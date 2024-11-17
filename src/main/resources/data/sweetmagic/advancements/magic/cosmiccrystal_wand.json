@@ -1,0 +1,13 @@
+{
+	"display": {
+		"icon": { "item": "sweetmagic:cosmiccrystal_wand" },
+		"title": { "translate": "smadbent.cosmiccrystal_wand.title" },
+		"description": { "translate": "smadbent.cosmiccrystal_wand.text" }
+	},
+	"parent": "sweetmagic:magic/deuscrystal_wand", "criteria": {
+		"trigger": { "trigger": "minecraft:inventory_changed", "conditions": {
+			"items": [ { "items": [ "sweetmagic:cosmiccrystal_wand" ] } ]
+		} }
+	},
+	"rewards": { "loot": ["sweetmagic:advance/magia_bottle_2"] }
+}

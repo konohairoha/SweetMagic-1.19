@@ -1,0 +1,13 @@
+{
+	"display": {
+		"icon": { "item": "sweetmagic:figurine_ignisknight" },
+		"title": { "translate": "smadbent.ignisknight.title" },
+		"description": { "translate": "smadbent.ignisknight.text" }
+	},
+	"parent": "sweetmagic:magic/holyangel", "criteria": {
+		"trigger": { "trigger": "minecraft:inventory_changed", "conditions": {
+			"items": [ { "items": [ "sweetmagic:magic_ignisblast" ] } ]
+		} }
+	},
+	"rewards": { "loot": ["sweetmagic:advance/mf_bottle_3"] }
+}

@@ -1,0 +1,14 @@
+{
+	"display": {
+		"icon": { "item": "sweetmagic:prism_sapling" },
+		"title": { "translate": "smadbent.labyrinth.title" },
+		"description": { "translate": "smadbent.labyrinth.text" }
+	},
+	"parent": "sweetmagic:adventure/desert_mine", "criteria": {
+		"trigger": { "trigger": "minecraft:location", "conditions": { "player": [{
+			"condition": "minecraft:entity_properties", "entity": "this",
+			"predicate": { "location": { "structure": "sweetmagic:labyrinth" } }
+		}] } }
+	},
+	"rewards": { "loot": ["sweetmagic:advance/mf_bottle_1"] }
+}

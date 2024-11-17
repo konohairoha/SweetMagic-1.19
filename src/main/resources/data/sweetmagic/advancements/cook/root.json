@@ -1,0 +1,40 @@
+{
+	"display": {
+		"icon": { "item": "sweetmagic:short_cake" },
+		"title": { "translate": "smadbent.cook_root.title" },
+		"description": { "translate": "smadbent.cook_root.text" },
+		"background": "sweetmagic:textures/block/tamagotti_wood.png",
+		"show_toast": false,
+		"announce_to_chat": false
+	},
+	"criteria": {
+		"trigger": { "trigger": "minecraft:inventory_changed", "conditions": {
+			"items": [ { "items": [ 
+				"sweetmagic:sugarbell_seed",
+				"sweetmagic:sannyflower_seed",
+				"sweetmagic:moonblossom_seed",
+				"sweetmagic:fire_nasturtium_seed",
+				"sweetmagic:drizzly_mysotis_seed",
+				"sweetmagic:clerodendrum_seed",
+				"sweetmagic:cotton_seed",
+				"sweetmagic:glowflower_seed",
+				"sweetmagic:sticky_stuff_seed",
+				"sweetmagic:quartz_seed",
+				"sweetmagic:coffee_seed",
+				"sweetmagic:corn_seed",
+				"sweetmagic:eggplant_seed",
+				"sweetmagic:rice_seed",
+				"sweetmagic:cabbage_seed",
+				"sweetmagic:lettuce_seed",
+				"sweetmagic:paper_mint_seed",
+				"sweetmagic:vannila_pods",
+				"sweetmagic:pineapple_seed",
+				"sweetmagic:greenpepper_seed",
+				"sweetmagic:spinach_seed",
+				"sweetmagic:j_radish_seed",
+				"sweetmagic:whitenet_seed",
+				"sweetmagic:azuki_seed"
+			 ] } ]
+		} }
+	}
+}

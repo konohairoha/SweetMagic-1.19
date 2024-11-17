@@ -1,0 +1,13 @@
+{
+	"display": {
+		"icon": { "item": "sweetmagic:altar_creat" },
+		"title": { "translate": "smadbent.altar_creat.title" },
+		"description": { "translate": "smadbent.altar_creat.text" }
+	},
+	"parent": "sweetmagic:magic/magic_book_cosmic", "criteria": {
+		"trigger": { "trigger": "minecraft:inventory_changed", "conditions": {
+			"items": [ { "items": [ "sweetmagic:altar_creat" ] } ]
+		} }
+	},
+	"rewards": { "loot": ["sweetmagic:advance/mf_sbottle_2"] }
+}

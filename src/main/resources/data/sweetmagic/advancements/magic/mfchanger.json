@@ -1,0 +1,13 @@
+{
+	"display": {
+		"icon": { "item": "sweetmagic:mfchanger" },
+		"title": { "translate": "smadbent.mfchanger.title" },
+		"description": { "translate": "smadbent.mfchanger.text" }
+	},
+	"parent": "sweetmagic:magic/twilight_alstroemeria", "criteria": {
+		"trigger": { "trigger": "minecraft:inventory_changed", "conditions": {
+			"items": [ { "items": [ "sweetmagic:mfchanger" ] } ]
+		} }
+	},
+	"rewards": { "loot": ["sweetmagic:advance/mf_sbottle_1"] }
+}

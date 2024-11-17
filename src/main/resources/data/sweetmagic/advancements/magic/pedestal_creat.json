@@ -1,0 +1,13 @@
+{
+	"display": {
+		"icon": { "item": "sweetmagic:pedestal_creat" },
+		"title": { "translate": "smadbent.pedestal_creat.title" },
+		"description": { "translate": "smadbent.pedestal_creat.text" }
+	},
+	"parent": "sweetmagic:magic/twilight_alstroemeria", "criteria": {
+		"trigger": { "trigger": "minecraft:inventory_changed", "conditions": {
+			"items": [ { "items": [ "sweetmagic:pedestal_creat" ] } ]
+		} }
+	},
+	"rewards": { "loot": ["sweetmagic:advance/pedestal_creat"] }
+}

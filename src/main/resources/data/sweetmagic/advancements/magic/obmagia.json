@@ -1,0 +1,13 @@
+{
+	"display": {
+		"icon": { "item": "sweetmagic:obmagia" },
+		"title": { "translate": "smadbent.obmagia.title" },
+		"description": { "translate": "smadbent.obmagia.text" }
+	},
+	"parent": "sweetmagic:magic/magic_book", "criteria": {
+		"trigger": { "trigger": "minecraft:inventory_changed", "conditions": {
+			"items": [ { "items": [ "sweetmagic:obmagia" ] } ]
+		} }
+	},
+	"rewards": { "loot": ["sweetmagic:advance/obmagia"] }
+}

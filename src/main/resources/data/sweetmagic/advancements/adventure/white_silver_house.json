@@ -1,0 +1,14 @@
+{
+	"display": {
+		"icon": { "item": "sweetmagic:white_stone_polished" },
+		"title": { "translate": "smadbent.white_silver_house.title" },
+		"description": { "translate": "smadbent.white_silver_house.text" }
+	},
+	"parent": "sweetmagic:adventure/witch_large_house", "criteria": {
+		"trigger": { "trigger": "minecraft:location", "conditions": { "player": [{
+			"condition": "minecraft:entity_properties", "entity": "this",
+			"predicate": { "location": { "structure": "sweetmagic:white_silver_house" } }
+		}] } }
+	},
+	"rewards": { "loot": ["sweetmagic:advance/mf_bottle_3"] }
+}

@@ -1,0 +1,13 @@
+{
+	"display": {
+		"icon": { "item": "sweetmagic:figurine_queenfrost" },
+		"title": { "translate": "smadbent.queenfrost.title" },
+		"description": { "translate": "smadbent.queenfrost.text" }
+	},
+	"parent": "sweetmagic:magic/dungeon_compas", "criteria": {
+		"trigger": { "trigger": "minecraft:inventory_changed", "conditions": {
+			"items": [ { "items": [ "sweetmagic:magic_frostlaser" ] } ] }
+		} }
+	},
+	"rewards": { "loot": ["sweetmagic:advance/mf_bottle_2"] }
+}

@@ -1,0 +1,13 @@
+{
+	"display": {
+		"icon": { "item": "sweetmagic:twilight_alstroemeria" },
+		"title": { "translate": "smadbent.twilight_alstroemeria.title" },
+		"description": { "translate": "smadbent.twilight_alstroemeria.text" }
+	},
+	"parent": "sweetmagic:magic/moonblossom_petal", "criteria": {
+		"trigger": { "trigger": "minecraft:inventory_changed", "conditions": {
+			"items": [ { "items": [ "sweetmagic:twilight_alstroemeria" ] } ]
+		} }
+	},
+	"rewards": { "experience": 100 }
+}

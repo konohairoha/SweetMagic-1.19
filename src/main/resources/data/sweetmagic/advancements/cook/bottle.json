@@ -1,0 +1,13 @@
+{
+	"display": {
+		"icon": { "item": "sweetmagic:bottle" },
+		"title": { "translate": "smadbent.bottle.title" },
+		"description": { "translate": "smadbent.bottle.text" }
+	},
+	"parent": "sweetmagic:cook/root", "criteria": {
+		"trigger": { "trigger": "minecraft:inventory_changed", "conditions": {
+				"items": [ { "items": [ "sweetmagic:bottle" ] } ]
+		} }
+	},
+	"rewards": { "experience": 5 }
+}

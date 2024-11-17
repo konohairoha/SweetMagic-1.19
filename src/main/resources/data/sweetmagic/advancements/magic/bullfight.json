@@ -1,0 +1,13 @@
+{
+	"display": {
+		"icon": { "item": "sweetmagic:figurine_bullfight" },
+		"title": { "translate": "smadbent.bullfight.title" },
+		"description": { "translate": "smadbent.bullfight.text" }
+	},
+	"parent": "sweetmagic:magic/sturdust_crystal", "criteria": {
+		"trigger": { "trigger": "minecraft:inventory_changed", "conditions": {
+			"items": [ { "items": [ "sweetmagic:figurine_bullfight" ] } ]
+		} }
+	},
+	"rewards": { "loot": ["sweetmagic:advance/mf_bottle_3"] }
+}

@@ -1,0 +1,13 @@
+{
+	"display": {
+		"icon": { "item": "sweetmagic:solid_star_pot" },
+		"title": { "translate": "smadbent.solid_star_pot.title" },
+		"description": { "translate": "smadbent.solid_star_pot.text" }
+	},
+	"parent": "sweetmagic:magic/zinnia_pot", "criteria": {
+		"trigger": { "trigger": "minecraft:inventory_changed", "conditions": {
+			"items": [ { "items": [ "sweetmagic:solid_star_pot" ] } ]
+		} }
+	},
+	"rewards": { "loot": ["sweetmagic:advance/mf_bottle_3"] }
+}

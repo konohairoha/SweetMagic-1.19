@@ -1,0 +1,13 @@
+{
+	"display": {
+		"icon": { "item": "sweetmagic:magic_meal" },
+		"title": { "translate": "smadbent.magic_meal.title" },
+		"description": { "translate": "smadbent.magic_meal.text" }
+	},
+	"parent": "sweetmagic:magic/pedestal_creat", "criteria": {
+		"trigger": { "trigger": "minecraft:inventory_changed", "conditions": {
+			"items": [ { "items": [ "sweetmagic:magic_meal" ] } ]
+		} }
+	},
+	"rewards": { "loot": ["sweetmagic:advance/mf_sbottle_1"] }
+}

@@ -1,0 +1,13 @@
+{
+	"display": {
+		"icon": { "item": "sweetmagic:deuscrystal_wand" },
+		"title": { "translate": "smadbent.deuscrystal_wand.title" },
+		"description": { "translate": "smadbent.deuscrystal_wand.text" }
+	},
+	"parent": "sweetmagic:magic/purecrystal_wand", "criteria": {
+		"deuscrystal_wand": { "trigger": "minecraft:inventory_changed", "conditions": {
+			"items": [ { "items": [ "sweetmagic:deuscrystal_wand" ] } ]
+		} }
+	},
+	"rewards": { "loot": ["sweetmagic:advance/mf_bottle_7"] }
+}

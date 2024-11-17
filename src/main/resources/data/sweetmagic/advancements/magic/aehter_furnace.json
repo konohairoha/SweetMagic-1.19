@@ -1,0 +1,13 @@
+{
+	"display": {
+		"icon": { "item": "sweetmagic:aehter_furnace" },
+		"title": { "translate": "smadbent.aehter_furnace.title" },
+		"description": { "translate": "smadbent.aehter_furnace.text" }
+	},
+	"parent": "sweetmagic:magic/pedestal_creat", "criteria": {
+		"trigger": { "trigger": "minecraft:inventory_changed", "conditions": {
+			"items": [ { "items": [ "sweetmagic:aehter_furnace" ] } ]
+		} }
+	},
+	"rewards": { "loot": ["sweetmagic:advance/mf_sbottle_2"] }
+}

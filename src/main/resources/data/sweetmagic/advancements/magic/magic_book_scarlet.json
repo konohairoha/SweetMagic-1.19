@@ -1,0 +1,13 @@
+{
+	"display": {
+		"icon": { "item": "sweetmagic:magic_book_scarlet" },
+		"title": { "translate": "smadbent.magic_book_scarlet.title" },
+		"description": { "translate": "smadbent.magic_book_scarlet.text" }
+	},
+	"parent": "sweetmagic:magic/sturdust_crystal", "criteria": {
+		"trigger": { "trigger": "minecraft:inventory_changed", "conditions": {
+			"items": [ { "items": [ "sweetmagic:magic_book_scarlet" ] } ]
+		} }
+	},
+	"rewards": { "loot": ["sweetmagic:advance/magic_book_scarlet"] }
+}

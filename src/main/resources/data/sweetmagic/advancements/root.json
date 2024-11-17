@@ -1,1 +1,15 @@
-
+{
+	"display": {
+		"icon": { "item": "sweetmagic:twilight_alstroemeria" },
+		"title": { "translate": "smadbent.root.title" },
+		"description": { "translate": "smadbent.root.text" },
+		"background": "sweetmagic:textures/block/orange_planks_w.png",
+		"show_toast": false,
+		"announce_to_chat": false
+	},
+	"criteria": { "trigger": {
+		"trigger": "minecraft:inventory_changed", "conditions": {
+			"items": [ { "items": [ "sweetmagic:sugarbell" ] } ]
+		} }
+	}
+}

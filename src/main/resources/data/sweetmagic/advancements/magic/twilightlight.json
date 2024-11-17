@@ -1,0 +1,13 @@
+{
+	"display": {
+		"icon": { "item": "sweetmagic:twilightlight" },
+		"title": { "translate": "smadbent.twilightlight.title" },
+		"description": { "translate": "smadbent.twilightlight.text" }
+	},
+	"parent": "sweetmagic:magic/pedestal_creat", "criteria": {
+		"trigger": { "trigger": "minecraft:inventory_changed", "conditions": {
+			"items": [ { "items": [ "sweetmagic:twilightlight" ] } ]
+		} }
+	},
+	"rewards": { "loot": ["sweetmagic:advance/mf_sbottle_2"] }
+}

@@ -1,0 +1,14 @@
+{
+	"display": {
+		"icon": { "item": "minecraft:skeleton_skull" },
+		"title": { "translate": "smadbent.tomb.title" },
+		"description": { "translate": "smadbent.tomb.text" }
+	},
+	"parent": "sweetmagic:adventure/beginner", "criteria": {
+		"trigger": { "trigger": "minecraft:location", "conditions": { "player": [{
+			"condition": "minecraft:entity_properties", "entity": "this",
+			"predicate": { "location": { "structure": "sweetmagic:tomb" } }
+		}] } }
+	},
+	"rewards": { "loot": ["sweetmagic:advance/mf_sbottle_1"] }
+}

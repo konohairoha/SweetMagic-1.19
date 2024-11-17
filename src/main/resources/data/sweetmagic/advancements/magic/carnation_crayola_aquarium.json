@@ -1,0 +1,13 @@
+{
+	"display": {
+		"icon": { "item": "sweetmagic:carnation_crayola_aquarium" },
+		"title": { "translate": "smadbent.carnation_crayola_aquarium.title" },
+		"description": { "translate": "smadbent.carnation_crayola_aquarium.text" }
+	},
+	"parent": "sweetmagic:magic/alstroemeria_aquarium", "criteria": {
+		"trigger": { "trigger": "minecraft:inventory_changed", "conditions": {
+			"items": [ { "items": [ "sweetmagic:carnation_crayola_aquarium" ] } ]
+		} }
+	},
+	"rewards": { "loot": ["sweetmagic:advance/mf_bottle_4"] }
+}

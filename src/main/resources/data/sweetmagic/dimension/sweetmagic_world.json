@@ -1,0 +1,14 @@
+{
+	"type": "sweetmagic:sweetmagic_world", "generator": {
+		"type": "minecraft:noise", "settings": "sweetmagic:sweetmagic_world", "biome_source": {
+			"type": "minecraft:checkerboard", "scale": 6, "biomes": [
+				"sweetmagic:flower_garden",
+				"sweetmagic:fruit_forest_sm",
+				"sweetmagic:prism_forest_sm",
+				"sweetmagic:cherry_blossoms_forest_sm",
+				"sweetmagic:magiawood_forest",
+				"sweetmagic:fruittower_forest"
+			]
+		}
+	}
+}

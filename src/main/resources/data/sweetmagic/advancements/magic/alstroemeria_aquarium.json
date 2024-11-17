@@ -1,0 +1,13 @@
+{
+	"display": {
+		"icon": { "item": "sweetmagic:alstroemeria_aquarium" },
+		"title": { "translate": "smadbent.alstroemeria_aquarium.title" },
+		"description": { "translate": "smadbent.alstroemeria_aquarium.text" }
+	},
+	"parent": "sweetmagic:magic/altar_creat", "criteria": {
+		"trigger": { "trigger": "minecraft:inventory_changed", "conditions": {
+			"items": [ { "items": [ "sweetmagic:alstroemeria_aquarium" ] } ]
+		} }
+	},
+	"rewards": { "loot": ["sweetmagic:advance/mf_bottle_2"] }
+}

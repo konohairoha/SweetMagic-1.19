@@ -1,0 +1,13 @@
+{
+	"display": {
+		"icon": { "item": "sweetmagic:dungeon_compas" },
+		"title": { "translate": "smadbent.dungeon_compas.title" },
+		"description": { "translate": "smadbent.dungeon_compas.text" }
+	},
+	"parent": "sweetmagic:magic/twilight_alstroemeria", "criteria": {
+		"trigger": { "trigger": "minecraft:inventory_changed", "conditions": {
+			"items": [ { "items": [ "sweetmagic:dungeon_compas" ] } ]
+		} }
+	},
+	"rewards": { "loot": ["sweetmagic:advance/mf_bottle_1"] }
+}
