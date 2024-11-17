@@ -1,0 +1,12 @@
+{
+	"structures": [ {
+		"structure": "sweetmagic:village", "weight": 2
+	}],
+	"placement": {
+		"salt": 46512544,
+		"frequency": 0.6,
+		"spacing": 52,
+		"separation": 32,
+		"type": "minecraft:random_spread"
+	}
+}

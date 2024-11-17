@@ -1,0 +1,16 @@
+{
+	"structures": [ {
+		"structure": "sweetmagic:pen", "weight": 2
+	}],
+	"placement": {
+		"salt": 85144,
+		"frequency": 0.575,
+		"spacing": 48,
+		"separation": 24,
+		"type": "minecraft:random_spread",
+		"exclusion_zone": {
+			"chunk_count": 4,
+			"other_set": "minecraft:villages"
+		}
+	}
+}

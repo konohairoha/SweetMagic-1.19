@@ -1,0 +1,15 @@
+{
+	"structures": [ {
+		"structure": "sweetmagic:submarine_ruins", "weight": 2
+	}],
+	"placement": {
+		"salt": 12220730,
+		"spacing": 24,
+		"separation": 12,
+		"type": "minecraft:random_spread",
+		"exclusion_zone": {
+			"chunk_count": 1,
+			"other_set": "minecraft:ocean_ruins"
+		}
+	}
+}

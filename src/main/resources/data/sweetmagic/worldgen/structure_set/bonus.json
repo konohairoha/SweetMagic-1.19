@@ -1,0 +1,11 @@
+{
+	"structures": [ {
+		"structure": "sweetmagic:bonus", "weight": 2
+	}],
+	"placement": {
+		"salt": 22427519,
+		"spacing": 28,
+		"separation": 14,
+		"type": "minecraft:random_spread"
+	}
+}

@@ -1,0 +1,12 @@
+{
+	"structures": [ {
+		"structure": "sweetmagic:skyland_old", "weight": 2
+	}],
+	"placement": {
+		"salt": 4301212,
+		"frequency": 0.1,
+		"spacing": 32,
+		"separation": 16,
+		"type": "minecraft:random_spread"
+	}
+}

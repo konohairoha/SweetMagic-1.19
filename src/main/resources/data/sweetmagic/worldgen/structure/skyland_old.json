@@ -1,0 +1,15 @@
+{
+	"type": "minecraft:jigsaw",
+	"biomes": "#sweetmagic:structure/skyland_old",
+	"spawn_overrides": {},
+	"start_pool": "sweetmagic:skyland_old/start_pool",
+	"size": 1,
+	"step": "raw_generation",
+	"terrain_adaptation": "none",
+	"start_height": {
+		"absolute": 128
+	},
+	"project_start_to_heightmap": "WORLD_SURFACE_WG",
+	"max_distance_from_center": 64,
+	"use_expansion_hack": false
+}

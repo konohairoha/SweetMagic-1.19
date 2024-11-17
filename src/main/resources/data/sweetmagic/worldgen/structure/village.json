@@ -1,0 +1,15 @@
+{
+	"type": "sweetmagic:sm_jigsaw",
+	"biomes": "#sweetmagic:structure/village",
+	"spawn_overrides": {},
+	"start_pool": "sweetmagic:village/center",
+	"size": 300,
+	"step": "surface_structures",
+	"terrain_adaptation": "beard_thin",
+	"start_height": {
+		"absolute": 0
+	},
+	"project_start_to_heightmap": "WORLD_SURFACE_WG",
+	"max_distance_from_center": 2048,
+	"use_expansion_hack": false
+}

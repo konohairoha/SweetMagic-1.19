@@ -1,0 +1,20 @@
+{
+	"structures": [ 
+		{ "structure": "sweetmagic:ruins_site", "weight": 2 }
+	],
+	"placement": {
+		"salt": 22421222,
+		"frequency": 0.7,
+		"spacing": 64,
+		"separation": 32,
+		"type": "minecraft:random_spread",
+		"exclusion_zone": {
+			"chunk_count": 6,
+			"other_set": "minecraft:villages",
+			"other_set": "sweetmagic:skyisland",
+			"other_set": "sweetmagic:ruins_site_light",
+			"other_set": "sweetmagic:ruins_site_fire",
+			"other_set": "sweetmagic:ruins_site_wind"
+		}
+	}
+}

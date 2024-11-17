@@ -1,0 +1,19 @@
+{
+	"structures": [ {
+		"structure": "sweetmagic:white_silver_house", "weight": 2
+	}],
+	"placement": {
+		"salt": 22484610,
+		"frequency": 0.7,
+		"spacing": 56,
+		"separation": 28,
+		"type": "minecraft:random_spread",
+		"exclusion_zone": {
+			"chunk_count": 4,
+			"other_set": "sweetmagic:skyisland",
+			"other_set": "sweetmagic:skyland_old",
+			"other_set": "sweetmagic:arena",
+			"other_set": "sweetmagic:village"
+		}
+	}
+}

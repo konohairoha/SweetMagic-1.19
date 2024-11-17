@@ -1,0 +1,12 @@
+{
+	"structures": [ {
+		"structure": "sweetmagic:sweetmagic_gate", "weight": 2
+	}],
+	"placement": {
+		"salt": 22425656,
+		"frequency": 0.3,
+		"spacing": 32,
+		"separation": 16,
+		"type": "minecraft:random_spread"
+	}
+}
