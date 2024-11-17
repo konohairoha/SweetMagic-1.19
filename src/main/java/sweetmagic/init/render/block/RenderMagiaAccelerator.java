@@ -1,0 +1,52 @@
+package sweetmagic.init.render.block;
+
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Matrix3f;
+import com.mojang.math.Matrix4f;
+
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import sweetmagic.init.tile.sm.TileMagiaAccelerator;
+import sweetmagic.init.tile.sm.TileSMMagic;
+
+public class RenderMagiaAccelerator implements BlockEntityRenderer<TileMagiaAccelerator> {
+
+	public RenderMagiaAccelerator(BlockEntityRendererProvider.Context con) { }
+
+	@Override
+	public void render(TileMagiaAccelerator tile, float parTick, PoseStack pose, MultiBufferSource buf, int light, int overlayLight) {
+		if (tile.getLevel() == null || tile.isAir() || !tile.isRangeView) { return; }
+
+		Level world = tile.getLevel();
+        double posX = tile.getBlockPos().getX();
+        double posY = tile.getBlockPos().getY();
+        double posZ = tile.getBlockPos().getZ();
+		Iterable<BlockPos> posList = tile.getRangePosUnder(tile.range);
+
+		// リスト分まわす
+		for (BlockPos pos : posList) {
+
+			// MFブロック以外または送信側なら終了
+			if ( !(tile.getTile(pos) instanceof TileSMMagic magic) || !magic.getReceive() || magic instanceof TileMagiaAccelerator) { continue; }
+
+			VoxelShape voxel = world.getBlockState(pos).getCollisionShape(world, pos);
+			VertexConsumer con = buf.getBuffer(RenderType.lineStrip());
+			this.drawShape(pose, con, voxel, -posX + pos.getX(), -posY + pos.getY() + 0.01D, -posZ + pos.getZ());
+		}
+	}
+
+	private void drawShape(PoseStack pose, VertexConsumer con, VoxelShape voxel, double x, double y, double z) {
+		Matrix4f mat4 = pose.last().pose();
+		Matrix3f mat3 = pose.last().normal();
+		voxel.forAllEdges((x1, y1, z1, x2, y2, z2) -> {
+			con.vertex(mat4, (float) (x1 + x), (float) (y1 + y), (float) (z1 + z)).color(1F, 38F / 255F, 49F / 255F, 1F).normal(mat3, 5F, 5F, 5F).endVertex();
+			con.vertex(mat4, (float) (x2 + x), (float) (y2 + y), (float) (z2 + z)).color(1F, 38F / 255F, 49F / 255F, 1F).normal(mat3, 5F, 5F, 5F).endVertex();
+		});
+    }
+}
