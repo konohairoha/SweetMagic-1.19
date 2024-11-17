@@ -1,0 +1,10 @@
+{
+	"type": "sweetmagic:alstromeria_craft",
+	"ingredients": [
+		{ "item": "sweetmagic:blank_page", "count": 1 },
+		{ "tag": "forge:cobblestone", "count": 4 }
+	],
+	"result": [
+		{ "item": "sweetmagic:blank_magic", "count": 1 }
+	]
+}

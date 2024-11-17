@@ -1,0 +1,10 @@
+{
+	"type": "sweetmagic:bottle_craft",
+	"ingredients": [
+		{ "tag": "forge:berries", "count": 16 },
+		{ "tag": "forge:dyes/orange", "count": 1 }
+	],
+	"result": [
+		{ "item": "minecraft:glow_berries", "count": 24 }
+	]
+}

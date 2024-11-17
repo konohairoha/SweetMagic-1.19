@@ -1,0 +1,11 @@
+{
+	"type": "sweetmagic:bottle_craft",
+	"ingredients": [
+		{ "tag": "minecraft:logs", "count": 4 },
+		{ "tag": "forge:dyes/red", "count": 2 },
+		{ "item": "minecraft:bone_meal", "count": 1 }
+	],
+	"result": [
+		{ "item": "minecraft:red_mushroom", "count": 16 }
+	]
+}

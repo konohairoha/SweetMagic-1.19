@@ -1,0 +1,10 @@
+{
+	"type": "sweetmagic:bottle_craft",
+	"ingredients": [
+		{ "tag": "forge:cook/rice", "count": 8 },
+		{ "tag": "forge:water", "count": 4 }
+	],
+	"result": [
+		{ "item": "sweetmagic:vinegar", "count": 32 }
+	]
+}

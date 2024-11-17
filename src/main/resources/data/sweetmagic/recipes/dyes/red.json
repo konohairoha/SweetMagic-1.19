@@ -1,0 +1,8 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		{ "tag": "forge:dyes/red" },
+		{ "tag": "forge:recipe_book" }
+	],
+	"result": { "item": "minecraft:red_dye", "count": 1 }
+}

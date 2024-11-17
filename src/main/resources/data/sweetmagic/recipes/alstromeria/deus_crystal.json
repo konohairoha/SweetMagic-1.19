@@ -1,0 +1,13 @@
+{
+	"type": "sweetmagic:alstromeria_craft",
+	"ingredients": [
+		{ "item": "sweetmagic:pure_crystal", "count": 3 },
+		{ "item": "sweetmagic:magia_bottle", "count": 2 },
+		{ "item": "sweetmagic:sannyflower_petal", "count": 8 },
+		{ "item": "sweetmagic:moonblossom_petal", "count": 8 },
+		{ "item": "sweetmagic:witch_tears", "count": 2 }
+	],
+	"result": [
+		{ "item": "sweetmagic:deus_crystal", "count": 1 }
+	]
+}

@@ -1,0 +1,11 @@
+{
+	"type": "sweetmagic:alstromeria_craft",
+	"ingredients": [
+		{ "item": "sweetmagic:alternative_ingot", "count": 1 },
+		{ "tag": "forge:ingots/gold", "count": 1 },
+		{ "item": "sweetmagic:magia_bottle", "count": 1 }
+	],
+	"result": [
+		{ "item": "sweetmagic:cosmos_light_ingot", "count": 2 }
+	]
+}

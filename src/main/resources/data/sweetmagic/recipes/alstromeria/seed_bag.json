@@ -1,0 +1,11 @@
+{
+	"type": "sweetmagic:alstromeria_craft",
+	"ingredients": [
+		{ "item": "sweetmagic:cotton_cloth", "count": 4 },
+		{ "tag": "forge:seeds", "count": 5 },
+		{ "tag": "forge:string", "count": 1 }
+	],
+	"result": [
+		{ "item": "sweetmagic:seed_bag", "count": 1 }
+	]
+}

@@ -1,0 +1,10 @@
+{
+	"type": "sweetmagic:bottle_craft",
+	"ingredients": [
+		{ "tag": "forge:foods/meat/raw", "count": 1 },
+		{ "item": "sweetmagic:magic_meal", "count": 1 }
+	],
+	"result": [
+		{ "item": "minecraft:rotten_flesh", "count": 2 }
+	]
+}

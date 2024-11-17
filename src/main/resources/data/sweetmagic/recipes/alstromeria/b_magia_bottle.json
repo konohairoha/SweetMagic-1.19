@@ -1,0 +1,9 @@
+{
+	"type": "sweetmagic:alstromeria_craft",
+	"ingredients": [
+		{ "item": "sweetmagic:b_mf_bottle", "count": 10 }
+	],
+	"result": [
+		{ "item": "sweetmagic:b_magia_bottle", "count": 1 }
+	]
+}

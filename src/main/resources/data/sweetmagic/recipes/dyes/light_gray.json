@@ -1,0 +1,8 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		{ "tag": "forge:dyes/light_gray" },
+		{ "tag": "forge:recipe_book" }
+	],
+	"result": { "item": "minecraft:light_gray_dye", "count": 1 }
+}

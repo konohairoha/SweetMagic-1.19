@@ -1,0 +1,10 @@
+{
+	"type": "sweetmagic:alstromeria_craft",
+	"ingredients": [
+		{ "tag": "forge:cobblestone" , "count": 8 },
+		{ "item": "minecraft:bricks" , "count": 4 }
+	],
+	"result": [
+		{ "item": "sweetmagic:longtile_brick_w", "count": 64 }
+	]
+}

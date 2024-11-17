@@ -1,0 +1,8 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		{ "tag": "forge:dyes/brown" },
+		{ "tag": "forge:recipe_book" }
+	],
+	"result": { "item": "minecraft:brown_dye", "count": 1 }
+}

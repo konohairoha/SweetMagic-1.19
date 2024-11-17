@@ -1,0 +1,11 @@
+{
+	"type": "sweetmagic:alstromeria_craft",
+	"ingredients": [
+		{ "item": "sweetmagic:sugarglass" , "count": 16 },
+		{ "tag": "forge:dyes/white" , "count": 1 },
+		{ "item": "minecraft:stick", "count": 2 }
+	],
+	"result": [
+		{ "item": "sweetmagic:lightbrown4panel_glass", "count": 32 }
+	]
+}

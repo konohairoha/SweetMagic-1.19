@@ -1,0 +1,10 @@
+{
+	"type": "sweetmagic:alstromeria_craft",
+	"ingredients": [
+		{ "tag": "forge:ingots/iron" , "count": 1 },
+		{ "item": "sweetmagic:aether_crystal" , "count": 2 }
+	],
+	"result": [
+		{ "item": "sweetmagic:alternative_ingot", "count": 2 }
+	]
+}

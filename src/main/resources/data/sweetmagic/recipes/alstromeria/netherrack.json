@@ -1,0 +1,10 @@
+{
+	"type": "sweetmagic:alstromeria_craft",
+	"ingredients": [
+		{ "item": "sweetmagic:fire_powder", "count": 2 },
+		{ "tag": "minecraft:dirt", "count": 16 }
+	],
+	"result": [
+		{ "item": "minecraft:netherrack", "count": 32 }
+	]
+}

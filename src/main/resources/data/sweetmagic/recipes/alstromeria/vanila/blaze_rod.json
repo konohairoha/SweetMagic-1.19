@@ -1,0 +1,10 @@
+{
+	"type": "sweetmagic:alstromeria_craft",
+	"ingredients": [
+		{ "item": "sweetmagic:fire_powder", "count": 4 },
+		{ "item": "minecraft:glowstone_dust", "count": 2 }
+	],
+	"result": [
+		{ "item": "minecraft:blaze_rod", "count": 1 }
+	]
+}

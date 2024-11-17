@@ -1,0 +1,11 @@
+{
+	"type": "sweetmagic:alstromeria_craft",
+	"ingredients": [
+		{ "item": "sweetmagic:sugarglass" , "count": 16 },
+		{ "tag": "forge:nuggets/iron", "count": 1 },
+		{ "tag": "forge:dyes/white", "count": 1 }
+	],
+	"result": [
+		{ "item": "sweetmagic:gorgeous_glass_w", "count": 32 }
+	]
+}

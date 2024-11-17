@@ -1,0 +1,10 @@
+{
+	"type": "sweetmagic:bottle_craft",
+	"ingredients": [
+		{ "tag": "minecraft:fishes", "count": 4 },
+		{ "tag": "forge:salt", "count": 2 }
+	],
+	"result": [
+		{ "item": "sweetmagic:bonito_flakes", "count": 32 }
+	]
+}

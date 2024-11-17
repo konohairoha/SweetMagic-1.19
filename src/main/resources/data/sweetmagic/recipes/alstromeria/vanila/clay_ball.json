@@ -1,0 +1,11 @@
+{
+	"type": "sweetmagic:alstromeria_craft",
+	"ingredients": [
+		{ "item": "sweetmagic:sticky_stuff_petal", "count": 1 },
+		{ "tag": "minecraft:dirt", "count": 1 },
+		{ "tag": "forge:sand", "count": 1 }
+	],
+	"result": [
+		{ "item": "minecraft:clay_ball", "count": 16 }
+	]
+}

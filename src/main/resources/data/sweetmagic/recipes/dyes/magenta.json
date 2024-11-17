@@ -1,0 +1,8 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		{ "tag": "forge:dyes/magenta" },
+		{ "tag": "forge:recipe_book" }
+	],
+	"result": { "item": "minecraft:magenta_dye", "count": 1 }
+}

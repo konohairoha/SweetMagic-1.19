@@ -1,0 +1,11 @@
+{
+	"type": "sweetmagic:alstromeria_craft",
+	"ingredients": [
+		{ "tag": "forge:seeds", "count": 16 },
+		{ "item": "sweetmagic:magic_meal", "count": 8 },
+		{ "tag": "minecraft:dirt", "count": 8 }
+	],
+	"result": [
+		{ "item": "sweetmagic:potting_soil", "count": 8 }
+	]
+}

@@ -1,0 +1,10 @@
+{
+	"type": "sweetmagic:alstromeria_craft",
+	"ingredients": [
+		{ "item": "sweetmagic:cotton", "count": 1 },
+		{ "tag": "forge:string", "count": 4 }
+	],
+	"result": [
+		{ "item": "minecraft:feather", "count": 2 }
+	]
+}

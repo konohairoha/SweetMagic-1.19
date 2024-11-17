@@ -1,0 +1,10 @@
+{
+	"type": "sweetmagic:bottle_craft",
+	"ingredients": [
+		{ "tag": "forge:seeds", "count": 8 },
+		{ "tag": "minecraft:saplings", "count": 8 }
+	],
+	"result": [
+		{ "item": "minecraft:bone_meal", "count": 24 }
+	]
+}

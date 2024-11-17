@@ -1,0 +1,11 @@
+{
+	"type": "sweetmagic:bottle_craft",
+	"ingredients": [
+		{ "item": "minecraft:kelp", "count": 4 },
+		{ "tag": "forge:salt", "count": 2 },
+		{ "tag": "forge:water", "count": 2 }
+	],
+	"result": [
+		{ "item": "sweetmagic:seaweed", "count": 32 }
+	]
+}
