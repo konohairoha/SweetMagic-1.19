@@ -1,0 +1,15 @@
+{
+	"name": "sweetmagic:village/villagers",
+	"fallback": "minecraft:empty",
+	"elements": [
+		{
+			"weight": 1,
+			"element": {
+				"location": "minecraft:village/plains/villagers/unemployed",
+				"processors": "minecraft:empty",
+				"projection": "rigid",
+				"element_type": "minecraft:single_pool_element"
+			}
+		}
+	]
+}

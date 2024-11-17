@@ -1,0 +1,11 @@
+{
+	"name": "sweetmagic:village/golems", "fallback": "minecraft:empty",
+	"elements": [
+		{
+			"weight": 1, "element": {
+				"location": "minecraft:village/common/iron_golem",
+				"processors": "minecraft:empty", "projection": "rigid", "element_type": "minecraft:single_pool_element"
+			}
+		}
+	]
+}

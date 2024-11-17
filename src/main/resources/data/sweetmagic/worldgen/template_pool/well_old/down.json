@@ -1,0 +1,13 @@
+{
+	"name": "sweetmagic:well_old/down",
+	"fallback": "minecraft:empty",
+	"elements": [{
+	"weight": 1,
+		"element": {
+			"location": "sweetmagic:well_old/well_down",
+			"processors": "minecraft:empty",
+			"projection": "rigid",
+			"element_type": "minecraft:single_pool_element"
+		}
+	}]
+}
