@@ -1,0 +1,9 @@
+{
+	"type": "sweetmagic:furniture_craft",
+	"ingredients": [
+		{ "tag": "sweetmagic:moden_rack", "count": 1 }
+	],
+	"result": [
+		{ "item": "sweetmagic:moden_rack_b", "count": 1 }
+	]
+}

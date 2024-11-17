@@ -1,0 +1,9 @@
+{
+	"type": "sweetmagic:furniture_craft",
+	"ingredients": [
+		{ "tag": "sweetmagic:iron_fence", "count": 1 }
+	],
+	"result": [
+		{ "item": "sweetmagic:tinplate_bucket", "count": 1 }
+	]
+}

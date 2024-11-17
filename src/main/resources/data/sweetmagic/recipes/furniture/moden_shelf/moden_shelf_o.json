@@ -1,0 +1,9 @@
+{
+	"type": "sweetmagic:furniture_craft",
+	"ingredients": [
+		{ "tag": "sweetmagic:woodchest", "count": 1 }
+	],
+	"result": [
+		{ "item": "sweetmagic:moden_shelf_o", "count": 1 }
+	]
+}

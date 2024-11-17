@@ -1,0 +1,9 @@
+{
+	"type": "sweetmagic:furniture_craft",
+	"ingredients": [
+		{ "tag": "sweetmagic:plate", "count": 1 }
+	],
+	"result": [
+		{ "item": "sweetmagic:plate_p", "count": 1 }
+	]
+}
