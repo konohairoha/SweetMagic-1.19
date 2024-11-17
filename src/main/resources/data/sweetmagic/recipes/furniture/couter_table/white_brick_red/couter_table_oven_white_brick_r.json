@@ -1,0 +1,9 @@
+{
+	"type": "sweetmagic:furniture_craft",
+	"ingredients": [
+		{ "tag": "sweetmagic:oven", "count": 1 }
+	],
+	"result": [
+		{ "item": "sweetmagic:couter_table_oven_white_brick_r", "count": 1 }
+	]
+}

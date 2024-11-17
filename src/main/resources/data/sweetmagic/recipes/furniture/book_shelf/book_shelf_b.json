@@ -1,0 +1,9 @@
+{
+	"type": "sweetmagic:furniture_craft",
+	"ingredients": [
+		{ "tag": "forge:bookshelves", "count": 1 }
+	],
+	"result": [
+		{ "item": "sweetmagic:book_shelf_b", "count": 1 }
+	]
+}

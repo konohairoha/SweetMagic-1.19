@@ -1,0 +1,9 @@
+{
+	"type": "sweetmagic:furniture_craft",
+	"ingredients": [
+		{ "tag": "sweetmagic:corkboard", "count": 1 }
+	],
+	"result": [
+		{ "item": "sweetmagic:wallboard", "count": 1 }
+	]
+}

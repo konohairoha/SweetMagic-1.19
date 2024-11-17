@@ -1,0 +1,9 @@
+{
+	"type": "sweetmagic:furniture_craft",
+	"ingredients": [
+		{ "tag": "sweetmagic:freezer", "count": 1 }
+	],
+	"result": [
+		{ "item": "sweetmagic:freezer", "count": 1 }
+	]
+}
