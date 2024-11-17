@@ -1,0 +1,11 @@
+{
+	"type": "sweetmagic:iris_craft",
+	"ingredients": [
+		{ "tag": "sweetmagic:cosmic_wand", "count": 1 },
+		{ "item": "sweetmagic:unmeltable_ice", "count": 16 },
+		{ "item": "sweetmagic:cosmic_crystal", "count": 1 }
+	],
+	"result": [
+		{ "item": "sweetmagic:cosmic_blizzard_wand", "count": 1 }
+	]
+}

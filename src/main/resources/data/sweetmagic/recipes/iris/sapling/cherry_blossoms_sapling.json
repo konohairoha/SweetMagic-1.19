@@ -1,0 +1,10 @@
+{
+	"type": "sweetmagic:iris_craft",
+	"ingredients": [
+		{ "tag": "minecraft:saplings", "count": 1 },
+		{ "tag": "minecraft:leaves", "count": 1 }
+	],
+	"result": [
+		{ "item": "sweetmagic:cherry_blossoms_sapling", "count": 1 }
+	]
+}

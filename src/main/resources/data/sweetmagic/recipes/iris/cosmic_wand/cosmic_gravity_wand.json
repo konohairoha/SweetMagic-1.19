@@ -1,0 +1,11 @@
+{
+	"type": "sweetmagic:iris_craft",
+	"ingredients": [
+		{ "tag": "sweetmagic:cosmic_wand", "count": 1 },
+		{ "item": "sweetmagic:grav_powder", "count": 16 },
+		{ "item": "sweetmagic:cosmic_crystal", "count": 1 }
+	],
+	"result": [
+		{ "item": "sweetmagic:cosmic_gravity_wand", "count": 1 }
+	]
+}

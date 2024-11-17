@@ -1,0 +1,10 @@
+{
+	"type": "sweetmagic:iris_craft",
+	"ingredients": [
+		{ "tag": "minecraft:saplings", "count": 1 },
+		{ "tag": "forge:dyes/green", "count": 1 }
+	],
+	"result": [
+		{ "item": "sweetmagic:banana_sapling", "count": 1 }
+	]
+}

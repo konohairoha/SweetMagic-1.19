@@ -1,0 +1,12 @@
+{
+	"type": "sweetmagic:iris_craft",
+	"ingredients": [
+		{ "item": "sweetmagic:magicians_robe", "count": 1 },
+		{ "tag": "forge:dyes/brown", "count": 2 },
+		{ "item": "sweetmagic:acce_bag", "count": 4 },
+		{ "item": "sweetmagic:magia_bottle", "count": 3 }
+	],
+	"result": [
+		{ "item": "sweetmagic:windwitch_robe", "count": 1 }
+	]
+}

@@ -1,0 +1,11 @@
+{
+	"type": "sweetmagic:iris_craft",
+	"ingredients": [
+		{ "tag": "sweetmagic:cosmic_wand", "count": 1 },
+		{ "item": "sweetmagic:drizzly_mysotis_flower", "count": 16 },
+		{ "item": "sweetmagic:cosmic_crystal", "count": 1 }
+	],
+	"result": [
+		{ "item": "sweetmagic:cosmic_aquamarine_wand", "count": 1 }
+	]
+}
