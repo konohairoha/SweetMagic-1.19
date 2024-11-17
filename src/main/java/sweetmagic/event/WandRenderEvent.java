@@ -38,6 +38,7 @@ public class WandRenderEvent extends SMUtilEvent {
 	private static final ResourceLocation TEX = SweetMagicCore.getSRC("textures/gui/gui_usergage.png");
 	private static final ResourceLocation SCOPE = SweetMagicCore.getSRC("textures/gui/spyglass_scope.png");
 	private static int tickTime = 0;
+	private static final int SCOPE_TIME = 5;
 
 	// レンダーイベントの呼び出し
 	@SubscribeEvent
@@ -135,7 +136,8 @@ public class WandRenderEvent extends SMUtilEvent {
 
 		RenderSystem.disableBlend();
 
-		if (wand.isScope() && mc.options.getCameraType().isFirstPerson() && player.isShiftKeyDown()) {
+		int remaing = player.getUseItemRemainingTicks();
+		if (wand.isScope() && mc.options.getCameraType().isFirstPerson() && remaing != 0 && 72000 - player.getUseItemRemainingTicks() > SCOPE_TIME) {
 
 			RenderSystem.disableDepthTest();
 			RenderSystem.depthMask(false);
@@ -197,7 +199,7 @@ public class WandRenderEvent extends SMUtilEvent {
 		int remainingTick = player.getUseItemRemainingTicks();
 
 		if (remainingTick != 0) {
-			int progress = Math.min(15, (int) (15 * (20F - ( remainingTick - 71980F )  ) / 20F ) );
+			int progress = Math.min(15, (int) (15 * (20F - ( remainingTick - 71980F ) ) / 20F ) );
 			drawTextured(mat, posX, height - 22 + 15 - progress, 76 + (progress == 15 ? 8 : 0), 53 + (progress == 15 ? 0 : 15 - progress), 5, progress);
 		}
 	}
@@ -282,7 +284,8 @@ public class WandRenderEvent extends SMUtilEvent {
 	public static void onFOVEvent (ComputeFovModifierEvent event) {
 		Player player = event.getPlayer();
 		Minecraft mc = Minecraft.getInstance();
-		if (!mc.options.getCameraType().isFirstPerson() || !player.isShiftKeyDown()) { return; }
+		int remaing = player.getUseItemRemainingTicks();
+		if (!mc.options.getCameraType().isFirstPerson() || remaing == 0 || remaing > 72000 - SCOPE_TIME) { return; }
 
 		ItemStack stack = player.getMainHandItem();
 		if (stack.isEmpty() || !(stack.getItem() instanceof IWand wand) || !wand.isScope()) { return; }

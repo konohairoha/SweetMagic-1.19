@@ -41,7 +41,6 @@ import sweetmagic.init.EnchantInit;
 import sweetmagic.init.ItemInit;
 import sweetmagic.init.PotionInit;
 import sweetmagic.init.capability.ICookingStatus;
-import sweetmagic.util.SMDebug;
 
 public class LivingDethEvent {
 
@@ -186,7 +185,6 @@ public class LivingDethEvent {
 		if (player == null) { return; }
 
 		ICookingStatus.getState(player).setHealth(player.getHealth());
-		SMDebug.info("logout:" + ICookingStatus.getState(player).getHealth());
 		Inventory keepInv = playerKeepsMap.remove(player.getUUID());
 		if (keepInv  == null) { return; }
 

@@ -11,6 +11,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemCooldowns;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -65,6 +66,8 @@ public class SMLivingDamageEvent {
 		// えんちちーによる攻撃なら
 		if (attackEntity != null && attackEntity instanceof LivingEntity attacker) {
 
+			float oldDamage = damage;
+
 			// ポーションによるダメージ増減
 			damage = SMLivingDamageEvent.potionDamageCut(target, attacker, src, damage);
 
@@ -80,14 +83,14 @@ public class SMLivingDamageEvent {
 
 			// ポーチを着ているなら
 			if (damage > 0F && !leg.isEmpty() && leg.getItem() instanceof IPorch) {
-				damage = SMLivingDamageEvent.porchMobDmageCut(target, damage, src, new PorchInfo(leg));
+				damage = SMLivingDamageEvent.porchMobDmageCut(target, attacker, oldDamage, damage, src, new PorchInfo(leg));
 			}
 
 			ItemStack legAttack = attacker.getItemBySlot(EquipmentSlot.LEGS);
 			if (!legAttack.isEmpty() && legAttack.getItem() instanceof IPorch porch) {
 
 				// ポーションによるダメージ上昇
-				damage = SMLivingDamageEvent.porchMobDmageCut(attacker, damage, src, new PorchInfo(legAttack));
+				damage = SMLivingDamageEvent.porchMobDmageUp(attacker, damage, src, new PorchInfo(legAttack));
 
 				// 被ダメージが死亡した際
 				if (damage >= target.getHealth() && src.getDirectEntity() instanceof AbstractMagicShot magic) {
@@ -145,7 +148,7 @@ public class SMLivingDamageEvent {
 	}
 
 	// ポーチによるダメージカット
-	public static float porchMobDmageCut (LivingEntity entity, float damage, DamageSource src, PorchInfo info) {
+	public static float porchMobDmageCut (LivingEntity entity, LivingEntity attacker, float oldDamage, float damage, DamageSource src, PorchInfo info) {
 
 		Level world = entity.level;
 		IPorch porch = info.getPorch();
@@ -161,6 +164,16 @@ public class SMLivingDamageEvent {
 		if (porch.hasAcce(stack, ItemInit.emelald_pias)) {
 			float dameRate = porch.acceCount(stack, ItemInit.emelald_pias, 10) * 0.1F;
 			damage *= (1F + dameRate);
+		}
+
+		if (porch.hasAcce(stack, ItemInit.poison_fang) && entity instanceof Player player) {
+
+			ItemCooldowns cool = player.getCooldowns();
+			if(!cool.isOnCooldown(ItemInit.poison_fang)) {
+				double counterDamage = oldDamage * 0.25D;
+				cool.addCooldown(ItemInit.poison_fang, (int) (counterDamage * 20));
+				attacker.setHealth((float) Math.max(attacker.getHealth(), counterDamage));
+			}
 		}
 
 		return damage;
