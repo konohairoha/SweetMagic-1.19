@@ -1,0 +1,12 @@
+{
+	"type": "sweetmagic:juicemaker_craft",
+	"ingredients": [
+		{ "tag": "forge:yogurt", "count": 1 },
+		{ "tag": "forge:crops/banana", "count": 3 },
+		{ "tag": "forge:crops/lemon", "count": 1 },
+		{ "tag": "forge:milk", "count": 2 }
+	],
+	"result": [
+		{ "item": "sweetmagic:banana_smoothy", "count": 5 }
+	]
+}

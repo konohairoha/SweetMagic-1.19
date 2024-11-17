@@ -1,0 +1,13 @@
+{
+	"type": "sweetmagic:frypan_craft",
+	"ingredients": [
+		{ "tag": "forge:mushroom", "count": 3 },
+		{ "tag": "forge:crops/cabbage", "count": 2 },
+		{ "tag": "forge:crops/lemon", "count": 2 },
+		{ "tag": "forge:butter", "count": 1 },
+		{ "tag": "forge:oil", "count": 1 }
+	],
+	"result": [
+		{ "item": "sweetmagic:sauteed_mushrooms", "count": 6 }
+	]
+}

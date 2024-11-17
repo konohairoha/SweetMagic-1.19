@@ -1,0 +1,17 @@
+{
+	"type": "sweetmagic:frypan_craft",
+	"ingredients": [
+		{ "tag": "forge:raw_beef", "count": 6 },
+		{ "tag": "forge:crops/onion", "count": 4 },
+		{ "tag": "forge:crops/tomato", "count": 2 },
+		{ "tag": "forge:crops/carrot", "count": 1 },
+		{ "tag": "forge:bread_crumbs", "count": 8 },
+		{ "tag": "forge:eggs", "count": 4 },
+		{ "tag": "forge:milk", "count": 2 },
+		{ "tag": "forge:wine", "count": 2 },
+		{ "tag": "forge:oil", "count": 2 }
+	],
+	"result": [
+		{ "item": "sweetmagic:steak_hamburg", "count": 12 }
+	]
+}

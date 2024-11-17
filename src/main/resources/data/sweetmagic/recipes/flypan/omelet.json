@@ -1,0 +1,11 @@
+{
+	"type": "sweetmagic:frypan_craft",
+	"ingredients": [
+		{ "tag": "forge:eggs", "count": 3 },
+		{ "item": "minecraft:sugar", "count": 2 },
+		{ "tag": "forge:oil", "count": 1 }
+	],
+	"result": [
+		{ "item": "sweetmagic:omelet", "count": 3 }
+	]
+}

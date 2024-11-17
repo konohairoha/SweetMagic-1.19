@@ -1,0 +1,14 @@
+{
+	"type": "sweetmagic:freezer_craft",
+	"ingredients": [
+		{ "tag": "forge:crops/lettuce", "count": 4 },
+		{ "tag": "forge:vegetables", "count": 1 },
+		{ "tag": "forge:vegetables", "count": 1 },
+		{ "tag": "forge:toast", "count": 4 },
+		{ "tag": "forge:mayonnaise", "count": 2 },
+		{ "tag": "forge:butter", "count": 4 }
+	],
+	"result": [
+		{ "item": "sweetmagic:sandwich", "count": 8 }
+	]
+}

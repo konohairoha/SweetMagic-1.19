@@ -1,0 +1,10 @@
+{
+	"type": "sweetmagic:frypan_craft",
+	"ingredients": [
+		{ "item": "sweetmagic:shrimp", "count": 2 },
+		{ "tag": "forge:oil", "count": 1 }
+	],
+	"result": [
+		{ "item": "sweetmagic:baked_shrimp", "count": 2 }
+	]
+}

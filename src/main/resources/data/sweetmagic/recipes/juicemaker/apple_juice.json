@@ -1,0 +1,12 @@
+{
+	"type": "sweetmagic:juicemaker_craft",
+	"ingredients": [
+		{ "tag": "forge:crops/apple", "count": 2 },
+		{ "tag": "forge:crops/lemon", "count": 1 },
+		{ "tag": "forge:sugar", "count": 2 },
+		{ "tag": "forge:ice", "count": 1 }
+	],
+	"result": [
+		{ "item": "sweetmagic:apple_juice", "count": 5 }
+	]
+}

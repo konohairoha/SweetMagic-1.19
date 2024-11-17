@@ -1,0 +1,11 @@
+{
+	"type": "sweetmagic:freezer_craft",
+	"ingredients": [
+		{ "tag": "forge:crops/apple", "count": 2 },
+		{ "tag": "forge:sugar", "count": 4 },
+		{ "item": "minecraft:stick", "count": 2 }
+	],
+	"result": [
+		{ "item": "sweetmagic:applecandy", "count": 2 }
+	]
+}

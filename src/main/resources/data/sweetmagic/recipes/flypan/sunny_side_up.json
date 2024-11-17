@@ -1,0 +1,12 @@
+{
+	"type": "sweetmagic:frypan_craft",
+	"ingredients": [
+		{ "tag": "forge:eggs", "count": 2 },
+		{ "tag": "forge:salt", "count": 1 },
+		{ "tag": "forge:oil", "count": 1 },
+		{ "tag": "forge:water", "count": 1 }
+	],
+	"result": [
+		{ "item": "sweetmagic:sunny_side_up", "count": 2 }
+	]
+}

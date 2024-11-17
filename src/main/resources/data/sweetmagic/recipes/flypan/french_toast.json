@@ -1,0 +1,13 @@
+{
+	"type": "sweetmagic:frypan_craft",
+	"ingredients": [
+		{ "tag": "forge:toast", "count": 4 },
+		{ "tag": "forge:butter", "count": 1 },
+		{ "tag": "forge:eggs", "count": 2 },
+		{ "tag": "forge:milk", "count": 1 },
+		{ "item": "minecraft:sugar", "count": 1 }
+	],
+	"result": [
+		{ "item": "sweetmagic:french_toast", "count": 4 }
+	]
+}

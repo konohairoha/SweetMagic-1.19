@@ -1,0 +1,13 @@
+{
+	"type": "sweetmagic:freezer_craft",
+	"ingredients": [
+		{ "tag": "forge:fruit", "count": 2 },
+		{ "tag": "forge:fruit", "count": 2 },
+		{ "tag": "forge:toast", "count": 4 },
+		{ "tag": "forge:cream", "count": 4 },
+		{ "tag": "forge:sugar", "count": 2 }
+	],
+	"result": [
+		{ "item": "sweetmagic:sandwich_fruit", "count": 8 }
+	]
+}

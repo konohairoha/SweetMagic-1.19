@@ -1,0 +1,14 @@
+{
+	"type": "sweetmagic:freezer_craft",
+	"ingredients": [
+		{ "tag": "forge:raw_salmon", "count": 2 },
+		{ "tag": "forge:cook/rice", "count": 4 },
+		{ "tag": "forge:vinegar", "count": 3 },
+		{ "tag": "forge:salt", "count": 1 },
+		{ "tag": "forge:sugar", "count": 2 },
+		{ "tag": "forge:dry_seaweed", "count": 2 }
+	],
+	"result": [
+		{ "item": "sweetmagic:sushi_salmon", "count": 6 }
+	]
+}

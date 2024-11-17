@@ -1,0 +1,13 @@
+{
+	"type": "sweetmagic:freezer_craft",
+	"ingredients": [
+		{ "tag": "forge:eggs", "count": 3 },
+		{ "tag": "forge:crops/lettuce", "count": 3 },
+		{ "tag": "forge:toast", "count": 3 },
+		{ "tag": "forge:cheese", "count": 2 },
+		{ "tag": "forge:salt", "count": 1 }
+	],
+	"result": [
+		{ "item": "sweetmagic:sandwitch_egg", "count": 8 }
+	]
+}

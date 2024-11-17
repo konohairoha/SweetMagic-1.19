@@ -1,0 +1,14 @@
+{
+	"type": "sweetmagic:frypan_craft",
+	"ingredients": [
+		{ "tag": "forge:crops/cabbage", "count": 4 },
+		{ "tag": "forge:crops/onion", "count": 3 },
+		{ "tag": "forge:crops/carrot", "count": 2 },
+		{ "tag": "forge:vegetables", "count": 1 },
+		{ "tag": "forge:foods/meat/raw", "count": 2 },
+		{ "tag": "forge:oil", "count": 2 }
+	],
+	"result": [
+		{ "item": "sweetmagic:salad_mixoil", "count": 4 }
+	]
+}

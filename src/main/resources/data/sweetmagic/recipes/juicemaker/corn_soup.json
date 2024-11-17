@@ -1,0 +1,12 @@
+{
+	"type": "sweetmagic:juicemaker_craft",
+	"ingredients": [
+		{ "tag": "forge:crops/corn", "count": 3 },
+		{ "tag": "forge:crops/onion", "count": 2 },
+		{ "tag": "forge:milk", "count": 3 },
+		{ "tag": "forge:salt", "count": 1 }
+	],
+	"result": [
+		{ "item": "sweetmagic:corn_soup", "count": 8 }
+	]
+}

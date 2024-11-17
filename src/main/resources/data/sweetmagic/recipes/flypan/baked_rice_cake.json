@@ -1,0 +1,10 @@
+{
+	"type": "sweetmagic:frypan_craft",
+	"ingredients": [
+		{ "tag": "forge:rice_cake", "count": 2 },
+		{ "tag": "forge:oil", "count": 1 }
+	],
+	"result": [
+		{ "item": "sweetmagic:baked_rice_cake", "count": 2 }
+	]
+}

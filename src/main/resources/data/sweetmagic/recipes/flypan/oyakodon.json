@@ -1,0 +1,17 @@
+{
+	"type": "sweetmagic:frypan_craft",
+	"ingredients": [
+		{ "tag": "forge:raw_chicken", "count": 2 },
+		{ "tag": "forge:cook/rice", "count": 4 },
+		{ "tag": "forge:crops/onion", "count": 2 },
+		{ "tag": "forge:eggs", "count": 8 },
+		{ "tag": "forge:bonito_flakes", "count": 1 },
+		{ "tag": "forge:wine", "count": 2 },
+		{ "tag": "forge:soy_sauce", "count": 2 },
+		{ "tag": "forge:sugar", "count": 2 },
+		{ "tag": "forge:oil", "count": 1 }
+	],
+	"result": [
+		{ "item": "sweetmagic:oyakodon", "count": 8 }
+	]
+}

@@ -1,0 +1,13 @@
+{
+	"type": "sweetmagic:freezer_craft",
+	"ingredients": [
+		{ "tag": "forge:dough", "count": 1 },
+		{ "tag": "forge:ice", "count": 3 },
+		{ "tag": "forge:sugar", "count": 2 },
+		{ "tag": "forge:cream", "count": 2 },
+		{ "tag": "forge:milk", "count": 2 }
+	],
+	"result": [
+		{ "item": "sweetmagic:cake_roll", "count": 5 }
+	]
+}
