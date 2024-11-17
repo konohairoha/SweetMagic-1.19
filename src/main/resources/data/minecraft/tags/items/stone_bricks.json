@@ -1,0 +1,32 @@
+{
+	"replace": false,
+	"values": [
+		"sweetmagic:simplestonebrick",
+		"sweetmagic:simplestonebrick_stairs",
+		"sweetmagic:simplestonebrick_trapdoor",
+		"sweetmagic:simplestonebrick_cracked",
+		"sweetmagic:simplestonebrick_cracked_stairs",
+		"sweetmagic:simplestonebrick_cracked_trapdoor",
+		"sweetmagic:simplestonebrick_mossy",
+		"sweetmagic:simplestonebrick_mossy_stairs",
+		"sweetmagic:simplestonebrick_mossy_trapdoor",
+		"sweetmagic:simplestonebrick_b",
+		"sweetmagic:simplestonebrick_b_stairs",
+		"sweetmagic:simplestonebrick_b_trapdoor",
+		"sweetmagic:simplestonebrick_b_cracked",
+		"sweetmagic:simplestonebrick_b_cracked_stairs",
+		"sweetmagic:simplestonebrick_b_cracked_trapdoor",
+		"sweetmagic:simplestonebrick_b_mossy",
+		"sweetmagic:simplestonebrick_b_mossy_stairs",
+		"sweetmagic:simplestonebrick_b_mossy_trapdoor",
+		"sweetmagic:simplestonebrick_g",
+		"sweetmagic:simplestonebrick_g_stairs",
+		"sweetmagic:simplestonebrick_g_trapdoor",
+		"sweetmagic:simplestonebrick_g_cracked",
+		"sweetmagic:simplestonebrick_g_cracked_stairs",
+		"sweetmagic:simplestonebrick_g_cracked_trapdoor",
+		"sweetmagic:simplestonebrick_g_mossy",
+		"sweetmagic:simplestonebrick_g_mossy_stairs",
+		"sweetmagic:simplestonebrick_g_mossy_trapdoor"
+	]
+}

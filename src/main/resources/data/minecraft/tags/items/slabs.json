@@ -1,0 +1,29 @@
+{
+	"replace": false,
+	"values": [
+		"sweetmagic:antique_brick_0_slab",
+		"sweetmagic:antique_brick_0w_slab",
+		"sweetmagic:antique_brick_0l_slab",
+		"sweetmagic:antique_brick_0g_slab",
+		"sweetmagic:antique_brick_0b_slab",
+		"sweetmagic:old_brick_slab",
+		"sweetmagic:old_brick_b_slab",
+		"sweetmagic:old_brick_g_slab",
+		"sweetmagic:old_brick_l_slab",
+		"sweetmagic:old_brick_r_slab",
+		"sweetmagic:old_brick_s_slab",
+		"sweetmagic:old_brick_y_slab",
+		"sweetmagic:pasteltile_brick_y_slab",
+		"sweetmagic:pasteltile_brick_b_slab",
+		"sweetmagic:pasteltile_brick_bl_slab",
+		"sweetmagic:pasteltile_brick_br_slab",
+		"sweetmagic:pasteltile_brick_gr_slab",
+		"sweetmagic:pasteltile_brick_lg_slab",
+		"sweetmagic:pasteltile_brick_r_slab",
+		"sweetmagic:whiteline_brick_r_slab",
+		"sweetmagic:whiteline_brick_b_slab",
+		"sweetmagic:whiteline_brick_y_slab",
+		"sweetmagic:flagstone_slab",
+		"sweetmagic:flagstone_color_slab"
+	]
+}

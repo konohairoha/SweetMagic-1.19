@@ -1,0 +1,13 @@
+{
+	"replace": false,
+	"values": [
+		"sweetmagic:aether_crystal_ore",
+		"sweetmagic:deep_aether_crystal_ore",
+		"sweetmagic:cosmic_crystal_ore",
+		"sweetmagic:deep_cosmic_crystal_ore",
+		"sweetmagic:fluorite_ore",
+		"sweetmagic:deep_fluorite_ore",
+		"sweetmagic:redberyl_ore",
+		"sweetmagic:deep_redberyl_ore"
+	]
+}
