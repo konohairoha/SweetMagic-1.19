@@ -1,0 +1,9 @@
+{
+	"type": "sweetmagic:furniture_craft",
+	"ingredients": [
+		{ "tag": "sweetmagic:wall_rack", "count": 1 }
+	],
+	"result": [
+		{ "item": "sweetmagic:wall_rack_t", "count": 1 }
+	]
+}

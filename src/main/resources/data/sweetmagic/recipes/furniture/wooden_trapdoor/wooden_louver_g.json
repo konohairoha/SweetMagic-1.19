@@ -1,0 +1,9 @@
+{
+	"type": "sweetmagic:furniture_craft",
+	"ingredients": [
+		{ "tag": "sweetmagic:wooden_louver", "count": 1 }
+	],
+	"result": [
+		{ "item": "sweetmagic:wooden_louver_g", "count": 1 }
+	]
+}

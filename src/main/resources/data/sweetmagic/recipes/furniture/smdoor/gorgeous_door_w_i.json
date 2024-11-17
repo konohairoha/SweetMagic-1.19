@@ -1,0 +1,9 @@
+{
+	"type": "sweetmagic:furniture_craft",
+	"ingredients": [
+		{ "tag": "sweetmagic:smlogs", "count": 1 }
+	],
+	"result": [
+		{ "item": "sweetmagic:gorgeous_door_w_i", "count": 2 }
+	]
+}
