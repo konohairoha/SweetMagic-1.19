@@ -1,0 +1,10 @@
+{
+	"pools": [ {
+		"name": "mf_bottle", "rolls": 1, "entries": [
+			{
+				"type": "item", "weight": 100, "name": "minecraft:gold_ingot",
+				"functions": [ { "function": "set_count", "count": { "min": 4, "max": 4 } } ]
+			}
+		]
+	} ]
+}

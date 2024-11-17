@@ -1,0 +1,46 @@
+{
+	"type": "minecraft:entity", "pools": [
+		{
+			"bonus_rolls": 0.0, "entries": [ {
+			"type": "minecraft:item", "functions": [
+				{ "add": false, "count": { "type": "minecraft:uniform", "max": 1.0, "min": 1.0 }, "function": "minecraft:set_count" },
+				{ "count": { "type": "minecraft:uniform", "max": 0.0, "min": 0.0 }, "function": "minecraft:looting_enchant" }
+			], "name": "sweetmagic:wind_relief" }
+		], "rolls": 1.0 },
+		{
+			"bonus_rolls": 0.0, "entries": [ {
+			"type": "minecraft:item", "functions": [
+				{ "add": false, "count": { "type": "minecraft:uniform", "max": 1.0, "min": 1.0 }, "function": "minecraft:set_count" },
+				{ "count": { "type": "minecraft:uniform", "max": 0.0, "min": 0.0 }, "function": "minecraft:looting_enchant" }
+			], "name": "sweetmagic:magic_windstorm" }
+		], "rolls": 1.0 },
+		{
+			"bonus_rolls": 0.0, "entries": [ {
+			"type": "minecraft:item", "functions": [
+				{ "add": false, "count": { "type": "minecraft:uniform", "max": 3.0, "min": 0.0 }, "function": "minecraft:set_count" },
+				{ "count": { "type": "minecraft:uniform", "max": 2.0, "min": 0.0 }, "function": "minecraft:looting_enchant" }
+			], "name": "sweetmagic:wish_crystal" }
+		], "rolls": 1.0 },
+		{
+			"bonus_rolls": 0.0, "entries": [ {
+			"type": "minecraft:item", "functions": [
+				{ "add": false, "count": { "type": "minecraft:uniform", "max": 3.0, "min": 1.0 }, "function": "minecraft:set_count" },
+				{ "count": { "type": "minecraft:uniform", "max": 2.0, "min": 0.0 }, "function": "minecraft:looting_enchant" }
+			], "name": "sweetmagic:acce_bag" }
+		], "rolls": 1.0 },
+		{
+			"bonus_rolls": 0.0, "entries": [ {
+			"type": "minecraft:item", "functions": [
+				{ "add": false, "count": { "type": "minecraft:uniform", "max": 4.0, "min": 2.0 }, "function": "minecraft:set_count" },
+				{ "count": { "type": "minecraft:uniform", "max": 2.0, "min": 0.0 }, "function": "minecraft:looting_enchant" }
+			], "name": "sweetmagic:witch_tears" }
+		], "rolls": 1.0 },
+		{
+			"bonus_rolls": 0.0, "entries": [ {
+			"type": "minecraft:item", "functions": [
+				{ "add": false, "count": { "type": "minecraft:uniform", "max": 1, "min": 1 }, "function": "minecraft:set_count" },
+				{ "count": { "type": "minecraft:uniform", "max": 0, "min": 0 }, "function": "minecraft:looting_enchant" }
+			], "name": "sweetmagic:figurine_windwitch_master" }
+		], "rolls": 1.0 }
+	], "random_sequence": "sweetmagic:entities/windwitch_master"
+}

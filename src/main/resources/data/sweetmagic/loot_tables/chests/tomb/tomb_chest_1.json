@@ -1,0 +1,80 @@
+{
+	"pools": [ { "name": "smbounus", "rolls": 10, "entries": [
+		{
+			"type": "item", "weight": 5, "name": "sweetmagic:aether_crystal",
+			"functions": [ { "function": "set_count", "count": { "min": 1, "max": 8 } } ]
+		},
+		{
+			"type": "item", "weight": 5, "name": "sweetmagic:magic_meal",
+			"functions": [ { "function": "set_count", "count": { "min": 2, "max": 8 } } ]
+		},
+		{
+			"type": "item", "weight": 3, "name": "sweetmagic:sannyflower_petal",
+			"functions": [ { "function": "set_count", "count": { "min": 1, "max": 4 } } ]
+		},
+		{
+			"type": "item", "weight": 3, "name": "sweetmagic:moonblossom_petal",
+			"functions": [ { "function": "set_count", "count": { "min": 1, "max": 4 } } ]
+		},
+		{
+			"type": "item", "weight": 2, "name": "sweetmagic:flower_bag",
+			"functions": [ { "function": "set_count", "count": { "min": 1, "max": 3 } } ]
+		},
+		{
+			"type": "item", "weight": 2, "name": "sweetmagic:magic_aether_force",
+			"functions": [ { "function": "set_count", "count": { "min": 1, "max": 1 } } ]
+		},
+		{
+			"type": "item", "weight": 3, "name": "sweetmagic:mf_small_bottle",
+			"functions": [ { "function": "set_count", "count": { "min": 1, "max": 2 } } ]
+		},
+		{
+			"type": "item", "weight": 1, "name": "sweetmagic:aether_recovery_book1",
+			"functions": [ { "function": "set_count", "count": { "min": -1, "max": 1 } } ]
+		},
+		{
+			"type": "item", "weight": 3, "name": "minecraft:glass_bottle",
+			"functions": [ { "function": "set_count", "count": { "min": 3, "max": 12 } } ]
+		},
+		{
+			"type": "item", "weight": 3, "name": "minecraft:redstone",
+			"functions": [ { "function": "set_count", "count": { "min": 3, "max": 6 } } ]
+		},
+		{
+			"type": "item", "weight": 3, "name": "minecraft:coal",
+			"functions": [ { "function": "set_count", "count": { "min": 3, "max": 6 } } ]
+		},
+		{
+			"type": "item", "weight": 3, "name": "minecraft:torch",
+			"functions": [ { "function": "set_count", "count": { "min": 5, "max": 12 } } ]
+		},
+		{
+			"type": "item", "weight": 4, "name": "minecraft:iron_ingot",
+			"functions": [ { "function": "set_count", "count": { "min": 1, "max": 3 } } ]
+		},
+		{
+			"type": "item", "weight": 4, "name": "minecraft:gold_ingot",
+			"functions": [ { "function": "set_count", "count": { "min": 1, "max": 2 } } ]
+		},
+		{
+			"type": "item", "weight": 3, "name": "minecraft:bucket",
+			"functions": [ { "function": "set_count", "count": { "min": 1, "max": 1 } } ]
+		},
+		{
+			"type": "item", "weight": 3, "name": "minecraft:bone",
+			"functions": [ { "function": "set_count", "count": { "min": 2, "max": 5 } } ]
+		},
+		{
+			"type": "item", "weight": 3, "name": "minecraft:ender_pearl",
+			"functions": [ { "function": "set_count", "count": { "min": 1, "max": 3 } } ]
+		},
+		{
+			"type": "item", "weight": 3, "name": "minecraft:rotten_flesh",
+			"functions": [ { "function": "set_count", "count": { "min": 2, "max": 4 } } ]
+		},
+		{
+			"type": "item", "weight": 1, "name": "minecraft:diamond",
+			"functions": [ { "function": "set_count", "count": { "min": -1, "max": 2 } } ]
+		}
+	] } ]
+}

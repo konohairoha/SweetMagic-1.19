@@ -1,0 +1,76 @@
+{
+	"pools": [ { "name": "smbounus", "rolls": 4, "entries": [
+		{
+			"type": "item", "weight": 3, "name": "sweetmagic:aether_crystal",
+			"functions": [ { "function": "set_count", "count": { "min": 1, "max": 6 } } ]
+		},
+		{
+			"type": "item", "weight": 6, "name": "sweetmagic:aether_crystal_shard",
+			"functions": [ { "function": "set_count", "count": { "min": 1, "max": 12 } } ]
+		},
+		{
+			"type": "item", "weight": 3, "name": "sweetmagic:fire_nasturtium_petal",
+			"functions": [ { "function": "set_count", "count": { "min": 0, "max": 6 } } ]
+		},
+		{
+			"type": "item", "weight": 3, "name": "sweetmagic:drizzly_mysotis_flower",
+			"functions": [ { "function": "set_count", "count": { "min": 0, "max": 3 } } ]
+		},
+		{
+			"type": "item", "weight": 2, "name": "sweetmagic:mf_small_bottle",
+			"functions": [ { "function": "set_count", "count": { "min": 0, "max": 3 } } ]
+		},
+		{
+			"type": "item", "weight": 4, "name": "sweetmagic:blank_page",
+			"functions": [ { "function": "set_count", "count": { "min": 1, "max": 3 } } ]
+		},
+		{
+			"type": "item", "weight": 3, "name": "sweetmagic:blank_magic",
+			"functions": [ { "function": "set_count", "count": { "min": 1, "max": 3 } } ]
+		},
+		{
+			"type": "item", "weight": 2, "name": "sweetmagic:mysterious_page",
+			"functions": [ { "function": "set_count", "count": { "min": 0, "max": 3 } } ]
+		},
+		{
+			"type": "item", "weight": 3, "name": "sweetmagic:magic_meal",
+			"functions": [ { "function": "set_count", "count": { "min": 4, "max": 8 } } ]
+		},
+		{
+			"type": "item", "weight": 3, "name": "sweetmagic:sticky_stuff_petal",
+			"functions": [ { "function": "set_count", "count": { "min": 0, "max": 3 } } ]
+		},
+		{
+			"type": "item", "weight": 3, "name": "sweetmagic:clerodendrum_petal",
+			"functions": [ { "function": "set_count", "count": { "min": 0, "max": 3 } } ]
+		},
+		{
+			"type": "item", "weight": 2, "name": "sweetmagic:cotton",
+			"functions": [ { "function": "set_count", "count": { "min": 1, "max": 3 } } ]
+		},
+		{
+			"type": "item", "weight": 2, "name": "sweetmagic:paper_mint",
+			"functions": [ { "function": "set_count", "count": { "min": 1, "max": 3 } } ]
+		},
+		{
+			"type": "item", "weight": 3, "name": "minecraft:iron_ingot",
+			"functions": [ { "function": "set_count", "count": { "min": 1, "max": 5 } } ]
+		},
+		{
+			"type": "item", "weight": 3, "name": "minecraft:gold_ingot",
+			"functions": [ { "function": "set_count", "count": { "min": 1, "max": 3 } } ]
+		},
+		{
+			"type": "item", "weight": 3, "name": "minecraft:obsidian",
+			"functions": [ { "function": "set_count", "count": { "min": 1, "max": 3 } } ]
+		},
+		{
+			"type": "item", "weight": 3, "name": "minecraft:book",
+			"functions": [ { "function": "set_count", "count": { "min": 1, "max": 4 } } ]
+		},
+		{
+			"type": "item", "weight": 3, "name": "minecraft:ender_pearl",
+			"functions": [ { "function": "set_count", "count": { "min": 1, "max": 3 } } ]
+		}
+	] } ]
+}

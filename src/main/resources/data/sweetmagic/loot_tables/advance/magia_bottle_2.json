@@ -1,0 +1,14 @@
+{
+	"pools": [ {
+		"name": "mf_bottle", "rolls": 3, "entries": [
+			{
+				"type": "item", "weight": 100, "name": "sweetmagic:magia_bottle",
+				"functions": [ { "function": "set_count", "count": { "min": 0, "max": 2 } } ]
+			},
+			{
+				"type": "item", "weight": 100, "name": "sweetmagic:deus_crystal",
+				"functions": [ { "function": "set_count", "count": { "min": 0, "max": 1 } } ]
+			}
+		]
+	} ]
+}

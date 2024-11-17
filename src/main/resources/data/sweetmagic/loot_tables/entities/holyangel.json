@@ -1,0 +1,46 @@
+{
+	"type": "minecraft:entity", "pools": [
+		{
+			"bonus_rolls": 0.0, "entries": [ {
+			"type": "minecraft:item", "functions": [
+				{ "add": false, "count": { "type": "minecraft:uniform", "max": 1.0, "min": 1.0 }, "function": "minecraft:set_count" },
+				{ "count": { "type": "minecraft:uniform", "max": 0.0, "min": 0.0 }, "function": "minecraft:looting_enchant" }
+			], "name": "sweetmagic:holly_charm" }
+		], "rolls": 1.0 },
+		{
+			"bonus_rolls": 0.0, "entries": [ {
+			"type": "minecraft:item", "functions": [
+				{ "add": false, "count": { "type": "minecraft:uniform", "max": 1.0, "min": 1.0 }, "function": "minecraft:set_count" },
+				{ "count": { "type": "minecraft:uniform", "max": 0.0, "min": 0.0 }, "function": "minecraft:looting_enchant" }
+			], "name": "sweetmagic:magic_holybuster" }
+		], "rolls": 1.0 },
+		{
+			"bonus_rolls": 0.0, "entries": [ {
+			"type": "minecraft:item", "functions": [
+				{ "add": false, "count": { "type": "minecraft:uniform", "max": 3.0, "min": 0.0 }, "function": "minecraft:set_count" },
+				{ "count": { "type": "minecraft:uniform", "max": 2.0, "min": 0.0 }, "function": "minecraft:looting_enchant" }
+			], "name": "sweetmagic:wish_crystal" }
+		], "rolls": 1.0 },
+		{
+			"bonus_rolls": 0.0, "entries": [ {
+			"type": "minecraft:item", "functions": [
+				{ "add": false, "count": { "type": "minecraft:uniform", "max": 3.0, "min": 1.0 }, "function": "minecraft:set_count" },
+				{ "count": { "type": "minecraft:uniform", "max": 2.0, "min": 0.0 }, "function": "minecraft:looting_enchant" }
+			], "name": "sweetmagic:acce_bag" }
+		], "rolls": 1.0 },
+		{
+			"bonus_rolls": 0.0, "entries": [ {
+			"type": "minecraft:item", "functions": [
+				{ "add": false, "count": { "type": "minecraft:uniform", "max": 8.0, "min": 4.0 }, "function": "minecraft:set_count" },
+				{ "count": { "type": "minecraft:uniform", "max": 4.0, "min": 0.0 }, "function": "minecraft:looting_enchant" }
+			], "name": "sweetmagic:prizmium" }
+		], "rolls": 1.0 },
+		{
+			"bonus_rolls": 0.0, "entries": [ {
+			"type": "minecraft:item", "functions": [
+				{ "add": false, "count": { "type": "minecraft:uniform", "max": 1, "min": 1 }, "function": "minecraft:set_count" },
+				{ "count": { "type": "minecraft:uniform", "max": 0, "min": 0 }, "function": "minecraft:looting_enchant" }
+			], "name": "sweetmagic:figurine_holyangel" }
+		], "rolls": 1.0 }
+	], "random_sequence": "sweetmagic:entities/queenfrost"
+}

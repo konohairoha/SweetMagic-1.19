@@ -1,0 +1,23 @@
+{
+	"pools": [ {
+		"name": "ruins_site", "rolls": 1, "entries": [
+			{
+				"type": "item", "weight": 100, "name": "minecraft:map",
+				"functions": [
+					{
+						"function": "minecraft:exploration_map",
+						"destination": "sweetmagic:ruins_site_fire",
+						"decoration": "banner_red",
+						"zoom": 2,
+						"search_radius": 1024,
+						"skip_existing_chunks": false
+					},
+					{
+						"function":"minecraft:set_name",
+						"name":"Ruin Site(Fire)"
+					}
+				]
+			}
+		]
+	} ]
+}
