@@ -1,0 +1,7 @@
+{
+	"replace": false,
+	"values": [
+		"sweetmagic:magic_book",
+		"#forge:magic_book_cosmic"
+	]
+}

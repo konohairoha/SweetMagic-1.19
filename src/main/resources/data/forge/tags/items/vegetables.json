@@ -1,0 +1,20 @@
+{
+	"replace": false,
+	"values": [
+		"#forge:crops/corn",
+		"#forge:crops/greenbeans",
+		"#forge:crops/onion",
+		"#forge:crops/sweetpotato",
+		"#forge:crops/soybean",
+		"#forge:crops/tomato",
+		"#forge:crops/eggplant",
+		"#forge:crops/cabbage",
+		"#forge:crops/lettuce",
+		"#forge:crops/greenpepper",
+		"#forge:crops/spinach",
+		"#forge:crops/japanese_radish",
+		"#forge:crops/soybean",
+		"#forge:crops/potato",
+		"#forge:crops/carrot"
+	]
+}

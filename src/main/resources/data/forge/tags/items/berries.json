@@ -1,1 +1,10 @@
-
+{
+	"replace": false,
+	"values": [
+		"sweetmagic:strawberry_seed",
+		"sweetmagic:raspberry_seed",
+		"sweetmagic:blueberry_seed",
+		"minecraft:glow_berries",
+		"minecraft:sweet_berries"
+	]
+}

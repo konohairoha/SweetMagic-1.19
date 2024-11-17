@@ -1,0 +1,10 @@
+{
+	"replace": false,
+	"values": [
+		"sweetmagic:book_shelf_t",
+		"sweetmagic:book_shelf_b",
+		"sweetmagic:book_shelf_m",
+		"sweetmagic:stacks_books_vertical",
+		"sweetmagic:stacks_books"
+	]
+}
