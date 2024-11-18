@@ -1,0 +1,14 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"key": {
+		"S": { "item": "sweetmagic:sannyflower_petal" },
+		"M": { "item": "sweetmagic:moonblossom_petal" },
+		"T": { "item": "minecraft:clock" }
+	},
+	"pattern": [
+		"SSS",
+		"STM",
+		"MMM"
+	],
+	"result": { "item": "sweetmagic:twilight_alstroemeria" }
+}

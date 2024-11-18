@@ -1,0 +1,14 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"key": {
+		"W": { "tag": "minecraft:wooden_slabs" },
+		"S": { "item": "minecraft:stick" },
+		"R": { "tag": "forge:recipe_book" }
+	},
+	"pattern": [
+		"SWS",
+		"SWS",
+		"SRS"
+	],
+	"result": { "item": "sweetmagic:wall_shelf", "count": 4 }
+}

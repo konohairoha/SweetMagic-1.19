@@ -1,0 +1,15 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		{ "tag": "forge:cobblestone" },
+		{ "tag": "forge:cobblestone" },
+		{ "tag": "forge:cobblestone" },
+		{ "tag": "forge:cobblestone" },
+		{ "tag": "forge:cobblestone" },
+		{ "tag": "forge:cobblestone" },
+		{ "tag": "forge:cobblestone" },
+		{ "tag": "forge:cobblestone" },
+		{ "item": "sweetmagic:magic_meal" }
+	],
+	"result": { "item": "sweetmagic:white_stone", "count": 32 }
+}

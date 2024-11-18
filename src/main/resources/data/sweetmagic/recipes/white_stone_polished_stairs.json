@@ -1,0 +1,14 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"key": {
+		"B": { "item": "sweetmagic:white_stone_polished" }
+	},
+	"pattern": [
+		"  B",
+		" BB",
+		"BBB"
+	],
+	"result": {
+		"item": "sweetmagic:white_stone_polished_stairs", "count": 6
+	}
+}

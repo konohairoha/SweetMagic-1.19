@@ -1,0 +1,7 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		{ "tag": "forge:milk" }
+	],
+	"result": { "item": "sweetmagic:whipping_cream", "count": 4 }
+}

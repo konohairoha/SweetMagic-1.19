@@ -1,0 +1,14 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"key": {
+		"B": { "item": "sweetmagic:whiteline_brick_b" },
+		"M": { "item": "sweetmagic:magic_meal" },
+		"D": { "item": "sweetmagic:potting_soil" }
+	},
+	"pattern": [
+		"MMM",
+		"DDD",
+		"BBB"
+	],
+	"result": { "item": "sweetmagic:whiteline_brick_pot_b", "count": 4 }
+}
