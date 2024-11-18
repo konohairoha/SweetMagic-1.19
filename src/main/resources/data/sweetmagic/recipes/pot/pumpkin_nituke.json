@@ -1,0 +1,11 @@
+{
+	"type": "sweetmagic:pot_craft",
+	"ingredients": [
+		{ "item": "minecraft:pumpkin", "count": 1 },
+		{ "tag": "forge:water", "count": 1 },
+		{ "item": "minecraft:sugar", "count": 1 }
+	],
+	"result": [
+		{ "item": "sweetmagic:pumpkin_nituke", "count": 3 }
+	]
+}

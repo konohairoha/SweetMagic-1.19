@@ -1,0 +1,11 @@
+{
+	"type": "sweetmagic:recycler_craft",
+	"ingredients": [
+		{ "item": "sweetmagic:blank_page", "count": 1 }
+	],
+	"result": [
+		{ "item": "minecraft:paper", "count": 1 },
+		{ "item": "minecraft:paper", "count": 1, "chance": 0.67 },
+		{ "item": "minecraft:paper", "count": 1, "chance": 0.25 }
+	]
+}

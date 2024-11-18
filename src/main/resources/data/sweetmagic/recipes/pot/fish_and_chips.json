@@ -1,0 +1,15 @@
+{
+	"type": "sweetmagic:pot_craft",
+	"ingredients": [
+		{ "tag": "forge:raw_cod", "count": 4 },
+		{ "tag": "forge:fried_potato", "count": 4 },
+		{ "tag": "forge:raw_beef", "count": 2 },
+		{ "tag": "forge:eggs", "count": 3 },
+		{ "tag": "forge:flour", "count": 3 },
+		{ "tag": "forge:oil", "count": 6 },
+		{ "tag": "forge:salt", "count": 2 }
+	],
+	"result": [
+		{ "item": "sweetmagic:fish_and_chips", "count": 8 }
+	]
+}

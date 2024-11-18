@@ -1,0 +1,16 @@
+{
+	"type": "sweetmagic:pot_craft",
+	"ingredients": [
+		{ "tag": "forge:crops/cabbage", "count": 4 },
+		{ "tag": "forge:crops/onion", "count": 2 },
+		{ "tag": "forge:raw_beef", "count": 2 },
+		{ "tag": "forge:raw_pork", "count": 2 },
+		{ "tag": "forge:wine", "count": 2 },
+		{ "tag": "forge:water", "count": 3 },
+		{ "tag": "forge:milk", "count": 1 },
+		{ "tag": "forge:salt", "count": 1 }
+	],
+	"result": [
+		{ "item": "sweetmagic:roll_cabbage", "count": 8 }
+	]
+}

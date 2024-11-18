@@ -1,0 +1,7 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		{ "item": "sweetmagic:eggplant" }
+	],
+	"result": { "item": "sweetmagic:eggplant_seed", "count": 2 }
+}

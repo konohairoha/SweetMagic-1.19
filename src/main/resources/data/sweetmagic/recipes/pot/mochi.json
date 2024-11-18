@@ -1,0 +1,10 @@
+{
+	"type": "sweetmagic:pot_craft",
+	"ingredients": [
+		{ "item": "sweetmagic:cooked_rice", "count": 6 },
+		{ "tag": "forge:water", "count": 2 }
+	],
+	"result": [
+		{ "item": "sweetmagic:mochi", "count": 5 }
+	]
+}

@@ -1,0 +1,14 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"key": {
+		"B": { "item": "sweetmagic:design_brick_bd" },
+		"M": { "item": "sweetmagic:magic_meal" },
+		"D": { "item": "sweetmagic:potting_soil" }
+	},
+	"pattern": [
+		"MMM",
+		"DDD",
+		"BBB"
+	],
+	"result": { "item": "sweetmagic:design_brick_pot_bd", "count": 4 }
+}

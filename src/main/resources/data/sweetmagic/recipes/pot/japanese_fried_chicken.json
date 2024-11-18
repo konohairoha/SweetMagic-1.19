@@ -1,0 +1,14 @@
+{
+	"type": "sweetmagic:pot_craft",
+	"ingredients": [
+		{ "tag": "forge:raw_chicken", "count": 4 },
+		{ "tag": "forge:crops/cabbage", "count": 2 },
+		{ "tag": "forge:flour", "count": 4 },
+		{ "tag": "forge:soy_sauce", "count": 2 },
+		{ "tag": "forge:wine", "count": 2 },
+		{ "tag": "forge:oil", "count": 4 }
+	],
+	"result": [
+		{ "item": "sweetmagic:japanese_fried_chicken", "count": 8 }
+	]
+}

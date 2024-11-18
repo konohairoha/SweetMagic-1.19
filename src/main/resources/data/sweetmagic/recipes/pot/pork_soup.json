@@ -1,0 +1,14 @@
+{
+	"type": "sweetmagic:pot_craft",
+	"ingredients": [
+		{ "tag": "forge:raw_pork", "count": 1 },
+		{ "tag": "forge:miso", "count": 3 },
+		{ "tag": "forge:crops/onion", "count": 2 },
+		{ "tag": "forge:crops/japanese_radish", "count": 1 },
+		{ "tag": "forge:crops/carrot", "count": 1 },
+		{ "tag": "forge:water", "count": 4 }
+	],
+	"result": [
+		{ "item": "sweetmagic:pork_soup", "count": 8 }
+	]
+}

@@ -1,0 +1,15 @@
+{
+	"type": "sweetmagic:recycler_craft",
+	"ingredients": [
+		{ "item": "sweetmagic:mystical_book", "count": 1 }
+	],
+	"result": [
+		{ "item": "sweetmagic:mystical_page", "count": 1 },
+		{ "item": "sweetmagic:mysterious_page", "count": 1 },
+		{ "item": "sweetmagic:mysterious_page", "count": 1, "chance": 0.67 },
+		{ "item": "sweetmagic:mysterious_page", "count": 2, "chance": 0.25 },
+		{ "item": "sweetmagic:blank_page", "count": 1 },
+		{ "item": "sweetmagic:blank_page", "count": 1, "chance": 0.67 },
+		{ "item": "sweetmagic:blank_page", "count": 3, "chance": 0.25 }
+	]
+}

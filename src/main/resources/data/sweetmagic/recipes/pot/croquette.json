@@ -1,0 +1,18 @@
+{
+	"type": "sweetmagic:pot_craft",
+	"ingredients": [
+		{ "tag": "forge:crops/onion", "count": 2 },
+		{ "tag": "forge:crops/potato", "count": 4 },
+		{ "tag": "forge:raw_beef", "count": 2 },
+		{ "tag": "forge:eggs", "count": 3 },
+		{ "tag": "forge:flour", "count": 1 },
+		{ "tag": "forge:bread_crumbs", "count": 6 },
+		{ "tag": "forge:butter", "count": 1 },
+		{ "tag": "forge:water", "count": 4 },
+		{ "tag": "forge:oil", "count": 8 },
+		{ "tag": "forge:salt", "count": 2 }
+	],
+	"result": [
+		{ "item": "sweetmagic:croquette", "count": 16 }
+	]
+}

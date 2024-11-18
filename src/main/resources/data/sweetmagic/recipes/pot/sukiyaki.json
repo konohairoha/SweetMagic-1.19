@@ -1,0 +1,17 @@
+{
+	"type": "sweetmagic:pot_craft",
+	"ingredients": [
+		{ "tag": "forge:raw_beef", "count": 4 },
+		{ "tag": "forge:crops/onion", "count": 3 },
+		{ "tag": "forge:crops/lettuce", "count": 2 },
+		{ "tag": "forge:mushroom", "count": 3 },
+		{ "tag": "forge:eggs", "count": 4 },
+		{ "tag": "forge:soy_sauce", "count": 4 },
+		{ "tag": "forge:wine", "count": 3 },
+		{ "tag": "forge:oil", "count": 1 },
+		{ "tag": "forge:sugar", "count": 4 }
+	],
+	"result": [
+		{ "item": "sweetmagic:sukiyaki", "count": 12 }
+	]
+}

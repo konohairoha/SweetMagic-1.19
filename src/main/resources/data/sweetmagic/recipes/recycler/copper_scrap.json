@@ -1,0 +1,11 @@
+{
+	"type": "sweetmagic:recycler_craft",
+	"ingredients": [
+		{ "item": "sweetmagic:copper_scrap", "count": 1 }
+	],
+	"result": [
+		{ "item": "minecraft:raw_copper", "count": 1, "chance": 0.5 },
+		{ "item": "minecraft:raw_copper", "count": 1, "chance": 0.125 },
+		{ "item": "minecraft:raw_copper", "count": 1, "chance": 0.025 }
+	]
+}

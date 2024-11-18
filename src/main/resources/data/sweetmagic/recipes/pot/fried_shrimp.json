@@ -1,0 +1,15 @@
+{
+	"type": "sweetmagic:pot_craft",
+	"ingredients": [
+		{ "tag": "forge:raw_shrimp", "count": 4 },
+		{ "tag": "forge:crops/cabbage", "count": 2 },
+		{ "tag": "forge:flour", "count": 4 },
+		{ "tag": "forge:bread_crumbs", "count": 4 },
+		{ "tag": "forge:oil", "count": 4 },
+		{ "tag": "forge:eggs", "count": 4 },
+		{ "tag": "forge:salt", "count": 1 }
+	],
+	"result": [
+		{ "item": "sweetmagic:fried_shrimp", "count": 8 }
+	]
+}

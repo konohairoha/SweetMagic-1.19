@@ -1,0 +1,7 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		{ "item": "sweetmagic:divinecrystal_block" }
+	],
+	"result": { "item": "sweetmagic:divine_crystal", "count": 9 }
+}

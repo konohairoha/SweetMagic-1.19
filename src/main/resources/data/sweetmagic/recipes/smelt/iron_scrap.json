@@ -1,0 +1,6 @@
+{
+	"type": "minecraft:smelting",
+	"cookingtime": 200, "experience": 0.1,
+	"ingredient": { "item": "sweetmagic:iron_scrap" },
+	"result": "minecraft:iron_nugget"
+}

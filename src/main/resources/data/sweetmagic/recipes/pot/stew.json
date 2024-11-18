@@ -1,0 +1,17 @@
+{
+	"type": "sweetmagic:pot_craft",
+	"ingredients": [
+		{ "tag": "forge:raw_chicken", "count": 4 },
+		{ "tag": "forge:crops/potato", "count": 4 },
+		{ "tag": "forge:crops/onion", "count": 3 },
+		{ "tag": "forge:crops/carrot", "count": 2 },
+		{ "tag": "forge:flour", "count": 2 },
+		{ "tag": "forge:butter", "count": 2 },
+		{ "tag": "forge:milk", "count": 3 },
+		{ "tag": "forge:water", "count": 2 },
+		{ "tag": "forge:salt", "count": 1 }
+	],
+	"result": [
+		{ "item": "sweetmagic:stew", "count": 12 }
+	]
+}

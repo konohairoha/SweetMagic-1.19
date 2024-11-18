@@ -1,0 +1,13 @@
+{
+	"type": "sweetmagic:pot_craft",
+	"ingredients": [
+		{ "tag": "forge:miso", "count": 3 },
+		{ "tag": "forge:crops/onion", "count": 2 },
+		{ "tag": "forge:crops/japanese_radish", "count": 2 },
+		{ "tag": "forge:seaweed", "count": 2 },
+		{ "tag": "forge:water", "count": 4 }
+	],
+	"result": [
+		{ "item": "sweetmagic:soy_soup", "count": 8 }
+	]
+}

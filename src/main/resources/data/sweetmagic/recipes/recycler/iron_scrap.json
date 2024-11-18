@@ -1,0 +1,13 @@
+{
+	"type": "sweetmagic:recycler_craft",
+	"ingredients": [
+		{ "item": "sweetmagic:iron_scrap", "count": 1 }
+	],
+	"result": [
+		{ "item": "minecraft:iron_nugget", "count": 2 },
+		{ "item": "minecraft:iron_nugget", "count": 1, "chance": 0.75 },
+		{ "item": "minecraft:iron_nugget", "count": 1, "chance": 0.5 },
+		{ "item": "minecraft:raw_iron", "count": 1, "chance": 0.25 },
+		{ "item": "minecraft:raw_iron", "count": 1, "chance": 0.1 }
+	]
+}

@@ -1,0 +1,6 @@
+{
+	"type": "minecraft:smelting",
+	"cookingtime": 200, "experience": 0.1,
+	"ingredient": { "item": "sweetmagic:copper_scrap" },
+	"result": "minecraft:stone"
+}

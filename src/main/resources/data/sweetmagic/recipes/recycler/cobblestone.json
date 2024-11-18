@@ -1,0 +1,12 @@
+{
+	"type": "sweetmagic:recycler_craft",
+	"ingredients": [
+		{ "item": "minecraft:cobbled_deepslate", "count": 1 }
+	],
+	"result": [
+		{ "item": "minecraft:cobblestone", "count": 1 },
+		{ "item": "minecraft:cobblestone", "count": 1, "chance": 0.5 },
+		{ "item": "minecraft:dirt", "count": 1, "chance": 0.25 },
+		{ "item": "minecraft:dirt", "count": 1, "chance": 0.1 }
+	]
+}

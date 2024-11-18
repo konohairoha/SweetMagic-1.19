@@ -1,0 +1,10 @@
+{
+	"type": "sweetmagic:pot_craft",
+	"ingredients": [
+		{ "tag": "forge:leather", "count": 1 },
+		{ "tag": "forge:water", "count": 1 }
+	],
+	"result": [
+		{ "item": "sweetmagic:gelatin", "count": 16 }
+	]
+}

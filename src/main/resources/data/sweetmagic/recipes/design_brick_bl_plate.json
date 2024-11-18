@@ -1,0 +1,10 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"key": {
+		"B": { "item": "sweetmagic:design_brick_bl" }
+	},
+	"pattern": [
+		"BB "
+	],
+	"result": { "item": "sweetmagic:design_brick_bl_plate", "count": 2 }
+}
