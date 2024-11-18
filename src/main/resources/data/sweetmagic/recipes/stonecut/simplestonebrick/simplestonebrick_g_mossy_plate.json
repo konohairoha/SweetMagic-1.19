@@ -1,0 +1,5 @@
+{
+	"type": "minecraft:stonecutting", "count": 1,
+	"ingredient": {"tag": "minecraft:stone_bricks"},
+	"result": "sweetmagic:simplestonebrick_g_mossy_plate"
+}

@@ -1,0 +1,5 @@
+{
+	"type": "minecraft:stonecutting", "count": 2,
+	"ingredient": {"tag": "minecraft:stone_bricks"},
+	"result": "sweetmagic:simplestonebrick_g_cracked_slab"
+}

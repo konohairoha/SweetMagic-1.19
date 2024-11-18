@@ -1,0 +1,5 @@
+{
+	"type": "minecraft:stonecutting", "count": 1,
+	"ingredient": { "tag": "sweetmagic:smglass_pane" },
+	"result": "sweetmagic:wooden_frame_window_w"
+}
