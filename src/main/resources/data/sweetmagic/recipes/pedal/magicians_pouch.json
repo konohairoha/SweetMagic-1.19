@@ -1,0 +1,14 @@
+{
+	"type": "sweetmagic:pedal_craft",
+	"ingredients": [
+		{ "tag": "forge:leather", "count": 16 },
+		{ "tag": "forge:chests", "count": 1 },
+		{ "item": "sweetmagic:aether_crystal", "count": 4 },
+		{ "item": "minecraft:string", "count": 8 },
+		{ "tag": "forge:nuggets/iron", "count": 1 },
+		{ "tag": "minecraft:buttons", "count": 1 }
+	],
+	"result": [
+		{ "item": "sweetmagic:magicians_pouch", "count": 1, "mf": 5000, "nbt": false }
+	]
+}

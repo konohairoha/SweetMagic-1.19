@@ -1,0 +1,11 @@
+{
+	"type": "sweetmagic:pedal_craft",
+	"ingredients": [
+		{ "tag": "forge:glass/colorless", "count": 2 },
+		{ "item": "sweetmagic:aether_crystal", "count": 1 },
+		{ "tag": "forge:nuggets/iron", "count": 3 }
+	],
+	"result": [
+		{ "item": "sweetmagic:dungeon_compas", "count": 1, "mf": 500, "nbt": false }
+	]
+}

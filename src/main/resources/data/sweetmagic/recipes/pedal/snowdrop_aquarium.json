@@ -1,0 +1,12 @@
+{
+	"type": "sweetmagic:pedal_craft",
+	"ingredients": [
+		{ "item": "sweetmagic:snowdrop_pot", "count": 1 },
+		{ "item": "sweetmagic:cosmos_light_ingot", "count": 2 },
+		{ "tag": "sweetmagic:smplanks", "count": 4 },
+		{ "tag": "sweetmagic:smglass", "count": 4 }
+	],
+	"result": [
+		{ "item": "sweetmagic:snowdrop_aquarium", "count": 1, "mf": 50000, "nbt": true }
+	]
+}

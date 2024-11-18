@@ -1,0 +1,14 @@
+{
+	"type": "sweetmagic:pedal_craft",
+	"ingredients": [
+		{ "item": "sweetmagic:mftank_adavance", "count": 1 },
+		{ "item": "sweetmagic:sugarglass", "count": 16 },
+		{ "item": "sweetmagic:magicbarrier", "count": 64 },
+		{ "item": "sweetmagic:mirage_glass", "count": 16 },
+		{ "item": "sweetmagic:pure_crystal", "count": 2 },
+		{ "item": "sweetmagic:mystical_page", "count": 2 }
+	],
+	"result": [
+		{ "item": "sweetmagic:mftank_master", "count": 1, "mf": 300000, "nbt": true }
+	]
+}

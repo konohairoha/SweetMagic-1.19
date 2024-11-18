@@ -1,0 +1,16 @@
+{
+	"type": "sweetmagic:pedal_craft",
+	"ingredients": [
+		{ "item": "sweetmagic:magic_book_cosmic", "count": 1 },
+		{ "item": "sweetmagic:aether_crystal_shard", "count": 1 },
+		{ "item": "sweetmagic:aether_crystal", "count": 1 },
+		{ "item": "sweetmagic:divine_crystal", "count": 1 },
+		{ "item": "sweetmagic:pure_crystal", "count": 1 },
+		{ "item": "sweetmagic:deus_crystal", "count": 1 },
+		{ "item": "sweetmagic:cosmic_crystal_shard", "count": 1 },
+		{ "item": "sweetmagic:cosmic_crystal", "count": 1 }
+	],
+	"result": [
+		{ "item": "sweetmagic:magic_book_scarlet", "count": 1, "mf": 200000, "nbt": false }
+	]
+}

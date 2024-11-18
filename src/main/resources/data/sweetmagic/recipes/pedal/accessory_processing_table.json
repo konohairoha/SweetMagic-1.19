@@ -1,0 +1,12 @@
+{
+	"type": "sweetmagic:pedal_craft",
+	"ingredients": [
+		{ "item": "sweetmagic:white_stone", "count": 8 },
+		{ "item": "sweetmagic:alternative_ingot", "count": 4 },
+		{ "item": "sweetmagic:starlight", "count": 2 },
+		{ "item": "sweetmagic:magic_meal", "count": 8 }
+	],
+	"result": [
+		{ "item": "sweetmagic:accessory_processing_table", "count": 1, "mf": 50000, "nbt": false }
+	]
+}

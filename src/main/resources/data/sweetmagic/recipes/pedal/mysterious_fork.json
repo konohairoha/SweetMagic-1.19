@@ -1,0 +1,11 @@
+{
+	"type": "sweetmagic:pedal_craft",
+	"ingredients": [
+		{ "item": "sweetmagic:alternative_block", "count": 1 },
+		{ "item": "sweetmagic:aether_crystal", "count": 2 },
+		{ "item": "sweetmagic:mysterious_page", "count": 1 }
+	],
+	"result": [
+		{ "item": "sweetmagic:mysterious_fork", "count": 1, "mf": 2000, "nbt": false }
+	]
+}

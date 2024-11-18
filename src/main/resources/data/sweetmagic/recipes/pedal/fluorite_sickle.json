@@ -1,0 +1,11 @@
+{
+	"type": "sweetmagic:pedal_craft",
+	"ingredients": [
+		{ "item": "sweetmagic:alternative_sickle", "count": 1 },
+		{ "item": "sweetmagic:alternative_ingot", "count": 2 },
+		{ "tag": "forge:gems/fluorite", "count": 5 }
+	],
+	"result": [
+		{ "item": "sweetmagic:fluorite_sickle", "count": 1, "mf": 5000, "nbt": true }
+	]
+}

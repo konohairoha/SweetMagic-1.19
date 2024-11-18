@@ -1,0 +1,12 @@
+{
+	"type": "sweetmagic:pedal_craft",
+	"ingredients": [
+		{ "item": "sweetmagic:divine_crystal", "count": 2 },
+		{ "item": "sweetmagic:mf_small_bottle", "count": 4 },
+		{ "tag": "forge:stone", "count": 8 },
+		{ "item": "sweetmagic:alternative_ingot", "count": 8 }
+	],
+	"result": [
+		{ "item": "sweetmagic:aether_repair", "count": 1, "mf": 100000, "nbt": false }
+	]
+}

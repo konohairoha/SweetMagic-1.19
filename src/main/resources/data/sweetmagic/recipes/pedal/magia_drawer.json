@@ -1,0 +1,12 @@
+{
+	"type": "sweetmagic:pedal_craft",
+	"ingredients": [
+		{ "tag": "sweetmagic:woodchest", "count": 1 },
+		{ "item": "sweetmagic:aether_crystal", "count": 2 },
+		{ "item": "sweetmagic:mysterious_page", "count": 3 },
+		{ "tag": "forge:chests/wooden", "count": 2 }
+	],
+	"result": [
+		{ "item": "sweetmagic:magia_drawer", "count": 1, "mf": 10000, "nbt": true }
+	]
+}

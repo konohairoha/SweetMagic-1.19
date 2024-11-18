@@ -1,0 +1,13 @@
+{
+	"type": "sweetmagic:pedal_craft",
+	"ingredients": [
+		{ "tag": "sweetmagic:mill", "count": 1 },
+		{ "tag": "forge:ingots/iron", "count": 2 },
+		{ "item": "sweetmagic:divine_crystal", "count": 2 },
+		{ "tag": "sweetmagic:smlogs", "count": 4 },
+		{ "tag": "forge:stone", "count": 8 }
+	],
+	"result": [
+		{ "item": "sweetmagic:aether_recycler", "count": 1, "mf": 10000, "nbt": false }
+	]
+}

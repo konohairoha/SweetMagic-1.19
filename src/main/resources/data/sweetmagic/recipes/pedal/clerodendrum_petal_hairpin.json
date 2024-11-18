@@ -1,0 +1,10 @@
+{
+	"type": "sweetmagic:pedal_craft",
+	"ingredients": [
+		{ "item": "sweetmagic:clerodendrum_petal", "count": 8 },
+		{ "tag": "forge:ingots/copper", "count": 2 }
+	],
+	"result": [
+		{ "item": "sweetmagic:clerodendrum_petal_hairpin", "count": 1, "mf": 500, "nbt": true }
+	]
+}

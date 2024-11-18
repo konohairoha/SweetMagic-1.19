@@ -1,0 +1,12 @@
+{
+	"type": "sweetmagic:pedal_craft",
+	"ingredients": [
+		{ "item": "sweetmagic:sugarglass", "count": 4 },
+		{ "item": "minecraft:fishing_rod", "count": 1 },
+		{ "tag": "forge:ingots/iron", "count": 6 },
+		{ "item": "sweetmagic:aether_crystal", "count": 2 }
+	],
+	"result": [
+		{ "item": "sweetmagic:mf_fisher", "count": 1, "mf": 1000, "nbt": false }
+	]
+}

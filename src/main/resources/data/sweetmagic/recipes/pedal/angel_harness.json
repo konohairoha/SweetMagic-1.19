@@ -1,0 +1,13 @@
+{
+	"type": "sweetmagic:pedal_craft",
+	"ingredients": [
+		{ "item": "sweetmagic:aether_boot", "count": 1 },
+		{ "item": "sweetmagic:pure_crystal", "count": 3 },
+		{ "item": "sweetmagic:cosmos_light_ingot", "count": 4 },
+		{ "item": "sweetmagic:mystical_page", "count": 2 },
+		{ "item": "sweetmagic:starlight", "count": 8 }
+	],
+	"result": [
+		{ "item": "sweetmagic:angel_harness", "count": 1, "mf": 200000, "nbt": true }
+	]
+}

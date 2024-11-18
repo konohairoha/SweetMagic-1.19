@@ -1,0 +1,12 @@
+{
+	"type": "sweetmagic:pedal_craft",
+	"ingredients": [
+		{  "tag": "forge:ender_pearls" , "count": 1 },
+		{ "tag": "forge:glass/colorless" , "count": 4 },
+		{ "item": "sweetmagic:alternative_ingot" , "count": 4 },
+		{ "tag": "minecraft:planks" , "count": 4 }
+	],
+	"result": [
+		{ "item": "sweetmagic:aether_lamplight", "count": 1, "mf": 20000, "nbt": false }
+	]
+}

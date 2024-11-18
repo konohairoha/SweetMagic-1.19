@@ -1,0 +1,12 @@
+{
+	"type": "sweetmagic:pedal_craft",
+	"ingredients": [
+		{ "item": "sweetmagic:hydrangea_pot", "count": 1 },
+		{ "item": "sweetmagic:cosmos_light_ingot", "count": 2 },
+		{ "tag": "sweetmagic:smplanks", "count": 4 },
+		{ "tag": "sweetmagic:smglass", "count": 4 }
+	],
+	"result": [
+		{ "item": "sweetmagic:hydrangea_aquarium", "count": 1, "mf": 50000, "nbt": true }
+	]
+}

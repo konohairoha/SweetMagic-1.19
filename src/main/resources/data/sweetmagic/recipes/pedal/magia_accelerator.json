@@ -1,0 +1,12 @@
+{
+	"type": "sweetmagic:pedal_craft",
+	"ingredients": [
+		{ "item": "sweetmagic:ami_glass", "count": 8 },
+		{ "item": "sweetmagic:pure_crystal", "count": 2 },
+		{ "item": "sweetmagic:pillar_stone_w", "count": 6 },
+		{ "item": "sweetmagic:cosmos_light_ingot", "count": 2 }
+	],
+	"result": [
+		{ "item": "sweetmagic:magia_accelerator", "count": 1, "mf": 100000, "nbt": false }
+	]
+}

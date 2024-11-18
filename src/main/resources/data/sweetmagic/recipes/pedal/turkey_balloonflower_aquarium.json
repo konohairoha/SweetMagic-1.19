@@ -1,0 +1,12 @@
+{
+	"type": "sweetmagic:pedal_craft",
+	"ingredients": [
+		{ "item": "sweetmagic:turkey_balloonflower_pot", "count": 1 },
+		{ "item": "sweetmagic:cosmos_light_ingot", "count": 2 },
+		{ "tag": "sweetmagic:smplanks", "count": 4 },
+		{ "tag": "sweetmagic:smglass", "count": 4 }
+	],
+	"result": [
+		{ "item": "sweetmagic:turkey_balloonflower_aquarium", "count": 1, "mf": 200000, "nbt": true }
+	]
+}

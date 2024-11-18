@@ -1,0 +1,11 @@
+{
+	"type": "sweetmagic:pedal_craft",
+	"ingredients": [
+		{ "tag": "sweetmagic:aether_wand", "count": 1 },
+		{ "item": "sweetmagic:divine_crystal", "count": 1 },
+		{ "item": "minecraft:blaze_rod", "count": 2 }
+	],
+	"result": [
+		{ "item": "sweetmagic:divine_wand", "count": 1, "mf": 10000, "nbt": true }
+	]
+}

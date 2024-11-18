@@ -1,0 +1,12 @@
+{
+	"type": "sweetmagic:pedal_craft",
+	"ingredients": [
+		{ "item": "sweetmagic:zinnia", "count": 16 },
+		{ "item": "sweetmagic:alternative_ingot", "count": 2 },
+		{ "item": "sweetmagic:magic_meal", "count": 4 },
+		{ "item": "minecraft:flower_pot", "count": 1 }
+	],
+	"result": [
+		{ "item": "sweetmagic:zinnia_pot", "count": 1, "mf": 160000, "nbt": false }
+	]
+}

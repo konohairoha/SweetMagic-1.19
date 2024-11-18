@@ -1,0 +1,11 @@
+{
+	"type": "sweetmagic:pedal_craft",
+	"ingredients": [
+		{ "item": "sweetmagic:mf_bottle", "count": 2 },
+		{ "item": "sweetmagic:cotton_cloth", "count": 8 },
+		{ "item": "minecraft:feather", "count": 4 }
+	],
+	"result": [
+		{ "item": "sweetmagic:prompt_feather", "count": 1, "mf": 1000, "nbt": false }
+	]
+}

@@ -1,0 +1,12 @@
+{
+	"type": "sweetmagic:pedal_craft",
+	"ingredients": [
+		{ "item": "sweetmagic:gorgeous_glass", "count": 4 },
+		{ "item": "sweetmagic:alternative_ingot", "count": 3 },
+		{ "tag": "forge:ingots/iron", "count": 6 },
+		{ "item": "sweetmagic:aether_crystal", "count": 2 }
+	],
+	"result": [
+		{ "item": "sweetmagic:mf_miner", "count": 1, "mf": 5000, "nbt": false }
+	]
+}

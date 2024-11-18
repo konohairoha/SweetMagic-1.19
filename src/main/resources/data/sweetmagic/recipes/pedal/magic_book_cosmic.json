@@ -1,0 +1,15 @@
+{
+	"type": "sweetmagic:pedal_craft",
+	"ingredients": [
+		{ "item": "sweetmagic:magic_book", "count": 1 },
+		{ "item": "minecraft:glow_ink_sac", "count": 4 },
+		{ "item": "sweetmagic:pure_crystal", "count": 2 },
+		{ "item": "sweetmagic:magia_bottle", "count": 1 },
+		{ "item": "sweetmagic:mystical_page", "count": 1 },
+		{ "item": "sweetmagic:mysterious_page", "count": 4 },
+		{ "item": "sweetmagic:witch_tears", "count": 1 }
+	],
+	"result": [
+		{ "item": "sweetmagic:magic_book_cosmic", "count": 1, "mf": 20000, "nbt": false }
+	]
+}

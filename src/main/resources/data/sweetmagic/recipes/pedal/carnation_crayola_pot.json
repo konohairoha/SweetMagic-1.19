@@ -1,0 +1,11 @@
+{
+	"type": "sweetmagic:pedal_craft",
+	"ingredients": [
+		{ "item": "sweetmagic:carnation_crayola", "count": 8 },
+		{ "item": "sweetmagic:sugarbell", "count": 4 },
+		{ "item": "minecraft:flower_pot", "count": 1 }
+	],
+	"result": [
+		{ "item": "sweetmagic:carnation_crayola_pot", "count": 1, "mf": 500, "nbt": false }
+	]
+}

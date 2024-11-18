@@ -1,0 +1,11 @@
+{
+	"type": "sweetmagic:pedal_craft",
+	"ingredients": [
+		{ "tag": "sweetmagic:purecrystal_wand", "count": 1 },
+		{ "item": "sweetmagic:deus_crystal", "count": 1 },
+		{ "item": "sweetmagic:cosmos_light_ingot", "count": 4 }
+	],
+	"result": [
+		{ "item": "sweetmagic:deuscrystal_wand", "count": 1, "mf": 150000, "nbt": true }
+	]
+}

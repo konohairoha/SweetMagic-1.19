@@ -1,0 +1,12 @@
+{
+	"type": "sweetmagic:pedal_craft",
+	"ingredients": [
+		{ "item": "sweetmagic:mfchanger_adavance", "count": 1 },
+		{ "item": "sweetmagic:magiawood_log", "count": 16 },
+		{ "item": "sweetmagic:pure_crystal", "count": 2 },
+		{ "item": "sweetmagic:mystical_page", "count": 2 }
+	],
+	"result": [
+		{ "item": "sweetmagic:mfchanger_master", "count": 1, "mf": 300000, "nbt": true }
+	]
+}

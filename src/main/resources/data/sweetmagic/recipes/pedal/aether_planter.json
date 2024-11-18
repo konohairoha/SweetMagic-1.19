@@ -1,0 +1,12 @@
+{
+	"type": "sweetmagic:pedal_craft",
+	"ingredients": [
+		{ "tag": "sweetmagic:potting_soil_pot", "count": 16 },
+		{ "tag": "sweetmagic:smlogs", "count": 4 },
+		{ "tag": "forge:ingots/iron", "count": 4 },
+		{ "tag": "forge:magic_book_cosmic", "count": 1 }
+	],
+	"result": [
+		{ "item": "sweetmagic:aether_planter", "count": 4, "mf": 8000, "nbt": false }
+	]
+}

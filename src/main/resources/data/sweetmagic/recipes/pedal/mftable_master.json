@@ -1,0 +1,12 @@
+{
+	"type": "sweetmagic:pedal_craft",
+	"ingredients": [
+		{ "item": "sweetmagic:mftable_adavance", "count": 1 },
+		{ "item": "sweetmagic:prism_log", "count": 16 },
+		{ "item": "sweetmagic:pure_crystal", "count": 2 },
+		{ "item": "sweetmagic:mystical_page", "count": 2 }
+	],
+	"result": [
+		{ "item": "sweetmagic:mftable_master", "count": 1, "mf": 300000, "nbt": true }
+	]
+}

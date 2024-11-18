@@ -1,0 +1,12 @@
+{
+	"type": "sweetmagic:pedal_craft",
+	"ingredients": [
+		{ "item": "sweetmagic:aether_crystal", "count": 3 },
+		{ "tag": "forge:nuggets/gold", "count": 1 },
+		{ "item": "minecraft:stick", "count": 2 },
+		{ "item": "minecraft:feather", "count": 2 }
+	],
+	"result": [
+		{ "item": "sweetmagic:aether_wand", "count": 1, "mf": 500, "nbt": false }
+	]
+}

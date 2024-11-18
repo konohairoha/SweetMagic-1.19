@@ -1,0 +1,12 @@
+{
+	"type": "sweetmagic:pedal_craft",
+	"ingredients": [
+		{ "item": "sweetmagic:magiawood_log", "count": 8 },
+		{ "item": "sweetmagic:cotton_cloth", "count": 8 },
+		{ "item": "sweetmagic:aether_crystal", "count": 4 },
+		{ "item": "minecraft:book", "count": 3 }
+	],
+	"result": [
+		{ "item": "sweetmagic:enchant_educe", "count": 1, "mf": 20000, "nbt": false }
+	]
+}

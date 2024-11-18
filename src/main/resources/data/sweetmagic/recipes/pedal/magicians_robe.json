@@ -1,0 +1,12 @@
+{
+	"type": "sweetmagic:pedal_craft",
+	"ingredients": [
+		{ "item": "sweetmagic:cotton_cloth", "count": 24 },
+		{ "item": "sweetmagic:aether_crystal", "count": 6 },
+		{ "tag": "forge:ingots/gold", "count": 4 },
+		{ "tag": "sweetmagic:slimeballs", "count": 16 }
+	],
+	"result": [
+		{ "item": "sweetmagic:magicians_robe", "count": 1, "mf": 5000, "nbt": false }
+	]
+}
