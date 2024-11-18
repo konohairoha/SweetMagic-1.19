@@ -1,0 +1,13 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"key": {
+		"R": { "tag": "forge:recipe_book" },
+		"B": { "item": "minecraft:book" }
+	},
+	"pattern": [
+		"   ",
+		"BBB",
+		" R "
+	],
+	"result": { "item": "sweetmagic:stacks_books_vertical" }
+}

@@ -1,0 +1,9 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		{ "item": "sweetmagic:peach_leaves" },
+		{ "item": "sweetmagic:peach_leaves" },
+		{ "tag": "minecraft:saplings" }
+	],
+	"result": { "item": "sweetmagic:planting_peach", "count": 16 }
+}

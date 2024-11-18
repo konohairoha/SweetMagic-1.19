@@ -1,0 +1,9 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		{ "item": "sweetmagic:orange_leaves" },
+		{ "item": "sweetmagic:orange_leaves" },
+		{ "tag": "minecraft:saplings" }
+	],
+	"result": { "item": "sweetmagic:planting_orange", "count": 16 }
+}

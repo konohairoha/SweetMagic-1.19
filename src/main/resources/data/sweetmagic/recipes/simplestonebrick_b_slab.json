@@ -1,0 +1,8 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"key": { "B": { "item": "sweetmagic:simplestonebrick_b" } },
+	"pattern": [
+		"BBB"
+	],
+	"result": { "item": "sweetmagic:simplestonebrick_b_slab", "count": 6 }
+}

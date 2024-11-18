@@ -1,0 +1,9 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		{ "item": "sweetmagic:estor_leaves" },
+		{ "item": "sweetmagic:estor_leaves" },
+		{ "tag": "minecraft:saplings" }
+	],
+	"result": { "item": "sweetmagic:planting_estor", "count": 16 }
+}

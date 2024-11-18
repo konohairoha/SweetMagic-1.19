@@ -1,0 +1,13 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"key": {
+		"B": { "tag": "sweetmagic:iron_fence" },
+		"P": { "tag": "forge:nuggets/iron" }
+	},
+	"pattern": [
+		" BB",
+		" BB",
+		"PPP"
+	],
+	"result": { "item": "sweetmagic:range_food", "count": 2 }
+}

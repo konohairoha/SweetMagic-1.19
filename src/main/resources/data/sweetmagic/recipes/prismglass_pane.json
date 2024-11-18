@@ -1,0 +1,11 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"key": {
+		"G": { "item": "sweetmagic:prismglass" }
+	},
+	"pattern": [
+		"GGG",
+		"GGG"
+	],
+	"result": { "item": "sweetmagic:prismglass_pane", "count": 16 }
+}

@@ -1,0 +1,13 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"key": {
+		"R": { "tag": "forge:cook/rice" },
+		"D": { "tag": "forge:dry_seaweed" },
+		"S": { "tag": "forge:salt" }
+	},
+	"pattern": [
+		"RR ",
+		"DS "
+	],
+	"result": { "item": "sweetmagic:riceball_salt", "count": 4 }
+}

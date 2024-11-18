@@ -1,0 +1,8 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		{ "item": "minecraft:glass" },
+		{ "item": "minecraft:sugar" }
+	],
+	"result": { "item": "sweetmagic:sugarglass", "count": 2 }
+}

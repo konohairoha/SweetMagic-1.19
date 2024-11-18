@@ -1,0 +1,11 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"key": {
+		"G": { "item": "sweetmagic:sugarglass" }
+	},
+	"pattern": [
+		"GGG",
+		"GGG"
+	],
+	"result": { "item": "sweetmagic:sugarglass_pane", "count": 16 }
+}

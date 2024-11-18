@@ -1,0 +1,16 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"key": {
+		"I": { "tag": "forge:ingots/iron" },
+		"B": { "tag": "sweetmagic:iron_fence" },
+		"F": { "item": "minecraft:furnace" }
+	},
+	"pattern": [
+		"BBB",
+		"IFI",
+		"III"
+	],
+	"result": {
+		"item": "sweetmagic:stove"
+	}
+}

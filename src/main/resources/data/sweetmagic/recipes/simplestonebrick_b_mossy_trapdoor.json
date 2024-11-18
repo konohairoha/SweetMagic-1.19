@@ -1,0 +1,9 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"key": { "P": { "item": "sweetmagic:simplestonebrick_b_mossy" } },
+	"pattern": [
+		"PPP",
+		"PPP"
+	],
+	"result": { "item": "sweetmagic:simplestonebrick_b_mossy_trapdoor", "count": 8 }
+}

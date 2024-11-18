@@ -1,0 +1,8 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"key": { "B": { "item": "sweetmagic:simplestonebrick_g_mossy" } },
+	"pattern": [
+		"BBB"
+	],
+	"result": { "item": "sweetmagic:simplestonebrick_g_mossy_slab", "count": 6 }
+}

@@ -1,0 +1,7 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		{ "item": "sweetmagic:purecrystal_block" }
+	],
+	"result": { "item": "sweetmagic:pure_crystal", "count": 9 }
+}

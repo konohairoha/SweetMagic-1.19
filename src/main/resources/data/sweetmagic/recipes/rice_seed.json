@@ -1,0 +1,7 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		{ "item": "sweetmagic:rice_plants" }
+	],
+	"result": { "item": "sweetmagic:rice_seed", "count": 1 }
+}

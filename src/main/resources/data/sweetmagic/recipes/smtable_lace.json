@@ -1,0 +1,11 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		{ "item": "sweetmagic:smtable" },
+		{ "item": "sweetmagic:smtable" },
+		{ "item": "sweetmagic:smtable" },
+		{ "item": "sweetmagic:smtable" },
+		{ "tag": "minecraft:wool" }
+	],
+	"result": { "item": "sweetmagic:smtable_lace", "count": 4 }
+}
