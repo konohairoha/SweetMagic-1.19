@@ -1,0 +1,5 @@
+{
+	"type": "minecraft:stonecutting", "count": 1,
+	"ingredient": { "tag": "sweetmagic:chopping_board" },
+	"result": "sweetmagic:chopping_board_p"
+}

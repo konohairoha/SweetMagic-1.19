@@ -1,0 +1,5 @@
+{
+	"type": "minecraft:stonecutting", "count": 2,
+ 	"ingredient": { "tag": "sweetmagic:design_brick/all" },
+	"result": "sweetmagic:design_brick_bl_slab"
+}

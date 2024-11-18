@@ -1,0 +1,5 @@
+{
+	"type": "minecraft:stonecutting", "count": 1,
+	"ingredient": { "tag": "sweetmagic:chestnut_planks" },
+	"result": "sweetmagic:chestnut_stairs"
+}
