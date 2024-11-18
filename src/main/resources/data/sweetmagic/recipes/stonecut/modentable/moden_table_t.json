@@ -1,0 +1,5 @@
+{
+	"type": "minecraft:stonecutting", "count": 1,
+	"ingredient": { "tag": "sweetmagic:moden_table" },
+	"result": "sweetmagic:moden_table_t"
+}

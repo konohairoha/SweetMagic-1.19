@@ -1,0 +1,5 @@
+{
+	"type": "minecraft:stonecutting", "count": 1,
+	"ingredient": { "tag": "sweetmagic:glowstone" },
+	"result": "sweetmagic:stendglass_lamp_g"
+}

@@ -1,0 +1,5 @@
+{
+	"type": "minecraft:stonecutting", "count": 1,
+	"ingredient": { "item": "sweetmagic:lemon_planks" },
+	"result": "sweetmagic:lemon_planks_plate"
+}

@@ -1,0 +1,5 @@
+{
+	"type": "minecraft:stonecutting", "count": 1,
+	"ingredient": { "tag": "sweetmagic:magiawood_planks" },
+	"result": "sweetmagic:magiawood_stairs"
+}

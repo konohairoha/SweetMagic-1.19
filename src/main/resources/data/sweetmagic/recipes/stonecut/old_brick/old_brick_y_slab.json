@@ -1,0 +1,5 @@
+{
+	"type": "minecraft:stonecutting", "count": 2,
+	"ingredient": { "tag": "sweetmagic:old_brick/all" },
+	"result": "sweetmagic:old_brick_y_slab"
+}
