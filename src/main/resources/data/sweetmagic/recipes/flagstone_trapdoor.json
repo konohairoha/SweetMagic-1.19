@@ -1,0 +1,11 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"key": {
+		"P": { "item": "sweetmagic:flagstone" }
+	},
+	"pattern": [
+		"PPP",
+		"PPP"
+	],
+	"result": { "item": "sweetmagic:flagstone_trapdoor", "count": 8 }
+}

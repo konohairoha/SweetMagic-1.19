@@ -1,0 +1,10 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		{ "item": "sweetmagic:frosted_glass" },
+		{ "item": "sweetmagic:frosted_glass" },
+		{ "tag": "forge:dyes/white" },
+		{ "tag": "forge:dyes/white" }
+	],
+	"result": { "item": "sweetmagic:frosted_glass_line", "count": 4 }
+}

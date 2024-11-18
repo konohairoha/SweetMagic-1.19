@@ -1,0 +1,15 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"key": {
+		"C": { "tag": "forge:chests/wooden" },
+		"I": { "tag": "sweetmagic:ice" },
+		"S": { "tag": "sweetmagic:slimeballs" },
+		"D": { "item": "minecraft:iron_door" }
+	},
+	"pattern": [
+		"SD ",
+		"ID ",
+		"CD "
+	],
+	"result": { "item": "sweetmagic:freezer" }
+}

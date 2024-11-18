@@ -1,0 +1,12 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"key": {
+		"L": { "item": "sweetmagic:magiawood_log" }
+	},
+	"pattern": [
+		" L ",
+		" L ",
+		" L "
+	],
+	"result": { "item": "sweetmagic:fence_pole_magiawood", "count": 18 }
+}

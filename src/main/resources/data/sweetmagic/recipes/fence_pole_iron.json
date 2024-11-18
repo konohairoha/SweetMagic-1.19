@@ -1,0 +1,12 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"key": {
+		"L": { "tag": "forge:nuggets/iron" }
+	},
+	"pattern": [
+		" L ",
+		" L ",
+		" L "
+	],
+	"result": { "item": "sweetmagic:fence_pole_iron", "count": 18 }
+}

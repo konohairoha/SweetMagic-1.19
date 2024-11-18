@@ -1,0 +1,7 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		{ "item": "sweetmagic:fire_nasturtium_petal" }
+	],
+	"result": { "item": "sweetmagic:fire_powder", "count": 2 }
+}

@@ -1,0 +1,12 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"key": {
+		"L": { "item": "sweetmagic:chestnut_log" }
+	},
+	"pattern": [
+		" L ",
+		" L ",
+		" L "
+	],
+	"result": { "item": "sweetmagic:fence_pole_chestnut", "count": 18 }
+}

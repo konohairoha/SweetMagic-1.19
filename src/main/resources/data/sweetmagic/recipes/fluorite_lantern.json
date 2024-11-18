@@ -1,0 +1,14 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"key": {
+		"F": { "item": "sweetmagic:fluorite" },
+		"G": { "tag": "sweetmagic:smglass" },
+		"I": { "tag": "forge:nuggets/iron" }
+	},
+	"pattern": [
+		" I ",
+		"GFG",
+		" I "
+	],
+	"result": { "item": "sweetmagic:fluorite_lantern", "count": 4 }
+}

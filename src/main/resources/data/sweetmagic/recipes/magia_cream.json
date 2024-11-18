@@ -1,0 +1,8 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		{ "item": "minecraft:blaze_powder" },
+		{ "tag": "forge:slimeballs" }
+	],
+	"result": { "item": "minecraft:magma_cream", "count": 9 }
+}

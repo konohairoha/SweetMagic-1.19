@@ -1,0 +1,7 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		{ "item": "sweetmagic:greenpepper" }
+	],
+	"result": { "item": "sweetmagic:greenpepper_seed", "count": 2 }
+}

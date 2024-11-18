@@ -1,0 +1,8 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		{ "tag": "sweetmagic:smglass" },
+		{ "item": "sweetmagic:magic_meal" }
+	],
+	"result": { "item": "sweetmagic:magicbarrier", "count": 2 }
+}

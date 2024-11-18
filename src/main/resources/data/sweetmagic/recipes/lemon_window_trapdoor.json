@@ -1,0 +1,12 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"key": {
+		"P": { "item": "sweetmagic:lemon_planks" },
+		"G": { "tag": "sweetmagic:smglass_pane" }
+	},
+	"pattern": [
+		"PGP",
+		"PGP"
+	],
+	"result": { "item": "sweetmagic:lemon_window_trapdoor", "count": 8 }
+}

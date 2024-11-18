@@ -1,0 +1,14 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"key": {
+		"B": { "tag": "forge:recipe_book" },
+		"I": { "tag": "forge:ingots/iron" },
+		"N": { "tag": "forge:nuggets/iron" }
+	},
+	"pattern": [
+		"N N",
+		"IBI",
+		"III"
+	],
+	"result": { "item": "sweetmagic:iris_creation" }
+}

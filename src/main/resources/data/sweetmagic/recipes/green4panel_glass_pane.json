@@ -1,0 +1,11 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"key": {
+		"G": { "item": "sweetmagic:green4panel_glass" }
+	},
+	"pattern": [
+		"GGG",
+		"GGG"
+	],
+	"result": { "item": "sweetmagic:green4panel_glass_pane", "count": 16 }
+}
