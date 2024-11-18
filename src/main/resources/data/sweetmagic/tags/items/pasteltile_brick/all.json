@@ -1,0 +1,26 @@
+{
+	"replace": false,
+	"values": [
+		"sweetmagic:pasteltile_brick_b",
+		"sweetmagic:pasteltile_brick_b_stairs",
+		"sweetmagic:pasteltile_brick_b_trapdoor",
+		"sweetmagic:pasteltile_brick_bl",
+		"sweetmagic:pasteltile_brick_bl_stairs",
+		"sweetmagic:pasteltile_brick_bl_trapdoor",
+		"sweetmagic:pasteltile_brick_br",
+		"sweetmagic:pasteltile_brick_br_stairs",
+		"sweetmagic:pasteltile_brick_br_trapdoor",
+		"sweetmagic:pasteltile_brick_gr",
+		"sweetmagic:pasteltile_brick_gr_stairs",
+		"sweetmagic:pasteltile_brick_gr_trapdoor",
+		"sweetmagic:pasteltile_brick_lg",
+		"sweetmagic:pasteltile_brick_lg_stairs",
+		"sweetmagic:pasteltile_brick_lg_trapdoor",
+		"sweetmagic:pasteltile_brick_r",
+		"sweetmagic:pasteltile_brick_r_stairs",
+		"sweetmagic:pasteltile_brick_r_trapdoor",
+		"sweetmagic:pasteltile_brick_y",
+		"sweetmagic:pasteltile_brick_y_stairs",
+		"sweetmagic:pasteltile_brick_y_trapdoor"
+	]
+}

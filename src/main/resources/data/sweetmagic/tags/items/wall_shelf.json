@@ -1,0 +1,10 @@
+{
+	"replace": false,
+	"values": [
+		"sweetmagic:wall_shelf",
+		"sweetmagic:wall_shelf_m",
+		"sweetmagic:wall_shelf_t",
+		"sweetmagic:wall_shelf_b",
+		"sweetmagic:wall_shelf_i"
+	]
+}

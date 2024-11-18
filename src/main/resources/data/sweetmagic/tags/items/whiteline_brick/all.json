@@ -1,0 +1,14 @@
+{
+	"replace": false,
+	"values": [
+		"sweetmagic:whiteline_brick_r",
+		"sweetmagic:whiteline_brick_r_stairs",
+		"sweetmagic:whiteline_brick_r_trapdoor",
+		"sweetmagic:whiteline_brick_b",
+		"sweetmagic:whiteline_brick_b_stairs",
+		"sweetmagic:whiteline_brick_b_trapdoor",
+		"sweetmagic:whiteline_brick_y",
+		"sweetmagic:whiteline_brick_y_stairs",
+		"sweetmagic:whiteline_brick_y_trapdoor"
+	]
+}

@@ -1,0 +1,12 @@
+{
+	"replace": false,
+	"values": [
+		"sweetmagic:pane2_door_i",
+		"sweetmagic:pane4_door_i",
+		"sweetmagic:elegant_door_i",
+		"sweetmagic:arch_door_i",
+		"sweetmagic:arch_plant_door_i",
+		"sweetmagic:simple_door_i",
+		"sweetmagic:simple_net_door_i"
+	]
+}

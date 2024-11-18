@@ -1,0 +1,12 @@
+{
+	"replace": false,
+	"values": [
+		"sweetmagic:mill",
+		"sweetmagic:mixer_r",
+		"sweetmagic:mixer_l",
+		"sweetmagic:mixer_o",
+		"sweetmagic:mixer_pi",
+		"sweetmagic:mixer_pu",
+		"sweetmagic:mixer_s"
+	]
+}

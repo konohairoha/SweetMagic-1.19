@@ -1,0 +1,25 @@
+{
+	"replace": false,
+	"values": [
+		"sweetmagic:moden_stairs_t",
+		"sweetmagic:moden_stairs_b",
+		"sweetmagic:moden_stairs_chestnut",
+		"sweetmagic:moden_stairs_lemon",
+		"sweetmagic:moden_stairs_orange",
+		"sweetmagic:moden_stairs_orange_w",
+		"sweetmagic:moden_stairs_orange_p",
+		"sweetmagic:moden_stairs_orange_m",
+		"sweetmagic:moden_stairs_coconut",
+		"sweetmagic:moden_stairs_magiawood",
+		"sweetmagic:moden_stairs_unsupport_t",
+		"sweetmagic:moden_stairs_unsupport_b",
+		"sweetmagic:moden_stairs_unsupport_chestnut",
+		"sweetmagic:moden_stairs_unsupport_lemon",
+		"sweetmagic:moden_stairs_unsupport_orange",
+		"sweetmagic:moden_stairs_unsupport_orange_w",
+		"sweetmagic:moden_stairs_unsupport_orange_p",
+		"sweetmagic:moden_stairs_unsupport_orange_m",
+		"sweetmagic:moden_stairs_unsupport_coconut",
+		"sweetmagic:moden_stairs_unsupport_magiawood"
+	]
+}

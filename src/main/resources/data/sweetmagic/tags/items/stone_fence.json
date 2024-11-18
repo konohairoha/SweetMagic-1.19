@@ -1,0 +1,15 @@
+{
+	"replace": false,
+	"values": [
+		"sweetmagic:stone_fence_antique_r",
+		"sweetmagic:stone_fence_antique_w",
+		"sweetmagic:stone_fence_antique_b",
+		"sweetmagic:stone_fence_whiteline_r",
+		"sweetmagic:stone_fence_whiteline_b",
+		"sweetmagic:stone_fence_whiteline_y",
+		"sweetmagic:stone_fence_design_w",
+		"sweetmagic:stone_fence_design_bl",
+		"sweetmagic:stone_fence_simplestone_n",
+		"sweetmagic:stone_fence_simplestone_g"
+	]
+}

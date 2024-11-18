@@ -1,0 +1,32 @@
+{
+	"replace": false,
+	"values": [
+		"sweetmagic:longtile_brick_w",
+		"sweetmagic:longtile_brick_w_stairs",
+		"sweetmagic:longtile_brick_w_trapdoor",
+		"sweetmagic:longtile_brick_r",
+		"sweetmagic:longtile_brick_r_stairs",
+		"sweetmagic:longtile_brick_r_trapdoor",
+		"sweetmagic:longtile_brick_y",
+		"sweetmagic:longtile_brick_y_stairs",
+		"sweetmagic:longtile_brick_y_trapdoor",
+		"sweetmagic:longtile_brick_g",
+		"sweetmagic:longtile_brick_g_stairs",
+		"sweetmagic:longtile_brick_g_trapdoor",
+		"sweetmagic:longtile_brick_o",
+		"sweetmagic:longtile_brick_o_stairs",
+		"sweetmagic:longtile_brick_o_trapdoor",
+		"sweetmagic:longtile_brick_p",
+		"sweetmagic:longtile_brick_p_stairs",
+		"sweetmagic:longtile_brick_p_trapdoor",
+		"sweetmagic:longtile_brick_bu",
+		"sweetmagic:longtile_brick_bu_stairs",
+		"sweetmagic:longtile_brick_bu_trapdoor",
+		"sweetmagic:longtile_brick_bl",
+		"sweetmagic:longtile_brick_bl_stairs",
+		"sweetmagic:longtile_brick_bl_trapdoor",
+		"sweetmagic:longtile_brick_br",
+		"sweetmagic:longtile_brick_br_stairs",
+		"sweetmagic:longtile_brick_br_trapdoor"
+	]
+}

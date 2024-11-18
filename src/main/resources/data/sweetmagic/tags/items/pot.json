@@ -1,0 +1,18 @@
+{
+	"replace": false,
+	"values": [
+		"sweetmagic:pot_w",
+		"sweetmagic:pot_r",
+		"sweetmagic:pot_l",
+		"sweetmagic:pot_o",
+		"sweetmagic:pot_pi",
+		"sweetmagic:pot_pu",
+		"sweetmagic:pot_s",
+		"sweetmagic:single_pot_r",
+		"sweetmagic:single_pot_l",
+		"sweetmagic:single_pot_o",
+		"sweetmagic:single_pot_pi",
+		"sweetmagic:single_pot_pu",
+		"sweetmagic:single_pot_s"
+	]
+}

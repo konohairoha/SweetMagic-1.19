@@ -1,0 +1,11 @@
+{
+	"replace": false,
+	"values": [
+		"sweetmagic:woodbench_d",
+		"sweetmagic:woodbench_t",
+		"sweetmagic:woodbench_b",
+		"sweetmagic:backrest_woodbench_d",
+		"sweetmagic:backrest_woodbench_t",
+		"sweetmagic:backrest_woodbench_b"
+	]
+}

@@ -1,0 +1,10 @@
+{
+	"replace": false,
+	"values": [
+		"sweetmagic:magicpage_attack",
+		"sweetmagic:magicpage_defence",
+		"sweetmagic:magicpage_heal",
+		"sweetmagic:magicpage_mf",
+		"sweetmagic:magicpage_recast"
+	]
+}

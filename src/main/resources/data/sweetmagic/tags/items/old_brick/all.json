@@ -1,0 +1,26 @@
+{
+	"replace": false,
+	"values": [
+		"sweetmagic:old_brick",
+		"sweetmagic:old_brick_stairs",
+		"sweetmagic:old_brick_trapdoor",
+		"sweetmagic:old_brick_b",
+		"sweetmagic:old_brick_b_stairs",
+		"sweetmagic:old_brick_b_trapdoor",
+		"sweetmagic:old_brick_g",
+		"sweetmagic:old_brick_g_stairs",
+		"sweetmagic:old_brick_g_trapdoor",
+		"sweetmagic:old_brick_l",
+		"sweetmagic:old_brick_l_stairs",
+		"sweetmagic:old_brick_l_trapdoor",
+		"sweetmagic:old_brick_r",
+		"sweetmagic:old_brick_r_stairs",
+		"sweetmagic:old_brick_r_trapdoor",
+		"sweetmagic:old_brick_s",
+		"sweetmagic:old_brick_s_stairs",
+		"sweetmagic:old_brick_s_trapdoor",
+		"sweetmagic:old_brick_y",
+		"sweetmagic:old_brick_y_stairs",
+		"sweetmagic:old_brick_y_trapdoor"
+	]
+}

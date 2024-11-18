@@ -1,0 +1,9 @@
+{
+	"replace": false,
+	"values": [
+		"sweetmagic:wall_partition",
+		"sweetmagic:wall_partition_m",
+		"sweetmagic:wall_partition_t",
+		"sweetmagic:wall_partition_b"
+	]
+}

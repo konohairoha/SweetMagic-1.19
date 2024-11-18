@@ -1,0 +1,20 @@
+{
+	"replace": false,
+	"values": [
+		"sweetmagic:sugarglass",
+		"sweetmagic:shading_sugarglass",
+		"sweetmagic:frosted_glass",
+		"sweetmagic:frosted_glass_line",
+		"sweetmagic:prismglass",
+		"sweetmagic:shading_prismglass",
+		"sweetmagic:green4panel_glass",
+		"sweetmagic:lightbrown4panel_glass",
+		"sweetmagic:brown4panel_glass",
+		"sweetmagic:darkbrown4panel_glass",
+		"sweetmagic:ami_glass",
+		"sweetmagic:gorgeous_glass",
+		"sweetmagic:gorgeous_glass_w",
+		"sweetmagic:magicbarrier",
+		"sweetmagic:mirage_glass"
+	]
+}
