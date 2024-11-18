@@ -1,0 +1,5 @@
+{
+	"type": "minecraft:stonecutting", "count": 1,
+	"ingredient": { "tag": "sweetmagic:prism_planks" },
+	"result": "sweetmagic:prism_planks"
+}

@@ -1,0 +1,5 @@
+{
+	"type": "minecraft:stonecutting", "count": 1,
+	"ingredient": { "item": "minecraft:torch" },
+	"result": "sweetmagic:table_lamp"
+}

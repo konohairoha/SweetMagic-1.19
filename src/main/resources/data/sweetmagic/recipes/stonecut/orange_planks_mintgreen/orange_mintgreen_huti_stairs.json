@@ -1,0 +1,5 @@
+{
+	"type": "minecraft:stonecutting", "count": 1,
+	"ingredient": { "tag": "sweetmagic:orange_planks/orange_planks_mintgreen" },
+	"result": "sweetmagic:orange_mintgreen_huti_stairs"
+}

@@ -1,0 +1,5 @@
+{
+	"type": "minecraft:stonecutting", "count": 2,
+	"ingredient": { "tag": "sweetmagic:orange_planks/orange_planks_w" },
+	"result": "sweetmagic:orange_w_slab"
+}

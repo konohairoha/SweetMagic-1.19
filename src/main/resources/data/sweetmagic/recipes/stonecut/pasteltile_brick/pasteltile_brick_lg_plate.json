@@ -1,0 +1,5 @@
+{
+	"type": "minecraft:stonecutting", "count": 1,
+	"ingredient": { "tag": "sweetmagic:pasteltile_brick/all" },
+	"result": "sweetmagic:pasteltile_brick_lg_plate"
+}

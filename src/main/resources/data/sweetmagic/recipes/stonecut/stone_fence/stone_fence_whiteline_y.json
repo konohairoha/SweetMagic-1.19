@@ -1,0 +1,5 @@
+{
+	"type": "minecraft:stonecutting", "count": 1,
+	"ingredient": { "tag": "sweetmagic:whiteline_brick/all" },
+	"result": "sweetmagic:stone_fence_whiteline_y"
+}
