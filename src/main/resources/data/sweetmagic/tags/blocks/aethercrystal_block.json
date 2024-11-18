@@ -1,1 +1,7 @@
-
+{
+	"replace": false,
+	"values": [
+		"sweetmagic:aethercrystal_block",
+		"#sweetmagic:divinecrystal_block"
+	]
+}

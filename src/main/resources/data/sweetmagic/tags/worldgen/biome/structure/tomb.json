@@ -1,0 +1,9 @@
+{
+	"replace": false,
+	"values": [
+		"#forge:is_plains",
+		"#minecraft:is_hill",
+		"#minecraft:is_mountain",
+		"#minecraft:is_savanna"
+	]
+}

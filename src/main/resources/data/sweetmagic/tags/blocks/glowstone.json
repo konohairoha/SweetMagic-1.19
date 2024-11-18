@@ -1,0 +1,11 @@
+{
+	"replace": false,
+	"values": [
+		"minecraft:glowstone",
+		"sweetmagic:glow_light",
+		"sweetmagic:glow_light_o",
+		"sweetmagic:gorgeous_lamp",
+		"sweetmagic:stendglass_lamp_g",
+		"sweetmagic:stendglass_lamp_b"
+	]
+}

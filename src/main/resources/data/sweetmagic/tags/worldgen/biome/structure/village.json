@@ -1,0 +1,10 @@
+{
+	"replace": false,
+	"values": [
+		"#sweetmagic:is_flowergarden",
+		"sweetmagic:fruit_forest_sm",
+		"sweetmagic:fruittower_forest",
+		"sweetmagic:cherry_blossoms_forest_sm",
+		"sweetmagic:magiawood_forest"
+	]
+}

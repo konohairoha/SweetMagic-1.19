@@ -1,0 +1,35 @@
+{
+	"replace": false,
+	"values": [
+		"sweetmagic:sugarglass",
+		"sweetmagic:shading_sugarglass",
+		"sweetmagic:frosted_glass",
+		"sweetmagic:frosted_glass_line",
+		"sweetmagic:prismglass",
+		"sweetmagic:shading_prismglass",
+		"sweetmagic:green4panel_glass",
+		"sweetmagic:lightbrown4panel_glass",
+		"sweetmagic:brown4panel_glass",
+		"sweetmagic:darkbrown4panel_glass",
+		"sweetmagic:ami_glass",
+		"sweetmagic:gorgeous_glass",
+		"sweetmagic:gorgeous_glass_w",
+		"sweetmagic:magicbarrier",
+		"sweetmagic:mirage_glass",
+		
+		"sweetmagic:sugarglass_pane",
+		"sweetmagic:shading_sugarglass_pane",
+		"sweetmagic:frosted_glass_pane",
+		"sweetmagic:frosted_glass_line_pane",
+		"sweetmagic:prismglass_pane",
+		"sweetmagic:shading_prismglass_pane",
+		"sweetmagic:green4panel_glass_pane",
+		"sweetmagic:lightbrown4panel_glass_pane",
+		"sweetmagic:brown4panel_glass_pane",
+		"sweetmagic:darkbrown4panel_glass_pane",
+		"sweetmagic:darkbrown4panel_glass_pane",
+		"sweetmagic:ami_glass_pane",
+		"sweetmagic:gorgeous_glass_pane",
+		"sweetmagic:gorgeous_glass_w_pane"
+	]
+}

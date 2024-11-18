@@ -1,0 +1,13 @@
+{
+	"replace": false,
+	"values": [
+		"sweetmagic:flagstone",
+		"sweetmagic:flagstone_stairs",
+		"sweetmagic:flagstone_slab",
+		"sweetmagic:flagstone_trapdoor",
+		"sweetmagic:flagstone_color",
+		"sweetmagic:flagstone_color_stairs",
+		"sweetmagic:flagstone_color_slab",
+		"sweetmagic:flagstone_color_trapdoor"
+	]
+}

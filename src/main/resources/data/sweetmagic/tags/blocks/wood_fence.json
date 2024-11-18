@@ -1,0 +1,9 @@
+{
+	"replace": false,
+	"values": [
+		"sweetmagic:log_fence_pearch_v",
+		"sweetmagic:log_fence_pearch_h",
+		"sweetmagic:log_fence_prism_v",
+		"sweetmagic:log_fence_prism_h"
+	]
+}

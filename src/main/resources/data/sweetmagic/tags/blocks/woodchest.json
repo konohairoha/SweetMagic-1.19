@@ -1,0 +1,14 @@
+{
+	"replace": false,
+	"values": [
+		"sweetmagic:woodbox",
+		"sweetmagic:treasure_chest",
+		"sweetmagic:japanese_dance",
+		"sweetmagic:western_style_dance",
+		"#sweetmagic:trash_can",
+		"#sweetmagic:moden_shelf",
+		"#sweetmagic:couter_table_chest",
+		"#sweetmagic:trunk_case",
+		"#sweetmagic:wood_chest"
+	]
+}

@@ -1,0 +1,17 @@
+{
+	"replace": false,
+	"values": [
+		"sweetmagic:design_brick_w",
+		"sweetmagic:design_brick_w_stairs",
+		"sweetmagic:design_brick_r",
+		"sweetmagic:design_brick_r_stairs",
+		"sweetmagic:design_brick_g",
+		"sweetmagic:design_brick_g_stairs",
+		"sweetmagic:design_brick_bd",
+		"sweetmagic:design_brick_bd_stairs",
+		"sweetmagic:design_brick_bu",
+		"sweetmagic:design_brick_bu_stairs",
+		"sweetmagic:design_brick_bl",
+		"sweetmagic:design_brick_bl_stairs"
+	]
+}

@@ -1,0 +1,17 @@
+{
+	"replace": false,
+	"values": [
+		"sweetmagic:simplestonebrick_b",
+		"sweetmagic:simplestonebrick_b_slab",
+		"sweetmagic:simplestonebrick_b_stairs",
+		"sweetmagic:simplestonebrick_b_trapdoor",
+		"sweetmagic:simplestonebrick_b_cracked",
+		"sweetmagic:simplestonebrick_b_cracked_slab",
+		"sweetmagic:simplestonebrick_b_cracked_stairs",
+		"sweetmagic:simplestonebrick_b_cracked_trapdoor",
+		"sweetmagic:simplestonebrick_b_mossy",
+		"sweetmagic:simplestonebrick_b_mossy_slab",
+		"sweetmagic:simplestonebrick_b_mossy_stairs",
+		"sweetmagic:simplestonebrick_b_mossy_trapdoor"
+	]
+}
