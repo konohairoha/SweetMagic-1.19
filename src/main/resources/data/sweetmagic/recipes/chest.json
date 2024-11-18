@@ -1,0 +1,12 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"key": {
+		"G": { "tag": "sweetmagic:smlogs" }
+	},
+	"pattern": [
+		"GGG",
+		"G G",
+		"GGG"
+	],
+	"result": { "item": "minecraft:chest", "count": 4 }
+}

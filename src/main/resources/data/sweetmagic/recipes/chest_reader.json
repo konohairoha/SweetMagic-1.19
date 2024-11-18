@@ -1,0 +1,13 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"key": {
+		"A": { "item": "sweetmagic:aether_crystal" },
+		"S": { "tag": "sweetmagic:smlogs" }
+	},
+	"pattern": [
+		"AAA",
+		"ASA",
+		"AAA"
+	],
+	"result": { "item": "sweetmagic:chest_reader" }
+}

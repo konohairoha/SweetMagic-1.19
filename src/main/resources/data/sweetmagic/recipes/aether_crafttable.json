@@ -1,0 +1,8 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		{ "tag": "forge:wordkbench" },
+		{ "tag": "forge:recipe_book" }
+	],
+	"result": { "item": "sweetmagic:aether_crafttable", "count": 1 }
+}

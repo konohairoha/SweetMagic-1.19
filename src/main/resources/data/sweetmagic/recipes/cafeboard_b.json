@@ -1,0 +1,7 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		{ "item": "sweetmagic:cafeboard_w" }
+	],
+	"result": { "item": "sweetmagic:cafeboard_b", "count": 1 }
+}

@@ -1,0 +1,7 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		{ "item": "sweetmagic:cherry_blossoms_log" }
+	],
+	"result": { "item": "sweetmagic:cherry_blossoms_planks", "count": 4 }
+}

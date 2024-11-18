@@ -1,0 +1,8 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		{ "tag": "minecraft:planks" },
+		{ "tag": "forge:recipe_book" }
+	],
+	"result": { "item": "sweetmagic:chopping_board", "count": 1 }
+}

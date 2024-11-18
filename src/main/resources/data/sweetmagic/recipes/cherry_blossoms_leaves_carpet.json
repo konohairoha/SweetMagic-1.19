@@ -1,0 +1,8 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		{ "item": "sweetmagic:cherry_blossoms_leaves" },
+		{ "item": "sweetmagic:cherry_blossoms_leaves" }
+	],
+	"result": { "item": "sweetmagic:cherry_blossoms_leaves_carpet", "count": 8 }
+}

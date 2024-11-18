@@ -1,0 +1,12 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"key": {
+		"B": { "item": "sweetmagic:black_polished" }
+	},
+	"pattern": [
+		"BBB"
+	],
+	"result": {
+		"item": "sweetmagic:black_polished_slab", "count": 6
+	}
+}

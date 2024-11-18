@@ -1,0 +1,7 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		{ "item": "sweetmagic:corn" }
+	],
+	"result": { "item": "sweetmagic:corn_seed", "count": 2 }
+}

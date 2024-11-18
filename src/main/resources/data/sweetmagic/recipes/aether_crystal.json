@@ -1,0 +1,7 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		{ "item": "sweetmagic:aethercrystal_block" }
+	],
+	"result": { "item": "sweetmagic:aether_crystal", "count": 9 }
+}

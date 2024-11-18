@@ -1,0 +1,9 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		{ "item": "sweetmagic:paper_mint" },
+		{ "item": "sweetmagic:paper_mint" },
+		{ "tag": "forge:leather" }
+	],
+	"result": { "item": "minecraft:book", "count": 1 }
+}

@@ -1,0 +1,11 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"key": {
+		"C": { "item": "sweetmagic:alternative_ingot" }
+	},
+	"pattern": [
+		"CC ",
+		"CC "
+	],
+	"result": { "item": "sweetmagic:alternative_block" }
+}

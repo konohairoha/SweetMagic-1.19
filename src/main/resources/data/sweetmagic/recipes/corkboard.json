@@ -1,0 +1,14 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"key": {
+		"A": { "tag": "forge:leather" },
+		"S": { "item": "minecraft:stick" },
+		"R": { "tag": "forge:recipe_book" }
+	},
+	"pattern": [
+		" S ",
+		"SAS",
+		" R "
+	],
+	"result": { "item": "sweetmagic:corkboard", "count": 8 }
+}

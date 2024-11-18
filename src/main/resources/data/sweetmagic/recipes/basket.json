@@ -1,0 +1,13 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"key": {
+		"W": { "tag": "sweetmagic:smplanks" },
+		"S": { "item": "minecraft:stick" },
+		"R": { "tag": "forge:recipe_book" }
+	},
+	"pattern": [
+		"WWW",
+		"SRS"
+	],
+	"result": { "item": "sweetmagic:basket", "count": 8 }
+}

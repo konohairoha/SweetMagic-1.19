@@ -1,0 +1,14 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"key": {
+		"B": { "item": "sweetmagic:antique_brick_0w" },
+		"M": { "item": "sweetmagic:magic_meal" },
+		"D": { "item": "sweetmagic:potting_soil" }
+	},
+	"pattern": [
+		"MMM",
+		"DDD",
+		"BBB"
+	],
+	"result": { "item": "sweetmagic:antique_brick_pot_w", "count": 4 }
+}

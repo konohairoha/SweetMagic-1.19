@@ -1,0 +1,7 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		{ "item": "sweetmagic:coconut_log" }
+	],
+	"result": { "item": "sweetmagic:coconut_planks", "count": 4 }
+}

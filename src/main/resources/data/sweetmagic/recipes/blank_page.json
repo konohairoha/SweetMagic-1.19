@@ -1,0 +1,9 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		{ "item": "minecraft:paper" },
+		{ "item": "minecraft:feather" },
+		{ "tag": "forge:dyes" }
+	],
+	"result": { "item": "sweetmagic:blank_page", "count": 4 }
+}
