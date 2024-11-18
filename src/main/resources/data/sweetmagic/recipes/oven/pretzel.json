@@ -1,0 +1,14 @@
+{
+	"type": "sweetmagic:oven_craft",
+	"ingredients": [
+		{ "tag": "forge:butter", "count": 2 },
+		{ "tag": "forge:flour", "count": 6 },
+		{ "tag": "forge:milk", "count": 1 },
+		{ "tag": "forge:water", "count": 2 },
+		{ "tag": "forge:sugar", "count": 2 },
+		{ "tag": "forge:salt", "count": 1 }
+	],
+	"result": [
+		{ "item": "sweetmagic:pretzel", "count": 8 }
+	]
+}

@@ -1,0 +1,10 @@
+{
+	"type": "sweetmagic:mill_craft",
+	"ingredients": [
+		{ "item": "minecraft:lapis_lazuli", "count": 1 }
+	],
+	"result": [
+		{ "item": "minecraft:prismarine_shard", "count": 1 },
+		{ "item": "minecraft:prismarine_crystals", "count": 1, "chance": 0.25 }
+	]
+}

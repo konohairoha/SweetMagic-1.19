@@ -1,0 +1,10 @@
+{
+	"type": "sweetmagic:mill_craft",
+	"ingredients": [
+		{ "tag": "forge:cobblestone", "count": 1 }
+	],
+	"result": [
+		{ "item": "minecraft:dirt", "count": 1 },
+		{ "item": "minecraft:gravel", "count": 1, "chance": 0.35 }
+	]
+}

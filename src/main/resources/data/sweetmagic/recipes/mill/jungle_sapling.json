@@ -1,0 +1,9 @@
+{
+	"type": "sweetmagic:mill_craft",
+	"ingredients": [
+		{ "item": "minecraft:spruce_leaves", "count": 1 }
+	],
+	"result": [
+		{ "item": "minecraft:jungle_sapling", "count": 1 }
+	]
+}

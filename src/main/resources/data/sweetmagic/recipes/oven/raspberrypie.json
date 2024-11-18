@@ -1,0 +1,15 @@
+{
+	"type": "sweetmagic:oven_craft",
+	"ingredients": [
+		{ "tag": "forge:crops/raspberry", "count": 8 },
+		{ "tag": "forge:crops/lemon", "count": 1 },
+		{ "tag": "forge:flour", "count": 4 },
+		{ "tag": "forge:custard", "count": 2 },
+		{ "tag": "forge:butter", "count": 2 },
+		{ "tag": "forge:water", "count": 1 },
+		{ "tag": "forge:salt", "count": 1 }
+	],
+	"result": [
+		{ "item": "sweetmagic:raspberrypie", "count": 8 }
+	]
+}

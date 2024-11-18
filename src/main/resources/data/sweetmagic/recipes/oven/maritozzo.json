@@ -1,0 +1,15 @@
+{
+	"type": "sweetmagic:oven_craft",
+	"ingredients": [
+		{ "tag": "forge:cream", "count": 4 },
+		{ "tag": "forge:butter", "count": 1 },
+		{ "tag": "forge:flour", "count": 4 },
+		{ "tag": "forge:eggs", "count": 2 },
+		{ "tag": "forge:milk", "count": 2 },
+		{ "tag": "forge:salt", "count": 2 },
+		{ "tag": "forge:sugar", "count": 4 }
+	],
+	"result": [
+		{ "item": "sweetmagic:maritozzo", "count": 8 }
+	]
+}

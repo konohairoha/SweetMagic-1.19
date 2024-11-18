@@ -1,0 +1,13 @@
+{
+	"type": "sweetmagic:oven_craft",
+	"ingredients": [
+		{ "tag": "forge:raw_salmon", "count": 2 },
+		{ "tag": "forge:flour", "count": 3 },
+		{ "tag": "forge:butter", "count": 2 },
+		{ "tag": "forge:salt", "count": 2 },
+		{ "tag": "forge:oil", "count": 2 }
+	],
+	"result": [
+		{ "item": "sweetmagic:salmon_meuniere", "count": 6 }
+	]
+}

@@ -1,0 +1,10 @@
+{
+	"type": "sweetmagic:oven_craft",
+	"ingredients": [
+		{ "tag": "forge:toast", "count": 2 },
+		{ "tag": "forge:butter", "count": 2 }
+	],
+	"result": [
+		{ "item": "sweetmagic:butter_toast", "count": 2 }
+	]
+}

@@ -1,0 +1,13 @@
+{
+	"type": "sweetmagic:oven_craft",
+	"ingredients": [
+		{ "tag": "forge:eggs", "count": 3 },
+		{ "tag": "forge:butter", "count": 1 },
+		{ "tag": "forge:flour", "count": 6 },
+		{ "tag": "forge:cocoa_powder", "count": 4 },
+		{ "tag": "forge:sugar", "count": 3 }
+	],
+	"result": [
+		{ "item": "sweetmagic:icebox_cookie", "count": 12 }
+	]
+}

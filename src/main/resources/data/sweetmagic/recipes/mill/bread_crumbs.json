@@ -1,0 +1,11 @@
+{
+	"type": "sweetmagic:mill_craft",
+	"ingredients": [
+		{ "tag": "forge:bread", "count": 1 }
+	],
+	"result": [
+		{ "item": "sweetmagic:breadcrumbs", "count": 3 },
+		{ "item": "sweetmagic:breadcrumbs", "count": 1, "chance": 0.25 },
+		{ "item": "sweetmagic:breadcrumbs", "count": 1, "chance": 0.05 }
+	]
+}

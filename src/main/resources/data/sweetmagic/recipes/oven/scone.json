@@ -1,0 +1,13 @@
+{
+	"type": "sweetmagic:oven_craft",
+	"ingredients": [
+		{ "tag": "forge:salt", "count": 1 },
+		{ "tag": "forge:flour", "count": 4 },
+		{ "tag": "forge:butter", "count": 1 },
+		{ "tag": "forge:milk", "count": 1 },
+		{ "tag": "forge:sugar", "count": 4 }
+	],
+	"result": [
+		{ "item": "sweetmagic:scone", "count": 5 }
+	]
+}

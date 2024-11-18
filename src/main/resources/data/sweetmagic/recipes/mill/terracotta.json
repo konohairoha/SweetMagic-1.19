@@ -1,0 +1,9 @@
+{
+	"type": "sweetmagic:mill_craft",
+	"ingredients": [
+		{ "tag": "minecraft:terracotta", "count": 1 }
+	],
+	"result": [
+		{ "item": "minecraft:clay_ball", "count": 4 }
+	]
+}

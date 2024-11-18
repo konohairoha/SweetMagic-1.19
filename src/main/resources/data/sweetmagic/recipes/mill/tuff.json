@@ -1,0 +1,10 @@
+{
+	"type": "sweetmagic:mill_craft",
+	"ingredients": [
+		{ "item": "minecraft:andesite", "count": 1 }
+	],
+	"result": [
+		{ "item": "minecraft:tuff", "count": 1 },
+		{ "item": "minecraft:granite", "count": 1, "chance": 0.35 }
+	]
+}

@@ -1,0 +1,11 @@
+{
+	"type": "sweetmagic:oven_craft",
+	"ingredients": [
+		{ "tag": "forge:toast", "count": 2 },
+		{ "tag": "forge:crops/strawberry", "count": 4 },
+		{ "tag": "forge:sugar", "count": 2 }
+	],
+	"result": [
+		{ "item": "sweetmagic:jam_toast", "count": 3 }
+	]
+}

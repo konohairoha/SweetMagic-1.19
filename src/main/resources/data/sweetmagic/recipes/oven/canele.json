@@ -1,0 +1,15 @@
+{
+	"type": "sweetmagic:oven_craft",
+	"ingredients": [
+		{ "tag": "forge:vannila_essence", "count": 4 },
+		{ "tag": "forge:wine", "count": 3 },
+		{ "tag": "forge:butter", "count": 3 },
+		{ "tag": "forge:flour", "count": 6 },
+		{ "tag": "forge:eggs", "count": 2 },
+		{ "tag": "forge:milk", "count": 3 },
+		{ "tag": "forge:sugar", "count": 3 }
+	],
+	"result": [
+		{ "item": "sweetmagic:canele", "count": 12 }
+	]
+}

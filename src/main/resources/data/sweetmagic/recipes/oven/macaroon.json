@@ -1,0 +1,13 @@
+{
+	"type": "sweetmagic:oven_craft",
+	"ingredients": [
+		{ "tag": "forge:cocoa_powder", "count": 6 },
+		{ "tag": "forge:eggs", "count": 2 },
+		{ "tag": "forge:sugar", "count": 3 },
+		{ "tag": "forge:dyes/red", "count": 1 },
+		{ "tag": "forge:dyes/lime", "count": 1 }
+	],
+	"result": [
+		{ "item": "sweetmagic:macaroon", "count": 8 }
+	]
+}

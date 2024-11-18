@@ -1,0 +1,12 @@
+{
+	"type": "sweetmagic:oven_craft",
+	"ingredients": [
+		{ "tag": "forge:rice_cake", "count": 4 },
+		{ "item": "sweetmagic:soybean_flour", "count": 8 },
+		{ "tag": "forge:sugar", "count": 2 },
+		{ "tag": "forge:water", "count": 2 }
+	],
+	"result": [
+		{ "item": "sweetmagic:kinakomochi", "count": 4 }
+	]
+}

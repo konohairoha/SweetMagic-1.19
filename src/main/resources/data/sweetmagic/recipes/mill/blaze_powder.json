@@ -1,0 +1,12 @@
+{
+	"type": "sweetmagic:mill_craft",
+	"ingredients": [
+		{ "item": "minecraft:blaze_rod", "count": 1 }
+	],
+	"result": [
+		{ "item": "minecraft:blaze_powder", "count": 3 },
+		{ "item": "minecraft:blaze_powder", "count": 1, "chance": 0.35 },
+		{ "item": "minecraft:blaze_powder", "count": 1, "chance": 0.1 },
+		{ "item": "minecraft:blaze_powder", "count": 1, "chance": 0.03 }
+	]
+}

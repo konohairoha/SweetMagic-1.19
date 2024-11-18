@@ -1,0 +1,14 @@
+{
+	"type": "sweetmagic:oven_craft",
+	"ingredients": [
+		{ "tag": "forge:butter", "count": 6 },
+		{ "tag": "forge:flour", "count": 8 },
+		{ "tag": "forge:eggs", "count": 1 },
+		{ "tag": "forge:water", "count": 2 },
+		{ "tag": "forge:sugar", "count": 1 },
+		{ "tag": "forge:salt", "count": 1 }
+	],
+	"result": [
+		{ "item": "sweetmagic:butter_role", "count": 12 }
+	]
+}

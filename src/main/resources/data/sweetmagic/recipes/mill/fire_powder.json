@@ -1,0 +1,12 @@
+{
+	"type": "sweetmagic:mill_craft",
+	"ingredients": [
+		{ "item": "sweetmagic:fire_nasturtium_petal", "count": 1 }
+	],
+	"result": [
+		{ "item": "sweetmagic:fire_powder", "count": 2 },
+		{ "item": "sweetmagic:fire_powder", "count": 1, "chance": 0.4 },
+		{ "item": "sweetmagic:fire_powder", "count": 1, "chance": 0.15 },
+		{ "item": "sweetmagic:fire_powder", "count": 1, "chance": 0.05 }
+	]
+}

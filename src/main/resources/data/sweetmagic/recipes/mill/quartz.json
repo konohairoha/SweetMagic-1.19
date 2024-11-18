@@ -1,0 +1,9 @@
+{
+	"type": "sweetmagic:mill_craft",
+	"ingredients": [
+		{ "tag": "sweetmagic:quartzblock", "count": 1 }
+	],
+	"result": [
+		{ "item": "minecraft:quartz", "count": 4 }
+	]
+}

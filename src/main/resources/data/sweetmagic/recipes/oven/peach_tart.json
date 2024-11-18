@@ -1,0 +1,15 @@
+{
+	"type": "sweetmagic:oven_craft",
+	"ingredients": [
+		{ "tag": "forge:crops/peach", "count": 8 },
+		{ "tag": "forge:crops/mint", "count": 2 },
+		{ "tag": "forge:flour", "count": 4 },
+		{ "tag": "forge:custard", "count": 3 },
+		{ "tag": "forge:cream", "count": 1 },
+		{ "tag": "forge:vannila_essence", "count": 4 },
+		{ "tag": "forge:sugar", "count": 1 }
+	],
+	"result": [
+		{ "item": "sweetmagic:peach_tart", "count": 8 }
+	]
+}

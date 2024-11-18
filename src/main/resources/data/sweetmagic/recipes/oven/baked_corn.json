@@ -1,0 +1,10 @@
+{
+	"type": "sweetmagic:oven_craft",
+	"ingredients": [
+		{ "tag": "forge:crops/corn", "count": 3 },
+		{ "tag": "forge:butter", "count": 1 }
+	],
+	"result": [
+		{ "item": "sweetmagic:baked_corn", "count": 3 }
+	]
+}
