@@ -1,0 +1,14 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"key": {
+		"E": { "item": "sweetmagic:ender_shard" },
+		"I": { "tag": "forge:nuggets/iron" },
+		"S": { "item": "minecraft:stick" }
+	},
+	"pattern": [
+		" EE",
+		" IE",
+		"S  "
+	],
+	"result": { "item": "sweetmagic:mf_stuff" }
+}

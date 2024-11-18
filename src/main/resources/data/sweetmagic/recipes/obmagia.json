@@ -1,0 +1,16 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"key": {
+		"M": { "tag": "forge:magic_book" },
+		"W": { "tag": "minecraft:wool_carpets" },
+		"O": { "tag": "forge:obsidian" },
+		"P": { "tag": "minecraft:planks" },
+		"A": { "item": "sweetmagic:aether_crystal" }
+	},
+	"pattern": [
+		"WMW",
+		"OAO",
+		"P P"
+	],
+	"result": { "item": "sweetmagic:obmagia" }
+}

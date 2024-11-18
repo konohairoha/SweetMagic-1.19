@@ -1,0 +1,13 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"key": {
+		"G": { "item": "minecraft:glowstone_dust" },
+		"I": { "tag": "sweetmagic:iron_fence" }
+	},
+	"pattern": [
+		" I ",
+		" I ",
+		" G "
+	],
+	"result": { "item": "sweetmagic:moden_lamp", "count": 4 }
+}

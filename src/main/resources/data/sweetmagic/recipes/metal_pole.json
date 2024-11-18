@@ -1,0 +1,12 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"key": {
+		"I": { "tag": "sweetmagic:iron_fence" }
+	},
+	"pattern": [
+		" I ",
+		" I ",
+		" I "
+	],
+	"result": { "item": "sweetmagic:metal_pole", "count": 4 }
+}

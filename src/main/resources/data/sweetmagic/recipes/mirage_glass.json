@@ -1,0 +1,9 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		{ "tag": "sweetmagic:smglass" },
+		{ "tag": "sweetmagic:smglass" },
+		{ "item": "sweetmagic:ender_shard" }
+	],
+	"result": { "item": "sweetmagic:mirage_glass", "count": 4 }
+}

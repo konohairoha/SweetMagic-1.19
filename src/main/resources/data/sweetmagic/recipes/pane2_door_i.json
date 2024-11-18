@@ -1,0 +1,12 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"key": {
+		"P": { "tag": "sweetmagic:smplanks" }
+	},
+	"pattern": [
+		"PP ",
+		"PP ",
+		"PP "
+	],
+	"result": { "item": "sweetmagic:pane2_door_i", "count": 8 }
+}

@@ -1,0 +1,13 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"key": {
+		"B": { "tag": "forge:magic_book" },
+		"G": { "item": "sweetmagic:sugarglass" }
+	},
+	"pattern": [
+		"GGG",
+		"GBG",
+		"GGG"
+	],
+	"result": { "item": "sweetmagic:mftank" }
+}

@@ -1,0 +1,9 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		{ "tag": "minecraft:wool_carpets" },
+		{ "item": "minecraft:crafting_table" },
+		{ "tag": "forge:magic_book" }
+	],
+	"result": { "item": "sweetmagic:mftable" }
+}

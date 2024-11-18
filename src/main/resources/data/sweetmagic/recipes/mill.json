@@ -1,0 +1,16 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"key": {
+		"S": { "tag": "forge:stone" },
+		"I": { "tag": "forge:ingots/iron" },
+		"F": { "tag": "sweetmagic:iron_fence" },
+		"H": { "item": "minecraft:hopper" },
+		"C": { "tag": "forge:chests/wooden" }
+	},
+	"pattern": [
+		"HSI",
+		"FSI",
+		"CSI"
+	],
+	"result": { "item": "sweetmagic:mill" }
+}
