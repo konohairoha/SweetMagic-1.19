@@ -1,0 +1,21 @@
+{
+	"type": "sweetmagic:obmagia_craft",
+	"ingredients": [
+		{ "item": "sweetmagic:magic_fire", "count": 1 },
+		{ "item": "sweetmagic:divine_crystal", "count": 2 },
+		{ "item": "sweetmagic:fire_nasturtium_petal", "count": 16 },
+		{ "item": "sweetmagic:sugarbell", "count": 16 }
+	],
+	"base": [
+		{ "tag": "forge:magic_book", "count": 1 }
+	],
+	"page": [
+		{ "item": "sweetmagic:mysterious_page", "count": 2 }
+	],
+	"result": [
+		{ "item": "sweetmagic:magic_flamenova", "count": 1 }
+	],
+	"crafttime": [
+		{ "time": 8 }
+	]
+}

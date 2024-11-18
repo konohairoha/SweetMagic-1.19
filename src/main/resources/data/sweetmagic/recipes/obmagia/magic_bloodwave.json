@@ -1,0 +1,20 @@
+{
+	"type": "sweetmagic:obmagia_craft",
+	"ingredients": [
+		{ "item": "sweetmagic:magic_bloodshot", "count": 1 },
+		{ "item": "sweetmagic:stray_soul", "count": 8 },
+		{ "item": "sweetmagic:divine_crystal", "count": 1 }
+	],
+	"base": [
+		{ "tag": "forge:magic_book", "count": 1 }
+	],
+	"page": [
+		{ "item": "sweetmagic:mysterious_page", "count": 3 }
+	],
+	"result": [
+		{ "item": "sweetmagic:magic_bloodwave", "count": 1 }
+	],
+	"crafttime": [
+		{ "time": 8 }
+	]
+}

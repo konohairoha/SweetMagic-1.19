@@ -1,0 +1,21 @@
+{
+	"type": "sweetmagic:obmagia_craft",
+	"ingredients": [
+		{ "item": "sweetmagic:magic_aether_barrier", "count": 1 },
+		{ "item": "sweetmagic:pure_crystal", "count": 1 },
+		{ "item": "sweetmagic:alternative_ingot", "count": 8 },
+		{ "item": "sweetmagic:magic_meal", "count": 16 }
+	],
+	"base": [
+		{ "tag": "forge:magic_book_cosmic", "count": 1 }
+	],
+	"page": [
+		{ "item": "sweetmagic:mystical_page", "count": 1 }
+	],
+	"result": [
+		{ "item": "sweetmagic:magic_magia_protection", "count": 1 }
+	],
+	"crafttime": [
+		{ "time": 12 }
+	]
+}

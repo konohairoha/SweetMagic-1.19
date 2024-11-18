@@ -1,0 +1,21 @@
+{
+	"type": "sweetmagic:obmagia_craft",
+	"ingredients": [
+		{ "item": "minecraft:arrow", "count": 4 },
+		{ "item": "minecraft:iron_shovel", "count": 1 },
+		{ "item": "minecraft:iron_axe", "count": 1 },
+		{ "item": "minecraft:iron_pickaxe", "count": 1 }
+	],
+	"base": [
+		{ "item": "sweetmagic:blank_magic", "count": 1 }
+	],
+	"page": [
+		{ "item": "sweetmagic:blank_page", "count": 1 }
+	],
+	"result": [
+		{ "item": "sweetmagic:magic_dig", "count": 1 }
+	],
+	"crafttime": [
+		{ "time": 5 }
+	]
+}

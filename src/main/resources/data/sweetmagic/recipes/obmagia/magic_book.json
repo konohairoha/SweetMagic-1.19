@@ -1,0 +1,18 @@
+{
+	"type": "sweetmagic:obmagia_craft",
+	"ingredients": [
+		{ "item": "sweetmagic:aether_crystal", "count": 1 }
+	],
+	"base": [
+		{ "tag": "forge:magic_book", "count": 1 }
+	],
+	"page": [
+		{ "item": "sweetmagic:blank_page", "count": 1 }
+	],
+	"result": [
+		{ "item": "sweetmagic:magic_book", "count": 1 }
+	],
+	"crafttime": [
+		{ "time": 8 }
+	]
+}

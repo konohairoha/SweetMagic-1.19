@@ -1,0 +1,21 @@
+{
+	"type": "sweetmagic:obmagia_craft",
+	"ingredients": [
+		{ "item": "sweetmagic:magic_meal", "count": 8 },
+		{ "item": "sweetmagic:aether_crystal", "count": 3 },
+		{ "item": "sweetmagic:sugarbell", "count": 4 },
+		{ "item": "sweetmagic:cotton", "count": 4 }
+	],
+	"base": [
+		{ "item": "sweetmagic:blank_magic", "count": 1 }
+	],
+	"page": [
+		{ "item": "sweetmagic:blank_page", "count": 1 }
+	],
+	"result": [
+		{ "item": "sweetmagic:magic_burst", "count": 1 }
+	],
+	"crafttime": [
+		{ "time": 5 }
+	]
+}

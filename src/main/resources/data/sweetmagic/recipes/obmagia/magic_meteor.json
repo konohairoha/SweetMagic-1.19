@@ -1,0 +1,20 @@
+{
+	"type": "sweetmagic:obmagia_craft",
+	"ingredients": [
+		{ "item": "sweetmagic:magic_flamenova", "count": 1 },
+		{ "item": "sweetmagic:pure_crystal", "count": 1 },
+		{ "item": "sweetmagic:fire_nasturtium_petal", "count": 16 }
+	],
+	"base": [
+		{ "tag": "forge:magic_book_cosmic", "count": 1 }
+	],
+	"page": [
+		{ "item": "sweetmagic:mystical_page", "count": 1 }
+	],
+	"result": [
+		{ "item": "sweetmagic:magic_meteor", "count": 1 }
+	],
+	"crafttime": [
+		{ "time": 12 }
+	]
+}

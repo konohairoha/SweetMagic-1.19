@@ -1,0 +1,20 @@
+{
+	"type": "sweetmagic:obmagia_craft",
+	"ingredients": [
+		{ "item": "sweetmagic:magic_rockblast", "count": 1 },
+		{ "tag": "forge:stone", "count": 8 },
+		{ "item": "sweetmagic:sugarbell", "count": 4 }
+	],
+	"base": [
+		{ "tag": "forge:magic_book", "count": 1 }
+	],
+	"page": [
+		{ "item": "sweetmagic:mysterious_page", "count": 2 }
+	],
+	"result": [
+		{ "item": "sweetmagic:magic_ironblast", "count": 1 }
+	],
+	"crafttime": [
+		{ "time": 8 }
+	]
+}

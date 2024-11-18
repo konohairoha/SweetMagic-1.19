@@ -1,0 +1,18 @@
+{
+	"type": "sweetmagic:obmagia_craft",
+	"ingredients": [
+		{ "item": "sweetmagic:pure_crystal", "count": 1 }
+	],
+	"base": [
+		{ "tag": "forge:magic_book_scarlet", "count": 1 }
+	],
+	"page": [
+		{ "item": "sweetmagic:mystical_page", "count": 3 }
+	],
+	"result": [
+		{ "item": "sweetmagic:magic_book_scarlet", "count": 1 }
+	],
+	"crafttime": [
+		{ "time": 12 }
+	]
+}

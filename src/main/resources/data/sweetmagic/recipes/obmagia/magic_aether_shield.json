@@ -1,0 +1,21 @@
+{
+	"type": "sweetmagic:obmagia_craft",
+	"ingredients": [
+		{ "item": "sweetmagic:magic_invisible", "count": 1 },
+		{ "item": "sweetmagic:prizmium", "count": 2 },
+		{ "item": "sweetmagic:alternative_ingot", "count": 5 },
+		{ "item": "sweetmagic:mf_bottle", "count": 1 }
+	],
+	"base": [
+		{ "tag": "forge:magic_book", "count": 1 }
+	],
+	"page": [
+		{ "item": "sweetmagic:mysterious_page", "count": 2 }
+	],
+	"result": [
+		{ "item": "sweetmagic:magic_aether_shield", "count": 1 }
+	],
+	"crafttime": [
+		{ "time": 8 }
+	]
+}

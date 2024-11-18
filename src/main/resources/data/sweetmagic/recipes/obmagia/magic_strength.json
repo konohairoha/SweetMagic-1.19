@@ -1,0 +1,24 @@
+{
+	"type": "sweetmagic:obmagia_craft",
+	"ingredients": [
+		{ "item": "minecraft:glass_bottle", "count": 4 },
+		{ "item": "sweetmagic:aether_crystal", "count": 4 },
+		{ "item": "sweetmagic:paper_mint", "count": 4 },
+		{ "item": "sweetmagic:fire_nasturtium_petal", "count": 4 },
+		{ "item": "sweetmagic:drizzly_mysotis_flower", "count": 4 },
+		{ "item": "sweetmagic:sannyflower_petal", "count": 4 },
+		{ "item": "sweetmagic:moonblossom_petal", "count": 4 }
+	],
+	"base": [
+		{ "tag": "forge:magic_book_cosmic", "count": 1 }
+	],
+	"page": [
+		{ "item": "sweetmagic:mystical_page", "count": 1 }
+	],
+	"result": [
+		{ "item": "sweetmagic:magic_strength", "count": 1 }
+	],
+	"crafttime": [
+		{ "time": 12 }
+	]
+}

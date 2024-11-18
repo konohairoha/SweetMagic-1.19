@@ -1,0 +1,20 @@
+{
+	"type": "sweetmagic:obmagia_craft",
+	"ingredients": [
+		{ "item": "sweetmagic:magic_gravityfield", "count": 1 },
+		{ "item": "sweetmagic:grav_powder", "count": 4 },
+		{ "item": "sweetmagic:mf_bottle", "count": 1 }
+	],
+	"base": [
+		{ "tag": "forge:magic_book", "count": 1 }
+	],
+	"page": [
+		{ "item": "sweetmagic:mysterious_page", "count": 2 }
+	],
+	"result": [
+		{ "item": "sweetmagic:magic_gravityfield2", "count": 1 }
+	],
+	"crafttime": [
+		{ "time": 8 }
+	]
+}

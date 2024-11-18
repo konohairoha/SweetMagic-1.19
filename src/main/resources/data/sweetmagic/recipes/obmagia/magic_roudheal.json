@@ -1,0 +1,22 @@
+{
+	"type": "sweetmagic:obmagia_craft",
+	"ingredients": [
+		{ "item": "sweetmagic:magic_hiheal", "count": 1 },
+		{ "item": "sweetmagic:pure_crystal", "count": 1 },
+		{ "item": "sweetmagic:drizzly_mysotis_flower", "count": 16 },
+		{ "item": "sweetmagic:sugarbell", "count": 32 },
+		{ "item": "sweetmagic:mf_bottle", "count": 4 }
+	],
+	"base": [
+		{ "tag": "forge:magic_book_cosmic", "count": 1 }
+	],
+	"page": [
+		{ "item": "sweetmagic:mystical_page", "count": 1 }
+	],
+	"result": [
+		{ "item": "sweetmagic:magic_roudheal", "count": 1 }
+	],
+	"crafttime": [
+		{ "time": 12 }
+	]
+}

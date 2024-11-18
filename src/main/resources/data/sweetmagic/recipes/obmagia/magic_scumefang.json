@@ -1,0 +1,19 @@
+{
+	"type": "sweetmagic:obmagia_craft",
+	"ingredients": [
+		{ "item": "sweetmagic:magic_bubleprison", "count": 1 },
+		{ "item": "sweetmagic:drizzly_mysotis_flower", "count": 16 }
+	],
+	"base": [
+		{ "tag": "forge:magic_book", "count": 1 }
+	],
+	"page": [
+		{ "item": "sweetmagic:mysterious_page", "count": 3 }
+	],
+	"result": [
+		{ "item": "sweetmagic:magic_scumefang", "count": 1 }
+	],
+	"crafttime": [
+		{ "time": 8 }
+	]
+}

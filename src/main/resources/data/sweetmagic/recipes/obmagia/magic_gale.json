@@ -1,0 +1,20 @@
+{
+	"type": "sweetmagic:obmagia_craft",
+	"ingredients": [
+		{ "item": "sweetmagic:magic_storm", "count": 1 },
+		{ "item": "sweetmagic:tiny_feather", "count": 16 },
+		{ "item": "sweetmagic:pure_crystal", "count": 1 }
+	],
+	"base": [
+		{ "tag": "forge:magic_book_cosmic", "count": 1 }
+	],
+	"page": [
+		{ "item": "sweetmagic:mystical_page", "count": 1 }
+	],
+	"result": [
+		{ "item": "sweetmagic:magic_gale", "count": 1 }
+	],
+	"crafttime": [
+		{ "time": 12 }
+	]
+}

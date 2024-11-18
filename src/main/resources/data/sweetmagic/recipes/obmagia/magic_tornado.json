@@ -1,0 +1,21 @@
+{
+	"type": "sweetmagic:obmagia_craft",
+	"ingredients": [
+		{ "item": "sweetmagic:tiny_feather", "count": 4 },
+		{ "item": "sweetmagic:aether_crystal", "count": 2 },
+		{ "item": "sweetmagic:sugarbell", "count": 2 },
+		{ "item": "sweetmagic:clerodendrum_petal", "count": 3 }
+	],
+	"base": [
+		{ "item": "sweetmagic:blank_magic", "count": 1 }
+	],
+	"page": [
+		{ "item": "sweetmagic:blank_page", "count": 1 }
+	],
+	"result": [
+		{ "item": "sweetmagic:magic_tornado", "count": 1 }
+	],
+	"crafttime": [
+		{ "time": 5 }
+	]
+}

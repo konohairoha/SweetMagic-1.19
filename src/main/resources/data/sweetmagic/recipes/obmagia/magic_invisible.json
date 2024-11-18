@@ -1,0 +1,21 @@
+{
+	"type": "sweetmagic:obmagia_craft",
+	"ingredients": [
+		{ "item": "sweetmagic:prizmium", "count": 1 },
+		{ "item": "sweetmagic:alternative_ingot", "count": 3 },
+		{ "item": "sweetmagic:cotton", "count": 2 },
+		{ "item": "sweetmagic:mf_small_bottle", "count": 1 }
+	],
+	"base": [
+		{ "item": "sweetmagic:blank_magic", "count": 1 }
+	],
+	"page": [
+		{ "item": "sweetmagic:blank_page", "count": 1 }
+	],
+	"result": [
+		{ "item": "sweetmagic:magic_invisible", "count": 1 }
+	],
+	"crafttime": [
+		{ "time": 5 }
+	]
+}

@@ -1,0 +1,20 @@
+{
+	"type": "sweetmagic:obmagia_craft",
+	"ingredients": [
+		{ "item": "sweetmagic:magic_light", "count": 1 },
+		{ "item": "sweetmagic:divine_crystal", "count": 2 },
+		{ "item": "sweetmagic:prizmium", "count": 4 }
+	],
+	"base": [
+		{ "tag": "forge:magic_book", "count": 1 }
+	],
+	"page": [
+		{ "item": "sweetmagic:mysterious_page", "count": 2 }
+	],
+	"result": [
+		{ "item": "sweetmagic:magic_holy_light", "count": 1 }
+	],
+	"crafttime": [
+		{ "time": 8 }
+	]
+}

@@ -1,0 +1,21 @@
+{
+	"type": "sweetmagic:obmagia_craft",
+	"ingredients": [
+		{ "item": "sweetmagic:magic_future_visionfiled", "count": 1 },
+		{ "item": "sweetmagic:mf_bottle", "count": 1 },
+		{ "item": "sweetmagic:sannyflower_petal", "count": 4 },
+		{ "item": "sweetmagic:moonblossom_petal", "count": 4 }
+	],
+	"base": [
+		{ "tag": "forge:magic_book", "count": 1 }
+	],
+	"page": [
+		{ "item": "sweetmagic:mysterious_page", "count": 2 }
+	],
+	"result": [
+		{ "item": "sweetmagic:magic_future_visionfiled2", "count": 1 }
+	],
+	"crafttime": [
+		{ "time": 8 }
+	]
+}
