@@ -8,17 +8,17 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import sweetmagic.init.BlockInit;
 import sweetmagic.init.ItemInit;
-import sweetmagic.init.tile.sm.TileMFBottler;
+import sweetmagic.init.tile.sm.TileMFGenerater;
 import sweetmagic.util.RenderUtil;
 import sweetmagic.util.RenderUtil.RenderColor;
 import sweetmagic.util.RenderUtil.RenderInfo;
 
-public class RenderMFBottler<T extends TileMFBottler> extends RenderAbstractTile<T> {
+public class RenderMFGenerater<T extends TileMFGenerater> extends RenderAbstractTile<T> {
 
-	private static final ItemStack STACK = new ItemStack(ItemInit.magia_bottle);
+	private static final ItemStack STACK = new ItemStack(ItemInit.alt_bucket_lava);
 	private static final Block SQUARE = BlockInit.magic_square_l;
 
-	public RenderMFBottler(BlockEntityRendererProvider.Context con) {
+	public RenderMFGenerater(BlockEntityRendererProvider.Context con) {
 		super(con);
 	}
 
@@ -30,10 +30,10 @@ public class RenderMFBottler<T extends TileMFBottler> extends RenderAbstractTile
 
 	public void renderItem(T tile, float parTick, RenderInfo info) {
 
-		float scale = 0.675F;
+		float scale = 0.5F;
 		double shake = 0.1D;
-		PoseStack pose = info.pose();
 
+		PoseStack pose = info.pose();
 		pose.pushPose();
 		pose.translate(0.5D, 0.5D, 0.5D);
 		int gameTime = tile.getClientTime();

@@ -7,17 +7,18 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import sweetmagic.init.BlockInit;
-import sweetmagic.init.tile.sm.TileTransferGate;
+import sweetmagic.init.tile.sm.TileTransferGateVertical;
 import sweetmagic.util.RenderUtil;
 import sweetmagic.util.RenderUtil.RenderColor;
 import sweetmagic.util.RenderUtil.RenderInfo;
 
-public class RenderTransferGate<T extends TileTransferGate> extends RenderAbstractTile<T> {
+public class RenderTransferGateVertical <T extends TileTransferGateVertical>extends RenderAbstractTile<T> {
 
-	private static final ItemStack GATE = new ItemStack(BlockInit.transfer_gate);
+	private static final ItemStack GATE = new ItemStack(BlockInit.transfer_gate_vertical);
+	private static final ItemStack TOP = new ItemStack(BlockInit.transfer_gate_vertical_top);
 	private static final Block SQUARE = BlockInit.magic_square_l_blank;
 
-	public RenderTransferGate(BlockEntityRendererProvider.Context con) {
+	public RenderTransferGateVertical(BlockEntityRendererProvider.Context con) {
 		super(con);
 	}
 
@@ -29,10 +30,21 @@ public class RenderTransferGate<T extends TileTransferGate> extends RenderAbstra
 	public void renderModel(T tile, float parTick, RenderInfo info) {
 		PoseStack pose = info.pose();
 		pose.pushPose();
-		pose.translate(0.5D, 0D, 0.5D);
-		pose.scale(4F, 4F, 4F);
+		pose.translate(0.5D, -0.5D, 0.5D);
+		pose.scale(2F, 2F, 2F);
 		pose.mulPose(Vector3f.YP.rotationDegrees(tile.getRot()));
 		info.itemRenderNo(GATE);
+		pose.popPose();
+
+		pose.pushPose();
+		pose.translate(0.5D, 0D, 0.5D);
+		int gameTime = tile.getClientTime();
+		float angle = (gameTime + parTick) * 0.067F * this.pi;
+		pose.mulPose(Vector3f.YP.rotationDegrees(angle));
+		pose.scale(3.5F, 3.5F, 3.5F);
+		pose.mulPose(Vector3f.XP.rotationDegrees(90F));
+		pose.translate(-0.0025D, -0.1125D, -0.2D);
+		info.itemRenderNo(TOP);
 		pose.popPose();
 	}
 
@@ -41,22 +53,8 @@ public class RenderTransferGate<T extends TileTransferGate> extends RenderAbstra
 		int gameTime = tile.getClientTime();
 		PoseStack pose = info.pose();
 		pose.pushPose();
-		pose.translate(0.5D, 0.475D, 1.75D);
+		pose.translate(0.5D, 0.75D, 0.5D);
 		pose.scale(5F, 5F, 5F);
-		pose.mulPose(Vector3f.YP.rotationDegrees(tile.getRot()));
-		pose.mulPose(Vector3f.XP.rotationDegrees(90F));
-
-		switch (tile.getFace()) {
-		case SOUTH:
-			pose.translate(0D, 0.5D, 0D);
-			break;
-		case WEST:
-			pose.translate(0.25D, 0.25D, 0D);
-			break;
-		case EAST:
-			pose.translate(-0.25D, 0.25D, 0D);
-			break;
-		}
 
 		float angle = -(gameTime + parTick) * 0.1F * this.pi;
 		pose.mulPose(Vector3f.YP.rotationDegrees(angle));

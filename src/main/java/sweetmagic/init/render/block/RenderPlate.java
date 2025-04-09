@@ -3,11 +3,8 @@ package sweetmagic.init.render.block;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
 
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.ModelBlockRenderer;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
-import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
@@ -16,49 +13,46 @@ import sweetmagic.init.tile.sm.TilePlate;
 import sweetmagic.util.RenderUtil;
 import sweetmagic.util.RenderUtil.RenderInfo;
 
-public class RenderPlate extends RenderAbstractTile<TilePlate> {
-
+public class RenderPlate<T extends TilePlate> extends RenderAbstractTile<T> {
 
 	public RenderPlate(BlockEntityRendererProvider.Context con) {
 		super(con);
 	}
 
-	@Override
-	public void render(TilePlate tile, float parTick, PoseStack pose, MultiBufferSource buf, int light, int overlayLight) {
-		if (tile.getLevel() == null || tile.isAir()) { return; }
+	public void render(T tile, float parTick, RenderInfo info) {
 
 		int data = tile.getData();
+		PoseStack pose = info.pose();
 
 		if (data == 0) {
 			pose.pushPose();
-			RenderUtil.renderBlock(tile.getLevel(), tile.getBlockPos(), tile.getBlockState(), this.bRender, pose, buf, overlayLight);
+			RenderUtil.renderBlock(tile.getLevel(), tile.getBlockPos(), tile.getBlockState(), this.bRender, pose, info.buf(), info.overlay());
 			pose.popPose();
 		}
 
 		ItemStack stack = tile.getInputItem(0);
 		if (stack.isEmpty() && data != 3) { return; }
 
-		RenderInfo renderInfo = new RenderInfo(this.iRender, light, overlayLight, pose, buf);
-
 		switch (data) {
 		case 0:
-			this.renderPlateBlock(tile, stack, pose, buf, light, overlayLight);
+			this.renderPlateBlock(tile, stack, info);
 			break;
 		case 1:
-			this.renderTrayBlock(tile, stack, renderInfo);
+			this.renderTrayBlock(tile, stack, info);
 			break;
 		case 2:
-			this.renderBasketBlock(tile, stack, renderInfo);
+			this.renderBasketBlock(tile, stack, info);
 			break;
 		case 3:
-			this.renderShowCase(tile, renderInfo);
+			this.renderShowCase(tile, info);
 			break;
 		}
 	}
 
 	// 料理皿のレンダー
-	public void renderPlateBlock (TilePlate tile, ItemStack stack, PoseStack pose, MultiBufferSource buf, int light, int overlayLight) {
+	public void renderPlateBlock(T tile, ItemStack stack, RenderInfo info) {
 
+		PoseStack pose = info.pose();
 		pose.pushPose();
 		pose.translate(0.5D, 0.1D, 0.5D);
 		pose.mulPose(Vector3f.YP.rotationDegrees(tile.getRot()));
@@ -66,23 +60,23 @@ public class RenderPlate extends RenderAbstractTile<TilePlate> {
 		if (stack.getItem() instanceof BlockItem blockItem) {
 
 			if (blockItem.getBlock() instanceof Plate plate) {
-				this.renderPlate(tile, plate, stack, pose, buf, light, overlayLight);
+				this.renderPlate(tile, plate, stack, info);
 			}
 
 			else {
-				this.renderBlock(stack, pose, buf, light, overlayLight);
+				this.renderBlock(stack, info);
 			}
 		}
 
 		else {
-			this.renderItem(stack, pose, buf, light, overlayLight);
+			this.renderItem(stack, info);
 		}
 
 		pose.popPose();
 	}
 
 	// ウッドトレーのレンダー
-	public void renderTrayBlock (TilePlate tile, ItemStack stack, RenderInfo renderInfo) {
+	public void renderTrayBlock(T tile, ItemStack stack, RenderInfo info) {
 
 		boolean isBlock = stack.getItem() instanceof BlockItem;
 		double addY = isBlock ? -0.05D : 0D;
@@ -90,10 +84,9 @@ public class RenderPlate extends RenderAbstractTile<TilePlate> {
 
 		for (int x = 0; x < 2; x++)
 			for (int z = 0; z < 2; z++)
-				RenderUtil.renderItem(renderInfo, tile, stack, 1.825D - x * 1D, 0.775D + addY, 0.85D + z * 0.75D + addZ);
+				RenderUtil.renderItem(info, tile, stack, 1.825D - x * 1D, 0.775D + addY, 0.85D + z * 0.75D + addZ);
 
-		PoseStack pose = renderInfo.getPose();
-
+		PoseStack pose = info.pose();
 		pose.pushPose();
 		pose.mulPose(Vector3f.YP.rotationDegrees(tile.getRot()));
 		this.rotPosFix(pose, tile.getFace());
@@ -107,16 +100,16 @@ public class RenderPlate extends RenderAbstractTile<TilePlate> {
 	}
 
 	// バスケットのレンダー
-	public void renderBasketBlock (TilePlate tile, ItemStack stack, RenderInfo renderInfo) {
+	public void renderBasketBlock(T tile, ItemStack stack, RenderInfo info) {
 
 		boolean isBlock = stack.getItem() instanceof BlockItem;
 		double addY = isBlock ? -0.05D : 0D;
 		double addZ = isBlock ? 0.125D : 0D;
 		for (int x = 0; x < 2; x++)
 			for (int z = 0; z < 2; z++)
-				RenderUtil.renderItem(renderInfo, tile, stack, 1.825D - x * 1D, 0.525D + addY, 1.075D + z * 0.75D + addZ);
+				RenderUtil.renderItem(info, tile, stack, 1.825D - x * 1D, 0.525D + addY, 1.075D + z * 0.75D + addZ);
 
-		PoseStack pose = renderInfo.getPose();
+		PoseStack pose = info.pose();
 		pose.pushPose();
 		pose.mulPose(Vector3f.YP.rotationDegrees(tile.getRot()));
 		this.rotPosFix(pose, tile.getFace());
@@ -130,10 +123,10 @@ public class RenderPlate extends RenderAbstractTile<TilePlate> {
 	}
 
 	// ショケースのレンダー
-	public void renderShowCase (TilePlate tile, RenderInfo renderInfo) {
+	public void renderShowCase(T tile, RenderInfo info) {
 
-        // インベントリ分描画
-        for (int i = 0; i < tile.getInvSize(); i++) {
+		// インベントリ分描画
+		for (int i = 0; i < tile.getInvSize(); i++) {
 			ItemStack stack = tile.getInputItem(i);
 			if (stack.isEmpty()) { continue; }
 
@@ -143,39 +136,42 @@ public class RenderPlate extends RenderAbstractTile<TilePlate> {
 			for (int x = 0; x < 2; x++) {
 				for (int z = 0; z < 2; z++) {
 					double pX = isBlock ? 1.675D - x * 0.675D : 1.8D - x;
-					RenderUtil.renderItem(renderInfo, tile, stack, pX, 1.75D - i * 1.15D + addY, 1.25D + z * 0.75D);
+					RenderUtil.renderItem(info, tile, stack, pX, 1.75D - i * 1.15D + addY, 1.25D + z * 0.75D);
 				}
 			}
-        }
+		}
 	}
 
-	public void renderPlate (TilePlate tile, Plate plate, ItemStack stack, PoseStack pose, MultiBufferSource buf, int light, int overlayLight) {
+	public void renderPlate(T tile, Plate plate, ItemStack stack, RenderInfo info) {
 
-        ModelBlockRenderer.enableCaching();
+		ModelBlockRenderer.enableCaching();
+		PoseStack pose = info.pose();
 		pose.translate(-0.5D, -0.025D, -0.5D);
 		int value = Math.min(stack.getCount(), 12);
 
 		for (int i = 0; i < value; i++) {
-			RenderUtil.renderBlock(tile.getLevel(), tile.getBlockPos(), plate.defaultBlockState(), this.bRender, pose, buf, overlayLight);
+			RenderUtil.renderBlock(tile.getLevel(), tile.getBlockPos(), plate.defaultBlockState(), this.bRender, pose, info.buf(), info.overlay());
 			pose.translate(0D, 0.075D, 0D);
 		}
-        ModelBlockRenderer.clearCache();
+		ModelBlockRenderer.clearCache();
 	}
 
-	public void renderItem (ItemStack stack, PoseStack pose, MultiBufferSource buf, int light, int overlayLight) {
+	public void renderItem(ItemStack stack, RenderInfo info) {
+		PoseStack pose = info.pose();
 		pose.scale(0.675F, 0.675F, 0.675F);
 		pose.translate(0F, 0.25F, 0F);
-		this.iRender.renderStatic(stack, ItemTransforms.TransformType.FIXED, light, OverlayTexture.NO_OVERLAY, pose, buf, 0);
+		info.itemRenderNo(stack);
 	}
 
-	public void renderBlock (ItemStack stack, PoseStack pose, MultiBufferSource buf, int light, int overlayLight) {
+	public void renderBlock(ItemStack stack, RenderInfo info) {
+		PoseStack pose = info.pose();
 		pose.translate(0D, 0D, 0D);
 		pose.scale(0.75F, 0.75F, 0.75F);
 		pose.mulPose(Vector3f.XN.rotationDegrees(-90F));
-		this.iRender.renderStatic(stack, ItemTransforms.TransformType.FIXED, light, OverlayTexture.NO_OVERLAY, pose, buf, 0);
+		info.itemRenderNo(stack);
 	}
 
-	public void rotPosFix (PoseStack pose, Direction face) {
+	public void rotPosFix(PoseStack pose, Direction face) {
 		switch (face) {
 		case SOUTH:
 			pose.translate(-1D, 0D, -1D);

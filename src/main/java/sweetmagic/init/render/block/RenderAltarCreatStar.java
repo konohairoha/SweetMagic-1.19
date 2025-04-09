@@ -6,8 +6,6 @@ import java.util.List;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
 
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.TagKey;
@@ -18,8 +16,9 @@ import sweetmagic.init.TagInit;
 import sweetmagic.init.tile.sm.TileAltarCreatStar;
 import sweetmagic.util.RenderUtil;
 import sweetmagic.util.RenderUtil.RenderColor;
+import sweetmagic.util.RenderUtil.RenderInfo;
 
-public class RenderAltarCreatStar extends RenderAbstractTile<TileAltarCreatStar> {
+public class RenderAltarCreatStar<T extends TileAltarCreatStar> extends RenderAbstractTile<T> {
 
 	private static final float size = 0.45F;
 	private static final Block SQUARE = BlockInit.magic_square_l;
@@ -29,13 +28,12 @@ public class RenderAltarCreatStar extends RenderAbstractTile<TileAltarCreatStar>
 		super(con);
 	}
 
-	@Override
-	public void render(TileAltarCreatStar tile, float parTick, PoseStack pose, MultiBufferSource buf, int light, int overlayLight) {
+	public void render(T tile, float parTick, RenderInfo info) {
 
 		if (!tile.isHaveBlock || !tile.isRangeBlock) {
 
 			if (!tile.isHaveBlock) {
-				this.renderHaveBlock(tile, parTick, pose, buf, light, overlayLight);
+				this.renderHaveBlock(tile, parTick, info);
 			}
 
 			if (!tile.isRangeBlock) {
@@ -51,10 +49,10 @@ public class RenderAltarCreatStar extends RenderAbstractTile<TileAltarCreatStar>
 					pos.offset(-1, 0, -1), pos.offset(1, 0, -1), pos.offset(-1, 0, 1), pos.offset(1, 0, 1)
 				);
 
-				Block dc = tile.getRangeBlock(true);
-				Block ac = tile.getOverRangeBlock(true);
-				dcPosList.forEach(p -> this.renderRangeBlock(tile, parTick, pose, buf, light, overlayLight, p, TagInit.DC_BLOCK, dc));
-				acPosList.forEach(p -> this.renderRangeBlock(tile, parTick, pose, buf, light, overlayLight, p, TagInit.AC_BLOCK, ac));
+				Block dc = tile.getRangeBlock();
+				Block ac = tile.getOverRangeBlock();
+				dcPosList.forEach(p -> this.renderRangeBlock(tile, parTick, info, p, TagInit.DC_BLOCK, dc));
+				acPosList.forEach(p -> this.renderRangeBlock(tile, parTick, info, p, TagInit.AC_BLOCK, ac));
 			}
 		}
 
@@ -63,8 +61,9 @@ public class RenderAltarCreatStar extends RenderAbstractTile<TileAltarCreatStar>
 			int count = tile.craftList.size() - 1;
 			int nowTick = tile.nowTick * ( !tile.quickCraft ? 1 : 2 );
 			float posY = 1F + nowTick * 0.0065F;
-			long gameTime = tile.getTime();
+			int gameTime = tile.getClientTime();
 			float rotY = (gameTime + parTick) / 90F;
+			PoseStack pose = info.pose();
 
 			for (int i = 1; i < count + 1; i++) {
 
@@ -77,7 +76,7 @@ public class RenderAltarCreatStar extends RenderAbstractTile<TileAltarCreatStar>
 				pose.mulPose(Vector3f.YP.rotationDegrees(rotY * this.pi + (i * (360 / count)) + nowTick * 6.75F));
 				pose.scale(size, size, size);
 				pose.translate(1F - (0.0055F * nowTick) , 0F, 0F);
-				this.iRender.renderStatic(stack, ItemTransforms.TransformType.FIXED, light, overlayLight, pose, buf, 0);
+				info.itemRender(stack);
 				pose.popPose();
 			}
 
@@ -89,43 +88,46 @@ public class RenderAltarCreatStar extends RenderAbstractTile<TileAltarCreatStar>
 			pose.translate(0, Math.sin((gameTime + parTick) * 0.1F) * 0.15F + 0.2F, 0);
 			pose.scale(size, size, size);
 			pose.mulPose(Vector3f.YP.rotationDegrees(rot));
-			this.iRender.renderStatic(stack, ItemTransforms.TransformType.FIXED, light, overlayLight, pose, buf, 0);
+			info.itemRender(stack);
 			pose.popPose();
-			this.renderSquare(tile, parTick, pose, buf, light, overlayLight);
+			this.renderSquare(tile, parTick, info);
 		}
 	}
 
-	public void renderHaveBlock (TileAltarCreatStar tile, float parTick, PoseStack pose, MultiBufferSource buf, int light, int overlayLight) {
+	public void renderHaveBlock(T tile, float parTick, RenderInfo info) {
+		PoseStack pose = info.pose();
 		pose.pushPose();
 		pose.translate(0D, -0.95D, 0D);
-		RenderUtil.renderTransBlock(pose, buf, new RenderColor(1F, 1F, 1F, light, overlayLight), tile.getNeedBlock(true));
+		RenderUtil.renderTransBlock(pose, info.buf(), RenderColor.create(info), tile.getNeedBlock().defaultBlockState(), 0.67F);
 		pose.popPose();
 	}
 
-	public void renderRangeBlock (TileAltarCreatStar tile, float parTick, PoseStack pose, MultiBufferSource buf, int light, int overlayLight, BlockPos pos, TagKey<Block> tag, Block crystal) {
+	public void renderRangeBlock(T tile, float parTick, RenderInfo info, BlockPos pos, TagKey<Block> tag, Block crystal) {
 		if (tile.getState(pos).is(TagInit.AC_BLOCK)) { return; }
 
+		PoseStack pose = info.pose();
 		pose.pushPose();
 		BlockPos p = tile.getBlockPos();
 		pose.translate(pos.getX() - p.getX(), -0.97D, pos.getZ() - p.getZ());
-		RenderUtil.renderTransBlock(pose, buf, new RenderColor(1F, 1F, 1F, light, overlayLight), crystal);
+		RenderUtil.renderTransBlock(pose, info.buf(), RenderColor.create(info), crystal.defaultBlockState(), 0.5F);
 		pose.popPose();
 	}
 
-	public void renderSquare (TileAltarCreatStar tile, float parTick, PoseStack pose, MultiBufferSource buf, int light, int overlayLight) {
+	public void renderSquare(T tile, float parTick, RenderInfo info) {
 
 		float maxSize = 1.5F;
 		float addValue = 0.0125F;
 		float size = Math.min(maxSize, 0.125F + (tile.nowTick * addValue));
 
+		PoseStack pose = info.pose();
 		pose.pushPose();
 		pose.translate(0.5D, 1.35D, 0.5D);
-		long gameTime = tile.getTime();
+		int gameTime = tile.getClientTime();
 		pose.scale(size, size, size);
 		float angle = (gameTime + parTick) / -20.0F * this.pi;
 		pose.mulPose(Vector3f.YP.rotationDegrees(angle));
 		pose.translate(-0.5D, 0D, -0.5D);
-		RenderUtil.renderBlock(pose, buf, new RenderColor(72F / 255F, 1F, 1F, light, overlayLight), SQUARE);
+		RenderUtil.renderBlock(info, new RenderColor(72F / 255F, 1F, 1F, info.light(), info.overlay()), SQUARE);
 		pose.popPose();
 
 		maxSize = 3F;
@@ -137,7 +139,7 @@ public class RenderAltarCreatStar extends RenderAbstractTile<TileAltarCreatStar>
 		pose.scale(size, size, size);
 		pose.mulPose(Vector3f.YP.rotationDegrees(-angle));
 		pose.translate(-0.5D, 0D, -0.5D);
-		RenderUtil.renderBlock(pose, buf, new RenderColor(72F / 255F, 1F, 1F, light, overlayLight), SQUARE_BLANK);
+		RenderUtil.renderBlock(info, new RenderColor(72F / 255F, 1F, 1F, info.light(), info.overlay()), SQUARE_BLANK);
 		pose.popPose();
 	}
 }

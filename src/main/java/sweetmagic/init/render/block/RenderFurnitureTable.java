@@ -3,16 +3,14 @@ package sweetmagic.init.render.block;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
 
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
-import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
 import sweetmagic.init.ItemInit;
 import sweetmagic.init.tile.sm.TileFurnitureTable;
+import sweetmagic.util.RenderUtil.RenderInfo;
 
-public class RenderFurnitureTable extends RenderAbstractTile<TileFurnitureTable> {
+public class RenderFurnitureTable<T extends TileFurnitureTable> extends RenderAbstractTile<T> {
 
 	private static final ItemStack PICK = new ItemStack(ItemInit.silverhammer);
 
@@ -20,16 +18,15 @@ public class RenderFurnitureTable extends RenderAbstractTile<TileFurnitureTable>
 		super(con);
 	}
 
-	@Override
-	public void render(TileFurnitureTable tile, float parTick, PoseStack pose, MultiBufferSource buf, int light, int overlayLight) {
-		if (tile.getLevel() == null || tile.isAir()) { return; }
-		this.renderInv(tile, pose, buf, light, overlayLight);
-		this.renderTool(tile, pose, buf, light, overlayLight);
+	public void render(T tile, float parTick, RenderInfo info) {
+		this.renderInv(tile, info);
+		this.renderTool(tile, info);
 	}
 
-	public void renderInv (TileFurnitureTable tile, PoseStack pose, MultiBufferSource buf, int light, int overlayLight) {
+	public void renderInv(T tile, RenderInfo info) {
 
 		Direction face = tile.getFace();
+		PoseStack pose = info.pose();
 
 		for (int i = 0; i < tile.getInvSize(); i++) {
 
@@ -63,22 +60,21 @@ public class RenderFurnitureTable extends RenderAbstractTile<TileFurnitureTable>
 
 			pose.translate(0.7875D + addX, 0.275D, 0.7D + addZ);
 			pose.scale(0.33F, 0.33F, 0.33F);
-			this.iRender.renderStatic(out, ItemTransforms.TransformType.FIXED, light, OverlayTexture.NO_OVERLAY, pose, buf, 0);
+			info.itemRender(out);
 			pose.popPose();
 		}
 	}
 
-	public void renderTool (TileFurnitureTable tile, PoseStack pose, MultiBufferSource buf, int light, int overlayLight) {
+	public void renderTool(T tile, RenderInfo info) {
 
-		Direction face = tile.getFace();
-
+		PoseStack pose = info.pose();
 		pose.pushPose();
 		pose.mulPose(Vector3f.YP.rotationDegrees(tile.getRot()));
 
 		double addX = 0;
 		double addZ = 0;
 
-		switch (face) {
+		switch (tile.getFace()) {
 		case WEST:
 			addX = -1D;
 			break;
@@ -93,7 +89,7 @@ public class RenderFurnitureTable extends RenderAbstractTile<TileFurnitureTable>
 		pose.translate(-0.5D + addX, 1.01D, 0.325D + addZ);
 		pose.scale(0.5F, 0.5F, 0.5F);
 		pose.mulPose(Vector3f.XP.rotationDegrees(90F));
-		this.iRender.renderStatic(PICK, ItemTransforms.TransformType.FIXED, light, OverlayTexture.NO_OVERLAY, pose, buf, 0);
+		info.itemRender(PICK);
 		pose.popPose();
 	}
 }

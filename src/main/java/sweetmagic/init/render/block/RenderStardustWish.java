@@ -6,9 +6,7 @@ import com.mojang.math.Vector3f;
 
 import net.minecraft.client.model.BookModel;
 import net.minecraft.client.model.geom.ModelLayers;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -18,8 +16,9 @@ import sweetmagic.init.BlockInit;
 import sweetmagic.init.tile.sm.TileStardustWish;
 import sweetmagic.util.RenderUtil;
 import sweetmagic.util.RenderUtil.RenderColor;
+import sweetmagic.util.RenderUtil.RenderInfo;
 
-public class RenderStardustWish implements BlockEntityRenderer<TileStardustWish> {
+public class RenderStardustWish<T extends TileStardustWish> extends RenderAbstractTile<T> {
 
 	private static final ResourceLocation MAGIC_BOOK = SweetMagicCore.getSRC("textures/entity/stardustbook.png");
 	private static final Block SQUARE = BlockInit.magic_square_l;
@@ -27,16 +26,18 @@ public class RenderStardustWish implements BlockEntityRenderer<TileStardustWish>
 	private static final RenderType RENDER_TYPE = RenderType.entityCutoutNoCull(MAGIC_BOOK);
 
 	public RenderStardustWish(BlockEntityRendererProvider.Context con) {
+		super(con);
 		this.bookModel = new BookModel(con.bakeLayer(ModelLayers.BOOK));
 	}
 
-	public void render(TileStardustWish tile, float parTick, PoseStack pose, MultiBufferSource renderer, int light, int overlayLight) {
-		this.renderBook(tile, parTick, pose, renderer, light, overlayLight);
-		this.renderSquare(tile, parTick, pose, renderer, light, overlayLight);
+	public void render(T tile, float parTick, RenderInfo info) {
+		this.renderBook(tile, parTick, info);
+		this.renderSquare(tile, parTick, info);
 	}
 
-	public void renderBook (TileStardustWish tile, float parTick, PoseStack pose, MultiBufferSource renderer, int light, int overlayLight) {
+	public void renderBook(T tile, float parTick, RenderInfo info) {
 
+		PoseStack pose = info.pose();
 		pose.pushPose();
 		pose.translate(0.5D, 0.85D, 0.5D);
 		float f = (float) tile.time + parTick;
@@ -55,14 +56,15 @@ public class RenderStardustWish implements BlockEntityRenderer<TileStardustWish>
 		float f5 = Mth.frac(f3 + 0.75F) * 1.6F - 0.3F;
 		float f6 = Mth.lerp(parTick, tile.oOpen, tile.open);
 		this.bookModel.setupAnim(f, Mth.clamp(f4, 0.0F, 1.0F), Mth.clamp(f5, 0.0F, 1.0F), f6);
-		VertexConsumer vert = renderer.getBuffer(RENDER_TYPE).color(0F, 0F, 0F, 1F);
-		this.bookModel.render(pose, vert, light, overlayLight, 1.0F, 1.0F, 1.0F, 1.0F);
+		VertexConsumer vert = info.buf().getBuffer(RENDER_TYPE).color(0F, 0F, 0F, 1F);
+		this.bookModel.render(pose, vert, info.light(), info.overlay(), 1.0F, 1.0F, 1.0F, 1.0F);
 		pose.popPose();
 	}
 
-	public void renderSquare (TileStardustWish tile, float parTick, PoseStack pose, MultiBufferSource buf, int light, int overlayLight) {
+	public void renderSquare(T tile, float parTick, RenderInfo info) {
+		PoseStack pose = info.pose();
 		pose.pushPose();
-		long gameTime = tile.getTime();
+		int gameTime = tile.getClientTime();
 		pose.translate(0.5D, Math.sin((gameTime + parTick) / 10D) * 0.025D + 0.85D, 0.5D);
 		float angle = (gameTime + parTick) / -20F * (180F / (float) Math.PI);
 		pose.mulPose(Vector3f.YP.rotationDegrees(angle));
@@ -70,8 +72,8 @@ public class RenderStardustWish implements BlockEntityRenderer<TileStardustWish>
 		float r = (float) Math.sin((gameTime + parTick) / 20F) * 185F;
 		float g = (float) Math.sin((gameTime + parTick) / 20F) * 62F;
 		float b = (float) Math.sin((gameTime + parTick) / 20F) * 155F;
-		RenderColor color = new RenderColor((70F + r) / 255F, (180F + g) / 255F, (255F - b)/ 255F, light, overlayLight);
-		RenderUtil.renderBlock(pose, buf, color, SQUARE);
+		RenderColor color = new RenderColor((70F + r) / 255F, (180F + g) / 255F, (255F - b)/ 255F, info.light(), info.overlay());
+		RenderUtil.renderBlock(info, color, SQUARE);
 		pose.popPose();
 	}
 

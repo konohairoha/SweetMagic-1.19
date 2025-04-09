@@ -10,44 +10,49 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import net.minecraft.world.item.ItemStack;
 import sweetmagic.SweetMagicCore;
-import sweetmagic.init.BlockInit;
-import sweetmagic.init.tile.sm.TileParallelInterfere;
+import sweetmagic.init.tile.sm.TileMagiaTable;
 import sweetmagic.util.RenderUtil.RenderInfo;
 
-public class RenderParallelInterfere<T extends TileParallelInterfere> extends RenderAbstractTile<T> {
+public class RenderMagiaTable<T extends TileMagiaTable> extends RenderAbstractTile<T> {
 
-	private static final ResourceLocation MAGIC_BOOK = SweetMagicCore.getSRC("textures/entity/magicbook.png");
-	private static final ItemStack SQUARE = new ItemStack(BlockInit.magic_square_h);
+	private static final ResourceLocation MAGIC_BOOK = SweetMagicCore.getSRC("textures/entity/magia_book.png");
 	private final BookModel bookModel;
 	private static final RenderType RENDER_TYPE = RenderType.entityCutoutNoCull(MAGIC_BOOK);
 
-	public RenderParallelInterfere(BlockEntityRendererProvider.Context con) {
+	public RenderMagiaTable(BlockEntityRendererProvider.Context con) {
 		super(con);
 		this.bookModel = new BookModel(con.bakeLayer(ModelLayers.BOOK));
 	}
 
 	public void render(T tile, float parTick, RenderInfo info) {
 		this.renderBook(tile, parTick, info);
-		this.renderSquare(tile, parTick, info);
+		this.renderItem(tile, parTick, info);
 	}
 
 	public void renderBook(T tile, float parTick, RenderInfo info) {
 
 		PoseStack pose = info.pose();
 		pose.pushPose();
-		pose.translate(0.5D, 0.85D, 0.5D);
+		pose.translate(0.5D, 1D, 0.5D);
 		float f = (float) tile.time + parTick;
 		pose.translate(0.0D, (double) (0.1F + Mth.sin(f * 0.1F) * 0.01F), 0.0D);
 
-		float f1;
-		for (f1 = tile.rot - tile.oRot; f1 >= (float) Math.PI; f1 -= ((float) Math.PI * 2F)) { }
+		float rot = 1.5825F;
 
-		while (f1 < -(float) Math.PI) { f1 += ((float) Math.PI * 2F); }
+		switch (tile.getFace()) {
+		case SOUTH:
+			rot = 4.7F;
+			break;
+		case EAST:
+			rot = 0F;
+			break;
+		case WEST:
+			rot = 3.15F;
+			break;
+		}
 
-		float f2 = tile.oRot + f1 * parTick;
-		pose.mulPose(Vector3f.YP.rotation(-f2));
+		pose.mulPose(Vector3f.YP.rotation(rot));
 		pose.mulPose(Vector3f.ZP.rotationDegrees(80F));
 		float f3 = Mth.lerp(parTick, tile.oFlip, tile.flip);
 		float f4 = Mth.frac(f3 + 0.25F) * 1.6F - 0.3F;
@@ -59,17 +64,19 @@ public class RenderParallelInterfere<T extends TileParallelInterfere> extends Re
 		pose.popPose();
 	}
 
-	public void renderSquare(T tile, float parTick, RenderInfo info) {
+	public void renderItem(T tile, float parTick, RenderInfo info) {
+		if(!tile.isCraft || tile.copyMagic.isEmpty()) { return; }
+
 		PoseStack pose = info.pose();
 		pose.pushPose();
-		pose.translate(0.5D, 1.35D, 0.5D);
+		pose.translate(0.5D, 1.75D, 0.5D);
 		int gameTime = tile.getClientTime();
-		pose.translate(0D, Math.sin((gameTime + parTick) / 10D) * 0.025D, 0D);
-		float size = 2F;
-		pose.scale(size, size, size);
-		float angle = (gameTime + parTick) / -20F * this.pi;
-		pose.mulPose(Vector3f.YP.rotationDegrees(angle));
-		info.itemRender(SQUARE);
+		pose.translate(0D, Math.sin((gameTime + parTick) * 0.15D) * 0.075D, 0D);
+		float rotY = (gameTime + parTick) * 0.0375F;
+		pose.mulPose(Vector3f.YP.rotationDegrees(rotY * this.pi));
+		pose.scale(0.5F, 0.5F, 0.5F);
+		info.itemRenderNo(tile.copyMagic);
+//		info.itemRenderNo(tile.getInputItem());
 		pose.popPose();
 	}
 }

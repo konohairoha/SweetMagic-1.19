@@ -3,12 +3,12 @@ package sweetmagic.init.render.block;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
 
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.world.entity.LivingEntity;
 import sweetmagic.init.tile.sm.TileSMSpawner;
+import sweetmagic.util.RenderUtil.RenderInfo;
 
-public class RenderSMSpawner extends RenderAbstractTile<TileSMSpawner> {
+public class RenderSMSpawner<T extends TileSMSpawner> extends RenderAbstractTile<T> {
 
 	private int tickTime = 0;
 
@@ -16,8 +16,7 @@ public class RenderSMSpawner extends RenderAbstractTile<TileSMSpawner> {
 		super(con);
 	}
 
-	@Override
-	public void render(TileSMSpawner tile, float parTick, PoseStack pose, MultiBufferSource buf, int light, int overlayLight) {
+	public void render(T tile, float parTick, RenderInfo info) {
 		if (tile.isPeace || tile.getMobType() == -1) { return; }
 
 		LivingEntity entity = tile.getRenderEntity();
@@ -29,6 +28,7 @@ public class RenderSMSpawner extends RenderAbstractTile<TileSMSpawner> {
 		float f = 0.675F;
 		float f1 = Math.max(entity.getBbWidth(), entity.getBbHeight());
 		if ((double) f1 > 1D) { f /= f1; }
+		PoseStack pose = info.pose();
 		pose.pushPose();
 		pose.translate(0.5D, 0D, 0.5D);
 		pose.translate(0D, (double) 0.4F, 0D);
@@ -42,7 +42,7 @@ public class RenderSMSpawner extends RenderAbstractTile<TileSMSpawner> {
 		pose.translate(0D, (double) -0.2F, 0D);
 		pose.mulPose(Vector3f.XP.rotationDegrees(-30F));
 		pose.scale(f, f, f);
-		this.eRender.render(entity, 0D, 0D, 0D, 0F, parTick, pose, buf, light);
+		this.eRender.render(entity, 0D, 0D, 0D, 0F, parTick, pose, info.buf(), info.light());
 		pose.popPose();
 	}
 }

@@ -1,32 +1,40 @@
 package sweetmagic.init.render.block;
 
-import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
-import net.minecraft.world.item.ItemStack;
-import sweetmagic.init.BlockInit;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.inventory.InventoryMenu;
+import sweetmagic.SweetMagicCore;
+import sweetmagic.init.RenderTypeInit;
 import sweetmagic.init.tile.sm.TileMFTank;
+import sweetmagic.util.RenderUtil.RenderInfo;
 
-public class RenderMFTank extends RenderAbstractTile<TileMFTank> {
+public class RenderMFTank<T extends TileMFTank> extends RenderAbstractTile<T> {
 
-	private static final float SIZE = (15.9F / 16F) * 2F;
-	private static final ItemStack STACK = new ItemStack(BlockInit.magiaflux_liquidblock);
+	private static final ResourceLocation SRC = SweetMagicCore.getSRC("block/mf_water_still");
 
 	public RenderMFTank(BlockEntityRendererProvider.Context con) {
 		super(con);
 	}
 
-	@Override
-	public void render(TileMFTank tile, float parTick, PoseStack pose, MultiBufferSource buf, int light, int overlayLight) {
+	public void render(T tile, float parTick, RenderInfo info) {
 		if (tile.isMFEmpty()) { return; }
 
-		pose.pushPose();
+		int xd = 0;
+		int zd = 0;
+		if (xd < 0 || zd < 0) { return; }
+		float[] xBounds = this.getBlockBounds(xd);
+		float[] zBounds = this.getBlockBounds(zd);
+
+		VertexConsumer ver = info.buf().getBuffer(RenderTypeInit.SMELTERY_FLUID);
+		float curY = 0.005F;
 		float scale = Math.min(1F, (float) tile.getMF() / (float) tile.getMaxMF());
-		pose.translate(0.5D, 0.5D - (1D - scale) / 2D, 0.5D);
-		pose.scale(SIZE, SIZE * scale, SIZE);
-		this.iRender.renderStatic(STACK, ItemTransforms.TransformType.FIXED, light, overlayLight, pose, buf, 0);
-		pose.popPose();
+		float h = 0.99F * scale;
+		TextureAtlasSprite tex = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(SRC);
+		this.renderLargeFluidCuboid(info.pose(), ver, info.light(), xd, xBounds, zd, zBounds, curY, curY + h, tex, -1);
+		curY += h;
 	}
 }

@@ -33,7 +33,8 @@ public class RenderMagicianLectern implements BlockEntityRenderer<TileAbstractMa
 		if (tile.summonType.is(SummonType.END)) { return; }
 
 		float f = 0;
-		float f1 = ((float) tile.getTime() + parTick) * 3F;
+		int gameTime = tile.getClientTime();
+		float f1 = ((float) gameTime + parTick) * 3F;
 		float size = 1F + Math.min(1F, tile.tileTime * 0.00625F);
 		float addY = Math.min(0.5F, tile.tileTime * 0.003125F);
 		VertexConsumer vert = buf.getBuffer(RENDER_TYPE).color(0F, 0F, 0F, 1F);
