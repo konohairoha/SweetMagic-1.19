@@ -17,8 +17,8 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraftforge.common.loot.IGlobalLootModifier;
 import net.minecraftforge.common.loot.LootModifier;
 
-public class LootTableModifier extends LootModifier
-{
+public class LootTableModifier extends LootModifier {
+
 	public static final Supplier<Codec<LootTableModifier>> CODEC = Suppliers.memoize(() ->
 			RecordCodecBuilder.create(inst -> codecStart(inst).and(ResourceLocation.CODEC.fieldOf("lootTable")
 					.forGetter((m) -> m.lootTable)).apply(inst, LootTableModifier::new)));

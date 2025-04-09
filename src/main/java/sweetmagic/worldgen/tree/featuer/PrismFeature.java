@@ -15,9 +15,9 @@ import sweetmagic.init.BlockInit;
 public class PrismFeature extends AbstractTreeFeatuer {
 
 	private final int height = 19;
-    private final int randHeight = 24;
-    private final boolean isSmall;
-    private final int data;
+	private final int randHeight = 24;
+	private final boolean isSmall;
+	private final int data;
 
 	public PrismFeature(int data, boolean isSmall) {
 		super();
@@ -109,7 +109,7 @@ public class PrismFeature extends AbstractTreeFeatuer {
 		return true;
 	}
 
-    // 主軸の横
+	// 主軸の横
 	public void subTrunk (WorldGenLevel world, Random rand, BlockPos pos, BlockState state) {
 
 		int height = rand.nextInt(6) + 8;
@@ -151,24 +151,26 @@ public class PrismFeature extends AbstractTreeFeatuer {
 
 	public BlockState getLog() {
 		switch (this.data) {
-		case 1:  return BlockInit.magiawood_log.defaultBlockState();
+		case 1: return BlockInit.magiawood_log.defaultBlockState();
 		case 2: return BlockInit.lemon_log.defaultBlockState();
 		case 3: return BlockInit.orange_log.defaultBlockState();
 		case 4: return BlockInit.estor_log.defaultBlockState();
 		case 5: return BlockInit.peach_log.defaultBlockState();
 		case 6: return BlockInit.chestnut_log.defaultBlockState();
+		case 7: return BlockInit.peach_log.defaultBlockState();
 		default: return BlockInit.prism_log.defaultBlockState();
 		}
 	}
 
 	public BlockState getLeave() {
 		switch (this.data) {
-		case 1:  return BlockInit.magiawood_leaves.defaultBlockState().setValue(LeavesBlock.PERSISTENT, true);
+		case 1: return BlockInit.magiawood_leaves.defaultBlockState().setValue(LeavesBlock.PERSISTENT, true);
 		case 2: return BlockInit.lemon_leaves.defaultBlockState().setValue(ISMCrop.AGE2, 0);
 		case 3: return BlockInit.orange_leaves.defaultBlockState().setValue(ISMCrop.AGE2, 0);
 		case 4: return BlockInit.estor_leaves.defaultBlockState().setValue(ISMCrop.AGE2, 0);
 		case 5: return BlockInit.peach_leaves.defaultBlockState().setValue(ISMCrop.AGE2, 0);
 		case 6: return BlockInit.chestnut_leaves.defaultBlockState();
+		case 7: return BlockInit.maple_leaves.defaultBlockState().setValue(ISMCrop.AGE5, new Random().nextInt(6));
 		default: return BlockInit.prism_leaves.defaultBlockState().setValue(LeavesBlock.PERSISTENT, true);
 		}
 	}

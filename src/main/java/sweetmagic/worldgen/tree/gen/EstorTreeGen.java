@@ -12,7 +12,7 @@ public class EstorTreeGen extends AbstractTreeGen {
 		super(log, leave, growValue);
 	}
 
-    public void generate(Level world, RandomSource rand, BlockPos pos) {
+	public void generate(Level world, RandomSource rand, BlockPos pos) {
 
 		if (!this.checkBlock(world.getBlockState(pos.below()))) { return; }
 
@@ -46,5 +46,5 @@ public class EstorTreeGen extends AbstractTreeGen {
 		for (int y = 0; y <= 5; y++) {
 			world.setBlock(pos.offset(0, y, 0), this.log, 3);
 		}
-    }
+	}
 }

@@ -34,7 +34,7 @@ import sweetmagic.init.BlockInit;
 import sweetmagic.init.block.sm.SMFlowerDiff;
 public class SMFlowerGen {
 
-    private static final Map<String, ResourceKey<PlacedFeature>> keyMap = new HashMap<>();
+	private static final Map<String, ResourceKey<PlacedFeature>> keyMap = new HashMap<>();
 
 	public static final SimpleBlockConfiguration SUGAR = new SimpleBlockConfiguration(
 		new WeightedStateProvider(SimpleWeightedRandomList.<BlockState>builder()
@@ -136,24 +136,25 @@ public class SMFlowerGen {
 				CountPlacement.of(chance), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_WORLD_SURFACE, BiomeFilter.biome());
 	}
 
-    public static <FC extends FeatureConfiguration, F extends Feature<FC>> Holder<ConfiguredFeature<FC, ?>> register(ResourceLocation id, F feature, FC config) {
-        return badRegister(BuiltinRegistries.CONFIGURED_FEATURE, id, new ConfiguredFeature<>(feature, config));
-    }
+	public static <FC extends FeatureConfiguration, F extends Feature<FC>> Holder<ConfiguredFeature<FC, ?>> register(ResourceLocation id, F feature, FC config) {
+		return badRegister(BuiltinRegistries.CONFIGURED_FEATURE, id, new ConfiguredFeature<>(feature, config));
+	}
 
-    public static <V extends T, T> Holder<V> badRegister(Registry<T> registry, ResourceLocation id, V value) {
-        return BuiltinRegistries.register((Registry<V>) registry, id, value);
-    }
+	public static <V extends T, T> Holder<V> badRegister(Registry<T> registry, ResourceLocation id, V value) {
+		return BuiltinRegistries.register((Registry<V>) registry, id, value);
+	}
 
-    public static Holder<PlacedFeature> register(ResourceLocation id, Holder<? extends ConfiguredFeature<?, ?>> feature, List<PlacementModifier> mod) {
-        keyMap.put(id.getPath(), ResourceKey.create(Registry.PLACED_FEATURE_REGISTRY, id));
-        return BuiltinRegistries.register(BuiltinRegistries.PLACED_FEATURE, id, new PlacedFeature(Holder.hackyErase(feature), List.copyOf(mod)));
-    }
+	public static Holder<PlacedFeature> register(ResourceLocation id, Holder<? extends ConfiguredFeature<?, ?>> feature, List<PlacementModifier> mod) {
+		keyMap.put(id.getPath(), ResourceKey.create(Registry.PLACED_FEATURE_REGISTRY, id));
+		return BuiltinRegistries.register(BuiltinRegistries.PLACED_FEATURE, id,
+				new PlacedFeature(Holder.hackyErase(feature), List.copyOf(mod)));
+	}
 
-    public static Holder<PlacedFeature> register(ResourceLocation id, Holder<? extends ConfiguredFeature<?, ?>> feature, PlacementModifier... mod) {
-        return register(id, feature, List.of(mod));
-    }
+	public static Holder<PlacedFeature> register(ResourceLocation id, Holder<? extends ConfiguredFeature<?, ?>> feature, PlacementModifier... mod) {
+		return register(id, feature, List.of(mod));
+	}
 
-    public static ResourceKey<PlacedFeature> getFeatureKey(String key) {
-        return keyMap.get(key);
-    }
+	public static ResourceKey<PlacedFeature> getFeatureKey(String key) {
+		return keyMap.get(key);
+	}
 }

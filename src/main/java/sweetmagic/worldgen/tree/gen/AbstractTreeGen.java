@@ -26,7 +26,7 @@ public abstract class AbstractTreeGen {
 		}
 	}
 
-    public abstract void generate(Level world, RandomSource rand, BlockPos pos);
+	public abstract void generate(Level world, RandomSource rand, BlockPos pos);
 
 	// ブロックの設置
 	public void setBlock (Level world, BlockPos pos, BlockState state) {
@@ -40,7 +40,7 @@ public abstract class AbstractTreeGen {
 	}
 
 	// 草か土かチェック
-	public boolean checkBlock (BlockState state) {
-	     return state.is(BlockTags.DIRT) || state.is(Blocks.GRASS);
+	public boolean checkBlock(BlockState state) {
+		return state.is(BlockTags.DIRT) || state.is(Blocks.GRASS);
 	}
 }

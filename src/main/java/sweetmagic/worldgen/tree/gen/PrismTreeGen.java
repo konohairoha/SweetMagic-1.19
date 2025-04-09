@@ -9,14 +9,14 @@ import sweetmagic.init.block.sm.FruitLeaves;
 
 public class PrismTreeGen extends AbstractTreeGen {
 
-    public int height = 19;
-    public int randHeight = 24;
+	public int height = 19;
+	public int randHeight = 24;
 
 	public PrismTreeGen(BlockState log, BlockState leave, int growValue) {
 		super(log, leave, growValue);
 	}
 
-    public void generate(Level world, RandomSource rand, BlockPos pos) {
+	public void generate(Level world, RandomSource rand, BlockPos pos) {
 
 		if (!this.checkBlock(world.getBlockState(pos.below()))) { return; }
 
@@ -88,9 +88,9 @@ public class PrismTreeGen extends AbstractTreeGen {
 		this.setBlock(world, top.offset(1, 1, 0), leave);
 		this.setBlock(world, top.above(), leave);
 		this.setBlock(world, top.above(2), leave);
-    }
+	}
 
-    // 主軸の横
+	// 主軸の横
 	public void subTrunk (Level world, BlockPos pos, BlockState state) {
 
 		RandomSource rand = world.random;

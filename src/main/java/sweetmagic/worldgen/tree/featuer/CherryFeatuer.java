@@ -35,25 +35,28 @@ import sweetmagic.init.BlockInit;
 
 public class CherryFeatuer extends Feature<TreeConfiguration> {
 
-	public CherryFeatuer() {
+	private boolean isCherry = false;
+
+	public CherryFeatuer(boolean isCherry) {
 		super(TreeConfiguration.CODEC);
+		this.isCherry = isCherry;
 	}
 
 	private static boolean isVine(LevelSimulatedReader world, BlockPos pos) {
-		return world.isStateAtPosition(pos, (state) -> { return state.is(Blocks.VINE); });
+		return world.isStateAtPosition(pos, (s) -> { return s.is(Blocks.VINE); });
 	}
 
 	public static boolean isBlockWater(LevelSimulatedReader world, BlockPos pos) {
-		return world.isStateAtPosition(pos, (state) -> { return state.is(Blocks.WATER); });
+		return world.isStateAtPosition(pos, (s) -> { return s.is(Blocks.WATER); });
 	}
 
 	public static boolean isAirOrLeaves(LevelSimulatedReader world, BlockPos pos) {
-		return world.isStateAtPosition(pos, (state) -> { return state.is(BlockTags.LEAVES); });
+		return world.isStateAtPosition(pos, (s) -> { return s.is(BlockTags.LEAVES); });
 	}
 
 	private static boolean isReplaceablePlant(LevelSimulatedReader world, BlockPos pos) {
-		return world.isStateAtPosition(pos, (state) -> {
-			Material mate = state.getMaterial();
+		return world.isStateAtPosition(pos, (s) -> {
+			Material mate = s.getMaterial();
 			return mate == Material.REPLACEABLE_PLANT || mate == Material.REPLACEABLE_WATER_PLANT || mate == Material.REPLACEABLE_FIREPROOF_PLANT;
 		});
 	}
@@ -84,7 +87,6 @@ public class CherryFeatuer extends Feature<TreeConfiguration> {
 				List<FoliagePlacer.FoliageAttachment> list = con.trunkPlacer.placeTrunk(world, bi2, rand, k1, bpos, con);
 				list.forEach(s -> con.foliagePlacer.createFoliage(world, bi3, rand, con, k1, s, j, l));
 				return true;
-
 			}
 
 			return false;
@@ -116,12 +118,11 @@ public class CherryFeatuer extends Feature<TreeConfiguration> {
 	}
 
 	public boolean place(FeaturePlaceContext<TreeConfiguration> fpc) {
-
 		WorldGenLevel world = fpc.level();
-		RandomSource rand = fpc.random();
 		BlockPos pos = fpc.origin();
 		if (!this.checkBlock(world.getBlockState(pos.below()).getBlock())) { return false; }
 
+		RandomSource rand = fpc.random();
 		TreeConfiguration con = fpc.config();
 		Set<BlockPos> set = Sets.newHashSet();
 		Set<BlockPos> set1 = Sets.newHashSet();
@@ -140,15 +141,17 @@ public class CherryFeatuer extends Feature<TreeConfiguration> {
 				con.decorators.forEach((s) -> { s.place(deco); });
 			}
 
-			BlockState cherry_blossoms = BlockInit.cherry_blossoms_leaves_carpet.defaultBlockState();
+			if (this.isCherry) {
+				BlockState cherry_blossoms = BlockInit.cherry_blossoms_leaves_carpet.defaultBlockState();
 
-			for (int x = -4; x <= 4; x++) {
-				for (int z = -4; z <= 4; z++) {
+				for (int x = -4; x <= 4; x++) {
+					for (int z = -4; z <= 4; z++) {
 
-					float chance = Math.abs(x) <= 2 && Math.abs(z) <= 2 ? 0.725F : 0.275F;
-					if ( (x == 0 && z == 0) || rand.nextFloat() >= chance) { continue; }
+						float chance = Math.abs(x) <= 2 && Math.abs(z) <= 2 ? 0.725F : 0.275F;
+						if ( (x == 0 && z == 0) || rand.nextFloat() >= chance) { continue; }
 
-					this.setSMBlock(world, pos.offset(x, 0, z), cherry_blossoms);
+						this.setSMBlock(world, pos.offset(x, 0, z), cherry_blossoms);
+					}
 				}
 			}
 
@@ -221,7 +224,7 @@ public class CherryFeatuer extends Feature<TreeConfiguration> {
 					if (!state1.hasProperty(BlockStateProperties.DISTANCE)) { continue; }
 
 					int k = state1.getValue(BlockStateProperties.DISTANCE);
-					if (k <= l + 1) {  continue; }
+					if (k <= l + 1) { continue; }
 
 					BlockState state2 = state1.setValue(BlockStateProperties.DISTANCE, Integer.valueOf(l + 1));
 					setBlockKnownShape(world, mutPos, state2);

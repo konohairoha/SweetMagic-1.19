@@ -29,7 +29,7 @@ public class AzaleaFeatuer extends AbstractTreeFeatuer {
 
 		BlockState log = this.getLog();
 		Random rand = new Random();
-	    boolean isSmall = rand.nextBoolean();
+		boolean isSmall = rand.nextBoolean();
 
 		if (isSmall) {
 			this.setBlock(world, pos, log);

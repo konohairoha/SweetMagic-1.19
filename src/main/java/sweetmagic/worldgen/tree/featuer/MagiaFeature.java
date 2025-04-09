@@ -16,9 +16,9 @@ import sweetmagic.init.BlockInit;
 
 public class MagiaFeature extends AbstractTreeFeatuer {
 
-    public int height = 10;
-    public int randHeight = 1;
-    private static final EnumProperty<Direction.Axis> AXIS = RotatedPillarBlock.AXIS;
+	public int height = 10;
+	public int randHeight = 1;
+	private static final EnumProperty<Direction.Axis> AXIS = RotatedPillarBlock.AXIS;
 
 	public MagiaFeature() {
 		super();
@@ -120,8 +120,7 @@ public class MagiaFeature extends AbstractTreeFeatuer {
 		return true;
 	}
 
-
-    // 主軸の横
+	// 主軸の横
 	public void subTrunk (WorldGenLevel world, BlockPos pos, BlockState state, Direction face) {
 
 		RandomSource rand = world.getRandom();

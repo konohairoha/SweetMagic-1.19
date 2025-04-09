@@ -14,8 +14,7 @@ public class SMTreeGen extends AbstractTreeGen {
 		super(log, leave, growValue);
 	}
 
-    public void generate(Level world, RandomSource rand, BlockPos pos) {
-
+	public void generate(Level world, RandomSource rand, BlockPos pos) {
 		if (!this.checkBlock(world.getBlockState(pos.below()))) { return; }
 
 		for (int y = 1; y <= 5; y++) {
@@ -68,5 +67,5 @@ public class SMTreeGen extends AbstractTreeGen {
 		world.setBlock(pos.west(2), chestnut, 3);
 		world.setBlock(pos.south(2), chestnut, 3);
 		world.setBlock(pos.east(2), chestnut, 3);
-    }
+	}
 }

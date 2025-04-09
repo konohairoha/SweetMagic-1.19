@@ -15,8 +15,7 @@ public class CoconutTreeGen extends AbstractTreeGen {
 		this.coconut = coconut;
 	}
 
-    public void generate(Level world, RandomSource rand, BlockPos pos) {
-
+	public void generate(Level world, RandomSource rand, BlockPos pos) {
 		if (!this.checkBlock(world.getBlockState(pos.below()))) { return; }
 
 		for (int y = 1; y <= 8; y++) {
@@ -79,5 +78,5 @@ public class CoconutTreeGen extends AbstractTreeGen {
 		for (int y = 0; y <= 8; y++) {
 			world.setBlock(pos.offset(0, y, 0), this.log, 3);
 		}
-    }
+	}
 }

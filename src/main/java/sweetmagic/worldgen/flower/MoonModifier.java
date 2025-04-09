@@ -23,7 +23,7 @@ public record MoonModifier(GenerationStep.Decoration step, Holder<PlacedFeature>
 	public static final RegistryObject<Codec<? extends BiomeModifier>> SERIALIZER = BaseModifier.getModifier("smflowers_moon");
 
 	private static List<TagKey<Biome>> biomeTagList = Arrays.<TagKey<Biome>> asList(
-		BiomeTags.IS_FOREST, BiomeTags.IS_TAIGA, BiomeTags.IS_JUNGLE, TagInit.IS_FLOWERGARDEN
+		BiomeTags.IS_FOREST, BiomeTags.IS_TAIGA, BiomeTags.IS_JUNGLE, TagInit.IS_SWEETMAGIC
 	);
 
 	@Override

@@ -100,11 +100,11 @@ public class SMOreGen {
 		return orePlacement(CountPlacement.of(count), HeightRangePlacement.triangle(ver1, ver2));
 	}
 
-	public static VerticalAnchor absolute (int y) {
+	public static VerticalAnchor absolute(int y) {
 		return VerticalAnchor.absolute(y);
 	}
 
-	public static VerticalAnchor aboveBottom (int y) {
+	public static VerticalAnchor aboveBottom(int y) {
 		return VerticalAnchor.aboveBottom(y);
 	}
 }

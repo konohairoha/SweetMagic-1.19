@@ -22,7 +22,6 @@ public class SMTreeFeatuer extends AbstractTreeFeatuer {
 	}
 
 	public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> con) {
-
 		BlockPos pos = con.origin();
 		WorldGenLevel world = con.level();
 		if (!this.checkBlock(world.getBlockState(pos.below()).getBlock())) { return false; }
@@ -105,6 +104,7 @@ public class SMTreeFeatuer extends AbstractTreeFeatuer {
 		case 3: return BlockInit.estor_log.defaultBlockState();
 		case 4: return BlockInit.peach_log.defaultBlockState();
 		case 5: return BlockInit.cherry_blossoms_log.defaultBlockState();
+		case 6: return BlockInit.peach_log.defaultBlockState();
 		default: return BlockInit.chestnut_log.defaultBlockState();
 		}
 	}
@@ -116,6 +116,7 @@ public class SMTreeFeatuer extends AbstractTreeFeatuer {
 		case 3: return BlockInit.estor_leaves.defaultBlockState().setValue(ISMCrop.AGE2, 2);
 		case 4: return BlockInit.peach_leaves.defaultBlockState().setValue(ISMCrop.AGE2, 2);
 		case 5: return BlockInit.cherry_blossoms_leaves.defaultBlockState().setValue(LeavesBlock.PERSISTENT, true);
+		case 6: return BlockInit.maple_leaves.defaultBlockState().setValue(LeavesBlock.PERSISTENT, true).setValue(ISMCrop.AGE5, new Random().nextInt(6));
 		default: return BlockInit.chestnut_leaves.defaultBlockState().setValue(LeavesBlock.PERSISTENT, true);
 		}
 	}

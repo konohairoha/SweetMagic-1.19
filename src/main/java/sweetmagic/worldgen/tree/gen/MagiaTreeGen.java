@@ -11,15 +11,15 @@ import net.minecraft.world.level.material.Material;
 
 public class MagiaTreeGen extends AbstractTreeGen {
 
-    public int height = 10;
-    public int randHeight = 1;
-    private static final EnumProperty<Direction.Axis> AXIS = RotatedPillarBlock.AXIS;
+	public int height = 10;
+	public int randHeight = 1;
+	private static final EnumProperty<Direction.Axis> AXIS = RotatedPillarBlock.AXIS;
 
 	public MagiaTreeGen(BlockState log, BlockState leave, int growValue) {
 		super(log, leave, growValue);
 	}
 
-    public void generate(Level world, RandomSource rand, BlockPos pos) {
+	public void generate(Level world, RandomSource rand, BlockPos pos) {
 
 		if (!this.checkBlock(world.getBlockState(pos.below()))) { return; }
 
@@ -108,9 +108,9 @@ public class MagiaTreeGen extends AbstractTreeGen {
 			this.setBlock(world, top.offset(i, 6, 0), this.leave);
 			this.setBlock(world, top.offset(0, 6, i), this.leave);
 		}
-    }
+	}
 
-    // 主軸の横
+	// 主軸の横
 	public void subTrunk (Level world, BlockPos pos, BlockState state, Direction face) {
 
 		RandomSource rand = world.random;

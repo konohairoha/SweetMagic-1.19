@@ -24,7 +24,7 @@ public record SugarModifier(GenerationStep.Decoration step, Holder<PlacedFeature
 	public static final RegistryObject<Codec<? extends BiomeModifier>> SERIALIZER = BaseModifier.getModifier("smflowers_sugar");
 
 	private static List<TagKey<Biome>> biomeTagList = Arrays.<TagKey<Biome>> asList(
-		Tags.Biomes.IS_PLAINS, BiomeTags.IS_SAVANNA, TagInit.IS_SMFOREST, TagInit.IS_FLOWERGARDEN
+		Tags.Biomes.IS_PLAINS, BiomeTags.IS_SAVANNA, TagInit.IS_SMFOREST, TagInit.IS_SWEETMAGIC
 	);
 
 	@Override

@@ -20,7 +20,7 @@ import sweetmagic.SweetMagicCore;
 public class BaseModifier {
 
 	public static RegistryObject<Codec<? extends BiomeModifier>> getModifier (String name) {
-		return  RegistryObject.create(SweetMagicCore.getSRC(name), ForgeRegistries.Keys.BIOME_MODIFIER_SERIALIZERS, SweetMagicCore.MODID);
+		return RegistryObject.create(SweetMagicCore.getSRC(name), ForgeRegistries.Keys.BIOME_MODIFIER_SERIALIZERS, SweetMagicCore.MODID);
 	}
 
 	public static void addFeature (Phase phase, ModifiableBiomeInfo.BiomeInfo.Builder build, GenerationStep.Decoration step, Holder<PlacedFeature> feature) {
