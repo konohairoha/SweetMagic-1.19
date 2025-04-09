@@ -45,7 +45,7 @@ public interface ISMCrop {
 	IntegerProperty getSMMaxAge();
 
 	// 成長チャンスの設定
-	void setGlowChance (int chance);
+	void setGlowChance(int chance);
 
 	// 成長チャンスの取得
 	int getGlowChange();
@@ -57,58 +57,58 @@ public interface ISMCrop {
 	ItemLike getCrop();
 
 	// デフォルトステータス取得
-	BlockState getDefault ();
+	BlockState getDefault();
 
 	// 右クリック回収時に戻る成長段階
-	default int RCSetState () {
+	default int RCSetState() {
 		return 0;
 	}
 
 	// ドロップ数
-	default int getDropValue (RandomSource rand, int fortune) {
+	default int getDropValue(RandomSource rand, int fortune) {
 		return 1;
 	}
 
 	// ドロップアイテム取得
-	default ItemStack getDropStack (RandomSource rand) {
+	default ItemStack getDropStack(RandomSource rand) {
 		return new ItemStack(this.getCrop(), this.getDropValue(rand, 0));
 	}
 
 	// 右クリック時アイテムを取得
-	default List<ItemStack> rightClickStack (Level world, BlockState state, BlockPos pos) {
+	default List<ItemStack> rightClickStack(Level world, BlockState state, BlockPos pos) {
 
 		// アイテムの取得
 		List<ItemStack> stackList = Arrays.<ItemStack> asList( this.getDropStack(world.random) );
 
 		// 作物の成長段階を下げる
-        world.setBlock(pos, state.setValue(this.getSMMaxAge(), this.RCSetState()), 2);
+		world.setBlock(pos, state.setValue(this.getSMMaxAge(), this.RCSetState()), 2);
 		return stackList;
 	}
 
 	// 右クリックアイテムの取得
-	default ItemEntity getDropItem (Level world, Player player, ItemStack hand, ItemLike item, int amount) {
+	default ItemEntity getDropItem(Level world, Player player, ItemStack hand, ItemLike item, int amount) {
 		return new ItemEntity(world, player.xo, player.yo, player.zo, new ItemStack(item, amount));
 	}
 
 	// 右クリック時の処理
-	default void onRicghtClick (Level world, Player player, BlockState state, BlockPos pos, ItemStack stack) { }
+	default void onRicghtClick(Level world, Player player, BlockState state, BlockPos pos, ItemStack stack) { }
 
 	// ブロック破壊処理
 	default boolean breakBlock(Level world, BlockPos pos) {
-        return world.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
-    }
+		return world.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
+	}
 
-	default void playCropSound (Level world, RandomSource rand, BlockPos pos, float vol) {
+	default void playCropSound(Level world, RandomSource rand, BlockPos pos, float vol) {
 		world.playSound(null, pos, SoundEvents.GRASS_PLACE, SoundSource.BLOCKS, vol, 0.8F + rand.nextFloat() * 0.4F);
 	}
 
 	// 作物回収時の音
-	default void playCropSound (Level world, RandomSource rand, BlockPos pos) {
-        this.playCropSound(world, rand, pos, 0.5F);
+	default void playCropSound(Level world, RandomSource rand, BlockPos pos) {
+		this.playCropSound(world, rand, pos, 0.5F);
 	}
 
 	// 幸運での加算
-	default int getFoutuneValue (Player player) {
+	default int getFoutuneValue(Player player) {
 
 		int value = 0;
 
@@ -120,26 +120,26 @@ public interface ISMCrop {
 	}
 
 	// ドロップアイテムの取得
-	default Item getDropItem () {
+	default Item getDropItem() {
 		return null;
 	}
 
-	default Block getBlock (LevelAccessor world, BlockPos pos) {
+	default Block getBlock(LevelAccessor world, BlockPos pos) {
 		return world.getBlockState(pos).getBlock();
 	}
 
 	// 現在の成長段階を取得
-	default int getNowState (BlockState state) {
+	default int getNowState(BlockState state) {
 		return state.getValue(this.getSMMaxAge());
 	}
 
 	// 最大成長段階かどうか
-	default boolean isMaxAge (BlockState state) {
+	default boolean isMaxAge(BlockState state) {
 		return this.getNowState(state) >= this.getMaxBlockState();
 	}
 
 	// 成長できるかどうか
-	default boolean isGlowChange (RandomSource rand) {
+	default boolean isGlowChange(RandomSource rand) {
 		return rand.nextInt(this.getGlowChange()) == 0;
 	}
 

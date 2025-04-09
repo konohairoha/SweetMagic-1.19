@@ -1,5 +1,7 @@
 package sweetmagic.util;
 
+import java.util.List;
+
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Vector3f;
@@ -9,10 +11,15 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.block.ModelBlockRenderer;
+import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.entity.ItemRenderer;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -23,9 +30,9 @@ import sweetmagic.init.tile.sm.TileAbstractSM;
 
 public class RenderUtil {
 
-	public static void renderItem (RenderInfo info, TileAbstractSM tile, ItemStack stack, double x, double y, double z) {
+	public static void renderItem(RenderInfo info, TileAbstractSM tile, ItemStack stack, double x, double y, double z) {
 
-		PoseStack pose = info.getPose();
+		PoseStack pose = info.pose();
 		pose.pushPose();
 		pose.mulPose(Vector3f.YP.rotationDegrees(tile.getRot()));
 
@@ -52,20 +59,22 @@ public class RenderUtil {
 			pose.translate(x, y, z);
 		}
 
-		info.getRender().renderStatic(stack, ItemTransforms.TransformType.FIXED, info.getLight(), info.getOverlayLight(), pose, info.getBuf(), 0);
+		info.render().renderStatic(stack, ItemTransforms.TransformType.FIXED, info.light(), info.overlay(), pose, info.buf(), 0);
 		pose.popPose();
 	}
 
-	// ブロックレンダー
-	public static void renderBlock(PoseStack pose, MultiBufferSource buf, RenderColor renderColor, Block block) {
+	public static void renderBlock(RenderInfo info, RenderColor color, Block block) {
+		renderBlock(info.pose(), info.buf(), color, block);
+	}
 
+	// ブロックレンダー
+	public static void renderBlock(PoseStack pose, MultiBufferSource buf, RenderColor color, Block block) {
 		Minecraft mc = Minecraft.getInstance();
 		BlockState state = block.defaultBlockState();
 		VertexConsumer vert = buf.getBuffer(RenderType.cutout()).color(0F, 0F, 0F, 1F);
 		ModelBlockRenderer render = new ModelBlockRenderer(mc.getBlockColors());
-
 		BakedModel model = mc.getBlockRenderer().getBlockModel(state);
-		render.renderModel(pose.last(), vert, state, model, renderColor.getRed(), renderColor.getGreen(), renderColor.getBlue(), renderColor.getLight(), renderColor.getOverlayLight());
+		render.renderModel(pose.last(), vert, state, model, color.red(), color.green(), color.blue(), color.light(), color.overlayLight());
 	}
 
 	// ブロックレンダー
@@ -78,58 +87,56 @@ public class RenderUtil {
 		Minecraft mc = Minecraft.getInstance();
 		VertexConsumer vert = buf.getBuffer(RenderType.translucent()).color(0F, 0F, 0F, 1F);
 		ModelBlockRenderer render = new ModelBlockRenderer(mc.getBlockColors());
-
 		BakedModel model = mc.getBlockRenderer().getBlockModel(state);
-		render.renderModel(pose.last(), vert, state, model, renderColor.getRed(), renderColor.getGreen(), renderColor.getBlue(), renderColor.getLight(), renderColor.getOverlayLight());
+		render.renderModel(pose.last(), vert, state, model, renderColor.red(), renderColor.green(), renderColor.blue(), renderColor.light(), renderColor.overlayLight());
+	}
+
+	// ブロックレンダー
+	public static void renderTransBlock(PoseStack pose, MultiBufferSource buf, RenderColor color, BlockState state, float alpha) {
+		Minecraft mc = Minecraft.getInstance();
+		VertexConsumer ver = buf.getBuffer(RenderType.translucent()).color(0F, 0F, 0F, 1F);
+		BakedModel model = mc.getBlockRenderer().getBlockModel(state);
+		int light = color.light();
+		int over = color.overlayLight();
+
+		for (Direction face : Direction.values()) {
+
+			List<BakedQuad> quadList = model.getQuads(state, face, RandomSource.create(Mth.getSeed(1, 1, 1)));
+			for (BakedQuad quad : quadList) {
+				boolean flag = quad.isTinted();
+				float f = flag ? 0F : 1F;
+				float f1 = flag ? 0F : 1F;
+				float f2 = flag ? 0F : 1F;
+				ver.putBulkData(pose.last(), quad, f, f1, f2, alpha, light, over, true);
+			}
+		}
 	}
 
 	public static void renderBlock(Level world, BlockPos pos, BlockState state, BlockRenderDispatcher render, PoseStack pose, MultiBufferSource buf, int overlay) {
-        ForgeHooksClient.renderPistonMovedBlocks(pos, state, pose, buf, world, false, overlay, render);
-    }
+		ForgeHooksClient.renderPistonMovedBlocks(pos, state, pose, buf, world, false, overlay, render);
+	}
 
-	public static record RenderInfo (ItemRenderer render, int light, int overlayLight, PoseStack pose, MultiBufferSource buf) {
+	public static record RenderInfo (ItemRenderer render, int light, int overlay, PoseStack pose, MultiBufferSource buf) {
 
-		public ItemRenderer getRender () {
-			return this.render;
+		public void itemRender(ItemStack stack) {
+			this.render().renderStatic(stack, ItemTransforms.TransformType.FIXED, this.light(), this.overlay(), this.pose(), this.buf(), 0);
 		}
 
-		public int getLight () {
-			return this.light;
-		}
-
-		public int getOverlayLight () {
-			return this.overlayLight;
-		}
-
-		public PoseStack getPose () {
-			return this.pose;
-		}
-
-		public MultiBufferSource getBuf () {
-			return this.buf;
+		public void itemRenderNo(ItemStack stack) {
+			this.render().renderStatic(stack, ItemTransforms.TransformType.FIXED, this.light(), OverlayTexture.NO_OVERLAY, this.pose(), this.buf(), 0);
 		}
 	}
 
 	public static record RenderColor (float red, float green, float blue, int light, int overlayLight) {
 
-		public float getRed () {
-			return this.red;
+		public static RenderColor create(int light) {
+			return new RenderColor (1F, 1F, 1F, light, OverlayTexture.NO_OVERLAY);
 		}
 
-		public float getGreen () {
-			return this.green;
-		}
-
-		public float getBlue () {
-			return this.blue;
-		}
-
-		public int getLight () {
-			return this.light;
-		}
-
-		public int getOverlayLight () {
-			return this.overlayLight;
+		public static RenderColor create(RenderInfo info) {
+			return new RenderColor (1F, 1F, 1F, info.light(), OverlayTexture.NO_OVERLAY);
 		}
 	}
+
+	public static record RGBColor (int red, int green, int blue) { }
 }

@@ -2,19 +2,19 @@ package sweetmagic.api.iitem.info;
 
 import net.minecraft.world.item.ItemStack;
 import sweetmagic.api.iitem.IPorch;
-import sweetmagic.init.tile.inventory.SMPorchInventory;
+import sweetmagic.init.tile.inventory.SMInventory.SMPorchInventory;
 
 public class PorchInfo extends BaseItemInfo {
 
 	private final IPorch porch;
 
-	public PorchInfo (ItemStack stack) {
+	public PorchInfo(ItemStack stack) {
 		super(stack, stack.getOrCreateTag());
 		this.porch = (IPorch) stack.getItem();
 	}
 
 	// ポーチの取得
-	public IPorch getPorch () {
+	public IPorch getPorch() {
 		return this.porch;
 	}
 

@@ -8,15 +8,17 @@ public class SMDebug {
 
 	private static final Logger LOGGER = LogUtils.getLogger();
 
-	public static void info(Object obj) {
+	public static void info(Object... objArray) {
 
-		if (obj instanceof String text) {
-			LOGGER.info("★★★" + text);
+		String tip = "";
+
+		for (int i = 0; i < objArray.length; i++) {
+			Object obj = objArray[i];
+			tip += obj instanceof String text ? text : obj;
+			if (i != objArray.length - 1) { tip += " / "; }
 		}
 
-		else {
-			LOGGER.info("★★★" + obj);
-		}
+		LOGGER.info("★★★" + tip);
 	}
 
 	public static void info() {

@@ -19,6 +19,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.BossEvent;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
@@ -50,15 +51,20 @@ import sweetmagic.init.entity.animal.AbstractSummonMob;
 import sweetmagic.init.entity.projectile.AbstractMagicShot;
 import sweetmagic.util.PlayerHelper;
 import sweetmagic.util.SMDamage;
+import sweetmagic.util.WorldHelper;
 
 public interface ISMMob {
 
 	public static final EntityDataSerializer<Boolean> BOOLEAN = EntityDataSerializers.BOOLEAN;
 	public static final EntityDataSerializer<Integer> INT = EntityDataSerializers.INT;
 	public static final EntityDataSerializer<Float> FLOAT = EntityDataSerializers.FLOAT;
+	public static final BossEvent.BossBarColor BC_BLUE = BossEvent.BossBarColor.BLUE;
+	public static final BossEvent.BossBarColor BC_RED = BossEvent.BossBarColor.RED;
+	public static final BossEvent.BossBarColor BC_GREEN = BossEvent.BossBarColor.GREEN;
+	public static final BossEvent.BossBarOverlay NOTCHED_6 = BossEvent.BossBarOverlay.NOTCHED_6;
 
 	// 魔法攻撃なら2倍
-	default float getDamageAmount (Level world, DamageSource src, float dame, float rate) {
+	default float getDamageAmount(Level world, DamageSource src, float dame, float rate) {
 
 		if (src.getDirectEntity() instanceof Warden entity) {
 			entity.hurt(SMDamage.MAGIC, dame);
@@ -85,13 +91,13 @@ public interface ISMMob {
 	}
 
 	// ボスダメージ計算
-	default float getBossDamageAmount (Level world, int defTime, DamageSource src, float amount, float cap) {
+	default float getBossDamageAmount(Level world, int defTime, DamageSource src, float amount, float cap) {
 
 		Entity attacker = src.getDirectEntity();
 
 		// デバフダメージなら
 		if (src instanceof SMDamage smDame && smDame.isDebuffFlag()) {
-			amount /= 4D;
+			amount *= 0.25F;
 		}
 
 		else if (attacker instanceof Warden entity) {
@@ -100,33 +106,28 @@ public interface ISMMob {
 			amount = 0F;
 		}
 
-		else if (!src.isMagic()) {
-			return 0;
-		}
-
-		float defTimeDamage = src == SMDamage.addDamage ? cap / 5F : 0F;
-
 		if (attacker instanceof AbstractSummonMob || src.getEntity() instanceof AbstractSummonMob) {
 			amount = Math.min(cap * 0.5F, amount) * 0.5F;
 		}
 
 		// 火力キャップ
+		float defTimeDamage = src == SMDamage.addDamage ? cap / 5F : 0F;
 		return Math.min(defTime <= 0 ? cap : defTimeDamage, amount);
 	}
 
 	// 魔法によるダメージか？
-	default boolean isSMDamage (DamageSource src) {
-    	Entity entity = src.getDirectEntity();
-    	return src instanceof SMDamage || entity instanceof AbstractMagicShot;
+	default boolean isSMDamage(DamageSource src) {
+		Entity entity = src.getDirectEntity();
+		return src instanceof SMDamage || entity instanceof AbstractMagicShot;
 	}
 
 	// 魔法ダメージ以外か
-	default boolean notMagicDamage (Entity attacker, Entity attackEntity) {
+	default boolean notMagicDamage(Entity attacker, Entity attackEntity) {
 		return attacker != null && attackEntity != null && !( attackEntity instanceof AbstractMagicShot || attackEntity instanceof AbstractSummonMob);
 	}
 
 	// ボスのダメージチェック
-	default boolean checkBossDamage (DamageSource src) {
+	default boolean checkBossDamage(DamageSource src) {
 		return !this.isSMDamage(src);
 	}
 
@@ -143,22 +144,22 @@ public interface ISMMob {
 	}
 
 	// 範囲の取得
-	default AABB getAABB (Entity entity, double range) {
+	default AABB getAABB(Entity entity, double range) {
 		return entity.getBoundingBox().inflate(range, range / 2, range);
 	}
 
 	// 範囲の取得
-	default AABB getAABB (Entity entity, double x, double  y, double  z) {
+	default AABB getAABB(Entity entity, double x, double y, double z) {
 		return entity.getBoundingBox().inflate(x, y, z);
 	}
 
 	// 範囲の取得
-	default AABB getAABB (BlockPos pos, double range) {
+	default AABB getAABB(BlockPos pos, double range) {
 		return new AABB(pos.getX() - range, pos.getY() - range, pos.getZ() - range, pos.getX() + range, pos.getY() + range, pos.getZ() + range);
 	}
 
 	// えんちちーソート
-	default int sortEntity (Entity mob, Entity entity1, Entity entity2) {
+	default int sortEntity(Entity mob, Entity entity1, Entity entity2) {
 		if (entity1 == null || entity2 == null) { return 0; }
 
 		double distance1 = mob.distanceToSqr(entity1);
@@ -175,29 +176,29 @@ public interface ISMMob {
 		world.playSound(null, entity.blockPosition(), sound, SoundSource.HOSTILE, vol, pitch);
 	}
 
-	default boolean isTarget () {
+	default boolean isTarget() {
 		return false;
 	}
 
-	default boolean isHard (Level world) {
+	default boolean isHard(Level world) {
 		return world.getDifficulty().equals(Difficulty.HARD);
 	}
 
 	// 体力が半分以下かどうか
-	default boolean isHalfHealth (LivingEntity entity) {
+	default boolean isHalfHealth(LivingEntity entity) {
 		return entity.getHealth() <= (entity.getMaxHealth() * 0.5D);
 	}
 
 	// リーダーフラグを所持しているか
-	default boolean isLeader (LivingEntity entity) {
+	default boolean isLeader(LivingEntity entity) {
 		return entity.hasEffect(PotionInit.leader_flag);
 	}
 
-	default int getPotionLevel (LivingEntity entity, MobEffect potion) {
+	default int getPotionLevel(LivingEntity entity, MobEffect potion) {
 		return entity.hasEffect(potion) ? 1 : 0;
 	}
 
-	public static boolean isOverworld (ServerLevelAccessor world, BlockPos pos) {
+	public static boolean isOverworld(ServerLevelAccessor world, BlockPos pos) {
 		return world.getBiome(pos).is(BiomeTags.IS_OVERWORLD);
 	}
 
@@ -216,7 +217,6 @@ public interface ISMMob {
 	}
 
 	public static boolean isDarkEnoughToSpawnSM(ServerLevelAccessor world, BlockPos pos, RandomSource rand) {
-
 		if (world.getBrightness(LightLayer.SKY, pos) > rand.nextInt(32) || !world.getBiome(pos).is(TagInit.IS_SWEETMAGIC)) { return false; }
 
 		DimensionType dim = world.dimensionType();
@@ -227,12 +227,12 @@ public interface ISMMob {
 		return j <= dim.monsterSpawnLightTest().sample(rand);
 	}
 
-	default int getDate (Level world) {
+	default int getDate(Level world) {
 		return (int) (world.dayTime() / 24000);
 	}
 
 	// 日付経過のレート
-	default float getDateRate (Level world, float minRate) {
+	default float getDateRate(Level world, float minRate) {
 
 		// 難易度の取得
 		float rate = 1F;
@@ -259,7 +259,7 @@ public interface ISMMob {
 	}
 
 	// 最大体力の設定
-	default void initMobData (LivingEntity entity, DifficultyInstance dif) {
+	default void initMobData(LivingEntity entity, DifficultyInstance dif) {
 
 		if (entity.getItemBySlot(EquipmentSlot.HEAD).isEmpty()) {
 			LocalDate date = LocalDate.now();
@@ -287,12 +287,12 @@ public interface ISMMob {
 	}
 
 	// 低ランクかどうか
-	default boolean isLowRank () {
+	default boolean isLowRank() {
 		return true;
 	}
 
 	// スポーンまでの日数
-	default int getMaxSpawnDate () {
+	default int getMaxSpawnDate() {
 		return SMConfig.spawnDate.get();
 	}
 
@@ -314,17 +314,17 @@ public interface ISMMob {
 	}
 
 	// 経過日数を満たしていないなら
-	public static boolean isDayElapse (ServerLevelAccessor world, int day) {
+	public static boolean isDayElapse(ServerLevelAccessor world, int day) {
 		if (SMConfig.spawnSMMob.get()) { return true; }
 		switch (world.getDifficulty()) {
-		case EASY:   return world.dayTime() > (day * 36000);
-		case NORMAL: return world.dayTime() > (day * 24000);
-		default:     return true;
+		case EASY:		return world.dayTime() > (day * 36000);
+		case NORMAL:	return world.dayTime() > (day * 24000);
+		default:		return true;
 		}
 	}
 
 	// 経過日数を満たしていないなら
-	public static boolean isSkyView (ServerLevelAccessor world, BlockPos pos) {
+	public static boolean isSkyView(ServerLevelAccessor world, BlockPos pos) {
 		return world.canSeeSky(pos) || ( SMConfig.spawnCave.get() && pos.getY() <= 30 && Math.min(1F, ( (float) ( 30F - pos.getY() ) * 0.0333F)) > world.getRandom().nextFloat() );
 	}
 
@@ -343,11 +343,11 @@ public interface ISMMob {
 		return SynchedEntityData.defineId(entity, seria);
 	}
 
-	default void addPotion (LivingEntity entity, MobEffect potion, int time, int level) {
+	default void addPotion(LivingEntity entity, MobEffect potion, int time, int level) {
 		PlayerHelper.setPotion(entity, potion, level, time);
 	}
 
-	default ItemStack getStack () {
+	default ItemStack getStack() {
 		return ItemStack.EMPTY;
 	}
 
@@ -363,13 +363,12 @@ public interface ISMMob {
 		}
 
 		public void tick() {
-
 			if (this.operation != MoveControl.Operation.MOVE_TO) { return; }
 
 			Vec3 vec = new Vec3(this.wantedX - this.mob.getX(), this.wantedY - this.mob.getY(), this.wantedZ - this.mob.getZ());
 			double d0 = vec.length();
 
-			if (d0 < this.mob.getBoundingBox().getSize()) {
+			if (d0 < this.mob.getBoundingBox().getSize() || ( this.mob instanceof AbstractSummonMob su && su.getShit() ) ) {
 				this.operation = MoveControl.Operation.WAIT;
 				this.mob.setDeltaMovement(this.mob.getDeltaMovement().scale(0.5D));
 			}
@@ -431,19 +430,31 @@ public interface ISMMob {
 		}
 	}
 
-	default Iterable<BlockPos> getPosList (BlockPos pos, double range) {
-		return BlockPos.betweenClosed(pos.offset(-range, -range, -range), pos.offset(range, range, range));
+	default <T> void registerData(LivingEntity entity, EntityDataAccessor<T> data, T value) {
+		entity.getEntityData().define(data, value);
 	}
 
-	default Iterable<BlockPos> getPosRangeList (BlockPos pos, double range) {
-		return BlockPos.betweenClosed(pos.offset(-range, 0, -range), pos.offset(range, 0, range));
+	default <T> T getData(LivingEntity entity, EntityDataAccessor<T> data) {
+		return entity.getEntityData().get(data);
 	}
 
-	default boolean isPlayer (Entity entity) {
+	default <T> void setData(LivingEntity entity, EntityDataAccessor<T> data, T value) {
+		entity.getEntityData().set(data, value);
+	}
+
+	default Iterable<BlockPos> getPosList(BlockPos pos, double range) {
+		return WorldHelper.getRangePos(pos, range);
+	}
+
+	default Iterable<BlockPos> getPosRangeList(BlockPos pos, double range) {
+		return WorldHelper.getRangePos(pos, -range, 0, -range, range, 0, range);
+	}
+
+	default boolean isPlayer(Entity entity) {
 		return entity instanceof Player || entity instanceof AbstractSummonMob;
 	}
 
-	default Predicate<LivingEntity> getTargetEntity () {
+	default Predicate<LivingEntity> getTargetEntity() {
 		return e -> e instanceof Player || e instanceof AbstractSummonMob;
 	}
 }

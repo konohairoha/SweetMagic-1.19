@@ -13,16 +13,17 @@ public class SMConfig {
 
 	public static ForgeConfigSpec.BooleanValue spawnPhantom;	// ファントムスポーン
 	public static ForgeConfigSpec.BooleanValue spawnDrowned;	// ドラウンドスポーン
-	public static ForgeConfigSpec.BooleanValue spawnTrader;		// 行商人スポーン
+	public static ForgeConfigSpec.BooleanValue spawnTrader;	// 行商人スポーン
 	public static ForgeConfigSpec.BooleanValue canTackBlock;	// エンダーマンのブロック回収
 	public static ForgeConfigSpec.IntValue spawnDate;			// スイマジモブのスポーン日数
 	public static ForgeConfigSpec.BooleanValue spawnSMMob;		// スイマジモブのスポーン緩和
 	public static ForgeConfigSpec.BooleanValue spawnCave;		// 洞窟でのスイマジモブのスポーン
 
 	public static ForgeConfigSpec.BooleanValue hungerSetting;	// 空腹設定
+	public static ForgeConfigSpec.BooleanValue foodQuality;	// 品質設定
 
-	public static ForgeConfigSpec.IntValue prismChance;			// プリズムフォレストバイオームチャンス
-	public static ForgeConfigSpec.IntValue fruitChance;			// フルーツフォレストバイオームチャンス
+	public static ForgeConfigSpec.IntValue prismChance;		// プリズムフォレストバイオームチャンス
+	public static ForgeConfigSpec.IntValue fruitChance;		// フルーツフォレストバイオームチャンス
 	public static ForgeConfigSpec.IntValue cherreyChance;		// 桜の木バイオームチャンス
 
 	public static ForgeConfigSpec.IntValue plainFlowerChance;	// 平原花生成チャンス
@@ -100,6 +101,14 @@ public class SMConfig {
 		hungerSetting = BUILD
 				.comment("Setting hunger gauge decreases when magic is used. Default: false")
 				.define("Hungry after Magic Use", false);
+
+		BUILD.pop();
+
+		BUILD.push("Food Setting");
+
+		foodQuality = BUILD
+				.comment("Quality levels will be set for food. Default: true")
+				.define("Quality Level Enablement", true);
 
 		BUILD.pop();
 

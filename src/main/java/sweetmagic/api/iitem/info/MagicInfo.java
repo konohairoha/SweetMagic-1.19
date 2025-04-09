@@ -10,21 +10,21 @@ public class MagicInfo {
 	private final Item item;
 	private final IMagicItem magicItem;
 
-	public MagicInfo (ItemStack stack) {
+	public MagicInfo(ItemStack stack) {
 		this.stack = stack;
 		this.item = this.stack.getItem();
 		this.magicItem = (IMagicItem) this.item;
 	}
 
-	public ItemStack getStack () {
+	public ItemStack getStack() {
 		return this.stack;
 	}
 
-	public Item getItem () {
+	public Item getItem() {
 		return this.item;
 	}
 
-	public IMagicItem getMagicItem () {
+	public IMagicItem getMagicItem() {
 		return this.magicItem;
 	}
 }

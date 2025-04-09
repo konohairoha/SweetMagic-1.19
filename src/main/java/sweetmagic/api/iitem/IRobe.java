@@ -16,15 +16,15 @@ public interface IRobe extends ISMArmor, IMFTool {
 	);
 
 	// GUIを開く
-	void openGui (Level world, Player player, ItemStack stack);
+	void openGui(Level world, Player player, ItemStack stack);
 
 	// SMモブのダメージカット率（1だとダメージカット無し）
-	default float getSMMobDamageCut () {
+	default float getSMMobDamageCut() {
 		return 0.67F;
 	}
 
 	// 魔法ダメージカット率（1だとダメージカット無し）
-	default float getMagicDamageCut () {
+	default float getMagicDamageCut() {
 		return 0.67F;
 	}
 }

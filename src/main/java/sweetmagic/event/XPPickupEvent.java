@@ -44,8 +44,7 @@ public class XPPickupEvent {
 	}
 
 	// エーテルヒールによる回復
-	public static boolean healRepair (Player player, ItemStack stack, IMFTool mfTool, int value) {
-
+	public static boolean healRepair(Player player, ItemStack stack, IMFTool mfTool, int value) {
 		// MF回復エンチャがついていないかエンチャが0以下かMFが最大値なら終了
 		int level = EnchantmentHelper.getItemEnchantmentLevel(EnchantInit.aetherheal, stack);
 		if (level <= 0 || mfTool.isMaxMF(stack)) { return false; }
@@ -60,7 +59,7 @@ public class XPPickupEvent {
 	}
 
 	// エーテルヒールによる回復
-	public static void emelaldPiasEffect (Player player, ItemStack stack, IPorch porch, int value) {
+	public static void emelaldPiasEffect(Player player, ItemStack stack, IPorch porch, int value) {
 		int count = porch.acceCount(stack, ItemInit.emelald_pias, 10);
 		if (count <= 0) { return; }
 

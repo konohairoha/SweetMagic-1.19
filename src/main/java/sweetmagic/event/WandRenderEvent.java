@@ -13,6 +13,7 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -26,9 +27,11 @@ import sweetmagic.SweetMagicCore;
 import sweetmagic.api.emagic.SMMagicType;
 import sweetmagic.api.event.SMUtilEvent;
 import sweetmagic.api.iitem.IMagicItem;
+import sweetmagic.api.iitem.IPorch;
 import sweetmagic.api.iitem.IWand;
 import sweetmagic.api.iitem.info.MagicInfo;
 import sweetmagic.api.iitem.info.WandInfo;
+import sweetmagic.init.ItemInit;
 import sweetmagic.init.item.magic.MFTeleport;
 
 @OnlyIn(Dist.CLIENT)
@@ -38,7 +41,7 @@ public class WandRenderEvent extends SMUtilEvent {
 	private static final ResourceLocation TEX = SweetMagicCore.getSRC("textures/gui/gui_usergage.png");
 	private static final ResourceLocation SCOPE = SweetMagicCore.getSRC("textures/gui/spyglass_scope.png");
 	private static int tickTime = 0;
-	private static final int SCOPE_TIME = 5;
+	private static final int SCOPE_TIME = 6;
 
 	// レンダーイベントの呼び出し
 	@SubscribeEvent
@@ -135,7 +138,6 @@ public class WandRenderEvent extends SMUtilEvent {
 		}
 
 		RenderSystem.disableBlend();
-
 		int remaing = player.getUseItemRemainingTicks();
 		if (wand.isScope() && mc.options.getCameraType().isFirstPerson() && remaing != 0 && 72000 - player.getUseItemRemainingTicks() > SCOPE_TIME) {
 
@@ -170,7 +172,7 @@ public class WandRenderEvent extends SMUtilEvent {
 	}
 
 	// GUIを描画
-	public static void renderGUI (Matrix4f mat, int height, int weight, boolean isLeftSide, boolean isSneak) {
+	public static void renderGUI(Matrix4f mat, int height, int weight, boolean isLeftSide, boolean isSneak) {
 		int addY = (int) ((isSneak ? 40 : -Math.min(-40, tickTime)) * getProgress(10));
 		int posX = isLeftSide ? 10 : weight - 247;
 		drawTextured(mat, posX, height - 47 - addY, 0, 0, 41, 40);
@@ -178,19 +180,19 @@ public class WandRenderEvent extends SMUtilEvent {
 	}
 
 	// GUIのゲージを描画
-	public static void renderMFProgress (Matrix4f mat, int height, int weight, boolean isLeftSide, int progress) {
+	public static void renderMFProgress(Matrix4f mat, int height, int weight, boolean isLeftSide, int progress) {
 		int posX = isLeftSide ? 54 : weight - 202;
 		drawTextured(mat, posX, height - 25, 0, 50, progress, 14);
 	}
 
 	// GUIのゲージを描画
-	public static void renderEXPProgress (Matrix4f mat, int height, int weight, boolean isLeftSide, int progress) {
+	public static void renderEXPProgress(Matrix4f mat, int height, int weight, boolean isLeftSide, int progress) {
 		int posX = isLeftSide ? 54 : weight - 202;
 		drawTextured(mat, posX, height - 11, 0, 64, progress, 4);
 	}
 
 	// GUIのゲージを描画
-	public static void renderChargeProgress (Matrix4f mat, int height, int weight, boolean isLeftSide, Player player) {
+	public static void renderChargeProgress(Matrix4f mat, int height, int weight, boolean isLeftSide, Player player) {
 
 		RenderSystem.setShaderTexture(0, TEX);
 
@@ -199,7 +201,15 @@ public class WandRenderEvent extends SMUtilEvent {
 		int remainingTick = player.getUseItemRemainingTicks();
 
 		if (remainingTick != 0) {
-			int progress = Math.min(15, (int) (15 * (20F - ( remainingTick - 71980F ) ) / 20F ) );
+
+			float rate = 20F;
+			ItemStack leg = player.getItemBySlot(EquipmentSlot.LEGS);
+
+			if (!leg.isEmpty() && leg.getItem() instanceof IPorch portch && portch.hasAcce(leg, ItemInit.magician_quillpen)) {
+				rate /= 4F;
+			}
+
+			int progress = Math.min(15, (int) (15 * (rate - ( remainingTick - (72000F - rate)) ) / rate ) );
 			drawTextured(mat, posX, height - 22 + 15 - progress, 76 + (progress == 15 ? 8 : 0), 53 + (progress == 15 ? 0 : 15 - progress), 5, progress);
 		}
 	}
@@ -262,7 +272,7 @@ public class WandRenderEvent extends SMUtilEvent {
 	}
 
 	// 杖のMFをテキスト描画
-	public static void renderMFText (Minecraft mc, PoseStack pose, int height, int weight, WandInfo wandInfo, boolean isLeftSide) {
+	public static void renderMFText(Minecraft mc, PoseStack pose, int height, int weight, WandInfo wandInfo, boolean isLeftSide) {
 		Font font = mc.font;
 		String text = String.format("%,d", wandInfo.getWand().getMF(wandInfo.getStack())) + "MF";
 		int posX = isLeftSide ? 72 : weight - 192;
@@ -270,18 +280,18 @@ public class WandRenderEvent extends SMUtilEvent {
 	}
 
 	// 杖の魔法名をテキスト描画
-	public static void renderMagicText (Minecraft mc, PoseStack pose, int height, int weight, ItemStack slotItem, boolean isLeftSide) {
+	public static void renderMagicText(Minecraft mc, PoseStack pose, int height, int weight, ItemStack slotItem, boolean isLeftSide) {
 		Font font = mc.font;
 		int posX = isLeftSide ? 65 : weight - 192;
 		font.drawShadow(pose, slotItem.getHoverName(), posX, height - 44, 0xffffff);
 	}
 
-	public static float getProgress (int maxTime) {
+	public static float getProgress(int maxTime) {
 		return Math.min(1F, (float) tickTime / maxTime);
 	}
 
 	@SubscribeEvent
-	public static void onFOVEvent (ComputeFovModifierEvent event) {
+	public static void onFOVEvent(ComputeFovModifierEvent event) {
 		Player player = event.getPlayer();
 		Minecraft mc = Minecraft.getInstance();
 		int remaing = player.getUseItemRemainingTicks();

@@ -23,46 +23,46 @@ import sweetmagic.util.WorldHelper;
 
 public abstract class AbstractChopTaskEvent {
 
-    protected final Level world;
-    protected final Player player;
-    protected final boolean isCreative;
-    protected final BlockPos start;
-    protected final int blockTick;
-    protected List<BlockPos> targetblockList = new ArrayList<>();	// 対象リスト
-    protected Set<BlockPos> posSet = new HashSet<>();				// 対象座標リスト
+	protected final Level world;
+	protected final Player player;
+	protected final boolean isCreative;
+	protected final BlockPos start;
+	protected final int blockTick;
+	protected List<BlockPos> targetblockList = new ArrayList<>(); // 対象リスト
+	protected Set<BlockPos> posSet = new HashSet<>(); // 対象座標リスト
 
-    public AbstractChopTaskEvent(BlockPos start, Player player, int blockTick) {
-        this.world = player.getLevel();
-        this.player = player;
-        this.isCreative = player.isCreative();
-        this.blockTick = blockTick;
-        this.start = start;
-        this.targetblockList.add(start);
-    }
+	public AbstractChopTaskEvent(BlockPos start, Player player, int blockTick) {
+		this.world = player.getLevel();
+		this.player = player;
+		this.isCreative = player.isCreative();
+		this.blockTick = blockTick;
+		this.start = start;
+		this.targetblockList.add(start);
+	}
 
 	@SubscribeEvent
 	public void chopChop(TickEvent.ServerTickEvent event) {
 
 		// クライアントなら終了
-    	if(event.side.isClient()) {
-            this.finish();
-            return;
-        }
+		if (event.side.isClient()) {
+			this.finish();
+			return;
+		}
 
-        BlockPos pos;
-        int left = this.blockTick;
+		BlockPos pos;
+		int left = this.blockTick;
 		List<ItemStack> dropList = new ArrayList<>();
-        Direction[] allFace = new Direction[] { Direction.UP, Direction.DOWN, Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST };
-        boolean isFirst = this.posSet.isEmpty();
+		Direction[] allFace = new Direction[] { Direction.UP, Direction.DOWN, Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST };
+		boolean isFirst = this.posSet.isEmpty();
 
-        // 見つかるまで回す
-        while(left > 0) {
+		// 見つかるまで回す
+		while(left > 0) {
 
-        	// 空なら終了
-            if(this.targetblockList.isEmpty()) {
-            	this.finish();
-                return;
-            }
+			// 空なら終了
+			if(this.targetblockList.isEmpty()) {
+				this.finish();
+				return;
+			}
 
 			pos = this.targetblockList.get(0);
 			this.targetblockList.remove(0);
@@ -89,7 +89,7 @@ public abstract class AbstractChopTaskEvent {
 				continue;
 			}
 
-            if (!this.checkBlock(this.world, pos)) { continue; }
+			if (!this.checkBlock(this.world, pos)) { continue; }
 
 			BlockState state = this.world.getBlockState(pos);
 
@@ -103,24 +103,23 @@ public abstract class AbstractChopTaskEvent {
 			// 4方向確認
 			for (Direction face : allFace) {
 
-                BlockPos posFace = pos.relative(face);
-
 				// 未チェック領域なら追加
-                this.checkPos(posFace);
+				BlockPos posFace = pos.relative(face);
+				this.checkPos(posFace);
 
-                if (face != Direction.UP) {
-                    this.checkPos(posFace.above());
-                }
-            }
+				if (face != Direction.UP) {
+					this.checkPos(posFace.above());
+				}
+			}
 
 			left--;
-        }
+		}
 
 		//リストに入れたアイテムをドロップさせる
 		WorldHelper.createLootDrop(dropList, this.world, this.player.xo, this.player.yo, this.player.zo);
-    }
+	}
 
-	public void checkPos (BlockPos pos) {
+	public void checkPos(BlockPos pos) {
 		if (!this.posSet.contains(pos) && this.checkBlock(this.world, pos)) {
 			this.targetblockList.add(pos);
 			this.posSet.add(pos);
@@ -129,14 +128,14 @@ public abstract class AbstractChopTaskEvent {
 
 	// イベント終了
 	public void finish() {
-        MinecraftForge.EVENT_BUS.unregister(this);
-    }
+		MinecraftForge.EVENT_BUS.unregister(this);
+	}
 
 	public LootContext.Builder getLoot (Level world, BlockPos pos, ItemStack stack) {
 		return (new LootContext.Builder((ServerLevel) world)).withRandom(world.random)
 				.withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(pos)).withParameter(LootContextParams.TOOL, stack).withOptionalParameter(LootContextParams.BLOCK_ENTITY, world.getBlockEntity(pos));
 	}
 
-    // 原木チェック
+	// 原木チェック
 	public abstract boolean checkBlock(Level world, BlockPos pos);
 }

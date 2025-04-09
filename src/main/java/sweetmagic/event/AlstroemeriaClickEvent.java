@@ -14,7 +14,7 @@ import sweetmagic.init.block.magic.PedalCreate;
 public class AlstroemeriaClickEvent {
 
 	@SubscribeEvent
-    public static void rightClickBlock (RightClickBlock event) {
+	public static void rightClickBlock(RightClickBlock event) {
 		ItemStack stack = event.getItemStack();
 		if (stack.isEmpty()) { return; }
 
@@ -25,17 +25,25 @@ public class AlstroemeriaClickEvent {
 		BlockPos pos = event.getPos();
 		BlockState state = world.getBlockState(pos);
 		Block block = state.getBlock();
-//		if ( !(block instanceof Alstroemeria als) ) { return; }
 
 		if (block instanceof Alstroemeria als) {
 			// 最大成長時にアルストロメリアクラフトの実行
-			if (!world.isClientSide && als.isMaxAge(state)) {
-				als.getRecipeAlstroemeria(world, pos, player, stack, true);
+			if (als.isMaxAge(state)) {
+
+				if(!world.isClientSide) {
+					als.getRecipeAlstroemeria(world, pos, player, stack, true);
+				}
+
+				event.setCanceled(true);
 			}
 		}
 
-		else if (block instanceof PedalCreate pedal && !world.isClientSide) {
-			pedal.pedalCraft(world, pos, player, stack, true);
+		else if (block instanceof PedalCreate pedal) {
+
+			if(!world.isClientSide) {
+				pedal.pedalCraft(world, pos, player, stack, true);
+			}
+
 			event.setCanceled(true);
 		}
 	}

@@ -20,7 +20,7 @@ public enum SMElement {
 	SMElement() { }
 
 	// Stringから属性を返す
-	public static SMElement getElement (String ele) {
+	public static SMElement getElement(String ele) {
 
 		SMElement element = null;
 
@@ -72,9 +72,7 @@ public enum SMElement {
 	public boolean is(SMElement... eleArray) {
 
 		for (SMElement ele : eleArray) {
-			if (ele.equals(this)) {
-				return true;
-			}
+			if (ele.equals(this)) { return true; }
 		}
 
 		return false;

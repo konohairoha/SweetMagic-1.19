@@ -22,7 +22,7 @@ import sweetmagic.api.iitem.info.PorchInfo;
 import sweetmagic.init.EnchantInit;
 import sweetmagic.init.SoundInit;
 import sweetmagic.init.item.magic.SMAcce;
-import sweetmagic.init.tile.inventory.SMPorchInventory;
+import sweetmagic.init.tile.inventory.SMInventory.SMPorchInventory;
 
 public interface IPorch extends ISMArmor {
 
@@ -31,21 +31,19 @@ public interface IPorch extends ISMArmor {
 	);
 
 	// GUIを開く
-	void openGui (Level world, Player player, ItemStack stack);
+	void openGui(Level world, Player player, ItemStack stack);
 
 	// スロット数
-	default int getSlotSize () {
+	default int getSlotSize() {
 		return 8 * this.getTier();
 	}
 
-	default void playSound (Level world, Player player, SoundEvent sound, float vol, float pitch) {
+	default void playSound(Level world, Player player, SoundEvent sound, float vol, float pitch) {
 		world.playSound(null, player.blockPosition(), sound, SoundSource.PLAYERS, vol, pitch);
 	}
 
 	// 常時発動処理
-	default void onTick (Level world, Player player, ItemStack porch) {
-
-		// スペクターモードの時は終了
+	default void onTick(Level world, Player player, ItemStack porch) {
 		if (player.isSpectator()) { return; }
 
 		// インベントリを取得
@@ -59,10 +57,10 @@ public interface IPorch extends ISMArmor {
 			// アクセサリ以外かクラフトタイムがあるなら次へ
 			AcceInfo info = new AcceInfo(stack);
 			IAcce acce = info.getAcce();
-			if ( !acce.canUseEffect(world, player, info)) { continue; }
+			if (!acce.canUseEffect(world, player, info)) { continue; }
 
 			// update処理不可のアイテムまたは重複不可で既に発動済みなら次へ
-			if (!acce.isUpdateType(world, player, info) || ( !acce.isDuplication() && acceList.contains(stack) ) ) { continue; }
+			if (!acce.isUpdateType(world, player, info) || (!acce.isDuplication() && acceList.contains(stack))) { continue; }
 
 			// アクセサリーの常時処理へ
 			acce.onUpdate(world, player, info);
@@ -83,24 +81,24 @@ public interface IPorch extends ISMArmor {
 		acceSet.forEach(i -> i.getAcce().onMultiUpdate(world, player, i, pInfo));
 	}
 
-	default List<ItemStack> getStackList (ItemStack stack) {
+	default List<ItemStack> getStackList(ItemStack stack) {
 		return new PorchInfo(stack).getInv().getStackList().stream().filter(s -> s.getItem() instanceof IAcce).toList();
 	}
 
-	default boolean hasAcce (ItemStack stack, Item acce) {
+	default boolean hasAcce(ItemStack stack, Item acce) {
 		return !this.getStackList(stack).stream().filter(s -> s.is(acce)).toList().isEmpty();
 	}
 
-	default boolean hasAcceIsActive (ItemStack stack, Item acce) {
+	default boolean hasAcceIsActive(ItemStack stack, Item acce) {
 		return !this.getStackList(stack).stream().filter(s -> s.is(acce) && !s.getOrCreateTag().getBoolean(SMAcce.NOT_ACTIVE)).toList().isEmpty();
 	}
 
-	default boolean getFilter (AcceInfo info) {
+	default boolean getFilter(AcceInfo info) {
 		IAcce acce = info.getAcce();
 		return acce.isDuplication() && acce.getAcceType().is(SMAcceType.MUL_UPDATE);
 	}
 
-	default int acceCount (ItemStack stack, Item acce, int maxValue) {
+	default int acceCount(ItemStack stack, Item acce, int maxValue) {
 
 		int acceCount = 0;
 		List<ItemStack> stackList = this.getStackList(stack).stream().filter(s -> s.is(acce)).toList();
@@ -113,7 +111,7 @@ public interface IPorch extends ISMArmor {
 		return Math.min(acceCount, maxValue);
 	}
 
-	default void acceInvalidate (Player player, ItemStack stack, Item acce) {
+	default void acceInvalidate(Player player, ItemStack stack, Item acce) {
 
 		// インベントリ取得
 		SMPorchInventory inv = new PorchInfo(stack).getInv();
@@ -135,12 +133,12 @@ public interface IPorch extends ISMArmor {
 		}
 	}
 
-	public static IPorch getPorch (Player player) {
+	public static IPorch getPorch(Player player) {
 		ItemStack leg = player.getItemBySlot(EquipmentSlot.LEGS);
 		return !leg.isEmpty() && leg.getItem() instanceof IPorch porch ? porch : null;
 	}
 
-	public static IPorch getPorch (ItemStack leg) {
+	public static IPorch getPorch(ItemStack leg) {
 		return !leg.isEmpty() && leg.getItem() instanceof IPorch porch ? porch : null;
 	}
 }

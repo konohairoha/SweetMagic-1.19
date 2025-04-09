@@ -31,6 +31,8 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import sweetmagic.init.ItemInit;
 import sweetmagic.init.PotionInit;
+import sweetmagic.util.SMDebug;
+import sweetmagic.util.WorldHelper;
 
 public interface IRangeTool {
 
@@ -40,36 +42,53 @@ public interface IRangeTool {
 
 	int getRange();
 
-	default void rangeBreake(ItemStack stack, Level world, BlockPos pos, LivingEntity living, RayTracePointer tracePointer) {
+	default boolean isDepth() {
+		return false;
+	}
 
-		if (world.isClientSide  || !(living instanceof Player player) || living.hasEffect(PotionInit.non_destructive)) { return; }
+	default void rangeBreake(ItemStack stack, Level world, BlockPos pos, LivingEntity living, RayTracePointer ray) {
+		if (world.isClientSide || !(living instanceof Player player) || living.hasEffect(PotionInit.non_destructive)) { return; }
 
-		HitResult mop = tracePointer.rayTrace(world, player, ClipContext.Fluid.NONE);
+		HitResult mop = ray.rayTrace(world, player, ClipContext.Fluid.NONE);
 		if (!(mop instanceof BlockHitResult result) || result.getType() == HitResult.Type.MISS || !pos.equals(result.getBlockPos())) { return; }
 
 		Direction face = result.getDirection();
 
 		int area = this.getRange();
-		int rangeX, rangeY, rangeZ;	//向きに合わせて座標を変えるための変数
+		int xa = 0, ya = 0, za = 0, xb = 0, yb = 0, zb = 0;
+		int rangeX, rangeY, rangeZ; //向きに合わせて座標を変えるための変数
 		rangeX = rangeY = rangeZ = area;
+		area += 1;
 
 		switch (face) {
-        case UP:
-        case DOWN:
-        	rangeY = 0;
-        	break;
-        case NORTH:
-        case SOUTH:
-        	rangeZ = 0;
-        	break;
-        case EAST:
-        case WEST:
-        	rangeX = 0;
-        	break;
+		case UP:
+			ya = this.isDepth() ? -area : 0;
+			rangeY = 0;
+			break;
+		case DOWN:
+			yb = this.isDepth() ? area : 0;
+			rangeY = 0;
+			break;
+		case NORTH:
+			zb = this.isDepth() ? area : 0;
+			rangeZ = 0;
+			break;
+		case SOUTH:
+			za = this.isDepth() ? -area : 0;
+			rangeZ = 0;
+			break;
+		case EAST:
+			xb = this.isDepth() ? -area : 0;
+			rangeX = 0;
+			break;
+		case WEST:
+			xa = this.isDepth() ? area : 0;
+			rangeX = 0;
+			break;
 		}
 
 		// 範囲の座標取得
-		Iterable<BlockPos> pList = BlockPos.betweenClosed(pos.offset(-rangeX, -rangeY, -rangeZ), pos.offset(rangeX, rangeY, rangeZ));
+		Iterable<BlockPos> pList = WorldHelper.getRangePos(pos, -rangeX + xa, -rangeY + ya, -rangeZ + za, rangeX + xb, rangeY + yb, rangeZ + zb);
 
 		//リストの作成（めっちゃ大事）
 		List<ItemStack> dropList = new ArrayList<>();
@@ -86,11 +105,12 @@ public interface IRangeTool {
 
 		for (BlockPos p : pList) {
 
+			SMDebug.info(p);
 			BlockState state = world.getBlockState(p);
 			if (!this.isAllBlock() && !stack.isCorrectToolForDrops(state)) { continue; }
 
 			BlockEntity tile = world.getBlockEntity(p);
-			if ( ( tile != null && !tileList.contains(tile.getType()) ) && tile != null) { continue; }
+			if ((tile != null && !tileList.contains(tile.getType())) && tile != null) { continue; }
 
 			if (silkTouch <= 0) {
 
@@ -109,7 +129,7 @@ public interface IRangeTool {
 				}
 			}
 
-			world.destroyBlock(p, false);
+//			world.destroyBlock(p, false);
 			world.removeBlock(p, false);
 			living.gameEvent(GameEvent.BLOCK_DESTROY);
 		}

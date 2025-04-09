@@ -38,6 +38,7 @@ import sweetmagic.api.iitem.info.WandInfo;
 import sweetmagic.init.BlockInit;
 import sweetmagic.init.ItemInit;
 import sweetmagic.init.ParticleInit;
+import sweetmagic.util.WorldHelper;
 
 @Mod.EventBusSubscriber(modid = SweetMagicCore.MODID, value = Dist.CLIENT)
 public class HasItemEvent {
@@ -57,7 +58,7 @@ public class HasItemEvent {
 		}
 
 		tickTime++;
-		if(tickTime % 16 != 0) { return; }
+		if (tickTime % 16 != 0) { return; }
 
 		tickTime = 0;
 		Player player = event.getPlayer();
@@ -76,9 +77,7 @@ public class HasItemEvent {
 		}
 
 		if (itemList.isEmpty()) {
-			itemList = Arrays.<Item> asList(
-				ItemInit.magic_light, Item.byBlock(BlockInit.magiclight)
-			);
+			itemList = Arrays.<Item> asList(ItemInit.magic_light, Item.byBlock(BlockInit.magiclight));
 		}
 
 		Level world = player.level;
@@ -92,8 +91,6 @@ public class HasItemEvent {
 
 	// 魔法の流れの描画
 	public static void onMFMFlow(ComputeFovModifierEvent event) {
-
-		// 魔法流の杖以外なら終了
 		Player player = event.getPlayer();
 		ItemStack stack = player.getMainHandItem();
 		if (stack.isEmpty() || stack.getItem() != ItemInit.mf_stuff || !player.level.isClientSide) { return; }
@@ -101,16 +98,16 @@ public class HasItemEvent {
 		int area = 16;
 		Level world = player.level;
 		BlockPos pPos = player.getOnPos();
-		ParticleOptions par = ParticleInit.MF.get();
+		ParticleOptions par = ParticleInit.MF;
 
 		// 範囲の座標取得
-		Iterable<BlockPos> pList = BlockPos.betweenClosed(pPos.offset(-area, -area, -area), pPos.offset(area, area, area));
+		Iterable<BlockPos> pList = WorldHelper.getRangePos(pPos, area);
 
 		for (BlockPos pos : pList) {
 
 			// 魔法の光以外なら次へ
 			BlockEntity bEntity = world.getBlockEntity(pos);
-			if (bEntity == null || !( bEntity instanceof ITileMF tile) ) { continue; }
+			if (bEntity == null || !(bEntity instanceof ITileMF tile)) { continue; }
 
 			// 座標リストがないなら次へ
 			Set<BlockPos> posList = tile.getPosList();
@@ -122,14 +119,12 @@ public class HasItemEvent {
 	}
 
 	// 魔法の光描画
-	public static void renderEffect (Level world, Player player) {
+	public static void renderEffect(Level world, Player player) {
 
 		int area = 12;
 		BlockPos pPos = player.getOnPos();
-		ParticleOptions par = ParticleInit.MAGICLIGHT.get();
-
-		// 範囲の座標取得
-		Iterable<BlockPos> posList = BlockPos.betweenClosed(pPos.offset(-area, -area, -area), pPos.offset(area, area, area));
+		ParticleOptions par = ParticleInit.MAGICLIGHT;
+		Iterable<BlockPos> posList = WorldHelper.getRangePos(pPos, area);
 
 		for (BlockPos pos : posList) {
 
@@ -144,7 +139,7 @@ public class HasItemEvent {
 	}
 
 	// 魔法の流れを描画
-	public static void renderMFFlow (Level world, BlockPos basePos, Set<BlockPos> posList, ParticleOptions particle) {
+	public static void renderMFFlow(Level world, BlockPos basePos, Set<BlockPos> posList, ParticleOptions particle) {
 
 		// スピードの宣言
 		float speed = 0.0265F;
@@ -159,7 +154,6 @@ public class HasItemEvent {
 			float xSpeed = (basePos.getX() - pos.getX()) * speed;
 			float ySpeed = (basePos.getY() - pos.getY()) * speed;
 			float zSpeed = (basePos.getZ() - pos.getZ()) * speed;
-
 			world.addParticle(particle, x, y, z, xSpeed, ySpeed, zSpeed);
 		}
 	}
@@ -172,61 +166,69 @@ public class HasItemEvent {
 		ItemStack stack = player.getMainHandItem();
 		if (player.isShiftKeyDown() || stack.isEmpty() || !(stack.getItem() instanceof IRangeTool tool) || tool.getRange() == 0) { return; }
 
-		ClientLevel level = mc.level;
-        Camera camera = mc.gameRenderer.getMainCamera();
-        double posX = camera.getPosition().x;
-        double posY = camera.getPosition().y;
-        double posZ = camera.getPosition().z;
-        Vec3 vec = event.getTarget().getLocation();
-        BlockPos pos = new BlockPos(vec.x, vec.y, vec.z);
+		ClientLevel world = mc.level;
+		Camera camera = mc.gameRenderer.getMainCamera();
+		double posX = camera.getPosition().x;
+		double posY = camera.getPosition().y;
+		double posZ = camera.getPosition().z;
+		Vec3 vec = event.getTarget().getLocation();
+		BlockPos pos = new BlockPos(vec.x, vec.y, vec.z);
 
-        BufferSource buffer = mc.renderBuffers().bufferSource();
-        VertexConsumer con = buffer.getBuffer(RenderType.lineStrip());
+		BufferSource buffer = mc.renderBuffers().bufferSource();
+		VertexConsumer con = buffer.getBuffer(RenderType.lineStrip());
 
 		int area = 1;
-		int rangeX, rangeY, rangeZ;	//向きに合わせて座標を変えるための変数
+		int xa = 0, ya = 0, za = 0, xb = 0, yb = 0, zb = 0;
+		int rangeX, rangeY, rangeZ; //向きに合わせて座標を変えるための変数
 		rangeX = rangeY = rangeZ = area;
+		area += 1;
 
 		switch (event.getTarget().getDirection()) {
-        case UP:
-        	rangeY = 0;
-        	pos = pos.below();
-        	break;
-        case DOWN:
-        	rangeY = 0;
-        	break;
-        case NORTH:
-        	rangeZ = 0;
-        	break;
-        case SOUTH:
-        	rangeZ = 0;
-        	pos = pos.north();
-        	break;
-        case EAST:
-        	rangeX = 0;
-        	pos = pos.west();
-        	break;
-        case WEST:
-        	rangeX = 0;
-        	break;
+		case UP:
+			ya = tool.isDepth() ? -area : 0;
+			rangeY = 0;
+			pos = pos.below();
+			break;
+		case DOWN:
+			yb = tool.isDepth() ? area : 0;
+			rangeY = 0;
+			break;
+		case NORTH:
+			zb = tool.isDepth() ? area : 0;
+			rangeZ = 0;
+			break;
+		case SOUTH:
+			za = tool.isDepth() ? -area : 0;
+			rangeZ = 0;
+			pos = pos.north();
+			break;
+		case EAST:
+			xb = tool.isDepth() ? -area : 0;
+			rangeX = 0;
+			pos = pos.west();
+			break;
+		case WEST:
+			xa = tool.isDepth() ? area : 0;
+			rangeX = 0;
+			break;
 		}
 
 		// 範囲の座標取得
-		Iterable<BlockPos> pList = BlockPos.betweenClosed(pos.offset(-rangeX, -rangeY, -rangeZ), pos.offset(rangeX, rangeY, rangeZ));
+		Iterable<BlockPos> pList = WorldHelper.getRangePos(pos, -rangeX + xa, -rangeY + ya, -rangeZ + za,rangeX + xb, rangeY + yb, rangeZ + zb);
 		for (BlockPos p : pList) {
 
-			if (!tool.isAllBlock() && !stack.isCorrectToolForDrops(level.getBlockState(p)) || level.getBlockEntity(p) != null) { continue; }
-	        VoxelShape voxel = level.getBlockState(p).getCollisionShape(level, p);
-	        drawShape(event.getPoseStack(), con, voxel, -posX + p.getX(), -posY + p.getY(), -posZ + p.getZ());
+			if (!tool.isAllBlock() && !stack.isCorrectToolForDrops(world.getBlockState(p)) || world.getBlockEntity(p) != null) { continue; }
+			VoxelShape voxel = world.getBlockState(p).getCollisionShape(world, p);
+			drawShape(event.getPoseStack(), con, voxel, -posX + p.getX(), -posY + p.getY(), -posZ + p.getZ());
 		}
 	}
 
-    private static void drawShape(PoseStack pose, VertexConsumer con, VoxelShape voxel, double x, double y, double z) {
-        Matrix4f mat4 = pose.last().pose();
+	private static void drawShape(PoseStack pose, VertexConsumer con, VoxelShape voxel, double x, double y, double z) {
+		Matrix4f mat4 = pose.last().pose();
 		Matrix3f mat3 = pose.last().normal();
 		voxel.forAllEdges((x1, y1, z1, x2, y2, z2) -> {
-            con.vertex(mat4, (float) (x1 + x), (float) (y1 + y), (float) (z1 + z)).color(0.13F, 0.13F, 0.13F, 1F).normal(mat3, 3F, 3F, 3F).endVertex();
-            con.vertex(mat4, (float) (x2 + x), (float) (y2 + y), (float) (z2 + z)).color(0.13F, 0.13F, 0.13F, 1F).normal(mat3, 3F, 3F, 3F).endVertex();
-        });
-    }
+			con.vertex(mat4, (float) (x1 + x), (float) (y1 + y), (float) (z1 + z)).color(0.13F, 0.13F, 0.13F, 1F).normal(mat3, 3F, 3F, 3F).endVertex();
+			con.vertex(mat4, (float) (x2 + x), (float) (y2 + y), (float) (z2 + z)).color(0.13F, 0.13F, 0.13F, 1F).normal(mat3, 3F, 3F, 3F).endVertex();
+		});
+	}
 }

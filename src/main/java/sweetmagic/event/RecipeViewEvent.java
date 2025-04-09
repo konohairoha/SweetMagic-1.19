@@ -10,6 +10,7 @@ import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.entity.ItemRenderer;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -23,19 +24,25 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import sweetmagic.SweetMagicCore;
 import sweetmagic.api.event.SMUtilEvent;
+import sweetmagic.api.iblock.ISMCookBlock;
 import sweetmagic.api.iblock.ISMCraftBlock;
+import sweetmagic.init.capability.ICookingStatus;
 import sweetmagic.recipe.RecipeHelper;
-import sweetmagic.recipe.RecipeUtil;
+import sweetmagic.recipe.RecipeHelper.RecipeUtil;
 
 @Mod.EventBusSubscriber(modid = SweetMagicCore.MODID, value = Dist.CLIENT)
 public class RecipeViewEvent extends SMUtilEvent {
 
 	// GUIの取得
 	private static final ResourceLocation TEX = SweetMagicCore.getSRC("textures/gui/gui_usergage.png");
+	private static final ResourceLocation TEX2 = SweetMagicCore.getSRC("textures/gui/gui_cook_book.png");
 	public static RecipeUtil recipe = null;
 	public static boolean canShiftCraft = false;
+	public static boolean isCookBlock = false;
+	public static Player player = null;
 	public static int tickTime = 0;
 	public static int renderTick = 0;
+	public static int renderCookTick = 0;
 
 	// レンダーイベントの呼び出し
 	@SubscribeEvent
@@ -46,30 +53,30 @@ public class RecipeViewEvent extends SMUtilEvent {
 
 			int height = event.getWindow().getGuiScaledHeight();	// 画面サイズの高さを取得
 			int weight = event.getWindow().getGuiScaledWidth();		// 画面サイズの高さを取得
-			int addX = (int) (25 - 10 * getProgress(20));
+			int addX = (int) (25 - 10 * getProgress(renderTick, 20));
 			int addY = -10;
 
 			// レンダーの開始
 			renderStart(TEX);
-			RenderSystem.setShaderColor(1F, 1F, 1F, getProgress(10));
+			RenderSystem.setShaderColor(1F, 1F, 1F, getProgress(renderTick, 10));
 			PoseStack pose = event.getPoseStack();
 			Matrix4f mat = pose.last().pose();
 
 			drawTextured(mat, weight - 200 + addX, height - 186 + addY, 145, 0, 98, 131);
+			renderStart(TEX);
 
 			Minecraft mc = Minecraft.getInstance();
 			Font font = mc.font;
 			ItemRenderer render = mc.getItemRenderer();
 
 			if(RecipeViewEvent.canShiftCraft) {
-				drawTextured(mat, weight - 200 + addX, height - 210 + addY, 145, 179, 143, 23);
+				drawTextured(mat, weight - 200 + addX, height - 210 + addY, 145, 179, 104, 23);
 				font.drawShadow(pose, getText("shift_craft_0"), weight - 198 + addX, height - 218, 0xF9B848);
 				font.drawShadow(pose, getText("shift_craft_1"), weight - 198 + addX, height - 209, 0xF9B848);
 			}
 
 			// レシピから完成品を取得
 			List<ItemStack> resultList = RecipeViewEvent.recipe.getResultList();
-
 			List<ItemStack> inputList = RecipeViewEvent.recipe.getInputList();
 			ItemStack inputStack = inputList.get(0);
 
@@ -97,9 +104,8 @@ public class RecipeViewEvent extends SMUtilEvent {
 			render.renderAndDecorateItem(inputStack, weight - 185 + addX, height - 179 + addY);
 			render.renderGuiItemDecorations(font, inputStack, weight - 185 + addX, height - 179 + addY);
 
-			tickTime++;
 			renderTick++;
-			if (tickTime % 5 == 0) {
+			if (tickTime++ % 5 == 0) {
 				tickTime = 0;
 				RecipeViewEvent.recipe = null;
 			}
@@ -108,17 +114,87 @@ public class RecipeViewEvent extends SMUtilEvent {
 		else {
 			renderTick = 0;
 		}
+
+		if (RecipeViewEvent.isCookBlock && RecipeViewEvent.player != null) {
+
+			Minecraft mc = Minecraft.getInstance();
+			Font font = mc.font;
+			PoseStack pose = event.getPoseStack();
+			Matrix4f mat = pose.last().pose();
+			Player player = RecipeViewEvent.player;
+			int level = ICookingStatus.getState(player).getLevel();
+			float addX2 = (int) (20 - 10 * getProgress(renderCookTick, 20));
+			renderStart(TEX2);
+			drawTextured(mat, (int) (addX2 - 3), 57, 0, 0, 122, 74);
+
+			MutableComponent tip = getTipArray(getText("player_cook_level"), ": ", getLabel("" + level).withStyle(WHITE));
+			font.drawShadow(pose, tip, addX2, 60, 0xF9B848);
+
+			ICookingStatus status = ICookingStatus.getState(player);
+			MutableComponent tip2 = getTipArray(getText("experience"), ": ", getLabel("" + status.needExp(level + 1)).withStyle(WHITE));
+			font.drawShadow(pose, tip2, addX2, 71, 0xF9B848);
+
+			if (player.isShiftKeyDown()) {
+
+				float limit = 117F;
+
+				for (int i = 1; i <= 4; i++) {
+					MutableComponent tip3 = getText("cook_level_tip" + i);
+					int nameSize = font.width(tip3);
+					pose.pushPose();
+					float addX = addX2 - 2F;
+
+					if (nameSize >= limit) {
+						pose.translate((nameSize - limit) / 10D + 1D, 0D, 0D);
+						pose.scale(limit / nameSize, 1F, 1F);
+					}
+
+					font.drawShadow(pose, tip3.withStyle(WHITE), addX, 74 + i * 11, 0xF9B848);
+					pose.popPose();
+				}
+			}
+
+			else {
+				pose.pushPose();
+				MutableComponent tip3 = getText("shift");
+				int nameSize = font.width(tip3);
+				float limit = 115F;
+
+				if (nameSize >= limit) {
+					pose.scale(limit / nameSize, 1F, 1F);
+					addX2 += 2F - 1F * (limit / nameSize);
+				}
+
+				font.drawShadow(pose, tip3.withStyle(RED), addX2, 85, 0xF9B848);
+				pose.popPose();
+			}
+
+
+			if (renderCookTick++ % 5 == 0) {
+				RecipeViewEvent.isCookBlock = false;
+			}
+		}
+
+		else {
+			renderCookTick = 0;
+		}
 	}
 
 	@SubscribeEvent
 	public static void highlightBlockEvent(RenderHighlightEvent.Block event) {
 		Camera camera = event.getCamera();
-		if (!(camera.getEntity() instanceof Player player)) { return; }
-
-		if (RecipeViewEvent.recipe != null) { return; }
+		if (!(camera.getEntity() instanceof Player player) || (RecipeViewEvent.isCookBlock && RecipeViewEvent.recipe != null)) { return; }
 
 		Level world = player.getLevel();
 		Block block = world.getBlockState(event.getTarget().getBlockPos()).getBlock();
+
+		if (!RecipeViewEvent.isCookBlock) {
+			RecipeViewEvent.isCookBlock = block instanceof ISMCookBlock cook && cook.isView();
+			RecipeViewEvent.player = player;
+		}
+
+		if (RecipeViewEvent.recipe != null) { return; }
+
 		RecipeViewEvent.recipe = null;
 
 		if (block instanceof ISMCraftBlock smCraft) {
@@ -131,7 +207,7 @@ public class RecipeViewEvent extends SMUtilEvent {
 		}
 	}
 
-	public static float getProgress (int maxTime) {
+	public static float getProgress (int renderTick, int maxTime) {
 		return Math.min(1F, (float) renderTick / maxTime);
 	}
 }

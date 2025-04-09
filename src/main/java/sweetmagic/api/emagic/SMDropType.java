@@ -14,7 +14,7 @@ public enum SMDropType {
 
 	private final String name;
 
-	public String getName () {
+	public String getName() {
 		return this.name;
 	}
 

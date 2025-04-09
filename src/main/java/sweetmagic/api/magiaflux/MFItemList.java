@@ -10,7 +10,7 @@ public class MFItemList implements IMagiaFluxItemListPlugin {
 
 	public static MFItemList INSTANCE = new MFItemList();
 
-	public void addPluginList () {
+	public void addPluginList() {
 		SweetMagicAPI.getMFPluginList().add(this);
 	}
 

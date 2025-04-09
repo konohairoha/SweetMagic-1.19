@@ -41,6 +41,7 @@ import sweetmagic.init.EnchantInit;
 import sweetmagic.init.ItemInit;
 import sweetmagic.init.PotionInit;
 import sweetmagic.init.capability.ICookingStatus;
+import sweetmagic.init.entity.monster.DwarfZombie;
 
 public class LivingDethEvent {
 
@@ -126,7 +127,7 @@ public class LivingDethEvent {
 		if (player == null) { return; }
 
 		Inventory keepInv = playerKeepsMap.remove(player.getUUID());
-		if (keepInv  == null) { return; }
+		if (keepInv == null) { return; }
 
 		Inventory pInv = player.getInventory();
 		NonNullList<ItemStack> items = keepInv.items;
@@ -182,11 +183,11 @@ public class LivingDethEvent {
 	@SubscribeEvent
 	public static void onPlayerLogout(PlayerLoggedOutEvent event) {
 		Player player = event.getEntity();
-		if (player == null) { return; }
+		if (player == null || !ICookingStatus.hasValue(player)) { return; }
 
 		ICookingStatus.getState(player).setHealth(player.getHealth());
 		Inventory keepInv = playerKeepsMap.remove(player.getUUID());
-		if (keepInv  == null) { return; }
+		if (keepInv == null) { return; }
 
 		keepInv.dropAll();
 	}
@@ -195,15 +196,13 @@ public class LivingDethEvent {
 	public static void cloneEvent(PlayerEvent.Clone event) {
 		Player original = event.getOriginal();
 		original.reviveCaps();
-		original.getCapability(CapabilityInit.COOK).ifPresent(old -> {
-			CompoundTag bags = old.serializeNBT();
-			event.getEntity().getCapability(CapabilityInit.COOK).ifPresent(c -> c.deserializeNBT(bags));
-		});
+		original.getCapability(CapabilityInit.COOK).ifPresent(old -> event.getEntity().getCapability(CapabilityInit.COOK).ifPresent(c -> c.deserializeNBT(old.serializeNBT())));
 	}
 
 	@SubscribeEvent
 	public static void loginEvent(PlayerEvent.PlayerLoggedInEvent event) {
 		Player player = event.getEntity();
+		ICookingStatus.sendPKT(player);
 		if (player.isCreative() || player.isSpectator()) { return; }
 
 		ItemStack stack = player.getItemBySlot(EquipmentSlot.FEET);
@@ -238,7 +237,7 @@ public class LivingDethEvent {
 		}
 
 		// ゾンビなら
-		else if (entity instanceof Zombie && rand.nextFloat() <= 0.15F) {
+		else if ( (entity instanceof Zombie || entity instanceof DwarfZombie) && rand.nextFloat() <= 0.15F) {
 			itemList.add(getItem(world, x, y, z, ItemInit.egg_bag, rand.nextInt(2) + 1));
 		}
 

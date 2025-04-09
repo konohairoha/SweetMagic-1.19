@@ -3,6 +3,7 @@ package sweetmagic.util;
 import java.util.List;
 import java.util.Optional;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
@@ -29,8 +30,16 @@ public class WorldHelper {
 		return world.registryAccess().ownedRegistryOrThrow(Registry.STRUCTURE_REGISTRY);
 	}
 
-	public static Holder<Structure> getHolderForStructure(ServerLevel level, Structure structure) {
-		Optional<ResourceKey<Structure>> optional = getStructureRegistry(level).getResourceKey(structure);
-		return optional.isPresent() ? getStructureRegistry(level).getHolderOrThrow(optional.get()) : null;
+	public static Holder<Structure> getHolderForStructure(ServerLevel world, Structure struc) {
+		Optional<ResourceKey<Structure>> str = getStructureRegistry(world).getResourceKey(struc);
+		return str.isPresent() ? getStructureRegistry(world).getHolderOrThrow(str.get()) : null;
+	}
+
+	public static Iterable<BlockPos> getRangePos(BlockPos pos, double area) {
+		return WorldHelper.getRangePos(pos, area, area, area, area, area, area);
+	}
+
+	public static Iterable<BlockPos> getRangePos(BlockPos pos, double xA, double yA, double zA, double xB, double yB, double zB) {
+		return BlockPos.betweenClosed(pos.offset(-xA, -yA, -zA), pos.offset(xB, yB, zB));
 	}
 }

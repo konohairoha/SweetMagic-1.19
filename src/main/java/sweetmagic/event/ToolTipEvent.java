@@ -6,6 +6,7 @@ import java.util.List;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
@@ -16,6 +17,7 @@ import sweetmagic.SweetMagicCore;
 import sweetmagic.api.SweetMagicAPI;
 import sweetmagic.api.emagic.SMMagicType;
 import sweetmagic.api.event.SMUtilEvent;
+import sweetmagic.api.iblock.IFoodExpBlock;
 import sweetmagic.api.iitem.IAcce;
 import sweetmagic.api.iitem.IChoker;
 import sweetmagic.api.iitem.IFood;
@@ -28,6 +30,7 @@ import sweetmagic.api.iitem.IRobe;
 import sweetmagic.api.iitem.IWand;
 import sweetmagic.api.iitem.info.AcceInfo;
 import sweetmagic.api.iitem.info.BookInfo;
+import sweetmagic.config.SMConfig;
 import sweetmagic.init.item.magic.SMAcce;
 import sweetmagic.key.SMKeybind;
 
@@ -94,7 +97,8 @@ public class ToolTipEvent extends SMUtilEvent {
 
 					for (MutableComponent tip : magicTipList) {
 						i++;
-						toolTip.add(getTipArray(getText("effect").withStyle(GREEN), i + "： ", tip.withStyle(GOLD)));
+						tip = tip.getStyle().getColor() == null ? tip.withStyle(GOLD) : tip;
+						toolTip.add(getTipArray(getText("effect").withStyle(GREEN), i + "： ", tip));
 					}
 				}
 			}
@@ -324,7 +328,7 @@ public class ToolTipEvent extends SMUtilEvent {
 		}
 
 		else if (item instanceof IFood food) {
-			if (!food.isQuality()) { return; }
+			if (!food.isQuality() || !SMConfig.foodQuality.get()) { return; }
 
 			PotionInfo info = food.getPotionInfo();
 			int value = food.getQualityValue(stack);
@@ -332,14 +336,26 @@ public class ToolTipEvent extends SMUtilEvent {
 			boolean isTier2 = value >= 2;
 			boolean isTier3 = value >= 3;
 
+			MutableComponent food_level = getText("cook_difficulty");
+			toolTip.add(getTipArray(food_level.copy(), ": ", getLabel("" + food.getFoodLevel()).withStyle(WHITE)).withStyle(GREEN));
+			toolTip.add(empty());
+
 			MutableComponent quality_level = getText("quality_level");
-			String potionEffect = info.getPotion().getDisplayName().getString() + getEnchaText(info.getLevel() + 1).getString() + "(" + info.getTime() + "sec)";
+			String potionEffect = info.potion().getDisplayName().getString() + getEnchaText(info.level() + 1).getString() + "(" + info.time() / 20 + "sec)";
 
 			toolTip.add(getTipArray(quality_level.copy(), ": ", getLabel("" + value).withStyle(WHITE)).withStyle(GREEN));
 			toolTip.add(getText("quality_effect").withStyle(GREEN));
 			toolTip.add(getTipArray("-", quality_level, "1: ", getText("quality1").withStyle(isTier1 ? WHITE : GRAY)).withStyle(isTier1 ? GREEN : GRAY));
 			toolTip.add(getTipArray("-", quality_level, "2: ", getText("quality2", potionEffect).withStyle(isTier2 ? WHITE : GRAY)).withStyle(isTier2 ? GREEN : GRAY));
 			toolTip.add(getTipArray("-", quality_level, "3: ", getText("quality3").withStyle(isTier3 ? WHITE : GRAY)).withStyle(isTier3 ? GREEN : GRAY));
+
+			if (value >= 4) {
+				toolTip.add(getTipArray("-", quality_level, "4: ", getText("quality4").withStyle(WHITE)).withStyle(GREEN));
+			}
+		}
+
+		else if (item instanceof BlockItem bItem && bItem.getBlock() instanceof IFoodExpBlock food && food.isChanceUp()) {
+			toolTip.add(getText("food_expblock").withStyle(GREEN));
 		}
 
 		// MFを持ったアイテムなら

@@ -37,15 +37,15 @@ public interface IMFTool {
 		return tags;
 	}
 
-  	// MFを取得
+	// MFを取得
 	default int getMF (ItemStack stack) {
-    	return this.getNBT(stack).getInt(MF);
-  	}
+		return this.getNBT(stack).getInt(MF);
+	}
 
-  	// MFを設定
+	// MFを設定
 	default void setMF (ItemStack stack, int expValue) {
-  		this.getNBT(stack).putInt(MF, Math.max(0, expValue));
-  	}
+		this.getNBT(stack).putInt(MF, Math.max(0, expValue));
+	}
 
 	// MFが最大かどうか
 	default boolean isMaxMF (ItemStack stack) {
@@ -119,8 +119,8 @@ public interface IMFTool {
 		return EnchantmentHelper.getItemEnchantmentLevel(encha, stacck);
 	}
 
-    // APIアイテムかどうかの判定
-	default boolean hasMF (ItemStack stack) {
-    	return SweetMagicAPI.hasMF(stack);
-    }
+	// APIアイテムかどうかの判定
+	default boolean hasMF(ItemStack stack) {
+		return SweetMagicAPI.hasMF(stack);
+	}
 }

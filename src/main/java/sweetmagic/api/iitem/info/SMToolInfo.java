@@ -7,7 +7,7 @@ public class SMToolInfo extends BaseItemInfo {
 
 	private final IMFTool mfTool;
 
-	public SMToolInfo (ItemStack stack) {
+	public SMToolInfo(ItemStack stack) {
 		super(stack, ((IMFTool) stack.getItem()).getNBT(stack));
 		this.mfTool = (IMFTool) stack.getItem();
 	}

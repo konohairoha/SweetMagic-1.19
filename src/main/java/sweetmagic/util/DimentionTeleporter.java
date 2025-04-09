@@ -11,8 +11,11 @@ import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.portal.PortalInfo;
@@ -24,20 +27,23 @@ import sweetmagic.init.block.sm.MagiaPortal;
 
 public record DimentionTeleporter (Block portal, Block flame, Direction.Axis face, boolean isZ) implements ITeleporter {
 
+	private static final Direction[] FACE_ARRAY = { Direction.NORTH, Direction.SOUTH, Direction.WEST, Direction.SOUTH };
+
 	@Override public boolean isVanilla() { return false; }
 
 	@Override
 	public boolean playTeleportSound(ServerPlayer player, ServerLevel sourceWorld, ServerLevel destWorld) {
-		player.playSound(SoundEvents.PORTAL_TRAVEL, 1F, 1F);
+		destWorld.playSound(player, player.blockPosition(), SoundEvents.PORTAL_TRAVEL, SoundSource.BLOCKS, 0.25F, 1F);
 		return false;
 	}
 
-    @Nullable
-    @Override
-    public PortalInfo getPortalInfo(Entity entity, ServerLevel world, Function<ServerLevel, PortalInfo> info) {
-		if(!(entity instanceof ServerPlayer player) || ((ServerPlayer) entity).isOnPortalCooldown()) { return null; }
+	@Nullable
+	@Override
+	public PortalInfo getPortalInfo(Entity entity, ServerLevel world, Function<ServerLevel, PortalInfo> info) {
+		if(!(entity instanceof LivingEntity living)) { return null; }
 
-		player.setPortalCooldown();
+		living.setPortalCooldown();
+//		SMDebug.info(info.apply(world).pos, entity.blockPosition());
 		ChunkPos chunk = new ChunkPos(entity.blockPosition());
 		int chunkX = chunk.x, chunkZ = chunk.z;
 
@@ -47,20 +53,23 @@ public record DimentionTeleporter (Block portal, Block flame, Direction.Axis fac
 			int baseX = chunkX * 16, baseZ = chunkZ * 16;
 
 			for(int y = 0; y < 256; y++) {
-				for(int x = -8; x < 16; x++) for(int z = -8; z < 16; z++) {
+				for(int x = -16; x < 16; x++) for(int z = -16; z < 16; z++) {
 
-					mut.set(baseX + x, y, baseZ + z);
-					BlockState targetState = world.getBlockState(mut);
-					if(targetState.getBlock() != this.portal) { continue; }
+					MutableBlockPos mut2 = mut.set(baseX + x, y, baseZ + z);
+					if(!this.isCenter(world, mut2)) { continue; }
 
-					float addY = targetState.getValue(MagiaPortal.AXIS) == Direction.Axis.Y ? 1.5F : 0F;
-					return new PortalInfo(new Vec3(mut.getX() + (entity.getX() % 1), mut.getY() - (this.isBlockPortal(world, mut.getX(), mut.getY() - 1, mut.getZ()) ? 1 : 0) + addY, mut.getZ() + (entity.getZ() % 1)), Vec3.ZERO, entity.getYRot(), entity.getXRot());
+					BlockState state = world.getBlockState(mut2);
+					float addY = state.hasProperty(MagiaPortal.AXIS) && state.getValue(MagiaPortal.AXIS) == Direction.Axis.Y ? 1.5F : 0F;
+					return new PortalInfo(new Vec3(mut2.getX() + (entity.getX() % 1), mut2.getY() - (this.isBlockPortal(world, mut2.getX(), mut2.getY() - 1, mut2.getZ()) ? 1 : 0) + addY, mut2.getZ() + (entity.getZ() % 1)), Vec3.ZERO, entity.getYRot(), entity.getXRot());
 				}
 			}
 		}
 
-		if(player.getRespawnPosition() != null && player.getRespawnDimension() == world.dimension()) {
-			return new PortalInfo(new Vec3(player.getRespawnPosition().getX(), player.getRespawnPosition().getY(), player.getRespawnPosition().getZ()), Vec3.ZERO, player.getRespawnAngle(), player.getRespawnAngle());
+		if((entity instanceof ServerPlayer player)) {
+			BlockPos resPawnpos = player.getRespawnPosition();
+			if(resPawnpos != null && player.getRespawnDimension() == world.dimension()) {
+				return new PortalInfo(new Vec3(resPawnpos.getX(), resPawnpos.getY(), resPawnpos.getZ()), Vec3.ZERO, player.getRespawnAngle(), player.getRespawnAngle());
+			}
 		}
 
 		BlockPos entityPos = entity.blockPosition();
@@ -74,9 +83,7 @@ public record DimentionTeleporter (Block portal, Block flame, Direction.Axis fac
 				for (int addZ = -2; addZ < 3; addZ++) {
 
 					BlockPos targetPos = this.isZ ? pos.offset(addX, addY, addZ) : pos.offset(addZ, addY, addX);
-					BlockState state = world.getBlockState(targetPos);
-					Block block = state.getBlock();
-					if (block == BlockInit.sturdust_crystal) { continue; }
+					if (world.getBlockState(targetPos).is(BlockInit.sturdust_crystal)) { continue; }
 
 					world.destroyBlock(pos, false);
 					world.removeBlock(pos, false);
@@ -93,9 +100,14 @@ public record DimentionTeleporter (Block portal, Block flame, Direction.Axis fac
 		}
 
 		return new PortalInfo(new Vec3(pos.getX(), pos.getY(), pos.getZ()), Vec3.ZERO, entity.getYRot(), entity.getXRot());
-    }
+	}
 
-	public boolean isBlockPortal(ServerLevel var1, int var2, int var3, int var4) {
-		return var1.getBlockState(new BlockPos(var2, var3, var4)).getBlock() == this.portal;
+	public boolean isBlockPortal(ServerLevel world, int x, int y, int z) {
+		return world.getBlockState(new BlockPos(x, y, z)).getBlock() == this.portal;
+	}
+
+	public boolean isCenter(Level world, MutableBlockPos pos) {
+		return (world.getBlockState(pos.relative(FACE_ARRAY[0])).is(this.portal) && world.getBlockState(pos.relative(FACE_ARRAY[1])).is(this.portal) ) ||
+				(world.getBlockState(pos.relative(FACE_ARRAY[2])).is(this.portal) && world.getBlockState(pos.relative(FACE_ARRAY[3])).is(this.portal) );
 	}
 }

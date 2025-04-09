@@ -36,6 +36,8 @@ import sweetmagic.util.SMDamage;
 
 public class SMLivingDamageEvent {
 
+	private static boolean hasQuillpen = false;
+
 	// ダメージを受けたときのイベント
 	@SubscribeEvent
 	public static void onHurt(LivingHurtEvent event) {
@@ -45,6 +47,8 @@ public class SMLivingDamageEvent {
 		LivingEntity target = event.getEntity();
 		DamageSource src = event.getSource();
 		Entity attackEntity = src.getEntity();
+		float oldDamage = damage;
+		hasQuillpen = false;
 
 		ItemStack chest = target.getItemBySlot(EquipmentSlot.CHEST);
 		ItemStack leg = target.getItemBySlot(EquipmentSlot.LEGS);
@@ -65,8 +69,6 @@ public class SMLivingDamageEvent {
 
 		// えんちちーによる攻撃なら
 		if (attackEntity != null && attackEntity instanceof LivingEntity attacker) {
-
-			float oldDamage = damage;
 
 			// ポーションによるダメージ増減
 			damage = SMLivingDamageEvent.potionDamageCut(target, attacker, src, damage);
@@ -96,6 +98,11 @@ public class SMLivingDamageEvent {
 				if (damage >= target.getHealth() && src.getDirectEntity() instanceof AbstractMagicShot magic) {
 					SMLivingDamageEvent.targetKill(target, attacker, magic, new PorchInfo(legAttack));
 				}
+			}
+
+			// ポーチを着ているなら
+			if (oldDamage > damage && !leg.isEmpty() && leg.getItem() instanceof IPorch) {
+				SMLivingDamageEvent.porchAftereffect(attacker, oldDamage - damage, src, new PorchInfo(leg));
 			}
 		}
 
@@ -143,6 +150,8 @@ public class SMLivingDamageEvent {
 			float dameRate = porch.acceCount(stack, ItemInit.veil_darkness, 5) * 0.1F;
 			damage *= (1F - dameRate);
 		}
+
+		hasQuillpen = porch.hasAcce(stack, ItemInit.magician_quillpen);
 
 		return damage;
 	}
@@ -198,6 +207,11 @@ public class SMLivingDamageEvent {
 
 	// ポーションによるダメージ増減
 	public static float potionDamageCut (LivingEntity target, LivingEntity attacker, DamageSource src, float damage) {
+
+		// 召喚保護なら攻撃を無効化
+		if (target.hasEffect(PotionInit.magic_array)) {
+			return 0;
+		}
 
 		// エーテルシールドなら攻撃を無効化
 		if (target.hasEffect(PotionInit.aether_shield)) {
@@ -255,7 +269,7 @@ public class SMLivingDamageEvent {
 
 			int level = target.getEffect(PotionInit.aether_barrier).getAmplifier() + 1;
 			float cutRate = 1.5F + (level * 0.1F);
-			damage = damage * cutRate;
+			damage = damage / cutRate;
 
 			if (attacker instanceof Warden) {
 				damage *= 0.25F;
@@ -274,9 +288,28 @@ public class SMLivingDamageEvent {
 			}
 
 			int maxValue = 2 + level * 2;
-			time -= Math.min(maxValue, damage) * 20;
+			time -= Math.min(maxValue, damage) * 20 / (hasQuillpen ? 4 : 1);
 			damage = Math.max(0, damage - maxValue);
 			target.addEffect(new MobEffectInstance(effect.getEffect(), time, level - 1, true, false));
+		}
+
+		// クイーンの保護
+		if (target.hasEffect(PotionInit.queen_bless)) {
+			damage *= 0.75F;
+		}
+
+		// ウィッチの保護
+		if (target.hasEffect(PotionInit.witch_bless)) {
+
+			MobEffectInstance effect = target.getEffect(PotionInit.witch_bless);
+			int time = effect.getDuration();
+			damage -= time;
+			time -= damage * 40 / (hasQuillpen ? 4 : 1);
+			target.addEffect(new MobEffectInstance(effect.getEffect(), time, 0, true, false));
+
+			if (damage <= 0F) {
+				return 0F;
+			}
 		}
 
 		// 被弾側が毒ならダメージ増加
@@ -348,5 +381,20 @@ public class SMLivingDamageEvent {
 				magic.setRecastTime(s, Math.max(0, (int) ( recast - magic.getMaxRecastTime() * 0.1F ) ));
 			}
 		}
+	}
+
+	// ポーチによるダメージ上昇
+	public static void porchAftereffect (LivingEntity entity, float damage, DamageSource src, PorchInfo info) {
+		if (info.getPorch().hasAcce(info.getStack(), ItemInit.angel_flugel)) {
+			entity.heal(damage * 0.025F);
+		}
+	}
+
+	public static void attackDisabled (LivingEntity target, PorchInfo info) {
+		if (!info.getPorch().hasAcce(info.getStack(), ItemInit.angel_flugel)) { return; }
+
+		PlayerHelper.setPotion(target, PotionInit.regeneration, 0, 200);
+		PlayerHelper.setPotion(target, MobEffects.DAMAGE_BOOST, 3, 400);
+		PlayerHelper.setPotion(target, PotionInit.mfcostdown, 2, 400);
 	}
 }

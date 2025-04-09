@@ -9,5 +9,9 @@ public enum SMMagicType {
 	FIELD,		// フィールド
 	BOSS;		// ボス
 
-	SMMagicType () { }
+	SMMagicType() { }
+
+	public boolean is(SMMagicType type) {
+		return this.equals(type);
+	}
 }

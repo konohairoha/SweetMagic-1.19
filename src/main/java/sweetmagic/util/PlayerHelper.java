@@ -1,5 +1,7 @@
 package sweetmagic.util;
 
+import java.util.List;
+
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -12,7 +14,7 @@ import sweetmagic.init.ItemInit;
 
 public class PlayerHelper {
 
-	public static void setPotion (LivingEntity target, MobEffect effect, int level, int time) {
+	public static void setPotion(LivingEntity target, MobEffect effect, int level, int time) {
 
 		target.removeEffect(effect);
 		ItemStack leg = target.getItemBySlot(EquipmentSlot.LEGS);
@@ -29,7 +31,7 @@ public class PlayerHelper {
 		target.addEffect(new MobEffectInstance(effect, time, level, true, false));
 	}
 
-	public static void setPotion (LivingEntity target, MobEffect effect, int level, int time, boolean flag) {
+	public static void setPotion(LivingEntity target, MobEffect effect, int level, int time, boolean flag) {
 
 		target.removeEffect(effect);
 		ItemStack leg = target.getItemBySlot(EquipmentSlot.LEGS);
@@ -46,40 +48,44 @@ public class PlayerHelper {
 		target.addEffect(new MobEffectInstance(effect, time, level));
 	}
 
-    public static void addExp (Player player, int amount) {
-        final int exp = getExpValue(player) + amount;
-        player.totalExperience = exp;
-        player.experienceLevel = getLevelForExp(exp);
-        final int expForLevel = getExpForLevel(player.experienceLevel);
-        player.totalExperience = (int) ((float) (exp - expForLevel) / (float) player.getXpNeededForNextLevel());
-    }
+	public static void addExp(Player player, int amount) {
+		final int exp = getExpValue(player) + amount;
+		player.totalExperience = exp;
+		player.experienceLevel = getLevelForExp(exp);
+		final int expForLevel = getExpForLevel(player.experienceLevel);
+		player.totalExperience = (int) ((float) (exp - expForLevel) / (float) player.getXpNeededForNextLevel());
+	}
 
-    public static int getExpValue (Player player) {
-        return (int) (getExpForLevel(player.experienceLevel) + player.experienceProgress * player.getXpNeededForNextLevel());
-    }
+	public static int getExpValue(Player player) {
+		return (int) (getExpForLevel(player.experienceLevel) + player.experienceProgress * player.getXpNeededForNextLevel());
+	}
 
-    public static int getLevelForExp (int exp) {
+	public static int getLevelForExp(int exp) {
 
-        int level = 0;
+		int level = 0;
 
-        while (getExpForLevel(level) <= exp) {
-            level++;
-        }
+		while (getExpForLevel(level) <= exp) {
+			level++;
+		}
 
-        return level - 1;
-    }
+		return level - 1;
+	}
 
-    public static int getExpForLevel (int level) {
-        if (level == 0) { return 0; }
+	public static int getExpForLevel(int level) {
+		if (level == 0) { return 0; }
 
-        if (level > 0 && level < 17) {
-            return level * level + 6 * level;
-        }
+		if (level > 0 && level < 17) {
+			return level * level + 6 * level;
+		}
 
-        else if (level > 16 && level < 32) {
-            return (int) (2.5 * level * level - 40.5 * level + 360);
-        }
+		else if (level > 16 && level < 32) {
+			return (int) (2.5 * level * level - 40.5 * level + 360);
+		}
 
-        return (int) (4.5 * level * level - 162.5 * level + 2220);
-    }
+		return (int) (4.5 * level * level - 162.5 * level + 2220);
+	}
+
+	public static List<MobEffectInstance> getEffectList(LivingEntity entity, MobEffectCategory cate) {
+		return entity.getActiveEffects().stream().filter(p -> p.getEffect().getCategory() == cate).toList();
+	}
 }

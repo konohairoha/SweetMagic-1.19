@@ -6,6 +6,7 @@ import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import sweetmagic.SweetMagicCore;
+import sweetmagic.api.iblock.ISMCrop;
 import sweetmagic.init.BlockInit;
 
 @Mod.EventBusSubscriber(modid = SweetMagicCore.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
@@ -37,5 +38,35 @@ public class ColorRegisterEvent {
 
 			return color;
 		}, BlockInit.rune_character);
+
+		event.register((state, get, pos, tintIndex) -> {
+			int red, green, blue;
+
+			int fade = 0;
+			int value = state.getValue(ISMCrop.AGE5);
+
+			switch(value) {
+			case 0:
+				fade = pos.getX() * 64 + pos.getY() * 64 + pos.getZ() * 64;
+				break;
+			default:
+				fade = (value - 1) * 64;
+				break;
+			}
+
+			if ((fade & 256) != 0) {
+				fade = 255 - (fade & 255);
+			}
+
+			fade &= 255;
+			float spring = (255 - fade) / 255F;
+			float fall = fade / 255F;
+
+			red = (int) (spring * 106 + fall * 251);
+			green = (int) (spring * 156 + fall * 108);
+			blue = (int) (spring * 23 + fall * 27);
+
+			return 0xFF000000 | red << 16 | green << 8 | blue;
+		}, BlockInit.maple_leaves);
 	}
 }

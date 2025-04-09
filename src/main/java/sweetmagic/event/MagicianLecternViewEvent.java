@@ -60,7 +60,7 @@ public class MagicianLecternViewEvent extends SMUtilEvent {
 			Matrix4f mat = pose.last().pose();
 
 			drawTextured(mat, weight - 200 + addX, height - 186 + addY, 90, 144, 46, 97);
-			drawTextured(mat, weight - 200 + addX, height - 202 + addY, 145, 179, 135, 24);
+			drawTextured(mat, weight - 200 + addX, height - 202 + addY, 145, 179, 104, 24);
 
 			Minecraft mc = Minecraft.getInstance();
 			Font font = mc.font;

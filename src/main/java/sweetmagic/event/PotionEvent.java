@@ -1,5 +1,6 @@
 package sweetmagic.event;
 
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -19,11 +20,11 @@ public class PotionEvent {
 
 	// ポーションのイベント
 	@SubscribeEvent
-	public static void potionAddEvent (MobEffectEvent.Added event) {
-
+	public static void potionAddEvent(MobEffectEvent.Added event) {
 		LivingEntity entity = event.getEntity();
 		MobEffectInstance instance = event.getEffectInstance();
-		if (!entity.hasEffect(PotionInit.debuff_extension) || instance.equals(PotionInit.debuff_extension) || !instance.getEffect().getCategory().equals(MobEffectCategory.HARMFUL)) { return; }
+		MobEffectCategory cate = instance.getEffect().getCategory();
+		if (!entity.hasEffect(PotionInit.debuff_extension) || instance.equals(PotionInit.debuff_extension) || !cate.equals(PotionInit.DEBUFF)) { return; }
 
 		int level = entity.getEffect(PotionInit.debuff_extension).getAmplifier() + 1;
 		float rate = 1F + level * 0.25F;
@@ -31,9 +32,25 @@ public class PotionEvent {
 		instance.update(newInstance);
 	}
 
+	@SubscribeEvent
+	public static void potionRemoveEvent(MobEffectEvent.Remove event) {
+
+		LivingEntity entity = event.getEntity();
+		MobEffectInstance instance = event.getEffectInstance();
+		if(instance == null) { return; }
+
+		MobEffect effect = instance.getEffect();
+		MobEffectCategory cate = effect.getCategory();
+
+		if (cate.equals(PotionInit.BUFF) && !effect.equals(PotionInit.sandryon_bless) && entity.hasEffect(PotionInit.sandryon_bless)) {
+			event.setCanceled(true);
+			entity.removeEffect(PotionInit.sandryon_bless);
+		}
+	}
+
 	// 回復のイベント
 	@SubscribeEvent
-	public static void healEvent (LivingHealEvent event) {
+	public static void healEvent(LivingHealEvent event) {
 
 		// 回復増加が付いていないなら終了
 		LivingEntity entity = event.getEntity();
@@ -50,7 +67,7 @@ public class PotionEvent {
 
 	// ノックバックのイベント
 	@SubscribeEvent
-	public static void knockBackEvent (LivingKnockBackEvent event) {
+	public static void knockBackEvent(LivingKnockBackEvent event) {
 		LivingEntity entity = event.getEntity();
 		if (!entity.hasEffect(PotionInit.resistance_blow) && !hasHarness(entity)) { return; }
 
@@ -65,7 +82,7 @@ public class PotionEvent {
 		}
 	}
 
-	public static boolean hasHarness (LivingEntity entity) {
+	public static boolean hasHarness(LivingEntity entity) {
 		ItemStack feet = entity.getItemBySlot(EquipmentSlot.FEET);
 		if ( !(feet.getItem() instanceof IHarness harness)) { return false; }
 
@@ -86,7 +103,7 @@ public class PotionEvent {
 
 	// ノックバックのイベント
 	@SubscribeEvent
-	public static void teleportEvent (EntityTeleportEvent event) {
+	public static void teleportEvent(EntityTeleportEvent event) {
 		if ( !(event.getEntity() instanceof LivingEntity living) || !living.hasEffect(PotionInit.gravity)) { return; }
 		event.setCanceled(true);
 	}

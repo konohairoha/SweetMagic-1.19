@@ -10,10 +10,8 @@ public class SMDamage extends DamageSource {
 
 	private final int data;
 	private boolean isDebuffFlag = false;
-
 	private Entity thower = null;
 	private Entity magicShot = null;
-
 	public static SMDamage magicDamage = new SMDamage("sm_magic", 0).setBypassesArmor();
 	public static SMDamage flameDamage = new SMDamage("sm_flame", 0).setBypassesArmor();
 	public static SMDamage flostDamage = new SMDamage("sm_flost", 0).setBypassesArmor();
@@ -29,10 +27,10 @@ public class SMDamage extends DamageSource {
 
 	// 魔法ダメージの取得
 	public static DamageSource getMagicDamage(Entity magicShot, Entity thower) {
-		return (new IndirectEntityDamageSource("sm_magic", magicShot, thower).bypassArmor().setMagic());
+		return new IndirectEntityDamageSource("sm_magic", magicShot, thower).bypassArmor().setMagic();
 	}
 
-	public static DamageSource getAddDamage (Entity magicShot, Entity thower) {
+	public static DamageSource getAddDamage(Entity magicShot, Entity thower) {
 		SMDamage src = addDamage;
 		src.thower = thower;
 		src.magicShot = magicShot;
@@ -44,11 +42,11 @@ public class SMDamage extends DamageSource {
 		return this;
 	}
 
-	public void setDebuffFlag (boolean isDebuffFlag) {
+	public void setDebuffFlag(boolean isDebuffFlag) {
 		this.isDebuffFlag = isDebuffFlag;
 	}
 
-	public boolean isDebuffFlag () {
+	public boolean isDebuffFlag() {
 		return this.isDebuffFlag;
 	}
 

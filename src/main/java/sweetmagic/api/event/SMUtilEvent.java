@@ -25,12 +25,12 @@ public class SMUtilEvent {
 	public final static ChatFormatting GRAY = ChatFormatting.GRAY;
 
 	// 翻訳に変換
-	public static MutableComponent getTip (String tip) {
+	public static MutableComponent getTip(String tip) {
 		return Component.translatable(tip);
 	}
 
 	// 複数の文字列を連結して1つの文字列にする
-	public static MutableComponent getTipArray (Object... objArray) {
+	public static MutableComponent getTipArray(Object... objArray) {
 		MutableComponent com = null;
 		for (Object obj : objArray) {
 
@@ -70,21 +70,21 @@ public class SMUtilEvent {
 	}
 
 	// シフト押したときのツールチップ
-	public static void getShiftTip (List<Component> tooltip) {
+	public static void getShiftTip(List<Component> tooltip) {
 		tooltip.add(getText("shift").withStyle(RED));
 	}
 
-	public static MutableComponent enumString (String name) {
+	public static MutableComponent enumString(String name) {
 		return getText(name.toLowerCase());
 	}
 
 	// ツールチップに変換
-	public static MutableComponent getText (String name) {
+	public static MutableComponent getText(String name) {
 		return getTip("tip.sweetmagic." + name);
 	}
 
 	// ツールチップに変換
-	public static MutableComponent getText (String name, String text) {
+	public static MutableComponent getText(String name, String text) {
 		return Component.translatable("tip.sweetmagic." + name, text);
 	}
 
@@ -97,12 +97,12 @@ public class SMUtilEvent {
 	}
 
 	// Stringをスイマジの翻訳用文字列に変換
-	public static MutableComponent getEnchaText (int level) {
+	public static MutableComponent getEnchaText(int level) {
 		return getTip("enchantment.level." + level);
 	}
 
 	// レンダーの開始
-	public static void renderStart (ResourceLocation tex) {
+	public static void renderStart(ResourceLocation tex) {
 		RenderSystem.setShader(GameRenderer::getPositionTexShader);
 		RenderSystem.setShaderTexture(0, tex);
 		RenderSystem.setShaderColor(1F, 1F, 1F, 1F);

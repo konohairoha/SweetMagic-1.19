@@ -26,18 +26,18 @@ public interface IAcce extends ISMTip {
 	public static final String STACKCOUNT = "stackCount";			// 選択中のスロット
 
 	// 効果が発動できるか
-	default boolean canUseEffect (Level world, Player player, AcceInfo info) {
+	default boolean canUseEffect(Level world, Player player, AcceInfo info) {
 		return !player.getCooldowns().isOnCooldown(info.getItem());
 	}
 
 	// 常に発動したいならここで
-	default void onUpdate (Level world, Player player, AcceInfo info) { }
+	default void onUpdate(Level world, Player player, AcceInfo info) { }
 
 	// 重複系で常に発動したいならここで
-	default void onMultiUpdate (Level world, Player player, AcceInfo info, PorchInfo pInfo) { }
+	default void onMultiUpdate(Level world, Player player, AcceInfo info, PorchInfo pInfo) { }
 
 	// ツールチップ
-	void magicToolTip (List<MutableComponent> toolTip, ItemStack stack);
+	void magicToolTip(List<MutableComponent> toolTip, ItemStack stack);
 
 	default void debuffRemovalTip(List<MutableComponent> toolTip) { }
 
@@ -48,13 +48,13 @@ public interface IAcce extends ISMTip {
 	}
 
 	// アクセサリタイプの取得
-	SMAcceType getAcceType ();
+	SMAcceType getAcceType();
 
 	// アクセサリタイプの設定
 	void setAcceType(SMAcceType type);
 
 	// アクセサリタイプの取得
-	SMDropType getDropType ();
+	SMDropType getDropType();
 
 	// アクセサリタイプの設定
 	void setDropType(SMDropType type);
@@ -67,12 +67,12 @@ public interface IAcce extends ISMTip {
 	}
 
 	// ポーション付与
-	default void addPotion (LivingEntity target, MobEffect effect, int level, int time) {
+	default void addPotion(LivingEntity target, MobEffect effect, int level, int time) {
 		PlayerHelper.setPotion(target, effect, level, time);
 	}
 
 	// ポーション付与
-	default void addPotion (LivingEntity target, MobEffect effect, int level, int time, boolean flag) {
+	default void addPotion(LivingEntity target, MobEffect effect, int level, int time, boolean flag) {
 		PlayerHelper.setPotion(target, effect, level, time, flag);
 	}
 
@@ -85,12 +85,12 @@ public interface IAcce extends ISMTip {
 	}
 
 	// 範囲の取得
-	default AABB getAABB (Entity entity, double range) {
+	default AABB getAABB(Entity entity, double range) {
 		return entity.getBoundingBox().inflate(range, range, range);
 	}
 
 	// 範囲の取得
-	default AABB getAABB (Entity entity, double x, double  y, double  z) {
+	default AABB getAABB(Entity entity, double x, double y, double z) {
 		return entity.getBoundingBox().inflate(x, y, z);
 	}
 
@@ -99,32 +99,32 @@ public interface IAcce extends ISMTip {
 	}
 
 	// 重複できるか
-	default boolean isDuplication () {
+	default boolean isDuplication() {
 		return false;
 	}
 
 	// onOff切り替えするか
-	default boolean isSwitch () {
+	default boolean isSwitch() {
 		return false;
 	}
 
 	// スタック数の取得
-	default int getStackCount (AcceInfo info) {
+	default int getStackCount(AcceInfo info) {
 		return !this.isDuplication() ? 1 : info.getNBT().getInt(STACKCOUNT);
 	}
 
 	// 最大スタック数の取得
-	default int getMaxStackCount () {
+	default int getMaxStackCount() {
 		return 1;
 	}
 
 	// スタック数の増加が可能か
-	default boolean canAddStackCount (AcceInfo info) {
+	default boolean canAddStackCount(AcceInfo info) {
 		return this.getStackCount(info) < this.getMaxStackCount();
 	}
 
 	// スタック数の増加
-	default void addStackCount (AcceInfo info) {
+	default void addStackCount(AcceInfo info) {
 		if (!this.canAddStackCount(info)) { return; }
 
 		CompoundTag tags = this.getNBT(info.getStack());
@@ -132,7 +132,7 @@ public interface IAcce extends ISMTip {
 	}
 
 	// nbt初期化用
-	default CompoundTag getNBT (ItemStack stack) {
+	default CompoundTag getNBT(ItemStack stack) {
 
 		CompoundTag tags = stack.getTag();
 
@@ -151,7 +151,7 @@ public interface IAcce extends ISMTip {
 	}
 
 	// 杖の取得
-	public static IAcce getAcce (ItemStack stack) {
+	public static IAcce getAcce(ItemStack stack) {
 		return (IAcce) stack.getItem();
 	}
 }

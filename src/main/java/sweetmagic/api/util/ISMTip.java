@@ -14,7 +14,7 @@ public interface ISMTip {
 	public final static ChatFormatting WHITE = ChatFormatting.WHITE;
 
 	// 複数の文字列を連結して1つの文字列にする
-	default MutableComponent getTipArray (Object... objArray) {
+	default MutableComponent getTipArray(Object... objArray) {
 		MutableComponent com = null;
 		for (Object obj : objArray) {
 
@@ -54,17 +54,17 @@ public interface ISMTip {
 	}
 
 	// Stringをそのまま表示
-	default MutableComponent getLabel (String tip) {
+	default MutableComponent getLabel(String tip) {
 		return Component.literal(tip);
 	}
 
 	// Stringを翻訳して変換
-	default MutableComponent getTip (String tip) {
+	default MutableComponent getTip(String tip) {
 		return Component.translatable(tip);
 	}
 
 	// Stringをスイマジの翻訳用文字列に変換
-	default MutableComponent getText (String tip) {
+	default MutableComponent getText(String tip) {
 		return this.getTip("tip.sweetmagic." + tip);
 	}
 
@@ -75,27 +75,36 @@ public interface ISMTip {
 	}
 
 	// Stringをスイマジの翻訳用文字列に変換
-	default MutableComponent getEffectText (String tip) {
+	default MutableComponent getEffectText(String tip) {
 		return this.getTip("effect.sweetmagic." + tip);
 	}
 
+	// Stringをスイマジの翻訳用文字列に変換
+	default MutableComponent getEntityText(String tip) {
+		return this.getTip("entity.sweetmagic." + tip);
+	}
+
 	// Stringをマイクラの翻訳用文字列に変換
-	default MutableComponent getMCText (String tip) {
+	default MutableComponent getMCText(String tip) {
 		return this.getTip("effect.minecraft." + tip);
 	}
 
 	// Stringをスイマジの翻訳用文字列に変換
-	default MutableComponent getEnchaText (int level) {
+	default MutableComponent getEnchaText(int level) {
 		return this.getTip("enchantment.level." + level);
 	}
 
 	// シフト押したときのツールチップ
-	default void getShiftTip (List<Component> tooltip) {
+	default void getShiftTip(List<Component> tooltip) {
 		tooltip.add(this.getText("shift").withStyle(RED));
 	}
 
+	default MutableComponent empty() {
+		return Component.literal(" ");
+	}
+
 	// tierのチップ取得
-	default MutableComponent tierTip (int tier) {
+	default MutableComponent tierTip(int tier) {
 		return this.getTipArray(this.getText("tier"), ": ", this.getTip("" + tier).withStyle(WHITE), GREEN);
 	}
 }

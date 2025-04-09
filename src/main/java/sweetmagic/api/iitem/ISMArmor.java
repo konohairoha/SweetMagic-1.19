@@ -8,7 +8,7 @@ import sweetmagic.api.util.ISMTip;
 public interface ISMArmor extends ISMTip {
 
 	// エンチャレベル取得
-	default int getEnchantLevel (Enchantment enchant, ItemStack stack) {
+	default int getEnchantLevel(Enchantment enchant, ItemStack stack) {
 		return Math.min(EnchantmentHelper.getItemEnchantmentLevel(enchant, stack), 10);
 	}
 

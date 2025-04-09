@@ -18,11 +18,11 @@ public class SweetMagicAPI {
 	// 保有MFアイテム情報リスト
 	private static List<IMagiaFluxItemListPlugin> mfPluginList = new ArrayList<IMagiaFluxItemListPlugin>();
 
-	public static Map<Item, MagiaFluxInfo> getMFMap () {
+	public static Map<Item, MagiaFluxInfo> getMFMap() {
 		return mfList;
 	}
 
-	public static List<IMagiaFluxItemListPlugin> getMFPluginList () {
+	public static List<IMagiaFluxItemListPlugin> getMFPluginList() {
 		return mfPluginList;
 	}
 

@@ -8,17 +8,17 @@ public class RobeInfo extends BaseItemInfo {
 
 	private final IRobe robe;
 
-	public RobeInfo (ItemStack stack) {
+	public RobeInfo(ItemStack stack) {
 		super(stack, stack.getOrCreateTag());
 		this.robe = (IRobe) stack.getItem();
 	}
 
 	// ポーチの取得
-	public IRobe getRobe () {
+	public IRobe getRobe() {
 		return this.robe;
 	}
 
-	public void shrinkMF (int useMF) {
+	public void shrinkMF(int useMF) {
 
 		IRobe robe = this.getRobe();
 		ItemStack stack = this.getStack();

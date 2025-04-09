@@ -19,9 +19,7 @@ public class ItemHelper {
 
 	public static final Comparator<ItemStack> ITEMSTACK_ASCENDING = (s1, s2) -> {
 		if (s1.isEmpty() && s2.isEmpty()) { return 0; }
-
 		if (s1.isEmpty()) { return 1; }
-
 		if (s2.isEmpty()) { return -1; }
 
 		if (s1.getItem() != s2.getItem()) {
@@ -37,7 +35,6 @@ public class ItemHelper {
 		List<ItemStack> stackList = new ArrayList<>();
 
 		for (int i = 0; i < inv.getSlots(); i++) {
-
 			ItemStack stack = inv.getStackInSlot(i);
 			if (stack.isEmpty()) { continue; }
 
@@ -46,7 +43,7 @@ public class ItemHelper {
 		}
 
 		// アイテムのソート
-		stackList = stackList.stream().sorted( (s1, s2) -> sortItemStack(s1, s2) ).toList();
+		stackList = stackList.stream().sorted((s1, s2) -> sortItemStack(s1, s2)).toList();
 		stackList.forEach(s -> ItemHandlerHelper.insertItemStacked(inv, s, false));
 		return stackList.isEmpty();
 	}
@@ -80,7 +77,6 @@ public class ItemHelper {
 		List<Item> itemList = new ArrayList<>();
 
 		for (ItemStack stack : player.getInventory().items) {
-
 			if (stack.isEmpty()) { continue; }
 
 			pInveList.add(stack);
@@ -88,14 +84,13 @@ public class ItemHelper {
 		}
 
 		for (int i = 0; i < inv.getSlots(); i++) {
-
 			ItemStack stack = inv.getStackInSlot(i);
 			if (stack.isEmpty() || !itemList.contains(stack.getItem())) { continue; }
 
 			stackList.add(stack);
 		}
 
-        IItemHandler pInv = new PlayerMainInvWrapper(player.getInventory());
+		IItemHandler pInv = new PlayerMainInvWrapper(player.getInventory());
 
 		for (ItemStack s : stackList) {
 			ItemStack st = ItemHandlerHelper.insertItemStacked(pInv, s.copy(), false);
@@ -127,9 +122,7 @@ public class ItemHelper {
 		int stackId1 = Item.getId(stack1.getItem());
 		int stackId2 = Item.getId(stack2.getItem());
 		if (stackId1 == 0 || stackId2 == 0) { return 0; }
-
 		if (stackId1 > stackId2) { return 1; }
-
 		if (stackId1 < stackId2) { return -1; }
 
 		return 0;
@@ -144,9 +137,7 @@ public class ItemHelper {
 		int stackId1 = Item.getId(stack1.getItem());
 		int stackId2 = Item.getId(stack2.getItem());
 		if (stackId1 == 0 || stackId2 == 0) { return 0; }
-
 		if (stackId1 > stackId2) { return notRreverse ? 1 : -1; }
-
 		if (stackId1 < stackId2) { return notRreverse ? -1 : 1; }
 
 		return 0;
@@ -183,7 +174,7 @@ public class ItemHelper {
 
 			for (int z = x + 1; z < stackList.size(); z++) {
 				ItemStack s1 = stackList.get(z);
-				if ( !(ItemHandlerHelper.canItemStacksStack(stack, s1)) ) { continue; }
+				if (!(ItemHandlerHelper.canItemStacksStack(stack, s1))) { continue; }
 
 				stack.grow(s1.getCount());
 				stackList.set(z, ItemStack.EMPTY);

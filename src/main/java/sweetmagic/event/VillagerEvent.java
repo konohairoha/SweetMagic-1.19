@@ -27,7 +27,6 @@ public class VillagerEvent {
 		if (pro == null) { return; }
 
 		Int2ObjectMap<List<VillagerTrades.ItemListing>> tradeList = event.getTrades();
-//		if (pro.getPath().equals("farmer")) {
 
 		if (type.equals(VillageInit.COOK_PRO.get())) {
 
@@ -121,19 +120,19 @@ public class VillagerEvent {
 		return new BasicItemListing(new ItemStack(item, count), new ItemStack(Items.EMERALD, emeCount), maxTrades, xp, 0.05F);
 	}
 
-    public static BasicItemListing sellTrade(int value,ItemLike item, int count, int maxTrades, int xp) {
-        return new BasicItemListing(value, new ItemStack(item,count), maxTrades, xp, 0.05F);
-    }
+	public static BasicItemListing sellTrade(int value,ItemLike item, int count, int maxTrades, int xp) {
+		return new BasicItemListing(value, new ItemStack(item,count), maxTrades, xp, 0.05F);
+	}
 
 	public static BasicItemListing buyTrade(ItemLike item, int count, int maxTrades, int xp, Item crystal, int emeCount) {
 		return new BasicItemListing(new ItemStack(item, count), new ItemStack(crystal, emeCount), maxTrades, xp, 0.05F);
 	}
 
-    public static BasicItemListing sellTrade(ItemLike item, int count, int maxTrades, int xp, Item crystal, int emeCount) {
+	public static BasicItemListing sellTrade(ItemLike item, int count, int maxTrades, int xp, Item crystal, int emeCount) {
 		return new BasicItemListing(new ItemStack(crystal, emeCount), new ItemStack(item, count), maxTrades, xp, 0.05F);
-    }
+	}
 
-    public static BasicItemListing sellTrade(ItemStack stack, int maxTrades, int xp, Item crystal, int emeCount) {
+	public static BasicItemListing sellTrade(ItemStack stack, int maxTrades, int xp, Item crystal, int emeCount) {
 		return new BasicItemListing(new ItemStack(crystal, emeCount), stack, maxTrades, xp, 0.05F);
-    }
+	}
 }

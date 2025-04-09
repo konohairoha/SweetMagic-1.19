@@ -37,19 +37,18 @@ public class MagiaFluxInfo {
 
 	// アイテムにMFを定義
 	public void setMF(MagiaFluxInfo info) {
-
 		ItemStack stack = info.getItem();
 		Item item = stack.getItem();
 		if(stack.isEmpty()) { return; }
 
 		// すでにそのアイテムが定義されてたら異常
 		if (SweetMagicAPI.getMFMap().containsKey(item)) {
-			throw new IllegalArgumentException("The item has already been defined.    item:" + info.getItem() + ", mf:" + info.getMF());
+			throw new IllegalArgumentException("The item has already been defined.item:" + info.getItem() + ", mf:" + info.getMF());
 		}
 
 		// 対象のMFが1を下回ったら異常
 		if(info.getMF() < 1) {
-			throw new IllegalArgumentException("The target Magia Flux is an invalid value.    item:" + info.getItem() + ", mf:" + info.getMF());
+			throw new IllegalArgumentException("The target Magia Flux is an invalid value.item:" + info.getItem() + ", mf:" + info.getMF());
 		}
 
 		// チェック終了後、リストに入れる

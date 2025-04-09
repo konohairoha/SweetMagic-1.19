@@ -26,10 +26,10 @@ public interface ITileMF {
 	void addPosList(BlockPos pos);
 
 	// 座標の取得
-	BlockPos getTilePos ();
+	BlockPos getTilePos();
 
 	// worldの取得
-	Level getTileWorld ();
+	Level getTileWorld();
 
 	// 経過時間の取得
 	int getTickTime();
@@ -38,16 +38,16 @@ public interface ITileMF {
 	void setTickTime(int tickTime);
 
 	// 受信側かどうかの取得
-	boolean getReceive ();
+	boolean getReceive();
 
 	// MFの取得
-	int getMF ();
+	int getMF();
 
 	// MFの設定
 	void setMF(int mf);
 
 	// 最大MFの取得
-	int getMaxMF ();
+	int getMaxMF();
 
 	// MFが空かどうか
 	default boolean isMFEmpty() {
@@ -55,39 +55,32 @@ public interface ITileMF {
 	}
 
 	// MFが最大かどうか
-	default boolean isMaxMF () {
+	default boolean isMaxMF() {
 		return this.getMF() >= this.getMaxMF();
 	}
 
 	// 受信するMF量の取得
-	default int getReceiveMF () {
+	default int getReceiveMF() {
 		return 5000;
 	}
 
 	// 消費MF量の取得
-	default int getShrinkMF () {
+	default int getShrinkMF() {
 		return 2000;
 	}
 
 	// 消費MF以上にMFがあるか
-	default boolean hasNeedMF () {
+	default boolean hasNeedMF() {
 		return this.getMF() >= this.getShrinkMF();
 	}
 
 	// MFゲージの描画量を計算するためのメソッド
 	default int getMFProgressScaled(int value) {
-
-		int mf = 0;
-
-		if (!this.isMFEmpty()) {
-			return Math.min(value, (int) (value * (float) (this.getMF()) / (float) (this.getMaxMF())));
-		}
-
-		return mf;
-    }
+		return this.isMFEmpty() ? 0 : Math.min(value, (int) (value * (float) (this.getMF()) / (float) (this.getMaxMF())));
+	}
 
 	// MFを他のブロックに移し替えるときの処理
-	default int outputMF (int mf) {
+	default int outputMF(int mf) {
 
 		// 要求MF量が現在持っているMFよりも多い場合
 		if (mf > this.getMF()) {
@@ -113,18 +106,18 @@ public interface ITileMF {
 		return count;
 	}
 
-    // MFを持ったアイテムか
-	default boolean isMFAPIItem (ItemStack stack) {
-    	return SweetMagicAPI.hasMF(stack);
-    }
+	// MFを持ったアイテムか
+	default boolean isMFAPIItem(ItemStack stack) {
+		return SweetMagicAPI.hasMF(stack);
+	}
 
 	// アイテムが保持するMF取得
-	default int getItemMF (Item item) {
+	default int getItemMF(Item item) {
 		return SweetMagicAPI.getMF(new ItemStack(item));
 	}
 
 	// 送受信処理
-	default void sendRecivehandler () {
+	default void sendRecivehandler() {
 
 		Level world = this.getTileWorld();
 
@@ -146,7 +139,7 @@ public interface ITileMF {
 	}
 
 	// MFブロックからMFを入れるときの処理
-	default void insertMF (ITileMF reci, ITileMF tran, int tickTime) {
+	default void insertMF(ITileMF reci, ITileMF tran, int tickTime) {
 
 		int reciMF = reci.getMF();
 		int maxMF = reci.getMaxMF() <= 0 ? 100000 : reci.getMaxMF();
@@ -191,40 +184,36 @@ public interface ITileMF {
 	}
 
 	// MF最大時のインサート処理
-	default void maxMFInsert (ITileMF tran) {}
+	default void maxMFInsert(ITileMF tran) {}
 
 	// MF受信時のインサート処理
-	default void recipedMFInsert () {}
+	default void recipedMFInsert() {}
 
 
 	// List<BlockPos>をnbt保存
-	default CompoundTag savePosList (CompoundTag nbt, Set<BlockPos> posList, String name) {
+	default CompoundTag savePosList(CompoundTag nbt, Set<BlockPos> posList, String name) {
+		if (posList == null || posList.isEmpty()) { return nbt; }
 
-		// NULLチェックとListの個数を確認
-		if (posList != null && !posList.isEmpty()) {
+		// nbtのリストを作成
+		ListTag tagsList = new ListTag();
 
-			// nbtのリストを作成
-			ListTag tagsList = new ListTag();
+		// リストの分だけ回してNBTに保存
+		for (BlockPos pos : posList) {
 
-			// リストの分だけ回してNBTに保存
-			for (BlockPos pos : posList) {
+			if (pos == null) { continue; }
 
-				if (pos == null) { continue; }
+			// 座標をXYZごとに保存
+			CompoundTag tags = new CompoundTag();
+			tags.putInt("X", pos.getX());
+			tags.putInt("Y", pos.getY());
+			tags.putInt("Z", pos.getZ());
 
-				// 座標をXYZごとに保存
-				CompoundTag tags = new CompoundTag();
-                tags.putInt("X", pos.getX());
-                tags.putInt("Y", pos.getY());
-                tags.putInt("Z", pos.getZ());
-
-                // nbtリストにnbtを入れる
-                tagsList.add(tags);
-			}
-
-			// NBTに保存
-			nbt.put(name, tagsList);
+			// nbtリストにnbtを入れる
+			tagsList.add(tags);
 		}
 
+		// NBTに保存
+		nbt.put(name, tagsList);
 		return nbt;
 	}
 
@@ -237,11 +226,7 @@ public interface ITileMF {
 
 		// nbtリスト分だけ回す
 		for (int i = 0; i < tagsList.size(); ++i) {
-
-			// nbtリストの中にあるnbtを取り出す
 			CompoundTag tags = tagsList.getCompound(i);
-
-			// 座標リストに入れる
 			list.add(new BlockPos(tags.getInt("X"), tags.getInt("Y"), tags.getInt("Z")));
 		}
 
@@ -249,7 +234,7 @@ public interface ITileMF {
 	}
 
 	// 距離のチェック
-	default boolean checkDistance (BlockPos pos) {
+	default boolean checkDistance(BlockPos pos) {
 		double dis = 15D;
 		double pX = Math.abs(this.getTilePos().getX() - pos.getX());
 		double pY = Math.abs(this.getTilePos().getY() - pos.getY());
@@ -263,12 +248,12 @@ public interface ITileMF {
 	}
 
 	// クリエイティブ機能
-	default boolean isCreative () {
+	default boolean isCreative() {
 		return false;
 	}
 
 	// クライアント側へ送信
-	default void sentClient () {
+	default void sentClient() {
 		this.markDirty();
 	}
 

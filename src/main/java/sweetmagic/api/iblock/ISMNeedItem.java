@@ -9,20 +9,20 @@ import sweetmagic.recipe.RecipeHelper;
 
 public interface ISMNeedItem {
 
-	List<ItemStack> getNeedItemList ();
+	List<ItemStack> getNeedItemList();
 
-	List<ItemStack> getNeedHardItemList ();
+	List<ItemStack> getNeedHardItemList();
 
-	Item getNeedHardItem ();
+	Item getNeedHardItem();
 
-	default boolean isHard (Player player) {
+	default boolean isHard(Player player) {
 		return !RecipeHelper.getPlayerInv(player, ItemStack.EMPTY).stream().filter(s -> s.is(this.getNeedHardItem())).toList().isEmpty();
 	}
 
-	default boolean hasNeedItem (Player player) {
+	default boolean hasNeedItem(Player player, ItemStack hand) {
 
 		// プレイヤーのインベントリを取得
-		List<ItemStack> stackList = RecipeHelper.getPlayerInv(player, ItemStack.EMPTY);
+		List<ItemStack> stackList = RecipeHelper.getPlayerInv(player, hand);
 		boolean hasHardItem = !stackList.stream().filter(s -> s.is(this.getNeedHardItem())).toList().isEmpty();
 		List<ItemStack> needItemList = hasHardItem ? this.getNeedHardItemList() : this.getNeedItemList();
 

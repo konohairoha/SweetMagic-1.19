@@ -1,7 +1,6 @@
 package sweetmagic.event;
 
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.EnderMan;
@@ -18,7 +17,7 @@ import sweetmagic.init.item.magic.SMHarness;
 public class SMLivingTickEvent {
 
 	@SubscribeEvent
-	public static void onTickEvent (LivingTickEvent event) {
+	public static void onTickEvent(LivingTickEvent event) {
 		LivingEntity entity = event.getEntity();
 		if (!(entity instanceof Player player) || player.isCreative() || player.isSpectator()) { return; }
 
@@ -45,12 +44,8 @@ public class SMLivingTickEvent {
 	}
 
 	@SubscribeEvent
-	public static void mobGriefingEvent (EntityMobGriefingEvent event) {
-		if (SMConfig.canTackBlock.get()) { return; }
-
-		Entity entity = event.getEntity();
-		if ( !(entity instanceof EnderMan) ) { return; }
-
+	public static void mobGriefingEvent(EntityMobGriefingEvent event) {
+		if (SMConfig.canTackBlock.get() || !(event.getEntity() instanceof EnderMan)) { return; }
 		event.setResult(Result.DENY);
 	}
 }

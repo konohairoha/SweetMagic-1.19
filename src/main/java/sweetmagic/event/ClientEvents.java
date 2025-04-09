@@ -5,6 +5,7 @@ import net.minecraft.client.renderer.item.ItemPropertyFunction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -17,7 +18,7 @@ public class ClientEvents {
 
 	public static final ResourceLocation ACTIVE_OVERRIDE = SweetMagicCore.getSRC("active");
 
-	@SubscribeEvent
+	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void onClientSetup(FMLClientSetupEvent event) {
 		event.enqueueWork(() ->
 			addPropertyOverrides(ACTIVE_OVERRIDE, (stack, world, entity, seed) -> stack.getOrCreateTag().getBoolean(JapaneseUmbrella.ACTIVE) ? 1F : 0F, ItemInit.japanese_umbrella)

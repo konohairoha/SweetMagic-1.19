@@ -47,30 +47,29 @@ public class SMUtil {
 		return (ItemStack) obj;
 	}
 
-	public static Item getItem (Object obj) {
+	public static Item getItem(Object obj) {
 		return getStack(obj).getItem();
 	}
 
-    // 敵AIを動かさない
-    public static void tameAIDonmov(Mob target, int tickTime) {
+	// 敵AIを動かさない
+	public static void tameAIDonmov(Mob target, int tickTime) {
 
-        boolean isLearning = false;
-        for (WrappedGoal entry : target.goalSelector.getAvailableGoals()) {
-
-            if ( !(entry.getGoal() instanceof DonMovGoal goal)) { continue; }
+		boolean isLearning = false;
+		for (WrappedGoal entry : target.goalSelector.getAvailableGoals()) {
+			if (!(entry.getGoal() instanceof DonMovGoal goal)) { continue; }
 
 			goal.tickTime = tickTime;
 			isLearning = true;
 			break;
-        }
+		}
 
-        if (isLearning) { return; }
+		if (isLearning) { return; }
 
-        Set<WrappedGoal> goal = new HashSet<> (target.goalSelector.getAvailableGoals());
-        target.goalSelector.removeAllGoals();
+		Set<WrappedGoal> goal = new HashSet<>(target.goalSelector.getAvailableGoals());
+		target.goalSelector.removeAllGoals();
 		DonMovGoal ai = new DonMovGoal(target, goal);
 		ai.tickTime = tickTime;
 		target.goalSelector.addGoal(0, ai);
 		target.targetSelector.addGoal(0, ai);
-    }
+	}
 }

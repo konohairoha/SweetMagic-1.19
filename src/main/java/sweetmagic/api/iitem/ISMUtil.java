@@ -13,16 +13,17 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import sweetmagic.util.PlayerHelper;
+import sweetmagic.util.WorldHelper;
 
 public interface ISMUtil {
 
 	// ポーション付与
-	default void addPotion (LivingEntity target, MobEffect effect, int level, int time) {
+	default void addPotion(LivingEntity target, MobEffect effect, int level, int time) {
 		PlayerHelper.setPotion(target, effect, level, time);
 	}
 
 	// ポーション付与
-	default void setPotion (LivingEntity target, MobEffect effect, int level, int time, boolean flag) {
+	default void setPotion(LivingEntity target, MobEffect effect, int level, int time, boolean flag) {
 		PlayerHelper.setPotion(target, effect, level, time, flag);
 	}
 
@@ -31,8 +32,8 @@ public interface ISMUtil {
 	}
 
 	// 音を流す
-	default void playSound (Level level, BlockPos pos, SoundEvent sound, float vol, float pit) {
-		level.playSound(null, pos, sound, SoundSource.PLAYERS, vol, pit);
+	default void playSound(Level world, BlockPos pos, SoundEvent sound, float vol, float pit) {
+		world.playSound(null, pos, sound, SoundSource.PLAYERS, vol, pit);
 	}
 
 	default <T extends Entity> List<T> getEntityList(Class<T> enClass, Entity entity, double range) {
@@ -44,28 +45,28 @@ public interface ISMUtil {
 	}
 
 	// 範囲の取得
-	default AABB getAABB (BlockPos pos, double range) {
+	default AABB getAABB(BlockPos pos, double range) {
 		return this.getAABB(pos, range, range, range);
 	}
 
 	// 範囲の取得
-	default AABB getAABB (BlockPos pos, double x, double  y, double  z) {
+	default AABB getAABB(BlockPos pos, double x, double y, double z) {
 		return new AABB(pos.offset(-x, -y, -z), pos.offset(x, y, z));
 	}
 
 	// 範囲の取得
-	default AABB getAABB (Entity entity, double range) {
+	default AABB getAABB(Entity entity, double range) {
 		return entity.getBoundingBox().inflate(range, range, range);
 	}
 
 	// 範囲の取得
-	default AABB getAABB (Entity entity, double x, double  y, double  z) {
+	default AABB getAABB(Entity entity, double x, double y, double z) {
 		return entity.getBoundingBox().inflate(x, y, z);
 	}
 
 	// 周囲の座標取得
-	default Iterable<BlockPos> getRangePos (BlockPos pos, int range) {
-		return BlockPos.betweenClosed(pos.offset(-range, -range, -range), pos.offset(range, range, range));
+	default Iterable<BlockPos> getRangePos(BlockPos pos, int range) {
+		return WorldHelper.getRangePos(pos, range);
 	}
 
 	// 乱数取得

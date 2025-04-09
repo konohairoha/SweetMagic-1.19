@@ -70,8 +70,8 @@ public class RegisterHandler {
 
 	public static final RegisterHandler INSTANCE = new RegisterHandler();
 	public static final DeferredRegister<Codec<? extends BiomeModifier>> BIOME_REGISTER = DeferredRegister.create(ForgeRegistries.Keys.BIOME_MODIFIER_SERIALIZERS, SweetMagicCore.MODID);
-    private static final DeferredRegister<BiomeModifier> BIOME_MODIFIER = DeferredRegister.create(ForgeRegistries.Keys.BIOME_MODIFIERS, SweetMagicCore.MODID);
-    public static RegistryObject<Codec<EntityModifier>> ENHTITY_REGISTER = BIOME_REGISTER.register("smmob_spawn", () -> Codec.unit(EntityModifier.INSTANCE));
+	private static final DeferredRegister<BiomeModifier> BIOME_MODIFIER = DeferredRegister.create(ForgeRegistries.Keys.BIOME_MODIFIERS, SweetMagicCore.MODID);
+	public static RegistryObject<Codec<EntityModifier>> ENHTITY_REGISTER = BIOME_REGISTER.register("smmob_spawn", () -> Codec.unit(EntityModifier.INSTANCE));
 	public static final DeferredRegister<Codec<? extends IGlobalLootModifier>> LOOT_MODIFIER = DeferredRegister.create(ForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS, SweetMagicCore.MODID);
 
 	// 初期化
@@ -96,15 +96,15 @@ public class RegisterHandler {
 		LOOT_MODIFIER.register(event);
 		LOOT_MODIFIER.register("add_loot_table", LootTableModifier.CODEC);
 
-        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
-    		event.addListener(RenderEntityInit::registerRenderEntity);
-    		event.addListener(RenderEntityInit::registerRenderLayer);
-    		event.addListener(ParticleInit::registerParticle);
-    		MinecraftForge.EVENT_BUS.addListener(WandRenderEvent::onWandRenderEvent);
-    		MinecraftForge.EVENT_BUS.addListener(WandRenderEvent::onFOVEvent);
-    		MinecraftForge.EVENT_BUS.addListener(CompasRenderEvent::onWandRenderEvent);
-    		MenuInit.registerGUI();
-        });
+		DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
+			event.addListener(RenderEntityInit::registerRenderEntity);
+			event.addListener(RenderEntityInit::registerRenderLayer);
+			event.addListener(ParticleInit::registerParticle);
+			MinecraftForge.EVENT_BUS.addListener(WandRenderEvent::onWandRenderEvent);
+			MinecraftForge.EVENT_BUS.addListener(WandRenderEvent::onFOVEvent);
+			MinecraftForge.EVENT_BUS.addListener(CompasRenderEvent::onWandRenderEvent);
+			MenuInit.registerGUI();
+		});
 
 		event.addListener(SoundInit::registerSound);
 		MinecraftForge.EVENT_BUS.addGenericListener(Entity.class, CapabilityInit::attachEntityCapability);
@@ -136,10 +136,15 @@ public class RegisterHandler {
 		bus.addListener(EquipmentChangeEvent::changeEvent);
 		bus.addListener(PotionEvent::healEvent);
 		bus.addListener(PotionEvent::potionAddEvent);
+		bus.addListener(PotionEvent::potionRemoveEvent);
 		bus.addListener(PotionEvent::knockBackEvent);
 		bus.addListener(PotionEvent::teleportEvent);
 		bus.addListener(VillagerEvent::villagerTrade);
 		bus.addListener(SMPlayerEvent::sleepEvent);
+		bus.addListener(SMPlayerEvent::onPlayerSetSpawn);
+		bus.addListener(SMPlayerEvent::onSleepTimeCheck);
+		bus.addListener(SMPlayerEvent::onPlayerSleep);
+		bus.addListener(SMPlayerEvent::onPickup);
 	}
 
 	// コンフィグ登録
@@ -148,7 +153,7 @@ public class RegisterHandler {
 	}
 
 	// 草ドロップ登録
-	public void registerGrassDrop (IEventBus event) {
+	public void registerGrassDrop(IEventBus event) {
 		GrassDropHandler.REGISTER.register(event);
 		BIOME_MODIFIER.register(event);
 		BIOME_REGISTER.register("smflowers_moon", MoonModifier::makeCodec);
@@ -162,26 +167,26 @@ public class RegisterHandler {
 	}
 
 	// RegisterEventの実行
-	public static void onRegisterEvent (RegisterEvent event) {
+	public static void onRegisterEvent(RegisterEvent event) {
 
 		ResourceKey<? extends Registry<?>> key = event.getRegistryKey();
 
-        if (key.equals(ForgeRegistries.Keys.MENU_TYPES)) {
-        	MenuInit.registerMenu(event);
-        }
+		if (key.equals(ForgeRegistries.Keys.MENU_TYPES)) {
+			MenuInit.registerMenu(event);
+		}
 
-        if (key.equals(ForgeRegistries.Keys.ITEMS)) {
-        	SMOreGen.register(BIOME_MODIFIER);
-        	SMFlowerGen.register(BIOME_MODIFIER);
-        }
+		if (key.equals(ForgeRegistries.Keys.ITEMS)) {
+			SMOreGen.register(BIOME_MODIFIER);
+			SMFlowerGen.register(BIOME_MODIFIER);
+		}
 
-        if (key.equals(ForgeRegistries.Keys.BIOMES)) {
-            BiomeInit.registerBiome(Objects.requireNonNull(event.getForgeRegistry()));
-        }
+		if (key.equals(ForgeRegistries.Keys.BIOMES)) {
+			BiomeInit.registerBiome(Objects.requireNonNull(event.getForgeRegistry()));
+		}
 	}
 
 	@SubscribeEvent
-	public static void registerKeybind (RegisterKeyMappingsEvent event) {
+	public static void registerKeybind(RegisterKeyMappingsEvent event) {
 		KeyPressEvent.registerKeybind(event);
 	}
 }

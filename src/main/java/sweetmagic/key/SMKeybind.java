@@ -14,7 +14,7 @@ public enum SMKeybind {
 		this.keyName = keyName;
 	}
 
-	public String getName () {
+	public String getName() {
 		return this.keyName;
 	}
 }

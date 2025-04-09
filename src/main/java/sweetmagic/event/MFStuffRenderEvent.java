@@ -26,6 +26,8 @@ import sweetmagic.init.item.sm.SMItem;
 @Mod.EventBusSubscriber(modid = SweetMagicCore.MODID, value = Dist.CLIENT)
 public class MFStuffRenderEvent {
 
+	private static final List<Direction> ALL_FACE = Arrays.<Direction> asList(Direction.UP, Direction.NORTH, Direction.EAST);
+
 	@SubscribeEvent
 	public static void renderLevelLastEvent(RenderLevelStageEvent event) {
 		if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_TRANSLUCENT_BLOCKS) { return; }
@@ -38,7 +40,7 @@ public class MFStuffRenderEvent {
 		if (stack.isEmpty() || !stack.is(ItemInit.mf_stuff)) { return; }
 
 		CompoundTag tags = stack.getTag();
-		if (tags == null || !tags.contains("X") || player.tickCount % 30 != tags.getInt("tick")) {return; }
+		if (tags == null || !tags.contains("X") || player.tickCount % 30 != tags.getInt("tick")) { return; }
 
 		ClientLevel world = mc.level;
 		BlockPos pos = new BlockPos(tags.getInt("X"), tags.getInt("Y"), tags.getInt("Z"));
@@ -49,19 +51,17 @@ public class MFStuffRenderEvent {
 		range = range > aabb.min(Axis.Z) ? aabb.min(Axis.Z) : range;
 		range = range > 1D - aabb.max(Axis.Z) ? 1D - aabb.max(Axis.Z) : range;
 		range = 0.85D - range;
-
-        ParticleOptions par = ParticleInit.CYCLE_ORB_Y.get();
-        List<Direction> faceList = Arrays.<Direction> asList(Direction.UP, Direction.NORTH, Direction.EAST);
+		ParticleOptions par = ParticleInit.CYCLE_ORB_Y;
 
 		for (int i = 0; i < 16; i++) {
-			for (Direction face : faceList) {
+			for (Direction face : ALL_FACE) {
 				spawnParticleCycle(world, par, pos.getX() + 0.5D, pos.getY() + 0.55D, pos.getZ() + 0.5D, face, range, (i * 22.5D));
 			}
 		}
 	}
 
 	// パーティクルスポーンサイクル
-	protected static void spawnParticleCycle (ClientLevel world, ParticleOptions particle, double x, double y, double z, Direction face, double range, double angle) {
-		world.addParticle(particle, x, y, z, face.get3DDataValue(), range, angle + SMItem.SPEED);
+	protected static void spawnParticleCycle (ClientLevel world, ParticleOptions par, double x, double y, double z, Direction face, double range, double angle) {
+		world.addParticle(par, x, y, z, face.get3DDataValue(), range, angle + SMItem.SPEED);
 	}
 }

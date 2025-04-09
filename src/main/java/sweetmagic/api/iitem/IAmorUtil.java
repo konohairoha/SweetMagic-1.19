@@ -49,11 +49,11 @@ public interface IAmorUtil {
 		}
 	}
 
-	public static ArmorMaterial getArmorMaterial (int data) {
+	public static ArmorMaterial getArmorMaterial(int data) {
 		return data >= 1 ? SMArmorMaterialTier2.INSTANCE : SMArmorMaterialTier1.INSTANCE;
 	}
 
-	public static Item.Properties getArmorPro () {
+	public static Item.Properties getArmorPro() {
 		return SMItem.setItem(999, SweetMagicCore.smMagicTab);
 	}
 
@@ -69,11 +69,10 @@ public interface IAmorUtil {
 		@Override
 		public int getDefenseForSlot(@NotNull EquipmentSlot slot) {
 			switch (slot) {
-			case HEAD: return 3;
 			case CHEST: return 6;
 			case LEGS: return 7;
 			case FEET: return 3;
-			default : return 0;
+			default: return 3;
 			}
 		}
 
@@ -123,11 +122,10 @@ public interface IAmorUtil {
 		@Override
 		public int getDefenseForSlot(@NotNull EquipmentSlot slot) {
 			switch (slot) {
-			case HEAD: return 3;
 			case CHEST: return 8;
 			case LEGS: return 6;
 			case FEET: return 3;
-			default : return 0;
+			default: return 3;
 			}
 		}
 

@@ -1,6 +1,5 @@
 package sweetmagic.api.iitem;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
@@ -22,7 +21,6 @@ import net.minecraftforge.network.NetworkHooks;
 import sweetmagic.api.iitem.info.BookInfo;
 import sweetmagic.init.ItemInit;
 import sweetmagic.init.SoundInit;
-import sweetmagic.init.tile.inventory.SMBookInventory;
 import sweetmagic.init.tile.menu.SMBookMenu;
 import sweetmagic.init.tile.menu.container.ContainerMagicBook;
 
@@ -31,59 +29,47 @@ public interface IMagicBook {
 	public static final String SLOTCOUNT = "slotCount";	// スロットの数
 
 	// 確率で発動できるか確認
-	default boolean checkChance (float chance, Level world) {
+	default boolean checkChance(float chance, Level world) {
 		return chance * 0.01F >= world.random.nextFloat();
 	}
 
 	// 確率で発動できるか確認
-	default float getChance (float chance) {
+	default float getChance(float chance) {
 		return chance * 0.01F;
 	}
 
 	// インベントリのアイテム取得
-	default List<ItemStack> getInvList (BookInfo info) {
-
-		SMBookInventory inv = info.getInv();
-		List<ItemStack> stackList = new ArrayList<>();
-
-		for (int i = 0; i < inv.getSlots(); i++) {
-
-			ItemStack stack = inv.getStackInSlot(i);
-			if (stack.isEmpty()) { continue; }
-
-			stackList.add(stack);
-		}
-
-		return stackList;
+	default List<ItemStack> getInvList(BookInfo info) {
+		return info.getInv().getStackList();
 	}
 
 	// 攻撃ページの数でクリティカル確率上昇
-	default float getAttackPage (BookInfo info) {
+	default float getAttackPage(BookInfo info) {
 		return this.getPagePower(info, ItemInit.magicpage_attack, 2.5F);
 	}
 
 	// 防御ページの数でクリティカル確率上昇
-	default float getDefencePage (BookInfo info) {
+	default float getDefencePage(BookInfo info) {
 		return this.getPagePower(info, ItemInit.magicpage_defence, 3F);
 	}
 
 	// 回復ページの数で回復バフ確率上昇
-	default float getHealPage (BookInfo info) {
+	default float getHealPage(BookInfo info) {
 		return this.getPagePower(info, ItemInit.magicpage_heal, 5F);
 	}
 
 	// MFページの数でMF消費なし確率上昇
-	default float getMFPage (BookInfo info) {
+	default float getMFPage(BookInfo info) {
 		return this.getPagePower(info, ItemInit.magicpage_mf, 3F);
 	}
 
 	// リキャストページの数でリキャスト消費なし確率上昇
-	default float getRecastPage (BookInfo info) {
+	default float getRecastPage(BookInfo info) {
 		return this.getPagePower(info, ItemInit.magicpage_recast, 1F);
 	}
 
 	// ページの枚数の火力を取得
-	default float getPagePower (BookInfo info, Item item, float rate) {
+	default float getPagePower(BookInfo info, Item item, float rate) {
 		List<ItemStack> stackList = this.getInvList(info).stream().filter(s -> s.is(item)).toList();
 		int size = stackList.size();
 		float power = size * rate;
@@ -123,7 +109,7 @@ public interface IMagicBook {
 	}
 
 	// nbt初期化用
-	default CompoundTag getNBT (ItemStack stack) {
+	default CompoundTag getNBT(ItemStack stack) {
 
 		CompoundTag tags = stack.getTag();
 
@@ -142,11 +128,11 @@ public interface IMagicBook {
 	}
 
 	// スロットの取得
-	default int getSlotCount (ItemStack stack) {
+	default int getSlotCount(ItemStack stack) {
 		return this.getNBT(stack).getInt(SLOTCOUNT);
 	}
 
-	default void playSound (Level world, Player player, SoundEvent sound, float vol, float pitch) {
+	default void playSound(Level world, Player player, SoundEvent sound, float vol, float pitch) {
 		player.getCommandSenderWorld().playSound(null, player.blockPosition(), sound, SoundSource.PLAYERS, vol, pitch);
 	}
 
@@ -156,16 +142,16 @@ public interface IMagicBook {
 	}
 
 	// プレイヤーインベントリの本を取得
-	public static List<ItemStack> getBookList (Player player) {
+	public static List<ItemStack> getBookList(Player player) {
 		return player.getInventory().items.stream().filter(s -> s.getItem() instanceof IMagicBook).toList();
 	}
 
 	// 本の取得
-	public static IMagicBook getBook (ItemStack stack) {
+	public static IMagicBook getBook(ItemStack stack) {
 		return (IMagicBook) stack.getItem();
 	}
 
-	record ContainerBook(ItemStack stack) implements MenuProvider {
+	public record ContainerBook(ItemStack stack) implements MenuProvider {
 
 		@NotNull
 		@Override

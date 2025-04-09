@@ -36,8 +36,8 @@ import sweetmagic.worldgen.biome.SMBiomeRegion;
 @Mod(SweetMagicCore.MODID)
 public class SweetMagicCore {
 
-    public static boolean terrablenderLoaded = false;
-    public static boolean mousetweaksLoaded = false;
+	public static boolean terrablenderLoaded = false;
+	public static boolean mousetweaksLoaded = false;
 
 	public static final String MODID = "sweetmagic";
 	public static final CreativeModeTab smTab = new SMTab("sweetmagic_tab");
@@ -47,8 +47,8 @@ public class SweetMagicCore {
 	public SweetMagicCore() {
 
 		IEventBus event = FMLJavaModLoadingContext.get().getModEventBus();
-        terrablenderLoaded = ModList.get().isLoaded("terrablender");
-        mousetweaksLoaded = ModList.get().isLoaded("mousetweaks");
+		terrablenderLoaded = ModList.get().isLoaded("terrablender");
+		mousetweaksLoaded = ModList.get().isLoaded("mousetweaks");
 
 		// commonSetup呼び出し
 		event.addListener(this::commonSetup);
@@ -74,7 +74,7 @@ public class SweetMagicCore {
 
 		if (terrablenderLoaded) {
 			SMBiomeRegion.register();
-        }
+		}
 
 		DimentionInit.init();
 
@@ -101,25 +101,25 @@ public class SweetMagicCore {
 		}
 	}
 
-    @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
-    public static class RegistryEvents {
+	@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
+	public static class RegistryEvents {
 
-        @SubscribeEvent
-        public static void onRegister(RegisterEvent event) {
-        	RegisterHandler.onRegisterEvent(event);
-        }
-    }
+		@SubscribeEvent
+		public static void onRegister(RegisterEvent event) {
+			RegisterHandler.onRegisterEvent(event);
+		}
+	}
 
-    @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
-    public static class RegisterSpawn {
+	@Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+	public static class RegisterSpawn {
 
-    	@SubscribeEvent
-    	public static void registerSpawn(SpawnPlacementRegisterEvent event) {
-    		EntityInit.registerSpawn(event);
-    	}
-    }
+		@SubscribeEvent
+		public static void registerSpawn(SpawnPlacementRegisterEvent event) {
+			EntityInit.registerSpawn(event);
+		}
+	}
 
-	public static ResourceLocation getSRC (String name) {
+	public static ResourceLocation getSRC(String name) {
 		return new ResourceLocation(SweetMagicCore.MODID, name);
 	}
 

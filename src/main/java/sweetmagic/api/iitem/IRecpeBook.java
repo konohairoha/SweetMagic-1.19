@@ -1,5 +1,3 @@
 package sweetmagic.api.iitem;
 
-public interface IRecpeBook {
-
-}
+public interface IRecpeBook { }

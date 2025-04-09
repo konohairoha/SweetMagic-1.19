@@ -9,23 +9,23 @@ public abstract class BaseItemInfo {
 	protected final ItemStack stack;
 	protected final CompoundTag tags;
 
-	public BaseItemInfo (ItemStack stack, CompoundTag tags) {
+	public BaseItemInfo(ItemStack stack, CompoundTag tags) {
 		this.stack = stack;
 		this.tags = tags;
 	}
 
 	// NBTの取得
-	public CompoundTag getNBT () {
+	public CompoundTag getNBT() {
 		return this.tags;
 	}
 
 	// アイテムの取得
-	public ItemStack getStack () {
+	public ItemStack getStack() {
 		return this.stack;
 	}
 
 	// アイテムの取得
-	public Item getItem () {
+	public Item getItem() {
 		return this.getStack().getItem();
 	}
 }

@@ -19,6 +19,7 @@ import net.minecraftforge.event.level.BlockEvent.BreakEvent;
 import net.minecraftforge.event.level.BlockEvent.EntityPlaceEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import sweetmagic.init.BlockInit;
+import sweetmagic.init.ItemInit;
 import sweetmagic.init.PotionInit;
 import sweetmagic.init.block.magic.MagicianLectern;
 import sweetmagic.init.tile.sm.TileAbstractMagicianLectern;
@@ -42,12 +43,12 @@ public class BlockBreakEvent {
 	public static void onBlockBreakEvent (BreakEvent event) {
 		Player player = event.getPlayer();
 		LevelAccessor world = event.getLevel();
-		if (player == null || player.isCreative() || world.isClientSide()) { return; }
+		if (player == null || world.isClientSide()) { return; }
 
 		BlockState state = event.getState();
 		Block block = state.getBlock();
 
-		if (player.hasEffect(PotionInit.non_destructive) && block != Blocks.IRON_BARS && block != BlockInit.smspawner) {
+		if (!player.isCreative() && player.hasEffect(PotionInit.non_destructive) && block != Blocks.IRON_BARS && block != BlockInit.smspawner) {
 
 			float time = block.defaultDestroyTime();
 			Material mate = state.getMaterial();
@@ -63,6 +64,11 @@ public class BlockBreakEvent {
 				return;
 			}
 		}
+		
+		else if (player.getMainHandItem().is(ItemInit.startlight_wand)) {
+			event.setCanceled(true);
+			return;
+		}
 
 		if ( !(block instanceof MagicianLectern) ) { return; }
 
@@ -76,7 +82,6 @@ public class BlockBreakEvent {
 	// ブロックを破壊したときのイベント
 	@SubscribeEvent
 	public static void onBlockPlaceEvent (EntityPlaceEvent event) {
-
 		Entity entity = event.getEntity();
 		if ( !(entity instanceof Player player) || player.isCreative() || !player.hasEffect(PotionInit.non_destructive)) { return; }
 

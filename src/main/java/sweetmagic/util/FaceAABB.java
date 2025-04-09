@@ -3,6 +3,7 @@ package sweetmagic.util;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import sweetmagic.init.block.base.BaseFaceBlock;
 import sweetmagic.init.block.sm.MagiaPortal;
@@ -13,11 +14,15 @@ public record FaceAABB (double x1, double y1, double z1, double x2, double y2, d
 		return new FaceAABB(x1, y1, z1, x2, y2, z2).getRotatedBounds();
 	}
 
-	public static VoxelShape getAABB (VoxelShape[] aabbArray, BlockState state) {
+	public static VoxelShape getAABB(VoxelShape[] aabbArray, BlockState state) {
 		return aabbArray[state.getValue(BaseFaceBlock.FACING).get3DDataValue() - 2];
 	}
 
-	public static VoxelShape getAABB (VoxelShape[] aabbArray, VoxelShape aabb, BlockState state) {
+	public static VoxelShape getAABBUP(VoxelShape[] aabbArray, BlockState state) {
+		return aabbArray[state.getValue(BlockStateProperties.FACING).get3DDataValue() - 2];
+	}
+
+	public static VoxelShape getAABB(VoxelShape[] aabbArray, VoxelShape aabb, BlockState state) {
 		Direction.Axis axis = state.getValue(MagiaPortal.AXIS);
 		int value = 0;
 		switch (axis) {
