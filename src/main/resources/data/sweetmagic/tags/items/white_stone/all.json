@@ -1,0 +1,11 @@
+{
+	"replace": false,
+	"values": [
+		"sweetmagic:white_stone",
+		"sweetmagic:white_stone_stairs",
+		"sweetmagic:white_stone_trapdoor",
+		"sweetmagic:white_stone_polished",
+		"sweetmagic:white_stone_polished_stairs",
+		"sweetmagic:white_stone_polished_trapdoor"
+	]
+}
