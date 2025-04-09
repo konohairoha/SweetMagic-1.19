@@ -1,0 +1,14 @@
+{
+	"display": {
+		"icon": { "item": "minecraft:emerald" },
+		"title": { "translate": "smadbent.sm_village.title" },
+		"description": { "translate": "smadbent.sm_village.text" }
+	},
+	"parent": "sweetmagic:adventure/sweetmagic_world", "criteria": {
+		"trigger": { "trigger": "minecraft:location", "conditions": { "player": [{
+			"condition": "minecraft:entity_properties", "entity": "this",
+			"predicate": { "location": { "structure": "sweetmagic:village" } }
+		}] } }
+	},
+	"rewards": { "loot": ["sweetmagic:advance/mf_bottle_3"] }
+}

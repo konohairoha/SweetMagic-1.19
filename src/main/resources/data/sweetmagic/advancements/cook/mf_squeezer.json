@@ -1,0 +1,13 @@
+{
+	"display": {
+		"icon": { "item": "sweetmagic:mf_squeezer" },
+		"title": { "translate": "smadbent.mf_squeezer.title" },
+		"description": { "translate": "smadbent.mf_squeezer.text" }
+	},
+	"parent": "sweetmagic:cook/mf_forer", "criteria": {
+		"trigger": { "trigger": "minecraft:inventory_changed", "conditions": {
+			"items": [ { "items": [ "sweetmagic:mf_squeezer" ] } ]
+		} }
+	},
+	"rewards": { "loot": ["sweetmagic:advance/mf_sbottle_2"] }
+}

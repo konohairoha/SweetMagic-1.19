@@ -1,0 +1,13 @@
+{
+	"display": {
+		"icon": { "item": "sweetmagic:mf_egg_launcher" },
+		"title": { "translate": "smadbent.mf_egg_launcher.title" },
+		"description": { "translate": "smadbent.mf_egg_launcher.text" }
+	},
+	"parent": "sweetmagic:cook/mf_squeezer", "criteria": {
+		"trigger": { "trigger": "minecraft:inventory_changed", "conditions": {
+			"items": [ { "items": [ "sweetmagic:mf_egg_launcher" ] } ]
+		} }
+	},
+	"rewards": { "loot": ["sweetmagic:advance/mf_sbottle_2"] }
+}

@@ -1,0 +1,13 @@
+{
+	"display": {
+		"icon": { "item": "sweetmagic:mf_fisher" },
+		"title": { "translate": "smadbent.mf_fisher.title" },
+		"description": { "translate": "smadbent.mf_fisher.text" }
+	},
+	"parent": "sweetmagic:cook/root", "criteria": {
+		"trigger": { "trigger": "minecraft:inventory_changed", "conditions": {
+			"items": [ { "items": [ "sweetmagic:mf_fisher" ] } ]
+		} }
+	},
+	"rewards": { "loot": ["sweetmagic:advance/mf_sbottle_2"] }
+}

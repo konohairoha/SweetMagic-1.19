@@ -6,7 +6,7 @@
 	},
 	"parent": "sweetmagic:cook/root", "criteria": {
 		"trigger": { "trigger": "minecraft:inventory_changed", "conditions": {
-				"items": [ { "items": [ "sweetmagic:bottle" ] } ]
+			"items": [ { "items": [ "sweetmagic:bottle" ] } ]
 		} }
 	},
 	"rewards": { "experience": 5 }

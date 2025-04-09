@@ -1,0 +1,14 @@
+{
+	"display": {
+		"icon": { "item": "sweetmagic:magician_lectern_fire" },
+		"title": { "translate": "smadbent.broken_ruins_site_fire.title" },
+		"description": { "translate": "smadbent.broken_ruins_site_fire.text" }
+	},
+	"parent": "sweetmagic:adventure/broken_ruins_site_light", "criteria": {
+		"trigger": { "trigger": "minecraft:location", "conditions": { "player": [{
+			"condition": "minecraft:entity_properties", "entity": "this",
+			"predicate": { "location": { "structure": "sweetmagic:broken_ruins_site_fire" } }
+		}] } }
+	},
+	"rewards": { "loot": ["sweetmagic:advance/mf_bottle_3"] }
+}
