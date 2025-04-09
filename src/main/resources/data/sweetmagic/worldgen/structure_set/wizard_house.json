@@ -1,12 +1,12 @@
 {
 	"structures": [ {
-		"structure": "sweetmagic:well_old", "weight": 2
+		"structure": "sweetmagic:wizard_house", "weight": 2
 	}],
 	"placement": {
-		"salt": 1222561,
-		"frequency": 0.725,
-		"spacing": 40,
-		"separation": 20,
+		"salt": 6845163,
+		"frequency": 0.65,
+		"spacing": 64,
+		"separation": 32,
 		"type": "minecraft:random_spread",
 		"exclusion_zone": {
 			"chunk_count": 8,

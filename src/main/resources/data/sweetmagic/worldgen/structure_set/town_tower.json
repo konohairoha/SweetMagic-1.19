@@ -1,12 +1,12 @@
 {
 	"structures": [ {
-		"structure": "sweetmagic:witch_house", "weight": 2
+		"structure": "sweetmagic:town_tower", "weight": 2
 	}],
 	"placement": {
-		"salt": 22420012,
-		"frequency": 0.7,
-		"spacing": 56,
-		"separation": 28,
+		"salt": 20210329,
+		"frequency": 0.6,
+		"spacing": 64,
+		"separation": 32,
 		"type": "minecraft:random_spread",
 		"exclusion_zone": {
 			"chunk_count": 3,

@@ -10,11 +10,7 @@
 		"type": "minecraft:random_spread",
 		"exclusion_zone": {
 			"chunk_count": 4,
-			"other_set": "minecraft:villages",
-			"other_set": "sweetmagic:skyisland",
-			"other_set": "sweetmagic:ruins_site_light",
-			"other_set": "sweetmagic:ruins_site_fire",
-			"other_set": "sweetmagic:ruins_site"
+			"other_set": "minecraft:villages"
 		}
 	}
 }

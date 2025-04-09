@@ -1,0 +1,12 @@
+{
+	"structures": [ {
+		"structure": "sweetmagic:fluo_street_light", "weight": 2
+	}],
+	"placement": {
+		"salt": 756971,
+		"frequency": 0.625,
+		"spacing": 32,
+		"separation": 16,
+		"type": "minecraft:random_spread"
+	}
+}
