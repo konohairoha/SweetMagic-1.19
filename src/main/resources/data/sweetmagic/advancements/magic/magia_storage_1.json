@@ -1,0 +1,13 @@
+{
+	"display": {
+		"icon": { "item": "sweetmagic:magia_storage_1" },
+		"title": { "translate": "smadbent.magia_storage_1.title" },
+		"description": { "translate": "smadbent.magia_storage_1.text" }
+	},
+	"parent": "sweetmagic:magic/moden_shelf_y", "criteria": {
+		"trigger": { "trigger": "minecraft:inventory_changed", "conditions": {
+			"items": [ { "items": [ "sweetmagic:magia_storage_1" ] } ]
+		} }
+	},
+	"rewards": { "loot": ["sweetmagic:advance/mf_bottle_1"] }
+}

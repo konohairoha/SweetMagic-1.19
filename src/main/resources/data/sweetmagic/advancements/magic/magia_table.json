@@ -1,0 +1,13 @@
+{
+	"display": {
+		"icon": { "item": "sweetmagic:magia_table" },
+		"title": { "translate": "smadbent.magia_table.title" },
+		"description": { "translate": "smadbent.magia_table.text" }
+	},
+	"parent": "sweetmagic:magic/obmagia", "criteria": {
+		"trigger": { "trigger": "minecraft:inventory_changed", "conditions": {
+			"items": [ { "items": [ "sweetmagic:magia_table" ] } ]
+		} }
+	},
+	"rewards": { "loot": ["sweetmagic:advance/mf_bottle_3"] }
+}

@@ -1,0 +1,13 @@
+{
+	"display": {
+		"icon": { "item": "sweetmagic:figurine_hora" },
+		"title": { "translate": "smadbent.twilight_hora.title" },
+		"description": { "translate": "smadbent.twilight_hora.text" }
+	},
+	"parent": "sweetmagic:magic/bullfight", "criteria": {
+		"trigger": { "trigger": "minecraft:inventory_changed", "conditions": {
+			"items": [ { "items": [ "sweetmagic:figurine_hora" ] } ]
+		} }
+	},
+	"rewards": { "loot": ["sweetmagic:advance/deus"] }
+}

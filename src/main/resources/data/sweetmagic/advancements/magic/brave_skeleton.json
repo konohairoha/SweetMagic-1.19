@@ -1,0 +1,13 @@
+{
+	"display": {
+		"icon": { "item": "sweetmagic:figurine_brave" },
+		"title": { "translate": "smadbent.brave_skeleton.title" },
+		"description": { "translate": "smadbent.brave_skeleton.text" }
+	},
+	"parent": "sweetmagic:magic/twilight_hora", "criteria": {
+		"trigger": { "trigger": "minecraft:inventory_changed", "conditions": {
+			"items": [ { "items": [ "sweetmagic:figurine_brave" ] } ]
+		} }
+	},
+	"rewards": { "loot": ["sweetmagic:advance/deus"] }
+}

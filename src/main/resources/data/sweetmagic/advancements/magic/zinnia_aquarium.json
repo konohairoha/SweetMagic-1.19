@@ -1,0 +1,13 @@
+{
+	"display": {
+		"icon": { "item": "sweetmagic:zinnia_aquarium" },
+		"title": { "translate": "smadbent.zinnia_aquarium.title" },
+		"description": { "translate": "smadbent.zinnia_aquarium.text" }
+	},
+	"parent": "sweetmagic:magic/drizzly_mysotis_aquarium", "criteria": {
+		"trigger": { "trigger": "minecraft:inventory_changed", "conditions": {
+			"items": [ { "items": [ "sweetmagic:zinnia_aquarium" ] } ]
+		} }
+	},
+	"rewards": { "loot": ["sweetmagic:advance/magia_bottle_2"] }
+}
