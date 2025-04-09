@@ -3,7 +3,7 @@
 		{
 			"bonus_rolls": 0.0, "entries": [ {
 				"type": "minecraft:item", "functions": [
-					{ "add": false, "count": { "type": "minecraft:uniform", "max": 3.0, "min": 1.0 }, "function": "minecraft:set_count" },
+					{ "add": false, "count": { "type": "minecraft:uniform", "max": 4.0, "min": 1.0 }, "function": "minecraft:set_count" },
 					{ "count": { "type": "minecraft:uniform", "max": 2.0, "min": 0.0 }, "function": "minecraft:looting_enchant" }
 				], "name": "sweetmagic:wish_crystal" }
 			], "rolls": 1.0
@@ -43,9 +43,25 @@
 		{
 			"bonus_rolls": 0.0, "entries": [ {
 				"type": "minecraft:item", "functions": [
+					{ "add": false, "count": { "type": "minecraft:uniform", "max": 3.0, "min": 1.0 }, "function": "minecraft:set_count" },
+					{ "count": { "type": "minecraft:uniform", "max": 1.0, "min": 0.0 }, "function": "minecraft:looting_enchant" }
+				], "name": "sweetmagic:acce_bag" }
+			], "rolls": 1.0
+		},
+		{
+			"bonus_rolls": 0.0, "entries": [ {
+				"type": "minecraft:item", "functions": [
 					{ "add": false, "count": { "type": "minecraft:uniform", "max": 1.0, "min": 1.0 }, "function": "minecraft:set_count" },
 					{ "count": { "type": "minecraft:uniform", "max": 0.0, "min": 0.0 }, "function": "minecraft:looting_enchant" }
-				], "name": "sweetmagic:poison_fang" }
+				], "name": "sweetmagic:warrior_card" }
+			], "rolls": 1.0
+		},
+		{
+			"bonus_rolls": 0.0, "entries": [ {
+				"type": "minecraft:item", "functions": [
+					{ "add": false, "count": { "type": "minecraft:uniform", "max": 1.0, "min": 1.0 }, "function": "minecraft:set_count" },
+					{ "count": { "type": "minecraft:uniform", "max": 0.0, "min": 0.0 }, "function": "minecraft:looting_enchant" }
+				], "name": "sweetmagic:magic_deus_force" }
 			], "rolls": 1.0
 		},
 		{
@@ -53,8 +69,8 @@
 				"type": "minecraft:item", "functions": [
 					{ "add": false, "count": { "type": "minecraft:uniform", "max": 1, "min": 1 }, "function": "minecraft:set_count" },
 					{ "count": { "type": "minecraft:uniform", "max": 0, "min": 0 }, "function": "minecraft:looting_enchant" }
-				], "name": "sweetmagic:figurine_landroad" }
+				], "name": "sweetmagic:figurine_brave" }
 			], "rolls": 1.0
 		}
-	], "random_sequence": "sweetmagic:entities/silver_landroad"
+	], "random_sequence": "sweetmagic:entities/brave_skeleton"
 }
