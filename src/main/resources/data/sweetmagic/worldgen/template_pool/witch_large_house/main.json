@@ -1,13 +1,7 @@
 {
-	"name": "sweetmagic:witch_large_house/main",
-	"fallback": "minecraft:empty",
-	"elements": [{
-	"weight": 1,
-		"element": {
-			"location": "sweetmagic:witch_large_house/main",
-			"processors": "minecraft:empty",
-			"projection": "rigid",
-			"element_type": "minecraft:single_pool_element"
+	"name": "sweetmagic:witch_large_house/main", "fallback": "minecraft:empty", "elements": [{
+		"weight": 1, "element": {
+			"location": "sweetmagic:witch_large_house/main", "processors": "minecraft:empty", "projection": "rigid", "element_type": "minecraft:single_pool_element"
 		}
 	}]
 }

@@ -1,13 +1,7 @@
 {
-	"name": "sweetmagic:well_old/top",
-	"fallback": "minecraft:empty",
-	"elements": [{
-	"weight": 1,
-		"element": {
-			"location": "sweetmagic:well_old/well_top",
-			"processors": "minecraft:empty",
-			"projection": "rigid",
-			"element_type": "minecraft:single_pool_element"
+	"name": "sweetmagic:well_old/top", "fallback": "minecraft:empty", "elements": [{
+		"weight": 1, "element": {
+			"location": "sweetmagic:well_old/well_top", "processors": "minecraft:empty", "projection": "rigid", "element_type": "minecraft:single_pool_element"
 		}
 	}]
 }

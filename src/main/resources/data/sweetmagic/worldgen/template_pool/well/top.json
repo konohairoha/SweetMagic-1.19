@@ -1,15 +1,7 @@
 {
-	"name": "sweetmagic:well/start_pool",
-	"fallback": "minecraft:empty",
-	"elements": [
-		{
-			"weight": 150,
-			"element": {
-				"location": "sweetmagic:well/well_top",
-				"processors": "minecraft:empty",
-				"projection": "rigid",
-				"element_type": "minecraft:single_pool_element"
-			}
+	"name": "sweetmagic:well/start_pool", "fallback": "minecraft:empty", "elements": [{
+		"weight": 1, "element": {
+				"location": "sweetmagic:well/well_top", "processors": "minecraft:empty", "projection": "rigid", "element_type": "minecraft:single_pool_element"
 		}
-	]
+	}]
 }
