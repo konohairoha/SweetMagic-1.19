@@ -72,6 +72,9 @@
 		"sweetmagic:mf_miner",
 		"sweetmagic:mf_miner_advanced",
 		"sweetmagic:mf_bottler",
+		"sweetmagic:magia_accelerator",
+		"sweetmagic:mffurnace",
+		"sweetmagic:mffurnace_advance",
 		
 		"sweetmagic:table_lamp",
 		"sweetmagic:table_lantern",
@@ -103,6 +106,7 @@
 		"sweetmagic:aether_planter",
 		"sweetmagic:aether_crafttable",
 		"sweetmagic:chest_reader",
+		"sweetmagic:magia_table",
 		
 		"sweetmagic:smspawner",
 		
@@ -155,6 +159,8 @@
 		"#sweetmagic:stone_fence",
 		"#sweetmagic:couter_table",
 		"#sweetmagic:half_timber",
+		"#sweetmagic:half_timber_white",
+		"#sweetmagic:figurine",
 		
 		"#sweetmagic:freezer",
 		"#sweetmagic:frypan",
