@@ -37,8 +37,7 @@
 	"recycler_on": { "subtitle": "subtitle.sweetmagic.recycler_on", "sounds": [ "sweetmagic:recycler_on" ] },
 	"recycler_fin": { "subtitle": "subtitle.sweetmagic.recycler_fin", "sounds": [ "sweetmagic:recycler_fin" ] },
 	"recast_clear": { "subtitle": "subtitle.sweetmagic.recast_clear", "sounds": [ "sweetmagic:recast_clear" ] },
-	"butler_ambient": { "subtitle": "subtitle.sweetmagic.butler_ambient", "sounds": [ "sweetmagic:butler_ambient" ] },
-	"butler_damage": { "subtitle": "subtitle.sweetmagic.butler_damage", "sounds": [ "sweetmagic:butler_damage" ] },
 	"knife_shot": { "subtitle": "subtitle.sweetmagic.knife_shot", "sounds": [ "sweetmagic:knife_shot" ] },
-	"rifle_shot": { "subtitle": "subtitle.sweetmagic.rifle_shot", "sounds": [ "sweetmagic:rifle_shot" ] }
+	"rifle_shot": { "subtitle": "subtitle.sweetmagic.rifle_shot", "sounds": [ "sweetmagic:rifle_shot" ] },
+	"storage": { "subtitle": "subtitle.sweetmagic.storage", "sounds": [ "sweetmagic:storage" ] }
 }
