@@ -10,9 +10,9 @@ public class AetherLanternMenu extends BaseSMMenu {
 
 	public final TileAetherLanp tile;
 
-    public AetherLanternMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
-        this(windowId, pInv, (TileAetherLanp) MenuInit.getTile(pInv, data));
-    }
+	public AetherLanternMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
+		this(windowId, pInv, (TileAetherLanp) MenuInit.getTile(pInv, data));
+	}
 
 	public AetherLanternMenu(int windowId, Inventory pInv, TileAetherLanp tile) {
 		super(MenuInit.aetherLanternMenu, windowId, pInv, tile);

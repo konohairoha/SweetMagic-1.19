@@ -10,9 +10,9 @@ public class MFFisherMenu extends BaseSMMenu {
 
 	public final TileMFFisher tile;
 
-    public MFFisherMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
-        this(windowId, pInv, (TileMFFisher) MenuInit.getTile(pInv, data));
-    }
+	public MFFisherMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
+		this(windowId, pInv, (TileMFFisher) MenuInit.getTile(pInv, data));
+	}
 
 	public MFFisherMenu(int windowId, Inventory pInv, TileMFFisher tile) {
 		super(MenuInit.mfFisherMenu, windowId, pInv, tile);
@@ -22,7 +22,7 @@ public class MFFisherMenu extends BaseSMMenu {
 			for (int x = 0; x < 9; x++)
 				this.addSlot(new SMSlot(this.tile.getInput(), x + y * 9, 8 + x * 18, 55 + y * 18, s -> false));
 
-		this.setPInv(pInv, 8, 117);
+		this.setPInv(pInv, 8, 112);
 		this.setSlotSize(this.tile.getInvSize());
 	}
 }

@@ -32,12 +32,11 @@ public class FurnitureTableMenu extends BaseSMMenu {
 	public final Slot resultSlot;
 	public final TileFurnitureTable tile;
 	public List<Recipe<?>> recipeList = new ArrayList<>();
+	private Runnable slotUpdateListener = () -> {};
 
-	private Runnable slotUpdateListener = () -> { };
-
-    public FurnitureTableMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
-        this(windowId, pInv, (TileFurnitureTable) MenuInit.getTile(pInv, data));
-    }
+	public FurnitureTableMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
+		this(windowId, pInv, (TileFurnitureTable) MenuInit.getTile(pInv, data));
+	}
 
 	public FurnitureTableMenu(int windowId, Inventory pInv, TileFurnitureTable tile) {
 		super(MenuInit.furnitureTableMenu, windowId, pInv, tile);
@@ -111,16 +110,14 @@ public class FurnitureTableMenu extends BaseSMMenu {
 		this.recipeList = new ArrayList<>();
 		if (stack.isEmpty()) { return; }
 
-	    Container con = new SimpleContainer(1) {
-			public ItemStack getItem(int i) {
-				return stack;
-			}
-	    };
+		Container con = new SimpleContainer(1) {
+			public ItemStack getItem(int i) { return stack; }
+		};
 
-	    // レシピリストを取得
+		// レシピリストを取得
 		Level world = this.tile.getLevel();
 		this.recipeList.addAll(world.getRecipeManager().getRecipesFor(RecipeType.STONECUTTING, con, world));
-		this.recipeList.addAll(world.getRecipeManager().getRecipesFor(RecipeTypeInit.FURNITURE.get(), con, world));
+		this.recipeList.addAll(world.getRecipeManager().getRecipesFor(RecipeTypeInit.FURNITURE, con, world));
 
 		// レシピソート
 		this.recipeList = this.recipeList.stream().sorted( (s1, s2) -> sortRecipe(s1, s2) ).toList();

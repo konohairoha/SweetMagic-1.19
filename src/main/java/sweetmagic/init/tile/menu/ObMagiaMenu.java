@@ -17,9 +17,9 @@ public class ObMagiaMenu extends BaseSMMenu {
 	public final Slot baseSlot;
 	public final Slot outSlot;
 
-    public ObMagiaMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
-        this(windowId, pInv, (TileObMagia) MenuInit.getTile(pInv, data));
-    }
+	public ObMagiaMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
+		this(windowId, pInv, (TileObMagia) MenuInit.getTile(pInv, data));
+	}
 
 	public ObMagiaMenu(int windowId, Inventory pInv, TileObMagia tile) {
 		super(MenuInit.obMagiaMenu, windowId, pInv, tile);
@@ -40,7 +40,7 @@ public class ObMagiaMenu extends BaseSMMenu {
 		this.addSlot(new SMSlot(input, 3, 71 + addX, 76));
 		this.addSlot(new SMSlot(input, 4, 43 + addX, 86));
 		this.addSlot(new SMSlot(input, 5, 16 + addX, 76));
-		this.addSlot(new SMSlot(input, 6,  6 + addX, 49));
+		this.addSlot(new SMSlot(input, 6, 6 + addX, 49));
 		this.addSlot(new SMSlot(input, 7, 16 + addX, 21));
 
 		for (int y = 0; y < 9; y++)

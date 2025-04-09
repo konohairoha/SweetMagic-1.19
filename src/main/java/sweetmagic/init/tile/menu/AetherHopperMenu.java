@@ -14,9 +14,9 @@ public class AetherHopperMenu extends BaseSMMenu {
 
 	public final Slot wandSlot;
 
-    public AetherHopperMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
-        this(windowId, pInv, (TileAetherHopper) MenuInit.getTile(pInv, data));
-    }
+	public AetherHopperMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
+		this(windowId, pInv, (TileAetherHopper) MenuInit.getTile(pInv, data));
+	}
 
 	public AetherHopperMenu(int windowId, Inventory pInv, TileAetherHopper tile) {
 		super(MenuInit.aetherHopperMenu, windowId, pInv, tile);

@@ -11,15 +11,15 @@ import sweetmagic.api.iitem.IPorch;
 import sweetmagic.api.iitem.IWand;
 import sweetmagic.api.iitem.info.SMToolInfo;
 import sweetmagic.init.MenuInit;
-import sweetmagic.init.tile.inventory.SMRobeInventory;
+import sweetmagic.init.tile.inventory.SMInventory.SMRobeInventory;
 import sweetmagic.init.tile.slot.SMSlot;
 import sweetmagic.util.ItemHelper;
 
 public class SMRoveMenu extends BaseItemMenu {
 
-    public SMRoveMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
-        this(windowId, pInv, pInv.player.getItemBySlot(EquipmentSlot.CHEST));
-    }
+	public SMRoveMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
+		this(windowId, pInv, pInv.player.getItemBySlot(EquipmentSlot.CHEST));
+	}
 
 	public SMRoveMenu(int windowId, Inventory pInv, ItemStack stack) {
 		super(MenuInit.robeMenu, windowId, pInv, new SMRobeInventory(new SMToolInfo(stack)));

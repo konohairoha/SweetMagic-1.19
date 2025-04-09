@@ -13,9 +13,9 @@ public class AquariumPotMenu extends BaseSMMenu {
 
 	public final TileAquariumPot tile;
 
-    public AquariumPotMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
-        this(windowId, pInv, (TileAquariumPot) MenuInit.getTile(pInv, data));
-    }
+	public AquariumPotMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
+		this(windowId, pInv, (TileAquariumPot) MenuInit.getTile(pInv, data));
+	}
 
 	public AquariumPotMenu(int windowId, Inventory pInv, TileAquariumPot tile) {
 		super(MenuInit.aquariumPotMenu, windowId, pInv, tile);

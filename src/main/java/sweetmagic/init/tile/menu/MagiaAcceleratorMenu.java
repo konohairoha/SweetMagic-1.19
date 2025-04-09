@@ -10,9 +10,9 @@ public class MagiaAcceleratorMenu extends BaseSMMenu {
 
 	public final TileMagiaAccelerator tile;
 
-    public MagiaAcceleratorMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
-        this(windowId, pInv, (TileMagiaAccelerator) MenuInit.getTile(pInv, data));
-    }
+	public MagiaAcceleratorMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
+		this(windowId, pInv, (TileMagiaAccelerator) MenuInit.getTile(pInv, data));
+	}
 
 	public MagiaAcceleratorMenu(int windowId, Inventory pInv, TileMagiaAccelerator tile) {
 		super(MenuInit.magiaaccelerator_menu, windowId, pInv, tile);

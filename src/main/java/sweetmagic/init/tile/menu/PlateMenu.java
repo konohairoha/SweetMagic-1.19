@@ -12,9 +12,9 @@ public class PlateMenu extends BaseSMMenu {
 	public final TilePlate tile;
 	public final int data;
 
-    public PlateMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
-        this(windowId, pInv, (TilePlate) MenuInit.getTile(pInv, data));
-    }
+	public PlateMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
+		this(windowId, pInv, (TilePlate) MenuInit.getTile(pInv, data));
+	}
 
 	public PlateMenu(int windowId, Inventory pInv, TilePlate tile) {
 		super(MenuInit.plateMenu, windowId, pInv, tile);
@@ -33,7 +33,7 @@ public class PlateMenu extends BaseSMMenu {
 			for (int y = 0; y < 2; y++)
 				this.addSlot(new SMSlot(chest, y, 79, 9 + y * 18));
 			break;
-		default :
+		default:
 			this.addSlot(new SMSlot(chest, 0, 79, 14));
 			break;
 		}

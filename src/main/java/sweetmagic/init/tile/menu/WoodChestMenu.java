@@ -3,7 +3,6 @@ package sweetmagic.init.tile.menu;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.items.IItemHandler;
@@ -17,9 +16,9 @@ public class WoodChestMenu extends BaseSMMenu {
 	public final TileWoodChest tile;
 	public final int data;
 
-    public WoodChestMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
-        this(windowId, pInv, (TileWoodChest) MenuInit.getTile(pInv, data));
-    }
+	public WoodChestMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
+		this(windowId, pInv, (TileWoodChest) MenuInit.getTile(pInv, data));
+	}
 
 	public WoodChestMenu(int windowId, Inventory pInv, TileWoodChest tile) {
 		super(MenuInit.woodChestMenu, windowId, pInv, tile);
@@ -46,6 +45,7 @@ public class WoodChestMenu extends BaseSMMenu {
 		switch (this.data) {
 		case 0:
 		case 5:
+		case 7:
 			sound = SoundEvents.PISTON_CONTRACT;
 			break;
 		case 1:
@@ -64,8 +64,7 @@ public class WoodChestMenu extends BaseSMMenu {
 		}
 
 		if (sound != null) {
-			RandomSource rand = player.level.random;
-			this.tile.playSound(this.tile.getBlockPos(), sound, 0.5F, rand.nextFloat() * 0.1F + pitch);
+			this.tile.playSound(this.tile.getBlockPos(), sound, 0.5F, this.rand.nextFloat() * 0.1F + pitch);
 		}
 	}
 

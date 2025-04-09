@@ -15,9 +15,9 @@ public class FurnitureCraftMenu extends BaseSMMenu {
 	public final TileFurnitureTable tile;
 	public final Slot resultSlot;
 
-    public FurnitureCraftMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
-        this(windowId, pInv, (TileFurnitureTable) MenuInit.getTile(pInv, data));
-    }
+	public FurnitureCraftMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
+		this(windowId, pInv, (TileFurnitureTable) MenuInit.getTile(pInv, data));
+	}
 
 	public FurnitureCraftMenu(int windowId, Inventory pInv, TileFurnitureTable tile) {
 		super(MenuInit.furnitureCraftMenu, windowId, pInv, tile);

@@ -36,9 +36,9 @@ public class SMBookMenu extends RecipeBookMenu<CraftingContainer> {
 	private final ItemStack stack;
 	private final Player player;
 
-    public SMBookMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
-        this(windowId, pInv, ContainerLevelAccess.create(pInv.player.getCommandSenderWorld(), pInv.player.blockPosition()));
-    }
+	public SMBookMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
+		this(windowId, pInv, ContainerLevelAccess.create(pInv.player.getCommandSenderWorld(), pInv.player.blockPosition()));
+	}
 
 	public SMBookMenu(int windowId, Inventory level) {
 		this(windowId, level, ContainerLevelAccess.NULL);
@@ -63,17 +63,17 @@ public class SMBookMenu extends RecipeBookMenu<CraftingContainer> {
 			this.addSlot(new Slot(inv, x, 8 + x * 18, 198));
 	}
 
-	protected static void slotChangedCraftingGrid(AbstractContainerMenu menu, Level level, Player player, CraftingContainer contier, ResultContainer result) {
-		if (level.isClientSide) { return; }
+	protected static void slotChangedCraftingGrid(AbstractContainerMenu menu, Level world, Player player, CraftingContainer con, ResultContainer result) {
+		if (world.isClientSide) { return; }
 
 		ServerPlayer sPlayer = (ServerPlayer) player;
 		ItemStack stack = ItemStack.EMPTY;
-		Optional<CraftingRecipe> optional = level.getServer().getRecipeManager().getRecipeFor(RecipeType.CRAFTING, contier, level);
+		Optional<CraftingRecipe> opti = world.getServer().getRecipeManager().getRecipeFor(RecipeType.CRAFTING, con, world);
 
-		if (optional.isPresent()) {
-			CraftingRecipe recipe = optional.get();
-			if (result.setRecipeUsed(level, sPlayer, recipe)) {
-				stack = recipe.assemble(contier);
+		if (opti.isPresent()) {
+			CraftingRecipe recipe = opti.get();
+			if (result.setRecipeUsed(world, sPlayer, recipe)) {
+				stack = recipe.assemble(con);
 			}
 		}
 
@@ -109,7 +109,6 @@ public class SMBookMenu extends RecipeBookMenu<CraftingContainer> {
 	}
 
 	public ItemStack quickMoveStack(Player player, int index) {
-
 		ItemStack stack = ItemStack.EMPTY;
 		Slot slot = this.slots.get(index);
 		if (slot == null || !slot.hasItem()) { return stack; }

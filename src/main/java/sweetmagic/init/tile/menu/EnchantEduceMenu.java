@@ -18,9 +18,9 @@ public class EnchantEduceMenu extends BaseSMMenu {
 	public final Slot pageSlot;
 	public final Slot magicBookSlot;
 
-    public EnchantEduceMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
-        this(windowId, pInv, (TileEnchantEduce) MenuInit.getTile(pInv, data));
-    }
+	public EnchantEduceMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
+		this(windowId, pInv, (TileEnchantEduce) MenuInit.getTile(pInv, data));
+	}
 
 	public EnchantEduceMenu(int windowId, Inventory pInv, TileEnchantEduce tile) {
 		super(MenuInit.enchantEduceMenu, windowId, pInv, tile);
@@ -36,9 +36,9 @@ public class EnchantEduceMenu extends BaseSMMenu {
 		this.setPInv(pInv, 12 + addX, 111, -2);
 		this.setSlotSize(4);
 
-        // Armor slots
-        for (int y = 0; y < 4; y++)
-            this.addSlot(new SlotArmor(pInv.player, SMUtil.getEquipmentSlot(y), pInv, 39 - y, -19 + addX, 114 + y * 18));
+		// Armor slots
+		for (int y = 0; y < 4; y++)
+			this.addSlot(new SlotArmor(pInv.player, SMUtil.getEquipmentSlot(y), pInv, 39 - y, -19 + addX, 114 + y * 18));
 	}
 
 	@Override

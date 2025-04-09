@@ -2,7 +2,6 @@ package sweetmagic.init.tile.menu;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import sweetmagic.init.MenuInit;
@@ -14,9 +13,9 @@ public class MagiaDrawerMenu extends BaseSMMenu {
 
 	public final TileMagiaDrawer tile;
 
-    public MagiaDrawerMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
-        this(windowId, pInv, (TileMagiaDrawer) MenuInit.getTile(pInv, data));
-    }
+	public MagiaDrawerMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
+		this(windowId, pInv, (TileMagiaDrawer) MenuInit.getTile(pInv, data));
+	}
 
 	public MagiaDrawerMenu(int windowId, Inventory pInv, TileMagiaDrawer tile) {
 		super(MenuInit.magiaDrawerMenu, windowId, pInv, tile);
@@ -57,7 +56,6 @@ public class MagiaDrawerMenu extends BaseSMMenu {
 
 	public void removed(Player player) {
 		super.removed(player);
-		RandomSource rand = player.level.random;
-		this.tile.playSound(this.tile.getBlockPos(), SoundEvents.PISTON_CONTRACT, 0.5F, rand.nextFloat() * 0.1F + 0.9F);
+		this.tile.playSound(this.tile.getBlockPos(), SoundEvents.PISTON_CONTRACT, 0.5F, this.rand.nextFloat() * 0.1F + 0.9F);
 	}
 }

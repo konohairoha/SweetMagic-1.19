@@ -10,9 +10,9 @@ public class AetherRecyclerMenu extends BaseSMMenu {
 
 	public final TileAetherRecycler tile;
 
-    public AetherRecyclerMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
-        this(windowId, pInv, (TileAetherRecycler) MenuInit.getTile(pInv, data));
-    }
+	public AetherRecyclerMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
+		this(windowId, pInv, (TileAetherRecycler) MenuInit.getTile(pInv, data));
+	}
 
 	public AetherRecyclerMenu(int windowId, Inventory pInv, TileAetherRecycler tile) {
 		super(MenuInit.aetherRecyclerMenu, windowId, pInv, tile);
@@ -20,8 +20,8 @@ public class AetherRecyclerMenu extends BaseSMMenu {
 
 		this.addSlot(new SMSlot(this.tile.getInput(), 0, 143, 35));
 
-		for (int x = 0; x < 6; x++)
-			for (int y = 0; y < 4; y++)
+		for (int y = 0; y < 4; y++)
+			for (int x = 0; x < 6; x++)
 				this.addSlot(new SMSlot(this.tile.getHand(), x + y * 6, 25 + x * 18, 10 + y * 18));
 
 		for (int x = 0; x < 9; x++)

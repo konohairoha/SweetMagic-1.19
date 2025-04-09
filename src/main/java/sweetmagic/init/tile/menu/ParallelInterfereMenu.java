@@ -17,9 +17,9 @@ public class ParallelInterfereMenu extends BaseSMMenu {
 
 	public final TileParallelInterfere tile;
 
-    public ParallelInterfereMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
-        this(windowId, pInv, (TileParallelInterfere) MenuInit.getTile(pInv, data));
-    }
+	public ParallelInterfereMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
+		this(windowId, pInv, (TileParallelInterfere) MenuInit.getTile(pInv, data));
+	}
 
 	public ParallelInterfereMenu(int windowId, Inventory pInv, TileParallelInterfere tile) {
 		super(MenuInit.parallelInterfereMenu, windowId, pInv, tile);
@@ -40,7 +40,7 @@ public class ParallelInterfereMenu extends BaseSMMenu {
 		this.setSlotSize(this.tile.getInvSize());
 	}
 
-    public void updateSlotPositions(int offsetY) {
+	public void updateSlotPositions(int offsetY) {
 
 		int maxY = tile.getInvSize() / 9;
 
@@ -53,21 +53,21 @@ public class ParallelInterfereMenu extends BaseSMMenu {
 				this.setSlotPosY(slot, pY);
 			}
 		}
-    }
+	}
 
-    public void setSlotPos(Slot slot, String fieldName, int newValue) {
-        try {
-            Field field = ObfuscationReflectionHelper.findField(Slot.class, fieldName);
-            field.setAccessible(true);
-            field.set(slot, newValue);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-    }
+	public void setSlotPos(Slot slot, String fieldName, int newValue) {
+		try {
+			Field field = ObfuscationReflectionHelper.findField(Slot.class, fieldName);
+			field.setAccessible(true);
+			field.set(slot, newValue);
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		}
+	}
 
-    public void setSlotPosY(Slot slot, int newValue) {
-        setSlotPos(slot, "f_40221_", newValue);
-    }
+	public void setSlotPosY(Slot slot, int newValue) {
+		setSlotPos(slot, "f_40221_", newValue);
+	}
 
 	@Override
 	public boolean clickMenuButton(Player player, int id) {

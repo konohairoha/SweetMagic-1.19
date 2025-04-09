@@ -14,9 +14,9 @@ public class AetherRepairMenu extends BaseSMMenu {
 
 	public final TileAetherRepair tile;
 
-    public AetherRepairMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
-        this(windowId, pInv, (TileAetherRepair) MenuInit.getTile(pInv, data));
-    }
+	public AetherRepairMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
+		this(windowId, pInv, (TileAetherRepair) MenuInit.getTile(pInv, data));
+	}
 
 	public AetherRepairMenu(int windowId, Inventory pInv, TileAetherRepair tile) {
 		super(MenuInit.aetherRepairMenu, windowId, pInv, tile);
@@ -30,9 +30,9 @@ public class AetherRepairMenu extends BaseSMMenu {
 
 		this.setPInv(pInv, 32, 96);
 
-        // Armor slots
-        for (int y = 0; y < 4; y++)
-            this.addSlot(new SlotArmor(pInv.player, SMUtil.getEquipmentSlot(y), pInv, 39 - y, -19 + addX, 96 + y * 18));
+		// Armor slots
+		for (int y = 0; y < 4; y++)
+			this.addSlot(new SlotArmor(pInv.player, SMUtil.getEquipmentSlot(y), pInv, 39 - y, -19 + addX, 96 + y * 18));
 
 		this.setSlotSize(4);
 	}

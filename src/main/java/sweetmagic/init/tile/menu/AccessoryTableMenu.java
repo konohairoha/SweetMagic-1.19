@@ -14,9 +14,9 @@ public class AccessoryTableMenu extends BaseSMMenu {
 	public final TileAccessoryTable tile;
 	public final Slot starSlot;
 
-    public AccessoryTableMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
-        this(windowId, pInv, (TileAccessoryTable) MenuInit.getTile(pInv, data));
-    }
+	public AccessoryTableMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
+		this(windowId, pInv, (TileAccessoryTable) MenuInit.getTile(pInv, data));
+	}
 
 	public AccessoryTableMenu(int windowId, Inventory pInv, TileAccessoryTable tile) {
 		super(MenuInit.accessoryProcessingMenu, windowId, pInv, tile);

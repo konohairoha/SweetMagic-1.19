@@ -4,8 +4,8 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraftforge.items.IItemHandler;
 import sweetmagic.init.MenuInit;
-import sweetmagic.init.tile.slot.SlotInput;
 import sweetmagic.init.tile.slot.SMSlot;
+import sweetmagic.init.tile.slot.SlotInput;
 import sweetmagic.init.tile.sm.TileMFChanger;
 import sweetmagic.init.tile.sm.TileSMMagic;
 
@@ -13,9 +13,9 @@ public class MFChangerMenu extends BaseSMMenu {
 
 	public final TileSMMagic tile;
 
-    public MFChangerMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
-        this(windowId, pInv, (TileMFChanger) MenuInit.getTile(pInv, data));
-    }
+	public MFChangerMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
+		this(windowId, pInv, (TileMFChanger) MenuInit.getTile(pInv, data));
+	}
 
 	public MFChangerMenu(int windowId, Inventory pInv, TileMFChanger tile) {
 		super(MenuInit.changerMenu, windowId, pInv, tile);

@@ -13,9 +13,9 @@ public class AetherReverseMenu extends BaseSMMenu {
 	public final TileAetherReverse tile;
 	public Slot[] craftSlot = new Slot[9];
 
-    public AetherReverseMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
-        this(windowId, pInv, (TileAetherReverse) MenuInit.getTile(pInv, data));
-    }
+	public AetherReverseMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
+		this(windowId, pInv, (TileAetherReverse) MenuInit.getTile(pInv, data));
+	}
 
 	public AetherReverseMenu(int windowId, Inventory pInv, TileAetherReverse tile) {
 		super(MenuInit.aetherReverseMenu, windowId, pInv, tile);

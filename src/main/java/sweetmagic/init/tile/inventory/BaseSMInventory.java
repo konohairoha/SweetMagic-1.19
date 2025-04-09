@@ -24,7 +24,7 @@ public abstract class BaseSMInventory implements IItemHandlerModifiable {
 		this.setStack(stack);
 	}
 
-	public ItemStackHandler getInv () {
+	public ItemStackHandler getInv() {
 		return this.inv;
 	}
 
@@ -32,15 +32,15 @@ public abstract class BaseSMInventory implements IItemHandlerModifiable {
 		this.inv = inv;
 	}
 
-	public ItemStack getStack () {
+	public ItemStack getStack() {
 		return this.stack;
 	}
 
-	public void setStack (ItemStack stack) {
+	public void setStack(ItemStack stack) {
 		this.stack = stack;
 	}
 
-	public List<ItemStack> getStackList () {
+	public List<ItemStack> getStackList() {
 
 		List<ItemStack> stackList = new ArrayList<>();
 
@@ -54,7 +54,7 @@ public abstract class BaseSMInventory implements IItemHandlerModifiable {
 		return stackList;
 	}
 
-	public List<ItemStack> getStackAllList () {
+	public List<ItemStack> getStackAllList() {
 
 		List<ItemStack> stackList = new ArrayList<>();
 
@@ -117,12 +117,12 @@ public abstract class BaseSMInventory implements IItemHandlerModifiable {
 		this.writeToNBT(this.getTag());
 	}
 
-	public CompoundTag getTag () {
+	public CompoundTag getTag() {
 		return this.getStack().getOrCreateTag();
 	}
 
-	public void readFromNBT(CompoundTag nbt) {
-		this.getInv().deserializeNBT(nbt.getCompound("Items"));
+	public void readFromNBT(CompoundTag tags) {
+		this.getInv().deserializeNBT(tags.getCompound("Items"));
 	}
 
 	public void writeToNBT(CompoundTag tags) {

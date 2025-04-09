@@ -9,9 +9,9 @@ import sweetmagic.init.MenuInit;
 
 public class CleroMenu extends BaseItemMenu {
 
-    public CleroMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
-        this(windowId, pInv, pInv.player.getMainHandItem());
-    }
+	public CleroMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
+		this(windowId, pInv, pInv.player.getMainHandItem());
+	}
 
 	public CleroMenu(int windowId, Inventory pInv, ItemStack stack) {
 		super(MenuInit.cleroMenu, windowId, pInv);

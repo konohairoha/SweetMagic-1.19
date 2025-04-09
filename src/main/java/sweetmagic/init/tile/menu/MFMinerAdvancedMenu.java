@@ -15,9 +15,9 @@ public class MFMinerAdvancedMenu extends BaseSMMenu {
 	public final TileMFMinerAdvanced tile;
 	public final List<Slot> stoneSlotList = new ArrayList<>();;
 
-    public MFMinerAdvancedMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
-        this(windowId, pInv, (TileMFMinerAdvanced) MenuInit.getTile(pInv, data));
-    }
+	public MFMinerAdvancedMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
+		this(windowId, pInv, (TileMFMinerAdvanced) MenuInit.getTile(pInv, data));
+	}
 
 	public MFMinerAdvancedMenu(int windowId, Inventory pInv, TileMFMinerAdvanced tile) {
 		super(MenuInit.mfMinerMenu, windowId, pInv, tile);
@@ -35,7 +35,7 @@ public class MFMinerAdvancedMenu extends BaseSMMenu {
 			for (int x = 0; x < 9; x++)
 				this.addSlot(new SMSlot(this.tile.getOut(), x + y * 9, 8 + x * 18, 89 + y * 18, s -> false));
 
-		this.setPInv(pInv, 8, 151);
+		this.setPInv(pInv, 8, 146);
 		this.setSlotSize(this.tile.getInvSize() + 10);
 	}
 }

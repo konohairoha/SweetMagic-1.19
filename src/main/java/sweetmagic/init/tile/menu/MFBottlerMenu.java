@@ -11,9 +11,9 @@ public class MFBottlerMenu extends BaseSMMenu {
 
 	public final TileMFBottler tile;
 
-    public MFBottlerMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
-        this(windowId, pInv, (TileMFBottler) MenuInit.getTile(pInv, data));
-    }
+	public MFBottlerMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
+		this(windowId, pInv, (TileMFBottler) MenuInit.getTile(pInv, data));
+	}
 
 	public MFBottlerMenu(int windowId, Inventory pInv, TileMFBottler tile) {
 		super(MenuInit.mfBottlerMenu, windowId, pInv, tile);

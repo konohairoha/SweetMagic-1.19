@@ -11,16 +11,16 @@ import sweetmagic.api.iitem.IPorch;
 import sweetmagic.api.iitem.IRobe;
 import sweetmagic.api.iitem.info.BookInfo;
 import sweetmagic.init.MenuInit;
-import sweetmagic.init.tile.slot.SlotInput;
 import sweetmagic.init.tile.slot.SMSlot;
+import sweetmagic.init.tile.slot.SlotInput;
 
 public class MagicBookMenu extends BaseItemMenu {
 
 	private final ItemStack stack;
 
-    public MagicBookMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
-        this(windowId, pInv, pInv.player.getMainHandItem());
-    }
+	public MagicBookMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
+		this(windowId, pInv, pInv.player.getMainHandItem());
+	}
 
 	public MagicBookMenu(int windowId, Inventory pInv, ItemStack stack) {
 		super(MenuInit.magicBookMenu, windowId, pInv, new BookInfo(stack).getInv());

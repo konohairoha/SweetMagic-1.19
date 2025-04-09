@@ -14,9 +14,9 @@ import sweetmagic.util.ItemHelper;
 
 public class TrunkCaseMenu extends BaseItemMenu {
 
-    public TrunkCaseMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
-        this(windowId, pInv, pInv.player.getMainHandItem());
-    }
+	public TrunkCaseMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
+		this(windowId, pInv, pInv.player.getMainHandItem());
+	}
 
 	public TrunkCaseMenu(int windowId, Inventory pInv, ItemStack stack) {
 		super(MenuInit.trankCaseMenu, windowId, pInv, new SMTrunkCaseInventory(stack));
@@ -62,6 +62,7 @@ public class TrunkCaseMenu extends BaseItemMenu {
 			break;
 		}
 
+		this.inventory.writeBack();
 		RandomSource rand = player.level.random;
 		player.playSound(SoundEvents.UI_BUTTON_CLICK, 0.15F, rand.nextFloat() * 0.1F + 0.9F);
 		return true;

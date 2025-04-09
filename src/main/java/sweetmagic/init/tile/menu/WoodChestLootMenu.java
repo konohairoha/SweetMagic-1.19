@@ -10,9 +10,9 @@ public class WoodChestLootMenu extends BaseSMMenu {
 
 	public final TileWoodChest tile;
 
-    public WoodChestLootMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
-        this(windowId, pInv, (TileWoodChest) MenuInit.getTile(pInv, data));
-    }
+	public WoodChestLootMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
+		this(windowId, pInv, (TileWoodChest) MenuInit.getTile(pInv, data));
+	}
 
 	public WoodChestLootMenu(int windowId, Inventory pInv, TileWoodChest tile) {
 		super(MenuInit.woodChestLootMenu, windowId, pInv, tile);

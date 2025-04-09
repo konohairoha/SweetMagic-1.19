@@ -11,9 +11,9 @@ public class MFFurnaceMenu extends BaseSMMenu {
 
 	public final TileMFFurnace tile;
 
-    public MFFurnaceMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
-        this(windowId, pInv, (TileMFFurnace) MenuInit.getTile(pInv, data));
-    }
+	public MFFurnaceMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
+		this(windowId, pInv, (TileMFFurnace) MenuInit.getTile(pInv, data));
+	}
 
 	public MFFurnaceMenu(int windowId, Inventory pInv, TileMFFurnace tile) {
 		super(MenuInit.mfFurnace_menu, windowId, pInv, tile);

@@ -10,9 +10,9 @@ public class SpawnCrystalMenu extends BaseSMMenu {
 
 	public final TileSpawnCrystal tile;
 
-    public SpawnCrystalMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
-        this(windowId, pInv, (TileSpawnCrystal) MenuInit.getTile(pInv, data));
-    }
+	public SpawnCrystalMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
+		this(windowId, pInv, (TileSpawnCrystal) MenuInit.getTile(pInv, data));
+	}
 
 	public SpawnCrystalMenu(int windowId, Inventory pInv, TileSpawnCrystal tile) {
 		super(MenuInit.spawnCrystalMenu, windowId, pInv, tile);

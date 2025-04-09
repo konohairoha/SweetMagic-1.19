@@ -9,9 +9,9 @@ import sweetmagic.init.MenuInit;
 
 public class CompasMenu extends BaseItemMenu {
 
-    public CompasMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
-        this(windowId, pInv, pInv.player.getMainHandItem());
-    }
+	public CompasMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
+		this(windowId, pInv, pInv.player.getMainHandItem());
+	}
 
 	public CompasMenu(int windowId, Inventory pInv, ItemStack stack) {
 		super(MenuInit.compasMenu, windowId, pInv);

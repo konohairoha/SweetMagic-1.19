@@ -10,9 +10,9 @@ public class SMSpawnerMenu extends BaseSMMenu {
 
 	public final TileSMSpawner tile;
 
-    public SMSpawnerMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
-        this(windowId, pInv, (TileSMSpawner) MenuInit.getTile(pInv, data));
-    }
+	public SMSpawnerMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
+		this(windowId, pInv, (TileSMSpawner) MenuInit.getTile(pInv, data));
+	}
 
 	public SMSpawnerMenu(int windowId, Inventory pInv, TileSMSpawner tile) {
 		super(MenuInit.smSpawmerMenu, windowId, pInv, tile);

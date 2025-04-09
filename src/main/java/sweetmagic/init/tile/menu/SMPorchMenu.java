@@ -14,9 +14,9 @@ import sweetmagic.init.tile.slot.SlotInput;
 
 public class SMPorchMenu extends BaseItemMenu {
 
-    public SMPorchMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
-        this(windowId, pInv, pInv.player.getItemBySlot(EquipmentSlot.LEGS));
-    }
+	public SMPorchMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
+		this(windowId, pInv, pInv.player.getItemBySlot(EquipmentSlot.LEGS));
+	}
 
 	public SMPorchMenu(int windowId, Inventory pInv, ItemStack stack) {
 		super(MenuInit.porchMenu, windowId, pInv, new PorchInfo(stack).getInv());

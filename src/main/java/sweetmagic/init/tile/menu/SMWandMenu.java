@@ -16,9 +16,9 @@ import sweetmagic.init.tile.slot.WandSlot;
 
 public class SMWandMenu extends BaseItemMenu {
 
-    public SMWandMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
-        this(windowId, pInv, pInv.player.getMainHandItem());
-    }
+	public SMWandMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
+		this(windowId, pInv, pInv.player.getMainHandItem());
+	}
 
 	public SMWandMenu(int windowId, Inventory pInv, ItemStack stack) {
 		super(MenuInit.wandMenu, windowId, pInv, new WandInfo(stack).getInv());

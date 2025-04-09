@@ -4,9 +4,9 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraftforge.items.IItemHandler;
 import sweetmagic.init.MenuInit;
+import sweetmagic.init.tile.slot.SMSlot;
 import sweetmagic.init.tile.slot.SlotArmor;
 import sweetmagic.init.tile.slot.SlotInput;
-import sweetmagic.init.tile.slot.SMSlot;
 import sweetmagic.init.tile.sm.TileMFTable;
 import sweetmagic.util.SMUtil;
 
@@ -14,9 +14,9 @@ public class MFTableMenu extends BaseSMMenu {
 
 	public final TileMFTable tile;
 
-    public MFTableMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
-        this(windowId, pInv, (TileMFTable) MenuInit.getTile(pInv, data));
-    }
+	public MFTableMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
+		this(windowId, pInv, (TileMFTable) MenuInit.getTile(pInv, data));
+	}
 
 	public MFTableMenu(int windowId, Inventory pInv, TileMFTable tile) {
 		super(MenuInit.tableMenu, windowId, pInv, tile);
@@ -28,9 +28,9 @@ public class MFTableMenu extends BaseSMMenu {
 		this.setPInv(pInv, 38, 138);
 		this.setSlotSize(this.tile.getInvSize() + 1);
 
-        // Armor slots
-        for (int y = 0; y < 4; y++)
-            this.addSlot(new SlotArmor(pInv.player, SMUtil.getEquipmentSlot(y), pInv, 39 - y, 10, 138 + y * 18));
+		// Armor slots
+		for (int y = 0; y < 4; y++)
+			this.addSlot(new SlotArmor(pInv.player, SMUtil.getEquipmentSlot(y), pInv, 39 - y, 10, 138 + y * 18));
 	}
 
 	public void setSlot () {

@@ -1,5 +1,7 @@
 package sweetmagic.init.tile.menu;
 
+import java.util.Random;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -11,6 +13,7 @@ import sweetmagic.init.tile.sm.TileAbstractSM;
 
 public abstract class BaseSMMenu extends AbstractContainerMenu {
 
+	protected final Random rand = new Random();
 	public final TileAbstractSM tile;
 	public int slotSize = 0;
 	public Player player;
@@ -57,7 +60,6 @@ public abstract class BaseSMMenu extends AbstractContainerMenu {
 			else if (!this.moveItemStackTo(stack1, 0, slotCount, false)) {
 				return ItemStack.EMPTY;
 			}
-
 			if (stack1.isEmpty()) {
 				slot.set(ItemStack.EMPTY);
 			}
@@ -65,10 +67,13 @@ public abstract class BaseSMMenu extends AbstractContainerMenu {
 			else {
 				slot.setChanged();
 			}
-		}
 
+			this.quickMoveStack(player, slot, stack, stack1);
+		}
 		return stack;
 	}
+
+	public void quickMoveStack(Player player, Slot slot, ItemStack oldStack, ItemStack newStack) { }
 
 	// ブロックエンティティの取得
 	public TileAbstractSM getTile () {

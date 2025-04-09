@@ -22,8 +22,8 @@ public class SMTrunkCaseInventory extends BaseSMInventory {
 	}
 
 	@Override
-	public void readFromNBT(CompoundTag nbt) {
-		this.getInv().deserializeNBT(nbt);
+	public void readFromNBT(CompoundTag tags) {
+		this.getInv().deserializeNBT(tags);
 	}
 
 	@Override

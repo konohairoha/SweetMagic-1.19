@@ -12,9 +12,9 @@ public class ModenRackMenu extends BaseSMMenu {
 	public final TileModenRack tile;
 	public final int data;
 
-    public ModenRackMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
-        this(windowId, pInv, (TileModenRack) MenuInit.getTile(pInv, data));
-    }
+	public ModenRackMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
+		this(windowId, pInv, (TileModenRack) MenuInit.getTile(pInv, data));
+	}
 
 	public ModenRackMenu(int windowId, Inventory pInv, TileModenRack tile) {
 		super(MenuInit.modenRackMenu, windowId, pInv, tile);
