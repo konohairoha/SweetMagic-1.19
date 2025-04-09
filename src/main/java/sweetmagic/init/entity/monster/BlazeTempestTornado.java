@@ -38,7 +38,7 @@ public class BlazeTempestTornado extends AbstractSMMob {
 	private float allowHeight = 0.5F;
 	private int nextTick;
 	private int tickTime = 0;
-	private int windTime = 0;
+	private int windTime = 50;
 
 	private static final EntityDataAccessor<Integer> CANDLE = ISMMob.setData(BlazeTempestTornado.class, INT);
 
@@ -48,7 +48,7 @@ public class BlazeTempestTornado extends AbstractSMMob {
 
 	public BlazeTempestTornado(EntityType<BlazeTempestTornado> enType, Level world) {
 		super(enType, world);
-		this.xpReward = 150;
+		this.xpReward = 200;
 	}
 
 	protected void defineSynchedData() {
@@ -80,10 +80,9 @@ public class BlazeTempestTornado extends AbstractSMMob {
 
 	// ダメージ処理
 	public boolean hurt(DamageSource src, float amount) {
-
 		Entity attacker = src.getEntity();
 		Entity attackEntity = src.getDirectEntity();
-		if ( attacker != null && attacker instanceof ISMMob) { return false; }
+		if (attacker != null && attacker instanceof ISMMob) { return false; }
 
 		if (this.notMagicDamage(attacker, attackEntity)) {
 			attacker.hurt(SMDamage.magicDamage, amount);
@@ -97,11 +96,11 @@ public class BlazeTempestTornado extends AbstractSMMob {
 			this.defTime = 2;
 		}
 
-		if (!this.level.isClientSide && amount > 2F && this.tickCount > this.tickTime) {
+		if (!this.level.isClientSide && amount >= 2F && this.tickCount > this.tickTime) {
 			int count = this.getCandole();
 			if (count < 4) {
 				this.setCandole(count + 1);
-				this.tickTime = this.tickCount + 10;
+				this.tickTime = this.tickCount + 5;
 			}
 		}
 
@@ -125,28 +124,26 @@ public class BlazeTempestTornado extends AbstractSMMob {
 	}
 
 	public void tick() {
-
 		super.tick();
 
 		if (this.level.isClientSide && this.getTarget() != null) {
-			double x =  + this.xo + (this.rand.nextDouble() - 0.5D);
-			double y =  + this.yo + (this.rand.nextDouble() + 0.5D);
-			double z =  + this.zo + (this.rand.nextDouble() - 0.5D);
+			double x = + this.xo + (this.rand.nextDouble() - 0.5D);
+			double y = + this.yo + (this.rand.nextDouble() + 0.5D);
+			double z = + this.zo + (this.rand.nextDouble() - 0.5D);
 			this.level.addParticle(ParticleTypes.SWEEP_ATTACK, x, y, z, 0D, 0D, 0D);
 		}
 	}
 
 	public void aiStep() {
 
-		if (!this.onGround && this.getDeltaMovement().y < 0.0D) {
-			this.setDeltaMovement(this.getDeltaMovement().multiply(1.0D, 0.6D, 1.0D));
+		if (!this.onGround && this.getDeltaMovement().y < 0XD) {
+			this.setDeltaMovement(this.getDeltaMovement().multiply(1D, 0.6D, 1D));
 		}
 
 		super.aiStep();
 	}
 
 	protected void customServerAiStep() {
-
 		super.customServerAiStep();
 
 		--this.nextTick;
@@ -164,14 +161,14 @@ public class BlazeTempestTornado extends AbstractSMMob {
 			this.hasImpulse = true;
 		}
 
-		if (this.tickCount % 20 != 0 || this.getCandole() < 4 || this.windTime++ >= 200) { return; }
+		if (this.tickCount % 20 != 0 || this.getCandole() < 4 || this.windTime++ < 7) { return; }
 
 		boolean isPlayer = this.isPlayer(target);
 		List<LivingEntity> entityList = this.getEntityList(LivingEntity.class, this.getFilter(isPlayer), 8D);
 		if (entityList.isEmpty()) { return; }
 
 		for (LivingEntity entity : entityList) {
-			entity.hurt(this.getSRC(), 6F);
+			entity.hurt(this.getSRC(), 10F);
 			entity.invulnerableTime = 0;
 			entity.yo += 10D;
 
@@ -206,16 +203,16 @@ public class BlazeTempestTornado extends AbstractSMMob {
 		this.setCandole(tags.getInt("candole"));
 	}
 
-	public int getCandole () {
+	public int getCandole() {
 		return this.entityData.get(CANDLE);
 	}
 
-	public void setCandole (int size) {
+	public void setCandole(int size) {
 		this.entityData.set(CANDLE, size);
 	}
 
 	// 低ランクかどうか
-	public boolean isLowRank () {
+	public boolean isLowRank() {
 		return false;
 	}
 }

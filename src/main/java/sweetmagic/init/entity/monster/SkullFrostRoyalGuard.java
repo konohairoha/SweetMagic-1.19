@@ -8,7 +8,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -41,6 +40,7 @@ import sweetmagic.init.ParticleInit;
 import sweetmagic.init.PotionInit;
 import sweetmagic.init.entity.projectile.AbstractMagicShot;
 import sweetmagic.init.entity.projectile.FrostMagicShot;
+import sweetmagic.util.PlayerHelper;
 import sweetmagic.util.SMDamage;
 
 public class SkullFrostRoyalGuard extends Skeleton implements ISMMob {
@@ -50,7 +50,6 @@ public class SkullFrostRoyalGuard extends Skeleton implements ISMMob {
 	private int recastTime = 300;
 	private int guardTime = 0;
 	private static final int MAX_GUARDTIME = 300;
-
 	private static final EntityDataAccessor<Boolean> GUARD = ISMMob.setData(SkullFrostRoyalGuard.class, BOOLEAN);
 	private static final EntityDataAccessor<Integer> GUARD_POWER = ISMMob.setData(SkullFrostRoyalGuard.class, INT);
 
@@ -60,7 +59,7 @@ public class SkullFrostRoyalGuard extends Skeleton implements ISMMob {
 
 	public SkullFrostRoyalGuard(EntityType<SkullFrostRoyalGuard> enType, Level world) {
 		super(enType, world);
-		this.xpReward = 50;
+		this.xpReward = 200;
 	}
 
 	public void reassessWeaponGoal() { }
@@ -102,10 +101,9 @@ public class SkullFrostRoyalGuard extends Skeleton implements ISMMob {
 
 	// ダメージ処理
 	public boolean hurt(DamageSource src, float amount) {
-
 		Entity attacker = src.getEntity();
 		Entity attackEntity = src.getDirectEntity();
-		if ( attacker != null && attacker instanceof ISMMob) { return false; }
+		if (attacker != null && attacker instanceof ISMMob) { return false; }
 
 		if (this.notMagicDamage(attacker, attackEntity)) {
 			attacker.hurt(SMDamage.magicDamage, amount);
@@ -144,16 +142,14 @@ public class SkullFrostRoyalGuard extends Skeleton implements ISMMob {
 			RandomSource rand = this.random;
 			Vec3 vec = this.getDeltaMovement();
 
-			for (int i = 0; i < 4; i++) {
-
-				float x = (float) (this.getX() - 0.5F + rand.nextFloat());
-				float y = (float) (this.getY() + rand.nextFloat() * 2F);
-				float z = (float) (this.getZ() - 0.5F + rand.nextFloat());
-
-				float f1 = (float) ( (vec.x + 0.5F - rand.nextFloat() ) * 0.2F);
-				float f2 = (float) ( (vec.y + 0.5F - rand.nextFloat() ) * 0.2F);
-				float f3 = (float) ( (vec.z + 0.5F - rand.nextFloat() ) * 0.2F);
-				this.level.addParticle(ParticleInit.FROST.get(), x, y, z, f1, f2, f3);
+			for (int i = 0; i < 6; i++) {
+				float x = (float) this.getX() - 0.5F + rand.nextFloat();
+				float y = (float) this.getY() + rand.nextFloat() * 2F;
+				float z = (float) this.getZ() - 0.5F + rand.nextFloat();
+				float f1 = (float) (vec.x + 0.5F - rand.nextFloat()) * 0.2F;
+				float f2 = (float) (vec.y + 0.5F - rand.nextFloat()) * 0.2F;
+				float f3 = (float) (vec.z + 0.5F - rand.nextFloat()) * 0.2F;
+				this.level.addParticle(ParticleInit.FROST, x, y, z, f1, f2, f3);
 			}
 		}
 
@@ -167,7 +163,6 @@ public class SkullFrostRoyalGuard extends Skeleton implements ISMMob {
 	}
 
 	protected void customServerAiStep() {
-
 		super.customServerAiStep();
 
 		if (this.guardTime++ >= MAX_GUARDTIME && this.getGuard()) {
@@ -180,15 +175,13 @@ public class SkullFrostRoyalGuard extends Skeleton implements ISMMob {
 		if (target == null || this.recastTime-- > 0 || this.getGuard() || this.isLeader(this)) { return; }
 
 		this.setGuard(true);
-		int buffSize = target.getActiveEffects().stream().filter(e -> e.getEffect().getCategory() == MobEffectCategory.BENEFICIAL).toList().size();
+		int buffSize = PlayerHelper.getEffectList(target, PotionInit.BUFF).size();
 		this.setGuardPower(buffSize);
 		this.guardTime = 0;
 		this.playSound(SoundEvents.ENCHANTMENT_TABLE_USE, 0.5F, 1.175F);
 	}
 
 	public void performRangedAttack(LivingEntity target, float par1) {
-
-		// ガード中は終了
 		if (this.getGuard()) { return; }
 
 		boolean isWarden = target instanceof Warden;
@@ -203,8 +196,7 @@ public class SkullFrostRoyalGuard extends Skeleton implements ISMMob {
 			damage += 1.5F;
 		}
 
-		AbstractMagicShot entity = new FrostMagicShot(this.level, this, ItemStack.EMPTY);
-
+		AbstractMagicShot entity = new FrostMagicShot(this.level, this);
 		double d0 = target.getX() - this.getX();
 		double d1 = target.getY(0.3333333333333333D) - this.getY();
 		double d2 = target.getZ() - this.getZ();
@@ -228,24 +220,24 @@ public class SkullFrostRoyalGuard extends Skeleton implements ISMMob {
 		this.setGuardPower(tags.getInt("guardPower"));
 	}
 
-	public boolean getGuard () {
+	public boolean getGuard() {
 		return this.entityData.get(GUARD);
 	}
 
-	public void setGuard (boolean isGurd) {
+	public void setGuard(boolean isGurd) {
 		this.entityData.set(GUARD, isGurd);
 	}
 
-	public int getGuardPower () {
+	public int getGuardPower() {
 		return this.entityData.get(GUARD_POWER);
 	}
 
-	public void setGuardPower (int guardPower) {
+	public void setGuardPower(int guardPower) {
 		this.entityData.set(GUARD_POWER, guardPower);
 	}
 
 	// 低ランクかどうか
-	public boolean isLowRank () {
+	public boolean isLowRank() {
 		return false;
 	}
 
@@ -253,10 +245,10 @@ public class SkullFrostRoyalGuard extends Skeleton implements ISMMob {
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance dif, MobSpawnType spawn, @Nullable SpawnGroupData data, @Nullable CompoundTag tag) {
 		data = super.finalizeSpawn(world, dif, spawn, data, tag);
 		this.initMobData(this, dif);
-        this.setItemSlot(EquipmentSlot.CHEST, new ItemStack(Items.IRON_CHESTPLATE));
-        this.setItemSlot(EquipmentSlot.FEET, new ItemStack(Items.IRON_BOOTS));
-        this.armorDropChances[EquipmentSlot.CHEST.getIndex()] = 0F;
-        this.armorDropChances[EquipmentSlot.FEET.getIndex()] = 0F;
+		this.setItemSlot(EquipmentSlot.CHEST, new ItemStack(Items.IRON_CHESTPLATE));
+		this.setItemSlot(EquipmentSlot.FEET, new ItemStack(Items.IRON_BOOTS));
+		this.armorDropChances[EquipmentSlot.CHEST.getIndex()] = 0F;
+		this.armorDropChances[EquipmentSlot.FEET.getIndex()] = 0F;
 		return data;
 	}
 }

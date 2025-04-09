@@ -31,10 +31,8 @@ import sweetmagic.util.SMDamage;
 public class EnderShadow extends AbstractSMMob {
 
 	private int recastTime = 0;
-	private int teleoprtTime = 0;
 	private int tickTime = 0;
 	private int maxTickTime = 0;
-
 	private static final EntityDataAccessor<Integer> SUMMON_COUNT = ISMMob.setData(EnderShadow.class, INT);
 
 	public EnderShadow(Level world) {
@@ -43,7 +41,7 @@ public class EnderShadow extends AbstractSMMob {
 
 	public EnderShadow(EntityType<EnderShadow> enType, Level world) {
 		super(enType, world);
-		this.xpReward = 150;
+		this.xpReward = 200;
 	}
 
 	protected void defineSynchedData() {
@@ -75,14 +73,11 @@ public class EnderShadow extends AbstractSMMob {
 
 	// ダメージ処理
 	public boolean hurt(DamageSource src, float amount) {
-
 		Entity attacker = src.getEntity();
 		Entity attackEntity = src.getDirectEntity();
-		if ( attacker != null && attacker instanceof ISMMob) { return false;}
-
-		if (!this.level.isClientSide && amount > 2F && this.tickCount > this.teleoprtTime) {
-			this.teleoprtTime = this.tickCount + 10;
+		if (attacker != null && attacker instanceof ISMMob) {
 			this.teleport();
+			return false;
 		}
 
 		if (this.notMagicDamage(attacker, attackEntity)) {
@@ -114,7 +109,7 @@ public class EnderShadow extends AbstractSMMob {
 
 	protected void tickDeath() {
 		super.tickDeath();
-		List<EnderShadowMirage> entityList = this.getEntityList(EnderShadowMirage.class, this, e -> e.isAlive() && e.getOwnerID() == this.getUUID(), 256D);
+		List<EnderShadowMirage> entityList = this.getEntityList(EnderShadowMirage.class, this, e -> e.isAlive() && e.is(this), 256D);
 		entityList.forEach(e -> e.setHealth(0F));
 	}
 
@@ -131,14 +126,12 @@ public class EnderShadow extends AbstractSMMob {
 	}
 
 	protected void customServerAiStep() {
-
 		super.customServerAiStep();
-
 		LivingEntity target = this.getTarget();
-		if (target == null || this.recastTime-- > 0  || this.isLeader(this)) { return; }
+		if (target == null || this.recastTime-- > 0 || this.isLeader(this)) { return; }
 
 		if (this.maxTickTime <= 0) {
-			this.maxTickTime = this.random.nextInt(150) + 100;
+			this.maxTickTime = this.rand.nextInt(150) + 100;
 		}
 
 		if (this.tickTime++ >= this.maxTickTime) {
@@ -150,7 +143,7 @@ public class EnderShadow extends AbstractSMMob {
 
 				EnderShadowMirage entity = new EnderShadowMirage(this.level);
 				entity.setPos(this.getX() + 0.5D, this.getY() + 0.5D, this.getZ() + 0.5D);
-				entity.getAttribute(Attributes.MAX_HEALTH).setBaseValue(this.getMaxHealth() / 3F);
+				entity.getAttribute(Attributes.MAX_HEALTH).setBaseValue(this.getMaxHealth() / 4F);
 				entity.setHealth(entity.getMaxHealth());
 				this.level.addFreshEntity(entity);
 				entity.teleport();
@@ -159,7 +152,7 @@ public class EnderShadow extends AbstractSMMob {
 
 				this.setSummon(summonCount + 1);
 				this.recastTime = 100;
-				this.maxTickTime = this.random.nextInt(150) + 100;
+				this.maxTickTime = this.rand.nextInt(150) + 100;
 			}
 
 			else {
@@ -170,9 +163,9 @@ public class EnderShadow extends AbstractSMMob {
 
 	protected boolean teleport() {
 		if (!this.level.isClientSide() && this.isAlive()) {
-			double d0 = this.getX() + (this.random.nextDouble() - 0.5D) * 32D;
-			double d1 = this.getY() + (double) (this.random.nextInt(32) - 16);
-			double d2 = this.getZ() + (this.random.nextDouble() - 0.5D) * 32D;
+			double d0 = this.getX() + (this.rand.nextDouble() - 0.5D) * 32D;
+			double d1 = this.getY() + (double) (this.rand.nextInt(32) - 16);
+			double d2 = this.getZ() + (this.rand.nextDouble() - 0.5D) * 32D;
 			return this.teleport(d0, d1, d2);
 		}
 
@@ -181,9 +174,9 @@ public class EnderShadow extends AbstractSMMob {
 
 	protected boolean teleport(LivingEntity target) {
 		if (!this.level.isClientSide() && this.isAlive()) {
-			double d0 = target.getX() + (this.random.nextDouble() - 0.5D) * 5D;
-			double d1 = target.getY() + (double) (this.random.nextInt(8) - 4);
-			double d2 = target.getZ() + (this.random.nextDouble() - 0.5D) * 5D;
+			double d0 = target.getX() + (this.rand.nextDouble() - 0.5D) * 5D;
+			double d1 = target.getY() + (double) (this.rand.nextInt(8) - 4);
+			double d2 = target.getZ() + (this.rand.nextDouble() - 0.5D) * 5D;
 			return this.teleport(d0, d1, d2);
 		}
 
@@ -204,11 +197,11 @@ public class EnderShadow extends AbstractSMMob {
 		this.recastTime = tags.getInt("recastTime");
 	}
 
-	public int getSummon () {
+	public int getSummon() {
 		return this.entityData.get(SUMMON_COUNT);
 	}
 
-	public void setSummon (int summonCount) {
+	public void setSummon(int summonCount) {
 		this.entityData.set(SUMMON_COUNT, summonCount);
 	}
 }

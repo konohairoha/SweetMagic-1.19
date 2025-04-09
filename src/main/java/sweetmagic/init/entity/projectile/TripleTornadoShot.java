@@ -46,10 +46,10 @@ public class TripleTornadoShot extends AbstractMagicShot {
 		this.setWandInfo(wandInfo);
 	}
 
-	public TripleTornadoShot(Level world, LivingEntity entity, ItemStack stack) {
+	public TripleTornadoShot(Level world, LivingEntity entity) {
 		this(entity.getX(), entity.getEyeY() - (double) 0.1F, entity.getZ(), world);
 		this.setOwner(entity);
-		this.stack = stack;
+		this.stack = ItemStack.EMPTY;
 	}
 
 	public void tick() {
@@ -63,21 +63,22 @@ public class TripleTornadoShot extends AbstractMagicShot {
 	}
 
 	// 常時発動効果
-	public void tickEffect () {
+	public void tickEffect() {
 
 		BlockPos pos = this.blockPosition();
 		double range = this.getRange() / 2D;
 
 		List<LivingEntity> entityList = this.getEntityList(LivingEntity.class, this.getFilter(this.isPlayer, pos, range), range);
-		entityList.forEach(e -> this.addPotion(e, MobEffects.MOVEMENT_SLOWDOWN, 1000, 10));
+		entityList.forEach(e -> this.addPotion(e, MobEffects.MOVEMENT_SLOWDOWN, 60, 4));
 
 		if (this.tickCount % 5 == 0 && this.level instanceof ServerLevel sever) {
 
 			double scaleRate = Math.min(1D, this.tickCount * 0.05D);
 			double scale = range * scaleRate;
+			ParticleOptions par = ParticleInit.CYCLE_TORNADO;
 
 			for (double i = scale; i > 1; i -= 2) {
-				this.spawnParticleCycle(pos, i);
+				this.spawnParticleCycle(par, pos, i);
 			}
 
 			if (this.tickCount % 10 == 0) {
@@ -96,17 +97,17 @@ public class TripleTornadoShot extends AbstractMagicShot {
 			if (this.level instanceof ServerLevel sever) {
 
 				// 範囲の座標取得
-				Iterable<BlockPos> posList = BlockPos.betweenClosed(pos.offset(-range, -range, -range), pos.offset(range, range, range));
+				Iterable<BlockPos> posList = this.getPosList(pos, range);
 				Random rand = this.rand;
+				ParticleOptions par = ParticleTypes.END_ROD;
 
 				for (BlockPos p : posList) {
-
-					if (rand.nextFloat() >= 0.2F || !this.checkDistances(pos, p, range * range)) { continue; }
+					if (rand.nextFloat() >= 0.075F || !this.checkDistances(pos, p, range * range)) { continue; }
 
 					float x = (float) (p.getX() + rand.nextFloat() - 0.5F);
 					float y = (float) (p.getY() + rand.nextFloat() - 0.5F);
 					float z = (float) (p.getZ() + rand.nextFloat() - 0.5F);
-					sever.sendParticles(ParticleTypes.END_ROD, x, y, z, 0, this.getRandFloat(0.5F), rand.nextFloat() * 0.5F, this.getRandFloat(0.5F), 1F);
+					sever.sendParticles(par, x, y, z, 0, this.getRandFloat(0.5F), rand.nextFloat() * 0.5F, this.getRandFloat(0.5F), 1F);
 				}
 			}
 
@@ -132,29 +133,28 @@ public class TripleTornadoShot extends AbstractMagicShot {
 	}
 
 	// 範囲内にいるかのチェック
-	public boolean checkDistances (BlockPos basePos, BlockPos pos, double range) {
+	public boolean checkDistances(BlockPos basePos, BlockPos pos, double range) {
 		double d0 = basePos.getX() - pos.getX();
 		double d1 = basePos.getY() - pos.getY();
 		double d2 = basePos.getZ() - pos.getZ();
 		return (d0 * d0 + d1 * d1 + d2 * d2) <= range;
 	}
 
-	protected void spawnParticleCycle (BlockPos pos, double range) {
-
-		if ( !(this.level instanceof ServerLevel server)) { return; }
+	protected void spawnParticleCycle(ParticleOptions par, BlockPos pos, double range) {
+		if (!(this.level instanceof ServerLevel server)) { return; }
 
 		int count = 16;
 		Random rand = new Random();
 
 		for (int i = 0; i < count; i++) {
-			this.spawnParticleCycle(server, ParticleInit.CYCLE_TORNADO.get(), pos.getX() + 0.5D, pos.getY() - 0.5D + rand.nextDouble() * 1.5D, pos.getZ() + 0.5D, Direction.UP, range, i * 16F, false);
+			this.spawnParticleCycle(server, par, pos.getX() + 0.5D, pos.getY() - 0.5D + rand.nextDouble() * 1.5D, pos.getZ() + 0.5D, Direction.UP, range, i * 16F, false);
 		}
 	}
 
 	// パーティクルスポーンサイクル
-	protected void spawnParticleCycle (ServerLevel server, ParticleOptions particle, double x, double y, double z, Direction face, double range, double angle, boolean isRevese) {
+	protected void spawnParticleCycle(ServerLevel server, ParticleOptions par, double x, double y, double z, Direction face, double range, double angle, boolean isRevese) {
 		int way = isRevese ? -1 : 1;
-		server.sendParticles(particle, x, y, z, 0, face.get3DDataValue() * way, range, angle + way * 1 * 6F - this.tickCount * 5, 1F);
+		server.sendParticles(par, x, y, z, 0, face.get3DDataValue() * way, range, angle + way * 1 * 6F - this.tickCount * 5, 1F);
 	}
 
 	// 属性の取得

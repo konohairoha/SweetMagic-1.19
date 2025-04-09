@@ -4,22 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.BossEvent;
-import net.minecraft.world.BossEvent.BossBarColor;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -50,14 +43,10 @@ public class BullFight extends AbstractSMBoss {
 
 	private final List<LivingEntity> targetList = new ArrayList<>();
 	private static final EntityDataAccessor<Integer> ATTACK = ISMMob.setData(BullFight.class, INT);
-
-	private final ServerBossEvent bossEvent = this.getBossBar(BossEvent.BossBarColor.BLUE, BossEvent.BossBarOverlay.NOTCHED_6);
-
 	private int rushAttackChargeTime = 0;						// 突進攻撃のチャージ時間
-	private static final int RUSHATTACKCHARGEMAXTIME = 60;		// 突進攻撃の最大チャージ時間
-
+	private static final int RUSHATTACKCHARGEMAXTIME = 60;	// 突進攻撃の最大チャージ時間
 	private int pressAttackChargeTime = 0;						// 地面プレス攻撃のチャージ時間
-	private static final int PRESSATTACKCHARGEMAXTIME = 70;		// 地面プレス攻撃の最大チャージ時間
+	private static final int PRESSATTACKCHARGEMAXTIME = 70;	// 地面プレス攻撃の最大チャージ時間
 
 	public BullFight(Level world) {
 		super(EntityInit.bullfight, world);
@@ -65,8 +54,9 @@ public class BullFight extends AbstractSMBoss {
 
 	public BullFight(EntityType<? extends AbstractSMBoss> enType, Level world) {
 		super(enType, world);
-		this.xpReward = 150;
+		this.xpReward = 350;
 		this.maxUpStep = 1.25F;
+		this.setBossEvent(BC_BLUE, NOTCHED_6);
 	}
 
 	protected void registerGoals() {
@@ -116,11 +106,11 @@ public class BullFight extends AbstractSMBoss {
 		return 0.4F;
 	}
 
-	public int getAttackType () {
+	public int getAttackType() {
 		return this.entityData.get(ATTACK);
 	}
 
-	public void setAttackType (int attack) {
+	public void setAttackType(int attack) {
 		this.entityData.set(ATTACK, attack);
 	}
 
@@ -128,57 +118,31 @@ public class BullFight extends AbstractSMBoss {
 		super.addAdditionalSaveData(tags);
 	}
 
-	public void readAdditionalSaveData(CompoundTag tags) {
-		super.readAdditionalSaveData(tags);
-		if (this.hasCustomName()) {
-			this.bossEvent.setName(this.getDisplayName());
-		}
-	}
-
-	public void setCustomName(@Nullable Component tip) {
-		super.setCustomName(tip);
-		this.bossEvent.setName(this.getDisplayName());
-	}
-
-	public void startSeenByPlayer(ServerPlayer player) {
-		super.startSeenByPlayer(player);
-		this.bossEvent.addPlayer(player);
-	}
-
-	public void stopSeenByPlayer(ServerPlayer player) {
-		super.stopSeenByPlayer(player);
-		this.bossEvent.removePlayer(player);
-	}
-
 	// ダメージ処理
 	public boolean hurt(DamageSource src, float amount) {
-
 		Entity attacker = src.getEntity();
 		Entity attackEntity = src.getDirectEntity();
-		if ( attacker != null && attacker instanceof ISMMob) { return false; }
+		if (attacker != null && attacker instanceof ISMMob) { return false; }
 
 		// ボスダメージ計算
 		amount = this.getBossDamageAmount(this.level, this.defTime , src, amount, 10F);
 		this.defTime = amount > 0 ? 2 : this.defTime;
 
-		// 魔法攻撃以外なら反撃&ダメージ無効
-		if (this.notMagicDamage(attacker, attackEntity)) {
+		if (attacker instanceof Warden) {
 			this.attackDamage(attacker, SMDamage.magicDamage, amount);
 			return false;
+		}
+
+		// 魔法攻撃以外ならダメージ減少
+		if (this.notMagicDamage(attacker, attackEntity)) {
+			amount *= 0.25F;
 		}
 
 		return super.hurt(src, amount);
 	}
 
 	protected void customServerAiStep() {
-
 		super.customServerAiStep();
-        this.bossEvent.setProgress(this.getHealth() / this.getMaxHealth());
-
-        if (this.isHalfHealth(this)) {
-        	this.bossEvent.setColor(BossBarColor.RED);
-        }
-
 		LivingEntity target = this.getTarget();
 		if (target == null) { return; }
 
@@ -200,8 +164,7 @@ public class BullFight extends AbstractSMBoss {
 	}
 
 	// 地面プレス
-	public void groundPress (LivingEntity target) {
-
+	public void groundPress(LivingEntity target) {
 		if (this.pressAttackChargeTime++ < PRESSATTACKCHARGEMAXTIME || this.tickCount % 3 != 0) { return; }
 
 		boolean isPlayer = this.isPlayer(target);
@@ -216,13 +179,12 @@ public class BullFight extends AbstractSMBoss {
 		double z = ( targetPos.getZ() - pos.getZ() ) * rate;
 		BlockPos attackPos = new BlockPos(pos.getX() + x, pos.getY() + y, pos.getZ() + z);
 		BlockState state = this.level.getBlockState(attackPos);
-        SoundType sound = state.getBlock().getSoundType(state, this.level, pos, this);
-		this.level.playSound(null, attackPos, sound.getBreakSound(), SoundSource.HOSTILE, 2.5F, 0.9F + this.random.nextFloat() * 0.2F);
+		SoundType sound = state.getBlock().getSoundType(state, this.level, pos, this);
+		this.level.playSound(null, attackPos, sound.getBreakSound(), SoundSource.HOSTILE, 2.5F, 0.9F + this.rand.nextFloat() * 0.2F);
 
 		// 攻撃した人をリストに含まれないプレイヤーリストを取得
 		List<LivingEntity> attackList = this.getEntityList(LivingEntity.class, attackPos, 3D).stream().filter(this.getFilterList(isPlayer)).toList();
 		this.targetList.addAll(attackList);
-
 		float amount = 15F;
 
 		// 対象のえんちちーに攻撃
@@ -243,8 +205,7 @@ public class BullFight extends AbstractSMBoss {
 	}
 
 	// 突進攻撃
-	public void rushAttack (LivingEntity target) {
-
+	public void rushAttack(LivingEntity target) {
 		if (this.rushAttackChargeTime++ < RUSHATTACKCHARGEMAXTIME) { return; }
 
 		// 移動速度を取得
@@ -256,8 +217,6 @@ public class BullFight extends AbstractSMBoss {
 		// 攻撃者の座標取得
 		Vec3 src = new Vec3(this.getX(), this.getY(), this.getZ()).add(0, this.getEyeHeight(), 0);
 		Vec3 look = this.getViewVector(1.0F);
-
-		// 向き先に座標を設定
 		Vec3 dest = src.add(look.x * 2D, this.getY(), look.z * 2D);
 
 		// 移動速度を設定
@@ -340,12 +299,7 @@ public class BullFight extends AbstractSMBoss {
 		this.pressAttackChargeTime = 0;
 	}
 
-	protected void tickDeath() {
-		super.tickDeath();
-		this.bossEvent.setProgress(0F);
-	}
-
-	public Predicate<LivingEntity> getFilterList (boolean isPlayer) {
+	public Predicate<LivingEntity> getFilterList(boolean isPlayer) {
 		return e -> !e.isSpectator() && e.isAlive() && e != this && !this.targetList.contains(e) && (isPlayer ? (e instanceof Player || e instanceof AbstractSummonMob) : !(e instanceof Player) ) && !(e instanceof ISMMob);
 	}
 }

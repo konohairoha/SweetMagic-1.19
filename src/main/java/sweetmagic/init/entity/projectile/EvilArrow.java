@@ -37,10 +37,10 @@ public class EvilArrow extends AbstractMagicShot {
 		this.stack = wandInfo.getStack();
 	}
 
-	public EvilArrow(Level world, LivingEntity entity, ItemStack stack) {
+	public EvilArrow(Level world, LivingEntity entity) {
 		this(entity.getX(), entity.getEyeY() - (double) 0.1F, entity.getZ(), world);
 		this.setOwner(entity);
-		this.stack = stack;
+		this.stack = ItemStack.EMPTY;
 	}
 
 	// ブロック着弾
@@ -72,7 +72,7 @@ public class EvilArrow extends AbstractMagicShot {
 		this.rangeAttack(living, 3.5D);
 	}
 
-	public void rangeAttack (LivingEntity living, double range) {
+	public void rangeAttack(LivingEntity living, double range) {
 
 		this.playSound(SoundEvents.GENERIC_EXPLODE, 3F, 1F / (this.random.nextFloat() * 0.2F + 0.9F));
 		List<LivingEntity> entityList = this.getEntityList(LivingEntity.class, this.expTarget(living), range);
@@ -99,20 +99,19 @@ public class EvilArrow extends AbstractMagicShot {
 		}
 	}
 
-	public <T extends LivingEntity> Predicate<T> expTarget (LivingEntity living) {
+	public <T extends LivingEntity> Predicate<T> expTarget(LivingEntity living) {
 		return e -> (e instanceof ISMMob || e.hasEffect(PotionInit.darkness_fog)) && ( living == null || e.getUUID() != living.getUUID());
 	}
 
 	// パーティクルスポーン
 	protected void spawnParticle() {
-
 		if (this.tickCount < 3) { return; }
 
 		Vec3 vec = this.getDeltaMovement();
 		float addX = (float) (-vec.x / 10F);
 		float addY = (float) (-vec.y / 10F);
 		float addZ = (float) (-vec.z / 10F);
-		this.level.addParticle(ParticleInit.NORMAL.get(), this.getX(), this.getY(), this.getZ(), addX, addY, addZ);
+		this.level.addParticle(ParticleInit.NORMAL, this.getX(), this.getY(), this.getZ(), addX, addY, addZ);
 	}
 
 	// 属性の取得

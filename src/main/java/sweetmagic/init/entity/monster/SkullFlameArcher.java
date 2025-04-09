@@ -55,7 +55,7 @@ public class SkullFlameArcher extends Skeleton implements ISMMob {
 
 	public SkullFlameArcher(EntityType<? extends Skeleton> enType, Level world) {
 		super(enType, world);
-		this.xpReward = 150;
+		this.xpReward = 200;
 	}
 
 	public void reassessWeaponGoal() { }
@@ -91,10 +91,9 @@ public class SkullFlameArcher extends Skeleton implements ISMMob {
 
 	// ダメージ処理
 	public boolean hurt(DamageSource src, float amount) {
-
 		Entity attacker = src.getEntity();
 		Entity attackEntity = src.getDirectEntity();
-		if ( attacker != null && attacker instanceof ISMMob) { return false; }
+		if (attacker != null && attacker instanceof ISMMob) { return false; }
 
 		if (this.notMagicDamage(attacker, attackEntity)) {
 			attacker.hurt(SMDamage.magicDamage, amount);
@@ -126,14 +125,12 @@ public class SkullFlameArcher extends Skeleton implements ISMMob {
 			Vec3 vec = this.getDeltaMovement();
 
 			for (int i = 0; i < 6; i++) {
-
-				float x = (float) (this.getX() - 0.5F + rand.nextFloat());
-				float y = (float) (this.getY() + rand.nextFloat() * 2F);
-				float z = (float) (this.getZ() - 0.5F + rand.nextFloat());
-
-				float f1 = (float) ( (vec.x + 0.5F - rand.nextFloat() ) * 0.2F);
-				float f2 = (float) ( (vec.y + 0.5F - rand.nextFloat() ) * 0.2F);
-				float f3 = (float) ( (vec.z + 0.5F - rand.nextFloat() ) * 0.2F);
+				float x = (float) this.getX() - 0.5F + rand.nextFloat();
+				float y = (float) this.getY() + rand.nextFloat() * 2F;
+				float z = (float) this.getZ() - 0.5F + rand.nextFloat();
+				float f1 = (float) (vec.x + 0.5F - rand.nextFloat()) * 0.2F;
+				float f2 = (float) (vec.y + 0.5F - rand.nextFloat()) * 0.2F;
+				float f3 = (float) (vec.z + 0.5F - rand.nextFloat()) * 0.2F;
 				this.level.addParticle(ParticleTypes.FLAME, x, y, z, f1, f2, f3);
 			}
 		}
@@ -156,59 +153,25 @@ public class SkullFlameArcher extends Skeleton implements ISMMob {
 			damage += 1.5F;
 		}
 
-		if (this.isHalfHealth(this) && !this.isLeader(this)) {
-			for (int i = 0; i < 2; i++) {
-
-				AbstractMagicShot entity = new FireMagicShot(this.level, this, ItemStack.EMPTY);
-
-				double d0 = target.getX() - this.getX();
-				double d1 = target.getZ() - this.getZ();
-				double d3 = target.getY(0.3333333333333333D) - this.getY();
-				Vector3f vec = this.getShotVector(this, new Vec3(d0, d3, d1), i == 0 ? 24 : -24);
-				entity.shoot(vec.x(), vec.y(), vec.z(), shotSpeed, 1);
-				entity.setAddDamage(entity.getAddDamage() + damage);
-				entity.setMaxLifeTime(shotRange);
-				entity.setArrow(true);
-				entity.setRange(3.5D);
-				this.playSound(SoundEvents.BLAZE_SHOOT, 0.5F, 0.67F);
-				this.level.addFreshEntity(entity);
-			}
-		}
-
-		for (int i = 0; i < 2; i++) {
-
-			AbstractMagicShot entity = new FireMagicShot(this.level, this, ItemStack.EMPTY);
-
+		for (int i = 0; i < 5; i++) {
+			AbstractMagicShot entity = new FireMagicShot(this.level, this);
 			double d0 = target.getX() - this.getX();
 			double d1 = target.getZ() - this.getZ();
 			double d3 = target.getY(0.3333333333333333D) - this.getY();
-			Vector3f vec = this.getShotVector(this, new Vec3(d0, d3, d1), i == 0 ? 12 : -12);
+			Vector3f vec = this.getShotVector(this, new Vec3(d0, d3, d1), -24 + i * 12);
 			entity.shoot(vec.x(), vec.y(), vec.z(), shotSpeed, 1);
 			entity.setAddDamage(entity.getAddDamage() + damage);
 			entity.setMaxLifeTime(shotRange);
 			entity.setArrow(true);
 			entity.setRange(3.5D);
-			this.playSound(SoundEvents.BLAZE_SHOOT, 0.5F, 0.67F);
 			this.level.addFreshEntity(entity);
 		}
 
-		AbstractMagicShot entity = new FireMagicShot(this.level, this, ItemStack.EMPTY);
-
-		double d0 = target.getX() - this.getX();
-		double d1 = target.getY(0.3333333333333333D) - this.getY();
-		double d2 = target.getZ() - this.getZ();
-		double d3 = Math.sqrt(d0 * d0 + d2 * d2);
-		entity.shoot(d0, d1 - d3 * (double) 0.00F, d2, shotSpeed, 1);
-		entity.setAddDamage(entity.getAddDamage() + damage);
-		entity.setMaxLifeTime(shotRange);
-		entity.setArrow(true);
-		entity.setRange(2.5D);
 		this.playSound(SoundEvents.BLAZE_SHOOT, 0.5F, 0.67F);
-		this.level.addFreshEntity(entity);
 	}
 
 	// 低ランクかどうか
-	public boolean isLowRank () {
+	public boolean isLowRank() {
 		return false;
 	}
 

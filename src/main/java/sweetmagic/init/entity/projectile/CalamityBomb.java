@@ -29,7 +29,7 @@ public class CalamityBomb extends AbstractMagicShot {
 
 	private static final EntityDataAccessor<Integer> COUNT = SynchedEntityData.defineId(CalamityBomb.class, EntityDataSerializers.INT);
 
-	public CalamityBomb(EntityType<? extends CalamityBomb> entityType, Level world) {
+	public CalamityBomb(EntityType<? extends AbstractMagicShot> entityType, Level world) {
 		super(entityType, world);
 	}
 
@@ -46,10 +46,10 @@ public class CalamityBomb extends AbstractMagicShot {
 		this.setMaxLifeTime(120);
 	}
 
-	public CalamityBomb(Level world, LivingEntity entity, ItemStack stack) {
+	public CalamityBomb(Level world, LivingEntity entity) {
 		this(entity.getX(), entity.getEyeY() - (double) 0.1F, entity.getZ(), world);
 		this.setOwner(entity);
-		this.stack = stack;
+		this.stack = ItemStack.EMPTY;
 	}
 
 	protected void defineSynchedData() {
@@ -119,8 +119,7 @@ public class CalamityBomb extends AbstractMagicShot {
 		}
 	}
 
-	public void createExplo (float explo, float range) {
-
+	public void createExplo(float explo, float range) {
 		double effectRange = range * range;
 		List<LivingEntity> entityList = this.getEntityList(LivingEntity.class, e -> !(e instanceof ISMMob), explo);
 		if (entityList.isEmpty()) { return; }
@@ -144,19 +143,15 @@ public class CalamityBomb extends AbstractMagicShot {
 
 	// パーティクルスポーン
 	protected void spawnParticle() {
-
 		Random rand = this.rand;
 		Vec3 vec = this.getDeltaMovement();
 		float x = (float) (-vec.x / 80F);
 		float y = (float) (-vec.y / 80F);
 		float z = (float) (-vec.z / 80F);
-
-		for (int i = 0; i < 1; i++) {
-			float f1 = (float) (this.getX() - 0.5F + rand.nextFloat() + vec.x * i / 4.0F);
-			float f2 = (float) (this.getY() + 0.25F + rand.nextFloat() * 0.5 + vec.y * i / 4.0D);
-			float f3 = (float) (this.getZ() - 0.5F + rand.nextFloat() + vec.z * i / 4.0D);
-			this.level.addParticle(ParticleTypes.CLOUD, f1, f2, f3, x, y, z);
-		}
+		float f1 = (float) (this.getX() - 0.5F + rand.nextFloat() + vec.x);
+		float f2 = (float) (this.getY() + 0.25F + rand.nextFloat() * 0.5 + vec.y);
+		float f3 = (float) (this.getZ() - 0.5F + rand.nextFloat() + vec.z);
+		this.level.addParticle(ParticleTypes.CLOUD, f1, f2, f3, x, y, z);
 	}
 
 	// 属性の取得

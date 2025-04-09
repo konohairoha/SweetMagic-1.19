@@ -3,12 +3,9 @@ package sweetmagic.init.entity.projectile;
 import java.util.Random;
 
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
@@ -39,20 +36,16 @@ public class EnderBall extends AbstractMagicShot {
 		this.stack = wandInfo.getStack();
 	}
 
-	public EnderBall(Level world, LivingEntity entity, ItemStack stack) {
+	public EnderBall(Level world, LivingEntity entity) {
 		this(entity.getX(), entity.getEyeY() - (double) 0.1F, entity.getZ(), world);
 		this.setOwner(entity);
-		this.stack = stack;
+		this.stack = ItemStack.EMPTY;
 	}
 
 	// えんちちーに当たった時の処理
 	protected void entityHit(LivingEntity target) {
+		if (target instanceof ISMMob || this.level.isClientSide || !this.isTeleport) { return; }
 
-		if ( target instanceof ISMMob || this.level.isClientSide || !this.isTeleport) { return; }
-
-		double d0 = this.getX();
-		double d1 = this.getY();
-		double d2 = this.getZ();
 		Random rand = this.rand;
 
 		for (int i = 0; i < 16; ++i) {
@@ -70,9 +63,7 @@ public class EnderBall extends AbstractMagicShot {
 			if (event.isCanceled()) { return; }
 
 			if (target.randomTeleport(event.getTargetX(), event.getTargetY(), event.getTargetZ(), true)) {
-				SoundEvent soundevent = SoundEvents.CHORUS_FRUIT_TELEPORT;
-				this.level.playSound((Player) null, d0, d1, d2, soundevent, SoundSource.PLAYERS, 1.0F, 1.0F);
-				this.playSound(soundevent, 1.0F, 1.0F);
+				this.playSound(SoundEvents.CHORUS_FRUIT_TELEPORT, 1F, 1F);
 				break;
 			}
 		}
@@ -88,9 +79,9 @@ public class EnderBall extends AbstractMagicShot {
 		Random rand = this.rand;
 
 		for (int i = 0; i < 6; i++) {
-			float f1 = (float) (this.getX() - 0.5F + rand.nextFloat() + vec.x * i / 4.0F);
-			float f2 = (float) (this.getY() - 0.25F + rand.nextFloat() * 0.5 + vec.y * i / 4.0D);
-			float f3 = (float) (this.getZ() - 0.5F + rand.nextFloat() + vec.z * i / 4.0D);
+			float f1 = (float) (this.getX() - 0.5F + rand.nextFloat() + vec.x * i / 4F);
+			float f2 = (float) (this.getY() - 0.25F + rand.nextFloat() * 0.5 + vec.y * i / 4F);
+			float f3 = (float) (this.getZ() - 0.5F + rand.nextFloat() + vec.z * i / 4F);
 			this.level.addParticle(ParticleTypes.PORTAL, f1, f2, f3, x, y, z);
 		}
 	}

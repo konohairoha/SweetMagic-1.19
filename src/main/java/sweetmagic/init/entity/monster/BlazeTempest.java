@@ -85,9 +85,8 @@ public class BlazeTempest extends Blaze implements ISMMob {
 
 	// ダメージ処理
 	public boolean hurt(DamageSource src, float amount) {
-
 		Entity attacker = src.getEntity();
-		if ( attacker != null && attacker instanceof ISMMob) { return false; }
+		if (attacker != null && attacker instanceof ISMMob) { return false; }
 
 		// ダメージ倍処理
 		amount = this.getDamageAmount(this.level , src, amount, 1F);
@@ -115,14 +114,13 @@ public class BlazeTempest extends Blaze implements ISMMob {
 	}
 
 	public void tick() {
-
 		super.tick();
 
 		if (this.level.isClientSide && this.getTarget() != null) {
 			RandomSource rand = this.level.random;
-			double x =  + this.xo + (rand.nextDouble() - 0.5D);
-			double y =  + this.yo + (rand.nextDouble() + 0.5D);
-			double z =  + this.zo + (rand.nextDouble() - 0.5D);
+			double x = +this.xo + (rand.nextDouble() - 0.5D);
+			double y = +this.yo + (rand.nextDouble() + 0.5D);
+			double z = +this.zo + (rand.nextDouble() - 0.5D);
 			this.level.addParticle(ParticleTypes.SWEEP_ATTACK, x, y, z, 0D, 0D, 0D);
 		}
 	}

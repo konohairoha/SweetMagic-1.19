@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.function.Predicate;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -14,15 +16,20 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import sweetmagic.api.ientity.ISMMob;
@@ -36,13 +43,12 @@ public class HolyAngel extends AbstractSMBoss {
 
 	private int holyLightTime = 0;						// ホーリーライト攻撃時間
 	private int oruChargeTime = 0;						// オーバーレイユニット
-
-	private static final int HOLYLIGHT_MAXTIME = 500;	// ホーリーライトの最大攻撃時間
+	private int holyLightMaxTime = 500;					// ホーリーライトの最大攻撃時間
 	private static final int ORUCHARGE_MAXTIME = 300;	// オーバーレイユニット最大チャージ時間
-
 	private Map<Integer, BlockPos> posMap = new LinkedHashMap<>();	// セイクリッドレイン
 	private List<Player> playerList = new ArrayList<>();
-
+	private double armorHealth = 0D;
+	private double maxArmorHealth = 0D;
 	private static final EntityDataAccessor<Integer> ORU = ISMMob.setData(HolyAngel.class, INT);
 
 	public HolyAngel(Level world) {
@@ -51,7 +57,7 @@ public class HolyAngel extends AbstractSMBoss {
 
 	public HolyAngel(EntityType<HolyAngel> enType, Level world) {
 		super(enType, world);
-		this.xpReward = 300;
+		this.xpReward = 400;
 		this.maxUpStep = 1.25F;
 	}
 
@@ -88,31 +94,41 @@ public class HolyAngel extends AbstractSMBoss {
 
 	// ダメージ処理
 	public boolean hurt(DamageSource src, float amount) {
-
 		Entity attacker = src.getEntity();
 		Entity attackEntity = src.getDirectEntity();
-		if ( attacker != null && attacker instanceof ISMMob) { return false; }
+		if (attacker != null && attacker instanceof ISMMob) { return false; }
+
+		boolean isLectern = this.isLectern();
 
 		// ボスダメージ計算
-		amount = this.getBossDamageAmount(this.level, this.defTime , src, amount, 10F);
+		amount = this.getBossDamageAmount(this.level, this.defTime , src, amount, isLectern ? 10F : 5.75F);
 		this.defTime = amount > 0 ? 2 : this.defTime;
 
-		// 魔法攻撃以外なら反撃&ダメージ無効
-		if (this.notMagicDamage(attacker, attackEntity)) {
+		if (attacker instanceof Warden) {
 			this.attackDamage(attacker, SMDamage.magicDamage, amount);
 			return false;
 		}
 
+		// 魔法攻撃以外ならダメージ減少
+		if (this.notMagicDamage(attacker, attackEntity)) {
+			amount *= 0.25F;
+		}
+
 		// 魔導士の召喚台座による召喚の場合
-		if (this.isLectern()) {
+		if (isLectern) {
 			amount = this.getLecternAction(src, amount, this.getORU());
+		}
+
+		else if (this.armorHealth > 0D) {
+			this.armorHealth -= amount;
+			this.setORU((int) ((this.maxArmorHealth - this.armorHealth) % 7.5D));
 		}
 
 		return super.hurt(src, amount);
 	}
 
 	// 召喚台座時のダメージ処理
-	public float getLecternAction (DamageSource src, float amount, int armorSize) {
+	public float getLecternAction(DamageSource src, float amount, int armorSize) {
 
 		if (armorSize > 0) {
 
@@ -138,7 +154,7 @@ public class HolyAngel extends AbstractSMBoss {
 	}
 
 	// 危険な果実でのダメージ計算
-	public float getEvilDamage (float amount, int armorSize) {
+	public float getEvilDamage(float amount, int armorSize) {
 
 		// ORUを1つ減らす
 		this.setORU(armorSize - 1);
@@ -173,6 +189,8 @@ public class HolyAngel extends AbstractSMBoss {
 		tags.putInt("oru", this.getORU());
 		tags.putInt("oruChargeTime", this.oruChargeTime);
 		tags.putInt("holyLightTime", this.holyLightTime);
+		tags.putDouble("armorHealth", this.armorHealth);
+		tags.putDouble("maxArmorHealth", this.maxArmorHealth);
 	}
 
 	public void readAdditionalSaveData(CompoundTag tags) {
@@ -180,18 +198,23 @@ public class HolyAngel extends AbstractSMBoss {
 		this.setORU(tags.getInt("oru"));
 		this.oruChargeTime = tags.getInt("oruChargeTime");
 		this.holyLightTime = tags.getInt("holyLightTime");
+		this.armorHealth = tags.getDouble("armorHealth");
+		this.maxArmorHealth = tags.getDouble("maxArmorHealth");
+		if (!this.isLectern()) {
+			this.setBossEvent(BC_BLUE, NOTCHED_6);
+		}
 	}
 
-	public int getORU () {
+	public int getORU() {
 		return this.entityData.get(ORU);
 	}
 
-	public void setORU (int size) {
-		this.entityData.set(ORU, size);
+	public void setORU(int size) {
+		this.entityData.set(ORU, Math.min(24, size));
 	}
 
 	// アーマーがないなら
-	public boolean isArmorEmpty () {
+	public boolean isArmorEmpty() {
 		return this.getORU() <= 0;
 	}
 
@@ -234,13 +257,12 @@ public class HolyAngel extends AbstractSMBoss {
 	}
 
 	protected void customServerAiStep() {
-
 		super.customServerAiStep();
 		LivingEntity target = this.getTarget();
 		if (target == null) { return; }
 
 		// オーバーレイユニットが0の場合
-		if (this.getORU() <= 0) {
+		if (this.isLectern() && this.getORU() <= 0) {
 
 			this.oruChargeTime++;
 			this.posMap.clear();
@@ -267,12 +289,12 @@ public class HolyAngel extends AbstractSMBoss {
 	}
 
 	// 1stフェーズの攻撃
-	public void firstPhaseSttack (LivingEntity target) {
+	public void firstPhaseSttack(LivingEntity target) {
 
 		this.holyLightTime++;
-		double range = 16D;
+		double range = this.isLectern() ? 16D : 24D;
 
-		if (this.holyLightTime >= HOLYLIGHT_MAXTIME - 120) {
+		if (this.holyLightTime >= holyLightMaxTime - 120) {
 
 			if (this.holyLightTime % 30 == 0) {
 				BlockPos pos = this.blockPosition();
@@ -283,7 +305,7 @@ public class HolyAngel extends AbstractSMBoss {
 		}
 
 		// ホーリーライトの攻撃チャージが終わったら
-		if (this.holyLightTime >= HOLYLIGHT_MAXTIME) {
+		if (this.holyLightTime >= holyLightMaxTime) {
 
 			// 範囲にいるえんちちーを取得
 			boolean isPlayer = this.isPlayer(target);
@@ -294,7 +316,6 @@ public class HolyAngel extends AbstractSMBoss {
 
 			this.holyLightTime = 0;
 			this.playSound(SoundEvents.DRAGON_FIREBALL_EXPLODE, 2F, 1F);
-
 			if ( !(this.level instanceof ServerLevel sever) ) { return; }
 
 			// 範囲の座標取得
@@ -313,10 +334,10 @@ public class HolyAngel extends AbstractSMBoss {
 	}
 
 	// 2ndフェーズの攻撃
-	public void secondPhaseSttack (LivingEntity target) {
+	public void secondPhaseSttack(LivingEntity target) {
 
 		this.holyLightTime++;
-		double range = 12D;
+		double range = this.isLectern() ? 12D : 18D;
 		boolean isPlayer = this.isPlayer(target);
 
 		// ホーリーライトの座標設定
@@ -324,20 +345,18 @@ public class HolyAngel extends AbstractSMBoss {
 			this.setPosMap(isPlayer, range);
 		}
 
-		if (this.holyLightTime >= HOLYLIGHT_MAXTIME - 120 && this.holyLightTime % 30 == 0) {
-			for (BlockPos pos : this.posMap.values()) {
-				this.spawnParticleCycle(pos, range);
-			}
+		if (this.holyLightTime >= holyLightMaxTime - 120 && this.holyLightTime % 30 == 0) {
+			this.posMap.values().forEach(p -> this.spawnParticleCycle(p, range));
 		}
 
 		// ホーリーライトの攻撃チャージが終わったら攻撃
-		if (this.holyLightTime >= HOLYLIGHT_MAXTIME && this.tickCount % 6 == 0) {
+		if (this.holyLightTime >= holyLightMaxTime && this.tickCount % 6 == 0) {
 			this.holyLightAttack(isPlayer, range);
 		}
 	}
 
 	// ホーリーライトの座標設定
-	public void setPosMap (boolean isPlayer, double range) {
+	public void setPosMap(boolean isPlayer, double range) {
 
 		// 範囲にいるえんちちーを取得
 		List<LivingEntity> entityList = this.getEntityList(LivingEntity.class, this.getFilter(isPlayer), range);
@@ -362,7 +381,7 @@ public class HolyAngel extends AbstractSMBoss {
 	}
 
 	// ホーリーライトの攻撃
-	public void holyLightAttack (boolean isPlayer, double range) {
+	public void holyLightAttack(boolean isPlayer, double range) {
 
 		float damage = (this.isHard() ? 20F : 12F) + this.getBuffPower();
 
@@ -403,10 +422,24 @@ public class HolyAngel extends AbstractSMBoss {
 		}
 	}
 
-	public void setORU () {
-		int rate = this.isHard() ? 8 : 4;
+	public void setORU() {
+		int rate = this.isHard() ? 6 : 4;
 		List<Player> playerList = this.getEntityList(Player.class, 80D);
 		this.setORU(rate * playerList.size());
+	}
+
+	@Nullable
+	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance dif, MobSpawnType spawn, @Nullable SpawnGroupData data, @Nullable CompoundTag tag) {
+		data = super.finalizeSpawn(world, dif, spawn, data, tag);
+		this.startInfo();
+		return data;
+	}
+
+	public void startInfo() {
+		super.startInfo();
+		this.armorHealth = 3 * this.getEntityList(Player.class, 80D).size() * 15D;
+		this.maxArmorHealth = this.armorHealth;
+		this.holyLightMaxTime = 250;
 	}
 
 	public void clearInfo() {
@@ -415,7 +448,19 @@ public class HolyAngel extends AbstractSMBoss {
 		this.holyLightTime = 0;
 	}
 
-	public Predicate<LivingEntity> getFilter (boolean isPlayer, BlockPos pos, double range) {
+	// バフによるダメージ増減
+	public float getBuffPower() {
+		float damage = super.getBuffPower();
+
+		if (!this.isLectern()) {
+			damage += 10F;
+			damage *= 1.5F;
+		}
+
+		return damage;
+	}
+
+	public Predicate<LivingEntity> getFilter(boolean isPlayer, BlockPos pos, double range) {
 		return e -> !e.isSpectator() && e.isAlive() && (isPlayer ? (e instanceof Player || e instanceof AbstractSummonMob) : !(e instanceof Player) ) && !(e instanceof ISMMob) && this.checkDistances(pos, e.blockPosition(), range * range);
 	}
 }

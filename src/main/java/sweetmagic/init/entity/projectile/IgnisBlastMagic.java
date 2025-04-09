@@ -16,6 +16,7 @@ import net.minecraft.world.phys.Vec3;
 import sweetmagic.api.emagic.SMElement;
 import sweetmagic.api.iitem.info.WandInfo;
 import sweetmagic.init.EntityInit;
+import sweetmagic.init.PotionInit;
 import sweetmagic.init.entity.monster.boss.IgnisKnight;
 
 public class IgnisBlastMagic extends AbstractBossMagic {
@@ -24,7 +25,6 @@ public class IgnisBlastMagic extends AbstractBossMagic {
 	private int groundTime = 0;						// 着地時間
 	private int chargeTime = 0;						// イグニスブラストのチャージ時間
 	private static final int MAX_CHARGETIME = 50;	// イグニスブラストの最大チャージ時間
-
 	private List<LivingEntity> entityList = new ArrayList<>();
 
 	public IgnisBlastMagic(EntityType<? extends IgnisBlastMagic> entityType, Level world) {
@@ -43,7 +43,7 @@ public class IgnisBlastMagic extends AbstractBossMagic {
 	}
 
 	// 常時更新処理
-	public void onUpdate () {
+	public void onUpdate() {
 
 		// ターゲットがいる場合
 		if (this.target != null) {
@@ -70,13 +70,13 @@ public class IgnisBlastMagic extends AbstractBossMagic {
 		}
 
 		// ターゲットの設定
-		if ( ( this.target == null || !this.target.isAlive() ) && this.tickCount % 8 == 0) {
+		if ((this.target == null || !this.target.isAlive()) && this.tickCount % 8 == 0) {
 			this.setTarget(true);
 		}
 	}
 
 	// 魔法攻撃
-	public void attackMagic (LivingEntity target) {
+	public void attackMagic(LivingEntity target) {
 
 		this.tickTime++;
 		IgnisKnight ignis = this.getIgnis();
@@ -106,21 +106,23 @@ public class IgnisBlastMagic extends AbstractBossMagic {
 			// 地面に付いたら
 			else {
 
+				int data = this.getData();
+
 				// 地面着地時の爆発攻撃
 				if (!this.isGround) {
-					this.groundBlastAttack(ignis, target);
+					this.groundBlastAttack(ignis, target, data);
 				}
 
 				// 地面着地時の追加攻撃
 				else {
-					this.groundRingAttack(ignis, target);
+					this.groundRingAttack(ignis, target, data);
 				}
 			}
 		}
 	}
 
 	// ターゲットの真上にテレポート
-	public void targetTeleport (IgnisKnight ignis, LivingEntity target) {
+	public void targetTeleport(IgnisKnight ignis, LivingEntity target) {
 
 		// ターゲットの真上の座標取得
 		BlockPos targetPos = new BlockPos(target.getX(), target.getY() + 5D, target.getZ());
@@ -132,11 +134,11 @@ public class IgnisBlastMagic extends AbstractBossMagic {
 		}
 
 		// テレポート
-		this.teleportTo(target.getX(), target.getY() + 5D, target.getZ());
+		this.teleportTo(targetPos.getX(), targetPos.getY(), targetPos.getZ());
 	}
 
 	// 空中浮遊
-	public void ignisJump (IgnisKnight ignis, LivingEntity target) {
+	public void ignisJump(IgnisKnight ignis, LivingEntity target) {
 
 		// 移動を止める
 		Vec3 vec = this.getDeltaMovement();
@@ -161,7 +163,7 @@ public class IgnisBlastMagic extends AbstractBossMagic {
 		}
 
 		// 以降パーティクル表示
-		if ( !(this.level instanceof ServerLevel sever) ) { return; }
+		if (!(this.level instanceof ServerLevel sever)) { return; }
 
 		Random rand = this.rand;
 
@@ -170,21 +172,21 @@ public class IgnisBlastMagic extends AbstractBossMagic {
 			float y = (float) (this.getY() + rand.nextFloat() - 0.5F);
 			float z = (float) (this.getZ() + rand.nextFloat() - 0.5F);
 
-			float aX = (rand.nextFloat() - rand.nextFloat()) * 0.75F;
+			float aX = this.getRandFloat(0.75F);
 			float aY = 0.1F + rand.nextFloat() * 0.2F;
-			float aZ = (rand.nextFloat() - rand.nextFloat()) * 0.75F;
+			float aZ = this.getRandFloat(0.75F);
 			sever.sendParticles(ParticleTypes.SOUL_FIRE_FLAME, x, y, z, 0, aX, aY, aZ, 1F);
 		}
 	}
 
 	// 地面についていないなら落下
-	public void notOnGround (IgnisKnight ignis, LivingEntity target) {
+	public void notOnGround(IgnisKnight ignis, LivingEntity target) {
 		ignis.setSwing(true);
 		this.setDeltaMovement(new Vec3(0D, -1.5D, 0D));
 	}
 
 	// 地面着地時の爆発攻撃
-	public void groundBlastAttack (IgnisKnight ignis, LivingEntity target) {
+	public void groundBlastAttack(IgnisKnight ignis, LivingEntity target, int data) {
 
 		if (!this.level.getBlockState(this.blockPosition()).isAir()) {
 			this.teleportTo(this.getX(), this.getY() + 1.75D, this.getZ());
@@ -192,12 +194,19 @@ public class IgnisBlastMagic extends AbstractBossMagic {
 
 		// 周囲の敵モブ取得
 		ignis.setSwing(true);
-		float amount = 25F + this.getAddDamage();
-		double range = 10D + this.entityList.size() * 0.5D;
+		float amount = (data == 1 ? 35F : 25F) + this.getAddDamage();
+		double range = (data == 1 ? 15F : 10D) + this.entityList.size() * 0.5D;
 
 		// 対象のえんちちーに攻撃
 		List<LivingEntity> attackList = this.getEntityList(LivingEntity.class, e -> e instanceof Enemy && e.isAlive(), range);
-		attackList.forEach(e -> this.attackDamage(e, amount, true));
+
+		for (LivingEntity entity : attackList) {
+			this.attackDamage(entity, amount, true);
+
+			if (data == 1) {
+				this.addPotion(entity, PotionInit.flame, 0, 600);
+			}
+		}
 
 		// 初回着地フラグをtrue
 		this.isGround = true;
@@ -205,9 +214,7 @@ public class IgnisBlastMagic extends AbstractBossMagic {
 
 		// えんちちーリストのソート
 		this.sortEntityList(ignis);
-
-		// 以降パーティクル表示
-		if ( !(this.level instanceof ServerLevel sever) ) { return; }
+		if (!(this.level instanceof ServerLevel sever)) { return; }
 
 		sever.sendParticles(ParticleTypes.EXPLOSION_EMITTER, this.getX(), this.getY() + 1F, this.getZ(), 1, 0F, 0F, 0F, 1F);
 
@@ -221,18 +228,24 @@ public class IgnisBlastMagic extends AbstractBossMagic {
 	}
 
 	// 地面着地時の追加攻撃
-	public void groundRingAttack (IgnisKnight ignis, LivingEntity target) {
-
+	public void groundRingAttack(IgnisKnight ignis, LivingEntity target, int data) {
 		if (this.groundTime++ < 19 || this.groundTime % 20 != 0) { return; }
 
 		// 周囲の敵モブ取得
-		float amount = 10F + this.getAddDamage() * 0.5F;
-		double ran = 14D + this.entityList.size() * 2D;
+		float amount = (data == 1 ? 15F : 10F) + this.getAddDamage() * 0.5F;
+		double ran = (data == 1 ? 20D : 14D) + this.entityList.size() * 2D;
 		this.playSound(SoundEvents.BLAZE_SHOOT, 1F, 1F / (this.rand.nextFloat() * 0.2F + 0.9F));
 
 		// 対象のえんちちーに攻撃
 		List<LivingEntity> attackList = this.getEntityList(LivingEntity.class, e -> e instanceof Enemy && e.isAlive(), ran);
-		attackList.forEach(e -> this.attackDamage(e, amount, true));
+
+		for (LivingEntity entity : attackList) {
+			this.attackDamage(entity, amount, true);
+
+			if (data == 1 && entity.hasEffect(PotionInit.flame)) {
+				this.addAttack(entity, amount, 3);
+			}
+		}
 
 		// えんちちーリストのソート
 		this.sortEntityList(ignis);
@@ -243,7 +256,7 @@ public class IgnisBlastMagic extends AbstractBossMagic {
 		}
 
 		// 以降パーティクル表示
-		if ( !(this.level instanceof ServerLevel sever) ) { return; }
+		if (!(this.level instanceof ServerLevel sever)) { return; }
 
 		BlockPos pos = this.blockPosition();
 
@@ -255,7 +268,7 @@ public class IgnisBlastMagic extends AbstractBossMagic {
 	}
 
 	// えんちちーリストのソート
-	public void sortEntityList (IgnisKnight ignis) {
+	public void sortEntityList(IgnisKnight ignis) {
 
 		// 生存しているえんちちーだけに絞る
 		this.entityList = this.entityList.stream().filter(e -> e.isAlive()).toList();
@@ -272,7 +285,7 @@ public class IgnisBlastMagic extends AbstractBossMagic {
 	}
 
 	// 範囲内にいるかのチェック
-	public boolean checkDistances (BlockPos basePos, BlockPos pos, double range) {
+	public boolean checkDistances(BlockPos basePos, BlockPos pos, double range) {
 		double d0 = basePos.getX() - pos.getX();
 		double d1 = basePos.getY() - pos.getY();
 		double d2 = basePos.getZ() - pos.getZ();
@@ -280,8 +293,7 @@ public class IgnisBlastMagic extends AbstractBossMagic {
 	}
 
 	// ターゲットの設定
-	public List<LivingEntity> setTarget (boolean isSetTarget) {
-
+	public List<LivingEntity> setTarget(boolean isSetTarget) {
 		List<LivingEntity> entityList = this.getEntityList(LivingEntity.class, e -> e instanceof Enemy && e.isAlive(), 48D);
 		if (!isSetTarget) { return entityList; }
 
@@ -305,7 +317,7 @@ public class IgnisBlastMagic extends AbstractBossMagic {
 		return entityList;
 	}
 
-	public void clearInfo (IgnisKnight ignis) {
+	public void clearInfo(IgnisKnight ignis) {
 		this.chargeTime = 0;
 		this.tickTime = 0;
 		this.groundTime = 0;
@@ -320,7 +332,7 @@ public class IgnisBlastMagic extends AbstractBossMagic {
 	}
 
 	// 召喚えんちちーに取得
-	public LivingEntity getEntity () {
+	public LivingEntity getEntity() {
 
 		// えんちちーの初期化が出来ていないなら初期化
 		if (this.summon == null) {

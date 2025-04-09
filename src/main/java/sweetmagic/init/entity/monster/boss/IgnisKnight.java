@@ -57,16 +57,13 @@ public class IgnisKnight extends AbstractSMBoss {
 	private static final EntityDataAccessor<Boolean> SWING = ISMMob.setData(IgnisKnight.class, BOOLEAN);
 	private static final EntityDataAccessor<Boolean> ISATTACK = ISMMob.setData(IgnisKnight.class, BOOLEAN);
 	private static final EntityDataAccessor<Boolean> ISBLAST = ISMMob.setData(IgnisKnight.class, BOOLEAN);
-
+	private double armorHealth = 0D;
 	private int recastTime = 0;									// リキャストタイム
-
 	private int firstAttackChargeTime = 0;						// 1st攻撃のチャージ時間
 	private static final int FIRSTATTACKCHARGEMAXTIME = 135;	// 1st攻撃の最大チャージ時間
 	private int firstAttackTime = 0;							// 1st攻撃の時間
-
 	private boolean isGround = false;							// 着地したかどうか
 	private int groundTime = 0;									// 着地時間
-
 	private int secondAttackChargeTime = 0;						// 2nd攻撃のチャージ時間
 	private static final int SECONDATTACKCHARGEMAXTIME = 145;	// 2nd攻撃の最大チャージ時間
 
@@ -77,7 +74,7 @@ public class IgnisKnight extends AbstractSMBoss {
 	public IgnisKnight(EntityType<IgnisKnight> enType, Level world) {
 		super(enType, world);
 		this.moveControl = new IKMoveControl(this);
-		this.xpReward = 300;
+		this.xpReward = 500;
 	}
 
 	public static AttributeSupplier.Builder registerAttributes() {
@@ -128,23 +125,23 @@ public class IgnisKnight extends AbstractSMBoss {
 		return 0.75F;
 	}
 
-	public int getAttackType () {
+	public int getAttackType() {
 		return this.entityData.get(ATTACK);
 	}
 
-	public void setAttackType (int attack) {
+	public void setAttackType(int attack) {
 		this.entityData.set(ATTACK, attack);
 	}
 
-	public int getArmor () {
+	public int getArmor() {
 		return this.entityData.get(ARMOR);
 	}
 
-	public void setArmor (int armor) {
+	public void setArmor(int armor) {
 		this.entityData.set(ARMOR, armor);
 	}
 
-	public boolean isRush () {
+	public boolean isRush() {
 		return this.entityData.get(RUSH);
 	}
 
@@ -152,7 +149,7 @@ public class IgnisKnight extends AbstractSMBoss {
 		this.entityData.set(RUSH, rush);
 	}
 
-	public boolean isSwing () {
+	public boolean isSwing() {
 		return this.entityData.get(SWING);
 	}
 
@@ -160,7 +157,7 @@ public class IgnisKnight extends AbstractSMBoss {
 		this.entityData.set(SWING, swing);
 	}
 
-	public boolean isAttack () {
+	public boolean isAttack() {
 		return this.entityData.get(ISATTACK);
 	}
 
@@ -168,7 +165,7 @@ public class IgnisKnight extends AbstractSMBoss {
 		this.entityData.set(ISATTACK, isAttack);
 	}
 
-	public boolean isBlast () {
+	public boolean isBlast() {
 		return this.entityData.get(ISBLAST);
 	}
 
@@ -177,25 +174,29 @@ public class IgnisKnight extends AbstractSMBoss {
 	}
 
 	// アーマーがないなら
-	public boolean isArmorEmpty () {
+	public boolean isArmorEmpty() {
 		return this.getArmor() <= 0;
 	}
 
 	// ダメージ処理
 	public boolean hurt(DamageSource src, float amount) {
-
 		Entity attacker = src.getEntity();
 		Entity attackEntity = src.getDirectEntity();
-		if ( attacker != null && attacker instanceof ISMMob) { return false; }
+		if (attacker != null && attacker instanceof ISMMob) { return false; }
 
 		// ボスダメージ計算
-		amount = this.getBossDamageAmount(this.level, this.defTime , src, amount, 8F);
+		boolean isLectern = this.isLectern();
+		amount = this.getBossDamageAmount(this.level, this.defTime , src, amount, isLectern ? 8F : 6F);
 		this.defTime = amount > 0 ? 2 : this.defTime;
 
-		// 魔法攻撃以外なら反撃&ダメージ無効
-		if (this.notMagicDamage(attacker, attackEntity)) {
+		if (attacker instanceof Warden) {
 			this.attackDamage(attacker, SMDamage.magicDamage, amount);
 			return false;
+		}
+
+		// 魔法攻撃以外ならダメージ減少
+		if (this.notMagicDamage(attacker, attackEntity)) {
+			amount *= 0.25F;
 		}
 
 		// 魔導士の召喚台座による召喚の場合
@@ -203,11 +204,17 @@ public class IgnisKnight extends AbstractSMBoss {
 			amount = this.getLecternAction(src, amount, this.getArmor());
 		}
 
+		else if (this.armorHealth > 0D) {
+			this.armorHealth -= amount;
+			this.setArmor((int) (this.armorHealth / 7.5D));
+			amount = 0;
+		}
+
 		return super.hurt(src, amount);
 	}
 
 	// 召喚台座時のダメージ処理
-	public float getLecternAction (DamageSource src, float amount, int armorSize) {
+	public float getLecternAction(DamageSource src, float amount, int armorSize) {
 
 		if (armorSize > 0) {
 
@@ -232,7 +239,7 @@ public class IgnisKnight extends AbstractSMBoss {
 	}
 
 	// 危険な果実でのダメージ計算
-	public float getEvilDamage (float amount, int armorSize) {
+	public float getEvilDamage(float amount, int armorSize) {
 
 		this.setArmor(armorSize - 1);
 		amount = 25F / this.getEntityList(Player.class, 80F).size();
@@ -248,22 +255,45 @@ public class IgnisKnight extends AbstractSMBoss {
 	public void addAdditionalSaveData(CompoundTag tags) {
 		super.addAdditionalSaveData(tags);
 		tags.putInt("armor", this.getArmor());
+		tags.putDouble("armorHealth", this.armorHealth);
 	}
 
 	public void readAdditionalSaveData(CompoundTag tags) {
 		super.readAdditionalSaveData(tags);
 		this.setArmor(tags.getInt("armor"));
+		this.armorHealth = tags.getDouble("armorHealth");
+
+		if (!this.isLectern()) {
+			this.setBossEvent(BC_BLUE, NOTCHED_6);
+		}
 	}
 
 	@Nullable
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance dif, MobSpawnType spawn, @Nullable SpawnGroupData data, @Nullable CompoundTag tag) {
 		data = super.finalizeSpawn(world, dif, spawn, data, tag);
-		this.setArmor(this.getPlayer(Player.class).size() * 4);
+		this.startInfo();
 		return data;
 	}
 
-	protected void customServerAiStep() {
+	public void startInfo() {
+		super.startInfo();
+		this.setArmor(4 * this.getEntityList(Player.class, 80D).size());
+		this.armorHealth = this.getArmor() * 15D;
+	}
 
+	// バフによるダメージ増減
+	public float getBuffPower() {
+		float damage = super.getBuffPower();
+
+		if (!this.isLectern()) {
+			damage += 10F;
+			damage *= 1.25F;
+		}
+
+		return damage;
+	}
+
+	protected void customServerAiStep() {
 		super.customServerAiStep();
 
 		LivingEntity target = this.getTarget();
@@ -289,7 +319,7 @@ public class IgnisKnight extends AbstractSMBoss {
 	}
 
 	// 1stフェーズの攻撃
-	public void firstPhaseSttack (LivingEntity target) {
+	public void firstPhaseSttack(LivingEntity target) {
 
 		this.setAttack(true);
 		boolean isPlayer = this.isPlayer(target);
@@ -300,11 +330,11 @@ public class IgnisKnight extends AbstractSMBoss {
 		}
 
 		// 向きを強制設定（これしないと変な方向になるときがある）
-        double d1 = target.getX() - this.getX();
+		double d1 = target.getX() - this.getX();
 		double d2 = target.getZ() - this.getZ();
 		this.setYRot(-((float) Math.atan2(d1, d2)) * (180F / (float) Math.PI));
-        this.yBodyRot = this.getYRot();
-        this.yHeadRot = this.getYRot();
+		this.yBodyRot = this.getYRot();
+		this.yHeadRot = this.getYRot();
 		if (this.firstAttackChargeTime++ < FIRSTATTACKCHARGEMAXTIME) { return; }
 
 		// 最大チャージが終わったら攻撃タイプを設定
@@ -330,18 +360,18 @@ public class IgnisKnight extends AbstractSMBoss {
 	}
 
 	// 2ndフェーズの攻撃
-	public void secondPhaseSttack (LivingEntity target) {
+	public void secondPhaseSttack(LivingEntity target) {
 
 		this.setAttackType(2);
 		this.setAttack(true);
 		boolean isPlayer = this.isPlayer(target);
 
 		// 向きを強制設定（これしないと変な方向になるときがある）
-        double d1 = target.getX() - this.getX();
+		double d1 = target.getX() - this.getX();
 		double d2 = target.getZ() - this.getZ();
 		this.setYRot(-((float) Math.atan2(d1, d2)) * (180F / (float) Math.PI));
-        this.yBodyRot = this.getYRot();
-        this.yHeadRot = this.getYRot();
+		this.yBodyRot = this.getYRot();
+		this.yHeadRot = this.getYRot();
 		if (this.secondAttackChargeTime++ < SECONDATTACKCHARGEMAXTIME) { return; }
 
 		// ターゲットがないなら設定
@@ -360,7 +390,7 @@ public class IgnisKnight extends AbstractSMBoss {
 	}
 
 	// 突進攻撃
-	public void rushAttack (LivingEntity target, boolean isPlayer) {
+	public void rushAttack(LivingEntity target, boolean isPlayer) {
 
 		// 移動速度を取得
 		Vec3 vec = this.getDeltaMovement();
@@ -422,7 +452,7 @@ public class IgnisKnight extends AbstractSMBoss {
 
 				// 接触攻撃
 				this.contactDamage(isPlayer, this.setDamage(15F), 2D);
-				if ( !(this.level instanceof ServerLevel sever) ) { return; }
+				if (!(this.level instanceof ServerLevel sever)) { return; }
 
 				BlockPos pos = this.blockPosition();
 				float aX = (float) (-vec.x / 6F);
@@ -440,7 +470,7 @@ public class IgnisKnight extends AbstractSMBoss {
 	}
 
 	// ハンマー攻撃
-	public void hammerGroundwork (LivingEntity target, boolean isPlayer) {
+	public void hammerGroundwork(LivingEntity target, boolean isPlayer) {
 
 		this.tickTime++;
 
@@ -463,9 +493,9 @@ public class IgnisKnight extends AbstractSMBoss {
 		BlockPos pos = this.blockPosition();
 		BlockPos targetPos = target.blockPosition();
 
-		double x = ( targetPos.getX() - pos.getX() ) * rate;
-		double y = ( targetPos.getY() - pos.getY() ) * rate;
-		double z = ( targetPos.getZ() - pos.getZ() ) * rate;
+		double x = (targetPos.getX() - pos.getX()) * rate;
+		double y = (targetPos.getY() - pos.getY()) * rate;
+		double z = (targetPos.getZ() - pos.getZ()) * rate;
 		BlockPos attackPos = new BlockPos(pos.getX() + x, pos.getY() + y, pos.getZ() + z);
 		this.level.playSound(null, attackPos, SoundEvents.FIRECHARGE_USE, SoundSource.HOSTILE, 1F, 1F);
 
@@ -494,7 +524,7 @@ public class IgnisKnight extends AbstractSMBoss {
 			}
 		}
 
-		if (!(this.level instanceof ServerLevel server) ) { return; }
+		if (!(this.level instanceof ServerLevel server)) { return; }
 
 		for (int i = 0; i < 4; i++) {
 			this.spawnParticleRing(server, ParticleTypes.SOUL_FIRE_FLAME, 1D, new BlockPos(attackPos.getX(), attackPos.getY() - 2D + 0.25D + i, attackPos.getZ()), 1, 0.25D, 0D);
@@ -502,7 +532,7 @@ public class IgnisKnight extends AbstractSMBoss {
 	}
 
 	// ハンマー攻撃
-	public void hammerBlast (LivingEntity target, boolean isPlayer) {
+	public void hammerBlast(LivingEntity target, boolean isPlayer) {
 
 		this.tickTime++;
 		this.setBlast(true);
@@ -530,9 +560,9 @@ public class IgnisKnight extends AbstractSMBoss {
 					float y = (float) (this.getY() + this.rand.nextFloat() - 0.5F);
 					float z = (float) (this.getZ() + this.rand.nextFloat() - 0.5F);
 
-					float aX = (rand.nextFloat() - rand.nextFloat()) * 0.75F;
-					float aY = 0.1F + rand.nextFloat() * 0.2F;
-					float aZ = (rand.nextFloat() - rand.nextFloat()) * 0.75F;
+					float aX = (this.rand.nextFloat() - this.rand.nextFloat()) * 0.75F;
+					float aY = 0.1F + this.rand.nextFloat() * 0.2F;
+					float aZ = (this.rand.nextFloat() - this.rand.nextFloat()) * 0.75F;
 					sever.sendParticles(ParticleTypes.SOUL_FIRE_FLAME, x, y, z, 0, aX, aY, aZ, 1F);
 				}
 			}
@@ -633,28 +663,23 @@ public class IgnisKnight extends AbstractSMBoss {
 	}
 
 	// 接触ダメージ
-	public void contactDamage (boolean isPlayer, float amount, double range) {
-
-		// 範囲のモブを取得
+	public void contactDamage(boolean isPlayer, float amount, double range) {
 		List<LivingEntity> targetList = this.getEntityList(LivingEntity.class, this.getFilterList(isPlayer), range);
 		if (targetList.isEmpty()) { return; }
 
 		Random rand = this.rand;
 
 		for (LivingEntity target : targetList) {
-
 			this.attackDamage(target, this.getSRC(), target instanceof Enemy ? amount * 3F : amount);
+			if (!(this.level instanceof ServerLevel sever)) { continue; }
 
-			if (this.level instanceof ServerLevel sever) {
+			BlockPos pos = target.blockPosition();
+			float x = (float) (pos.getX() + rand.nextFloat() - 0.5F);
+			float y = (float) (pos.getY() + rand.nextFloat() + 1F);
+			float z = (float) (pos.getZ() + rand.nextFloat() - 0.5F);
 
-				BlockPos pos = target.blockPosition();
-				float x = (float) (pos.getX() + rand.nextFloat() - 0.5F);
-				float y = (float) (pos.getY() + rand.nextFloat() + 1F);
-				float z = (float) (pos.getZ() + rand.nextFloat() - 0.5F);
-
-				for (int i = 0; i < 16; i++) {
-					sever.sendParticles(ParticleTypes.CRIT, x, y, z, 4, 0F, 0F, 0F, 1F);
-				}
+			for (int i = 0; i < 16; i++) {
+				sever.sendParticles(ParticleTypes.CRIT, x, y, z, 4, 0F, 0F, 0F, 1F);
 			}
 		}
 
@@ -662,12 +687,12 @@ public class IgnisKnight extends AbstractSMBoss {
 		this.playSound(SoundEvents.ANVIL_PLACE, 1F, 1F);
 	}
 
-	public float setDamage (float amount) {
+	public float setDamage(float amount) {
 		amount = this.isArmorEmpty() ? amount * 1.25F : amount;
-		return ( this.isHard() ? amount * 2F : amount ) + this.getBuffPower();
+		return (this.isHard() ? amount * 2F : amount) + this.getBuffPower();
 	}
 
-	public void clearInfo () {
+	public void clearInfo() {
 		this.setAttackType(this.isHalfHealth(this) ? 2 : this.random.nextInt(2));
 		this.recastTime = this.isHard() ? 25 : 75 + this.random.nextInt(50);
 		this.firstAttackChargeTime = 0;
@@ -685,11 +710,11 @@ public class IgnisKnight extends AbstractSMBoss {
 		this.setBlast(false);
 	}
 
-	public Predicate<LivingEntity> getFilterList (boolean isPlayer) {
+	public Predicate<LivingEntity> getFilterList(boolean isPlayer) {
 		return e -> !e.isSpectator() && e.isAlive() && !this.targetList.contains(e) && (isPlayer ? (e instanceof Player || e instanceof AbstractSummonMob) : !(e instanceof Player) ) && !(e instanceof ISMMob);
 	}
 
-	public Predicate<LivingEntity> getFilter (boolean isPlayer, double range) {
+	public Predicate<LivingEntity> getFilter(boolean isPlayer, double range) {
 		return e -> !e.isSpectator() && e.isAlive() && this.checkDistances(this.blockPosition(), e.blockPosition(), range * range) && (isPlayer ? (e instanceof Player || e instanceof AbstractSummonMob) : !(e instanceof Player) ) && !(e instanceof ISMMob);
 	}
 

@@ -3,18 +3,11 @@ package sweetmagic.init.entity.monster.boss;
 import java.util.List;
 import java.util.UUID;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.BossEvent;
-import net.minecraft.world.BossEvent.BossBarColor;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -31,7 +24,6 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.raid.Raider;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import sweetmagic.api.ientity.ISMMob;
 import sweetmagic.init.EntityInit;
@@ -46,18 +38,13 @@ public class SilverLandRoad extends AbstractSMBoss {
 
 	private UUID ownerID;
 	private LivingEntity owner;
-
 	private int toxicTick = 0;
 	private static final int MAX_TOXIC_TICK = 400;
-
 	private int poisonTick = 0;
 	private static final int MAX_POISON_TICK = 150;
-
 	private int summonTick = 0;
 	private static final int MAX_SUMMON_TICK = 600;
-
 	private static final EntityDataAccessor<Boolean> IS_ALIVE = ISMMob.setData(SilverLandRoad.class, BOOLEAN);
-	private final ServerBossEvent bossEvent = this.getBossBar(BossEvent.BossBarColor.BLUE, BossEvent.BossBarOverlay.NOTCHED_6);
 
 	public SilverLandRoad(Level world) {
 		super(EntityInit.silverLandRoad, world);
@@ -65,8 +52,9 @@ public class SilverLandRoad extends AbstractSMBoss {
 
 	public SilverLandRoad(EntityType<? extends AbstractSMBoss> enType, Level world) {
 		super(enType, world);
-		this.xpReward = 150;
+		this.xpReward = 400;
 		this.maxUpStep = 1.25F;
+		this.setBossEvent(BC_BLUE, NOTCHED_6);
 	}
 
 	protected void registerGoals() {
@@ -98,26 +86,18 @@ public class SilverLandRoad extends AbstractSMBoss {
 	}
 
 	protected SoundEvent getAmbientSound() {
-		return SoundEvents.WOLF_AMBIENT;
-	}
-
-	protected SoundEvent getHurtSound(DamageSource src) {
-		return SoundEvents.WOLF_HURT;
-	}
-
-	protected SoundEvent getDeathSound() {
-		return SoundEvents.WOLF_DEATH;
+		return SoundEvents.WOLF_GROWL;
 	}
 
 	public float getVoicePitch() {
-		return 0.75F;
+		return 0.65F;
 	}
 
 	protected float getSoundVolume() {
 		return 0.5F;
 	}
 
-	public boolean getAlive () {
+	public boolean getAlive() {
 		return this.entityData.get(IS_ALIVE);
 	}
 
@@ -143,25 +123,21 @@ public class SilverLandRoad extends AbstractSMBoss {
 		if (tags.contains("ownerID")) {
 			this.setOwnerID(tags.getUUID("ownerID"));
 		}
-
-		if (this.hasCustomName()) {
-			this.bossEvent.setName(this.getDisplayName());
-		}
 	}
 
-	public UUID getOwnerID () {
+	public UUID getOwnerID() {
 		return this.ownerID;
 	}
 
-	public void setOwnerID (LivingEntity entity) {
+	public void setOwnerID(LivingEntity entity) {
 		this.ownerID = entity.getUUID();
 	}
 
-	public void setOwnerID (UUID id) {
+	public void setOwnerID(UUID id) {
 		this.ownerID = id;
 	}
 
-	public LivingEntity getEntity () {
+	public LivingEntity getEntity() {
 
 		LivingEntity entity = this.owner;
 
@@ -172,36 +148,24 @@ public class SilverLandRoad extends AbstractSMBoss {
 		return entity;
 	}
 
-	public void setCustomName(@Nullable Component tip) {
-		super.setCustomName(tip);
-		this.bossEvent.setName(this.getDisplayName());
-	}
-
-	public void startSeenByPlayer(ServerPlayer player) {
-		super.startSeenByPlayer(player);
-		this.bossEvent.addPlayer(player);
-	}
-
-	public void stopSeenByPlayer(ServerPlayer player) {
-		super.stopSeenByPlayer(player);
-		this.bossEvent.removePlayer(player);
-	}
-
 	// ダメージ処理
 	public boolean hurt(DamageSource src, float amount) {
-
 		Entity attacker = src.getEntity();
 		Entity attackEntity = src.getDirectEntity();
-		if ( attacker != null && attacker instanceof ISMMob) { return false; }
+		if (attacker != null && attacker instanceof ISMMob) { return false; }
 
 		// ボスダメージ計算
 		amount = this.getBossDamageAmount(this.level, this.defTime , src, amount, 8F);
 		this.defTime = amount > 0 ? 2 : this.defTime;
 
-		// 魔法攻撃以外なら反撃&ダメージ無効
-		if (this.notMagicDamage(attacker, attackEntity)) {
+		if (attacker instanceof Warden) {
 			this.attackDamage(attacker, SMDamage.magicDamage, amount);
 			return false;
+		}
+
+		// 魔法攻撃以外ならダメージ減少
+		if (this.notMagicDamage(attacker, attackEntity)) {
+			amount *= 0.25F;
 		}
 
 		if (amount > 1F) {
@@ -213,51 +177,48 @@ public class SilverLandRoad extends AbstractSMBoss {
 	}
 
 	protected void customServerAiStep() {
-
 		super.customServerAiStep();
-        this.bossEvent.setProgress(this.getHealth() / this.getMaxHealth());
 
-        if (this.isHalfHealth(this) && !this.getHalfHealth()) {
-        	this.bossEvent.setColor(BossBarColor.RED);
-        	this.setHalfHealth(true);
-        }
+		if (this.isHalfHealth(this) && !this.getHalfHealth()) {
+			this.setHalfHealth(true);
+		}
 
 		LivingEntity target = this.getTarget();
 		if (target == null) { return; }
 
 		this.getLookControl().setLookAt(target, 10F, 10F);
-        this.firstAttack(target);
+		this.firstAttack(target);
 
-        if (this.isHalfHealth(this) || this.getHalfHealth()) {
-        	this.secondAttack(target);
-        }
+		if (this.isHalfHealth(this) || this.getHalfHealth()) {
+			this.secondAttack(target);
+		}
 
-        if (!this.isAlive()) {
-        	this.toxicTick++;
+		if (!this.isAlive()) {
+			this.toxicTick++;
 			this.poisonTick++;
-        	this.summonTick++;
-        }
+			this.summonTick++;
+		}
 
-        if (this.hasEffect(PotionInit.recast_reduction)) {
-        	this.toxicTick++;
+		if (this.hasEffect(PotionInit.recast_reduction)) {
+			this.toxicTick++;
 			this.poisonTick++;
-        	this.summonTick++;
-        }
+			this.summonTick++;
+		}
 	}
 
-	public void firstAttack (LivingEntity target) {
-		if(this.poisonTick++ >= MAX_POISON_TICK) {
+	public void firstAttack(LivingEntity target) {
+		if (this.poisonTick++ >= MAX_POISON_TICK) {
 			this.poisonAttack(target);
 		}
 	}
 
 	public void secondAttack(LivingEntity target) {
 
-		if(this.summonTick++ >= MAX_SUMMON_TICK) {
+		if (this.summonTick++ >= MAX_SUMMON_TICK) {
 			this.poisonWolf(target);
 		}
 
-		if(this.toxicTick++ >= MAX_TOXIC_TICK) {
+		if (this.toxicTick++ >= MAX_TOXIC_TICK) {
 			this.toxicCircle(target);
 		}
 
@@ -271,7 +232,7 @@ public class SilverLandRoad extends AbstractSMBoss {
 		}
 	}
 
-	public void poisonAttack (LivingEntity target) {
+	public void poisonAttack(LivingEntity target) {
 
 		List<LivingEntity> targetList = this.getEntityList(LivingEntity.class, this.getFilter(this.isPlayer(target)), 48D);
 
@@ -282,7 +243,7 @@ public class SilverLandRoad extends AbstractSMBoss {
 			double z = entity.getZ() - this.getZ();
 			double xz = Math.sqrt(x * x + z * z);
 
-			PoisonMagicShot magic = new PoisonMagicShot(this.level, this, ItemStack.EMPTY);
+			PoisonMagicShot magic = new PoisonMagicShot(this.level, this);
 			magic.shoot(x, y - xz * 0.035D, z, 1F, 0F);
 			magic.setAddDamage(magic.getAddDamage() + 6F);
 			magic.setMaxLifeTime(100);
@@ -293,12 +254,11 @@ public class SilverLandRoad extends AbstractSMBoss {
 		this.poisonTick = 0;
 	}
 
-	public void poisonWolf (LivingEntity target) {
+	public void poisonWolf(LivingEntity target) {
 		List<LivingEntity> targetList = this.getEntityList(LivingEntity.class, this.getFilter(this.isPlayer(target)), 48D);
 		int size = 1 + targetList.size() / 2;
 
 		for (int i = 0; i < size ; i++) {
-
 			PhantomWolf entity = new PhantomWolf(this.level);
 			entity.setPos(this.getX() + 0.5D, this.getY() + 0.5D, this.getZ() + 0.5D);
 			entity.getAttribute(Attributes.MAX_HEALTH).setBaseValue(this.getMaxHealth() / 5F);
@@ -312,13 +272,13 @@ public class SilverLandRoad extends AbstractSMBoss {
 		this.summonTick = 0;
 	}
 
-	public void toxicCircle (LivingEntity target) {
+	public void toxicCircle(LivingEntity target) {
 		List<LivingEntity> targetList = this.getEntityList(LivingEntity.class, this.getFilter(this.isPlayer(target)), 48D);
 		double range = 5D + targetList.size() * 0.5D;
 		double x = target.getX() - this.getX();
 		double z = target.getZ() - this.getZ();
 
-		ToxicCircle entity = new ToxicCircle(this.level, this, ItemStack.EMPTY);
+		ToxicCircle entity = new ToxicCircle(this.level, this);
 		entity.setHitDead(false);
 		entity.shoot(x, 0D, z, 1F, 0F);
 		entity.setAddDamage(entity.getAddDamage() + 6F);
@@ -335,6 +295,7 @@ public class SilverLandRoad extends AbstractSMBoss {
 	}
 
 	public void startInfo() {
+		super.startInfo();
 		this.poisonTick = 120;
 		this.toxicTick = 240;
 		this.summonTick = 500;
@@ -342,9 +303,4 @@ public class SilverLandRoad extends AbstractSMBoss {
 
 	@Override
 	public void clearInfo() { }
-
-	protected void tickDeath() {
-		super.tickDeath();
-		this.bossEvent.setProgress(0F);
-	}
 }

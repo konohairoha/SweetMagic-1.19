@@ -7,15 +7,11 @@ import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -29,27 +25,25 @@ import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.SitWhenOrderedToGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
-import net.minecraft.world.entity.monster.AbstractSkeleton;
 import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.Witch;
 import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.raid.Raider;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
+import sweetmagic.api.ientity.IGolem;
 import sweetmagic.api.ientity.ISMMob;
 import sweetmagic.init.EntityInit;
+import sweetmagic.init.PotionInit;
+import sweetmagic.util.PlayerHelper;
 import sweetmagic.util.SMDamage;
 
-public class WitchGolem extends AbstractSummonMob {
+public class WitchGolem extends AbstractSummonMob implements IGolem {
 
-	private static final EntityDataAccessor<Integer> ATTACK_TICK = ISMMob.setData(AbstractSummonMob.class, EntityDataSerializers.INT);
+	private static final EntityDataAccessor<Integer> ATTACK_TICK = ISMMob.setData(WitchGolem.class, ISMMob.INT);
 
 	public WitchGolem(Level world) {
 		super(EntityInit.witchGolem, world);
@@ -87,7 +81,6 @@ public class WitchGolem extends AbstractSummonMob {
 		this.targetSelector.addGoal(4, new NearestAttackSMMobGoal<>(this, Monster.class, false));
 		this.targetSelector.addGoal(5, new AttackTargetGoal<>(this, Raider.class, false));
 		this.targetSelector.addGoal(6, new AttackTargetGoal<>(this, Warden.class, false));
-		this.targetSelector.addGoal(7, new AttackTargetGoal<>(this, AbstractSkeleton.class, false));
 	}
 
 	protected SoundEvent getHurtSound(DamageSource src) {
@@ -108,6 +101,24 @@ public class WitchGolem extends AbstractSummonMob {
 
 	public boolean canAttackType(EntityType<?> eType) {
 		return eType == EntityType.PLAYER || eType == EntityType.CREEPER ? false : super.canAttackType(eType);
+	}
+
+	public void hurtAction(Entity attacker, float amount) {
+		if (amount < 2F) { return; }
+
+		DamageSource src = SMDamage.getAddDamage(this, this);
+
+		if (attacker instanceof EnderMan || attacker instanceof Witch) {
+			src = DamageSource.playerAttack((Player) this.getOwner());
+		}
+
+		int effecsize = PlayerHelper.getEffectList(this, PotionInit.BUFF).size();
+		attacker.hurt(src, amount * (0.1F + 0.15F * effecsize));
+		attacker.invulnerableTime = 0;
+
+		if (effecsize > 0) {
+			this.heal(amount * 0.01F * effecsize);
+		}
 	}
 
 	public boolean doHurtTarget(Entity entity) {
@@ -160,21 +171,19 @@ public class WitchGolem extends AbstractSummonMob {
 	}
 
 	public void tick() {
-
 		super.tick();
-		if ( (this.tickCount % 20 != 0 && !this.isAlive()) || this.getShit()) { return; }
+		if ((this.tickCount % 20 != 0 && !this.isAlive()) || this.getShit()) { return; }
 
 		List<Monster> entityList = this.getEntityList(Monster.class, this.isTarget(), 32D + this.getRange());
 
 		for (Monster entity : entityList) {
-			if ( !(entity.getTarget() instanceof Player) ) { continue; }
+			if (!(entity.getTarget() instanceof Player)) { continue; }
 			entity.setTarget(this);
 			entity.setLastHurtByMob(this);
 		}
 	}
 
 	public void aiStep() {
-
 		super.aiStep();
 
 		int attackTick = this.getAttackTick();
@@ -204,48 +213,7 @@ public class WitchGolem extends AbstractSummonMob {
 		}
 	}
 
-	public InteractionResult mobInteract(Player player, InteractionHand hand) {
-
-		ItemStack stack = player.getItemInHand(hand);
-		Item item = stack.getItem();
-
-		if (this.level.isClientSide) {
-
-			if (this.isOwnedBy(player)) {
-				return InteractionResult.SUCCESS;
-			}
-
-			else {
-				return !this.isFood(stack) || !(this.getHealth() < this.getMaxHealth()) ? InteractionResult.PASS : InteractionResult.SUCCESS;
-			}
-		}
-
-		if (this.isOwnedBy(player)) {
-
-			if (item.isEdible() && stack.is(Items.IRON_INGOT) && this.getHealth() < this.getMaxHealth()) {
-				this.heal(25F);
-				this.gameEvent(GameEvent.EAT, this);
-				return InteractionResult.CONSUME;
-			}
-
-			InteractionResult result = super.mobInteract(player, hand);
-			return this.mobClick(result, stack);
-		}
-
-		InteractionResult result1 = super.mobInteract(player, hand);
-		if (result1.consumesAction()) {
-			this.setPersistenceRequired();
-		}
-
-		return result1;
-	}
-
 	public Vec3 getLeashOffset() {
 		return new Vec3(0D, (double) (0.875F * this.getEyeHeight()), (double) (this.getBbWidth() * 0.4F));
-	}
-
-	@Override
-	public WitchGolem getBreedOffspring(ServerLevel world, AgeableMob mob) {
-		return null;
 	}
 }

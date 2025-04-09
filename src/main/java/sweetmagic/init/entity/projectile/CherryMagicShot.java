@@ -36,17 +36,17 @@ public class CherryMagicShot extends AbstractMagicShot {
 		this.setWandInfo(wandInfo);
 	}
 
-	public CherryMagicShot(Level world, LivingEntity entity, ItemStack stack) {
+	public CherryMagicShot(Level world, LivingEntity entity) {
 		this(entity.getX(), entity.getEyeY() - (double) 0.1F, entity.getZ(), world);
 		this.setOwner(entity);
-		this.stack = stack;
+		this.stack = ItemStack.EMPTY;
 		this.setRange(4D);
 	}
 
 	// えんちちーに当たった時の処理
 	protected void entityHit(LivingEntity living) {
 		if (this.getRange() > 0D) {
-			this.rangeAttack(living.blockPosition(), (float) this.getDamage() * 0.85F, this.getRange());
+			this.rangeAttack(living.blockPosition(), this.getDamage() * 0.85F, this.getRange());
 		}
 	}
 
@@ -58,15 +58,27 @@ public class CherryMagicShot extends AbstractMagicShot {
 		this.discard();
 	}
 
-	public void rangeAttack (BlockPos bPos, float dame, double range) {
+	public void rangeAttack(BlockPos bPos, float dame, double range) {
 
 		double effectRange = range * range;
 
 		if (this.level instanceof ServerLevel server) {
 
-			for (double eRange = 0D; eRange < range; eRange++) {
-				for (int i = 0; i < Math.max(1, this.getData()); i++) {
-					this.spawnParticleRing2(server, ParticleInit.CHERRY_BLOSSOMS_LARGE.get(), 1 + eRange - i, bPos.above(i), -0.05D, -0.35D);
+			ParticleOptions par = ParticleInit.CHERRY_BLOSSOMS_LARGE;
+
+			if (this.getData() == 3) {
+				for (double eRange = 0D; eRange < range; eRange++) {
+					for (int i = 0; i < 5; i++) {
+						this.spawnParticleRing2(server, par, 1 + eRange * 1.5D - i, bPos.above(i), -0.05D, -0.1D, -0.75D);
+					}
+				}
+			}
+
+			else {
+				for (double eRange = 0D; eRange < range; eRange++) {
+					for (int i = 0; i < Math.max(1, this.getData()); i++) {
+						this.spawnParticleRing2(server, par, 1 + eRange - i, bPos.above(i), -0.05D, 0D, -0.35D);
+					}
 				}
 			}
 		}
@@ -75,6 +87,7 @@ public class CherryMagicShot extends AbstractMagicShot {
 		if (entityList.isEmpty()) { return; }
 
 		boolean isPlayer = this.getOwner() instanceof Player;
+		int level = this.getData() == 3 ? 2 : Math.max(1, this.getData() - 1);
 
 		for (LivingEntity entity : entityList) {
 
@@ -85,7 +98,7 @@ public class CherryMagicShot extends AbstractMagicShot {
 				this.attackDamage(entity, dame * 0.25F, false);
 
 			if (isPlayer) {
-				this.addPotion(entity, PotionInit.dig_poison_vulnerable, 1200, Math.max(1, this.getData() - 1));
+				this.addPotion(entity, PotionInit.dig_poison_vulnerable, 1200, level);
 			}
 		}
 	}
@@ -107,17 +120,11 @@ public class CherryMagicShot extends AbstractMagicShot {
 			float f1 = (float) (this.getX() - 0.5F + rand.nextFloat() + vec.x * i / 5F);
 			float f2 = (float) (this.getY() - 0.25F + rand.nextFloat() * 0.5F + vec.y * i / 5F);
 			float f3 = (float) (this.getZ() - 0.5F + rand.nextFloat() + vec.z * i / 5F);
-
-			this.level.addParticle(ParticleInit.CHERRY_BLOSSOMS_LARGE.get(), f1, f2, f3, x, y, z);
+			this.level.addParticle(ParticleInit.CHERRY_BLOSSOMS_LARGE, f1, f2, f3, x, y, z);
 		}
 	}
 
-	@Override
-	public SMElement getElement() {
-		return SMElement.EARTH;
-	}
-
-	public void spawnParticleRing2(ServerLevel server, ParticleOptions par, double range, BlockPos pos, double addY, double speed) {
+	public void spawnParticleRing2(ServerLevel server, ParticleOptions par, double range, BlockPos pos, double addY, double ySpeed, double speed) {
 
 		double x = pos.getX() + 0.5D;
 		double y = pos.getY() + 1D + addY;
@@ -128,7 +135,12 @@ public class CherryMagicShot extends AbstractMagicShot {
 
 			if (rand.nextFloat() >= 0.1F) { continue; }
 			double rate = range * 0.75D;
-			server.sendParticles(par, x + Math.cos(degree) * rate, y, z + Math.sin(degree) * rate, 0, Math.cos(degree) * 0.65D, 0, Math.sin(degree) * 0.65D, speed);
+			server.sendParticles(par, x + Math.cos(degree) * rate, y, z + Math.sin(degree) * rate, 0, Math.cos(degree) * 0.65D, ySpeed, Math.sin(degree) * 0.65D, speed);
 		}
+	}
+
+	@Override
+	public SMElement getElement() {
+		return SMElement.EARTH;
 	}
 }

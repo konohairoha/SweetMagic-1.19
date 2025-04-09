@@ -8,6 +8,8 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.goal.WrappedGoal;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
@@ -15,6 +17,7 @@ import sweetmagic.api.emagic.SMElement;
 import sweetmagic.api.iitem.info.WandInfo;
 import sweetmagic.init.EntityInit;
 import sweetmagic.init.ParticleInit;
+import sweetmagic.init.entity.ai.ExplosionAttackGoal;
 
 public class ExplosionMagicShot extends AbstractMagicShot {
 
@@ -33,10 +36,10 @@ public class ExplosionMagicShot extends AbstractMagicShot {
 		this.setWandInfo(wandInfo);
 	}
 
-	public ExplosionMagicShot(Level world, LivingEntity entity, ItemStack stack) {
+	public ExplosionMagicShot(Level world, LivingEntity entity) {
 		this(entity.getX(), entity.getEyeY() - (double) 0.1F, entity.getZ(), world);
 		this.setOwner(entity);
-		this.stack = stack;
+		this.stack = ItemStack.EMPTY;
 		this.setRange(5D);
 	}
 
@@ -55,7 +58,7 @@ public class ExplosionMagicShot extends AbstractMagicShot {
 		this.discard();
 	}
 
-	public void rangeAttack (BlockPos pos, float dame, double range) {
+	public void rangeAttack(BlockPos pos, float dame, double range) {
 		this.playSound(SoundEvents.GENERIC_EXPLODE, 3F, 1F / (this.random.nextFloat() * 0.2F + 0.9F));
 
 		if (this.level instanceof ServerLevel sever) {
@@ -64,20 +67,38 @@ public class ExplosionMagicShot extends AbstractMagicShot {
 
 		List<LivingEntity> entityList = this.getEntityList(LivingEntity.class, this.isTarget(), range);
 		entityList.forEach(e -> this.attackDamage(e, dame, false));
+
+		if (this.getData() >= 3) {
+			List<Mob> mobList = this.getEntityList(Mob.class, this.isTarget(), range);
+
+			for (Mob mob : mobList) {
+
+				List<WrappedGoal> goalList = mob.goalSelector.getAvailableGoals().stream().filter(e -> e.getGoal() instanceof ExplosionAttackGoal).toList();
+
+				if(goalList.isEmpty()) {
+					mob.goalSelector.addGoal(0, new ExplosionAttackGoal(mob, this.getOwner(), this, this.getDamage(), 31 + this.rand.nextInt(4)));
+				}
+
+				else {
+					((ExplosionAttackGoal) goalList.get(0).getGoal()).clearInfo(31 + this.rand.nextInt(4));
+				}
+			}
+		}
 	}
 
 	// ダメージレートの取得
-	public float getDamageRate () {
+	public float getDamageRate() {
 		switch (this.getData()) {
 		case 1: return 0.875F;
 		case 2: return 1.35F;
+		case 3: return 1.75F;
 		default: return 0.5F;
 		}
 	}
 
 	// パーティクルスポーン
 	protected void spawnParticle() {
-		this.level.addParticle(ParticleInit.ORB.get(), this.getX(), this.getY(), this.getZ(), 255F / 255F, 248F / 255F, 44F / 255F);
+		this.level.addParticle(ParticleInit.ORB, this.getX(), this.getY(), this.getZ(), 1F, 248F / 255F, 44F / 255F);
 	}
 
 	// 属性の取得

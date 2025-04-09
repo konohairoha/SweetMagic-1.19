@@ -78,7 +78,6 @@ public class ArchSpider extends Spider implements ISMMob {
 
 	// ダメージ処理
 	public boolean hurt(DamageSource src, float amount) {
-
 		Entity attacker = src.getEntity();
 		if ( attacker != null && attacker instanceof ISMMob) { return false; }
 
@@ -93,7 +92,6 @@ public class ArchSpider extends Spider implements ISMMob {
 	}
 
 	public boolean doHurtTarget(Entity target) {
-
 		if (!super.doHurtTarget(target)) { return false; }
 		if (!( target instanceof LivingEntity living ) ) { return true; }
 
@@ -111,7 +109,7 @@ public class ArchSpider extends Spider implements ISMMob {
 
 		this.addPotion(living, PotionInit.deadly_poison, time, level);
 		living.invulnerableTime = 0;
-         return true;
+		return true;
 	}
 
 	public static class SpiderAttackGoal extends MeleeAttackGoal {

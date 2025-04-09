@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -14,6 +15,7 @@ import sweetmagic.api.emagic.SMElement;
 import sweetmagic.api.iitem.info.WandInfo;
 import sweetmagic.init.EntityInit;
 import sweetmagic.init.ParticleInit;
+import sweetmagic.init.PotionInit;
 import sweetmagic.init.entity.monster.boss.QueenFrost;
 
 public class FrostLaserMagic extends AbstractBossMagic {
@@ -56,25 +58,24 @@ public class FrostLaserMagic extends AbstractBossMagic {
 
 	// 攻撃時のパーティクル
 	public void attackParticle () {
+		if (!(this.level instanceof ServerLevel server)) { return; }
 
 		// パーティクルを出す
-		if (this.level instanceof ServerLevel server) {
+		Random rand = this.rand;
+		BlockPos p = this.target.blockPosition();
+		ParticleOptions par = ParticleInit.FROST_LASER;
 
-			Random rand = this.rand;
-			BlockPos p = this.target.blockPosition();
+		for (int i = 0; i < 10; i++) {
 
-			for (int i = 0; i < 10; i++) {
+			if (rand.nextFloat() >= 0.65F) { continue; }
 
-				if (rand.nextFloat() >= 0.65F) { continue; }
-
-				float f1 = (float) this.getX() + rand.nextFloat() - 0.5F;
-				float f2 = (float) this.getY() + 0.5F;
-				float f3 = (float) this.getZ() + rand.nextFloat() - 0.5F;
-				float x = (float) ( ( p.getX() - this.getX() + rand.nextFloat() * 1.5F ) * 0.125F);
-				float y = (float) ( ( p.getY() - this.getY() + rand.nextFloat() * 1.5F ) * 0.125F);
-				float z = (float) ( ( p.getZ() - this.getZ() + rand.nextFloat() * 1.5F ) * 0.125F);
-				server.sendParticles(ParticleInit.FROST_LASER.get(), f1, f2, f3, 0, x, y, z, 1F);
-			}
+			float f1 = (float) this.getX() + rand.nextFloat() - 0.5F;
+			float f2 = (float) this.getY() + 0.5F;
+			float f3 = (float) this.getZ() + rand.nextFloat() - 0.5F;
+			float x = (float) ((p.getX() - this.getX() + this.getRandFloat(1.5F)) * 0.125F);
+			float y = (float) ((p.getY() - this.getY() + this.getRandFloat(1.5F)) * 0.125F);
+			float z = (float) ((p.getZ() - this.getZ() + this.getRandFloat(1.5F)) * 0.125F);
+			server.sendParticles(par, f1, f2, f3, 0, x, y, z, 1F);
 		}
 	}
 
@@ -86,7 +87,8 @@ public class FrostLaserMagic extends AbstractBossMagic {
 		double disX = this.target.xo - this.xo;
 		double disY = this.target.yo - this.yo;
 		double disZ = this.target.zo - this.zo;
-		float damage = 2.5F + this.getAddDamage() * 0.1F;
+		int data = this.getData();
+		float damage = (data == 1 ? 3.75F : 2.5F) + this.getAddDamage() * 0.1F;
 
 		// 向き先に座標を設定
 		for (int i = 0; i < 36; i++) {
@@ -94,7 +96,15 @@ public class FrostLaserMagic extends AbstractBossMagic {
 			// 攻撃した人をリストに含まれないプレイヤーリストを取得
 			double dis = (double) (i + 1) / 36D;
 			List<LivingEntity> entityList = this.getEntityList(LivingEntity.class, this.getAABB(disX * dis, disY * dis, disZ * dis, false)).stream().filter(e -> e.isAlive() && e instanceof Enemy && !entityAllList.contains(e)).toList();entityAllList.addAll(entityList);
-			entityList.forEach(e -> this.attackDamage(e, damage, true));
+
+			for (LivingEntity target : entityList) {
+				float newDamage = damage * (data == 1 && target.hasEffect(PotionInit.frost) ? 1.5F : 1F);
+				this.attackDamage(target, newDamage, true);
+
+				if (data == 1) {
+					this.addPotion(target, PotionInit.frost, 0, 600);
+				}
+			}
 		}
 	}
 

@@ -17,6 +17,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -33,7 +34,6 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.raid.Raider;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.Vec3;
@@ -55,7 +55,7 @@ public class WindWitchMaster extends AbstractSMBoss {
 	private static final EntityDataAccessor<Boolean> IS_TARGET = ISMMob.setData(WindWitchMaster.class, BOOLEAN);
 	private static final EntityDataAccessor<Integer> ATTACK = ISMMob.setData(WindWitchMaster.class, INT);
 	private static final EntityDataAccessor<Integer> ARMOR = ISMMob.setData(WindWitchMaster.class, INT);
-
+	private static final EntityDataAccessor<Boolean> ISRESURRECTION = ISMMob.setData(WindWitchMaster.class, BOOLEAN);
 	private int windBlastTime = 0;									// ウィンドブラストの時間
 	private int windBlastCount = 2;									// ウィンドブラストの時間
 	private Map<Integer, BlockPos> posMap = new LinkedHashMap<>();	// トリトル対象座標
@@ -66,7 +66,6 @@ public class WindWitchMaster extends AbstractSMBoss {
 
 	public WindWitchMaster(EntityType<WindWitchMaster> enType, Level world) {
 		super(enType, world);
-		this.xpReward = 300;
 	}
 
 	public static AttributeSupplier.Builder registerAttributes() {
@@ -80,9 +79,10 @@ public class WindWitchMaster extends AbstractSMBoss {
 
 	protected void defineSynchedData() {
 		super.defineSynchedData();
-		this.entityData.define(IS_TARGET, false);
-		this.entityData.define(ATTACK, 0);
-		this.entityData.define(ARMOR, 0);
+		this.registerData(this, IS_TARGET, false);
+		this.registerData(this, ISRESURRECTION, false);
+		this.registerData(this, ATTACK, 0);
+		this.registerData(this, ARMOR, 0);
 	}
 
 	protected void registerGoals() {
@@ -109,22 +109,22 @@ public class WindWitchMaster extends AbstractSMBoss {
 		return SoundEvents.WITCH_DEATH;
 	}
 
-	public int getAttackType () {
-		return this.entityData.get(ATTACK);
+	public int getAttackType() {
+		return this.getData(this, ATTACK);
 	}
 
-	public void setAttackType (int attack) {
-		this.entityData.set(ATTACK, attack);
+	public void setAttackType(int attack) {
+		this.setData(this, ATTACK, attack);
 	}
 
-	public int getArmor () {
-		return this.entityData.get(ARMOR);
+	public int getArmor() {
+		return this.getData(this, ARMOR);
 	}
 
-	public void setArmor (int armor) {
+	public void setArmor(int armor) {
 
 		int oldArmor = this.getArmor();
-		this.entityData.set(ARMOR, armor);
+		this.setData(this, ARMOR, armor);
 
 		if (oldArmor > 0 && armor <= 0) {
 
@@ -137,29 +137,45 @@ public class WindWitchMaster extends AbstractSMBoss {
 		}
 	}
 
-	public boolean isTarget () {
-		return this.entityData.get(IS_TARGET);
+	public void setResurrection (boolean isResurrection) {
+		this.setData(this, ISRESURRECTION, isResurrection);
+	}
+
+	public boolean getResurrection() {
+		return this.getData(this, ISRESURRECTION);
+	}
+
+	public boolean isHard() {
+		return super.isHard() || !this.isLectern();
+	}
+
+	public boolean isTarget() {
+		return this.getData(this, IS_TARGET);
 	}
 
 	// ダメージ処理
 	public boolean hurt(DamageSource src, float amount) {
-
 		Entity attacker = src.getEntity();
 		Entity attackEntity = src.getDirectEntity();
-		if ( attacker != null && attacker instanceof ISMMob) { return false; }
+		if (attacker != null && attacker instanceof ISMMob) { return false; }
 
 		// ボスダメージ計算
-		amount = this.getBossDamageAmount(this.level, this.defTime , src, amount, 7.5F);
+		boolean isLectern = this.isLectern();
+		amount = this.getBossDamageAmount(this.level, this.defTime , src, amount, isLectern ? 7.5F : 5.5F);
 		this.defTime = amount > 0 ? 2 : this.defTime;
 
-		// 魔法攻撃以外なら反撃&ダメージ無効
-		if (this.notMagicDamage(attacker, attackEntity)) {
+		if (attacker instanceof Warden) {
 			this.attackDamage(attacker, SMDamage.magicDamage, amount);
 			return false;
 		}
 
+		// 魔法攻撃以外ならダメージ減少
+		if (this.notMagicDamage(attacker, attackEntity)) {
+			amount *= 0.25F;
+		}
+
 		// 魔導士の召喚台座による召喚の場合
-		if (this.isLectern()) {
+		if (isLectern) {
 			amount = this.getLecternAction(src, amount, this.getArmor());
 		}
 
@@ -171,7 +187,7 @@ public class WindWitchMaster extends AbstractSMBoss {
 	}
 
 	// 召喚台座時のダメージ処理
-	public float getLecternAction (DamageSource src, float amount, int armorSize) {
+	public float getLecternAction(DamageSource src, float amount, int armorSize) {
 
 		if (armorSize > 0) {
 
@@ -196,7 +212,7 @@ public class WindWitchMaster extends AbstractSMBoss {
 	}
 
 	// 危険な果実でのダメージ計算
-	public float getEvilDamage (float amount, int armorSize) {
+	public float getEvilDamage(float amount, int armorSize) {
 		amount = 25F / this.getEntityList(Player.class, 80F).size();
 		return amount;
 	}
@@ -215,22 +231,57 @@ public class WindWitchMaster extends AbstractSMBoss {
 	public void addAdditionalSaveData(CompoundTag tags) {
 		super.addAdditionalSaveData(tags);
 		tags.putBoolean("is_target", this.isTarget());
+		tags.putBoolean("isResurrection", this.getResurrection());
 		tags.putInt("armor", this.getArmor());
 		tags.putInt("attackType", this.getAttackType());
 	}
 
 	public void readAdditionalSaveData(CompoundTag tags) {
 		super.readAdditionalSaveData(tags);
-		this.entityData.set(IS_TARGET, tags.getBoolean("is_target"));
+		this.setData(this, IS_TARGET, tags.getBoolean("is_target"));
+		this.setData(this, ISRESURRECTION, tags.getBoolean("isResurrection"));
 		this.setArmor(tags.getInt("armor"));
 		this.setAttackType(tags.getInt("attackType"));
+
+		if (!this.isLectern()) {
+			this.setBossEvent(BC_BLUE, NOTCHED_6);
+		}
 	}
 
 	@Nullable
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance dif, MobSpawnType spawn, @Nullable SpawnGroupData data, @Nullable CompoundTag tag) {
 		data = super.finalizeSpawn(world, dif, spawn, data, tag);
 		this.setArmor(this.getPlayer(Player.class).size() * 4);
+		this.startInfo();
 		return data;
+	}
+
+	public void startInfo() {
+		super.startInfo();
+		this.addPotion(this, PotionInit.resurrection, 99999, 0);
+		this.setResurrection(true);
+	}
+
+	// バフによるダメージ増減
+	public float getBuffPower() {
+		float damage = super.getBuffPower();
+
+		if (!this.isLectern()) {
+			damage += 8F;
+			damage *= 1.25F;
+		}
+
+		return damage;
+	}
+
+	public void die(DamageSource src) {
+		super.die(src);
+
+		if (this.getResurrection()) {
+			this.setResurrection(false);
+			this.addPotion(this, PotionInit.magic_damage_cause, 99999, 3);
+			this.addPotion(this, MobEffects.DAMAGE_BOOST, 99999, 3);
+		}
 	}
 
 	public void tick() {
@@ -238,14 +289,12 @@ public class WindWitchMaster extends AbstractSMBoss {
 
 		if (!this.level.isClientSide && this.tickTime++ > 10) {
 			this.tickTime = 0;
-			this.entityData.set(IS_TARGET, this.getTarget() != null);
+			this.setData(this, IS_TARGET, this.getTarget() != null);
 		}
 	}
 
 	protected void customServerAiStep() {
-
 		super.customServerAiStep();
-
 		LivingEntity target = this.getTarget();
 		if (target == null) { return; }
 
@@ -257,8 +306,15 @@ public class WindWitchMaster extends AbstractSMBoss {
 		}
 
 		// 2ndフェーズの攻撃
-		if (this.isHalfHealth(this) && this.recastSecondTime-- <= 0) {
-			this.secondPhaseSttack(target);
+		if (this.isHalfHealth(this)) {
+
+			if (this.getResurrection() && !this.hasEffect(PotionInit.resurrection)) {
+				this.addPotion(this, PotionInit.reflash_effect, 9999, 0);
+			}
+
+			if (this.recastSecondTime-- <= 0) {
+				this.secondPhaseSttack(target);
+			}
 		}
 
 		if (this.recastTime-- > 0) { return; }
@@ -268,7 +324,7 @@ public class WindWitchMaster extends AbstractSMBoss {
 	}
 
 	// 1stフェーズの攻撃
-	public void firstPhaseSttack (LivingEntity target) {
+	public void firstPhaseSttack(LivingEntity target) {
 
 		if (this.getAttackType() == 0) {
 			this.tornadoExplosion(target);
@@ -280,12 +336,12 @@ public class WindWitchMaster extends AbstractSMBoss {
 	}
 
 	// 2ndフェーズの攻撃
-	public void secondPhaseSttack (LivingEntity target) {
+	public void secondPhaseSttack(LivingEntity target) {
 		this.windStorm(target);
 	}
 
 	// 竜巻爆発
-	public void tornadoExplosion (LivingEntity target) {
+	public void tornadoExplosion(LivingEntity target) {
 
 		boolean isPlayer = this.isPlayer(target);
 		List<LivingEntity> entityList = this.getEntityList(LivingEntity.class, this.getFilter(isPlayer), 64D);
@@ -295,17 +351,17 @@ public class WindWitchMaster extends AbstractSMBoss {
 			return;
 		}
 
-		double range = 14D + entityList.size() * 2D;
+		double range = Math.min(32D, 16D + entityList.size() * 1.35D);
 		BlockPos pos = entityList.stream().sorted( (s1, s2) -> this.sortEntity(this, s1, s2) ).toList().get(0).blockPosition();
 
-		TripleTornadoShot entity = new TripleTornadoShot(this.level, this, ItemStack.EMPTY);
+		TripleTornadoShot entity = new TripleTornadoShot(this.level, this);
 		entity.shootFromRotation(this, this.getXRot(), this.getYRot(), 0, 1F, 0);
 		entity.shoot(0D, 0D, 0D, 0F, 0F);
 		entity.setPos(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D);
 		entity.setHitDead(false);
 		entity.setNotDamage(true);
 		entity.setRange(range);
-		entity.setAddDamage( (this.isHard() ? 60F : 30F) + this.getBuffPower());
+		entity.setAddDamage((this.isHard() ? 80F : 35F) + this.getBuffPower());
 		entity.isPlayer = isPlayer;
 
 		if (!this.level.isClientSide) {
@@ -317,13 +373,13 @@ public class WindWitchMaster extends AbstractSMBoss {
 	}
 
 	// トリプルトルネード
-	public void tripleTornado (LivingEntity target) {
+	public void tripleTornado(LivingEntity target) {
 
 		boolean isPlayer = this.isPlayer(target);
 
 		// 範囲にいるえんちちーを取得
 		List<LivingEntity> entityList = this.getEntityList(LivingEntity.class, this.getFilter(isPlayer), 48D);
-		double range = 8D + entityList.size();
+		double range = Math.min(15D, 8D + entityList.size() * 0.325D);
 		int count = 0;
 
 		for (LivingEntity entity : entityList) {
@@ -358,14 +414,14 @@ public class WindWitchMaster extends AbstractSMBoss {
 		for (Entry<Integer, BlockPos> map : this.posMap.entrySet()) {
 
 			BlockPos pos = map.getValue();
-			TripleTornadoShot entity = new TripleTornadoShot(this.level, this, ItemStack.EMPTY);
+			TripleTornadoShot entity = new TripleTornadoShot(this.level, this);
 			entity.shootFromRotation(this, this.getXRot(), this.getYRot(), 0, 1F, 0);
 			entity.shoot(0D, 0D, 0D, 0F, 0F);
 			entity.setPos(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D);
 			entity.setHitDead(false);
 			entity.setNotDamage(true);
 			entity.setRange(range);
-			entity.setAddDamage( (this.isHard() ? 37.5F : 17.5F) + this.getBuffPower());
+			entity.setAddDamage( (this.isHard() ? 50F : 20F) + this.getBuffPower());
 			entity.isPlayer = isPlayer;
 
 			if (!this.level.isClientSide) {
@@ -377,8 +433,7 @@ public class WindWitchMaster extends AbstractSMBoss {
 	}
 
 	// ウィンドストーム
-	public void windStorm (LivingEntity target) {
-
+	public void windStorm(LivingEntity target) {
 		if (this.windBlastTime-- > 0) { return; }
 
 		boolean isPlayer = this.isPlayer(target);
@@ -386,7 +441,7 @@ public class WindWitchMaster extends AbstractSMBoss {
 
 		for (int i = 0; i < 2; i++) {
 
-			WindStormShot entity = new WindStormShot(this.level, this, ItemStack.EMPTY);
+			WindStormShot entity = new WindStormShot(this.level, this);
 
 			double d0 = target.getX() - this.getX();
 			double d1 = target.getZ() - this.getZ();
@@ -404,7 +459,7 @@ public class WindWitchMaster extends AbstractSMBoss {
 			}
 		}
 
-		WindStormShot entity = new WindStormShot(this.level, this, ItemStack.EMPTY);
+		WindStormShot entity = new WindStormShot(this.level, this);
 		double x = target.getX() - this.getX();
 		double y = target.getY(0.3333333333333333D) - this.getY();
 		double z = target.getZ() - this.getZ();
@@ -451,15 +506,13 @@ public class WindWitchMaster extends AbstractSMBoss {
 	}
 
 	// えんちちーソート
-	public int sortEntity (Entity mob, Entity entity1, Entity entity2) {
-
+	public int sortEntity(Entity mob, Entity entity1, Entity entity2) {
 		if (entity1 == null || entity2 == null) { return 0; }
 
 		double distance1 = mob.distanceToSqr(entity1);
 		double distance2 = mob.distanceToSqr(entity2);
 
 		if (distance1 < distance2) { return 1; }
-
 		if (distance1 > distance2) { return -1; }
 
 		return 0;

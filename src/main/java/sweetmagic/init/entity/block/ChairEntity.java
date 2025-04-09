@@ -71,7 +71,6 @@ public class ChairEntity extends Entity {
 	}
 
 	public static void create(Level world, BlockPos pos, double yOffset, Player player, Direction face) {
-
 		if (world.isClientSide()) { return; }
 
 		List<ChairEntity> seats = world.getEntitiesOfClass(ChairEntity.class, new AABB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1D, pos.getY() + 1D, pos.getZ() + 1D));
@@ -100,7 +99,7 @@ public class ChairEntity extends Entity {
 	@Override
 	protected void addPassenger(Entity entity) {
 		super.addPassenger(entity);
-		entity.setYRot(this.getYRot() - 180);
+		entity.setYRot(this.getYRot() - 180F);
 	}
 
 	@Override

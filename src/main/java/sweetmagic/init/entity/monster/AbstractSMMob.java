@@ -102,7 +102,12 @@ public abstract class AbstractSMMob extends Monster implements ISMMob {
 	}
 
 	public void tick() {
-		super.tick();
+
+		try {
+			super.tick();
+		}
+
+		catch (Throwable e) { }
 
 		if (this.defTime > 0) {
 			this.defTime--;

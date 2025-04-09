@@ -30,16 +30,16 @@ public class WitchIfrit extends AbstractWitch {
 
 		switch (this.rand.nextInt(4)) {
 		case 0:
-			entity = new FireMagicShot(this.level, this, ItemStack.EMPTY);
+			entity = new FireMagicShot(this.level, this);
 			break;
 		case 1:
-			entity = new FireMagicShot(this.level, this, ItemStack.EMPTY);
+			entity = new FireMagicShot(this.level, this);
 			break;
 		case 2:
-			entity = new ExplosionMagicShot(this.level, this, ItemStack.EMPTY);
+			entity = new ExplosionMagicShot(this.level, this);
 			break;
 		case 3:
-			entity = new GravityMagicShot(this.level, this, ItemStack.EMPTY);
+			entity = new GravityMagicShot(this.level, this);
 			break;
 		}
 		return entity;

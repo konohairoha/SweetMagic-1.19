@@ -1,11 +1,14 @@
 package sweetmagic.init.entity.projectile;
 
+import java.util.List;
 import java.util.Random;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.goal.WrappedGoal;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
@@ -15,6 +18,7 @@ import sweetmagic.init.EntityInit;
 import sweetmagic.init.ParticleInit;
 import sweetmagic.init.PotionInit;
 import sweetmagic.init.SoundInit;
+import sweetmagic.init.entity.ai.BubleExplosionGoal;
 
 public class BubbleMagicShot extends AbstractMagicShot {
 
@@ -33,10 +37,10 @@ public class BubbleMagicShot extends AbstractMagicShot {
 		this.setWandInfo(wandInfo);
 	}
 
-	public BubbleMagicShot(Level world, LivingEntity entity, ItemStack stack) {
+	public BubbleMagicShot(Level world, LivingEntity entity) {
 		this(entity.getX(), entity.getEyeY() - (double) 0.1F, entity.getZ(), world);
 		this.setOwner(entity);
-		this.stack = stack;
+		this.stack = ItemStack.EMPTY;
 	}
 
 	// えんちちーに当たった時の処理
@@ -45,7 +49,7 @@ public class BubbleMagicShot extends AbstractMagicShot {
 		int time = 10 * this.getWandLevel();
 
 		if ( this.canTargetEffect(living, this.getOwner()) ) {
-			this.addPotion(living, PotionInit.bubble, time, this.getData());
+			time = this.addPotion(living, PotionInit.bubble, time, this.getData());
 		}
 
 		else {
@@ -53,6 +57,19 @@ public class BubbleMagicShot extends AbstractMagicShot {
 		}
 
 		this.playSound(SoundInit.BUBBLE, 0.1F, 1F);
+
+		if (this.getData() == 3 && living instanceof Mob mob) {
+
+			List<WrappedGoal> goalList = mob.goalSelector.getAvailableGoals().stream().filter(e -> e.getGoal() instanceof BubleExplosionGoal).toList();
+
+			if(goalList.isEmpty()) {
+				mob.goalSelector.addGoal(0, new BubleExplosionGoal(mob, this.getOwner(), this, this.getDamage(), time - 1));
+			}
+
+			else {
+				((BubleExplosionGoal) goalList.get(0).getGoal()).clearInfo(time - 1);
+			}
+		}
 	}
 
 	protected void spawnParticleShort(ServerLevel sever, BlockPos pos) {
@@ -61,11 +78,11 @@ public class BubbleMagicShot extends AbstractMagicShot {
 		float z = (float) (pos.getZ() + this.getRandFloat(0.5F));
 
 		for (int i = 0; i < 4; i++) {
-			sever.sendParticles(ParticleInit.BUBBLE.get(), x, y, z, 4, 0F, 0F, 0F, 0.15F);
+			sever.sendParticles(ParticleInit.BUBBLE, x, y, z, 4, 0F, 0F, 0F, 0.15F);
 		}
 	}
 
-	public int getMinParticleTick () {
+	public int getMinParticleTick() {
 		return 3;
 	}
 
@@ -83,7 +100,7 @@ public class BubbleMagicShot extends AbstractMagicShot {
 			float f1 = (float) (this.getX() - 0.5F + rand.nextFloat() + vec.x * i * 0.25F);
 			float f2 = (float) (this.getY() - 0.25F + rand.nextFloat() * 0.5 + vec.y * i * 0.25F);
 			float f3 = (float) (this.getZ() - 0.5F + rand.nextFloat() + vec.z * i * 0.25F);
-			this.level.addParticle(ParticleInit.BUBBLE.get(), f1, f2, f3, x, y, z);
+			this.level.addParticle(ParticleInit.BUBBLE, f1, f2, f3, x, y, z);
 		}
 	}
 

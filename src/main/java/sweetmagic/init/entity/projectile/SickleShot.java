@@ -31,10 +31,10 @@ public class SickleShot extends AbstractMagicShot {
 		this.setPos(x, y, z);
 	}
 
-	public SickleShot(Level world, LivingEntity entity, ItemStack stack) {
+	public SickleShot(Level world, LivingEntity entity) {
 		this(entity.getX(), entity.getEyeY() - (double) 0.1F, entity.getZ(), world);
 		this.setOwner(entity);
-		this.stack = stack;
+		this.stack = ItemStack.EMPTY;
 	}
 
 	public void tick() {
@@ -46,7 +46,7 @@ public class SickleShot extends AbstractMagicShot {
 		}
 	}
 
-	public void rangeAttack (BlockPos pos, float dame, double range) {
+	public void rangeAttack(BlockPos pos, float dame, double range) {
 
 		List<LivingEntity> entityList = this.getEntityList(LivingEntity.class, this.getFilter(pos, range), range);
 		this.playSound(SoundInit.SWING, 0.2F, 1F);
@@ -56,39 +56,40 @@ public class SickleShot extends AbstractMagicShot {
 		}
 	}
 
-	public void spawnParticle (ServerLevel server) {
+	public void spawnParticle(ServerLevel server) {
 		if (this.tickCount % 30 == 0) {
 			this.spawnParticleCycle(server, this.xo, this.yo + 1.15D, this.zo, 0.85D, this.rand, 10);
 		}
 	}
 
-	protected void spawnParticleCycle (ServerLevel server, double x, double y, double z, double range, Random rand, int count) {
+	protected void spawnParticleCycle(ServerLevel server, double x, double y, double z, double range, Random rand, int count) {
+		ParticleOptions par = ParticleInit.CYCLE_TOXIC;
 		for (int i = 0; i < count; i++) {
-			this.spawnParticleCycle(server, ParticleInit.CYCLE_TOXIC.get(), x, y, z, Direction.UP, range, i * 36F, false);
-			this.spawnParticleCycle(server, ParticleInit.CYCLE_TOXIC.get(), x, y, z, Direction.NORTH, range, i * 36F, false);
-			this.spawnParticleCycle(server, ParticleInit.CYCLE_TOXIC.get(), x, y, z, Direction.EAST, range, i * 36F, false);
+			this.spawnParticleCycle(server, par, x, y, z, Direction.UP, range, i * 36F, false);
+			this.spawnParticleCycle(server, par, x, y, z, Direction.NORTH, range, i * 36F, false);
+			this.spawnParticleCycle(server, par, x, y, z, Direction.EAST, range, i * 36F, false);
 		}
 	}
 
 	// パーティクルスポーンサイクル
-	protected void spawnParticleCycle (ServerLevel server, ParticleOptions particle, double x, double y, double z, Direction face, double range, double angle, boolean isRevese) {
+	protected void spawnParticleCycle(ServerLevel server, ParticleOptions par, double x, double y, double z, Direction face, double range, double angle, boolean isRevese) {
 		int way = isRevese ? -1 : 1;
-		server.sendParticles(particle, x, y, z, 0, face.get3DDataValue() * way, range, angle + way * 1 * 6F, 1F);
+		server.sendParticles(par, x, y, z, 0, face.get3DDataValue() * way, range, angle + way * 1 * 6F, 1F);
 	}
 
-	public Predicate<LivingEntity> getFilter (BlockPos pos, double range) {
+	public Predicate<LivingEntity> getFilter(BlockPos pos, double range) {
 		return e -> !e.isSpectator() && e.isAlive() && this.checkDistances(pos, e.blockPosition(), range * range);
 	}
 
 	// 範囲内にいるかのチェック
-	public boolean checkDistances (BlockPos basePos, BlockPos pos, double range) {
+	public boolean checkDistances(BlockPos basePos, BlockPos pos, double range) {
 		double d0 = basePos.getX() - pos.getX();
 		double d1 = basePos.getY() - pos.getY();
 		double d2 = basePos.getZ() - pos.getZ();
 		return (d0 * d0 + d1 * d1 + d2 * d2) <= range;
 	}
 
-	public boolean isPlayer (Entity entity) {
+	public boolean isPlayer(Entity entity) {
 		return entity instanceof Player || entity instanceof AbstractSummonMob;
 	}
 

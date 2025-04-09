@@ -1,5 +1,6 @@
 package sweetmagic.init.entity.projectile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -23,9 +24,11 @@ import sweetmagic.init.ParticleInit;
 
 public class BulletMagicShot extends AbstractMagicShot {
 
+	private int count = 0;
+	private List<LivingEntity> taregetList = new ArrayList<>();
 	private static final EntityDataAccessor<Integer> TARGET = SynchedEntityData.defineId(BulletMagicShot.class, EntityDataSerializers.INT);
 
-	public BulletMagicShot(EntityType<? extends BulletMagicShot> entityType, Level world) {
+	public BulletMagicShot(EntityType<? extends AbstractMagicShot> entityType, Level world) {
 		super(entityType, world);
 	}
 
@@ -45,7 +48,7 @@ public class BulletMagicShot extends AbstractMagicShot {
 		this.entityData.define(TARGET, -1);
 	}
 
-	public void tick () {
+	public void tick() {
 
 		if (!this.level.isClientSide()) {
 			this.updateTarget();
@@ -54,25 +57,21 @@ public class BulletMagicShot extends AbstractMagicShot {
 		Entity target = this.getTarget();
 		if (target != null) {
 
-			Vec3 bulletVec = this.getDeltaMovement();
-			double mX = bulletVec.x();
-			double mY = bulletVec.y();
-			double mZ = bulletVec.z();
+			Vec3 vec = this.getDeltaMovement();
+			double mX = vec.x();
+			double mY = vec.y();
+			double mZ = vec.z();
 
-			Vec3 arrowLoc = new Vec3(this.getX(), this.getY(), this.getZ());
-			Vec3 targetLoc = new Vec3(target.getX(), target.getY() + target.getBbHeight() / 2, target.getZ());
-
-			Vec3 lookVec = targetLoc.subtract(arrowLoc);
+			Vec3 arrowVec = new Vec3(this.getX(), this.getY(), this.getZ());
+			Vec3 lookVec = new Vec3(target.getX(), target.getY() + target.getBbHeight() / 2, target.getZ()).subtract(arrowVec);
 			Vec3 arrowMotion = new Vec3(mX, mY, mZ);
-
 			double theta = this.wrap180Radian(this.angleBetween(arrowMotion, lookVec));
 			theta = this.clampAbs(theta, Math.PI / 2);
 
-			Vec3 crossProduct = arrowMotion.cross(lookVec).normalize();
-			Vec3 adjustedLookVec = this.transform(crossProduct, theta, arrowMotion);
-
-			this.shoot(adjustedLookVec.x, adjustedLookVec.y, adjustedLookVec.z, 1F, 0);
-            this.setDeltaMovement(this.getDeltaMovement().scale(1.1F));
+			Vec3 crossVec = arrowMotion.cross(lookVec).normalize();
+			Vec3 adjustedVec = this.transform(crossVec, theta, arrowMotion);
+			this.shoot(adjustedVec.x, adjustedVec.y, adjustedVec.z, 1F, 0);
+			this.setDeltaMovement(this.getDeltaMovement().scale(1.1F));
 		}
 
 		this.spawnParticleSever();
@@ -91,7 +90,7 @@ public class BulletMagicShot extends AbstractMagicShot {
 		if (target != null) { return; }
 
 		Entity owner = this.getOwner();
-		List<LivingEntity> entityList = this.getEntityList(LivingEntity.class, e -> this.canTargetEffect(e, owner) && e.isAlive(), this.getRange());
+		List<LivingEntity> entityList = this.getEntityList(LivingEntity.class, e -> this.canTargetEffect(e, owner) && e.isAlive() && !this.taregetList.contains(e), this.getRange());
 		if (entityList.isEmpty()) { return; }
 
 		double distance = this.getRange() + 1;
@@ -102,89 +101,6 @@ public class BulletMagicShot extends AbstractMagicShot {
 				this.setTarget(entity);
 			}
 		}
-	}
-
-	private double wrap180Radian(double radian) {
-
-		radian %= 2 * Math.PI;
-
-		while (radian >= Math.PI) {
-			radian -= 2 * Math.PI;
-		}
-
-		while (radian < -Math.PI) {
-			radian += 2 * Math.PI;
-		}
-
-		return radian;
-	}
-
-	private double clampAbs(double param, double maxMagnitude) {
-		if (Math.abs(param) > maxMagnitude) {
-			param =param < 0 ? -Math.abs(maxMagnitude) : Math.abs(maxMagnitude);
-		}
-		return param;
-	}
-
-	private double angleBetween(Vec3 v1, Vec3 v2) {
-
-		double vDot = v1.dot(v2) / (v1.length() * v2.length());
-
-		if (vDot < -1D) {
-			vDot = -1D;
-		}
-
-		if (vDot > 1D) {
-			vDot = 1D;
-		}
-
-		return Math.acos(vDot);
-	}
-
-	private Vec3 transform(Vec3 axis, double angle, Vec3 normal) {
-
-		double m00 = 1D;
-		double m01 = 0D;
-		double m02 = 0D;
-
-		double m10 = 0D;
-		double m11 = 1D;
-		double m12 = 0D;
-
-		double m20 = 0D;
-		double m21 = 0D;
-		double m22 = 1D;
-		double mag = Math.sqrt(axis.x * axis.x + axis.y * axis.y + axis.z * axis.z);
-
-		if (mag >= 1.0E-10) {
-
-			mag = 1D / mag;
-			double ax = axis.x * mag;
-			double ay = axis.y * mag;
-			double az = axis.z * mag;
-
-			double sinTheta = Math.sin(angle);
-			double cosTheta = Math.cos(angle);
-			double t = 1D - cosTheta;
-
-			double xz = ax * az;
-			double xy = ax * ay;
-			double yz = ay * az;
-
-			m00 = t * ax * ax + cosTheta;
-			m01 = t * xy - sinTheta * az;
-			m02 = t * xz + sinTheta * ay;
-
-			m10 = t * xy + sinTheta * az;
-			m11 = t * ay * ay + cosTheta;
-			m12 = t * yz - sinTheta * ax;
-
-			m20 = t * xz - sinTheta * ay;
-			m21 = t * yz + sinTheta * ax;
-			m22 = t * az * az + cosTheta;
-		}
-
-		return new Vec3(m00 * normal.x + m01 * normal.y + m02 * normal.z, m10 * normal.x + m11 * normal.y + m12 * normal.z, m20 * normal.x + m21 * normal.y + m22 * normal.z);
 	}
 
 	// えんちちーに当たった時の処理
@@ -200,41 +116,40 @@ public class BulletMagicShot extends AbstractMagicShot {
 				living.push(vec3.x, 0.1D, vec3.z);
 			}
 		}
-	}
 
-	// 追加攻撃
-	public void addAttack (LivingEntity entity, float dame, int addAttackCount) {
+		if (this.getData() >= 3) {
+			this.taregetList.add(living);
+			this.setTarget(null);
 
-		if (addAttackCount > 0) {
-
-			for (int i = 0; i < addAttackCount; i++) {
-				this.attackDamage(entity, dame * 0.25F, true);
+			if (this.count++ > 3) {
+				this.discard();
 			}
 		}
 	}
 
 	// 追加攻撃
-	public void addAttackEntity (Entity target, LivingEntity attacker, float dame, int addAttackCount) {
+	public void addAttack(LivingEntity entity, float dame, int addAttackCount) {
+		if (addAttackCount <= 0) { return; }
+		for (int i = 0; i < addAttackCount; i++) {
+			this.attackDamage(entity, dame * 0.25F, true);
+		}
+	}
 
-		if (addAttackCount > 0) {
+	// 追加攻撃
+	public void addAttackEntity(Entity target, LivingEntity attacker, float dame, int addAttackCount) {
+		if (addAttackCount <= 0) { return; }
 
-			for (int i = 0; i < addAttackCount; i++) {
-
-				if (target.hurt(DamageSource.playerAttack((Player) attacker), dame * 0.25F) ) {
-					target.invulnerableTime = 0;
-				}
+		for (int i = 0; i < addAttackCount; i++) {
+			if (target.hurt(DamageSource.playerAttack((Player) attacker), dame * 0.25F)) {
+				target.invulnerableTime = 0;
 			}
 		}
 	}
 
 	// パーティクルスポーン
 	protected void spawnParticleSever() {
-
-		if (this.tickCount < 3) { return; }
-
-		if (this.level instanceof ServerLevel sever) {
-			sever.sendParticles(ParticleInit.ORB.get(), this.getX(), this.getY(), this.getZ(), 0, 114F / 255F, 255F / 255F, 170F / 255F, 1F);
-		}
+		if (this.tickCount < 3 || !(this.level instanceof ServerLevel sever)) { return; }
+		sever.sendParticles(ParticleInit.ORB, this.getX(), this.getY(), this.getZ(), 0, 114F / 255F, 255F / 255F, 170F / 255F, 1F);
 	}
 
 	@Nullable

@@ -9,6 +9,7 @@ import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -34,13 +35,19 @@ public class BloodMagicShot extends AbstractMagicShot {
 		this.setWandInfo(wandInfo);
 	}
 
+	public BloodMagicShot(Level world, LivingEntity entity) {
+		this(entity.getX(), entity.getEyeY() - (double) 0.1F, entity.getZ(), world);
+		this.setOwner(entity);
+		this.stack = ItemStack.EMPTY;
+		this.setRange(5D);
+	}
+
 	// えんちちーに当たった時の処理
 	protected void entityHit(LivingEntity living) {
 
 		living.invulnerableTime = 0;
-		boolean isTier2 = this.getData() >= 1;
 
-		if (isTier2) {
+		if (this.getData() >= 1) {
 			float rate = this.getData() == 1 ? 0.67F : 1F;
 			this.rangeAttack(living.blockPosition(), (float) this.getDamage() * rate, this.getRange());
 		}
@@ -59,34 +66,55 @@ public class BloodMagicShot extends AbstractMagicShot {
 
 	public void rangeAttack (BlockPos bPos, float dame, double range) {
 
-		if (this.level instanceof ServerLevel server) {
+		int data = this.getData();
+		double effectRange = range * range;
+		List<LivingEntity> entityList = this.getEntityList(LivingEntity.class, this.isBladTarget(effectRange), range);
 
-			if (this.getData() <= 1) {
+		if (data != 3) {
+			entityList.forEach(e -> this.attackDamage(e, dame, false));
+		}
 
-				double moveSpeed = range * 0.175D;
-				double ySpeed = 0.45D + (range >= 4 ? range * -0.04D : 0D);
+		else {
+			entityList.forEach(e -> {
+				this.attackDamage(e, dame, false);
+				this.addAttack(e, dame, 4);
+			});
+		}
 
-				for (int i= -1; i < 3; i++) {
-					this.spawnParticleRing(server, ParticleInit.BLOOD.get(), range, bPos.above(i), ySpeed, moveSpeed);
-				}
+		if (!(this.level instanceof ServerLevel server)) { return; }
+
+		if (data <= 1) {
+
+			double moveSpeed = range * 0.175D;
+			double ySpeed = 0.45D + (range >= 4 ? range * -0.04D : 0D);
+
+			for (int i= -1; i < 3; i++) {
+				this.spawnParticleRing(server, ParticleInit.BLOOD, range, bPos.above(i), ySpeed, moveSpeed);
 			}
+		}
 
-			else {
+		else if (data <= 2) {
 
-				BlockPos pos = this.blockPosition();
-				ParticleOptions particle = ParticleInit.CYCLE_BLOOD.get();
+			BlockPos pos = this.blockPosition();
+			ParticleOptions particle = ParticleInit.CYCLE_BLOOD;
 
-				for (double dis = 0.5D; dis < range; dis += 0.5D) {
-					for (int i = 0; i < 8; i++) {
-						this.spawnParticleCycle(server, particle, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, Direction.UP, dis, (i * 45) + dis * 12D, true);
-					}
+			for (double dis = 0.5D; dis < range; dis += 0.5D) {
+				for (int i = 0; i < 8; i++) {
+					this.spawnParticleCycle(server, particle, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, Direction.UP, dis, (i * 45) + dis * 12D, true);
 				}
 			}
 		}
 
-		double effectRange = range * range;
-		List<LivingEntity> entityList = this.getEntityList(LivingEntity.class, this.isBladTarget(effectRange), range);
-		entityList.forEach(e -> this.attackDamage(e, dame, false));
+		else {
+
+			boolean isZero = this.getMaxLifeTime() == 100;
+			double ySpeed = isZero ? 0D : -2D;
+			double inRate = isZero ? 1.5D : 0.5D;
+
+			for (int i = 0; i < 8; i++) {
+				this.spawnParticleRing(server, ParticleInit.BLOOD, range * (0.1D * i), bPos.above(i + 3), ySpeed, inRate);
+			}
+		}
 	}
 
 	protected void spawnParticleShort(ServerLevel sever, BlockPos pos) {
@@ -95,7 +123,7 @@ public class BloodMagicShot extends AbstractMagicShot {
 		float z = (float) (pos.getZ() + this.getRandFloat(0.5F));
 
 		for (int i = 0; i < 4; i++) {
-			sever.sendParticles(ParticleInit.BLOOD.get(), x, y, z, 4, 0F, 0F, 0F, 0.15F);
+			sever.sendParticles(ParticleInit.BLOOD, x, y, z, 4, 0F, 0F, 0F, 0.15F);
 		}
 	}
 
@@ -121,7 +149,7 @@ public class BloodMagicShot extends AbstractMagicShot {
 			float f2 = (float) (this.getY() - 0.25F + rand.nextFloat() * 0.5 + vec.y * i / 4.0D);
 			float f3 = (float) (this.getZ() - 0.5F + rand.nextFloat() + vec.z * i / 4.0D);
 
-			this.level.addParticle(ParticleInit.BLOOD.get(), f1, f2, f3, x, y, z);
+			this.level.addParticle(ParticleInit.BLOOD, f1, f2, f3, x, y, z);
 		}
 	}
 

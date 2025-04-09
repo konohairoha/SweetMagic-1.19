@@ -1,12 +1,9 @@
 package sweetmagic.init.entity.monster;
 
-import java.util.UUID;
-
 import javax.annotation.Nullable;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.DifficultyInstance;
@@ -39,12 +36,10 @@ import sweetmagic.init.ItemInit;
 import sweetmagic.init.entity.projectile.AbstractMagicShot;
 import sweetmagic.init.entity.projectile.RockBlastMagicShot;
 
-public class DwarfZombie extends AbstractSMMob {
+public class DwarfZombie extends AbstractOwnerMob {
 
 	private int recastTime = 100;
 	private static final int RAND_RECASTTIME = 80;
-	private UUID ownerID;
-	private LivingEntity owner;
 	private static final EntityDataAccessor<Boolean> ISSUMMON = ISMMob.setData(DwarfZombie.class, BOOLEAN);
 
 	public DwarfZombie(Level world) {
@@ -96,9 +91,8 @@ public class DwarfZombie extends AbstractSMMob {
 
 	// ダメージ処理
 	public boolean hurt(DamageSource src, float amount) {
-
 		Entity attacker = src.getEntity();
-		if ( attacker != null && attacker instanceof ISMMob) { return false; }
+		if (attacker != null && attacker instanceof ISMMob) { return false; }
 
 		// ダメージ倍処理
 		amount = this.getDamageAmount(this.level , src, amount, 0.25F);
@@ -106,9 +100,7 @@ public class DwarfZombie extends AbstractSMMob {
 	}
 
 	protected void customServerAiStep() {
-
 		super.customServerAiStep();
-
 		LivingEntity target = this.getTarget();
 		if (target == null) { return; }
 
@@ -125,27 +117,21 @@ public class DwarfZombie extends AbstractSMMob {
 
 	public AbstractMagicShot getMagicShot (LivingEntity target, boolean isWarden) {
 
-		AbstractMagicShot entity = null;
-
+		AbstractMagicShot entity = new RockBlastMagicShot(this.level, this);
 		float damage = isWarden ? 13F : 2F;
 		float shotSpeed = isWarden ? 5F : 1.5F;
-
 		double x = target.getX() - this.getX();
 		double y = target.getY(0.3333333333333333D) - this.getY();
 		double z = target.getZ() - this.getZ();
 		double xz = Math.sqrt(x * x + z * z);
 		int level = isWarden ? 20 : 7;
-
-		entity = new RockBlastMagicShot(this.level, this, ItemStack.EMPTY);
 		entity.setWandLevel(level);
 		entity.shoot(x, y - xz * 0.065D, z, shotSpeed, 0F);
 		entity.setAddDamage( entity.getAddDamage() + damage );
-
 		return entity;
 	}
 
 	protected void tickDeath() {
-
 		super.tickDeath();
 		if (!this.getSummon()) { return; }
 
@@ -156,62 +142,44 @@ public class DwarfZombie extends AbstractSMMob {
 	}
 
 	public void addAdditionalSaveData(CompoundTag tags) {
-		super.addAdditionalSaveData(tags);
 
 		if (this.getSummon()) {
 			tags.putBoolean("isSummon", this.getSummon());
+		}
 
-			if (this.getOwnerID() != null) {
-				tags.putUUID("ownerID", this.getOwnerID());
-			}
+		super.addAdditionalSaveData(tags);
+	}
+
+	public void saveOwnerTag(CompoundTag tags) {
+		if (this.getSummon()) {
+			super.saveOwnerTag(tags);
 		}
 	}
 
 	public void readAdditionalSaveData(CompoundTag tags) {
-		super.readAdditionalSaveData(tags);
 		this.setSummon(tags.getBoolean("isSummon"));
+		super.readAdditionalSaveData(tags);
+	}
 
+	public void writeOwnerTag(CompoundTag tags) {
 		if (this.getSummon()) {
-			this.setOwnerID(tags.getUUID("ownerID"));
+			super.writeOwnerTag(tags);
 		}
 	}
 
-	public boolean getSummon () {
+	public boolean getSummon() {
 		return this.entityData.get(ISSUMMON);
 	}
 
-	public void setSummon (boolean summonCount) {
+	public void setSummon(boolean summonCount) {
 		this.entityData.set(ISSUMMON, summonCount);
-	}
-
-	public UUID getOwnerID () {
-		return this.ownerID;
-	}
-
-	public void setOwnerID (LivingEntity entity) {
-		this.ownerID = entity.getUUID();
-	}
-
-	public void setOwnerID (UUID id) {
-		this.ownerID = id;
-	}
-
-	public LivingEntity getEntity () {
-
-		LivingEntity entity = this.owner;
-
-		if (entity == null && this.level instanceof ServerLevel server) {
-			entity = (LivingEntity) server.getEntity(this.getOwnerID());
-		}
-
-		return entity;
 	}
 
 	@Nullable
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance dif, MobSpawnType spawn, @Nullable SpawnGroupData data, @Nullable CompoundTag tag) {
 		data = super.finalizeSpawn(world, dif, spawn, data, tag);
 		this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ItemInit.alt_pick));
-        this.armorDropChances[EquipmentSlot.MAINHAND.getIndex()] = 0F;
+		this.armorDropChances[EquipmentSlot.MAINHAND.getIndex()] = 0F;
 		return data;
 	}
 

@@ -9,7 +9,6 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import sweetmagic.init.entity.monster.BlazeTempest;
 import sweetmagic.init.entity.projectile.AbstractMagicShot;
@@ -49,7 +48,6 @@ public class BlazeAttackGoal extends Goal {
 	}
 
 	public void tick() {
-
 		--this.attackTime;
 		LivingEntity target = this.blaze.getTarget();
 		if (target == null) { return; }
@@ -73,7 +71,6 @@ public class BlazeAttackGoal extends Goal {
 		else if (d0 < this.getFollowDistance() * this.getFollowDistance() && flag) {
 
 			Level world = this.blaze.level;
-
 			double x = target.getX() - this.blaze.getX();
 			double y = target.getY(0.3333333333333333D) - this.blaze.getY();
 			double z = target.getZ() - this.blaze.getZ();
@@ -112,7 +109,7 @@ public class BlazeAttackGoal extends Goal {
 					if (this.data == 0) {
 						dama = isWarden ? 5F : 0.5F;
 						speed = isWarden ? 2.25F : 1.25F;
-						attackCount = isWarden ? 5 : 1 + (int) (Math.min(3F, 3F * ( (BlazeTempest) this.blaze).getDateRate(world, 0.25F) ));
+						attackCount = isWarden ? 5 : 1 + (int) (Math.min(3F, 3F * ( (BlazeTempest) this.blaze).getDateRate(world, 0.25F)));
 					}
 
 					// ウォーデン以外でハードなら威力を上昇
@@ -121,7 +118,7 @@ public class BlazeAttackGoal extends Goal {
 					}
 
 					for (int i = 0; i < attackCount; ++i) {
-						AbstractMagicShot entity = new CycloneMagicShot(world, this.blaze, ItemStack.EMPTY);
+						AbstractMagicShot entity = new CycloneMagicShot(world, this.blaze);
 						entity.shoot(x, y - xz * (double) 0.065F, z, speed, shake);
 						entity.setAddDamage(entity.getAddDamage() + dama);
 						entity.setRange(1D);

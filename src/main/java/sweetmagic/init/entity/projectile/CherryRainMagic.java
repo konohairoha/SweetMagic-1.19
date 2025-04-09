@@ -4,9 +4,11 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.Enemy;
@@ -15,13 +17,14 @@ import sweetmagic.api.emagic.SMElement;
 import sweetmagic.api.iitem.info.WandInfo;
 import sweetmagic.init.EntityInit;
 import sweetmagic.init.ParticleInit;
+import sweetmagic.init.PotionInit;
 import sweetmagic.init.entity.monster.boss.Arlaune;
+import sweetmagic.util.PlayerHelper;
 
 public class CherryRainMagic extends AbstractBossMagic {
 
 	private int rainTime = 0;
 	private final static int MAX_RAINTIME = 150;
-
 	private BlockPos pos = null;
 
 	public CherryRainMagic(EntityType<? extends AbstractBossMagic> entityType, Level world) {
@@ -40,10 +43,10 @@ public class CherryRainMagic extends AbstractBossMagic {
 	}
 
 	// 常時更新処理
-	public void onUpdate () {
+	public void onUpdate() {
 
 		// ターゲットがいる場合
-		if ( ( this.target != null && this.target.isAlive() ) || this.pos != null) {
+		if ((this.target != null && this.target.isAlive()) || this.pos != null) {
 
 			// 回転の設定
 			this.setRotInit();
@@ -56,24 +59,23 @@ public class CherryRainMagic extends AbstractBossMagic {
 		}
 
 		// ターゲットの設定
-		if ( this.rainTime <= 0 && ( this.target == null || !this.target.isAlive() ) && this.tickCount % 8 == 0) {
+		if (this.rainTime <= 0 && (this.target == null || !this.target.isAlive()) && this.tickCount % 8 == 0) {
 			this.setTarget();
 		}
 	}
 
 	// 魔法攻撃
-	public void attackMagic (LivingEntity target) {
-
+	public void attackMagic(LivingEntity target) {
 		if (this.level.isClientSide) { return; }
 
 		if (this.rainTime >= 30D) {
 
-			double range = 12.5D;
+			double range = 15D;
 
 			if (this.rainTime % 10 == 0) {
 
 				// 対象のえんちちーに攻撃
-				float damage = 3F + this.getAddDamage();
+				float damage = 3F + this.getAddDamage() * 0.1F;
 				List<LivingEntity> targetList = this.getEntityList(LivingEntity.class, e -> e instanceof Enemy && e.isAlive(), this.getAABB(this.getPos(target), range));
 				targetList.forEach(e -> this.attackDamage(e, damage, true));
 			}
@@ -83,9 +85,9 @@ public class CherryRainMagic extends AbstractBossMagic {
 				Random rand = this.rand;
 				BlockPos pos = this.getPos(target);
 				Iterable<BlockPos> posList = this.getPosRangeList(pos, range);
+				ParticleOptions par = ParticleInit.CHERRY_BLOSSOMS_LARGE;
 
 				for (BlockPos p : posList) {
-
 					if (rand.nextFloat() >= 0.04F) { continue; }
 
 					double x = p.getX() + rand.nextDouble() * 1.5D - 0.75D;
@@ -94,40 +96,48 @@ public class CherryRainMagic extends AbstractBossMagic {
 					float f1 = this.getRandFloat(0.1F);
 					float f2 = 0.2F + this.getRandFloat(0.1F);
 					float f3 = this.getRandFloat(0.1F);
-					server.sendParticles(ParticleInit.CHERRY_BLOSSOMS_LARGE.get(), x, y, z, 0, f1, f2, f3, 1F);
+					server.sendParticles(par, x, y, z, 0, f1, f2, f3, 1F);
 				}
 			}
 		}
 
-		if (this.rainTime++ >= MAX_RAINTIME) {
+		if (this.rainTime++ < MAX_RAINTIME) { return; }
 
-			double range = 13D;
-			List<LivingEntity> targetList = this.getEntityList(LivingEntity.class, e -> e instanceof Enemy && e.isAlive(), this.getAABB(this.getPos(target), range));
+		int data = this.getData();
+		double range = data == 1 ? 20D : 16.5D;
+		float damage = (data == 1 ? 50F : 40F) + this.getAddDamage();
+		List<LivingEntity> targetList = this.getEntityList(LivingEntity.class, e -> e instanceof Enemy && e.isAlive(), this.getAABB(this.getPos(target), range));
 
-			// 対象のえんちちーに攻撃
-			for (LivingEntity entity : targetList) {
-				this.attackDamage(entity, 40F, true);
-				entity.playSound(SoundEvents.LIGHTNING_BOLT_IMPACT, 1.5F, 1F);
+		// 対象のえんちちーに攻撃
+		for (LivingEntity entity : targetList) {
+			this.attackDamage(entity, damage, true);
+			entity.playSound(SoundEvents.LIGHTNING_BOLT_IMPACT, 1.5F, 1F);
 
-				if (this.level instanceof ServerLevel sever) {
+			if (data == 1) {
+				List<MobEffectInstance> effecList = PlayerHelper.getEffectList(entity, PotionInit.BUFF);
 
-					float x = (float) (entity.xo + this.rand.nextFloat() * 0.5F);
-					float y = (float) (entity.getY() + this.rand.nextFloat() * 0.5F + 1.5F);
-					float z = (float) (entity.zo + this.rand.nextFloat() * 0.5F);
-
-					for (int i = 0; i < 8; i++) {
-						sever.sendParticles(ParticleTypes.FIREWORK, x, y, z, 2, 0F, 0F, 0F, 0.1F);
-					}
+				if (!effecList.isEmpty()) {
+					entity.removeEffect(effecList.get(0).getEffect());
 				}
 			}
 
-			this.rainTime = -50;
-			this.pos = null;
+			if (!(this.level instanceof ServerLevel sever)) { continue; }
+
+			float x = (float) (entity.xo + this.rand.nextFloat() * 0.5F);
+			float y = (float) (entity.getY() + this.rand.nextFloat() * 0.5F + 1.5F);
+			float z = (float) (entity.zo + this.rand.nextFloat() * 0.5F);
+
+			for (int i = 0; i < 8; i++) {
+				sever.sendParticles(ParticleTypes.FIREWORK, x, y, z, 2, 0F, 0F, 0F, 0.1F);
+			}
 		}
+
+		this.rainTime = -50;
+		this.pos = null;
 	}
 
 	// ターゲットの設定
-	public void setTarget () {
+	public void setTarget() {
 
 		List<LivingEntity> entityList = this.getEntityList(LivingEntity.class, e -> e instanceof Enemy && e.isAlive(), 48D);
 		double dis = 0D;
@@ -148,7 +158,7 @@ public class CherryRainMagic extends AbstractBossMagic {
 		}
 	}
 
-	public BlockPos getPos (LivingEntity target) {
+	public BlockPos getPos(LivingEntity target) {
 
 		if (this.target != null && this.target.isAlive()) {
 			return target.blockPosition();
@@ -162,7 +172,7 @@ public class CherryRainMagic extends AbstractBossMagic {
 	}
 
 	// 召喚えんちちーに取得
-	public LivingEntity getEntity () {
+	public LivingEntity getEntity() {
 
 		// えんちちーの初期化が出来ていないなら初期化
 		if (this.summon == null) {

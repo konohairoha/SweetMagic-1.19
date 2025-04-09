@@ -64,14 +64,17 @@ import sweetmagic.api.iitem.IPorch;
 import sweetmagic.api.iitem.IWand;
 import sweetmagic.api.iitem.info.BookInfo;
 import sweetmagic.api.iitem.info.WandInfo;
+import sweetmagic.init.BlockInit;
 import sweetmagic.init.ItemInit;
 import sweetmagic.init.ParticleInit;
 import sweetmagic.init.PotionInit;
 import sweetmagic.init.SoundInit;
 import sweetmagic.init.TagInit;
+import sweetmagic.init.block.sm.MirageGlass;
 import sweetmagic.init.entity.animal.AbstractSummonMob;
 import sweetmagic.util.PlayerHelper;
 import sweetmagic.util.SMDamage;
+import sweetmagic.util.WorldHelper;
 
 public abstract class AbstractMagicShot extends Projectile {
 
@@ -85,15 +88,15 @@ public abstract class AbstractMagicShot extends Projectile {
 	public int knockback = 1;					// ノックバック
 	public int addAttack = 0;					// 追加攻撃
 	public int maxBreak = 0;					// 最大破壊回数
-    public float baseDamage = 2F;				// 基本ダメージ
+	public float baseDamage = 2F;				// 基本ダメージ
 	public float addDamage = 0F;				// 追加ダメージ
 	public boolean inGround;					// 地面についているかどうか
 	private boolean isHitDead = true;			// えんちちー着弾時に弾を消滅させるか
-    public boolean isCritical = false;			// クリティカルかどうか
-    public boolean isPlayerThrower = true;		// 射撃者がプレイヤー
-    public boolean isBlockPenetration = false;	// ブロック貫通
-    public boolean isNotDamage = false;			// 戦闘ダメージ無効化
-    public boolean isSilk = false;				// シルクタッチ
+	public boolean isCritical = false;			// クリティカルかどうか
+	public boolean isPlayerThrower = true;		// 射撃者がプレイヤー
+	public boolean isBlockPenetration = false;	// ブロック貫通
+	public boolean isNotDamage = false;			// 戦闘ダメージ無効化
+	public boolean isSilk = false;				// シルクタッチ
 	public IWand wand;							// 杖
 	public CompoundTag tags;					// NBT
 	public ItemStack stack = ItemStack.EMPTY;	// アイテムスタック
@@ -105,6 +108,9 @@ public abstract class AbstractMagicShot extends Projectile {
 	private static final EntityDataAccessor<Float> RANGE = setEntityData(EntityDataSerializers.FLOAT);
 	private static final EntityDataAccessor<Float> SHOTSPEED = setEntityData(EntityDataSerializers.FLOAT);
 	private static final EntityDataAccessor<Boolean> ISARROW = setEntityData(EntityDataSerializers.BOOLEAN);
+	private static final EntityDataAccessor<Boolean> ISHOURGLASS = setEntityData(EntityDataSerializers.BOOLEAN);
+	private static final EntityDataAccessor<Boolean> ISWARRIOR_CARD = setEntityData(EntityDataSerializers.BOOLEAN);
+	private static final EntityDataAccessor<Boolean> ISQUILLPEN = setEntityData(EntityDataSerializers.BOOLEAN);
 
 	public AbstractMagicShot(EntityType<? extends AbstractMagicShot> entityType, Level world) {
 		super(entityType, world);
@@ -126,7 +132,7 @@ public abstract class AbstractMagicShot extends Projectile {
 
 	public boolean shouldRenderAtSqrDistance(double dis) {
 
-		double d0 = this.getBoundingBox().getSize() * 10.0D;
+		double d0 = this.getBoundingBox().getSize() * 10D;
 		if (Double.isNaN(d0)) { d0 = 1.0D; }
 
 		d0 *= 64.0D * getViewScale();
@@ -140,6 +146,9 @@ public abstract class AbstractMagicShot extends Projectile {
 		this.entityData.define(RANGE, 0F);
 		this.entityData.define(SHOTSPEED, 1F);
 		this.entityData.define(ISARROW, false);
+		this.entityData.define(ISHOURGLASS, false);
+		this.entityData.define(ISWARRIOR_CARD, false);
+		this.entityData.define(ISQUILLPEN, false);
 	}
 
 	public void shoot(double x, double y, double z, float vec, float inaccuracy) {
@@ -174,7 +183,6 @@ public abstract class AbstractMagicShot extends Projectile {
 
 				// 地面着弾判定
 				for (AABB aabb : voxel.toAabbs()) {
-
 					if (!aabb.move(pos).contains(vec31)) { continue; }
 
 					this.inGround = true;
@@ -275,8 +283,8 @@ public abstract class AbstractMagicShot extends Projectile {
 			this.checkInsideBlocks();
 
 			if (this.getArrow()) {
-	            Vec3 vec = this.getDeltaMovement().scale(0.99D);
-	            this.setDeltaMovement(vec.x, vec.y - 0.02D, vec.z);
+				Vec3 vec = this.getDeltaMovement().scale(0.99D);
+				this.setDeltaMovement(vec.x, vec.y - 0.02D, vec.z);
 			}
 		}
 	}
@@ -296,6 +304,7 @@ public abstract class AbstractMagicShot extends Projectile {
 
 				BlockHitResult result = (BlockHitResult) hit;
 				BlockPos pos = result.getBlockPos();
+				BlockState state = this.level.getBlockState(pos);
 
 				if (this.getArrow()) {
 					this.setLifeTime(0);
@@ -312,6 +321,11 @@ public abstract class AbstractMagicShot extends Projectile {
 					return;
 				}
 
+				if (state.is(BlockInit.mirage_wall_glass) && !state.getValue(MirageGlass.ISVIEW)) {
+					MirageGlass mirage = (MirageGlass) state.getBlock();
+					mirage.setValue(this.level, pos);
+				}
+
 				this.onHitBlock(result);
 
 				if (this.tickCount <= this.getMinParticleTick() && this.level instanceof ServerLevel sever) {
@@ -324,13 +338,13 @@ public abstract class AbstractMagicShot extends Projectile {
 	}
 
 	// パーティクルスポーン
-	protected void spawnParticle () {}
+	protected void spawnParticle() {}
 
 	// パーティクルスポーン
-	protected void spawnParticleShort (ServerLevel sever, BlockPos pos) {}
+	protected void spawnParticleShort(ServerLevel sever, BlockPos pos) {}
 
 	// パーティクルスポーン
-	protected void spawnParticleRing(ServerLevel server, ParticleOptions particle, double range, BlockPos pos, double ySpeed, double moveValue) {
+	protected void spawnParticleRing(ServerLevel server, ParticleOptions par, double range, BlockPos pos, double ySpeed, double moveValue) {
 
 		double x = pos.getX() + 0.5D;
 		double y = pos.getY() + 0.5D;
@@ -338,7 +352,7 @@ public abstract class AbstractMagicShot extends Projectile {
 
 		for (double degree = 0D; degree < range * Math.PI; degree += 0.1D) {
 			double rate = range;
-			server.sendParticles(particle, x + Math.cos(degree) * rate, y, z + Math.sin(degree) * rate, 0, -Math.cos(degree), ySpeed, -Math.sin(degree), moveValue);
+			server.sendParticles(par, x + Math.cos(degree) * rate, y, z + Math.sin(degree) * rate, 0, -Math.cos(degree), ySpeed, -Math.sin(degree), moveValue);
 		}
 	}
 
@@ -351,7 +365,7 @@ public abstract class AbstractMagicShot extends Projectile {
 
 		for (double degree = -range * Math.PI; degree < range * Math.PI; degree += 0.25D) {
 			double rate = range * 0.75D;
-			server.sendParticles(par, x + Math.cos(degree) * rate, y, z + Math.sin(degree) * rate, 0, Math.cos(degree) * 0.65D, 0, Math.sin(degree) * 0.65D, 1D);
+			server.sendParticles(par, x + Math.cos(degree) * rate, y, z + Math.sin(degree) * rate, 0, Math.cos(degree) * 0.65D, 0, Math.sin(degree) * 0.65D, -0.67D);
 		}
 	}
 
@@ -368,7 +382,7 @@ public abstract class AbstractMagicShot extends Projectile {
 		}
 	}
 
-	public BlockParticleOption getParticle (BlockState state) {
+	public BlockParticleOption getParticle(BlockState state) {
 		return new BlockParticleOption(ParticleTypes.BLOCK, state);
 	}
 
@@ -383,19 +397,19 @@ public abstract class AbstractMagicShot extends Projectile {
 	}
 
 	// デスポーン時効果
-	public void despawnAction () { }
+	public void despawnAction() { }
 
 	public void shootFromRotation(Entity entity, float x, float y, float z, float shotSpeed, float par1) {
-		float f = -Mth.sin(y * ((float) Math.PI / 180F)) * Mth.cos(x * ((float) Math.PI / 180F));
-		float f1 = -Mth.sin((x + z) * ((float) Math.PI / 180F));
-		float f2 = Mth.cos(y * ((float) Math.PI / 180F)) * Mth.cos(x * ((float) Math.PI / 180F));
+		float pi = (float) Math.PI / 180F;
+		float f = -Mth.sin(y * pi) * Mth.cos(x * pi);
+		float f1 = -Mth.sin((x + z) * pi);
+		float f2 = Mth.cos(y * pi) * Mth.cos(x * pi);
 		this.shoot((double) f, (double) f1, (double) f2, shotSpeed, par1);
 		this.setShotSpeed(shotSpeed);
 	}
 
 	// エンティティ被弾時
 	protected void onHitEntity(EntityHitResult result) {
-
 		super.onHitEntity(result);
 		if (this.getNotDamage()) { return; }
 
@@ -414,22 +428,22 @@ public abstract class AbstractMagicShot extends Projectile {
 				// ノックバック
 				this.onKnockBack(living);
 
-	            if (!this.level.isClientSide && attacker instanceof LivingEntity attackkerLiv) {
+				if (!this.level.isClientSide && attacker instanceof LivingEntity attackkerLiv) {
 
-	            	try {
-	 	               EnchantmentHelper.doPostHurtEffects(living, attacker);
-		               EnchantmentHelper.doPostDamageEffects(attackkerLiv, living);
-		               attackkerLiv.setLastHurtByMob(living);
-	            	}
+					try {
+						EnchantmentHelper.doPostHurtEffects(living, attacker);
+						EnchantmentHelper.doPostDamageEffects(attackkerLiv, living);
+						attackkerLiv.setLastHurtByMob(living);
+					}
 
-	    			catch (Throwable e) { }
-	            }
+					catch (Throwable e) { }
+				}
 
-	            // ウォーデンならダメージ増加
-	            dame = target instanceof Warden ? dame * 4F : dame;
+				// ウォーデンならダメージ増加
+				dame = target instanceof Warden ? dame * 4F : dame;
 
-	            // ターゲットに攻撃
-	    		if (target.hurt(src, dame)) {
+				// ターゲットに攻撃
+				if (target.hurt(src, dame)) {
 
 					this.entityHit(living);
 					living.invulnerableTime = 0;
@@ -442,12 +456,12 @@ public abstract class AbstractMagicShot extends Projectile {
 					if (this.tickCount <= this.getMinParticleTick() && this.level instanceof ServerLevel sever) {
 						this.spawnParticleShort(sever, this.blockPosition());
 					}
-	    		}
+				}
 
-	    		// プレイヤー同士の被弾なら
-	    		if (living instanceof Player && attacker instanceof ServerPlayer && !this.isSilent()) {
-					((ServerPlayer) attacker).connection.send(new ClientboundGameEventPacket(ClientboundGameEventPacket.ARROW_HIT_PLAYER, 0F));
-	    		}
+				// プレイヤー同士の被弾なら
+				if (living instanceof Player && attacker instanceof ServerPlayer server && !this.isSilent()) {
+					server.connection.send(new ClientboundGameEventPacket(ClientboundGameEventPacket.ARROW_HIT_PLAYER, 0F));
+				}
 			}
 
 			// LivingEntity以外で攻撃したのがプレイヤーなら
@@ -534,10 +548,22 @@ public abstract class AbstractMagicShot extends Projectile {
 	}
 
 	// 追加攻撃
-	public void addAttack (LivingEntity entity, float dame, int addAttackCount) {
+	public void addAttack(LivingEntity entity, float dame, int addAttackCount) {
 		if (addAttackCount <= 0) { return; }
 
-		dame = this.isBoss(entity) ? dame * 0.1F : dame * 0.25F;
+		LivingEntity owner = this.getLiving();
+		if (owner != null) {
+			if (owner.hasEffect(PotionInit.arlaune_bless)) {
+				addAttackCount++;
+			}
+		}
+
+		float rate = this.getQuillpen() ? 0.5F : 0.1F;
+		dame = this.isBoss(entity) ? dame * rate : dame * 0.25F;
+
+		if (entity.hasEffect(PotionInit.flame) && this.getWarriorCard()) {
+			dame *= 1.25F;
+		}
 
 		for (int i = 0; i < addAttackCount; i++) {
 			this.acceAddAttack(entity, (LivingEntity) this.getOwner(), dame, true);
@@ -549,15 +575,20 @@ public abstract class AbstractMagicShot extends Projectile {
 	}
 
 	// 追加攻撃
-	public void addAttackEntity (Entity target, LivingEntity attacker, float dame, int addAttackCount) {
+	public void addAttackEntity(Entity target, LivingEntity attacker, float dame, int addAttackCount) {
 		if (addAttackCount <= 0) { return; }
 
-		dame = this.isBoss(target) ? dame * 0.1F : dame * 0.25F;
+		float rate = this.getQuillpen() ? 0.5F : 0.1F;
+		dame = this.isBoss(target) ? dame * rate : dame * 0.25F;
+
+		if (target instanceof LivingEntity entity && entity.hasEffect(PotionInit.flame) && this.getWarriorCard()) {
+			dame *= 1.25F;
+		}
 
 		for (int i = 0; i < addAttackCount; i++) {
 
 			this.acceAddAttack(target, attacker, dame, false);
-			if (target.hurt(SMDamage.getAddDamage(this, attacker), dame) ) {
+			if (target.hurt(SMDamage.getAddDamage(this, attacker), dame)) {
 				target.invulnerableTime = 0;
 			}
 			this.vulnerableParticle(target);
@@ -566,12 +597,11 @@ public abstract class AbstractMagicShot extends Projectile {
 		this.setAddAttack(0);
 	}
 
-	public void acceAddAttack (Entity target, LivingEntity attacker, float dame, boolean isNotEnder) {
-
-		if (this.rand.nextFloat() > 0.5F) { return; }
+	public void acceAddAttack(Entity target, LivingEntity attacker, float dame, boolean isNotEnder) {
+		if (this.rand.nextFloat() > 0.5F || attacker == null || !(attacker instanceof Player player)) { return; }
 
 		ItemStack leg = attacker.getItemBySlot(EquipmentSlot.LEGS);
-		if (attacker instanceof Player player && !leg.isEmpty() && leg.getItem() instanceof IPorch porch && porch.hasAcce(leg, ItemInit.cherry_ornate_hairpin)) {
+		if (!leg.isEmpty() && leg.getItem() instanceof IPorch porch && porch.hasAcce(leg, ItemInit.cherry_ornate_hairpin)) {
 
 			DamageSource src = isNotEnder ? SMDamage.getAddDamage(this, attacker) : DamageSource.playerAttack(player);
 			if (target.hurt(src, dame * 0.25F) ) {
@@ -581,7 +611,7 @@ public abstract class AbstractMagicShot extends Projectile {
 	}
 
 	// ノックバック
-	public void onKnockBack (LivingEntity living) {
+	public void onKnockBack(LivingEntity living) {
 
 		if (this.knockback > 0D) {
 			float knock = (float) Math.max(0F, 1F - living.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE));
@@ -614,8 +644,8 @@ public abstract class AbstractMagicShot extends Projectile {
 
 		// エンダーマン以外ならターゲットに攻撃
 		if (!(target instanceof EnderMan) && !(target instanceof Witch)) {
-    		target.hurt(isAddAttack ? SMDamage.getAddDamage(this, this.getOwner()) : this.damageSource(), target instanceof Warden ? dame * 4F : dame);
-    		target.invulnerableTime = 0;
+			target.hurt(isAddAttack ? SMDamage.getAddDamage(this, this.getOwner()) : this.damageSource(), target instanceof Warden ? dame * 4F : dame);
+			target.invulnerableTime = 0;
 		}
 
 		// エンダーマンの場合
@@ -654,9 +684,9 @@ public abstract class AbstractMagicShot extends Projectile {
 		}
 	}
 
-	public void inGround () { }
+	public void inGround() { }
 
-	public boolean canHitTarget (Entity entity) {
+	public boolean canHitTarget(Entity entity) {
 		return entity instanceof Player || entity instanceof AbstractSummonMob;
 	}
 
@@ -674,37 +704,37 @@ public abstract class AbstractMagicShot extends Projectile {
 	}
 
 	// 杖レベルの設定
-	public void setWandLevel (int wandLevel) {
+	public void setWandLevel(int wandLevel) {
 		this.wandLevel = wandLevel;
 	}
 
 	// 杖レベルの取得
-	public int getWandLevel () {
+	public int getWandLevel() {
 		return this.wandLevel;
 	}
 
 	// 生存時間の設定
-	public void setLifeTime (int lifeTime) {
+	public void setLifeTime(int lifeTime) {
 		this.lifeTime = lifeTime;
 	}
 
 	// 生存時間の取得
-	public int getLifeTime () {
+	public int getLifeTime() {
 		return this.lifeTime;
 	}
 
 	// 最大生存時間の設定
-	public void setMaxLifeTime (int maxLifeTime) {
+	public void setMaxLifeTime(int maxLifeTime) {
 		this.maxLifeTime = maxLifeTime;
 	}
 
 	// 最大生存時間の取得
-	public int getMaxLifeTime () {
+	public int getMaxLifeTime() {
 		return this.maxLifeTime;
 	}
 
 	// 最低パーティクル描画時間
-	public int getMinParticleTick () {
+	public int getMinParticleTick() {
 		return 0;
 	}
 
@@ -771,6 +801,36 @@ public abstract class AbstractMagicShot extends Projectile {
 	// 矢の設定
 	public void setArrow(boolean isArrow) {
 		this.entityData.set(ISARROW, isArrow);
+	}
+
+	// 砂時計の取得
+	public boolean getHourGlass() {
+		return this.entityData.get(ISHOURGLASS);
+	}
+
+	// 砂時計の設定
+	public void setHourGlass(boolean isGlass) {
+		this.entityData.set(ISHOURGLASS, isGlass);
+	}
+
+	// 戦士のカードの取得
+	public boolean getWarriorCard() {
+		return this.entityData.get(ISWARRIOR_CARD);
+	}
+
+	// 戦士のカードの設定
+	public void setWarriorCard(boolean isCard) {
+		this.entityData.set(ISWARRIOR_CARD, isCard);
+	}
+
+	// 戦士のカードの取得
+	public boolean getQuillpen() {
+		return this.entityData.get(ISQUILLPEN);
+	}
+
+	// 戦士のカードの設定
+	public void setQuillpen(boolean isCard) {
+		this.entityData.set(ISQUILLPEN, isCard);
 	}
 
 	// 最大破壊回数の取得
@@ -849,12 +909,12 @@ public abstract class AbstractMagicShot extends Projectile {
 	}
 
 	// tierの取得
-	public int getTier () {
+	public int getTier() {
 		return this.entityData.get(TIER);
 	}
 
 	// tierの設定
-	public void setTier (int tier) {
+	public void setTier(int tier) {
 		this.entityData.set(TIER, tier);
 	}
 
@@ -878,32 +938,42 @@ public abstract class AbstractMagicShot extends Projectile {
 
 	// ダメージソース(誰が攻撃したかをわかるために)
 	protected DamageSource damageSource() {
-
 		Entity owner = this.getOwner();
 		if (!(owner instanceof Monster entity)) { return SMDamage.getMagicDamage(this, owner); }
 
 		return entity.getTarget() instanceof Player ? DamageSource.mobAttack(entity) : SMDamage.getMagicDamage(this, owner);
 	}
 
-	public void addPotion (LivingEntity entity, MobEffect potion, int time, int level) {
+	public int addPotion(LivingEntity entity, MobEffect potion, int time, int level) {
 
 		if (this.isBoss(entity)) {
+
+			if (!potion.equals(PotionInit.bleeding)) {
+				time = time / 4;
+				level = Math.max(0, level - 1);
+			}
+
+			else {
+				time = time / 2;
+			}
+
 			time = time / 4;
-			level = Math.min(0, level / 2);
+			level = potion.equals(PotionInit.bleeding) ? level : Math.max(0, level - 1);
 
 			if (potion.equals(PotionInit.bubble)) {
-				time = Math.min(10, time);
+				time = Math.min(10 + 20 * level, time);
 			}
 		}
 
 		PlayerHelper.setPotion(entity, potion, level, time);
+		return time;
 	}
 
-	public boolean isBoss (Entity entity) {
+	public boolean isBoss(Entity entity) {
 		return entity.getType().is(TagInit.BOSS);
 	}
 
-	public boolean isNotSpecial (Entity entity) {
+	public boolean isNotSpecial(Entity entity) {
 		return entity.getType().is(TagInit.NOT_SPECIAL);
 	}
 
@@ -929,17 +999,15 @@ public abstract class AbstractMagicShot extends Projectile {
 	}
 
 	// 杖情報の設定
-	public void setWandInfo (WandInfo wandInfo) {
+	public void setWandInfo(WandInfo wandInfo) {
 		this.setStack(wandInfo.getStack());
 		this.setWandLevel(wandInfo.getLevel());
 		this.setNBT(wandInfo.getNBT());
 	}
 
 	// アクセサリー効果発動
-	public void acceEffect () {
-
+	public void acceEffect() {
 		if (!(this.getOwner() instanceof Player player)) { return; }
-
 
 		float chance = 0F;
 		ItemStack leg = player.getItemBySlot(EquipmentSlot.LEGS);
@@ -954,6 +1022,18 @@ public abstract class AbstractMagicShot extends Projectile {
 
 				if (!player.isCreative()) {
 					player.setHealth(Math.max(1F, player.getHealth() - bloodCount));
+				}
+			}
+
+			if (porch.hasAcce(leg, ItemInit.wizard_gauntlet)) {
+
+				if (this.getRange() > 0D) {
+					this.setRange(this.getRange() * 1.125F);
+				}
+
+				if (this.getElement().is(SMElement.LIGHTNING)) {
+					this.setAddAttack(this.getAddAttack() + 2);
+					this.setAddDamage(this.getAddDamage() * 1.5F);
 				}
 			}
 
@@ -975,7 +1055,7 @@ public abstract class AbstractMagicShot extends Projectile {
 			}
 
 			int frostChainCount = porch.acceCount(leg, ItemInit.frosted_chain, 1);
-			if (frostChainCount > 0 && this instanceof FrostMagicShot) {
+			if (frostChainCount > 0 && this.getElement().is(SMElement.FROST)) {
 				float addDameRate = 1.25F;
 				this.setAddDamage(this.getAddDamage() * addDameRate);
 
@@ -985,17 +1065,30 @@ public abstract class AbstractMagicShot extends Projectile {
 			}
 
 			int hollyCharmCount = porch.acceCount(leg, ItemInit.holly_charm, 1);
-			if (hollyCharmCount > 0 && this instanceof LightMagicShot) {
+			if (hollyCharmCount > 0 && this.getElement().is(SMElement.SHINE)) {
 				float addDameRate = 1.25F;
 				this.setAddDamage(this.getAddDamage() * addDameRate);
 				this.setAddAttack(this.getAddAttack() + 1);
 			}
 
 			int ignisSoulCount = porch.acceCount(leg, ItemInit.ignis_soul, 1);
-			if (ignisSoulCount > 0 && this instanceof FireMagicShot) {
+			if (ignisSoulCount > 0 && this.getElement().is(SMElement.FLAME)) {
 				float addDameRate = 1.25F;
 				this.setAddDamage(this.getBaseDamage() * addDameRate);
 				this.setAddAttack(this.getAddAttack() + 1);
+			}
+
+			if (porch.hasAcce(leg, ItemInit.warrior_card) && player.hasEffect(MobEffects.DAMAGE_BOOST)) {
+				this.setAddAttack(this.getAddAttack() + player.getEffect(MobEffects.DAMAGE_BOOST).getAmplifier() + 1);
+				this.setWarriorCard(true);
+			}
+
+			if (porch.hasAcce(leg, ItemInit.magician_quillpen)) {
+				this.setQuillpen(true);
+			}
+
+			if (porch.hasAcce(leg, ItemInit.twilight_hourglass)) {
+				this.setHourGlass(true);
 			}
 
 			int windReliefCount = porch.acceCount(leg, ItemInit.wind_relief, 1);
@@ -1036,8 +1129,16 @@ public abstract class AbstractMagicShot extends Projectile {
 			chance += (player.getEffect(MobEffects.LUCK).getAmplifier() + 1) * 0.025F;
 		}
 
-		if (chance > 0F && chance >= this.random.nextFloat()) {
+		if (chance > 0F && chance >= this.rand.nextFloat()) {
 			this.setCritical(true);
+		}
+
+		if (player.hasEffect(PotionInit.holy_bless)) {
+			this.setRange(this.getRange() + 3F);
+		}
+
+		if (player.hasEffect(PotionInit.knight_bless)) {
+			this.setAddDamage(this.getAddDamage() + 6F);
 		}
 	}
 
@@ -1056,15 +1157,12 @@ public abstract class AbstractMagicShot extends Projectile {
 	}
 
 	// ダメージの取得
-	protected float getDamage () {
+	protected float getDamage() {
 
 		// 基礎ダメージの取得
 		float damage = this.getBaseDamage();
 		LivingEntity entity = this.getLiving();
-
-		if (entity == null) {
-			return damage;
-		}
+		if (entity == null) { return damage; }
 
 		// 攻撃力上昇
 		if (entity.hasEffect(MobEffects.DAMAGE_BOOST)) {
@@ -1092,8 +1190,91 @@ public abstract class AbstractMagicShot extends Projectile {
 
 		// ダメージ加算
 		damage += !this.getCritical() ? this.getAddDamage() : this.getAddDamage() * 1.5F;
-
 		return damage;
+	}
+
+
+	protected double wrap180Radian(double radian) {
+
+		radian %= 2 * Math.PI;
+
+		while (radian >= Math.PI) {
+			radian -= 2 * Math.PI;
+		}
+
+		while (radian < -Math.PI) {
+			radian += 2 * Math.PI;
+		}
+
+		return radian;
+	}
+
+	protected double clampAbs(double param, double maxMagnitude) {
+		if (Math.abs(param) > maxMagnitude) {
+			param =param < 0 ? -Math.abs(maxMagnitude) : Math.abs(maxMagnitude);
+		}
+		return param;
+	}
+
+	protected double angleBetween(Vec3 v1, Vec3 v2) {
+
+		double vDot = v1.dot(v2) / (v1.length() * v2.length());
+
+		if (vDot < -1D) {
+			vDot = -1D;
+		}
+
+		if (vDot > 1D) {
+			vDot = 1D;
+		}
+
+		return Math.acos(vDot);
+	}
+
+	protected Vec3 transform(Vec3 axis, double angle, Vec3 normal) {
+
+		double m00 = 1D;
+		double m01 = 0D;
+		double m02 = 0D;
+
+		double m10 = 0D;
+		double m11 = 1D;
+		double m12 = 0D;
+
+		double m20 = 0D;
+		double m21 = 0D;
+		double m22 = 1D;
+		double mag = Math.sqrt(axis.x * axis.x + axis.y * axis.y + axis.z * axis.z);
+
+		if (mag >= 1.0E-10) {
+
+			mag = 1D / mag;
+			double ax = axis.x * mag;
+			double ay = axis.y * mag;
+			double az = axis.z * mag;
+
+			double sinTheta = Math.sin(angle);
+			double cosTheta = Math.cos(angle);
+			double t = 1D - cosTheta;
+
+			double xz = ax * az;
+			double xy = ax * ay;
+			double yz = ay * az;
+
+			m00 = t * ax * ax + cosTheta;
+			m01 = t * xy - sinTheta * az;
+			m02 = t * xz + sinTheta * ay;
+
+			m10 = t * xy + sinTheta * az;
+			m11 = t * ay * ay + cosTheta;
+			m12 = t * yz - sinTheta * ax;
+
+			m20 = t * xz - sinTheta * ay;
+			m21 = t * yz + sinTheta * ax;
+			m22 = t * az * az + cosTheta;
+		}
+
+		return new Vec3(m00 * normal.x + m01 * normal.y + m02 * normal.z, m10 * normal.x + m11 * normal.y + m12 * normal.z, m20 * normal.x + m21 * normal.y + m22 * normal.z);
 	}
 
 	/*
@@ -1132,6 +1313,9 @@ public abstract class AbstractMagicShot extends Projectile {
 		tags.putBoolean("isNotDamage", this.getNotDamage());
 		tags.putBoolean("isSilk", this.getSilk());
 		tags.putBoolean("isArrow", this.getArrow());
+		tags.putBoolean("isWarriorCard", this.getWarriorCard());
+		tags.putBoolean("isQuillpen", this.getQuillpen());
+		tags.putBoolean("isHourGlass", this.getHourGlass());
 
 		if (!this.getStack().isEmpty()) {
 			tags.put("wandStack", this.getStack().save(new CompoundTag()));
@@ -1167,6 +1351,9 @@ public abstract class AbstractMagicShot extends Projectile {
 		this.setNotDamage(tags.getBoolean("isNotDamage"));
 		this.setSilk(tags.getBoolean("isSilk"));
 		this.setArrow(tags.getBoolean("isArrow"));
+		this.setWarriorCard(tags.getBoolean("isWarriorCard"));
+		this.setQuillpen(tags.getBoolean("isQuillpen"));
+		this.setHourGlass(tags.getBoolean("isHourGlass"));
 
 		if (tags.contains("wandStack", 10)) {
 			this.stack = ItemStack.of(tags.getCompound("wandStack"));
@@ -1182,7 +1369,7 @@ public abstract class AbstractMagicShot extends Projectile {
 	 */
 
 	// 音を流す
-	public void playSound (Entity entity, SoundEvent sound, float vol, float pit) {
+	public void playSound(Entity entity, SoundEvent sound, float vol, float pit) {
 		this.level.playSound(null, entity.getOnPos(), sound, SoundSource.AMBIENT, vol, pit);
 	}
 
@@ -1202,62 +1389,62 @@ public abstract class AbstractMagicShot extends Projectile {
 	}
 
 	// 範囲の取得
-	public AABB getAABB (double range) {
+	public AABB getAABB(double range) {
 		return this.getAABB(range, range / 2, range);
 	}
 
 	// 範囲の取得
-	public AABB getAABB (double x, double y, double z) {
+	public AABB getAABB(double x, double y, double z) {
 		return this.getBoundingBox().inflate(x, y, z);
 	}
 
 	// 範囲の取得
-	public AABB getAABB (BlockPos pos, double range) {
+	public AABB getAABB(BlockPos pos, double range) {
 		return new AABB(pos.offset(-range, -range, -range), pos.offset(range, range, range));
 	}
 
 	// 射撃者によってえんちちーを取得
-	public <T extends LivingEntity> Predicate<T> isTarget () {
+	public <T extends LivingEntity> Predicate<T> isTarget() {
 		return e -> e.isAlive() && this.canTargetEffect(e, this.getOwner());
 	}
 
 	// 範囲内にいる射撃者によってえんちちーを取得
-	public <T extends LivingEntity> Predicate<T> isBladTarget (double range) {
+	public <T extends LivingEntity> Predicate<T> isBladTarget(double range) {
 		return e -> e.isAlive() && this.canTargetEffect(e, this.getOwner()) && this.checkDistance(e.blockPosition(), range);
 	}
 
-	public Iterable<BlockPos> getPosList (BlockPos pos, double range) {
-		return BlockPos.betweenClosed(pos.offset(-range, -range, -range), pos.offset(range, range, range));
+	public Iterable<BlockPos> getPosList(BlockPos pos, double range) {
+		return WorldHelper.getRangePos(pos, range);
 	}
 
-	public Iterable<BlockPos> getPosRangeList (BlockPos pos, double range) {
-		return BlockPos.betweenClosed(pos.offset(-range, 0, -range), pos.offset(range, 0, range));
+	public Iterable<BlockPos> getPosRangeList(BlockPos pos, double range) {
+		return WorldHelper.getRangePos(pos, -range, 0, -range, range, 0, range);
 	}
 
 	// プレイヤーの取得
-	public Player getPlayer () {
+	public Player getPlayer() {
 		return (Player) this.getOwner();
 	}
 
 	// 乱数取得
-	public float getRandFloat (float rate) {
+	public float getRandFloat(float rate) {
 		return (this.rand.nextFloat() - this.rand.nextFloat()) * rate;
 	}
 
-	public double getColorValue (double base, double max) {
+	public double getColorValue(double base, double max) {
 		return Math.min(1F, (base + this.rand.nextDouble() * max) / 255D);
 	}
 
-	public boolean canTargetEffect (LivingEntity target, Entity owner) {
+	public boolean canTargetEffect(LivingEntity target, Entity owner) {
 		return (owner instanceof Player || owner instanceof AbstractSummonMob) ? target instanceof Enemy : target instanceof Player;
 	}
 
 	// 範囲内にいるかのチェック
-	public boolean checkDistance (BlockPos pos, double range) {
+	public boolean checkDistance(BlockPos pos, double range) {
 		return this.distanceToSqr(pos.getX(), pos.getY(), pos.getZ()) <= range;
 	}
 
-	public void vulnerableAttack (LivingEntity target, LivingEntity attacker, float dame) {
+	public void vulnerableAttack(LivingEntity target, LivingEntity attacker, float dame) {
 
 		// 炎、爆発脆弱化
 		if (this.isVulnerable(target, PotionInit.flame_explosion_vulnerable, SMElement.FLAME, SMElement.BLAST)) {
@@ -1280,17 +1467,16 @@ public abstract class AbstractMagicShot extends Projectile {
 		}
 	}
 
-	public boolean isVulnerable (LivingEntity target, MobEffect potion, SMElement... eleArray) {
+	public boolean isVulnerable(LivingEntity target, MobEffect potion, SMElement... eleArray) {
 		return target.hasEffect(potion) && this.getElement().is(eleArray);
 	}
 
-	public void vulnerableAttack (LivingEntity target, LivingEntity attacker, MobEffect potion, float dame) {
+	public void vulnerableAttack(LivingEntity target, LivingEntity attacker, MobEffect potion, float dame) {
 		this.addAttackEntity(target, attacker, dame * 2.5F, target.getEffect(potion).getAmplifier() + 1);
 	}
 
-	public void vulnerableParticle (Entity target) {
-
-		if (!(this.level instanceof ServerLevel server)) {  return; }
+	public void vulnerableParticle(Entity target) {
+		if (!(this.level instanceof ServerLevel server)) { return; }
 
 		double red = this.getColorValue(10D, 235D);
 		double green = this.getColorValue(10D, 235D);
@@ -1303,7 +1489,7 @@ public abstract class AbstractMagicShot extends Projectile {
 			double x = target.getX() + this.getRandFloat(0.5F) + addX;
 			double y = target.getY() + 1.5D + this.getRandFloat(0.5F) + addY;
 			double z = target.getZ() + this.getRandFloat(0.5F) + addZ;
-			server.sendParticles(ParticleInit.ADDATTACK.get(), x, y, z, 0, red, green, blue, 1F);
+			server.sendParticles(ParticleInit.ADDATTACK, x, y, z, 0, red, green, blue, 1F);
 		}
 	}
 

@@ -55,7 +55,7 @@ public class DwarfZombieMaster extends AbstractSMMob {
 
 	public DwarfZombieMaster(EntityType<DwarfZombieMaster> enType, Level world) {
 		super(enType, world);
-		this.xpReward = 150;
+		this.xpReward = 200;
 		this.maxUpStep = 1.25F;
 	}
 
@@ -101,13 +101,9 @@ public class DwarfZombieMaster extends AbstractSMMob {
 
 	// ダメージ処理
 	public boolean hurt(DamageSource src, float amount) {
-
 		Entity attacker = src.getEntity();
 		Entity attackEntity = src.getDirectEntity();
-
-		if ( attacker != null && attacker instanceof ISMMob) {
-			return false;
-		}
+		if (attacker != null && attacker instanceof ISMMob) { return false; }
 
 		if (this.notMagicDamage(attacker, attackEntity)) {
 			attacker.hurt(SMDamage.magicDamage, amount);
@@ -125,9 +121,7 @@ public class DwarfZombieMaster extends AbstractSMMob {
 	}
 
 	protected void customServerAiStep() {
-
 		super.customServerAiStep();
-
 		LivingEntity target = this.getTarget();
 		if (target == null || this.tickCount % 100 != 0 || this.isLeader(this)) { return; }
 
@@ -144,7 +138,7 @@ public class DwarfZombieMaster extends AbstractSMMob {
 				this.level.addFreshEntity(entity);
 				entity.teleport();
 				entity.spawnAnim();
-	            this.armorDropChances[EquipmentSlot.MAINHAND.getIndex()] = 0F;
+				this.armorDropChances[EquipmentSlot.MAINHAND.getIndex()] = 0F;
 			}
 
 			this.setSummon(true);
@@ -166,7 +160,7 @@ public class DwarfZombieMaster extends AbstractSMMob {
 				entity.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.STONE_SWORD));
 				this.level.addFreshEntity(entity);
 				entity.spawnAnim();
-	            this.armorDropChances[EquipmentSlot.MAINHAND.getIndex()] = 0F;
+				this.armorDropChances[EquipmentSlot.MAINHAND.getIndex()] = 0F;
 
 				if (count++ >= 3) { break; }
 			}
@@ -177,8 +171,8 @@ public class DwarfZombieMaster extends AbstractSMMob {
 	}
 
 	public boolean doHurtTarget(Entity entity) {
-		boolean flag = super.doHurtTarget(entity);
 
+		boolean flag = super.doHurtTarget(entity);
 		float baseDamae = (float) this.getAttributeValue(Attributes.ATTACK_DAMAGE);
 
 		if (flag && entity instanceof Warden target) {
@@ -219,23 +213,23 @@ public class DwarfZombieMaster extends AbstractSMMob {
 		this.setHalfHealth(tags.getBoolean("isHalfHealth"));
 	}
 
-	public boolean getSummon () {
+	public boolean getSummon() {
 		return this.entityData.get(ISSUMMON);
 	}
 
-	public void setSummon (boolean summonCount) {
+	public void setSummon(boolean summonCount) {
 		this.entityData.set(ISSUMMON, summonCount);
 	}
 
-	public boolean isHalfHealth () {
+	public boolean isHalfHealth() {
 		return this.entityData.get(ISHALFHEALTH);
 	}
 
-	public void setHalfHealth (boolean isHalfHealth) {
+	public void setHalfHealth(boolean isHalfHealth) {
 		this.entityData.set(ISHALFHEALTH, isHalfHealth);
 	}
 
-	public List<BlockPos> getPosList () {
+	public List<BlockPos> getPosList() {
 		return this.posList;
 	}
 
@@ -247,7 +241,7 @@ public class DwarfZombieMaster extends AbstractSMMob {
 	}
 
 	// 低ランクかどうか
-	public boolean isLowRank () {
+	public boolean isLowRank() {
 		return false;
 	}
 

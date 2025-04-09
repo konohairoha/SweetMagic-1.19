@@ -35,7 +35,6 @@ import sweetmagic.init.entity.projectile.LightMagicShot;
 
 public class WindWitch extends AbstractSMMob {
 
-	private int tickTime = 0;
 	private int recastTime = 0;
 	private static final int RAND_RECASTTIME = 50;
 	private static final EntityDataAccessor<Boolean> IS_TARGET = SynchedEntityData.defineId(WindWitch.class, BOOLEAN);
@@ -72,7 +71,7 @@ public class WindWitch extends AbstractSMMob {
 	}
 
 	// スポーンまでの日数
-	public int getMaxSpawnDate () {
+	public int getMaxSpawnDate() {
 		return SMConfig.spawnDate.get() * 3;
 	}
 
@@ -90,9 +89,8 @@ public class WindWitch extends AbstractSMMob {
 
 	// ダメージ処理
 	public boolean hurt(DamageSource src, float amount) {
-
 		Entity attacker = src.getEntity();
-		if ( attacker != null && attacker instanceof ISMMob) { return false; }
+		if (attacker != null && attacker instanceof ISMMob) { return false; }
 
 		// ダメージ倍処理
 		amount = this.getDamageAmount(this.level , src, amount, 0.25F);
@@ -119,27 +117,24 @@ public class WindWitch extends AbstractSMMob {
 		this.entityData.set(IS_TARGET, tags.getBoolean("is_target"));
 	}
 
-	public boolean isTarget () {
+	public boolean isTarget() {
 		return this.entityData.get(IS_TARGET);
 	}
 
 	public void tick() {
 		super.tick();
 
-		if (!this.level.isClientSide && this.tickTime++ > 10) {
-			this.tickTime = 0;
+		if (!this.level.isClientSide && this.tickCount % 10 == 0) {
 			this.entityData.set(IS_TARGET, this.getTarget() != null);
 		}
 	}
 
 	protected void customServerAiStep() {
-
 		super.customServerAiStep();
-
 		LivingEntity target = this.getTarget();
 		if (target == null) { return; }
 
-		this.getLookControl().setLookAt(target, 10.0F, 10.0F);
+		this.getLookControl().setLookAt(target, 10F, 10F);
 		if (this.recastTime-- > 0) { return; }
 
 		boolean isWarden = target instanceof Warden;
@@ -150,13 +145,11 @@ public class WindWitch extends AbstractSMMob {
 		this.level.addFreshEntity(entity);
 	}
 
-	public AbstractMagicShot getMagicShot (LivingEntity target, boolean isWarden) {
+	public AbstractMagicShot getMagicShot(LivingEntity target, boolean isWarden) {
 
 		AbstractMagicShot entity = null;
-
 		float dama = isWarden ? 30F : 1.25F;
 		float dameRate = isWarden ? 1.25F : this.getDateRate(this.level, 0.1F);
-
 		double x = target.getX() - this.getX();
 		double y = target.getY(0.3333333333333333D) - this.getY();
 		double z = target.getZ() - this.getZ();
@@ -164,33 +157,28 @@ public class WindWitch extends AbstractSMMob {
 		int level = isWarden ? 20 : 7;
 
 		switch (this.rand.nextInt(4)) {
-		case 0:
-			entity = new CycloneMagicShot(this.level, this, ItemStack.EMPTY);
-			break;
 		case 1:
-			entity = new FrostMagicShot(this.level, this, ItemStack.EMPTY);
+			entity = new FrostMagicShot(this.level, this);
 			break;
 		case 2:
-			entity = new LightMagicShot(this.level, this, ItemStack.EMPTY);
+			entity = new LightMagicShot(this.level, this);
 			break;
 		case 3:
-			entity = new BubbleMagicShot(this.level, this, ItemStack.EMPTY);
+			entity = new BubbleMagicShot(this.level, this);
 			level = 4;
 			break;
 		default:
-			entity = new CycloneMagicShot(this.level, this, ItemStack.EMPTY);
-			level = 3;
+			entity = new CycloneMagicShot(this.level, this);
 			break;
 		}
 
 		entity.setWandLevel(level);
 		entity.shoot(x, y - xz * 0.035D, z, 3.35F, 0F);
-		entity.setAddDamage( (entity.getAddDamage() + dama) * dameRate );
-
+		entity.setAddDamage((entity.getAddDamage() + dama) * dameRate);
 		return entity;
 	}
 
-	public ItemStack getStack () {
+	public ItemStack getStack() {
 		return WAND;
 	}
 }

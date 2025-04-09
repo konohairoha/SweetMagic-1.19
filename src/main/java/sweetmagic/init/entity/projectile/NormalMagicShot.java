@@ -12,7 +12,7 @@ import sweetmagic.init.ParticleInit;
 
 public class NormalMagicShot extends AbstractMagicShot {
 
-	public NormalMagicShot(EntityType<? extends NormalMagicShot> entityType, Level world) {
+	public NormalMagicShot(EntityType<? extends AbstractMagicShot> entityType, Level world) {
 		super(entityType, world);
 	}
 
@@ -28,7 +28,7 @@ public class NormalMagicShot extends AbstractMagicShot {
 	}
 
 	// ノックバック
-	public void onKnockBack (LivingEntity living) {
+	public void onKnockBack(LivingEntity living) {
 		if (this.knockback <= 0D) { return; }
 
 		double rate = 1D + this.wandLevel * 0.05D;
@@ -39,13 +39,13 @@ public class NormalMagicShot extends AbstractMagicShot {
 		}
 	}
 
-	public int getMinParticleTick () {
+	public int getMinParticleTick() {
 		return 3;
 	}
 
 	// パーティクルスポーン
 	protected void spawnParticle() {
-		this.level.addParticle(ParticleInit.ORB.get(), this.getX(), this.getY(), this.getZ(), 114F / 255F, 255F / 255F, 170F / 255F);
+		this.level.addParticle(ParticleInit.ORB, this.getX(), this.getY(), this.getZ(), 114F / 255F, 255F / 255F, 170F / 255F);
 	}
 
 	// 属性の取得

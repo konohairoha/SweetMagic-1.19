@@ -35,10 +35,10 @@ public class ToxicCircle extends AbstractMagicShot {
 		this.setPos(x, y, z);
 	}
 
-	public ToxicCircle(Level world, LivingEntity entity, ItemStack stack) {
+	public ToxicCircle(Level world, LivingEntity entity) {
 		this(entity.getX(), entity.getEyeY() - (double) 0.1F, entity.getZ(), world);
 		this.setOwner(entity);
-		this.stack = stack;
+		this.stack = ItemStack.EMPTY;
 	}
 
 	public void tick() {
@@ -56,7 +56,7 @@ public class ToxicCircle extends AbstractMagicShot {
 				for (int i = 0; i < 3; i++) {
 					double x = pos.getX() + this.getRandFloat(range);
 					double z = pos.getZ() + this.getRandFloat(range);
-					server.sendParticles(ParticleInit.SMOKY.get(), x, this.yo + 0.25D, z, 0, 67F / 255F, 173F / 255F, 103F / 255F, 1F);
+					server.sendParticles(ParticleInit.SMOKY, x, this.yo + 0.25D, z, 0, 67F / 255F, 173F / 255F, 103F / 255F, 1F);
 				}
 			}
 		}
@@ -66,7 +66,7 @@ public class ToxicCircle extends AbstractMagicShot {
 		}
 	}
 
-	public void rangeAttack (BlockPos pos, float dame, double range) {
+	public void rangeAttack(BlockPos pos, float dame, double range) {
 
 		List<LivingEntity> entityList = this.getEntityList(LivingEntity.class, this.getFilter(pos, range), range);
 
@@ -96,9 +96,9 @@ public class ToxicCircle extends AbstractMagicShot {
 
 	protected void spawnParticleCycle (ServerLevel server, double x, double y, double z, double range, Random rand, int count) {
 		for (int i = 0; i < count; i++) {
-			this.spawnParticleCycle(server, ParticleInit.CYCLE_TOXIC.get(), x, y, z, Direction.UP, range, i * 36F, false);
-			this.spawnParticleCycle(server, ParticleInit.CYCLE_TOXIC.get(), x, y, z, Direction.NORTH, range, i * 36F, false);
-			this.spawnParticleCycle(server, ParticleInit.CYCLE_TOXIC.get(), x, y, z, Direction.EAST, range, i * 36F, false);
+			this.spawnParticleCycle(server, ParticleInit.CYCLE_TOXIC, x, y, z, Direction.UP, range, i * 36F, false);
+			this.spawnParticleCycle(server, ParticleInit.CYCLE_TOXIC, x, y, z, Direction.NORTH, range, i * 36F, false);
+			this.spawnParticleCycle(server, ParticleInit.CYCLE_TOXIC, x, y, z, Direction.EAST, range, i * 36F, false);
 		}
 	}
 

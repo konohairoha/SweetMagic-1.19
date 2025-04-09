@@ -30,16 +30,16 @@ public class WitchWindine extends AbstractWitch {
 
 		switch (this.rand.nextInt(4)) {
 		case 0:
-			entity = new BubbleMagicShot(this.level, this, ItemStack.EMPTY);
+			entity = new BubbleMagicShot(this.level, this);
 			break;
 		case 1:
-			entity = new PoisonMagicShot(this.level, this, ItemStack.EMPTY);
+			entity = new PoisonMagicShot(this.level, this);
 			break;
 		case 2:
-			entity = new FrostMagicShot(this.level, this, ItemStack.EMPTY);
+			entity = new FrostMagicShot(this.level, this);
 			break;
 		case 3:
-			entity = new BubbleMagicShot(this.level, this, ItemStack.EMPTY);
+			entity = new BubbleMagicShot(this.level, this);
 			break;
 		}
 		return entity;
@@ -49,7 +49,7 @@ public class WitchWindine extends AbstractWitch {
 		return WAND;
 	}
 
-	public float getDamageRate () {
+	public float getDamageRate() {
 		return 0.85F;
 	}
 

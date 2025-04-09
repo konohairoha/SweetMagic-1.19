@@ -1,17 +1,12 @@
 package sweetmagic.init.entity.monster;
 
-import java.util.UUID;
-
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
@@ -29,11 +24,7 @@ import net.minecraft.world.level.Level;
 import sweetmagic.api.ientity.ISMMob;
 import sweetmagic.init.EntityInit;
 
-public class EnderShadowMirage extends AbstractSMMob {
-
-	private int teleoprtTime = 0;
-	private UUID ownerID;
-	private LivingEntity owner;
+public class EnderShadowMirage extends AbstractOwnerMob {
 
 	private static final EntityDataAccessor<Boolean> ISSUMMON = ISMMob.setData(EnderShadowMirage.class, EntityDataSerializers.BOOLEAN);
 
@@ -77,11 +68,9 @@ public class EnderShadowMirage extends AbstractSMMob {
 	public boolean hurt(DamageSource src, float amount) {
 
 		Entity attacker = src.getEntity();
-		if ( attacker != null && attacker instanceof ISMMob) { return false; }
-
-		if (!this.level.isClientSide && amount > 2F && this.tickCount > this.teleoprtTime) {
-			this.teleoprtTime = this.tickCount + 10;
+		if (attacker != null && attacker instanceof ISMMob) {
 			this.teleport();
+			return false;
 		}
 
 		// ダメージ倍処理
@@ -113,53 +102,8 @@ public class EnderShadowMirage extends AbstractSMMob {
 		return flag;
 	}
 
-	protected void customServerAiStep() {
-
-		super.customServerAiStep();
-
-		LivingEntity target = this.getTarget();
-		if (target == null) { return; }
-
-		if (this.tickCount % 10 != 0 || this.random.nextFloat() >= 0.05F) { return; }
-
-		this.teleport();
-	}
-
-	public void addAdditionalSaveData(CompoundTag tags) {
-		super.addAdditionalSaveData(tags);
-		tags.putUUID("ownerID", this.getOwnerID());
-	}
-
-	public void readAdditionalSaveData(CompoundTag tags) {
-		super.readAdditionalSaveData(tags);
-		this.setOwnerID(tags.getUUID("ownerID"));
-	}
-
-	public UUID getOwnerID () {
-		return this.ownerID;
-	}
-
-	public void setOwnerID (LivingEntity entity) {
-		this.ownerID = entity.getUUID();
-	}
-
-	public void setOwnerID (UUID id) {
-		this.ownerID = id;
-	}
-
-	public LivingEntity getEntity () {
-
-		LivingEntity entity = this.owner;
-
-		if (entity == null && this.level instanceof ServerLevel server) {
-			entity = (LivingEntity) server.getEntity(this.getOwnerID());
-		}
-
-		return entity;
-	}
-
 	// 低ランクかどうか
-	public boolean isLowRank () {
+	public boolean isLowRank() {
 		return false;
 	}
 }

@@ -23,8 +23,8 @@ import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.Vec3;
@@ -42,22 +42,18 @@ public class QueenFrost extends AbstractSMBoss {
 
 	private int recastTime = 0;							// リキャストタイム
 	private int attackType = 0;							// 攻撃種別
-
 	private int frostRainTime = 0;						// フロストレインの攻撃時間
 	private int chargeTime = 0;							// フロストレインの溜め時間
 	private int laserTime = 0;							// フロスレ-ザーの攻撃時間
-
 	private static final int FROSTRAIN_MAXTIME = 70;	// フロストレインの最大攻撃時間
 	private static final int CHARGE_MAXTIME = 80;		// フロストレインの最大溜め時間
 	private static final int LASER_MAXTIME = 15;		// フロスレ-ザーの最大攻撃時間
-
 	private int leserTotalTime = 0;						// フロスレ-ザーの合計攻撃時間
-
+	private double armorHealth = 0D;
 	private BlockPos pos = null;
 	private BlockPos targetOldPos = null;
 	private Vec3 look = this.getViewVector(1.0F);
 	private List<Player> playerList = new ArrayList<>();
-
 	private static final EntityDataAccessor<Integer> ARMOR = ISMMob.setData(QueenFrost.class, INT);
 	private static final EntityDataAccessor<Boolean> ISLASER = ISMMob.setData(QueenFrost.class, BOOLEAN);
 	private static final EntityDataAccessor<Boolean> ISLECTERN = ISMMob.setData(QueenFrost.class, BOOLEAN);
@@ -69,7 +65,7 @@ public class QueenFrost extends AbstractSMBoss {
 
 	public QueenFrost(EntityType<QueenFrost> enType, Level world) {
 		super(enType, world);
-		this.xpReward = 300;
+		this.xpReward = 400;
 		this.maxUpStep = 1.25F;
 	}
 
@@ -113,31 +109,41 @@ public class QueenFrost extends AbstractSMBoss {
 
 	// ダメージ処理
 	public boolean hurt(DamageSource src, float amount) {
-
 		Entity attacker = src.getEntity();
 		Entity attackEntity = src.getDirectEntity();
-		if ( attacker != null && attacker instanceof ISMMob) { return false; }
+		if (attacker != null && attacker instanceof ISMMob) { return false; }
 
 		// ボスダメージ計算
-		amount = this.getBossDamageAmount(this.level, this.defTime , src, amount, 10F);
+		boolean isLectern = this.isLectern();
+		amount = this.getBossDamageAmount(this.level, this.defTime , src, amount, isLectern ? 10F : 7.5F);
 		this.defTime = amount > 0 ? 2 : this.defTime;
 
-		// 魔法攻撃以外なら反撃&ダメージ無効
-		if (this.notMagicDamage(attacker, attackEntity)) {
+		if (attacker instanceof Warden) {
 			this.attackDamage(attacker, SMDamage.magicDamage, amount);
 			return false;
 		}
 
+		// 魔法攻撃以外ならダメージ減少
+		if (this.notMagicDamage(attacker, attackEntity)) {
+			amount *= 0.25F;
+		}
+
 		// 魔導士の召喚台座による召喚の場合
-		if (this.isLectern()) {
+		if (isLectern) {
 			this.getLecternAction(src, amount, this.getArmor());
+		}
+
+		else if (this.armorHealth > 0D) {
+			this.armorHealth -= amount;
+			this.setArmor((int) (this.armorHealth / 7.5D));
+			amount = 0;
 		}
 
 		return super.hurt(src, amount);
 	}
 
 	// 召喚台座時のダメージ処理
-	public float getLecternAction (DamageSource src, float amount, int armorSize) {
+	public float getLecternAction(DamageSource src, float amount, int armorSize) {
 
 		if (armorSize > 0) {
 
@@ -160,7 +166,7 @@ public class QueenFrost extends AbstractSMBoss {
 	}
 
 	// 危険な果実でのダメージ計算
-	public float getEvilDamage (float amount, int armorSize) {
+	public float getEvilDamage(float amount, int armorSize) {
 
 		this.setArmor(armorSize - 1);
 		amount = 25F / this.getEntityList(Player.class, 80F).size();
@@ -181,6 +187,7 @@ public class QueenFrost extends AbstractSMBoss {
 		tags.putInt("frostRainTime", this.frostRainTime);
 		tags.putInt("chargeTime", this.chargeTime);
 		tags.putInt("laserTime", this.laserTime);
+		tags.putDouble("armorHealth", this.armorHealth);
 	}
 
 	public void readAdditionalSaveData(CompoundTag tags) {
@@ -191,30 +198,40 @@ public class QueenFrost extends AbstractSMBoss {
 		this.frostRainTime = tags.getInt("frostRainTime");
 		this.chargeTime = tags.getInt("chargeTime");
 		this.laserTime = tags.getInt("laserTime");
+		this.armorHealth = tags.getDouble("armorHealth");
+		if (!this.isLectern()) {
+			this.setBossEvent(BC_BLUE, NOTCHED_6);
+		}
 	}
 
-	public int getArmor () {
+	public int getArmor() {
 		return this.entityData.get(ARMOR);
 	}
 
-	public void setArmor (int size) {
+	public void setArmor(int size) {
 		this.entityData.set(ARMOR, size);
 	}
 
-	public boolean isLaser () {
+	public boolean isLaser() {
 		return this.entityData.get(ISLASER);
 	}
 
 	// アーマーがないなら
-	public boolean isArmorEmpty () {
+	public boolean isArmorEmpty() {
 		return this.getArmor() <= 0;
 	}
 
 	@Nullable
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance dif, MobSpawnType spawn, @Nullable SpawnGroupData data, @Nullable CompoundTag tag) {
 		data = super.finalizeSpawn(world, dif, spawn, data, tag);
-		this.setArmor(3 * this.getEntityList(Player.class, 80D).size());
+		this.startInfo();
 		return data;
+	}
+
+	public void startInfo() {
+		super.startInfo();
+		this.setArmor(3 * this.getEntityList(Player.class, 80D).size());
+		this.armorHealth = this.getArmor() * 15D;
 	}
 
 	public void tick() {
@@ -230,15 +247,13 @@ public class QueenFrost extends AbstractSMBoss {
 			float f1 = (float) ( (vec.x + 0.5F - this.rand.nextFloat() ) * 0.2F);
 			float f2 = 0F;
 			float f3 = (float) ( (vec.z + 0.5F - this.rand.nextFloat() ) * 0.2F);
-			this.level.addParticle(ParticleInit.FROST.get(), x, y, z, f1, f2, f3);
+			this.level.addParticle(ParticleInit.FROST, x, y, z, f1, f2, f3);
 		}
 
 		BlockPos spawnPos = this.getSpawnPos();
 		if (this.tickCount % 20 == 0 && spawnPos != null) {
 
-			double distance = this.distanceToSqr(spawnPos.getX(), spawnPos.getY(), spawnPos.getZ());
-
-			if (distance >= 2000) {
+			if (this.distanceToSqr(spawnPos.getX(), spawnPos.getY(), spawnPos.getZ()) >= 2000) {
 				this.teleport();
 			}
 		}
@@ -256,7 +271,6 @@ public class QueenFrost extends AbstractSMBoss {
 	}
 
 	protected void customServerAiStep() {
-
 		super.customServerAiStep();
 		LivingEntity target = this.getTarget();
 		if (target == null) { return; }
@@ -276,7 +290,7 @@ public class QueenFrost extends AbstractSMBoss {
 	}
 
 	// 1stフェーズの攻撃
-	public void firstPhaseSttack (LivingEntity target) {
+	public void firstPhaseSttack(LivingEntity target) {
 
 		boolean isPlayer = this.isPlayer(target);
 
@@ -292,18 +306,18 @@ public class QueenFrost extends AbstractSMBoss {
 	}
 
 	// 2ndフェーズの攻撃
-	public void secondPhaseSttack (LivingEntity target) {
+	public void secondPhaseSttack(LivingEntity target) {
 
 		// 向きを強制設定（これしないと変な方向になるときがある）
-        double d1 = target.getX() - this.getX();
+		double d1 = target.getX() - this.getX();
 		double d2 = target.getZ() - this.getZ();
 		this.setYRot(-((float) Math.atan2(d1, d2)) * (180F / (float) Math.PI));
-        this.yBodyRot = this.getYRot();
-        this.yHeadRot = this.getYRot();
+		this.yBodyRot = this.getYRot();
+		this.yHeadRot = this.getYRot();
 		float damage = this.getBuffPower() * 0.25F;
 		boolean isPlayer = target instanceof Player;
 
-        // 時間の経過と射撃中の状態設定
+		// 時間の経過と射撃中の状態設定
 		this.tickTime++;
 		this.entityData.set(ISLASER, true);
 		List<Player> targetPlayerList = this.getPlayer(Player.class);
@@ -345,8 +359,8 @@ public class QueenFrost extends AbstractSMBoss {
 				Vec3 dest = src.add(this.look.x * i, this.look.y * i, this.look.z * i);
 				List<LivingEntity> entityList = this.getEntityList(LivingEntity.class, this.getFilter(isPlayer, entityAllList), dest, 1D);
 				entityAllList.addAll(entityList);
-				this.attackDamage(entityList, SMDamage.flostDamage, 1F +damage);
-	        }
+				this.attackDamage(entityList, SMDamage.flostDamage, 1F + damage);
+			}
 		}
 
 		// パーティクルを出す
@@ -365,7 +379,7 @@ public class QueenFrost extends AbstractSMBoss {
 				float x = (float) ( ( p.getX() - this.getX() ) / 10F);
 				float y = (float) ( ( p.getY() - this.getY() ) / 10F);
 				float z = (float) ( ( p.getZ() - this.getZ() ) / 10F);
-				server.sendParticles(ParticleInit.FROST_LASER.get(), f1, f2, f3, 0, x, y, z, 1F);
+				server.sendParticles(ParticleInit.FROST_LASER, f1, f2, f3, 0, x, y, z, 1F);
 			}
 		}
 
@@ -375,7 +389,7 @@ public class QueenFrost extends AbstractSMBoss {
 		}
 	}
 
-	public void frostSpia (boolean isPlayer) {
+	public void frostSpia(boolean isPlayer) {
 
 		// 周囲の攻撃可能なプレイヤーの取得
 		int level = 5;
@@ -389,7 +403,7 @@ public class QueenFrost extends AbstractSMBoss {
 			double z = living.getZ() - this.getZ();
 			double xz = Math.sqrt(x * x + z * z);
 
-			AbstractMagicShot entity = new FrostMagicShot(this.level, this, ItemStack.EMPTY);
+			AbstractMagicShot entity = new FrostMagicShot(this.level, this);
 			entity.setHitDead(false);
 			entity.setData(1);
 			entity.setWandLevel(level);
@@ -399,11 +413,11 @@ public class QueenFrost extends AbstractSMBoss {
 		}
 
 		// リキャストタイムと攻撃種別の再設定
-		this.recastTime = (int) (( this.rand.nextInt(40) + 40 ) * ( this.isHalfHealth(this) ? 0.75F : 1F));
+		this.recastTime = (int) ((this.rand.nextInt(40) + 40) * (this.isHalfHealth(this) ? 0.75F : 1F));
 		this.attackType = this.rand.nextInt(2);
 	}
 
-	public void frostRain (LivingEntity target, boolean isPlayer) {
+	public void frostRain(LivingEntity target, boolean isPlayer) {
 
 		// パーティクルを出すように
 		if (this.chargeTime % 10 == 0) {
@@ -423,7 +437,7 @@ public class QueenFrost extends AbstractSMBoss {
 
 			for (int i = 0; i < 4; i++) {
 				BlockPos targetPos = this.pos.offset(this.rand.nextInt(10) - this.rand.nextInt(10), 10, this.rand.nextInt(10) - this.rand.nextInt(10));
-				AbstractMagicShot entity = new FrostMagicShot(this.level, this, ItemStack.EMPTY);
+				AbstractMagicShot entity = new FrostMagicShot(this.level, this);
 				entity.setWandLevel(level);
 				entity.shoot(0D, -0.35D, 0D, 1.35F, 0F);
 				entity.setPos(targetPos.getX() + 0.5D, targetPos.getY() + 10.5D, targetPos.getZ() + 0.5D);
@@ -439,7 +453,7 @@ public class QueenFrost extends AbstractSMBoss {
 			this.frostRainTime = 0;
 			this.chargeTime = 0;
 			this.pos = null;
-			this.recastTime = (int) (( this.rand.nextInt(60) + 60 ) * ( this.isHalfHealth(this) ? 0.75F : 1F));
+			this.recastTime = (int) ((this.rand.nextInt(60) + 60) * (this.isHalfHealth(this) ? 0.75F : 1F));
 			this.attackType = this.rand.nextInt(2);
 
 			// 現在のタゲ以外を対象に設定する
@@ -451,14 +465,25 @@ public class QueenFrost extends AbstractSMBoss {
 		}
 	}
 
+	// バフによるダメージ増減
+	public float getBuffPower() {
+		float damage = super.getBuffPower();
+
+		if (!this.isLectern()) {
+			damage += 8F;
+			damage *= 1.25F;
+		}
+
+		return damage;
+	}
+
 	// 範囲内にいるかのチェック
-	public boolean checkDistance (BlockPos targetPos, BlockPos pos, double range) {
+	public boolean checkDistance(BlockPos targetPos, BlockPos pos, double range) {
 		return Math.abs(targetPos.getX() - pos.getX() + targetPos.getZ() - pos.getZ()) <= range;
 	}
 
-	protected void spawnParticleCycle (LivingEntity target) {
-
-		if ( !(this.level instanceof ServerLevel server) ) { return; }
+	protected void spawnParticleCycle(LivingEntity target) {
+		if (!(this.level instanceof ServerLevel server)) { return; }
 
 		this.pos = this.pos == null ? target.blockPosition() : this.pos;
 
@@ -468,7 +493,7 @@ public class QueenFrost extends AbstractSMBoss {
 			boolean isReverse = count % 2 == 0;
 
 			for (int i = 0; i < 6 * count; i++) {
-				this.spawnParticleCycle(server, ParticleInit.CYCLE_FROST.get(), this.pos.getX() + 0.5D, this.pos.getY() + 0.5D, this.pos.getZ() + 0.5D, Direction.UP, range, (i * 60 / count) + this.rand.nextFloat() * 10D, isReverse);
+				this.spawnParticleCycle(server, ParticleInit.CYCLE_FROST, this.pos.getX() + 0.5D, this.pos.getY() + 0.5D, this.pos.getZ() + 0.5D, Direction.UP, range, (i * 60 / count) + this.rand.nextFloat() * 10D, isReverse);
 			}
 		}
 	}
@@ -483,15 +508,15 @@ public class QueenFrost extends AbstractSMBoss {
 		this.entityData.set(ISLASER, false);
 	}
 
-	public Predicate<LivingEntity> getFilter (boolean isPlayer, boolean flag) {
+	public Predicate<LivingEntity> getFilter(boolean isPlayer, boolean flag) {
 		return e -> !e.isSpectator() && e.isAlive() && (isPlayer ? (e instanceof Player || e instanceof AbstractSummonMob) : !(e instanceof Player) ) && !(e instanceof ISMMob) && this.hasLineOfSight(e);
 	}
 
-	public Predicate<LivingEntity> getFilter (boolean isPlayer, LivingEntity target) {
+	public Predicate<LivingEntity> getFilter(boolean isPlayer, LivingEntity target) {
 		return e -> !e.isSpectator() && e.isAlive() && (isPlayer ? (e instanceof Player || e instanceof AbstractSummonMob) : !(e instanceof Player) ) && target != e;
 	}
 
-	public Predicate<LivingEntity> getFilter (boolean isPlayer, List<LivingEntity> entityAllList) {
+	public Predicate<LivingEntity> getFilter(boolean isPlayer, List<LivingEntity> entityAllList) {
 		return e -> !e.isSpectator() && e.isAlive() && (isPlayer ? (e instanceof Player || e instanceof AbstractSummonMob) : !(e instanceof Player) ) && !entityAllList.contains(e);
 	}
 }

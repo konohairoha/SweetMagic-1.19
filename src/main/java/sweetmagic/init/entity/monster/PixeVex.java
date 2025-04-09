@@ -1,14 +1,11 @@
 package sweetmagic.init.entity.monster;
 
-import java.util.UUID;
-
 import javax.annotation.Nullable;
 
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
@@ -29,7 +26,6 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.raid.Raider;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.Vec3;
@@ -41,12 +37,9 @@ import sweetmagic.init.entity.projectile.FireMagicShot;
 import sweetmagic.init.entity.projectile.FrostMagicShot;
 import sweetmagic.init.entity.projectile.LightMagicShot;
 
-public class PixeVex extends AbstractSMMob {
+public class PixeVex extends AbstractOwnerMob {
 
-	private UUID ownerID;
-	private LivingEntity owner;
 	private static final EntityDataAccessor<Integer> ELEMENT_TYPE = ISMMob.setData(PixeVex.class, INT);
-
 	private int recastTime = 0;
 	private static final int RAND_RECASTTIME = 60;
 
@@ -90,38 +83,28 @@ public class PixeVex extends AbstractSMMob {
 		this.entityData.define(ELEMENT_TYPE, 0);
 	}
 
-	public int getElementType () {
+	public int getElementType() {
 		return this.entityData.get(ELEMENT_TYPE);
 	}
 
-	public void setElementType (int elementType) {
+	public void setElementType(int elementType) {
 		this.entityData.set(ELEMENT_TYPE, elementType);
 	}
 
 	public void addAdditionalSaveData(CompoundTag tags) {
 		super.addAdditionalSaveData(tags);
-
-		if (this.getOwnerID() != null) {
-			tags.putUUID("ownerID", this.getOwnerID());
-		}
-
 		tags.putInt("elementType", this.getElementType());
 	}
 
 	public void readAdditionalSaveData(CompoundTag tags) {
 		super.readAdditionalSaveData(tags);
-
-		if (tags.contains("ownerID")) {
-			this.setOwnerID(tags.getUUID("ownerID"));
-		}
 		this.setElementType(tags.getInt("elementType"));
 	}
 
 	// ダメージ処理
 	public boolean hurt(DamageSource src, float amount) {
-
 		Entity attacker = src.getEntity();
-		if ( attacker != null && attacker instanceof ISMMob) { return false; }
+		if (attacker != null && attacker instanceof ISMMob) { return false; }
 
 		// ダメージ倍処理
 		amount = this.getDamageAmount(this.level , src, amount, 1F);
@@ -133,7 +116,6 @@ public class PixeVex extends AbstractSMMob {
 	}
 
 	public void tick() {
-
 		super.tick();
 		if (!this.level.isClientSide || this.tickCount % 30 != 0) { return; }
 
@@ -142,10 +124,10 @@ public class PixeVex extends AbstractSMMob {
 
 		switch (this.getElementType()) {
 		case 1 :
-			par = ParticleInit.FROST.get();
+			par = ParticleInit.FROST;
 			break;
 		case 2 :
-			par = ParticleInit.MAGICLIGHT.get();
+			par = ParticleInit.MAGICLIGHT;
 			break;
 		default:
 			par = ParticleTypes.FLAME;
@@ -153,36 +135,29 @@ public class PixeVex extends AbstractSMMob {
 		}
 
 		for (int i = 0; i < 4; i++) {
-
-			float x = (float) (this.getX() - 0.5F + this.rand.nextFloat());
-			float y = (float) (this.getY() + this.rand.nextFloat() * 2F);
-			float z = (float) (this.getZ() - 0.5F + this.rand.nextFloat());
-
-			float f1 = (float) ( (vec.x + 0.5F - this.rand.nextFloat() ) * 0.2F);
-			float f2 = (float) ( (vec.y + 0.5F - this.rand.nextFloat() ) * 0.2F);
-			float f3 = (float) ( (vec.z + 0.5F - this.rand.nextFloat() ) * 0.2F);
+			float x = (float) this.getX() - 0.5F + this.rand.nextFloat();
+			float y = (float) this.getY() + this.rand.nextFloat() * 2F;
+			float z = (float) this.getZ() - 0.5F + this.rand.nextFloat();
+			float f1 = (float) (vec.x + 0.5F - this.rand.nextFloat()) * 0.2F;
+			float f2 = (float) (vec.y + 0.5F - this.rand.nextFloat()) * 0.2F;
+			float f3 = (float) (vec.z + 0.5F - this.rand.nextFloat()) * 0.2F;
 			this.level.addParticle(par, x, y, z, f1, f2, f3);
 		}
 	}
 
 	protected void customServerAiStep() {
-
 		super.customServerAiStep();
-
-        LivingEntity target = this.getTarget();
-        if (target == null) { return; }
-
-		if (this.recastTime-- > 0) { return; }
+		LivingEntity target = this.getTarget();
+		if (target == null || this.recastTime-- > 0) { return; }
 
 		boolean isWarden = target instanceof Warden;
-		this.recastTime = (int) (( this.rand.nextInt(RAND_RECASTTIME) + RAND_RECASTTIME ) * ( isWarden ? 0.25F : 1F ));
-
+		this.recastTime = (int) ((this.rand.nextInt(RAND_RECASTTIME) + RAND_RECASTTIME) * (isWarden ? 0.25F : 1F));
 		AbstractMagicShot entity = this.getMagicShot(target, isWarden);
 		this.playSound(SoundEvents.BLAZE_SHOOT, 0.5F, 0.67F);
 		this.level.addFreshEntity(entity);
 	}
 
-	public AbstractMagicShot getMagicShot (LivingEntity target, boolean isWarden) {
+	public AbstractMagicShot getMagicShot(LivingEntity target, boolean isWarden) {
 
 		AbstractMagicShot entity = null;
 		float dama = isWarden ? 30F : 1.5F;
@@ -196,47 +171,23 @@ public class PixeVex extends AbstractSMMob {
 
 		switch (this.getElementType()) {
 		case 0:
-			entity = new FireMagicShot(this.level, this, ItemStack.EMPTY);
+			entity = new FireMagicShot(this.level, this);
 			break;
 		case 1:
-			entity = new FrostMagicShot(this.level, this, ItemStack.EMPTY);
+			entity = new FrostMagicShot(this.level, this);
 			break;
 		case 2:
-			entity = new LightMagicShot(this.level, this, ItemStack.EMPTY);
+			entity = new LightMagicShot(this.level, this);
 			break;
 		}
 
 		entity.setWandLevel(level);
 		entity.shoot(x, y - xz * 0.035D, z, 3.35F, 0F);
-		entity.setAddDamage( (entity.getAddDamage() + dama) * dameRate );
-
+		entity.setAddDamage((entity.getAddDamage() + dama) * dameRate);
 		return entity;
 	}
 
-	public UUID getOwnerID () {
-		return this.ownerID;
-	}
-
-	public void setOwnerID (LivingEntity entity) {
-		this.ownerID = entity.getUUID();
-	}
-
-	public void setOwnerID (UUID id) {
-		this.ownerID = id;
-	}
-
-	public LivingEntity getEntity () {
-
-		LivingEntity entity = this.owner;
-
-		if (entity == null && this.level instanceof ServerLevel server) {
-			entity = (LivingEntity) server.getEntity(this.getOwnerID());
-		}
-
-		return entity;
-	}
-
-	public void setMoveControl (SMMoveControl con) {
+	public void setMoveControl(SMMoveControl con) {
 		this.moveControl = con;
 	}
 

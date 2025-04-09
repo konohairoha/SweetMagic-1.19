@@ -30,7 +30,7 @@ import sweetmagic.util.SMDamage;
 
 public class ElectricCube extends Slime implements ISMMob {
 
-	private static final EntityDataAccessor<Integer> ID_SIZE = SynchedEntityData.defineId(Slime.class, EntityDataSerializers.INT);
+	private static final EntityDataAccessor<Integer> ID_SIZE = SynchedEntityData.defineId(ElectricCube.class, EntityDataSerializers.INT);
 	public static final int MIN_SIZE = 1;
 	public static final int MAX_SIZE = 127;
 
@@ -67,7 +67,6 @@ public class ElectricCube extends Slime implements ISMMob {
 
 	// ダメージ処理
 	public boolean hurt(DamageSource src, float amount) {
-
 		Entity attacker = src.getEntity();
 		if ( attacker != null && attacker instanceof ISMMob) { return false; }
 

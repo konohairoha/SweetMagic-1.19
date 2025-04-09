@@ -1,8 +1,7 @@
 package sweetmagic.init.entity.monster;
 
-import java.util.UUID;
-
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -11,7 +10,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Monster;
@@ -23,9 +21,8 @@ import sweetmagic.init.ParticleInit;
 import sweetmagic.init.entity.monster.boss.Arlaune;
 import sweetmagic.init.entity.projectile.AbstractMagicShot;
 
-public class CherryPlant extends AbstractSMMob {
+public class CherryPlant extends AbstractOwnerMob {
 
-	private UUID ownerID;
 	private static final EntityDataAccessor<Integer> STAGE = ISMMob.setData(CherryPlant.class, INT);
 
 	public CherryPlant(Level world) {
@@ -63,19 +60,11 @@ public class CherryPlant extends AbstractSMMob {
 	public void addAdditionalSaveData(CompoundTag tags) {
 		super.addAdditionalSaveData(tags);
 		tags.putInt("cherry", this.getStage());
-
-		if (this.getOwnerID() != null) {
-			tags.putUUID("ownerID", this.getOwnerID());
-		}
 	}
 
 	public void readAdditionalSaveData(CompoundTag tags) {
 		super.readAdditionalSaveData(tags);
 		this.setStage(tags.getInt("cherry"));
-
-		if (tags.contains("ownerID")) {
-			this.setOwnerID(tags.getUUID("ownerID"));
-		}
 	}
 
 	// ダメージ処理
@@ -83,7 +72,7 @@ public class CherryPlant extends AbstractSMMob {
 
 		Entity attacker = src.getEntity();
 		if ( (attacker != null && attacker instanceof ISMMob) || !this.isSMDamage(src) ) {
-			this.playSound(SoundEvents.BLAZE_HURT, 2F, 0.85F);
+			this.playSound(SoundEvents.BLAZE_HURT, 1F, 0.85F);
 			return false;
 		}
 
@@ -93,7 +82,7 @@ public class CherryPlant extends AbstractSMMob {
 				double x = this.getX() + this.rand.nextDouble();
 				double y = this.getY() + this.rand.nextDouble() * 0.4D + 0.2D;
 				double z = this.getZ() + this.rand.nextDouble();
-				server.sendParticles(ParticleInit.CHERRY_BLOSSOMS_LARGE.get(), x, y, z, 2, 0F, 0F, 0F, 0.1F);
+				server.sendParticles(ParticleInit.CHERRY_BLOSSOMS_LARGE, x, y, z, 2, 0F, 0F, 0F, 0.1F);
 			}
 		}
 
@@ -130,9 +119,8 @@ public class CherryPlant extends AbstractSMMob {
 					}
 				}
 
-				if (this.getStage() >= 3 && this.getOwnerID() != null && this.level instanceof ServerLevel server) {
-
-					Arlaune entity = (Arlaune) server.getEntity(this.getOwnerID());
+				if (this.getStage() >= 3 && this.getOwnerID() != null) {
+					Arlaune entity = (Arlaune) this.getEntity();
 					if (entity != null && entity.isAlive()) {
 						entity.setPlant(entity.getPlant() + 1);
 					}
@@ -144,8 +132,8 @@ public class CherryPlant extends AbstractSMMob {
 			}
 		}
 
-		if (this.tickCount % 30 == 0 && this.getOwnerID() != null && this.level instanceof ServerLevel server) {
-			Arlaune entity = (Arlaune) server.getEntity(this.getOwnerID());
+		if (this.tickCount % 30 == 0 && this.getOwnerID() != null) {
+			Arlaune entity = (Arlaune) this.getEntity();
 			if (entity == null || !entity.isAlive()) {
 				this.setHealth(0F);
 			}
@@ -156,27 +144,16 @@ public class CherryPlant extends AbstractSMMob {
 
 		if (this.deathTime == 0 && this.level instanceof ServerLevel server) {
 			BlockPos pos = this.blockPosition().above();
+			ParticleOptions par = ParticleInit.CHERRY_BLOSSOMS_LARGE;
 
 			for (int i = 0; i < 64; i++) {
 				double x = pos.getX() + this.rand.nextDouble() - 0D;
 				double y = pos.getY() + this.rand.nextDouble() * 0.4D + 0.2D;
 				double z = pos.getZ() + this.rand.nextDouble() - 0D;
-				server.sendParticles(ParticleInit.CHERRY_BLOSSOMS_LARGE.get(), x, y, z, 2, 0F, 0F, 0F, 0.075F);
+				server.sendParticles(par, x, y, z, 2, 0F, 0F, 0F, 0.075F);
 			}
 		}
 
 		super.tickDeath();
-	}
-
-	public UUID getOwnerID () {
-		return this.ownerID;
-	}
-
-	public void setOwnerID (LivingEntity entity) {
-		this.ownerID = entity.getUUID();
-	}
-
-	public void setOwnerID (UUID id) {
-		this.ownerID = id;
 	}
 }

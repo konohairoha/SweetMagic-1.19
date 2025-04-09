@@ -37,10 +37,10 @@ public class GravityMagicShot extends AbstractMagicShot {
 		this.setWandInfo(wandInfo);
 	}
 
-	public GravityMagicShot(Level world, LivingEntity entity, ItemStack stack) {
+	public GravityMagicShot(Level world, LivingEntity entity) {
 		this(entity.getX(), entity.getEyeY() - (double) 0.1F, entity.getZ(), world);
 		this.setOwner(entity);
-		this.stack = stack;
+		this.stack = ItemStack.EMPTY;
 		this.setRange(5D);
 	}
 
@@ -70,17 +70,15 @@ public class GravityMagicShot extends AbstractMagicShot {
 		}
 
 		int data = this.getData();
+		if (data < 1) { return; }
 
-		if (data >= 1) {
-
-			if (data >= 2) {
-				this.setLifeTime(0);
-				this.setMaxLifeTime(60);
-			}
-
-			float rate = data >= 2 ? 1F : 0.5F;
-			this.rangeAttack(living.blockPosition(), (float) this.getDamage() * rate, this.getRange());
+		if (data >= 2) {
+			this.setLifeTime(0);
+			this.setMaxLifeTime(data >= 3 ? 100 : 60);
 		}
+
+		float rate = this.getDamageRate();
+		this.rangeAttack(living.blockPosition(), (float) this.getDamage() * rate, this.getRange());
 	}
 
 	// ブロック着弾
@@ -92,11 +90,11 @@ public class GravityMagicShot extends AbstractMagicShot {
 
 			if (data >= 2) {
 				this.setLifeTime(0);
-				this.setMaxLifeTime(60);
+				this.setMaxLifeTime(data >= 3 ? 100 : 60);
 			}
 
 			float rate = data >= 2 ? 1F : 0.67F;
-			float damageRate = data >= 2 ? 0.67F : 0.33F;
+			float damageRate = this.getDamageRate() * 0.67F;
 			this.rangeAttack(result.getBlockPos().above(), this.getDamage() * damageRate, this.getRange() * rate);
 		}
 
@@ -105,17 +103,20 @@ public class GravityMagicShot extends AbstractMagicShot {
 		}
 	}
 
-	public void rangeAttack (BlockPos bPos, float dame, double range) {
+	public void rangeAttack(BlockPos bPos, float dame, double range) {
 
 		int tick = this.getLifeTime();
 		boolean isTier3 = !this.getHitDead();
 
 		if (this.level instanceof ServerLevel server && (!isTier3 || (tick % 10 == 0))) {
 
-			double ySpeed = -0.25D;
+			boolean isZero = this.getMaxLifeTime() == 100;
+			double ySpeed = isZero ? 0D : -0.25D;
+			double yRate = isZero ? 0D : -0.6D;
+			double inRate = isZero ? 1.5D : 0.25D;
 
 			for (int i = 0; i < 4; i++) {
-				this.spawnParticleRing(server, ParticleInit.GRAVITY.get(), range * (1 - 0.14D * i), bPos.above(i + 1), ySpeed + i * -0.6D, 0.25D);
+				this.spawnParticleRing(server, ParticleInit.GRAVITY, range * (1 - 0.14D * i), bPos.above(i + 1), ySpeed + i * yRate, inRate);
 			}
 		}
 
@@ -142,7 +143,7 @@ public class GravityMagicShot extends AbstractMagicShot {
 
 	public void inGround() {
 		if (this.getData() >= 2) {
-			this.rangeAttack(this.blockPosition(), 1F, this.getRange());
+			this.rangeAttack(this.blockPosition(), this.getData() >= 3 ? this.getDamage() * 0.1F : 1F, this.getRange());
 		}
 	}
 
@@ -152,11 +153,11 @@ public class GravityMagicShot extends AbstractMagicShot {
 		float z = (float) (pos.getZ() + this.getRandFloat(0.25F));
 
 		for (int i = 0; i < 3; i++) {
-			sever.sendParticles(ParticleInit.GRAVITY.get(), x, y, z, 4, 0F, 0F, 0F, 0.15F);
+			sever.sendParticles(ParticleInit.GRAVITY, x, y, z, 4, 0F, 0F, 0F, 0.15F);
 		}
 	}
 
-	public int getMinParticleTick () {
+	public int getMinParticleTick() {
 		return 4;
 	}
 
@@ -173,7 +174,16 @@ public class GravityMagicShot extends AbstractMagicShot {
 			float f1 = (float) (this.getX() - 0.5F + rand.nextFloat() + vec.x * i / 4F);
 			float f2 = (float) (this.getY() - 0.25F + rand.nextFloat() * 0.5F + vec.y * i / 4F);
 			float f3 = (float) (this.getZ() - 0.5F + rand.nextFloat() + vec.z * i / 4F);
-			this.level.addParticle(ParticleInit.GRAVITY.get(), f1, f2, f3, x + this.getRandFloat(0.075F), y + this.getRandFloat(0.075F), z + this.getRandFloat(0.075F));
+			this.level.addParticle(ParticleInit.GRAVITY, f1, f2, f3, x + this.getRandFloat(0.075F), y + this.getRandFloat(0.075F), z + this.getRandFloat(0.075F));
+		}
+	}
+
+	// ダメージレートの取得
+	public float getDamageRate() {
+		switch (this.getData()) {
+		case 2: return 1F;
+		case 3: return 1.375F;
+		default: return 0.67F;
 		}
 	}
 

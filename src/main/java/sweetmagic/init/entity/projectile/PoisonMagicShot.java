@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -42,10 +43,10 @@ public class PoisonMagicShot extends AbstractMagicShot {
 		this.setWandInfo(wandInfo);
 	}
 
-	public PoisonMagicShot(Level world, LivingEntity entity, ItemStack stack) {
+	public PoisonMagicShot(Level world, LivingEntity entity) {
 		this(entity.getX(), entity.getEyeY() - (double) 0.1F, entity.getZ(), world);
 		this.setOwner(entity);
-		this.stack = stack;
+		this.stack = ItemStack.EMPTY;
 		this.setRange(4D);
 	}
 
@@ -54,11 +55,11 @@ public class PoisonMagicShot extends AbstractMagicShot {
 		this.entityData.define(IS_WOLF, false);
 	}
 
-	public void setWolf (boolean isWolf) {
+	public void setWolf(boolean isWolf) {
 		this.entityData.set(IS_WOLF, isWolf);
 	}
 
-	public boolean getWolf () {
+	public boolean getWolf() {
 		return this.entityData.get(IS_WOLF);
 	}
 
@@ -76,11 +77,15 @@ public class PoisonMagicShot extends AbstractMagicShot {
 		}
 
 		if (this.getData() >= 1) {
-			this.rangeAttack(living.blockPosition(), (float) this.getDamage() * 0.5F, this.getRange());
+			this.rangeAttack(living.blockPosition(), (float) this.getDamage() * this.getDamageRate(), this.getRange());
 		}
 
 		else {
 			this.hitToSpawnParticle();
+		}
+
+		if (this.getData() >= 3) {
+
 		}
 	}
 
@@ -88,7 +93,8 @@ public class PoisonMagicShot extends AbstractMagicShot {
 	protected void onHitBlock(BlockHitResult result) {
 
 		if (this.getData() >= 1) {
-			this.rangeAttack(result.getBlockPos().above(), this.getDamage() * 0.33F, this.getRange() * 0.67F);
+			float damageRate = this.getDamageRate() * 0.67F;
+			this.rangeAttack(result.getBlockPos().above(), this.getDamage() * damageRate, this.getRange() * 0.67F);
 		}
 
 		else {
@@ -98,23 +104,23 @@ public class PoisonMagicShot extends AbstractMagicShot {
 		this.discard();
 	}
 
-	public void rangeAttack (BlockPos bPos, float dame, double range) {
+	public void rangeAttack(BlockPos bPos, float dame, double range) {
 
 		if (this.level instanceof ServerLevel server) {
 
 			// 範囲の座標取得
 			Random rand = this.rand;
 			double effectRange = range * range;
-			Iterable<BlockPos> pList = BlockPos.betweenClosed(bPos.offset(-range, 0, -range), bPos.offset(range, 0, range));
+			Iterable<BlockPos> pList = this.getPosRangeList(bPos, range);
+			ParticleOptions par = ParticleInit.SMOKY;
 
 			for (BlockPos pos : pList) {
-
 				if(!this.checkDistance(pos, effectRange)) { continue; }
 
 				double x = pos.getX() + rand.nextDouble() * 1.5D - 0.75D;
 				double y = pos.getY() + rand.nextDouble() * 1.5D - 0.75D;
 				double z = pos.getZ() + rand.nextDouble() * 1.5D - 0.75D;
-				server.sendParticles(ParticleInit.SMOKY.get(), x, y, z, 0, 67F / 255F, 173F / 255F, 103F / 255F, 1F);
+				server.sendParticles(par, x, y, z, 0, 67F / 255F, 173F / 255F, 103F / 255F, 1F);
 			}
 		}
 
@@ -123,13 +129,22 @@ public class PoisonMagicShot extends AbstractMagicShot {
 
 		double effectRange = range * range;
 		int time = 60 * (this.getWandLevel() + 1);
+		boolean isTier4 = this.getData() >= 3;
 
 		for (LivingEntity entity : entityList) {
-
 			if (!this.checkDistance(entity.blockPosition(), effectRange)) { continue; }
 
 			this.attackDamage(entity, dame, false);
 			this.addPotion(entity, PotionInit.deadly_poison, time, this.getData());
+
+			if (isTier4) {
+				this.addPotion(entity, PotionInit.magic_damage_receive, time, 1);
+
+				if (entity.hasEffect(PotionInit.reflash_effect)) {
+					float rate = this.isBoss(entity) ? 0.025F : 0.1F;
+					entity.setHealth(Math.max(1, entity.getHealth() - entity.getMaxHealth() * rate));
+				}
+			}
 		}
 	}
 
@@ -139,11 +154,11 @@ public class PoisonMagicShot extends AbstractMagicShot {
 		float z = (float) (pos.getZ() + this.getRandFloat(0.25F));
 
 		for (int i = 0; i < 3; i++) {
-			sever.sendParticles(ParticleInit.POISON.get(), x, y, z, 4, 0F, 0F, 0F, 0.15F);
+			sever.sendParticles(ParticleInit.POISON, x, y, z, 4, 0F, 0F, 0F, 0.15F);
 		}
 	}
 
-	public int getMinParticleTick () {
+	public int getMinParticleTick() {
 		return 3;
 	}
 
@@ -157,20 +172,17 @@ public class PoisonMagicShot extends AbstractMagicShot {
 		Random rand = this.rand;
 
 		for (int i = 0; i < 6; i++) {
-
 			float x = addX + this.getRandFloat(0.075F);
 			float y = addY + this.getRandFloat(0.075F);
 			float z = addZ + this.getRandFloat(0.075F);
 			float f1 = (float) (this.getX() - 0.5F + rand.nextFloat() + vec.x * i / 4.0F);
 			float f2 = (float) (this.getY() - 0.25F + rand.nextFloat() * 0.5 + vec.y * i / 4.0D);
 			float f3 = (float) (this.getZ() - 0.5F + rand.nextFloat() + vec.z * i / 4.0D);
-
-			this.level.addParticle(ParticleInit.POISON.get(), f1, f2, f3, x, y, z);
+			this.level.addParticle(ParticleInit.POISON, f1, f2, f3, x, y, z);
 		}
 	}
 
-	public void hitToSpawnParticle () {
-
+	public void hitToSpawnParticle() {
 		if (!(this.level instanceof ServerLevel server)) { return; }
 
 		Random rand = this.rand;
@@ -180,7 +192,7 @@ public class PoisonMagicShot extends AbstractMagicShot {
 			double x = pos.getX() + rand.nextDouble() * 3D - 1.5D;
 			double y = pos.getY() + rand.nextDouble() * 1.5D - 0.75D;
 			double z = pos.getZ() + rand.nextDouble() * 3D - 1.5D;
-			server.sendParticles(ParticleInit.SMOKY.get(), x, y, z, 0, 67F / 255F, 173F / 255F, 103F / 255F, 1F);
+			server.sendParticles(ParticleInit.SMOKY, x, y, z, 0, 67F / 255F, 173F / 255F, 103F / 255F, 1F);
 		}
 	}
 
@@ -197,13 +209,23 @@ public class PoisonMagicShot extends AbstractMagicShot {
 	}
 
 	// レンダー用のえんちちー取得
-	public LivingEntity getRenderEntity () {
+	public LivingEntity getRenderEntity() {
 
 		if (this.entity == null) {
 			this.entity = entity = new PhantomWolf(this.level);
 		}
 
 		return this.entity;
+	}
+
+	// ダメージレートの取得
+	public float getDamageRate() {
+		switch (this.getData()) {
+		case 1: return 0.67F;
+		case 2: return 1F;
+		case 3: return 1.375F;
+		default: return 0.5F;
+		}
 	}
 
 	// 属性の取得

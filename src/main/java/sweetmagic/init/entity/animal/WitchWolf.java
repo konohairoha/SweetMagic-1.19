@@ -1,21 +1,16 @@
 package sweetmagic.init.entity.animal;
 
-import java.util.UUID;
-
 import com.mojang.blaze3d.vertex.PoseStack.Pose;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.server.level.ServerLevel;
+import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
@@ -34,19 +29,22 @@ import net.minecraft.world.entity.ai.goal.SitWhenOrderedToGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.monster.AbstractSkeleton;
+import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.monster.Witch;
 import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.raid.Raider;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.entity.EntityTeleportEvent;
+import sweetmagic.api.ientity.ISMMob;
 import sweetmagic.init.EntityInit;
+import sweetmagic.init.PotionInit;
+import sweetmagic.util.SMDamage;
 
 public class WitchWolf extends AbstractSummonMob {
 
@@ -57,6 +55,7 @@ public class WitchWolf extends AbstractSummonMob {
 	private float interestedAngle;
 	private float interestedAngleO;
 	private int recastTime = 0;
+	private static final EntityDataAccessor<Integer> ATTACK_TICK = ISMMob.setData(WitchGolem.class, ISMMob.INT);
 
 	public WitchWolf(Level world) {
 		super(EntityInit.witchWolf, world);
@@ -64,6 +63,11 @@ public class WitchWolf extends AbstractSummonMob {
 
 	public WitchWolf(EntityType<? extends AbstractSummonMob> eType, Level world) {
 		super(eType, world);
+	}
+
+	protected void defineSynchedData() {
+		super.defineSynchedData();
+		this.entityData.define(ATTACK_TICK, 0);
 	}
 
 	public static AttributeSupplier.Builder registerAttributes() {
@@ -112,6 +116,58 @@ public class WitchWolf extends AbstractSummonMob {
 		return 0.4F;
 	}
 
+	public void setAttackTick(int attackTick) {
+		this.entityData.set(ATTACK_TICK, attackTick);
+	}
+
+	public int getAttackTick() {
+		return this.entityData.get(ATTACK_TICK);
+	}
+
+	public void hurtAction(Entity attacker, float amount) {
+		if(this.getGolem()) {
+
+			DamageSource src = SMDamage.getAddDamage(this, this);
+
+			if (attacker instanceof EnderMan || attacker instanceof Witch) {
+				src = DamageSource.playerAttack((Player) this.getOwner());
+			}
+
+			attacker.hurt(src, amount * (0.1F));
+			attacker.invulnerableTime = 0;
+		}
+	}
+
+	public boolean doHurtTarget(Entity entity) {
+		this.setAttackTick(this.tickCount);
+
+		if(entity instanceof LivingEntity target) {
+
+			if (this.getMaster()) {
+				this.addAttack(target);
+				this.addPotion(target, PotionInit.debuff_extension, 600, 0);
+			}
+
+			if (this.getIfrit()) {
+				this.addAttack(target);
+				this.addPotion(target, PotionInit.flame, 600, 0);
+			}
+
+			if (this.getWindine()) {
+				this.addAttack(target);
+				this.addPotion(target, PotionInit.frost, 600, 0);
+			}
+		}
+
+		return super.doHurtTarget(entity);
+	}
+
+	public void addAttack(LivingEntity target) {
+		float damage = (float) this.getAttributeValue(Attributes.ATTACK_DAMAGE);
+		target.hurt(SMDamage.getAddDamage(this, this), damage) ;
+		target.invulnerableTime = 0;
+	}
+
 	public void aiStep() {
 		super.aiStep();
 		if (!this.level.isClientSide && this.isWet && !this.isShaking && !this.isPathFinding() && this.onGround) {
@@ -120,10 +176,18 @@ public class WitchWolf extends AbstractSummonMob {
 			this.shakeAnimO = 0F;
 			this.level.broadcastEntityEvent(this, (byte) 8);
 		}
+
+		if (!this.level.isClientSide && this.isAlive() && this.tickCount % 20 == 0 && this.getAlay()) {
+			this.heal(1F);
+		}
+
+		int attackTick = this.getAttackTick();
+		if (this.tickCount > attackTick + 10) {
+			this.setAttackTick(0);
+		}
 	}
 
 	public void tick() {
-
 		super.tick();
 		if (!this.isAlive()) { return; }
 
@@ -139,7 +203,7 @@ public class WitchWolf extends AbstractSummonMob {
 		else if ((this.isWet || this.isShaking) && this.isShaking) {
 
 			if (this.shakeAnim == 0F) {
-				this.playSound(SoundEvents.WOLF_SHAKE, this.getSoundVolume(), (this.getRand() - this.getRand()) * 0.2F + 1F);
+				this.playSound(SoundEvents.WOLF_SHAKE, this.getSoundVolume(), this.getRand(0.2F) + 1F);
 				this.gameEvent(GameEvent.ENTITY_SHAKE);
 			}
 
@@ -169,7 +233,6 @@ public class WitchWolf extends AbstractSummonMob {
 	}
 
 	protected void customServerAiStep() {
-
 		super.customServerAiStep();
 
 		if (this.recastTime > 0) {
@@ -269,56 +332,5 @@ public class WitchWolf extends AbstractSummonMob {
 
 	public int getMaxHeadXRot() {
 		return this.isInSittingPose() ? 20 : super.getMaxHeadXRot();
-	}
-
-	public InteractionResult mobInteract(Player player, InteractionHand hand) {
-
-		ItemStack stack = player.getItemInHand(hand);
-		Item item = stack.getItem();
-
-		if (this.level.isClientSide) {
-
-			if (this.isOwnedBy(player)) {
-				return InteractionResult.SUCCESS;
-			}
-
-			else {
-				return !this.isFood(stack) || !(this.getHealth() < this.getMaxHealth()) ? InteractionResult.PASS : InteractionResult.SUCCESS;
-			}
-		}
-
-		if (this.isOwnedBy(player)) {
-
-			if (item.isEdible() && this.isFood(stack) && this.getHealth() < this.getMaxHealth()) {
-				this.heal((float) stack.getFoodProperties(this).getNutrition());
-				this.gameEvent(GameEvent.EAT, this);
-				return InteractionResult.CONSUME;
-			}
-
-			InteractionResult result = super.mobInteract(player, hand);
-			return this.mobClick(result, stack);
-		}
-
-		InteractionResult result1 = super.mobInteract(player, hand);
-		if (result1.consumesAction()) {
-			this.setPersistenceRequired();
-		}
-
-		return result1;
-	}
-
-	public boolean isFood(ItemStack stack) {
-		return stack.getItem().isEdible() && stack.getFoodProperties(this).isMeat();
-	}
-
-	@Override
-	public WitchWolf getBreedOffspring(ServerLevel world, AgeableMob entity) {
-		WitchWolf wolf = EntityInit.witchWolf.create(world);
-		UUID uuid = this.getOwnerUUID();
-		if (uuid != null) {
-			wolf.setOwnerUUID(uuid);
-			wolf.setTame(true);
-		}
-		return wolf;
 	}
 }

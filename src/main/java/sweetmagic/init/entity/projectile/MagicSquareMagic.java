@@ -1,8 +1,10 @@
 package sweetmagic.init.entity.projectile;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.function.Predicate;
 
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.particles.ParticleOptions;
@@ -13,11 +15,18 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.monster.warden.Warden;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import sweetmagic.api.emagic.SMElement;
+import sweetmagic.api.iitem.IMagicItem;
+import sweetmagic.api.iitem.IWand;
+import sweetmagic.api.iitem.info.MagicInfo;
 import sweetmagic.api.iitem.info.WandInfo;
 import sweetmagic.init.EntityInit;
+import sweetmagic.init.ItemInit;
 import sweetmagic.init.ParticleInit;
 import sweetmagic.init.PotionInit;
 import sweetmagic.util.RenderUtil.RenderColor;
@@ -28,6 +37,9 @@ public class MagicSquareMagic extends AbstractMagicShot {
 	private RenderColor color = null;
 	private List<LivingEntity> mobList = new ArrayList<>();
 	private List<LivingEntity> enemyList = new ArrayList<>();
+	private List<Item> rainMagicList = Arrays.<Item> asList(
+		ItemInit.magic_rainfield, ItemInit.magic_rainfield2, ItemInit.magic_rainfield3, ItemInit.magic_rainfield4
+	);
 
 	public MagicSquareMagic(EntityType<? extends MagicSquareMagic> entityType, Level world) {
 		super(entityType, world);
@@ -56,7 +68,7 @@ public class MagicSquareMagic extends AbstractMagicShot {
 
 		// 最大生存時間を超えたら効果終了時エフェクトを発生
 		if (this.getLifeTime() >= this.getMaxLifeTime()) {
-			this.endEffect();
+			this.actionEffect(true);
 		}
 
 		super.tickDespawn();
@@ -64,24 +76,26 @@ public class MagicSquareMagic extends AbstractMagicShot {
 
 	// 常時スポーンパーティクル
 	public void tickSpawnParticle() {
-
-		if ( !(this.level instanceof ServerLevel server) ) { return; }
+		if (!(this.level instanceof ServerLevel server)) { return; }
 
 		ParticleOptions par = null;
 		int data = this.getData();
 
 		switch (data) {
 		case 0:
-			par = ParticleInit.GRAVITY_FIELD.get();
+			par = ParticleInit.GRAVITY_FIELD;
 			break;
 		case 1:
-			par = ParticleInit.WIND_FIELD.get();
+			par = ParticleInit.WIND_FIELD;
 			break;
 		case 2:
-			par = ParticleInit.RAIN_FIELD.get();
+			par = ParticleInit.RAIN_FIELD;
 			break;
 		case 3:
-			par = ParticleInit.DIVINE.get();
+			par = ParticleInit.DIVINE;
+			break;
+		case 4:
+			par = ParticleInit.REFLASH;
 			break;
 		}
 
@@ -89,15 +103,11 @@ public class MagicSquareMagic extends AbstractMagicShot {
 	}
 
 	// パーティクルスポーン
-	public void spawnParticle (ServerLevel server, ParticleOptions par, int data, int scale) {
+	public void spawnParticle(ServerLevel server, ParticleOptions par, int data, int scale) {
 
 		double range = scale * scale / 3D;
-		double posY = this.getY();
+		double posY = data == 2 ? this.getY() + 4D : this.getY();
 		float addY = 0F;
-
-		if (data == 2) {
-			posY += 4D;
-		}
 
 		for (int addX = -scale; addX <= scale; addX++) {
 			for (int addZ = -scale; addZ <= scale; addZ++) {
@@ -127,14 +137,15 @@ public class MagicSquareMagic extends AbstractMagicShot {
 	}
 
 	// 常時発動効果
-	public void tickEffect () {
-
+	public void tickEffect() {
 		if (this.tickCount % 10 != 0) { return; }
+		this.actionEffect(false);
+	}
 
-		// 半径の取得
-		double range = (this.getRange() / 2D) * 1.1D;
+	public void actionEffect(boolean isFinish) {
 
 		// えんちちーリストの取得
+		double range = (this.getRange() / 2D) * 1.1D;
 		List<LivingEntity> entityList = this.getEntityList(LivingEntity.class, e -> e.isAlive() && this.distanceTo(e) <= range, range);
 		if (entityList.isEmpty()) { return; }
 
@@ -148,73 +159,133 @@ public class MagicSquareMagic extends AbstractMagicShot {
 			switch(data) {
 			case 0:
 				// グラヴィティフィールド
-				this.gravityField(entity, isEnmy, data, tier);
+				this.gravityField(entity, isEnmy, isFinish, data, tier);
 				break;
 			case 1:
 				// ウィンドフィールド
-				this.windField(entity, isEnmy, data, tier);
+				this.windField(entity, isEnmy, isFinish, data, tier);
 				break;
 			case 2:
 				// レインフィールド
-				this.rainField(entity, isEnmy, data, tier);
+				this.rainField(entity, isEnmy, isFinish, data, tier);
 				break;
 			case 3:
 				// フューチャーヴィジョンフィールド
-				this.futureVisionField(entity, isEnmy, data, tier);
+				this.futureVisionField(entity, isEnmy, isFinish, data, tier);
+				break;
+			case 4:
+				// リフレッシフィールド
+				this.reflashField(entity, isEnmy, isFinish, data, tier);
 				break;
 			}
 		}
 	}
 
 	// グラヴィティフィールド
-	public void gravityField (LivingEntity entity, boolean isEnemy, int data, int tier) {
+	public void gravityField(LivingEntity entity, boolean isEnemy, boolean isFinish, int data, int tier) {
+
+		if (isFinish && isEnemy) {
+			int addLevel = this.getHourGlass() ? 1 : 0;
+			this.addPotion(entity, PotionInit.gravity, 1200 + tier * 600, addLevel);
+			float dame = 3F + this.getWandLevel();
+			this.attackDamage(entity, dame, false);
+			return;
+		}
 
 		if (this.tickCount % 20 != 0) { return; }
+		int addLevel = this.getHourGlass() ? 1 : 0;
 
 		// 敵モブなら
-		if (isEnemy) {
+		if (isEnemy && !this.enemyList.contains(entity)) {
 
-			this.addPotion(entity, PotionInit.gravity, 221, tier - 1);
+			this.enemyList.add(entity);
+			this.addPotion(entity, PotionInit.gravity, 1200 + tier * 600, tier - 1 + addLevel);
 
 			if (tier >= 2) {
-				this.addPotion(entity, MobEffects.MOVEMENT_SLOWDOWN, 221, tier - 1);
+				this.addPotion(entity, MobEffects.MOVEMENT_SLOWDOWN, 1200 + tier * 600, tier - 1 + addLevel);
 			}
 
 			if (tier >= 3) {
-				this.addPotion(entity, PotionInit.debuff_extension, 221, tier - 1);
+				this.addPotion(entity, PotionInit.debuff_extension, 1200 + tier * 600, tier - 1 + addLevel);
 			}
 		}
 
 		// 味方モブなら
-		else {
-			this.addPotion(entity, PotionInit.damage_cut, 221, tier - 1);
+		if (!isEnemy && !this.mobList.contains(entity)) {
+			this.addPotion(entity, PotionInit.damage_cut, 1200 + tier * 600, tier - 1 + addLevel);
+			this.mobList.add(entity);
 		}
 	}
 
 	// ウィンドフィールド
-	public void windField (LivingEntity entity, boolean isEnemy, int data, int tier) {
-		if (this.tickCount % 20 != 0 || isEnemy) { return; }
-		this.addPotion(entity, PotionInit.attack_disable, 221, tier - 1);
-	}
+	public void windField(LivingEntity entity, boolean isEnemy, boolean isFinish, int data, int tier) {
 
-	// レインフィールド
-	public void rainField (LivingEntity entity, boolean isEnemy, int data, int tier) {
+		if (isFinish && isEnemy) {
+			int addLevel = this.getHourGlass() ? 1 : 0;
+			this.addPotion(entity, PotionInit.bleeding, 1200 + tier * 600, addLevel);
+			float dame = 3F + this.getWandLevel();
+			this.attackDamage(entity, dame, false);
+			return;
+		}
 
 		if (this.tickCount % 20 != 0) { return; }
 
+		if (!isEnemy && !this.mobList.contains(entity)) {
+			int addLevel = this.getHourGlass() ? 1 : 0;
+			this.addPotion(entity, PotionInit.attack_disable, 221, tier - 1 + addLevel);
+			this.mobList.add(entity);
+		}
+
+		if (!isEnemy) {
+			entity.heal(1F);
+		}
+	}
+
+	// レインフィールド
+	public void rainField(LivingEntity entity, boolean isEnemy, boolean isFinish, int data, int tier) {
+
+		if (isFinish && entity instanceof Player player) {
+			Predicate<ItemStack> flag = s -> !this.rainMagicList.contains(s.getItem());
+			List<ItemStack> magicList = IWand.getMagicList(IWand.getWandList(player), flag);
+			float value = 12.5F * tier * 0.01F;
+			float bossValue = 6.25F * tier * 0.01F;
+
+			for (ItemStack stack : magicList) {
+
+				IMagicItem magic = new MagicInfo(stack).getMagicItem();
+				int recast = magic.getRecastTime(stack);
+				if (recast <= 0) { continue; }
+
+				float healValue = magic.isUniqueMagic() ? bossValue : value;
+				magic.setRecastTime(stack, Math.max(0, (int) (recast - magic.getMaxRecastTime() * healValue)));
+			}
+
+			return;
+		}
+
+		if (this.tickCount % 20 != 0) { return; }
+		int addLevel = this.getHourGlass() ? 1 : 0;
+
 		// 敵モブなら
-		if (isEnemy) {
-			this.addPotion(entity, PotionInit.magic_damage_receive, 221, tier - 1);
+		if (isEnemy && !this.enemyList.contains(entity)) {
+			this.addPotion(entity, PotionInit.magic_damage_receive, 1200 + tier * 600, tier - 1 + addLevel);
+			this.enemyList.add(entity);
 		}
 
 		// 味方モブなら
-		else {
-			this.addPotion(entity, PotionInit.magic_damage_cause, 221, tier - 1);
+		else if (!isEnemy && !this.mobList.contains(entity)) {
+			this.addPotion(entity, PotionInit.magic_damage_cause, 1200 + tier * 600, tier - 1 + addLevel);
+			this.mobList.add(entity);
 		}
 	}
 
 	// フューチャーヴィジョンフィールド
-	public void futureVisionField (LivingEntity entity, boolean isEnemy, int data, int tier) {
+	public void futureVisionField(LivingEntity entity, boolean isEnemy, boolean isFinish, int data, int tier) {
+
+		if (isFinish && isEnemy && entity instanceof Mob mob) {
+			SMUtil.tameAIDonmov(mob, 20 * tier);
+			return;
+		}
 
 		if (this.tickCount % 20 != 0) { return; }
 
@@ -235,21 +306,41 @@ public class MagicSquareMagic extends AbstractMagicShot {
 			// 効果適用済みなら終了
 			if (this.mobList.contains(entity)) { return; }
 
-			this.addPotion(entity, PotionInit.future_vision, 1200, tier - 1);
+			int addLevel = this.getHourGlass() ? 1 : 0;
+			this.addPotion(entity, PotionInit.future_vision, 1200 * (1 + addLevel), tier - 1 + addLevel);
 			this.mobList.add(entity);
 		}
 	}
 
-	// 効果終了時エフェクト
-	public void endEffect () { }
+	// リフレッシュフィールド
+	public void reflashField(LivingEntity entity, boolean isEnemy, boolean isFinish, int data, int tier) {
+
+		if (isFinish && !isEnemy) {
+			entity.heal(entity.getMaxHealth());
+			int addLevel = this.getHourGlass() ? 1 : 0;
+			this.addPotion(entity, PotionInit.reflash_effect, 2400, tier - 1 + addLevel);
+			return;
+		}
+
+		if (this.tickCount % 20 != 0 || isEnemy) { return; }
+
+		if (!this.mobList.contains(entity)) {
+			this.addPotion(entity, PotionInit.resurrection, 1200 + (data * 600), 0);
+			this.mobList.add(entity);
+		}
+
+		int addLevel = this.getHourGlass() ? 1 : 0;
+		this.addPotion(entity, PotionInit.reflash_effect, 600, tier - 1 + addLevel);
+		entity.heal(0.5F);
+	}
 
 	// 乱数取得
-	public float getRandFloat (Random rand) {
+	public float getRandFloat(Random rand) {
 		return rand.nextFloat() - rand.nextFloat();
 	}
 
 	// 魔法陣の色の取得
-	public RenderColor getColor (int light) {
+	public RenderColor getColor(int light) {
 
 		if (this.color == null) {
 			switch (this.getData()) {
@@ -264,6 +355,9 @@ public class MagicSquareMagic extends AbstractMagicShot {
 				break;
 			case 3:
 				this.color = new RenderColor(1F, 1F, 120F / 255F, light, OverlayTexture.NO_OVERLAY);
+				break;
+			case 4:
+				this.color = new RenderColor(80F / 255F, 1F, 239F / 255F, light, OverlayTexture.NO_OVERLAY);
 				break;
 			}
 		}

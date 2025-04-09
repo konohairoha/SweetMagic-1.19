@@ -5,11 +5,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -20,15 +17,12 @@ import net.minecraft.world.entity.ai.goal.GolemRandomStrollInVillageGoal;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.SitWhenOrderedToGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
-import net.minecraft.world.entity.monster.AbstractSkeleton;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.raid.Raider;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.gameevent.GameEvent;
 import sweetmagic.init.EntityInit;
 import sweetmagic.init.PotionInit;
 import sweetmagic.init.SoundInit;
@@ -70,7 +64,6 @@ public abstract class AbstractWitch extends AbstractSummonMob {
 		this.targetSelector.addGoal(4, new NearestAttackSMMobGoal<>(this, Monster.class, false));
 		this.targetSelector.addGoal(5, new AttackTargetGoal<>(this, Raider.class, false));
 		this.targetSelector.addGoal(6, new AttackTargetGoal<>(this, Warden.class, false));
-		this.targetSelector.addGoal(7, new AttackTargetGoal<>(this, AbstractSkeleton.class, false));
 	}
 
 	protected SoundEvent getAmbientSound() {
@@ -105,44 +98,7 @@ public abstract class AbstractWitch extends AbstractSummonMob {
 		return super.hurt(src, amount);
 	}
 
-	public InteractionResult mobInteract(Player player, InteractionHand hand) {
-
-		ItemStack stack = player.getItemInHand(hand);
-		Item item = stack.getItem();
-
-		if (this.level.isClientSide) {
-
-			if (this.isOwnedBy(player)) {
-				return InteractionResult.SUCCESS;
-			}
-
-			else {
-				return !this.isFood(stack) || !(this.getHealth() < this.getMaxHealth()) ? InteractionResult.PASS : InteractionResult.SUCCESS;
-			}
-		}
-
-		if (this.isOwnedBy(player)) {
-
-			if (item.isEdible() && this.isFood(stack) && this.getHealth() < this.getMaxHealth()) {
-				this.heal((float) stack.getFoodProperties(this).getNutrition());
-				this.gameEvent(GameEvent.EAT, this);
-				return InteractionResult.CONSUME;
-			}
-
-			InteractionResult result = super.mobInteract(player, hand);
-			return this.mobClick(result, stack);
-		}
-
-		InteractionResult result1 = super.mobInteract(player, hand);
-		if (result1.consumesAction()) {
-			this.setPersistenceRequired();
-		}
-
-		return result1;
-	}
-
 	public void tick() {
-
 		super.tick();
 		if (this.damageCoolTime > 0) { this.damageCoolTime--; }
 
@@ -155,7 +111,6 @@ public abstract class AbstractWitch extends AbstractSummonMob {
 	}
 
 	protected void customServerAiStep() {
-
 		super.customServerAiStep();
 
 		if (this.recastTime > 0) {
@@ -165,7 +120,7 @@ public abstract class AbstractWitch extends AbstractSummonMob {
 		LivingEntity target = this.getTarget();
 		if (target == null || this.getShit()) { return; }
 
-		this.getLookControl().setLookAt(target, 10.0F, 10.0F);
+		this.getLookControl().setLookAt(target, 10F, 10F);
 		if (this.recastTime > 0) { return; }
 
 		boolean isWarden = target instanceof Warden;
@@ -193,20 +148,19 @@ public abstract class AbstractWitch extends AbstractSummonMob {
 		this.level.addFreshEntity(entity);
 	}
 
-	public int getRecastTime () {
+	public int getRecastTime() {
 		return 150;
 	}
 
-	public int getWandLevel () {
+	public int getWandLevel() {
 		return 10;
 	}
 
-	public float getDamageRate () {
+	public float getDamageRate() {
 		return 1F;
 	}
 
-	public void addPotion () {
-
+	public void addPotion() {
 		if (this.level.isClientSide || this.getTarget() == null) { return; }
 
 		if (this.coolTime > 0) {
@@ -222,7 +176,7 @@ public abstract class AbstractWitch extends AbstractSummonMob {
 			// エーテルバリアー
 			if (!this.hasEffect(PotionInit.aether_barrier)) {
 				this.addPotion(this, PotionInit.aether_barrier, 400, 2);
-				this.playSound(SoundEvents.ENCHANTMENT_TABLE_USE, 1F, 1.175F);
+				this.playSound(SoundEvents.ENCHANTMENT_TABLE_USE, 0.25F, 1.175F);
 				this.coolTime += 200;
 				return;
 			}
@@ -250,7 +204,7 @@ public abstract class AbstractWitch extends AbstractSummonMob {
 				// リフレッシュ・エフェクト
 				if (!this.hasEffect(PotionInit.reflash_effect)) {
 					this.addPotion(this, PotionInit.reflash_effect, time, 0);
-					this.playSound(SoundEvents.ENCHANTMENT_TABLE_USE, 1F, 1.175F);
+					this.playSound(SoundEvents.ENCHANTMENT_TABLE_USE, 0.25F, 1.175F);
 					this.coolTime += coolTime * 1.25F;
 				}
 				return;
@@ -258,7 +212,7 @@ public abstract class AbstractWitch extends AbstractSummonMob {
 				// ルナッティクムーン
 				if (!this.hasEffect(PotionInit.magic_damage_cause)) {
 					this.addPotion(this, PotionInit.magic_damage_cause, time, 4);
-					this.playSound(SoundEvents.ENCHANTMENT_TABLE_USE, 1F, 1.175F);
+					this.playSound(SoundEvents.ENCHANTMENT_TABLE_USE, 0.25F, 1.175F);
 					this.coolTime += coolTime;
 				}
 				return;
@@ -266,7 +220,7 @@ public abstract class AbstractWitch extends AbstractSummonMob {
 				// エーテルバリアー
 				if (!this.hasEffect(PotionInit.aether_barrier)) {
 					this.addPotion(this, PotionInit.aether_barrier, time, 1);
-					this.playSound(SoundEvents.ENCHANTMENT_TABLE_USE, 1F, 1.175F);
+					this.playSound(SoundEvents.ENCHANTMENT_TABLE_USE, 0.25F, 1.175F);
 					this.coolTime += coolTime;
 				}
 				return;
@@ -274,7 +228,7 @@ public abstract class AbstractWitch extends AbstractSummonMob {
 				// 攻撃力強化
 				if (!this.hasEffect(MobEffects.DAMAGE_BOOST)) {
 					this.addPotion(this, MobEffects.DAMAGE_BOOST, time, 1);
-					this.playSound(SoundEvents.ENCHANTMENT_TABLE_USE, 1F, 1.175F);
+					this.playSound(SoundEvents.ENCHANTMENT_TABLE_USE, 0.25F, 1.175F);
 					this.coolTime += coolTime;
 				}
 				return;
@@ -283,16 +237,11 @@ public abstract class AbstractWitch extends AbstractSummonMob {
 	}
 
 	// 魔法攻撃
-	public abstract AbstractMagicShot getMagicShot (LivingEntity target, boolean isWarden);
+	public abstract AbstractMagicShot getMagicShot(LivingEntity target, boolean isWarden);
 
 	// 回復量
-	public abstract float getHealValue ();
+	public abstract float getHealValue();
 
 	// 杖の取得
 	public abstract ItemStack getStack();
-
-	@Override
-	public AgeableMob getBreedOffspring(ServerLevel world, AgeableMob mob) {
-		return null;
-	}
 }

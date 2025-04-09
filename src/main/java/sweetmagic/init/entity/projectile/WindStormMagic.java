@@ -14,6 +14,7 @@ import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import sweetmagic.api.emagic.SMElement;
+import sweetmagic.api.iitem.IWand;
 import sweetmagic.api.iitem.info.WandInfo;
 import sweetmagic.init.EntityInit;
 import sweetmagic.init.entity.monster.boss.WindWitchMaster;
@@ -75,14 +76,19 @@ public class WindStormMagic extends AbstractBossMagic {
 
 	// 魔法攻撃
 	public void attackMagic (LivingEntity target) {
-
 		if (this.level.isClientSide) { return; }
 
 		boolean isWarden = target instanceof Warden;
 		float damage = (isWarden ? 60F : 30F) + this.getAddDamage();
 		float shake = isWarden ? 5F : 25F;
 		LivingEntity player = (LivingEntity) this.getOwner();
-		WandInfo info = new WandInfo(this.getStack());
+		WandInfo info = null;
+
+		if (this.getStack().getItem() instanceof IWand) {
+			info = new WandInfo(this.getStack());
+		}
+
+		if (info == null) { return; }
 
 		for (int i = 0; i < 2; i++) {
 
@@ -112,6 +118,7 @@ public class WindStormMagic extends AbstractBossMagic {
 		entity.setMaxLifeTime(120);
 		entity.setRange(1.5D);
 		entity.setBlockPenetration(true);
+		entity.setData(this.getData());
 		this.level.addFreshEntity(entity);
 
 		this.playSound(SoundEvents.BLAZE_SHOOT, 0.5F, 0.67F);
@@ -138,7 +145,6 @@ public class WindStormMagic extends AbstractBossMagic {
 
 	// ターゲットの設定
 	public List<LivingEntity> setTarget (boolean isSetTarget) {
-
 		List<LivingEntity> entityList = this.getEntityList(LivingEntity.class, e -> e instanceof Enemy && e.isAlive(), 48D);
 		if (!isSetTarget) { return entityList; }
 

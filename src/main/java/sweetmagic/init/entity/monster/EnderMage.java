@@ -5,9 +5,6 @@ import java.util.List;
 
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.effect.MobEffectCategory;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
@@ -30,13 +27,13 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.raid.Raider;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import sweetmagic.api.ientity.ISMMob;
 import sweetmagic.init.EntityInit;
 import sweetmagic.init.PotionInit;
 import sweetmagic.init.entity.projectile.AbstractMagicShot;
 import sweetmagic.init.entity.projectile.EnderBall;
+import sweetmagic.util.PlayerHelper;
 
 public class EnderMage extends AbstractSMMob {
 
@@ -81,16 +78,14 @@ public class EnderMage extends AbstractSMMob {
 
 	// ダメージ処理
 	public boolean hurt(DamageSource src, float amount) {
-
 		Entity attacker = src.getEntity();
-		if ( attacker != null && attacker instanceof ISMMob) { return false; }
+		if (attacker != null && attacker instanceof ISMMob) { return false; }
 
 		// ダメージ倍処理
 		amount = this.getDamageAmount(this.level, src, amount, 1F);
-
 		Entity attackEntity = src.getDirectEntity();
 
-		if ( !this.isSMDamage(src) || ( attackEntity instanceof AbstractMagicShot magic && !( magic.getOwner() instanceof Player ) ) ) {
+		if (!this.isSMDamage(src) || (attackEntity instanceof AbstractMagicShot magic && !(magic.getOwner() instanceof Player))) {
 			if (this.random.nextBoolean()) {
 				this.teleport();
 			}
@@ -100,11 +95,9 @@ public class EnderMage extends AbstractSMMob {
 	}
 
 	public void aiStep() {
-
 		super.aiStep();
-
-		// 一定時間が経っていないなら終了
 		if (this.tickTime++ < 20 || this.level.isClientSide || this.getTarget() == null) { return; }
+
 		this.tickTime = 0;
 
 		if (this.coolTime > 0) {
@@ -131,14 +124,7 @@ public class EnderMage extends AbstractSMMob {
 			this.addPotion(entity, MobEffects.DAMAGE_BOOST, 400, 0);
 
 			try {
-				for (MobEffectInstance effect : entity.getActiveEffects()) {
-
-					// デバフなら除去
-					MobEffect potion = effect.getEffect();
-					if (potion.getCategory() == MobEffectCategory.HARMFUL) {
-						entity.removeEffect(potion);
-					}
-				}
+				PlayerHelper.getEffectList(entity, PotionInit.DEBUFF).forEach(p -> entity.removeEffect(p.getEffect()));
 			}
 
 			catch (Throwable e) { }
@@ -178,7 +164,6 @@ public class EnderMage extends AbstractSMMob {
 		}
 
 		public void tick() {
-
 			--this.attackTime;
 			LivingEntity target = this.ender.getTarget();
 			if (target == null) { return;}
@@ -238,7 +223,7 @@ public class EnderMage extends AbstractSMMob {
 							damage += 2F;
 						}
 
-						EnderBall entity = new EnderBall(world, this.ender, ItemStack.EMPTY);
+						EnderBall entity = new EnderBall(world, this.ender);
 						entity.shoot(x, y - xz * 0.065D, z, shotSpeed, 2F);
 						entity.setAddDamage(entity.getAddDamage() + damage);
 						entity.isTeleport = !this.ender.hasEffect(PotionInit.resistance_blow);

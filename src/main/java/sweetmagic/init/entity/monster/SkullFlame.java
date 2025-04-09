@@ -32,7 +32,6 @@ import net.minecraft.world.entity.monster.Skeleton;
 import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.raid.Raider;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.Vec3;
@@ -91,9 +90,8 @@ public class SkullFlame extends Skeleton implements ISMMob {
 
 	// ダメージ処理
 	public boolean hurt(DamageSource src, float amount) {
-
 		Entity attacker = src.getEntity();
-		if ( attacker != null && attacker instanceof ISMMob) { return false; }
+		if (attacker != null && attacker instanceof ISMMob) { return false; }
 
 		// ダメージ倍処理
 		amount = this.getDamageAmount(this.level , src, amount, 1F);
@@ -111,14 +109,12 @@ public class SkullFlame extends Skeleton implements ISMMob {
 			Vec3 vec = this.getDeltaMovement();
 
 			for (int i = 0; i < 6; i++) {
-
-				float x = (float) (this.getX() - 0.5F + rand.nextFloat());
-				float y = (float) (this.getY() + rand.nextFloat() * 2F);
-				float z = (float) (this.getZ() - 0.5F + rand.nextFloat());
-
-				float f1 = (float) ( (vec.x + 0.5F - rand.nextFloat() ) * 0.2F);
-				float f2 = (float) ( (vec.y + 0.5F - rand.nextFloat() ) * 0.2F);
-				float f3 = (float) ( (vec.z + 0.5F - rand.nextFloat() ) * 0.2F);
+				float x = (float) this.getX() - 0.5F + rand.nextFloat();
+				float y = (float) this.getY() + rand.nextFloat() * 2F;
+				float z = (float) this.getZ() - 0.5F + rand.nextFloat();
+				float f1 = (float) (vec.x + 0.5F - rand.nextFloat()) * 0.2F;
+				float f2 = (float) (vec.y + 0.5F - rand.nextFloat()) * 0.2F;
+				float f3 = (float) (vec.z + 0.5F - rand.nextFloat()) * 0.2F;
 				this.level.addParticle(ParticleTypes.FLAME, x, y, z, f1, f2, f3);
 			}
 		}
@@ -142,10 +138,8 @@ public class SkullFlame extends Skeleton implements ISMMob {
 		}
 
 		// ウォーデンかハードならブレなし、それ以外なら日数でブレが発生
-		float shake = ( isWarden || isHard ) ? 0F : 1F;
-
-		AbstractMagicShot entity = new FireMagicShot(this.level, this, ItemStack.EMPTY);
-
+		float shake = (isWarden || isHard) ? 0F : 1F;
+		AbstractMagicShot entity = new FireMagicShot(this.level, this);
 		double d0 = target.getX() - this.getX();
 		double d1 = target.getY(0.3333333333333333D) - this.getY();
 		double d2 = target.getZ() - this.getZ();

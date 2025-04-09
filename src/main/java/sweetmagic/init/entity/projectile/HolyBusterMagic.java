@@ -12,6 +12,7 @@ import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.Enemy;
@@ -45,7 +46,7 @@ public class HolyBusterMagic extends AbstractBossMagic {
 	}
 
 	// 常時更新処理
-	public void onUpdate () {
+	public void onUpdate() {
 
 		// ターゲットがいる場合
 		if (this.target != null) {
@@ -65,50 +66,53 @@ public class HolyBusterMagic extends AbstractBossMagic {
 		}
 
 		// ターゲットの設定
-		if ( ( this.target == null || !this.target.isAlive() ) && this.tickCount % 8 == 0) {
+		if ((this.target == null || !this.target.isAlive()) && this.tickCount % 8 == 0) {
 			this.setTarget();
 		}
 	}
 
 	// 攻撃時のパーティクル
-	public void attackParticle () {
-
-		if ( !(this.level instanceof ServerLevel server)) { return; }
+	public void attackParticle() {
+		if (!(this.level instanceof ServerLevel server)) { return; }
 
 		int count = 18;
-		double range = 10D;
+		double range = this.getData() == 1 ? 16.75D : 10D;
 		Random rand = this.rand;
+		ParticleOptions par = ParticleInit.CYCLE_ELECTRIC;
 
 		for (BlockPos pos : this.posMap.values()) {
 
-			if ( pos == null) { return; }
+			if (pos == null) { return; }
 
-			this.spawnParticleCycle(server, pos, range + 1.15D, rand, count);
-			this.spawnParticleCycle(server, pos, range - 3.85D, rand, count);
-			this.spawnParticleCycle(server, pos, range - 7.85D, rand, count);
+			this.spawnParticleCycle(server, pos, range + 1.15D, rand, count, par);
+			this.spawnParticleCycle(server, pos, range - 3.85D, rand, count, par);
+			this.spawnParticleCycle(server, pos, range - 7.85D, rand, count, par);
 		}
 	}
 
-	protected void spawnParticleCycle (ServerLevel server, BlockPos pos, double range, Random rand, int count) {
+	protected void spawnParticleCycle(ServerLevel server, BlockPos pos, double range, Random rand, int count, ParticleOptions par) {
 		for (int i = 0; i < count; i++) {
-			this.spawnParticleCycle(server, ParticleInit.CYCLE_ELECTRIC.get(), pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, Direction.UP, range, i * 20F, false);
+			this.spawnParticleCycle(server, par, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, Direction.UP, range, i * 20F, false);
 		}
 	}
 
 	// パーティクルスポーンサイクル
-	protected void spawnParticleCycle (ServerLevel server, ParticleOptions particle, double x, double y, double z, Direction face, double range, double angle, boolean isRevese) {
+	protected void spawnParticleCycle(ServerLevel server, ParticleOptions par, double x, double y, double z, Direction face, double range, double angle, boolean isRevese) {
 		int way = isRevese ? -1 : 1;
-		server.sendParticles(particle, x, y, z, 0, face.get3DDataValue() * way, range, angle + way * 1 * 6F, 1F);
+		server.sendParticles(par, x, y, z, 0, face.get3DDataValue() * way, range, angle + way * 1 * 6F, 1F);
 	}
 
 	// ターゲット座標設定
-	public void setTargetPos () {
-
+	public void setTargetPos() {
 		if (!this.posMap.isEmpty()) { return; }
 
 		final int maxTarget = 8;
 		List<LivingEntity> entityList = this.getEntityList(LivingEntity.class, e -> e.isAlive() && e instanceof Enemy, 48D);
 		int maxLoop = Math.min(maxTarget, entityList.size());
+
+		if (this.getData() == 1) {
+			maxLoop += 4;
+		}
 
 		for (int i = 0; i < maxLoop; i++) {
 			this.posMap.put(i, entityList.get(i).blockPosition());
@@ -134,22 +138,34 @@ public class HolyBusterMagic extends AbstractBossMagic {
 		}
 	}
 
-	public int getRandRange (Random rand, int range) {
+	public int getRandRange(Random rand, int range) {
 		return rand.nextInt(range) - rand.nextInt(range);
 	}
 
 	// 魔法攻撃
-	public void attackMagic () {
+	public void attackMagic() {
 
-		double range = 10D;
-		float damage = 22F + this.getAddDamage();
+		int data = this.getData();
+		double range = data == 1 ? 17.5D : 12.5D;
+		float damage = (data == 1 ? 50F : 25F) + this.getAddDamage();
 
 		for (Entry<Integer, BlockPos> map : this.posMap.entrySet()) {
 
 			BlockPos pos = map.getValue();
 			AABB aabb = new AABB(pos.offset(-range, -range, -range), pos.offset(range, range, range));
 			List<LivingEntity> entityList = this.getEntityList(LivingEntity.class, aabb).stream().filter(e -> e.isAlive() && e instanceof Enemy && this.checkDistances(pos, e.blockPosition(), range * range)).toList();
-			entityList.forEach(e -> this.attackDamage(e, damage, true));
+
+			for (LivingEntity target : entityList) {
+				this.attackDamage(target, damage, true);
+
+				if (data == 1) {
+					if (target.hasEffect(MobEffects.GLOWING)) {
+						target.setHealth(Math.min(1F, target.getHealth() - 10F));
+					}
+
+					this.addPotion(target, MobEffects.GLOWING, 0, 600);
+				}
+			}
 
 			this.posMap.remove(map.getKey());
 
@@ -162,7 +178,7 @@ public class HolyBusterMagic extends AbstractBossMagic {
 
 				// 範囲の座標取得
 				Random rand = this.rand;
-				Iterable<BlockPos> posList = BlockPos.betweenClosed(pos.offset(-range, -range, -range), pos.offset(range, range, range));
+				Iterable<BlockPos> posList = this.getPosList(pos, range);
 
 				for (BlockPos p : posList) {
 
@@ -181,7 +197,7 @@ public class HolyBusterMagic extends AbstractBossMagic {
 	}
 
 	// 範囲内にいるかのチェック
-	public boolean checkDistances (BlockPos basePos, BlockPos pos, double range) {
+	public boolean checkDistances(BlockPos basePos, BlockPos pos, double range) {
 		double d0 = basePos.getX() - pos.getX();
 		double d1 = basePos.getY() - pos.getY();
 		double d2 = basePos.getZ() - pos.getZ();
@@ -189,7 +205,7 @@ public class HolyBusterMagic extends AbstractBossMagic {
 	}
 
 	// ターゲットの設定
-	public void setTarget () {
+	public void setTarget() {
 
 		List<LivingEntity> entityList = this.getEntityList(LivingEntity.class, e -> e instanceof Enemy && e.isAlive(), 48D);
 		double dis = 0D;
@@ -211,7 +227,7 @@ public class HolyBusterMagic extends AbstractBossMagic {
 	}
 
 	// 召喚えんちちーに取得
-	public LivingEntity getEntity () {
+	public LivingEntity getEntity() {
 
 		// えんちちーの初期化が出来ていないなら初期化
 		if (this.summon == null) {

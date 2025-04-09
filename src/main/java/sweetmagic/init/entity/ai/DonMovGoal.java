@@ -15,7 +15,7 @@ import net.minecraft.world.entity.ai.goal.WrappedGoal;
 
 public class DonMovGoal extends Goal {
 
-	public static final UUID UUID_donmov  = UUID.fromString("6fd1ce57-8e37-504d-f859-6262b644ef19");
+	public static final UUID UUID_donmov = UUID.fromString("6fd1ce57-8e37-504d-f859-6262b644ef19");
 	public static final AttributeModifier modifierDonmove = new AttributeModifier(UUID_donmov, "SM speedDown", -5D, AttributeModifier.Operation.ADDITION);
 
 	public int tickTime = 20;
@@ -52,7 +52,7 @@ public class DonMovGoal extends Goal {
 
 	// 終了時処理
 	public void stop() {
-    	this.tickTime = 0;
+		this.tickTime = 0;
 		AttributeMap attriMap = this.entity.getAttributes();
 		ImmutableMultimap.Builder<Attribute, AttributeModifier> map = this.getMap();
 		attriMap.removeAttributeModifiers(map.build());
@@ -61,7 +61,7 @@ public class DonMovGoal extends Goal {
 
 	// 常時処理
 	public void tick() {
-        --this.tickTime;
+		--this.tickTime;
 	}
 
 	// 移動速度情報取得

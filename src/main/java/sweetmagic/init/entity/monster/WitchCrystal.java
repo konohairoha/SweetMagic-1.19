@@ -1,16 +1,12 @@
 package sweetmagic.init.entity.monster;
 
-import java.util.UUID;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Monster;
@@ -20,14 +16,13 @@ import sweetmagic.api.ientity.ISMMob;
 import sweetmagic.init.EntityInit;
 import sweetmagic.init.entity.monster.boss.WindWitchMaster;
 
-public class WitchCrystal extends AbstractSMMob {
+public class WitchCrystal extends AbstractOwnerMob {
 
-	private UUID ownerID;
 	public WitchCrystal(Level world) {
 		super(EntityInit.witchCrystal, world);
 	}
 
-	public WitchCrystal(EntityType<? extends WitchCrystal> enType, Level world) {
+	public WitchCrystal(EntityType<WitchCrystal> enType, Level world) {
 		super(enType, world);
 		this.xpReward = 1;
 	}
@@ -65,20 +60,6 @@ public class WitchCrystal extends AbstractSMMob {
 		return super.hurt(src, Math.min(20F, amount));
 	}
 
-	public void addAdditionalSaveData(CompoundTag tags) {
-		super.addAdditionalSaveData(tags);
-		if (this.getOwnerID() != null) {
-			tags.putUUID("ownerID", this.getOwnerID());
-		}
-	}
-
-	public void readAdditionalSaveData(CompoundTag tags) {
-		super.readAdditionalSaveData(tags);
-		if (tags.contains("ownerID")) {
-			this.setOwnerID(tags.getUUID("ownerID"));
-		}
-	}
-
 	public void tick() {
 		super.tick();
 		this.setDeltaMovement(new Vec3(0, 0, 0));
@@ -88,35 +69,23 @@ public class WitchCrystal extends AbstractSMMob {
 
 		if (this.deathTime == 0) {
 
-			if (this.getOwnerID() != null && this.level instanceof ServerLevel server) {
-				WindWitchMaster entity = (WindWitchMaster) server.getEntity(this.getOwnerID());
+			if (this.getOwnerID() != null) {
+				WindWitchMaster entity = (WindWitchMaster) this.getEntity();
 				if (entity != null && entity.isAlive()) {
 					entity.setArmor(entity.getArmor() - 1);
 				}
 			}
 
-			this.playSound(SoundEvents.GLASS_BREAK, 3F, 1.1F);
-			this.playSound(SoundEvents.GENERIC_EXPLODE, 1.5F, 1F / (this.rand.nextFloat() * 0.2F + 0.7F));
-
 			if (this.level instanceof ServerLevel sever) {
 				BlockPos pos = this.blockPosition().above();
 				sever.sendParticles(ParticleTypes.EXPLOSION, pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, 2, 0D, 0D, 0D, 0D);
 			}
+
+			this.playSound(SoundEvents.GLASS_BREAK, 3F, 1.1F);
+			this.playSound(SoundEvents.GENERIC_EXPLODE, 1.5F, 1F / (this.rand.nextFloat() * 0.2F + 0.7F));
 		}
 
 		super.tickDeath();
-	}
-
-	public UUID getOwnerID () {
-		return this.ownerID;
-	}
-
-	public void setOwnerID (LivingEntity entity) {
-		this.ownerID = entity.getUUID();
-	}
-
-	public void setOwnerID (UUID id) {
-		this.ownerID = id;
 	}
 
 	public float getLightLevelDependentMagicValue() {

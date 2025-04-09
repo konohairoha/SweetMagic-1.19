@@ -5,6 +5,7 @@ import java.util.List;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -37,10 +38,10 @@ public class CycloneMagicShot extends AbstractMagicShot {
 		this.setRange(6D);
 	}
 
-	public CycloneMagicShot(Level world, LivingEntity entity, ItemStack stack) {
+	public CycloneMagicShot(Level world, LivingEntity entity) {
 		this(entity.getX(), entity.getEyeY() - (double) 0.1F, entity.getZ(), world);
 		this.setOwner(entity);
-		this.stack = stack;
+		this.stack = ItemStack.EMPTY;
 		this.setRange(5D);
 	}
 
@@ -48,7 +49,7 @@ public class CycloneMagicShot extends AbstractMagicShot {
 	protected void entityHit(LivingEntity living) {
 
 		// 被弾時ノックバック
-		if ( this.canTargetEffect(living, this.getOwner()) ) {
+		if (this.canTargetEffect(living, this.getOwner())) {
 
 			int level = this.getWandLevel();
 			LivingKnockBackEvent event = ForgeHooks.onLivingKnockBack(living, this.knockback * (1F + (level * 0.1F)), 1F, 1F);
@@ -84,13 +85,14 @@ public class CycloneMagicShot extends AbstractMagicShot {
 		this.discard();
 	}
 
-	public void rangeAttack (BlockPos bPos, float dame, double range) {
-
+	public void rangeAttack(BlockPos bPos, float dame, double range) {
 		List<LivingEntity> entityList = this.getEntityList(LivingEntity.class, this.isTarget(), range);
 		if(entityList.isEmpty()) { return; }
 
 		boolean isTier3 = this.getData() >= 2;
+		boolean isTier4 = this.getData() >= 3;
 		int time = 60 * (this.getWandLevel() + 1);
+		int addLevel = isTier4 ? 2 : 1;
 
 		for (LivingEntity entity : entityList) {
 
@@ -106,19 +108,30 @@ public class CycloneMagicShot extends AbstractMagicShot {
 			this.attackDamage(entity, dame, false);
 
 			if (isTier3) {
-				int level = entity.hasEffect(PotionInit.bleeding) ? entity.getEffect(PotionInit.bleeding).getAmplifier() + 1 : 0;
+				int level = entity.hasEffect(PotionInit.bleeding) ? entity.getEffect(PotionInit.bleeding).getAmplifier() + addLevel : addLevel - 1;
 
 				if (level > 0) {
 					entity.removeEffect(PotionInit.bleeding);
 				}
 
-				this.addPotion(entity, PotionInit.bleeding, time, level);
+				this.addPotion(entity, PotionInit.bleeding, time, Math.max(0, level));
+				if (!entity.hasEffect(PotionInit.bleeding)) { continue; }
+
+				MobEffectInstance effect = entity.getEffect(PotionInit.bleeding);
+				int pLevel = effect.getAmplifier();
+				int pTime = effect.getDuration();
+				if (isTier4 && pLevel >= 4) {
+					entity.removeEffect(PotionInit.bleeding);
+					this.addPotion(entity, PotionInit.bleeding, time, 0);
+					float rate = 1F + pTime / 300F;
+					this.addAttack(entity, dame * rate, pLevel * 3);
+				}
 			}
 		}
 	}
 
 	// ダメージレートの取得
-	public float getDamageRate () {
+	public float getDamageRate() {
 		switch (this.getData()) {
 		case 0: return 1F;
 		case 1: return 1.5F;
@@ -132,24 +145,30 @@ public class CycloneMagicShot extends AbstractMagicShot {
 		float y = (float) (pos.getY() + this.getRandFloat(0.5F));
 		float z = (float) (pos.getZ() + this.getRandFloat(0.5F));
 
-		for (int i = 0; i < 16; i++) {
-			sever.sendParticles(ParticleTypes.CLOUD, x, y, z, 4, 0F, 0F, 0F, 0.15F);
+		int count = 16;
+		float rate = 0.15F;
+
+		if (this.getData() >= 3) {
+			count = 64;
+			rate = 0.25F;
+		}
+
+		for (int i = 0; i < count; i++) {
+			sever.sendParticles(ParticleTypes.CLOUD, x, y, z, 4, 0F, 0F, 0F, rate);
 		}
 	}
 
-	public int getMinParticleTick () {
+	public int getMinParticleTick() {
 		return 3;
 	}
 
 	// パーティクルスポーン
 	protected void spawnParticle() {
-
 		Vec3 vec = this.getDeltaMovement();
 		float x = (float) (-vec.x / 30F);
 		float y = (float) (-vec.y / 30F);
 		float z = (float) (-vec.z / 30F);
-
-		this.level.addParticle(ParticleInit.CYCLONE.get(), this.getX(), this.getY() + 0.5F, this.getZ(), x, y, z);
+		this.level.addParticle(ParticleInit.CYCLONE, this.getX(), this.getY() + 0.5F, this.getZ(), x, y, z);
 	}
 
 	// 属性の取得

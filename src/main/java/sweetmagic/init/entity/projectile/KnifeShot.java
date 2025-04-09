@@ -20,10 +20,10 @@ public class KnifeShot extends AbstractMagicShot {
 		this.setPos(x, y, z);
 	}
 
-	public KnifeShot(Level world, LivingEntity entity, ItemStack stack) {
+	public KnifeShot(Level world, LivingEntity entity) {
 		this(entity.getX(), entity.getEyeY() - (double) 0.1F, entity.getZ(), world);
 		this.setOwner(entity);
-		this.stack = stack;
+		this.stack = ItemStack.EMPTY;
 	}
 
 	// えんちちーに当たった時の処理
