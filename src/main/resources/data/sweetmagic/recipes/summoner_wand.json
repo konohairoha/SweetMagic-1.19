@@ -1,0 +1,14 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"key": {
+		"E": { "item": "sweetmagic:aether_crystal" },
+		"G": { "tag": "forge:nuggets/gold", "count": 1 },
+		"S": { "item": "minecraft:stick" }
+	},
+	"pattern": [
+		" GE",
+		" GG",
+		"S  "
+	],
+	"result": { "item": "sweetmagic:summoner_wand" }
+}

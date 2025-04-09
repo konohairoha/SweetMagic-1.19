@@ -1,0 +1,11 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"key": {
+		"I": { "item": "sweetmagic:alternative_ingot" }
+	},
+	"pattern": [
+		"I I",
+		" I "
+	],
+	"result": { "item": "sweetmagic:alternative_bucket" }
+}
