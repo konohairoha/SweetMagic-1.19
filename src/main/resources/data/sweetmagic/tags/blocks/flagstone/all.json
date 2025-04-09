@@ -8,6 +8,10 @@
 		"sweetmagic:flagstone_color",
 		"sweetmagic:flagstone_color_stairs",
 		"sweetmagic:flagstone_color_slab",
-		"sweetmagic:flagstone_color_trapdoor"
+		"sweetmagic:flagstone_color_trapdoor",
+		"sweetmagic:flagstone_brown",
+		"sweetmagic:flagstone_brown_stairs",
+		"sweetmagic:flagstone_brown_slab",
+		"sweetmagic:flagstone_brown_trapdoor"
 	]
 }
