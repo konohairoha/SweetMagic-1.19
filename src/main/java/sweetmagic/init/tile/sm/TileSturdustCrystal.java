@@ -40,7 +40,7 @@ public class TileSturdustCrystal extends TileAbstractSM {
 			float x = this.getRandFloat() * 0.075F;
 			float y = rand.nextFloat() * 0.08F;
 			float z = this.getRandFloat() * 0.075F;
-			world.addParticle(ParticleInit.NORMAL.get(), f1, f2, f3, x, y, z);
+			world.addParticle(ParticleInit.NORMAL, f1, f2, f3, x, y, z);
 		}
 	}
 

@@ -23,8 +23,8 @@ import sweetmagic.init.tile.menu.MFChangerMenu;
 
 public class TileMFChanger extends TileSMMagic {
 
-	public int maxMagiaFlux = 30000;				// 最大MF量を設定
-	public boolean isReceive = false;				// 受け取る側かどうか
+	public int maxMagiaFlux = 30000;
+	public boolean isReceive = false;
 
 	public TileMFChanger(BlockPos pos, BlockState state) {
 		this(TileInit.changer, pos, state);
@@ -105,19 +105,19 @@ public class TileMFChanger extends TileSMMagic {
 
 	// 最大MFの取得
 	@Override
-	public int getMaxMF () {
+	public int getMaxMF() {
 		return this.maxMagiaFlux;
 	}
 
 	// 受信側かどうかの取得
 	@Override
-	public boolean getReceive () {
+	public boolean getReceive() {
 		return this.isReceive;
 	}
 
 	// インベントリサイズの取得
 	@Override
-	public int getInvSize () {
+	public int getInvSize() {
 		return 3;
 	}
 
@@ -127,7 +127,7 @@ public class TileMFChanger extends TileSMMagic {
 	}
 
 	// インプットスロットのアイテムを取得
-	public  ItemStack getInputItem(int i) {
+	public ItemStack getInputItem(int i) {
 		return this.getInput().getStackInSlot(i);
 	}
 
@@ -142,12 +142,12 @@ public class TileMFChanger extends TileSMMagic {
 	}
 
 	// RS信号で動作を停止するかどうか
-	public boolean isRSStop () {
+	public boolean isRSStop() {
 		return true;
 	}
 
 	// インベントリのアイテムを取得
-	public List<ItemStack> getInvList () {
+	public List<ItemStack> getInvList() {
 		List<ItemStack> stackList = new ArrayList<>();
 
 		for (int i = 0; i < this.getInvSize(); i++) {

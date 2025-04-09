@@ -12,27 +12,27 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 
 public class SlotArmor extends Slot {
 
-    private final Entity entity;
-    private final EquipmentSlot slot;
+	private final Entity entity;
+	private final EquipmentSlot slot;
 
-    public SlotArmor(Entity entity, EquipmentSlot type, Inventory inv, int index, int x, int y) {
-        super(inv, index, x, y);
-        this.entity = entity;
-        this.slot = type;
-    }
+	public SlotArmor(Entity entity, EquipmentSlot type, Inventory inv, int index, int x, int y) {
+		super(inv, index, x, y);
+		this.entity = entity;
+		this.slot = type;
+	}
 
-    @Override
-    public int getMaxStackSize () {
-        return 1;
-    }
+	@Override
+	public int getMaxStackSize() {
+		return 1;
+	}
 
 	@Override
 	public boolean mayPlace(@NotNull ItemStack stack) {
-        return stack.canEquip(this.slot, this.entity);
+		return stack.canEquip(this.slot, this.entity);
 	}
 
-    public boolean mayPickup(Player player) {
-       ItemStack stack = this.getItem();
-       return !stack.isEmpty() && !player.isCreative() && EnchantmentHelper.hasBindingCurse(stack) ? false : super.mayPickup(player);
-    }
+	public boolean mayPickup(Player player) {
+		ItemStack stack = this.getItem();
+		return !stack.isEmpty() && !player.isCreative() && EnchantmentHelper.hasBindingCurse(stack) ? false : super.mayPickup(player);
+	}
 }

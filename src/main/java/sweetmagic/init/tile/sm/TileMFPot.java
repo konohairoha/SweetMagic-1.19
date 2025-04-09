@@ -27,14 +27,14 @@ import sweetmagic.api.SweetMagicAPI;
 import sweetmagic.api.iblock.ISMCrop;
 import sweetmagic.init.TileInit;
 import sweetmagic.init.block.magic.MFPot;
+import sweetmagic.util.WorldHelper;
 
 public class TileMFPot extends TileSMMagic {
 
-	public int maxMagiaFlux = 200000;				// 最大MF量を設定
-	public boolean isReceive = false;				// 受け取る側かどうか
-
+	public int maxMagiaFlux = 200000;
+	public boolean isReceive = false;
 	private Direction face = Direction.NORTH;
-    private final static Direction[] ALLFACE = new Direction[] {Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
+	private final static Direction[] ALLFACE = new Direction[] {Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
 
 	public TileMFPot(BlockPos pos, BlockState state) {
 		super(TileInit.mfpot, pos, state);
@@ -65,7 +65,7 @@ public class TileMFPot extends TileSMMagic {
 		}
 	}
 
-	public void onUpdate (Level world, BlockPos pos, boolean isClient) {
+	public void onUpdate(Level world, BlockPos pos, boolean isClient) {
 		if (this.isMaxMF()) { return; }
 
 		switch (this.getData(pos)) {
@@ -113,7 +113,7 @@ public class TileMFPot extends TileSMMagic {
 	}
 
 	// ドリズリィ
-	public void dmPot (Level world, BlockPos pos, boolean isClient) {
+	public void dmPot(Level world, BlockPos pos, boolean isClient) {
 		if (!world.isRaining()) { return; }
 
 		if (this.tickTime % 20 == 0 && !isClient) {
@@ -127,7 +127,7 @@ public class TileMFPot extends TileSMMagic {
 	}
 
 	// アルストロメリア
-	public void alstPot (Level world, BlockPos pos, boolean isClient) {
+	public void alstPot(Level world, BlockPos pos, boolean isClient) {
 
 		long worldTime = world.dayTime() % 24000;
 
@@ -145,7 +145,7 @@ public class TileMFPot extends TileSMMagic {
 	}
 
 	// スノードロップ
-	public void snodDropPot (Level world, BlockPos pos, boolean isClient) {
+	public void snodDropPot(Level world, BlockPos pos, boolean isClient) {
 		if(world.getBiome(pos).get().getBaseTemperature() > 0 && pos.getY() < 120) { return; }
 
 		if (this.tickTime % 20 == 0 && !isClient) {
@@ -159,7 +159,7 @@ public class TileMFPot extends TileSMMagic {
 	}
 
 	// 群青の薔薇
-	public void rosePot (Level world, BlockPos pos, boolean isClient) {
+	public void rosePot(Level world, BlockPos pos, boolean isClient) {
 		if (isClient || this.tickTime % 600 != 0) { return; }
 
 		BlockEntity tile = this.getTile(pos.below());
@@ -187,7 +187,7 @@ public class TileMFPot extends TileSMMagic {
 	}
 
 	// ジニア
-	public void zinniaPot (Level world, BlockPos pos, boolean isClient) {
+	public void zinniaPot(Level world, BlockPos pos, boolean isClient) {
 		if (this.tickTime % 40 != 0) { return; }
 
 		boolean isCharge = false;
@@ -228,7 +228,7 @@ public class TileMFPot extends TileSMMagic {
 	}
 
 	// ジニア
-	public void solidStarPot (Level world, BlockPos pos, boolean isClient) {
+	public void solidStarPot(Level world, BlockPos pos, boolean isClient) {
 		if (this.tickTime % 40 != 0) { return; }
 
 		float sumLightValue = 0F;
@@ -262,7 +262,7 @@ public class TileMFPot extends TileSMMagic {
 	}
 
 	// ハイドラ
-	public void hydoraPot (Level world, BlockPos pos, boolean isClient) {
+	public void hydoraPot(Level world, BlockPos pos, boolean isClient) {
 		if (this.tickTime % 10 != 0) { return; }
 
 		// 死んでいるえんちちーが居なければ終了
@@ -296,13 +296,11 @@ public class TileMFPot extends TileSMMagic {
 	}
 
 	// カーネーション
-	public void carnationPot (Level world, BlockPos pos, boolean isClient) {
+	public void carnationPot(Level world, BlockPos pos, boolean isClient) {
 		if (this.tickTime % 20 != 0) { return; }
 
 		List<ItemStack> stackList = new ArrayList<>();
-
-		// 範囲の座標取得
-		Iterable<BlockPos> posList = BlockPos.betweenClosed(pos.offset(-1, 0, -1), pos.offset(1, 0, 1));
+		Iterable<BlockPos> posList = WorldHelper.getRangePos(pos, -1, 0, -1, 1, 0, 1);
 
 		for (BlockPos p : posList) {
 
@@ -310,8 +308,7 @@ public class TileMFPot extends TileSMMagic {
 
 			BlockState state = this.getState(p);
 			Block block = state.getBlock();
-
-			if ( !( block instanceof ISMCrop crop ) ) { continue; }
+			if (!(block instanceof ISMCrop crop)) { continue; }
 
 			// 作物が最大成長していないまたは、MFを持っていなければ次へ
 			if (!crop.isMaxAge(state) || !SweetMagicAPI.hasMF(crop.getCrop().asItem())) { continue; }
@@ -325,7 +322,7 @@ public class TileMFPot extends TileSMMagic {
 				int sumMF = 0;
 
 				for (ItemStack stack : stackList) {
-					sumMF += (SweetMagicAPI.getMF(stack) * 1.5F);
+					sumMF += SweetMagicAPI.getMF(stack) * 1.5F;
 				}
 
 				this.setMF(this.getMF() + sumMF);
@@ -340,7 +337,7 @@ public class TileMFPot extends TileSMMagic {
 	}
 
 	// エリックスミシィ
-	public void ericsPot (Level world, BlockPos pos, boolean isClient) {
+	public void ericsPot(Level world, BlockPos pos, boolean isClient) {
 		long time = this.getTime();
 		if (time % 7 != 0) { return; }
 
@@ -365,7 +362,7 @@ public class TileMFPot extends TileSMMagic {
 	}
 
 	// コスモス
-	public void cosmosPot (Level world, BlockPos pos, boolean isClient) {
+	public void cosmosPot(Level world, BlockPos pos, boolean isClient) {
 		if (this.tickTime % 60 != 0) { return; }
 
 		int sumMF = 0;
@@ -375,12 +372,11 @@ public class TileMFPot extends TileSMMagic {
 			BlockPos p = pos.relative(face);
 			BlockState state = this.getState(p);
 			Block block = state.getBlock();
-
-			if ( !state.is(Blocks.LAVA) && !(block instanceof BaseFireBlock)) { continue; }
+			if (!state.is(Blocks.LAVA) && !(block instanceof BaseFireBlock)) { continue; }
 
 			if (block instanceof LiquidBlock liq && state.getValue(LiquidBlock.LEVEL) != 0) { continue; }
 
-			sumMF += state.is(Blocks.LAVA) ? 1000 : 10;
+			sumMF += state.is(Blocks.LAVA) ? 1500 : 100;
 			world.setBlock(p, Blocks.AIR.defaultBlockState(), 3);
 			this.playSound(p, SoundEvents.FIRE_EXTINGUISH, 1F, 1F);
 		}
@@ -398,18 +394,18 @@ public class TileMFPot extends TileSMMagic {
 		}
 	}
 
-	public int getData (BlockPos pos) {
+	public int getData(BlockPos pos) {
 		return this.getBlock(pos) instanceof MFPot pot ? pot.getData() : 0;
 	}
 
 	// 最大MFの取得
 	@Override
-	public int getMaxMF () {
+	public int getMaxMF() {
 		return this.maxMagiaFlux;
 	}
 
 	// 受信側かどうかの取得
-	public boolean getReceive () {
+	public boolean getReceive() {
 		return this.isReceive;
 	}
 
@@ -420,7 +416,7 @@ public class TileMFPot extends TileSMMagic {
 			double d0 = this.rand.nextGaussian() * 0.02D;
 			double d1 = this.rand.nextGaussian() * 0.02D;
 			double d2 = this.rand.nextGaussian() * 0.02D;
-			world.addParticle(par, this.getRandomX(pos, this.rand, 1D), this.getRandomY(pos, this.rand), this.getRandomZ(pos, this.rand, 1D), d0, d1, d2);
+			world.addParticle(par, this.getRandX(pos, this.rand, 1D), this.getRandY(pos, this.rand), this.getRandZ(pos, this.rand, 1D), d0, d1, d2);
 		}
 	}
 

@@ -19,7 +19,7 @@ import sweetmagic.init.tile.menu.AetherRepairMenu;
 
 public class TileAetherRepair extends TileSMMagic {
 
-	public int maxMagiaFlux = 100000;				// 最大MF量を設定
+	public int maxMagiaFlux = 100000;
 	private static final float[] xPosArray = { 0F, 0.125F, 0F, -0.125F };
 	private static final float[] zPosArray = { -0.125F, 0F, 0.125F, 0F };
 	protected final StackHandler inputInv = new StackHandler(this.getInvSize(), true);
@@ -57,7 +57,7 @@ public class TileAetherRepair extends TileSMMagic {
 	}
 
 	// 耐久値回復
-	public void repairTool () {
+	public void repairTool() {
 
 		for (int i = 0; i < this.getInvSize(); i++) {
 
@@ -83,7 +83,7 @@ public class TileAetherRepair extends TileSMMagic {
 		}
 	}
 
-	public void spawnParticl (BlockPos pos, float pX, float pZ) {
+	public void spawnParticl(BlockPos pos, float pX, float pZ) {
 
 		for (int i = 0; i < 2; i++) {
 
@@ -98,19 +98,19 @@ public class TileAetherRepair extends TileSMMagic {
 			float ySpeed = 0.1F * 0.4F;
 			float zSpeed = pZ * 0.25F;
 
-			this.level.addParticle(ParticleInit.NORMAL.get(), x, y, z, xSpeed, ySpeed, zSpeed);
+			this.level.addParticle(ParticleInit.NORMAL, x, y, z, xSpeed, ySpeed, zSpeed);
 		}
 	}
 
 	// インベントリサイズの取得
 	@Override
-	public int getInvSize () {
+	public int getInvSize() {
 		return 4;
 	}
 
 	// 最大MFの取得
 	@Override
-	public int getMaxMF () {
+	public int getMaxMF() {
 		return this.maxMagiaFlux;
 	}
 
@@ -120,12 +120,12 @@ public class TileAetherRepair extends TileSMMagic {
 	}
 
 	// 杖スロットのアイテムを取得
-	public  ItemStack getInputItem(int i) {
+	public ItemStack getInputItem(int i) {
 		return this.getInput().getStackInSlot(i);
 	}
 
 	// 消費MF量の取得
-	public int getShrinkMF () {
+	public int getShrinkMF() {
 		return 10000;
 	}
 
@@ -149,7 +149,7 @@ public class TileAetherRepair extends TileSMMagic {
 	}
 
 	// インベントリのアイテムを取得
-	public List<ItemStack> getInvList () {
+	public List<ItemStack> getInvList() {
 		List<ItemStack> stackList = new ArrayList<>();
 
 		for (int i = 0; i < this.getInvSize(); i++) {

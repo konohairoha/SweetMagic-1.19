@@ -36,13 +36,13 @@ public class TileMagicBarrier extends TileAbstractSM {
 		playerList.forEach(p -> this.addPotion(p, PotionInit.non_destructive, 130, 0));
 	}
 
-	public void removeDestructive (Level world) {
-		List<Player> playerList = this.getEntityList(Player.class, e -> e.isAlive() && !e.isCreative() && !e.isSpectator(), this.range * 2);
+	public void removeDestructive(Level world) {
+		List<Player> playerList = this.getEntityList(Player.class, e -> e.isAlive(), this.range * 2);
 		playerList.forEach(p -> p.removeEffect(PotionInit.non_destructive));
 	}
 
 	// ボタンクリック
-	public void clickButton (int id) {
+	public void clickButton(int id) {
 		switch (id) {
 		case 0:
 			this.setRange(Math.min(128, this.getRange() + 1));
@@ -57,12 +57,12 @@ public class TileMagicBarrier extends TileAbstractSM {
 	}
 
 	// スポーン範囲の取得
-	public int getRange () {
+	public int getRange() {
 		return this.range;
 	}
 
 	// スポーン範囲の設定
-	public void setRange (int range) {
+	public void setRange(int range) {
 		this.range = range;
 	}
 

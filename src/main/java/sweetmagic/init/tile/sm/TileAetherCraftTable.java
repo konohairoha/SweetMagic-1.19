@@ -21,6 +21,8 @@ public class TileAetherCraftTable extends TileAbstractSM {
 
 	private int sortType = 0;
 	private boolean isAscending = true;
+	public final StackHandler inputInv = new StackHandler(this.getInvSize());
+	public final StackHandler outInv = new StackHandler(1);
 
 	public TileAetherCraftTable(BlockPos pos, BlockState state) {
 		super(TileInit.aetherCraftTable, pos, state);
@@ -29,9 +31,6 @@ public class TileAetherCraftTable extends TileAbstractSM {
 	public TileAetherCraftTable(BlockEntityType<?> type, BlockPos pos, BlockState state) {
 		super(type, pos, state);
 	}
-
-	public final StackHandler inputInv = new StackHandler(this.getInvSize());
-	public final StackHandler outInv = new StackHandler(1);
 
 	// NBTの書き込み
 	@Override
@@ -65,7 +64,7 @@ public class TileAetherCraftTable extends TileAbstractSM {
 	}
 
 	// スロットのアイテムを取得
-	public  ItemStack getInputItem(int i) {
+	public ItemStack getInputItem(int i) {
 		return this.getInput().getStackInSlot(i);
 	}
 
@@ -75,7 +74,7 @@ public class TileAetherCraftTable extends TileAbstractSM {
 	}
 
 	// スロットのアイテムを取得
-	public  ItemStack getOutItem() {
+	public ItemStack getOutItem() {
 		return this.getOut().getStackInSlot(0);
 	}
 
@@ -84,27 +83,27 @@ public class TileAetherCraftTable extends TileAbstractSM {
 		return new AetherCraftTableMenu(windowId, inv, this);
 	}
 
-	public void setSortType (int sortType) {
+	public void setSortType(int sortType) {
 		this.sortType = sortType;
 	}
 
-	public int getSortType () {
+	public int getSortType() {
 		return this.sortType;
 	}
 
-	public void setAscending (boolean isAscending) {
+	public void setAscending(boolean isAscending) {
 		this.isAscending = isAscending;
 	}
 
-	public boolean getAscending () {
+	public boolean getAscending() {
 		return this.isAscending;
 	}
 
-	public int getMaxViewChest () {
+	public int getMaxViewChest() {
 		return 4;
 	}
 
-	public boolean isReader (Block block) {
+	public boolean isReader(Block block) {
 		return block.defaultBlockState().is(TagInit.CHEST_READER);
 	}
 

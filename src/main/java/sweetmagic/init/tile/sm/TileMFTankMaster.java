@@ -28,7 +28,7 @@ public class TileMFTankMaster extends TileMFTank {
 		// 精錬可能かつ必要MF以上なら
 		if (!this.hasNeedMF()) { return; }
 
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < 5; i++) {
 			if (this.canSmelt(i)) {
 				this.smeltItem(i);
 			}

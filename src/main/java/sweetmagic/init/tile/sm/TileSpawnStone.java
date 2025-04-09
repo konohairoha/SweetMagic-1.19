@@ -24,12 +24,18 @@ import sweetmagic.init.PotionInit;
 import sweetmagic.init.SoundInit;
 import sweetmagic.init.TileInit;
 import sweetmagic.init.entity.animal.AbstractSummonMob;
+import sweetmagic.init.entity.monster.ArchSpider;
 import sweetmagic.init.entity.monster.BlazeTempest;
 import sweetmagic.init.entity.monster.BlazeTempestTornado;
+import sweetmagic.init.entity.monster.BlitzWizard;
+import sweetmagic.init.entity.monster.CreeperCalamity;
 import sweetmagic.init.entity.monster.DwarfZombie;
 import sweetmagic.init.entity.monster.DwarfZombieMaster;
+import sweetmagic.init.entity.monster.ElectricCube;
+import sweetmagic.init.entity.monster.ElectricGolem;
 import sweetmagic.init.entity.monster.EnderMage;
 import sweetmagic.init.entity.monster.EnderShadow;
+import sweetmagic.init.entity.monster.PhantomWolf;
 import sweetmagic.init.entity.monster.SkullFlame;
 import sweetmagic.init.entity.monster.SkullFlameArcher;
 import sweetmagic.init.entity.monster.SkullFrost;
@@ -60,13 +66,13 @@ public class TileSpawnStone extends TileAbstractSM {
 		super.serverTick(world, pos, state);
 		if (this.tickTime % 10 != 0 || this.isPeaceful(world)) { return; }
 
-		List<Player> playerList = this.getEntityListHalf(Player.class, e -> e.isAlive() && !e.isCreative() && !e.isSpectator(), this.getRange() * 2);
+		List<Player> playerList = this.getEntityListUp(Player.class, e -> e.isAlive() && !e.isCreative() && !e.isSpectator(), this.getRange());
 		if (playerList.isEmpty()) { return; }
 
 		this.spawnMob(world, pos, this.getMobLevel());
 	}
 
-	public void spawnMob (Level world, BlockPos pos, int data) {
+	public void spawnMob(Level world, BlockPos pos, int data) {
 
 		int count = 0;
 		Random rand = this.rand;
@@ -80,7 +86,7 @@ public class TileSpawnStone extends TileAbstractSM {
 		int spawnMobType = this.getMobType();
 
 		if (spawnMobType == -1) {
-			spawnMobType = rand.nextInt(6);
+			spawnMobType = rand.nextInt(9);
 		}
 
 		int summonSize = 4;
@@ -122,7 +128,7 @@ public class TileSpawnStone extends TileAbstractSM {
 
 
 	// 雑魚モブの設定
-	public LivingEntity setMob (Level world, int spawnMobType, int mobLevel, float addHealth) {
+	public LivingEntity setMob(Level world, int spawnMobType, int mobLevel, float addHealth) {
 
 		LivingEntity entity = null;
 
@@ -146,6 +152,17 @@ public class TileSpawnStone extends TileAbstractSM {
 			entity = new WindWitch(world);
 			this.addPotion(entity, MobEffects.WEAKNESS, 99999, 0);
 			break;
+		case 6:
+			entity = new ElectricCube(world);
+			( (ElectricCube) entity).setSize(2);
+			this.addPotion(entity, PotionInit.leader_flag, 99999, 0);
+			break;
+		case 7:
+			entity = new ArchSpider(world);
+			break;
+		case 8:
+			entity = new CreeperCalamity(world);
+			break;
 		default:
 			entity = new SkullFrost(world);
 			entity.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.BOW));
@@ -159,7 +176,7 @@ public class TileSpawnStone extends TileAbstractSM {
 	}
 
 	// 雑魚モブの設定
-	public LivingEntity setBigMob (Level world, int spawnMobType, int mobLevel, float addHealth) {
+	public LivingEntity setBigMob(Level world, int spawnMobType, int mobLevel, float addHealth) {
 
 		LivingEntity entity = null;
 
@@ -181,9 +198,18 @@ public class TileSpawnStone extends TileAbstractSM {
 			entity = new DwarfZombieMaster(world);
 			entity.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ItemInit.alt_sword));
 			break;
-		case 6:
+		case 5:
 			entity = new WindWitch(world);
 			this.addPotion(entity, MobEffects.DAMAGE_BOOST, 99999, 1);
+			break;
+		case 6:
+			entity = new ElectricGolem(world);
+			break;
+		case 7:
+			entity = new PhantomWolf(world);
+			break;
+		case 8:
+			entity = new BlitzWizard(world);
 			break;
 		default:
 			entity = new SkullFrostRoyalGuard(world);
@@ -200,7 +226,7 @@ public class TileSpawnStone extends TileAbstractSM {
 	}
 
 	// モブの名前を取得
-	public String getEntityName () {
+	public String getEntityName() {
 
 		String text = "random";
 
@@ -220,6 +246,18 @@ public class TileSpawnStone extends TileAbstractSM {
 		case 4:
 			text = "dwarfzombie_master";
 			break;
+		case 5:
+			text = "windwitch";
+			break;
+		case 6:
+			text = "electricgolem";
+			break;
+		case 7:
+			text = "phantomwolf";
+			break;
+		case 8:
+			text = "blitz_wizard";
+			break;
 		}
 
 		return Component.translatable("entity.sweetmagic." + text).getString();
@@ -236,7 +274,7 @@ public class TileSpawnStone extends TileAbstractSM {
 	}
 
 	// ボタンクリック
-	public void clickButton (int id) {
+	public void clickButton(int id) {
 		switch (id) {
 		case 0:
 			this.setRange(Math.min(16, this.getRange() + 1));
@@ -251,7 +289,7 @@ public class TileSpawnStone extends TileAbstractSM {
 			this.setMobLevel(Math.max(1, this.getMobLevel() - 1));
 			break;
 		case 4:
-			this.setMobType(Math.min(4, this.getMobType() + 1));
+			this.setMobType(Math.min(8, this.getMobType() + 1));
 			break;
 		case 5:
 			this.setMobType(Math.max(-1, this.getMobType() - 1));
@@ -285,32 +323,32 @@ public class TileSpawnStone extends TileAbstractSM {
 	}
 
 	// スポーン範囲の取得
-	public int getRange () {
+	public int getRange() {
 		return this.range;
 	}
 
 	// スポーン範囲の設定
-	public void setRange (int range) {
+	public void setRange(int range) {
 		this.range = range;
 	}
 
 	// モブレベルの取得
-	public int getMobLevel () {
+	public int getMobLevel() {
 		return this.mobLevel;
 	}
 
 	// モブレベルの設定
-	public void setMobLevel (int level) {
+	public void setMobLevel(int level) {
 		this.mobLevel = level;
 	}
 
 	// モブ種類の取得
-	public int getMobType () {
+	public int getMobType() {
 		return this.mobType;
 	}
 
 	// モブ種類の設定
-	public void setMobType (int mobType) {
+	public void setMobType(int mobType) {
 		this.mobType = mobType;
 	}
 

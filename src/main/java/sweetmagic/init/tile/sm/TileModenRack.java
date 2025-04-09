@@ -18,6 +18,8 @@ import sweetmagic.init.tile.menu.ModenRackMenu;
 
 public class TileModenRack extends TileAbstractSM {
 
+	protected final StackHandler inputInv = new StackHandler(this.getInvSize(), true);
+
 	public TileModenRack(BlockPos pos, BlockState state) {
 		super(TileInit.modenRack, pos, state);
 	}
@@ -26,8 +28,6 @@ public class TileModenRack extends TileAbstractSM {
 		super(type, pos, state);
 		this.resolver = new SingleHandlerProvider(this.inputInv, IN_OUT);
 	}
-
-	protected final StackHandler inputInv = new StackHandler(this.getInvSize(), true);
 
 	// NBTの書き込み
 	@Override
@@ -45,7 +45,7 @@ public class TileModenRack extends TileAbstractSM {
 
 	// インベントリサイズの取得
 	@Override
-	public int getInvSize () {
+	public int getInvSize() {
 		return 18;
 	}
 
@@ -55,7 +55,7 @@ public class TileModenRack extends TileAbstractSM {
 	}
 
 	// スロットのアイテムを取得
-	public  ItemStack getInputItem(int i) {
+	public ItemStack getInputItem(int i) {
 		return this.getInput().getStackInSlot(i);
 	}
 
@@ -69,7 +69,7 @@ public class TileModenRack extends TileAbstractSM {
 		return this.getInputList().isEmpty();
 	}
 
-	public List<ItemStack> getInputList () {
+	public List<ItemStack> getInputList() {
 		List<ItemStack> stackList = new ArrayList<>();
 
 		for (int i = 0; i < this.getInvSize(); i++) {
@@ -79,7 +79,7 @@ public class TileModenRack extends TileAbstractSM {
 		return stackList;
 	}
 
-	public int getData () {
+	public int getData() {
 		return ( (ModenRack) this.getBlock(this.getBlockPos()) ).data;
 	}
 }

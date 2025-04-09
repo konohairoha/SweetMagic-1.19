@@ -24,14 +24,15 @@ import sweetmagic.recipe.tank.TankRecipe;
 
 public class TileMFTank extends TileSMMagic {
 
-	public int maxMagiaFlux = 100000;				// 最大MF量を設定
-	public boolean isReceive = true;				// 受け取る側かどうか
+	public int maxMagiaFlux = 100000;
 	public int viewMFInsert = 0;
 	public int viewMFExtract = 0;
 	public int newMFInsert = 0;
 	public int newMFExtract = 0;
 	public int oldMFInsert = 0;
 	public int oldMFExtract = 0;
+	protected final StackHandler inputInv = new StackHandler(this.getInvSize());
+	protected final StackHandler outputInv = new StackHandler(this.getSubInvSize());
 
 	public TileMFTank(BlockPos pos, BlockState state) {
 		this(TileInit.tank, pos, state);
@@ -41,9 +42,6 @@ public class TileMFTank extends TileSMMagic {
 		super(type, pos, state);
 		this.resolver = new InOutHandlerProvider(this.inputInv, this.outputInv);
 	}
-
-	protected final StackHandler inputInv = new StackHandler(this.getInvSize());
-	protected final StackHandler outputInv = new StackHandler(this.getSubInvSize());
 
 	// サーバー側処理
 	@Override
@@ -64,7 +62,7 @@ public class TileMFTank extends TileSMMagic {
 		}
 	}
 
-	public void smeltAction () {
+	public void smeltAction() {
 
 		// 精錬可能かつ必要MF以上なら
 		if (this.hasNeedMF() && this.canSmelt(0)) {
@@ -74,11 +72,8 @@ public class TileMFTank extends TileSMMagic {
 
 	// 精錬可能か銅か
 	public boolean canSmelt(int index) {
-
 		ItemStack toSmelt = this.getInputItem(index);
 		if (toSmelt.isEmpty()) { return false; }
-
-		// レシピを取得して見つからなければ終了
 		return !TankRecipe.getRecipe(this.level, Arrays.<ItemStack> asList(toSmelt)).isEmpty();
 	}
 
@@ -110,13 +105,12 @@ public class TileMFTank extends TileSMMagic {
 	}
 
 	// 必要MF
-	public int getNeedMF (ItemStack stack) {
+	public int getNeedMF(ItemStack stack) {
 		return SweetMagicAPI.getMF(stack);
 	}
 
 	// MF最大時のインサート処理
 	public void maxMFInsert(ITileMF tran) {
-
 		BlockEntity tile = this.getTile(this.getBlockPos().above());
 		if ( !(tile instanceof TileMFTank mfTile)) { return; }
 
@@ -124,8 +118,7 @@ public class TileMFTank extends TileSMMagic {
 	}
 
 	// タンク下のタンクにMFを入れる
-	public void underInsertMF (BlockPos pos) {
-
+	public void underInsertMF(BlockPos pos) {
 		BlockEntity tile = this.getTile(pos.below());
 		if ( !(tile instanceof TileMFTank mfTile)) { return; }
 
@@ -136,7 +129,6 @@ public class TileMFTank extends TileSMMagic {
 
 	// MF受信時のインサート処理
 	public void recipedMFInsert() {
-
 		BlockEntity tile = this.getTile(this.getBlockPos().below());
 		if ( !(tile instanceof TileMFTank mfTile)) { return; }
 
@@ -170,7 +162,6 @@ public class TileMFTank extends TileSMMagic {
 	}
 
 	public void setMF(int mf) {
-
 		int oldMF = this.getMF();
 		super.setMF(mf);
 		int newMF = this.getMF();
@@ -187,29 +178,23 @@ public class TileMFTank extends TileSMMagic {
 
 	// 最大MFの取得
 	@Override
-	public int getMaxMF () {
+	public int getMaxMF() {
 		return this.maxMagiaFlux;
 	}
 
 	// 受信するMF量の取得
 	@Override
-	public int getReceiveMF () {
+	public int getReceiveMF() {
 		return 10000;
-	}
-
-	// 受信側かどうかの取得
-	@Override
-	public boolean getReceive () {
-		return this.isReceive;
 	}
 
 	// インベントリサイズの取得
 	@Override
-	public int getInvSize () {
+	public int getInvSize() {
 		return 1;
 	}
 
-	public int getSubInvSize () {
+	public int getSubInvSize() {
 		return 3;
 	}
 
@@ -219,7 +204,7 @@ public class TileMFTank extends TileSMMagic {
 	}
 
 	// 入力スロットのアイテムを取得
-	public  ItemStack getInputItem(int i) {
+	public ItemStack getInputItem(int i) {
 		return this.getInput().getStackInSlot(i);
 	}
 
@@ -229,12 +214,12 @@ public class TileMFTank extends TileSMMagic {
 	}
 
 	// 出力スロットのアイテムを取得
-	public  ItemStack getOutItem(int i) {
+	public ItemStack getOutItem(int i) {
 		return this.getOut().getStackInSlot(i);
 	}
 
 	// 消費MF量の取得
-	public int getShrinkMF () {
+	public int getShrinkMF() {
 		return 1000;
 	}
 
@@ -244,7 +229,7 @@ public class TileMFTank extends TileSMMagic {
 	}
 
 	// インベントリのアイテムを取得
-	public List<ItemStack> getInvList () {
+	public List<ItemStack> getInvList() {
 		List<ItemStack> stackList = new ArrayList<>();
 
 		for (int i = 0; i < this.getInvSize(); i++) {

@@ -16,7 +16,6 @@ import sweetmagic.init.ParticleInit;
 public abstract class TileSMMagic extends TileAbstractSM implements ITileMF {
 
 	public int magiaFlux = 0;						// 所有しているMF
-	public int maxMagiaFlux = 10000;				// 最大MF量を設定
 	public boolean isReceive = true;				// 受け取る側かどうか
 	public Set<BlockPos> posList = new HashSet<>();	// MFブロックを保存するリスト
 	public String POST = "pos";
@@ -62,8 +61,7 @@ public abstract class TileSMMagic extends TileAbstractSM implements ITileMF {
 				float xSpeed = pX * 0.1175F;
 				float ySpeed = pY * 0.1175F;
 				float zSpeed = pZ * 0.1175F;
-
-				world.addParticle(ParticleInit.NORMAL.get(), x, y, z, xSpeed, ySpeed, zSpeed);
+				world.addParticle(ParticleInit.NORMAL, x, y, z, xSpeed, ySpeed, zSpeed);
 			}
 		}
 	}
@@ -84,12 +82,12 @@ public abstract class TileSMMagic extends TileAbstractSM implements ITileMF {
 	}
 
 	// 座標の取得
-	public BlockPos getTilePos () {
+	public BlockPos getTilePos() {
 		return this.getBlockPos();
 	}
 
 	// worldの取得
-	public Level getTileWorld () {
+	public Level getTileWorld() {
 		return this.getLevel();
 	}
 
@@ -104,12 +102,12 @@ public abstract class TileSMMagic extends TileAbstractSM implements ITileMF {
 	}
 
 	// 受信側かどうかの取得
-	public boolean getReceive () {
+	public boolean getReceive() {
 		return this.isReceive;
 	}
 
 	// MFの取得
-	public int getMF () {
+	public int getMF() {
 		return this.magiaFlux;
 	}
 
@@ -118,12 +116,7 @@ public abstract class TileSMMagic extends TileAbstractSM implements ITileMF {
 		this.magiaFlux = mf;
 	}
 
-	// 最大MFの取得
-	public int getMaxMF () {
-		return this.maxMagiaFlux;
-	}
-
-	public String getMFPercent () {
+	public String getMFPercent() {
 		return String.format("%.1f", ((float) this.getMF() / (float) this.getMaxMF()) * 100F) + "%";
 	}
 
@@ -140,7 +133,7 @@ public abstract class TileSMMagic extends TileAbstractSM implements ITileMF {
 		this.saveNBT(tag);
 	}
 
-	public void saveNBT (CompoundTag tags) { }
+	public void saveNBT(CompoundTag tags) { }
 
 	// NBTの読み込み
 	@Override
@@ -151,7 +144,7 @@ public abstract class TileSMMagic extends TileAbstractSM implements ITileMF {
 		this.loadNBT(tag);
 	}
 
-	public void loadNBT (CompoundTag tags) { }
+	public void loadNBT(CompoundTag tags) { }
 
 	public abstract IItemHandler getInput();
 

@@ -18,6 +18,8 @@ import sweetmagic.init.tile.menu.PlateMenu;
 
 public class TilePlate extends TileAbstractSM {
 
+	protected final StackHandler inputInv = new StackHandler(this.getInvSize(), true);
+
 	public TilePlate(BlockPos pos, BlockState state) {
 		this(TileInit.plate, pos, state);
 	}
@@ -26,8 +28,6 @@ public class TilePlate extends TileAbstractSM {
 		super(type, pos, state);
 		this.resolver = new SingleHandlerProvider(this.inputInv, IN_OUT);
 	}
-
-	protected final StackHandler inputInv = new StackHandler(this.getInvSize(), true);
 
 	// NBTの書き込み
 	@Override
@@ -45,7 +45,7 @@ public class TilePlate extends TileAbstractSM {
 
 	// インベントリサイズの取得
 	@Override
-	public int getInvSize () {
+	public int getInvSize() {
 		return 1;
 	}
 
@@ -55,7 +55,7 @@ public class TilePlate extends TileAbstractSM {
 	}
 
 	// スロットのアイテムを取得
-	public  ItemStack getInputItem(int i) {
+	public ItemStack getInputItem(int i) {
 		return this.getInput().getStackInSlot(i);
 	}
 
@@ -64,7 +64,7 @@ public class TilePlate extends TileAbstractSM {
 		return this.getInputList().isEmpty();
 	}
 
-	public List<ItemStack> getInputList () {
+	public List<ItemStack> getInputList() {
 		List<ItemStack> stackList = new ArrayList<>();
 
 		for (int i = 0; i < this.getInvSize(); i++) {
@@ -74,8 +74,8 @@ public class TilePlate extends TileAbstractSM {
 		return stackList;
 	}
 
-	public int getData () {
-		return ( (Plate) this.getBlock(this.getBlockPos()) ).getData();
+	public int getData() {
+		return ((Plate) this.getBlock(this.getBlockPos())).getData();
 	}
 
 	@Override

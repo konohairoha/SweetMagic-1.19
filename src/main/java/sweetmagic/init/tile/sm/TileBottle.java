@@ -38,6 +38,7 @@ public class TileBottle extends TileAbstractSMCook {
 		if (this.tickTime % 10 != 0) { return; }
 
 		this.tickTime = 0;
+		setChanged();
 
 		// クラフト中以外なら終了
 		if (!this.isCraft) { return; }
@@ -75,7 +76,7 @@ public class TileBottle extends TileAbstractSMCook {
 		double x = (double) pos.getX() + 0.8D - this.rand.nextDouble() * 0.6D;
 		double y = pos.getY() + 0.9D + this.rand.nextDouble() * 0.15D;
 		double z = (double) pos.getZ() + 0.8D - this.rand.nextDouble() * 0.6D;
-	     world.addAlwaysVisibleParticle(ParticleTypes.POOF, true, x, y, z, 0D, 0D, 0D);
+		world.addAlwaysVisibleParticle(ParticleTypes.POOF, true, x, y, z, 0D, 0D, 0D);
 	}
 
 	// レシピチェック
@@ -89,6 +90,10 @@ public class TileBottle extends TileAbstractSMCook {
 		this.setState(1);
 		this.sendPKT();
 		this.playSound(this.getBlockPos(), SoundEvents.ITEM_PICKUP, 1F, 1F);
+
+		if (this.player != null) {
+			this.resultList = this.setCookQuality(this.player, this.resultList, this.amount);
+		}
 	}
 
 	// クラフトの完成
@@ -136,6 +141,10 @@ public class TileBottle extends TileAbstractSMCook {
 	// 料理中か
 	public boolean isCook() {
 		return this.isCraft;
+	}
+
+	public List<ItemStack> getCraftList() {
+		return this.craftList;
 	}
 
 	// NBTの書き込み

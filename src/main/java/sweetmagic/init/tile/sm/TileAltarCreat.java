@@ -15,7 +15,7 @@ import sweetmagic.init.TileInit;
 
 public class TileAltarCreat extends TilePedalCreate {
 
-	public int maxMagiaFlux = 200000;				// 最大MF量を設定
+	public int maxMagiaFlux = 200000;
 	public boolean isRangeBlock = false;
 
 	public TileAltarCreat(BlockPos pos, BlockState state) {
@@ -40,17 +40,17 @@ public class TileAltarCreat extends TilePedalCreate {
 	}
 
 	// クラフト可能か
-	public MutableComponent checkCanCraft (List<ItemStack> stackList) {
+	public MutableComponent checkCanCraft(List<ItemStack> stackList) {
 
 		// 必要なブロックがない場合
 		if (!this.checkRangeBlock(false)) {
-			return this.getTipArray(this.getText("pedastal_norangeblock"), ":", this.getRangeBlock(false).getName().withStyle(RED));
+			return this.getTipArray(this.getText("pedastal_norangeblock"), ":", this.getRangeBlock().getName().withStyle(RED));
 		}
 
 		return super.checkCanCraft(stackList);
 	}
 
-	public boolean checkRangeBlock (boolean isClient) {
+	public boolean checkRangeBlock(boolean isClient) {
 
 		BlockPos pos = this.getBlockPos().below();
 
@@ -66,23 +66,23 @@ public class TileAltarCreat extends TilePedalCreate {
 		return true;
 	}
 
-	public Block getNeedBlock (boolean isClient) {
-		return isClient ? BlockInit.divinecrystal_block_alpha : BlockInit.divinecrystal_block;
+	public Block getNeedBlock() {
+		return BlockInit.divinecrystal_block;
 	}
 
-	public Block getRangeBlock  (boolean isClient) {
-		return isClient ? BlockInit.aethercrystal_block_alpha : BlockInit.aethercrystal_block;
+	public Block getRangeBlock() {
+		return BlockInit.aethercrystal_block;
 	}
 
 	// 最大MFの取得
 	@Override
-	public int getMaxMF () {
+	public int getMaxMF() {
 		return this.maxMagiaFlux;
 	}
 
 	// 受信するMF量の取得
 	@Override
-	public int getReceiveMF () {
+	public int getReceiveMF() {
 		return 40000;
 	}
 }

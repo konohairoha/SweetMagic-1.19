@@ -25,7 +25,6 @@ public class TileMill extends TileAbstractSMCook {
 	public List<Float> chanceList = new ArrayList<>();
 	public List<ItemStack> craftList = new ArrayList<>();
 	public List<ItemStack> resultList = new ArrayList<>();
-
 	protected final StackHandler handInv = new StackHandler(1);
 	protected final StackHandler outputInv = new StackHandler(this.getInvSize());
 
@@ -90,12 +89,12 @@ public class TileMill extends TileAbstractSMCook {
 	}
 
 	// 素材の取得
-	public List<ItemStack> getStackList () {
+	public List<ItemStack> getStackList() {
 		return Arrays.<ItemStack> asList(this.getHandItem());
 	}
 
 	// ドロップリストを取得
-	public List<ItemStack> getDropList () {
+	public List<ItemStack> getDropList() {
 
 		List<ItemStack> stackList = new ArrayList<>();
 		this.addStackList(stackList, this.getHandItem());
@@ -114,12 +113,12 @@ public class TileMill extends TileAbstractSMCook {
 	}
 
 	// レシピチェック
-	public boolean checkRecipe () {
+	public boolean checkRecipe() {
 		return !MillRecipe.getRecipe(this.level, this.getStackList()).isEmpty();
 	}
 
 	// 作成開始
-	public void craftStart () {
+	public void craftStart() {
 
 		// レシピを取得
 		List<ItemStack> stackList = this.getStackList();
@@ -159,7 +158,7 @@ public class TileMill extends TileAbstractSMCook {
 	}
 
 	// クラフトの完成
-	public void craftFinish () {
+	public void craftFinish() {
 
 		// リザルト分回す
 		for (int i = 0; i < this.resultList.size(); i++) {
@@ -184,7 +183,7 @@ public class TileMill extends TileAbstractSMCook {
 	}
 
 	// 初期化
-	public void clearInfo () {
+	public void clearInfo() {
 		this.amount = 0;
 		this.craftTime = 0;
 		this.isCraft = false;
@@ -195,7 +194,7 @@ public class TileMill extends TileAbstractSMCook {
 	}
 
 	// 出力スロットが空か
-	public boolean isOutputEmpty () {
+	public boolean isOutputEmpty() {
 		for (int i = 0; i < this.getInvSize(); i++) {
 			if (!this.getOutputItem(i).isEmpty()) { return false; }
 		}
@@ -203,7 +202,7 @@ public class TileMill extends TileAbstractSMCook {
 	}
 
 	// 出力アイテムリスト
-	public List<ItemStack> getOutPutList () {
+	public List<ItemStack> getOutPutList() {
 		List<ItemStack> stackList = new ArrayList<>();
 
 		for (int i = 0; i < this.getInvSize(); i++) {
@@ -218,11 +217,8 @@ public class TileMill extends TileAbstractSMCook {
 	}
 
 	// 出力アイテムの消費
-	public void outPutClear () {
-		List<ItemStack> stackList = this.getOutPutList();
-		for (ItemStack stack : stackList) {
-			stack.shrink(stack.getCount());
-		}
+	public void outPutClear() {
+		this.getOutPutList().forEach(s -> s.shrink(s.getCount()));
 	}
 
 	// 最大料理時間の取得
@@ -243,6 +239,10 @@ public class TileMill extends TileAbstractSMCook {
 	// 料理中か
 	public boolean isCook() {
 		return this.isCraft;
+	}
+
+	public List<ItemStack> getCraftList() {
+		return this.craftList;
 	}
 
 	// NBTの書き込み
@@ -275,7 +275,7 @@ public class TileMill extends TileAbstractSMCook {
 
 	// インベントリサイズの取得
 	@Override
-	public int getInvSize () {
+	public int getInvSize() {
 		return 4;
 	}
 
@@ -285,7 +285,7 @@ public class TileMill extends TileAbstractSMCook {
 	}
 
 	// メインスロットのアイテムを取得
-	public  ItemStack getHandItem() {
+	public ItemStack getHandItem() {
 		return this.getHand().getStackInSlot(0);
 	}
 
@@ -295,7 +295,7 @@ public class TileMill extends TileAbstractSMCook {
 	}
 
 	// 出力のアイテムを取得
-	public  ItemStack getOutputItem(int i) {
+	public ItemStack getOutputItem(int i) {
 		return this.getOutput().getStackInSlot(i);
 	}
 }

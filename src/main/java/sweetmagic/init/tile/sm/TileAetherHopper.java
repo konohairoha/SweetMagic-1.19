@@ -22,8 +22,7 @@ import sweetmagic.init.tile.menu.AetherHopperMenu;
 
 public class TileAetherHopper extends TileSMMagic {
 
-	public int maxMagiaFlux = 20000;				// 最大MF量を設定
-
+	public int maxMagiaFlux = 20000;
 	public final StackHandler inputInv = new StackHandler(this.getInvSize());
 	protected final StackHandler wandInv = new StackHandler(this.getInvSize());
 
@@ -79,8 +78,7 @@ public class TileAetherHopper extends TileSMMagic {
 	}
 
 	// アイテム吸い込み
-	public void suctionItem (BlockPos pos) {
-
+	public void suctionItem(BlockPos pos) {
 		Direction face = this.getFace() == Direction.UP ? Direction.DOWN : Direction.UP;
 		BlockEntity tile = this.getTile(pos.relative(face));
 		if (tile == null) { return; }
@@ -99,7 +97,7 @@ public class TileAetherHopper extends TileSMMagic {
 	}
 
 	// 別のホッパーへ送り付ける
-	public void setHopperItem (Level world, BlockPos pos) {
+	public void setHopperItem(Level world, BlockPos pos) {
 		ItemStack stack = this.getWandItem();
 		if (stack.isEmpty()) { return; }
 
@@ -149,13 +147,13 @@ public class TileAetherHopper extends TileSMMagic {
 
 	// インベントリサイズの取得
 	@Override
-	public int getInvSize () {
+	public int getInvSize() {
 		return 24;
 	}
 
 	// 最大MFの取得
 	@Override
-	public int getMaxMF () {
+	public int getMaxMF() {
 		return this.maxMagiaFlux;
 	}
 
@@ -165,7 +163,7 @@ public class TileAetherHopper extends TileSMMagic {
 	}
 
 	// 杖スロットのアイテムを取得
-	public  ItemStack getInputItem(int i) {
+	public ItemStack getInputItem(int i) {
 		return this.getInput().getStackInSlot(i);
 	}
 
@@ -175,7 +173,7 @@ public class TileAetherHopper extends TileSMMagic {
 	}
 
 	// 杖スロットのアイテムを取得
-	public  ItemStack getWandItem() {
+	public ItemStack getWandItem() {
 		return this.getWand().getStackInSlot(0);
 	}
 

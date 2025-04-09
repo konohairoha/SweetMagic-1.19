@@ -95,4 +95,8 @@ public class TileMagicianLecternWind extends TileAbstractMagicianLectern {
 	public int getBattleLevel () {
 		return 4;
 	}
+
+	public int getMaxMF() {
+		return 0;
+	}
 }

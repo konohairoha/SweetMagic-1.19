@@ -17,6 +17,8 @@ import sweetmagic.init.block.sm.WandPedastal;
 
 public class TileWandPedastal extends TileAbstractSM {
 
+	protected final StackHandler inputInv = new StackHandler(this.getInvSize());
+
 	public TileWandPedastal(BlockPos pos, BlockState state) {
 		this(TileInit.wandPedastal, pos, state);
 	}
@@ -25,8 +27,6 @@ public class TileWandPedastal extends TileAbstractSM {
 		super(type, pos, state);
 		this.resolver = new SingleHandlerProvider(this.inputInv, IN_OUT);
 	}
-
-	protected final StackHandler inputInv = new StackHandler(this.getInvSize());
 
 	// NBTの書き込み
 	@Override
@@ -44,7 +44,7 @@ public class TileWandPedastal extends TileAbstractSM {
 
 	// インベントリサイズの取得
 	@Override
-	public int getInvSize () {
+	public int getInvSize() {
 		return 1;
 	}
 
@@ -54,7 +54,7 @@ public class TileWandPedastal extends TileAbstractSM {
 	}
 
 	// スロットのアイテムを取得
-	public  ItemStack getInputItem(int i) {
+	public ItemStack getInputItem(int i) {
 		return this.getInput().getStackInSlot(i);
 	}
 
@@ -68,7 +68,7 @@ public class TileWandPedastal extends TileAbstractSM {
 		return this.getInputList().isEmpty();
 	}
 
-	public List<ItemStack> getInputList () {
+	public List<ItemStack> getInputList() {
 		List<ItemStack> stackList = new ArrayList<>();
 
 		for (int i = 0; i < this.getInvSize(); i++) {
@@ -78,7 +78,7 @@ public class TileWandPedastal extends TileAbstractSM {
 		return stackList;
 	}
 
-	public int getData () {
-		return ( (WandPedastal) this.getBlock(this.getBlockPos()) ).data;
+	public int getData() {
+		return ((WandPedastal) this.getBlock(this.getBlockPos())).data;
 	}
 }

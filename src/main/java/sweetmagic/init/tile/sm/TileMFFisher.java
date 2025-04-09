@@ -37,17 +37,17 @@ import sweetmagic.init.tile.menu.MFFisherMenu;
 
 public class TileMFFisher extends TileSMMagic {
 
-	public int maxMagiaFlux = 10000;				// 最大MF量を設定
-	public int maxCraftTime = 0;
 	public int craftTime = 0;
+	public int maxCraftTime = 0;
+	public int maxMagiaFlux = 10000;
 	public static final ItemStack FISHING_ROD = new ItemStack(Items.FISHING_ROD);
 	public static final ItemStack MACHETE = new ItemStack(ItemInit.machete);
 	public static final ItemStack MILK_PACK = new ItemStack(ItemInit.milk_pack);
 	public static final ItemStack AETHER_CRYSTAL = new ItemStack(ItemInit.aether_crystal);
 	public static final ItemStack DIVINE_CRYSTAL = new ItemStack(ItemInit.divine_crystal);
 	public static final ItemStack ALT_PICK = new ItemStack(ItemInit.alt_pick);
-
-	protected final StackHandler inputInv = new StackHandler(this.getInvSize());
+	public static final ItemStack EGG_BAG = new ItemStack(ItemInit.egg_bag);
+	protected final StackHandler inputInv = new MagiaHandler(this.getInvSize());
 
 	public TileMFFisher(BlockPos pos, BlockState state) {
 		this(TileInit.mfFisher, pos, state);
@@ -106,18 +106,18 @@ public class TileMFFisher extends TileSMMagic {
 				float ySpeed = -(pY * 0.025F - 0.065F);
 				float zSpeed = pZ * 0.1175F;
 
-				this.level.addParticle(ParticleInit.NORMAL.get(), x, y, z, xSpeed, ySpeed, zSpeed);
+				this.level.addParticle(ParticleInit.NORMAL, x, y, z, xSpeed, ySpeed, zSpeed);
 			}
 		}
 	}
 
-	public void craftFinish (Level world, BlockPos pos) {
+	public void craftFinish(Level world, BlockPos pos) {
 
 		boolean isCraft = false;
 		int useMF = this.getNeedMF();
 		int data = this.getData();
 
-		if (data == 2 && this.getMF() < useMF) {
+		if ((data == 2 || data == 5 || data == 6) && this.getMF() < useMF) {
 			isCraft = true;
 			useMF = 0;
 		}
@@ -135,10 +135,7 @@ public class TileMFFisher extends TileSMMagic {
 			if (!out.isEmpty()) { return; }
 		}
 
-		for (ItemStack stack : stackList) {
-			ItemHandlerHelper.insertItemStacked(this.getInput(), stack.copy(), false);
-		}
-
+		stackList.forEach(s -> ItemHandlerHelper.insertItemStacked(this.getInput(), s.copy(), false));
 		this.setMF(this.getMF() - useMF);
 		this.playSound(this.getBlockPos(), this.getSound(), 0.1F, 1F);
 		this.craftTime = 0;
@@ -150,7 +147,7 @@ public class TileMFFisher extends TileSMMagic {
 		}
 	}
 
-	public List<ItemStack> getDropList (Level world, BlockPos pos) {
+	public List<ItemStack> getDropList(Level world, BlockPos pos) {
 
 		RandomSource rand = this.level.random;
 		List<ItemStack> stackList = new ArrayList<>();
@@ -212,43 +209,47 @@ public class TileMFFisher extends TileSMMagic {
 			int rate = this.getMF() >= this.getNeedMF() ? 2 : 1;
 			stackList.add(new ItemStack(Blocks.COBBLESTONE, (this.rand.nextInt(5) + 2) * rate));
 			break;
+		case 6:
+			stackList.add(new ItemStack(Items.EGG, this.rand.nextInt(10) + 6));
+			break;
 		}
 
 		return stackList;
 	}
 
-	public void renderParicle (Level world, BlockPos pos, int data) {
-		if ( !(world instanceof ServerLevel sever) ) { return; }
+	public void renderParicle(Level world, BlockPos pos, int data) {
+		if (!(world instanceof ServerLevel sever)) { return; }
 
-		ParticleOptions par = data == 3 ? ParticleInit.AETHER.get() : ParticleInit.DIVINE.get();
+		ParticleOptions par = data == 3 ? ParticleInit.AETHER : ParticleInit.DIVINE;
 
 		for (int i = 0; i < 5; i++) {
 			float x = (float) (pos.getX() + 0.25F + this.rand.nextFloat() * 0.5F);
-			float y = (float) (pos.getY() + 1F  + this.rand.nextFloat() * 0.25F);
+			float y = (float) (pos.getY() + 1F + this.rand.nextFloat() * 0.25F);
 			float z = (float) (pos.getZ() + 0.25F + this.rand.nextFloat() * 0.5F);
 			sever.sendParticles(par, x, y, z, 0, 0F, -0.125F, 0F, 1F);
 		}
 	}
 
-	public void setMaxCraftTime () {
+	public void setMaxCraftTime() {
 		int randTime = this.getRandTime();
 		this.maxCraftTime = this.rand.nextInt((int) (randTime * 0.5F)) + randTime;
 		this.sendPKT();
 	}
 
-	public int getRandTime () {
+	public int getRandTime() {
 		switch(this.getData()) {
 		case 2:  return this.getMF() >= this.getNeedMF() ? 14 : 134;
 		case 3:  return 80;
 		case 4:  return 120;
 		case 5:  return this.getMF() >= this.getNeedMF() ? 20 : 80;
+		case 6:  return this.getMF() >= this.getNeedMF() ? 14 : 134;
 		default: return 20;
 		}
 	}
 
-	public int getNeedMF () {
+	public int getNeedMF() {
 		switch(this.getData()) {
-		case 2:  return 100;
+		case 2: return 100;
 		case 3:
 			int mf = SweetMagicAPI.getMF(AETHER_CRYSTAL);
 			int needMF = Math.max(mf, Math.min(this.getMF() / mf, 8) * mf);
@@ -257,15 +258,17 @@ public class TileMFFisher extends TileSMMagic {
 			int mfDiv = SweetMagicAPI.getMF(DIVINE_CRYSTAL);
 			int needMFDiv = Math.max(mfDiv, Math.min(this.getMF() / mfDiv, 8) * mfDiv);
 			return needMFDiv;
+		case 6: return 100;
 		default: return 300;
 		}
 	}
 
-	public boolean canCraft () {
-		return this.getData() == 2 || this.getMF() >= this.getNeedMF();
+	public boolean canCraft() {
+		int data = this.getData();
+		return data == 2 || data == 5 || data == 6 || this.getMF() >= this.getNeedMF();
 	}
 
-	public SoundEvent getSound () {
+	public SoundEvent getSound() {
 		switch(this.getData()) {
 		case 0:  return SoundEvents.FISHING_BOBBER_SPLASH;
 		case 1:  return SoundEvents.SHEEP_SHEAR;
@@ -273,19 +276,20 @@ public class TileMFFisher extends TileSMMagic {
 		case 3:  return SoundEvents.AMETHYST_BLOCK_BREAK;
 		case 4:  return SoundEvents.AMETHYST_BLOCK_BREAK;
 		case 5:  return SoundEvents.STONE_BREAK;
+		case 6:  return SoundEvents.CHICKEN_EGG;
 		default: return SoundEvents.COW_MILK;
 		}
 	}
 
 	// インベントリサイズの取得
 	@Override
-	public int getInvSize () {
+	public int getInvSize() {
 		return 27;
 	}
 
 	// 最大MFの取得
 	@Override
-	public int getMaxMF () {
+	public int getMaxMF() {
 		switch(this.getData()) {
 		case 3: return 40000;
 		case 4: return 400000;
@@ -295,7 +299,7 @@ public class TileMFFisher extends TileSMMagic {
 
 	// 受信するMF量の取得
 	@Override
-	public int getReceiveMF () {
+	public int getReceiveMF() {
 		switch(this.getData()) {
 		case 3: return 10000;
 		case 4: return 50000;
@@ -309,7 +313,7 @@ public class TileMFFisher extends TileSMMagic {
 	}
 
 	// 杖スロットのアイテムを取得
-	public  ItemStack getInputItem(int i) {
+	public ItemStack getInputItem(int i) {
 		return this.getInput().getStackInSlot(i);
 	}
 
@@ -331,22 +335,27 @@ public class TileMFFisher extends TileSMMagic {
 		this.maxCraftTime = tag.getInt("maxCraftTime");
 	}
 
+	// クラフト描画量を計算するためのメソッド
+	public int getCraftProgress(int value) {
+		return Math.min(value, (int) (value * (float) this.craftTime / (float) this.maxCraftTime));
+	}
+
 	@Override
 	public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player) {
 		return new MFFisherMenu(windowId, inv, this);
 	}
 
-	public int getData () {
-		return this.isAir() ? 0 : ( (MFFisher) this.getBlock(this.getBlockPos())).getData();
+	public int getData() {
+		return this.isAir() ? 0 : ((MFFisher) this.getBlock(this.getBlockPos())).getData();
 	}
 
 	// RS信号で動作を停止するかどうか
-	public boolean isRSStop () {
+	public boolean isRSStop() {
 		return true;
 	}
 
 	// インベントリのアイテムを取得
-	public List<ItemStack> getInvList () {
+	public List<ItemStack> getInvList() {
 		List<ItemStack> stackList = new ArrayList<>();
 
 		for (int i = 0; i < this.getInvSize(); i++) {

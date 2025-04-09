@@ -28,6 +28,10 @@ public class TileFurnitureTable extends TileAbstractSM {
 	public int setCount = 1;
 	public int oldSetCount = 1;
 	public boolean isSetCount = false;
+	public final StackHandler inputInv = new StackHandler(1);
+	public final StackHandler inputSideInv = new StackHandler(9);
+	public final StackHandler resultInv = new StackHandler(1);
+	public final StackHandler outInv = new StackHandler(this.getInvSize(), true);
 
 	public TileFurnitureTable(BlockPos pos, BlockState state) {
 		super(TileInit.furnitureTable, pos, state);
@@ -37,11 +41,6 @@ public class TileFurnitureTable extends TileAbstractSM {
 		super(type, pos, state);
 		this.resolver = new InOutHandlerProvider(this.inputSideInv, this.outInv);
 	}
-
-	public final StackHandler inputInv = new StackHandler(1);
-	public final StackHandler inputSideInv = new StackHandler(9);
-	public final StackHandler resultInv = new StackHandler(1);
-	public final StackHandler outInv = new StackHandler(this.getInvSize(), true);
 
 	// サーバー側処理
 	public void serverTick(Level level, BlockPos pos, BlockState state) {
@@ -64,7 +63,7 @@ public class TileFurnitureTable extends TileAbstractSM {
 		}
 	}
 
-	public void insertInput () {
+	public void insertInput() {
 		for (int i = 0; i < 9; i++) {
 			ItemStack stack = this.getInputSideItem(i);
 			if (stack.isEmpty()) { continue; }
@@ -74,7 +73,7 @@ public class TileFurnitureTable extends TileAbstractSM {
 		}
 	}
 
-	public void chekcSlot () {
+	public void chekcSlot() {
 		if (this.getInputItem().isEmpty() && this.setCount > 0) {
 			this.setCount = 1;
 			this.sendPKT();
@@ -82,13 +81,13 @@ public class TileFurnitureTable extends TileAbstractSM {
 	}
 
 	// 作成開始
-	public void craftStart () {
+	public void craftStart() {
 		this.tickTime = 0;
 		this.isCraft = true;
 		this.sendPKT();
 	}
 
-	public void craftFinish () {
+	public void craftFinish() {
 
 		ItemStack input = this.getInputItem();
 		ItemStack out = this.outStack.copy();
@@ -172,7 +171,7 @@ public class TileFurnitureTable extends TileAbstractSM {
 
 	// インベントリサイズの取得
 	@Override
-	public int getInvSize () {
+	public int getInvSize() {
 		return 27;
 	}
 
@@ -182,7 +181,7 @@ public class TileFurnitureTable extends TileAbstractSM {
 	}
 
 	// スロットのアイテムを取得
-	public  ItemStack getInputItem() {
+	public ItemStack getInputItem() {
 		return this.getInput().getStackInSlot(0);
 	}
 
@@ -192,7 +191,7 @@ public class TileFurnitureTable extends TileAbstractSM {
 	}
 
 	// スロットのアイテムを取得
-	public  ItemStack getInputSideItem(int i) {
+	public ItemStack getInputSideItem(int i) {
 		return this.getInputSide().getStackInSlot(i);
 	}
 
@@ -202,7 +201,7 @@ public class TileFurnitureTable extends TileAbstractSM {
 	}
 
 	// スロットのアイテムを取得
-	public  ItemStack getResultItem() {
+	public ItemStack getResultItem() {
 		return this.getResult().getStackInSlot(0);
 	}
 
@@ -212,7 +211,7 @@ public class TileFurnitureTable extends TileAbstractSM {
 	}
 
 	// スロットのアイテムを取得
-	public  ItemStack getOutItem(int i) {
+	public ItemStack getOutItem(int i) {
 		return this.getOut().getStackInSlot(i);
 	}
 

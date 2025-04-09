@@ -31,12 +31,11 @@ import sweetmagic.init.tile.menu.EnchantEduceMenu;
 
 public class TileEnchantEduce extends TileSMMagic {
 
-	private static final int MAX_CRAFT_TIME = 20;
 	public boolean isCraft = false;
-	public int craftTime = 0;
-	public int maxMagiaFlux = 100000;				// 最大MF量を設定
 	public int nowLevel = 1;
-
+	public int craftTime = 0;
+	public int maxMagiaFlux = 100000;
+	private static final int MAX_CRAFT_TIME = 20;
 	public ItemStack outStack = ItemStack.EMPTY;
 	protected final StackHandler outputInv = new StackHandler(1);
 	protected final StackHandler pageInv = new StackHandler(1, true);
@@ -44,7 +43,7 @@ public class TileEnchantEduce extends TileSMMagic {
 
 	protected final StackHandler bookInv = new StackHandler(1, true) {
 
-        @Override
+		@Override
 		public int getSlotLimit(int slot) {
 			return 1;
 		}
@@ -85,7 +84,7 @@ public class TileEnchantEduce extends TileSMMagic {
 	}
 
 	// 作成開始
-	public void craftStart (int buttonId) {
+	public void craftStart(int buttonId) {
 		ItemStack magicBook = this.getBookItem();
 		if (magicBook.isEmpty()) { return; }
 
@@ -108,10 +107,10 @@ public class TileEnchantEduce extends TileSMMagic {
 		if (encha == null) { return; }
 
 		if (isBook) {
-	        CompoundTag compoundtag = book.getTag();
-	        if (compoundtag != null) {
-	        	enchaBook.setTag(compoundtag.copy());
-	        }
+			CompoundTag compoundtag = book.getTag();
+			if (compoundtag != null) {
+				enchaBook.setTag(compoundtag.copy());
+			}
 		}
 
 		// 必要なものを消費
@@ -138,14 +137,14 @@ public class TileEnchantEduce extends TileSMMagic {
 	}
 
 	// クラフトの完成
-	public void craftFinish () {
+	public void craftFinish() {
 		ItemHandlerHelper.insertItemStacked(this.getOutput(), this.outStack, false);
 		this.playSound(this.getBlockPos(), SoundEvents.ENCHANTMENT_TABLE_USE, 0.25F, 1F);
 		this.clearInfo();
 	}
 
 	// エンチャントの取得
-	public Enchantment getEnchant (int buttonId) {
+	public Enchantment getEnchant(int buttonId) {
 		List<Enchantment> enchaList = this.getEnchaList();
 		if (buttonId >= enchaList.size() || enchaList.isEmpty()) { return null; }
 
@@ -184,7 +183,7 @@ public class TileEnchantEduce extends TileSMMagic {
 	}
 
 	// 既にエンチャントされているリストを取得
-	public List<Enchantment> stackEnchaList (ItemStack stack) {
+	public List<Enchantment> stackEnchaList(ItemStack stack) {
 
 		// 既にエンチャントされているリストを取得
 		ListTag listTag = stack.getEnchantmentTags();
@@ -198,7 +197,7 @@ public class TileEnchantEduce extends TileSMMagic {
 	}
 
 	// エンチャントコストの取得
-	public int getEnchantCost (int id, SMBook book) {
+	public int getEnchantCost(int id, SMBook book) {
 		List<Enchantment> enchaList = this.getEnchaList();
 		if (enchaList.isEmpty() || id >= enchaList.size()) { return 0; }
 
@@ -253,7 +252,7 @@ public class TileEnchantEduce extends TileSMMagic {
 		return tags != null ? tags.getList("StoredEnchantments", 10) : new ListTag();
 	}
 
-	public void clickLevelButton (int id) {
+	public void clickLevelButton(int id) {
 		ItemStack stack = this.getBookItem();
 		if (stack.isEmpty()) { return; }
 
@@ -286,40 +285,40 @@ public class TileEnchantEduce extends TileSMMagic {
 	}
 
 	// エンチャント最低レベルの取得
-	public int getMinLevel () {
+	public int getMinLevel() {
 		return 1;
 	}
 
 	// エンチャント最高レベルの取得
-	public int getMaxLevel (int tier) {
+	public int getMaxLevel(int tier) {
 		return tier + 1;
 	}
 
-	public int getNowLevel () {
+	public int getNowLevel() {
 		return this.nowLevel;
 	}
 
 	// 魔術書のtierによってページ数を返す
-	public int getPageCount (ItemStack magicBook) {
+	public int getPageCount(ItemStack magicBook) {
 		SMBook smBook = (SMBook) magicBook.getItem();
 		return smBook.getTier();
 	}
 
 	// 最大MFの取得
 	@Override
-	public int getMaxMF () {
+	public int getMaxMF() {
 		return this.maxMagiaFlux;
 	}
 
 	// 受信するMF量の取得
 	@Override
-	public int getReceiveMF () {
+	public int getReceiveMF() {
 		return 10000;
 	}
 
 	// インベントリサイズの取得
-	public int getInvSize () {
-		return 1;
+	public int getInvSize() {
+		return 5;
 	}
 
 	// NBTの書き込み
@@ -356,7 +355,7 @@ public class TileEnchantEduce extends TileSMMagic {
 	}
 
 	// 素材スロットのアイテムを取得
-	public  ItemStack getBookItem() {
+	public ItemStack getBookItem() {
 		return this.getBook().getStackInSlot(0);
 	}
 
@@ -366,7 +365,7 @@ public class TileEnchantEduce extends TileSMMagic {
 	}
 
 	// 素材スロットのアイテムを取得
-	public  ItemStack getInputItem() {
+	public ItemStack getInputItem() {
 		return this.getInput().getStackInSlot(0);
 	}
 
@@ -376,7 +375,7 @@ public class TileEnchantEduce extends TileSMMagic {
 	}
 
 	// 素材スロットのアイテムを取得
-	public  ItemStack getPageItem() {
+	public ItemStack getPageItem() {
 		return this.getPage().getStackInSlot(0);
 	}
 
@@ -386,14 +385,14 @@ public class TileEnchantEduce extends TileSMMagic {
 	}
 
 	// 素材スロットのアイテムを取得
-	public  ItemStack getOutItem() {
+	public ItemStack getOutItem() {
 		return this.getOutput().getStackInSlot(0);
 	}
 
-	// MFゲージの描画量を計算するためのメソッド
-	public int getCraftProgressScaled(int value) {
+	// クラフト描画量を計算するためのメソッド
+	public int getCraftProgress(int value) {
 		return Math.min(value, (int) (value * (float) (this.craftTime) / (float) (MAX_CRAFT_TIME)));
-    }
+	}
 
 	@Override
 	public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player) {
@@ -401,7 +400,7 @@ public class TileEnchantEduce extends TileSMMagic {
 	}
 
 	// インベントリのアイテムを取得
-	public List<ItemStack> getInvList () {
+	public List<ItemStack> getInvList() {
 		List<ItemStack> stackList = new ArrayList<>();
 		this.addStackList(stackList, this.getInputItem());
 		this.addStackList(stackList, this.getOutItem());

@@ -30,9 +30,8 @@ public class FurnaceSlot extends SMSlot {
 		this.getExp(stack);
 	}
 
-	public void getExp (ItemStack stack) {
-
-		if ( stack.isEmpty() || this.tile.exp <= 0F) { return; }
+	public void getExp(ItemStack stack) {
+		if (stack.isEmpty() || this.tile.exp <= 0F) { return; }
 
 		Level world = this.player.level;
 		if (world.isClientSide) { return; }

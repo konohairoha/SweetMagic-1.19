@@ -13,7 +13,7 @@ import sweetmagic.init.TileInit;
 
 public class TileMFTableMaster extends TileMFTable {
 
-	public int maxMagiaFlux = 8000000;				// 最大MF量を設定
+	public int maxMagiaFlux = 8000000;
 
 	protected final StackHandler wandInv = new StackHandler(this.getInvSize(), true) {
 
@@ -44,25 +44,25 @@ public class TileMFTableMaster extends TileMFTable {
 
 	// インベントリサイズの取得
 	@Override
-	public int getInvSize () {
+	public int getInvSize() {
 		return 6;
 	}
 
 	// 受信するMF量の取得
 	@Override
-	public int getReceiveMF () {
+	public int getReceiveMF() {
 		return 200000;
 	}
 
 	// 受信するMF量の取得
 	@Override
-	public int getShrinkMF () {
+	public int getShrinkMF() {
 		return 40000;
 	}
 
 	// 最大MFの取得
 	@Override
-	public int getMaxMF () {
+	public int getMaxMF() {
 		return this.maxMagiaFlux;
 	}
 

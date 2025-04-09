@@ -15,6 +15,7 @@ import sweetmagic.init.TagInit;
 import sweetmagic.init.item.magic.MFStuff;
 import sweetmagic.init.item.magic.MFTeleport;
 import sweetmagic.init.item.magic.SMAcce;
+import sweetmagic.init.item.sm.SMBucket;
 
 public class SlotInput {
 
@@ -37,26 +38,28 @@ public class SlotInput {
 	public static final Predicate<ItemStack> CANACCE = s -> !s.isEmpty() && SlotInput.checkAcce(s);
 	public static final Predicate<ItemStack> ISDUPACCE = s -> !s.isEmpty() && SlotInput.isDupAcce(s);
 	public static final Predicate<ItemStack> ISSTAR = s -> !s.isEmpty() && s.is(ItemInit.starlight);
+	public static final Predicate<ItemStack> ISALTBUCKET = s -> !s.isEmpty() && s.getItem() instanceof SMBucket;
+	public static final Predicate<ItemStack> ISAMAGIC = s -> !s.isEmpty() && s.getItem() instanceof IMagicItem magic && !magic.isUniqueMagic();
 
-	public static boolean isBucket (ItemStack stack) {
-		return stack.is(Items.WATER_BUCKET) || stack.is(ItemInit.watercup);
+	public static boolean isBucket(ItemStack stack) {
+		return stack.is(Items.WATER_BUCKET) || stack.is(ItemInit.watercup) || stack.is(ItemInit.alt_bucket_water);
 	}
 
 	// 魔法アイテムか
-	public static final Predicate<ItemStack> isMagicItem (int tier) {
+	public static final Predicate<ItemStack> isMagicItem(int tier) {
 		return s -> !s.isEmpty() && s.getItem() instanceof IMagicItem magic && tier >= magic.getTier();
 	}
 
-	public static boolean checkAcce (ItemStack stack) {
-		if ( !(stack.getItem() instanceof IAcce ) ) { return false; }
+	public static boolean checkAcce(ItemStack stack) {
+		if (!(stack.getItem() instanceof IAcce)) { return false; }
 
 		AcceInfo info = new AcceInfo(stack);
 		IAcce acce = info.getAcce();
 		return acce.isDuplication() && acce.canAddStackCount(info);
 	}
 
-	public static boolean isDupAcce (ItemStack stack) {
-		if ( !(stack.getItem() instanceof IAcce ) ) { return false; }
+	public static boolean isDupAcce(ItemStack stack) {
+		if (!(stack.getItem() instanceof IAcce)) { return false; }
 
 		AcceInfo info = new AcceInfo(stack);
 		IAcce acce = info.getAcce();

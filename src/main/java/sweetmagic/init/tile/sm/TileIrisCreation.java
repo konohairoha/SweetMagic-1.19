@@ -23,7 +23,7 @@ import sweetmagic.api.iitem.info.WandInfo;
 import sweetmagic.init.SoundInit;
 import sweetmagic.init.TileInit;
 import sweetmagic.init.block.sm.IrisCreation;
-import sweetmagic.init.tile.inventory.SMWandInventory;
+import sweetmagic.init.tile.inventory.SMInventory.SMWandInventory;
 import sweetmagic.init.tile.menu.IrisCreationMenu;
 import sweetmagic.recipe.iris.IrisRecipe;
 
@@ -34,7 +34,6 @@ public class TileIrisCreation extends TileAbstractSM {
 	public boolean isCraft = false;
 	public ItemStack outStack = ItemStack.EMPTY;
 	public List<ItemStack> craftList = new ArrayList<>();
-
 	protected final StackHandler handInv = new StackHandler(1);
 	protected final StackHandler inputInv = new StackHandler(this.getInvSize());
 	protected final StackHandler outputInv = new StackHandler(1);
@@ -88,7 +87,7 @@ public class TileIrisCreation extends TileAbstractSM {
 
 		this.tickTime = 0;
 		boolean under = state.getValue(IrisCreation.UNDER);
-		double addY = under ?  0.8D : 0.1D;
+		double addY = under ? 0.8D : 0.1D;
 
 		for (int i = 0; i < this.rand.nextInt(4) + 1; i++) {
 			double x = (double) pos.getX() + 0.5D + (this.rand.nextDouble() * 0.4D - 0.2D);
@@ -109,7 +108,7 @@ public class TileIrisCreation extends TileAbstractSM {
 	}
 
 	// 素材の取得
-	public List<ItemStack> getStackList () {
+	public List<ItemStack> getStackList() {
 
 		List<ItemStack> stackList = new ArrayList<>();
 		stackList.add(this.getHandItem());
@@ -126,12 +125,12 @@ public class TileIrisCreation extends TileAbstractSM {
 	}
 
 	// レシピチェック
-	public boolean checkRecipe () {
+	public boolean checkRecipe() {
 		return !IrisRecipe.getRecipe(this.level, this.getStackList()).isEmpty();
 	}
 
 	// 作成開始
-	public void craftStart () {
+	public void craftStart() {
 
 		// レシピを取得して見つからなければ終了
 		List<ItemStack> stackList = this.getStackList();
@@ -195,13 +194,13 @@ public class TileIrisCreation extends TileAbstractSM {
 	}
 
 	// クラフトの完成
-	public void craftFinish () {
+	public void craftFinish() {
 		ItemHandlerHelper.insertItemStacked(this.getOutput(), this.outStack, false);
 		this.clearInfo();
 	}
 
 	// 初期化
-	public void clearInfo () {
+	public void clearInfo() {
 		this.craftTime = 0;
 		this.isCraft = false;
 		this.outStack = ItemStack.EMPTY;
@@ -214,7 +213,7 @@ public class TileIrisCreation extends TileAbstractSM {
 	}
 
 	// ドロップリストを取得
-	public List<ItemStack> getDropList () {
+	public List<ItemStack> getDropList() {
 
 		List<ItemStack> stackList = new ArrayList<>();
 		this.addStackList(stackList, this.getHandItem());
@@ -259,7 +258,7 @@ public class TileIrisCreation extends TileAbstractSM {
 
 	// インベントリサイズの取得
 	@Override
-	public int getInvSize () {
+	public int getInvSize() {
 		return 8;
 	}
 
@@ -269,7 +268,7 @@ public class TileIrisCreation extends TileAbstractSM {
 	}
 
 	// メインスロットのアイテムを取得
-	public  ItemStack getHandItem() {
+	public ItemStack getHandItem() {
 		return this.getHand().getStackInSlot(0);
 	}
 
@@ -279,7 +278,7 @@ public class TileIrisCreation extends TileAbstractSM {
 	}
 
 	// 素材スロットのアイテムを取得
-	public  ItemStack getInputItem(int i) {
+	public ItemStack getInputItem(int i) {
 		return this.getInput().getStackInSlot(i);
 	}
 
@@ -289,14 +288,14 @@ public class TileIrisCreation extends TileAbstractSM {
 	}
 
 	// 出力のアイテムを取得
-	public  ItemStack getOutputItem() {
+	public ItemStack getOutputItem() {
 		return this.getOutput().getStackInSlot(0);
 	}
 
-	// MFゲージの描画量を計算するためのメソッド
-	public int getMfProgressScaled(int value) {
+	// 描画量を計算するためのメソッド
+	public int getProgress(int value) {
 		return Math.min(value, (int) (value * (float) (this.craftTime) / (float) (this.maxCraftTime)));
-    }
+	}
 
 	@Override
 	public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player) {
@@ -304,7 +303,7 @@ public class TileIrisCreation extends TileAbstractSM {
 	}
 
 	// RS信号で動作を停止するかどうか
-	public boolean isRSStop () {
+	public boolean isRSStop() {
 		return true;
 	}
 }

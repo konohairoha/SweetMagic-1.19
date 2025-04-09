@@ -41,17 +41,17 @@ public class TileAltarCreatStar extends TilePedalCreate {
 	}
 
 	// クラフト可能か
-	public MutableComponent checkCanCraft (List<ItemStack> stackList) {
+	public MutableComponent checkCanCraft(List<ItemStack> stackList) {
 
 		// 必要なブロックがない場合
 		if (!this.checkRangeBlock(false)) {
-			return this.getTipArray(this.getText("pedastal_norangeblock"), ":", this.getRangeBlock(false).getName().withStyle(RED), this.getText("or"), this.getOverRangeBlock(false).getName().withStyle(RED));
+			return this.getTipArray(this.getText("pedastal_norangeblock"), ":", this.getRangeBlock().getName().withStyle(RED), this.getText("or"), this.getOverRangeBlock().getName().withStyle(RED));
 		}
 
 		return super.checkCanCraft(stackList);
 	}
 
-	public boolean checkRangeBlock (boolean isClient) {
+	public boolean checkRangeBlock(boolean isClient) {
 
 		BlockPos pos = this.getBlockPos().below();
 
@@ -75,27 +75,27 @@ public class TileAltarCreatStar extends TilePedalCreate {
 		return true;
 	}
 
-	public Block getNeedBlock (boolean isClient) {
-		return isClient ? BlockInit.purecrystal_block_alpha : BlockInit.purecrystal_block;
+	public Block getNeedBlock() {
+		return BlockInit.purecrystal_block;
 	}
 
-	public Block getRangeBlock  (boolean isClient) {
-		return isClient ? BlockInit.divinecrystal_block_alpha : BlockInit.divinecrystal_block;
+	public Block getRangeBlock() {
+		return BlockInit.divinecrystal_block;
 	}
 
-	public Block getOverRangeBlock  (boolean isClient) {
-		return isClient ? BlockInit.aethercrystal_block_alpha : BlockInit.aethercrystal_block;
+	public Block getOverRangeBlock() {
+		return BlockInit.aethercrystal_block;
 	}
 
 	// 最大MFの取得
 	@Override
-	public int getMaxMF () {
+	public int getMaxMF() {
 		return this.maxMagiaFlux;
 	}
 
 	// 受信するMF量の取得
 	@Override
-	public int getReceiveMF () {
+	public int getReceiveMF() {
 		return 80000;
 	}
 }

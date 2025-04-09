@@ -18,9 +18,18 @@ import sweetmagic.init.entity.animal.AbstractSummonMob;
 import sweetmagic.init.entity.monster.boss.AbstractSMBoss;
 import sweetmagic.init.entity.monster.boss.AncientFairy;
 import sweetmagic.init.entity.monster.boss.Arlaune;
+import sweetmagic.init.entity.monster.boss.BlitzWizardMaster;
+import sweetmagic.init.entity.monster.boss.BraveSkeleton;
 import sweetmagic.init.entity.monster.boss.BullFight;
+import sweetmagic.init.entity.monster.boss.ElshariaCurious;
+import sweetmagic.init.entity.monster.boss.HolyAngel;
+import sweetmagic.init.entity.monster.boss.IgnisKnight;
+import sweetmagic.init.entity.monster.boss.QueenFrost;
 import sweetmagic.init.entity.monster.boss.SilverLandRoad;
+import sweetmagic.init.entity.monster.boss.TwilightHora;
 import sweetmagic.init.entity.monster.boss.WhiteButler;
+import sweetmagic.init.entity.monster.boss.WindWitchMaster;
+import sweetmagic.init.entity.monster.boss.WitchSandryon;
 
 public class TileSMSpawnerBoss extends TileSMSpawner {
 
@@ -36,6 +45,11 @@ public class TileSMSpawnerBoss extends TileSMSpawner {
 		return this.tickTime % 20 != 0;
 	}
 
+	// プレイヤーが周囲にいるかのチェック
+	public boolean checkPlayer (Level world, double range) {
+		return !this.getEntityListUp(Player.class, e -> e.isAlive() && !e.isCreative() && !e.isSpectator(), range).isEmpty();
+	}
+
 	public void doSpawnEntity (Level world, BlockPos pos, Random rand) {
 		if (!(world instanceof ServerLevel server) || !this.checkPlayer(world, this.getRange())) { return; }
 
@@ -43,10 +57,12 @@ public class TileSMSpawnerBoss extends TileSMSpawner {
 		entity.setPos(pos.getX() + 0.5D, pos.getY() + 1.5D, pos.getZ() + 0.5D);
 
 		this.setEntityBuff(entity);
+		this.startInfo(entity);
 		world.addFreshEntity(entity);
 		entity.spawnAnim();
 		world.destroyBlock(pos, false);
 		world.removeBlock(pos, false);
+		this.startInfo(entity);
 	}
 
 	// モブのバフを設定
@@ -63,9 +79,9 @@ public class TileSMSpawnerBoss extends TileSMSpawner {
 
 		Level world = this.level;
 		AbstractSMBoss entity = null;
-		AbstractSMBoss sub = null;
+		LivingEntity sub = null;
 		List<Player> playerList = this.getEntityList(Player.class, e -> e.isAlive() && !e.isCreative() && !e.isSpectator(), 32D);
-		int summonMobSize = this.getEntityList(AbstractSummonMob.class, e -> e.isAlive(), 80D).size();
+		int summonMobSize = this.getEntityList(AbstractSummonMob.class, e -> e.isAlive(), 80D).size() - 1;
 		float addHealth = 1F + summonMobSize * 0.1F;
 
 		switch (this.getMobType()) {
@@ -91,18 +107,69 @@ public class TileSMSpawnerBoss extends TileSMSpawner {
 			((SilverLandRoad) entity).setAlive(true);
 			sub = this.addSpawn(isRender);
 			break;
+		case 4:
+			entity = new TwilightHora(world);
+			entity.getAttribute(Attributes.MAX_HEALTH).setBaseValue(entity.getMaxHealth() * (1F + playerList.size() * 0.15F) * addHealth);
+			entity.setHealth(entity.getMaxHealth());
+			break;
+		case 5:
+			entity = new BraveSkeleton(world);
+			entity.getAttribute(Attributes.MAX_HEALTH).setBaseValue(entity.getMaxHealth() * (1F + playerList.size() * 0.15F) * addHealth);
+			entity.setHealth(entity.getMaxHealth());
+
+			if (!isRender) {
+				sub = ((BraveSkeleton) entity).spawnHorse(this.level, this.getBlockPos().above());
+			}
+			break;
+		case 6:
+			entity = new ElshariaCurious(world);
+			entity.getAttribute(Attributes.MAX_HEALTH).setBaseValue(entity.getMaxHealth() * (1F + playerList.size() * 0.15F) * addHealth);
+			entity.setHealth(entity.getMaxHealth());
+			break;
+		case 7:
+			entity = new WitchSandryon(world);
+			entity.getAttribute(Attributes.MAX_HEALTH).setBaseValue(entity.getMaxHealth() * (1F + playerList.size() * 0.15F) * addHealth);
+			entity.setHealth(entity.getMaxHealth());
+			break;
+		case 8:
+			entity = new QueenFrost(world);
+			entity.getAttribute(Attributes.MAX_HEALTH).setBaseValue(512D * (1F + playerList.size() * 0.15F) * addHealth);
+			entity.setHealth(entity.getMaxHealth());
+			break;
+		case 9:
+			entity = new HolyAngel(world);
+			entity.getAttribute(Attributes.MAX_HEALTH).setBaseValue(512D * (1F + playerList.size() * 0.15F) * addHealth);
+			entity.setHealth(entity.getMaxHealth());
+			break;
+		case 10:
+			entity = new IgnisKnight(world);
+			entity.getAttribute(Attributes.MAX_HEALTH).setBaseValue(512D * (1F + playerList.size() * 0.15F) * addHealth);
+			entity.setHealth(entity.getMaxHealth());
+			break;
+		case 11:
+			entity = new WindWitchMaster(world);
+			entity.getAttribute(Attributes.MAX_HEALTH).setBaseValue(768D * (1F + playerList.size() * 0.15F) * addHealth);
+			entity.setHealth(entity.getMaxHealth());
+			break;
+		case 12:
+			entity = new BlitzWizardMaster(world);
+			entity.getAttribute(Attributes.MAX_HEALTH).setBaseValue(768D * (1F + playerList.size() * 0.15F) * addHealth);
+			entity.setHealth(entity.getMaxHealth());
+			break;
 		}
 
 		if (sub != null) {
-			sub.setOwnerID(entity);
-			entity.setOwnerID(sub);
-		}
-
-		if (!isRender) {
-			entity.startInfo();
+			if (sub instanceof AbstractSMBoss boss) {
+				boss.setOwnerID(entity);
+				entity.setOwnerID(boss);
+			}
 		}
 
 		return entity;
+	}
+
+	public void startInfo(AbstractSMBoss mob) {
+		mob.startInfo();
 	}
 
 	public AbstractSMBoss addSpawn (boolean isRender) {
@@ -126,8 +193,10 @@ public class TileSMSpawnerBoss extends TileSMSpawner {
 		BlockPos pos = this.getBlockPos();
 		entity.setPos(pos.getX() + 1.5D, pos.getY() + 1.5D, pos.getZ() + 0.5D);
 		this.setEntityBuff(entity);
+		entity.startInfo();
 		world.addFreshEntity(entity);
 		entity.spawnAnim();
+		entity.startInfo();
 		return entity;
 	}
 
@@ -146,6 +215,6 @@ public class TileSMSpawnerBoss extends TileSMSpawner {
 	}
 
 	public int maxMobType () {
-		return 4;
+		return 13;
 	}
 }

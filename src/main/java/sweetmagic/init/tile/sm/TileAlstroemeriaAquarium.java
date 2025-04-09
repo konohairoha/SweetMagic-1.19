@@ -24,17 +24,15 @@ import sweetmagic.init.block.magic.PedalCreate;
 import sweetmagic.init.capability.ICapabilityResolver;
 import sweetmagic.init.capability.SidItemHandler;
 import sweetmagic.init.tile.menu.AlstroemeriaAquariumMenu;
-import sweetmagic.init.tile.slot.WrappedItemHandler;
 import sweetmagic.recipe.RecipeHelper;
-import sweetmagic.recipe.RecipeUtil;
+import sweetmagic.recipe.RecipeHelper.RecipeUtil;
 import sweetmagic.recipe.alstrameria.AlstroemeriaRecipe;
 
 public class TileAlstroemeriaAquarium extends TileSMMagic {
 
-	public int maxMagiaFlux = 50000;				// 最大MF量を設定
+	public int maxMagiaFlux = 50000;
 	public boolean isCraft = false;
 	public List<ItemStack> outStackList = new ArrayList<>();
-
 	protected final StackHandler handInv = new StackHandler(1);
 	protected final StackHandler inputInv = new StackHandler(10);
 	protected final StackHandler outputInv = new StackHandler(this.getInvSize());
@@ -70,7 +68,7 @@ public class TileAlstroemeriaAquarium extends TileSMMagic {
 	}
 
 	// 素材の取得
-	public List<ItemStack> getStackList () {
+	public List<ItemStack> getStackList() {
 
 		List<ItemStack> stackList = new ArrayList<>();
 		stackList.add(this.getHandItem());
@@ -87,13 +85,13 @@ public class TileAlstroemeriaAquarium extends TileSMMagic {
 	}
 
 	// レシピチェック
-	public boolean checkRecipe () {
+	public boolean checkRecipe() {
 		List<ItemStack> stackList = this.getStackList();
 		return !AlstroemeriaRecipe.getRecipe(this.level, stackList).isEmpty();
 	}
 
 	// 作成開始
-	public void craftStart () {
+	public void craftStart() {
 
 		// レシピを取得して見つからなければ終了
 		List<ItemStack> stackList = this.getStackList();
@@ -121,7 +119,7 @@ public class TileAlstroemeriaAquarium extends TileSMMagic {
 	}
 
 	// クラフトの完成
-	public void craftFinish () {
+	public void craftFinish() {
 
 		// 完成品を入れる
 		for (ItemStack result : this.outStackList) {
@@ -133,7 +131,7 @@ public class TileAlstroemeriaAquarium extends TileSMMagic {
 	}
 
 	// 初期化
-	public void clearInfo () {
+	public void clearInfo() {
 		this.isCraft = false;
 		this.outStackList.clear();
 	}
@@ -162,24 +160,24 @@ public class TileAlstroemeriaAquarium extends TileSMMagic {
 
 	// 受信するMF量の取得
 	@Override
-	public int getReceiveMF () {
+	public int getReceiveMF() {
 		return 10000;
 	}
 
 	// 最大MFの取得
 	@Override
-	public int getMaxMF () {
+	public int getMaxMF() {
 		return this.maxMagiaFlux;
 	}
 
 	// 消費MF
-	public int getUseMF () {
+	public int getUseMF() {
 		return 10;
 	}
 
 	// インベントリサイズの取得
 	@Override
-	public int getInvSize () {
+	public int getInvSize() {
 		return 27;
 	}
 
@@ -189,7 +187,7 @@ public class TileAlstroemeriaAquarium extends TileSMMagic {
 	}
 
 	// メインスロットのアイテムを取得
-	public  ItemStack getHandItem() {
+	public ItemStack getHandItem() {
 		return this.getHand().getStackInSlot(0);
 	}
 
@@ -199,7 +197,7 @@ public class TileAlstroemeriaAquarium extends TileSMMagic {
 	}
 
 	// 素材スロットのアイテムを取得
-	public  ItemStack getInputItem(int i) {
+	public ItemStack getInputItem(int i) {
 		return this.getInput().getStackInSlot(i);
 	}
 
@@ -209,7 +207,7 @@ public class TileAlstroemeriaAquarium extends TileSMMagic {
 	}
 
 	// 出力のアイテムを取得
-	public  ItemStack getOutputItem(int i) {
+	public ItemStack getOutputItem(int i) {
 		return this.getOutput().getStackInSlot(i);
 	}
 
@@ -219,12 +217,12 @@ public class TileAlstroemeriaAquarium extends TileSMMagic {
 	}
 
 	// RS信号で動作を停止するかどうか
-	public boolean isRSStop () {
+	public boolean isRSStop() {
 		return true;
 	}
 
 	// インベントリのアイテムを取得
-	public List<ItemStack> getInvList () {
+	public List<ItemStack> getInvList() {
 		List<ItemStack> stackList = new ArrayList<>();
 		this.addStackList(stackList, this.getHandItem());
 
@@ -251,27 +249,20 @@ public class TileAlstroemeriaAquarium extends TileSMMagic {
 		private final ICapabilityResolver<IItemHandler> outRes;
 
 		protected SMHandlerProvider() {
-			this.inRes = this.getBasicResolver(this.getHandler(inputInv, WrappedItemHandler.WriteMode.IN));
-			this.handRes = this.getBasicResolver(this.getHandler(handInv, WrappedItemHandler.WriteMode.IN));
-			this.outRes = this.getBasicResolver(this.getHandler(outputInv, WrappedItemHandler.WriteMode.OUT));
+			this.inRes = this.getBasicResolver(this.getHandler(inputInv, IN));
+			this.handRes = this.getBasicResolver(this.getHandler(handInv, IN));
+			this.outRes = this.getBasicResolver(this.getHandler(outputInv, OUT));
 		}
 
 		@Override
 		protected ICapabilityResolver<IItemHandler> getResolver(@Nullable Direction face) {
+			if (face == null) { return this.inRes; }
 
-			if (face == null) {
-				return this.inRes;
+			switch(face) {
+			case UP: return this.handRes;
+			case DOWN: return this.outRes;
+			default: return this.inRes;
 			}
-
-			else if (face == Direction.UP) {
-				return this.handRes;
-			}
-
-			else if (face == Direction.DOWN) {
-				return this.outRes;
-			}
-
-			return this.inRes;
 		}
 
 		@Override

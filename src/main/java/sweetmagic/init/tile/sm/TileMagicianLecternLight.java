@@ -68,4 +68,8 @@ public class TileMagicianLecternLight extends TileAbstractMagicianLectern {
 	public int getBattleLevel () {
 		return 2;
 	}
+
+	public int getMaxMF() {
+		return 0;
+	}
 }

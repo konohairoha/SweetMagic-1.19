@@ -13,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.Registry;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.nbt.CompoundTag;
@@ -23,6 +24,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -38,9 +40,11 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -49,6 +53,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.common.util.NonNullLazy;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
@@ -60,25 +65,26 @@ import sweetmagic.init.capability.SidItemHandler;
 import sweetmagic.init.item.sm.SMItem;
 import sweetmagic.init.tile.slot.WrappedItemHandler;
 import sweetmagic.init.tile.slot.WrappedItemHandler.WriteMode;
+import sweetmagic.util.WorldHelper;
 
 public abstract class TileAbstractSM extends BlockEntity implements MenuProvider {
 
+	public int tickTime = 0;
+	public int clientTime = 0;
+	protected Random rand = new Random();
 	protected ICapabilityResolver<IItemHandler> resolver = null;
 	protected static final WriteMode IN = WrappedItemHandler.WriteMode.IN;
 	protected static final WriteMode IN_OUT = WrappedItemHandler.WriteMode.IN_OUT;
 	protected static final WriteMode OUT = WrappedItemHandler.WriteMode.OUT;
-
-	public int tickTime = 0;
-	protected Random rand = new Random();
 
 	public TileAbstractSM(BlockEntityType<?> type, BlockPos pos, BlockState state) {
 		super(type, pos, state);
 	}
 
 	@Override
-    public CompoundTag getUpdateTag() {
-        return this.saveWithFullMetadata();
-    }
+	public CompoundTag getUpdateTag() {
+		return this.saveWithFullMetadata();
+	}
 
 	@Override
 	public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
@@ -87,13 +93,13 @@ public abstract class TileAbstractSM extends BlockEntity implements MenuProvider
 	}
 
 	@Override
-    public void handleUpdateTag(CompoundTag tags) {
-        this.deserializeNBT(tags);
-    }
+	public void handleUpdateTag(CompoundTag tags) {
+		this.deserializeNBT(tags);
+	}
 
 	@Override
 	public Packet<ClientGamePacketListener> getUpdatePacket() {
-        return ClientboundBlockEntityDataPacket.create(this, BlockEntity::getUpdateTag);
+		return ClientboundBlockEntityDataPacket.create(this, BlockEntity::getUpdateTag);
 	}
 
 	// NBTの書き込み
@@ -111,30 +117,29 @@ public abstract class TileAbstractSM extends BlockEntity implements MenuProvider
 	}
 
 	// ブロックステータスの取得
-	public BlockState getState (BlockPos pos) {
-		return this.getLevel().getBlockState(pos);
+	public BlockState getState(BlockPos pos) {
+		return this.hasLevel() ? this.getLevel().getBlockState(pos) : Blocks.AIR.defaultBlockState();
 	}
 
 	// ブロックの取得
-	public Block getBlock (BlockPos pos) {
+	public Block getBlock(BlockPos pos) {
 		return this.getState(pos).getBlock();
 	}
 
 	// ブロックえんちちーの取得
-	public BlockEntity getTile (BlockPos pos) {
+	public BlockEntity getTile(BlockPos pos) {
 		return this.getLevel().getBlockEntity(pos);
 	}
 
 	// 向きの取得
-	public Direction getFace () {
+	public Direction getFace() {
 		BlockState state = this.getState(this.getBlockPos());
-		return !state.hasProperty(BaseFaceBlock.FACING) ? Direction.NORTH : this.getState(this.getBlockPos()).getValue(BaseFaceBlock.FACING);
+		return !state.hasProperty(BaseFaceBlock.FACING) ? Direction.NORTH : state.getValue(BaseFaceBlock.FACING);
 	}
 
 	// 角度取得
-	public float getRot () {
+	public float getRot() {
 		switch (this.getFace()) {
-		case NORTH: return 0F;
 		case SOUTH: return 180F;
 		case WEST: return 90F;
 		case EAST: return 270F;
@@ -142,23 +147,27 @@ public abstract class TileAbstractSM extends BlockEntity implements MenuProvider
 		}
 	}
 
+	public int getMaxStackSize() {
+		return 64;
+	}
+
 	// 音を流す
-	public void playSound (BlockPos pos, SoundEvent sound, float vol, float pit) {
+	public void playSound(BlockPos pos, SoundEvent sound, float vol, float pit) {
 		this.getLevel().playSound(null, pos, sound, SoundSource.BLOCKS, vol, pit);
 	}
 
 	// 音を流す
-	public void playSound (Level world, BlockPos pos, SoundEvent sound, float vol, float pit) {
+	public void playSound(Level world, BlockPos pos, SoundEvent sound, float vol, float pit) {
 		world.playSound(null, pos, sound, SoundSource.BLOCKS, vol, pit);
 	}
 
 	// ゲーム時間の取得
-	public long getTime () {
+	protected long getTime() {
 		return this.getLevel().getGameTime();
 	}
 
 	// サーバーかどうか
-	public boolean isSever () {
+	public boolean isSever() {
 		return !this.getLevel().isClientSide;
 	}
 
@@ -183,6 +192,11 @@ public abstract class TileAbstractSM extends BlockEntity implements MenuProvider
 	// クライアント側処理
 	public void clientTick(Level world, BlockPos pos, BlockState state) {
 		this.tickTime++;
+		this.clientTime++;
+
+		if (this.clientTime++ >= 72000) {
+			this.clientTime = 0;
+		}
 
 		if (this.tickTime % 20 == 0 && this.isRSStop() && this.isRSPower()) {
 			this.addParticlesAroundSelf(world, this.rand, pos, DustParticleOptions.REDSTONE);
@@ -190,7 +204,7 @@ public abstract class TileAbstractSM extends BlockEntity implements MenuProvider
 	}
 
 	// パーティクルスポーンリング
-	protected void spawnParticleRing(ServerLevel server, ParticleOptions particle, double range, BlockPos pos, double addY, double ySpeed, double moveValue) {
+	protected void spawnParticleRing(ServerLevel server, ParticleOptions par, double range, BlockPos pos, double addY, double ySpeed, double moveValue) {
 
 		double x = pos.getX() + 0.5D;
 		double y = pos.getY() + 1D + addY;
@@ -198,12 +212,12 @@ public abstract class TileAbstractSM extends BlockEntity implements MenuProvider
 
 		for (double degree = -range * Math.PI; degree < range * Math.PI; degree += 0.05D) {
 			double rate = range;
-			server.sendParticles(particle, x + Math.cos(degree) * rate, y, z + Math.sin(degree) * rate, 0, -Math.cos(degree) * 0.25D, ySpeed, -Math.sin(degree) * 0.25D, moveValue);
+			server.sendParticles(par, x + Math.cos(degree) * rate, y, z + Math.sin(degree) * rate, 0, -Math.cos(degree) * 0.25D, ySpeed, -Math.sin(degree) * 0.25D, moveValue);
 		}
 	}
 
 	// パーティクルスポーンリング
-	protected void spawnParticleRing(Level world, ParticleOptions particle, double range, BlockPos pos, double addY, double ySpeed, float chance) {
+	protected void spawnParticleRing(Level world, ParticleOptions par, double range, BlockPos pos, double addY, double ySpeed, float chance) {
 
 		double x = pos.getX() + 0.5D;
 		double y = pos.getY() + 1D + addY;
@@ -212,20 +226,20 @@ public abstract class TileAbstractSM extends BlockEntity implements MenuProvider
 		for (double degree = -range * Math.PI; degree < range * Math.PI; degree += 0.05D) {
 			if (chance < this.rand.nextFloat()) { continue; }
 			double rate = range;
-			world.addParticle(particle, x + Math.cos(degree) * rate, y, z + Math.sin(degree) * rate, Math.cos(degree) * 0.25D * this.getRandFloat(), this.rand.nextDouble() * 0.1D, Math.sin(degree) * 0.1D * this.getRandFloat());
+			world.addParticle(par, x + Math.cos(degree) * rate, y, z + Math.sin(degree) * rate, Math.cos(degree) * 0.25D * this.getRandFloat(), this.rand.nextDouble() * 0.1D, Math.sin(degree) * 0.1D * this.getRandFloat());
 		}
 	}
 
 	// パーティクルスポーンサイクル
-	protected void spawnParticleCycle (Level world, ParticleOptions particle, double x, double y, double z, Direction face, double range, double angle, boolean isRevese) {
+	protected void spawnParticleCycle(Level world, ParticleOptions par, double x, double y, double z, Direction face, double range, double angle, boolean isRevese) {
 		int way = isRevese ? -1 : 1;
-		world.addParticle(particle, x, y, z, face.get3DDataValue() * way, range, angle + way * 1 * SMItem.SPEED);
+		world.addParticle(par, x, y, z, face.get3DDataValue() * way, range, angle + way * 1 * SMItem.SPEED);
 	}
 
 	// パーティクルスポーンサイクル
-	protected void spawnParticleCycle (Level world, ParticleOptions particle, BlockPos pos, Direction face, double range, double angle, boolean isRevese) {
+	protected void spawnParticleCycle(Level world, ParticleOptions par, BlockPos pos, Direction face, double range, double angle, boolean isRevese) {
 		int way = isRevese ? -1 : 0;
-		world.addParticle(particle, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, face.get3DDataValue() * way, range, angle + way * 1 * SMItem.SPEED);
+		world.addParticle(par, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, face.get3DDataValue() * way, range, angle + way * 1 * SMItem.SPEED);
 	}
 
 	protected void addParticlesAroundSelf(Level level, Random rand, BlockPos pos, ParticleOptions par) {
@@ -233,32 +247,32 @@ public abstract class TileAbstractSM extends BlockEntity implements MenuProvider
 			double d0 = rand.nextDouble() * 0.02D;
 			double d1 = rand.nextDouble() * 0.02D;
 			double d2 = rand.nextDouble() * 0.02D;
-			level.addParticle(par, this.getRandomX(pos, rand, 0.5D), this.getRandomY(pos, rand), this.getRandomZ(pos, rand, 0.5D), d0, d1, d2);
+			level.addParticle(par, this.getRandX(pos, rand, 0.5D), this.getRandY(pos, rand), this.getRandZ(pos, rand, 0.5D), d0, d1, d2);
 		}
 	}
 
-	public double getRandomX(BlockPos pos, Random rand, double scale) {
+	public double getRandX(BlockPos pos, Random rand, double scale) {
 		return pos.getX() + ((2D * rand.nextDouble() - 1D) * scale) + 0.5D;
 	}
 
-	public double getRandomY(BlockPos pos, Random rand) {
+	public double getRandY(BlockPos pos, Random rand) {
 		return pos.getY() + rand.nextDouble() * 0.5D + 1D;
 	}
 
-	public double getRandomZ(BlockPos pos, Random rand, double scale) {
+	public double getRandZ(BlockPos pos, Random rand, double scale) {
 		return pos.getZ() + ((2D * rand.nextDouble() - 1D) * scale) + 0.5D;
 	}
 
-	public float getRandFloat () {
+	public float getRandFloat() {
 		return this.rand.nextFloat() - this.rand.nextFloat();
 	}
 
-	public float getRandFloat (float rate) {
+	public float getRandFloat(float rate) {
 		return this.getRandFloat() * rate;
 	}
 
 	// List<ItemStack>をnbt保存
-	public CompoundTag saveStackList (CompoundTag nbt, List<ItemStack> stackList, String name) {
+	public CompoundTag saveStackList(CompoundTag nbt, List<ItemStack> stackList, String name) {
 
 		// NULLチェックとListの個数を確認
 		if (stackList != null && !stackList.isEmpty()) {
@@ -267,9 +281,9 @@ public abstract class TileAbstractSM extends BlockEntity implements MenuProvider
 			ListTag tagsList = new ListTag();
 			for (ItemStack stack : stackList) {
 
-                // nbtリストにnbtを入れる
+				// nbtリストにnbtを入れる
 				if (stack.isEmpty()) { continue; }
-                tagsList.add(stack.save(new CompoundTag()));
+				tagsList.add(stack.save(new CompoundTag()));
 			}
 
 			// NBTに保存
@@ -287,7 +301,7 @@ public abstract class TileAbstractSM extends BlockEntity implements MenuProvider
 	}
 
 	// List<ItemStack>をnbt保存
-	public CompoundTag saveStackListList (CompoundTag nbt, List<List<ItemStack>> stackListList, String name) {
+	public CompoundTag saveStackListList(CompoundTag nbt, List<List<ItemStack>> stackListList, String name) {
 
 		// NULLチェックとListの個数を確認
 		if (stackListList != null && !stackListList.isEmpty()) {
@@ -300,9 +314,9 @@ public abstract class TileAbstractSM extends BlockEntity implements MenuProvider
 				ListTag tagsList = new ListTag();
 				for (ItemStack stack : stackList) {
 
-	                // nbtリストにnbtを入れる
+					// nbtリストにnbtを入れる
 					if (stack.isEmpty()) { continue; }
-	                tagsList.add(stack.save(new CompoundTag()));
+					tagsList.add(stack.save(new CompoundTag()));
 				}
 
 				// NBTに保存
@@ -333,7 +347,7 @@ public abstract class TileAbstractSM extends BlockEntity implements MenuProvider
 	}
 
 	// List<Float>をnbt保存
-	public CompoundTag saveFloatList (CompoundTag nbt, List<Float> floatList, String name) {
+	public CompoundTag saveFloatList(CompoundTag nbt, List<Float> floatList, String name) {
 
 		// NULLチェックとListの個数を確認
 		if (floatList != null && !floatList.isEmpty()) {
@@ -342,10 +356,10 @@ public abstract class TileAbstractSM extends BlockEntity implements MenuProvider
 			ListTag tagsList = new ListTag();
 			for (Float f : floatList) {
 
-                // nbtリストにnbtを入れる
+				// nbtリストにnbtを入れる
 				CompoundTag tags = new CompoundTag();
 				tags.putFloat("floatList", f);
-                tagsList.add(tags);
+				tagsList.add(tags);
 			}
 
 			// NBTに保存
@@ -363,7 +377,6 @@ public abstract class TileAbstractSM extends BlockEntity implements MenuProvider
 	}
 
 	public void sendPKT() {
-
 		Level world = this.level;
 		if (world == null) { return; }
 
@@ -378,11 +391,11 @@ public abstract class TileAbstractSM extends BlockEntity implements MenuProvider
 	}
 
 	// インベントリサイズの取得
-	public int getInvSize () {
+	public int getInvSize() {
 		return 0;
 	}
 
-	public CompoundTag getTag (Tag tag) {
+	public CompoundTag getTag(Tag tag) {
 		return (CompoundTag) tag;
 	}
 
@@ -391,18 +404,18 @@ public abstract class TileAbstractSM extends BlockEntity implements MenuProvider
 		return Component.literal("");
 	}
 
-	public void addStackList (List<ItemStack> stackList, ItemStack stack) {
+	public void addStackList(List<ItemStack> stackList, ItemStack stack) {
 		if (!stack.isEmpty()) {
 			stackList.add(stack);
 		}
 	}
 
-	public Iterable<BlockPos> getRangePos (BlockPos pos, int range) {
-		return BlockPos.betweenClosed(pos.offset(-range, -range, -range), pos.offset(range, range, range));
+	public Iterable<BlockPos> getRangePos(BlockPos pos, int range) {
+		return WorldHelper.getRangePos(pos, range);
 	}
 
-	public Iterable<BlockPos> getRangePosUnder (int range) {
-		return BlockPos.betweenClosed(this.getBlockPos().offset(-range, 0, -range), this.getBlockPos().offset(range, range, range));
+	public Iterable<BlockPos> getRangePosUnder(BlockPos pos, int range) {
+		return WorldHelper.getRangePos(pos, -range, 0, -range, range, range, range);
 	}
 
 	public IItemHandler getItemHandler(BlockEntity tile, Direction face) {
@@ -422,6 +435,11 @@ public abstract class TileAbstractSM extends BlockEntity implements MenuProvider
 		return null;
 	}
 
+	public IFluidHandler getFluidHandler(BlockEntity tile, Direction face) {
+		Optional<IFluidHandler> cap = tile.getCapability(ForgeCapabilities.FLUID_HANDLER, face).resolve();
+		return cap.isPresent() ? cap.get() : null;
+	}
+
 	public <T extends Entity> List<T> getEntityList(Class<T> enClass, double range) {
 		return this.level.getEntitiesOfClass(enClass, this.getAABB(range));
 	}
@@ -434,49 +452,63 @@ public abstract class TileAbstractSM extends BlockEntity implements MenuProvider
 		return this.level.getEntitiesOfClass(enClass, this.getAABBHalf(range)).stream().filter(flag).toList();
 	}
 
+	public <T extends Entity> List<T> getEntityListUp(Class<T> enClass, Predicate<T> flag, double range) {
+		return this.level.getEntitiesOfClass(enClass, this.getAABBUp(range)).stream().filter(flag).toList();
+	}
+
 	// 範囲の取得
-	public AABB getAABB (double range) {
+	public AABB getAABB(double range) {
 		return this.getAABB(range, range, range);
 	}
 
 	// 範囲の取得
-	public AABB getAABBHalf (double range) {
+	public AABB getAABBHalf(double range) {
 		return this.getAABB(range, range * 0.5D, range);
 	}
 
 	// 範囲の取得
-	public AABB getAABB (double x, double  y, double  z) {
+	public AABB getAABBUp(double range) {
+		BlockPos pos = this.getBlockPos();
+		return new AABB(pos.offset(-range, 0, -range), pos.offset(range, range, range));
+	}
+
+	// 範囲の取得
+	public AABB getAABB(double x, double y, double z) {
 		BlockPos pos = this.getBlockPos();
 		return new AABB(pos.offset(-x, -y, -z), pos.offset(x, y, z));
 	}
 
-	public void clickButton () {
+	public void clickButton() {
 		this.playSound(this.getBlockPos(), SoundEvents.UI_BUTTON_CLICK, 0.15F, this.rand.nextFloat() * 0.1F + 0.9F);
 	}
 
-	public boolean isAir () {
+	public boolean isAir() {
 		return this.getState(this.getBlockPos()).isAir();
 	}
 
-	public boolean isRSPower () {
+	public boolean isRSPower() {
 		return this.getLevel().getBestNeighborSignal(this.getBlockPos()) > 0;
 	}
 
-	public boolean isRSStop () {
+	public boolean isRSStop() {
 		return false;
 	}
 
-	public boolean isPeaceful (Level world) {
+	public boolean isPeaceful(Level world) {
 		return world.getDifficulty() == Difficulty.PEACEFUL;
 	}
 
-	public void addPotion (LivingEntity entity, MobEffect potion, int time, int level) {
+	public void addPotion(LivingEntity entity, MobEffect potion, int time, int level) {
 		entity.addEffect(new MobEffectInstance(potion, time, level, true, false));
 	}
 
 	// ブロック内の情報が空かどうか
 	public boolean isInfoEmpty() {
 		return true;
+	}
+
+	public int getClientTime() {
+		return this.clientTime / 2;
 	}
 
 	@Override
@@ -512,8 +544,95 @@ public abstract class TileAbstractSM extends BlockEntity implements MenuProvider
 		}
 	}
 
-	protected void sendInfo() {
+	public class MagiaHandler extends StackHandler {
 
+		public MagiaHandler(int size) {
+			super(size);
+		}
+
+		public MagiaHandler(int size, boolean isUpdate) {
+			super(size, isUpdate);
+		}
+
+		public int getSlotLimit(int slot) {
+			return getMaxStackSize();
+		}
+
+		protected int getStackLimit(int slot, @NotNull ItemStack stack) {
+			return getMaxStackSize();
+		}
+
+		@Override
+		public CompoundTag serializeNBT() {
+			ListTag nbtTagList = new ListTag();
+			for (int i = 0; i < this.stacks.size(); i++) {
+				if (!this.stacks.get(i).isEmpty()) {
+					CompoundTag itemTag = new CompoundTag();
+					itemTag.putInt("Slot", i);
+					save(this.stacks.get(i), itemTag);
+					nbtTagList.add(itemTag);
+				}
+			}
+			CompoundTag nbt = new CompoundTag();
+			nbt.put("Items", nbtTagList);
+			nbt.putInt("Size", this.stacks.size());
+			return nbt;
+		}
+
+		@Override
+		public void deserializeNBT(CompoundTag nbt) {
+			setSize(nbt.contains("Size", Tag.TAG_INT) ? nbt.getInt("Size") : this.stacks.size());
+			ListTag tagList = nbt.getList("Items", Tag.TAG_COMPOUND);
+			for (int i = 0; i < tagList.size(); i++) {
+				CompoundTag itemTags = tagList.getCompound(i);
+				int slot = itemTags.getInt("Slot");
+
+				if (slot >= 0 && slot < this.stacks.size()) {
+					this.stacks.set(slot, of(itemTags));
+				}
+			}
+			onLoad();
+		}
+	}
+
+	public CompoundTag save(ItemStack stack, CompoundTag tags) {
+		ResourceLocation src = Registry.ITEM.getKey(stack.getItem());
+		tags.putString("id", src == null ? "minecraft:air" : src.toString());
+		tags.putInt("Count", stack.getCount());
+		if (stack.getTag() != null) {
+			tags.put("tag", stack.getTag().copy());
+		}
+
+		CompoundTag tags2 = this.serializeCaps();
+		if (tags2 != null && !tags2.isEmpty()) {
+			tags.put("ForgeCaps", tags2);
+		}
+
+		return tags;
+	}
+
+	public ItemStack of(CompoundTag tags) {
+		try {
+			return this.getStack(tags);
+		}
+
+		catch (RuntimeException run) {
+			return ItemStack.EMPTY;
+		}
+	}
+
+	public ItemStack getStack(CompoundTag tags) {
+		int count = tags.getInt("Count");
+		Item item = Registry.ITEM.get(new ResourceLocation(tags.getString("id")));
+		ItemStack stack = new ItemStack(item, count);
+		if (tags.contains("tag", 10)) {
+			stack.setTag(tags.getCompound("tag"));
+		}
+
+		return stack;
+	}
+
+	protected void sendInfo() {
 		Level world = this.getLevel();
 		if (world == null) { return; }
 
@@ -552,7 +671,7 @@ public abstract class TileAbstractSM extends BlockEntity implements MenuProvider
 		return super.getCapability(cap, side);
 	}
 
-	public NonNullLazy<IItemHandler> getHandler (IItemHandlerModifiable handler, WriteMode mode) {
+	public NonNullLazy<IItemHandler> getHandler(IItemHandlerModifiable handler, WriteMode mode) {
 		return () -> new WrappedItemHandler(handler, mode);
 	}
 
@@ -560,12 +679,12 @@ public abstract class TileAbstractSM extends BlockEntity implements MenuProvider
 
 		private final ICapabilityResolver<IItemHandler> inRes;
 
-		protected SingleHandlerProvider(NonNullLazy<IItemHandler> compose) {
-			this.inRes = this.getBasicResolver(compose);
+		protected SingleHandlerProvider(NonNullLazy<IItemHandler> hand) {
+			this.inRes = this.getBasicResolver(hand);
 		}
 
-		protected SingleHandlerProvider(IItemHandlerModifiable compose, WriteMode mode) {
-			this.inRes = this.getBasicResolver(this.getHandler(compose, mode));
+		protected SingleHandlerProvider(IItemHandlerModifiable hand, WriteMode mode) {
+			this.inRes = this.getBasicResolver(this.getHandler(hand, mode));
 		}
 
 		@Override
@@ -585,22 +704,18 @@ public abstract class TileAbstractSM extends BlockEntity implements MenuProvider
 		private final ICapabilityResolver<IItemHandler> outRes;
 
 		protected InOutHandlerProvider(IItemHandlerModifiable in, IItemHandlerModifiable out) {
-			this.inRes = this.getBasicResolver(this.getHandler(in, WrappedItemHandler.WriteMode.IN));
-			this.outRes = this.getBasicResolver(this.getHandler(out, WrappedItemHandler.WriteMode.OUT));
+			this.inRes = this.getBasicResolver(this.getHandler(in, IN));
+			this.outRes = this.getBasicResolver(this.getHandler(out, OUT));
 		}
 
 		@Override
 		protected ICapabilityResolver<IItemHandler> getResolver(@Nullable Direction face) {
+			if (face == null) { return this.inRes; }
 
-			if (face == null) {
-				return this.inRes;
+			switch(face) {
+			case DOWN: return this.outRes;
+			default: return this.inRes;
 			}
-
-			else if (face == Direction.DOWN) {
-				return this.outRes;
-			}
-
-			return this.inRes;
 		}
 
 		@Override

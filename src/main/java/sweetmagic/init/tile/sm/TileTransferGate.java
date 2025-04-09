@@ -64,6 +64,6 @@ public class TileTransferGate extends TileAbstractSM {
 			break;
 		}
 
-		world.addParticle(ParticleInit.DIVINE.get(), x, y, z, xSpeed, ySpeed, zSpeed);
+		world.addParticle(ParticleInit.DIVINE, x, y, z, xSpeed, ySpeed, zSpeed);
 	}
 }

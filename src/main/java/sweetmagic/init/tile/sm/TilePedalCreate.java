@@ -33,13 +33,13 @@ import sweetmagic.init.TagInit;
 import sweetmagic.init.TileInit;
 import sweetmagic.init.block.base.BaseMFBlock;
 import sweetmagic.init.block.sm.ParallelInterfere;
-import sweetmagic.init.tile.inventory.SMBookInventory;
-import sweetmagic.init.tile.inventory.SMPorchInventory;
-import sweetmagic.init.tile.inventory.SMWandInventory;
+import sweetmagic.init.tile.inventory.SMInventory.SMBookInventory;
+import sweetmagic.init.tile.inventory.SMInventory.SMPorchInventory;
+import sweetmagic.init.tile.inventory.SMInventory.SMWandInventory;
 import sweetmagic.recipe.RecipeHelper;
-import sweetmagic.recipe.RecipeUtil;
+import sweetmagic.recipe.RecipeHelper.RecipeUtil;
 import sweetmagic.recipe.pedal.PedalRecipe;
-import sweetmagic.util.RGBColor;
+import sweetmagic.util.RenderUtil.RGBColor;
 
 public class TilePedalCreate extends TileSMMagic implements ISMTip {
 
@@ -122,7 +122,7 @@ public class TilePedalCreate extends TileSMMagic implements ISMTip {
 
 		// 必要なブロックがない場合
 		if (!this.checkBlock()) {
-			return this.getTipArray(this.getText("pedastal_noblock"), ":", this.getNeedBlock(false).getName().withStyle(RED));
+			return this.getTipArray(this.getText("pedastal_noblock"), ":", this.getNeedBlock().getName().withStyle(RED));
 		}
 
 		// レシピを取得して見つからなければ終了
@@ -151,7 +151,7 @@ public class TilePedalCreate extends TileSMMagic implements ISMTip {
 
 		// 必要なブロックがない場合
 		if (!this.checkBlock()) {
-			return this.getTipArray(this.getText("pedastal_noblock"), ":", this.getNeedBlock(false).getName().withStyle(RED));
+			return this.getTipArray(this.getText("pedastal_noblock"), ":", this.getNeedBlock().getName().withStyle(RED));
 		}
 
 		for (int i = 0; i < 8; i++) {
@@ -333,7 +333,7 @@ public class TilePedalCreate extends TileSMMagic implements ISMTip {
 	public void craftFinish () {
 		this.isCraft = false;
 		this.playSound(this.getBlockPos(), SoundEvents.PLAYER_LEVELUP, 0.5F, 1F);
-        this.level.levelEvent(2003, this.getBlockPos().above(2), 0);
+		this.level.levelEvent(2003, this.getBlockPos().above(2), 0);
 		this.sendPKT();
 	}
 
@@ -363,25 +363,25 @@ public class TilePedalCreate extends TileSMMagic implements ISMTip {
 			float f2 = (float) (posY + 0.85F + this.rand.nextFloat() * 0.75F) + this.nowTick * 0.00375F * rate;
 			float f3 = (float) posZ - 0.5F + this.rand.nextFloat();
 
-			world.addParticle(ParticleInit.TWILIGHTLIGHT.get(), true, f1, f2, f3, 0, 0, 0);
+			world.addParticle(ParticleInit.TWILIGHTLIGHT, true, f1, f2, f3, 0, 0, 0);
 
 			float f4 = (float) posX - 0.5F + this.rand.nextFloat();
 			float f5 = (float) (posY + 0.35F + this.rand.nextFloat() * 0.75F) + this.nowTick * 0.003875F * rate;
 			float f6 = (float) posZ - 0.5F + this.rand.nextFloat();
 
 			RGBColor color = colorList.get(this.rand.nextInt(colorList.size()));
-			world.addParticle(ParticleInit.LAY.get(), true, f4, f5, f6, color.getRed(), color.getGreen(), color.getBlue());
+			world.addParticle(ParticleInit.LAY, true, f4, f5, f6, color.red(), color.green(), color.blue());
 		}
 	}
 
-    public void spawnParticleRing (Level world, double x, double y, double z, double vecX, double vecY, double vecZ, double step) {
+	public void spawnParticleRing(Level world, double x, double y, double z, double vecX, double vecY, double vecZ, double step) {
 
 		double spped = 0.1D;
 
-        for (double degree = 0D; degree < 2D * Math.PI; degree += step) {
-        	world.addParticle(ParticleInit.NORMAL.get(), true, x + Math.cos(degree), y, z + Math.sin(degree), -Math.cos(degree) * spped, vecY, -Math.sin(degree) * spped);
-        }
-    }
+		for (double degree = 0D; degree < 2D * Math.PI; degree += step) {
+			world.addParticle(ParticleInit.NORMAL, true, x + Math.cos(degree), y, z + Math.sin(degree), -Math.cos(degree) * spped, vecY, -Math.sin(degree) * spped);
+		}
+	}
 
 	// ドロップリストを取得
 	public List<ItemStack> getDropList() {
@@ -398,8 +398,8 @@ public class TilePedalCreate extends TileSMMagic implements ISMTip {
 		return this.craftTime;
 	}
 
-	public Block getNeedBlock (boolean isClient) {
-		return isClient ? BlockInit.aethercrystal_block_alpha : BlockInit.aethercrystal_block;
+	public Block getNeedBlock () {
+		return BlockInit.aethercrystal_block;
 	}
 
 	// 最大MFの取得

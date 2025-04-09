@@ -10,8 +10,11 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.items.IItemHandler;
+import sweetmagic.api.iitem.IFood;
 import sweetmagic.api.iitem.IPorch;
+import sweetmagic.api.iitem.info.FoodInfo;
 import sweetmagic.init.ItemInit;
+import sweetmagic.init.capability.ICookingStatus;
 
 public class CookedItemSlot extends SMSlot {
 
@@ -25,7 +28,7 @@ public class CookedItemSlot extends SMSlot {
 
 	public ItemStack remove(int count) {
 		if (this.hasItem()) {
-			this.removeCount += Math.min(count, this.getItem().getCount());
+			this.removeCount = Math.min(count, this.getItem().getCount());
 		}
 
 		return super.remove(count);
@@ -37,27 +40,34 @@ public class CookedItemSlot extends SMSlot {
 		super.onTake(player, stack);
 	}
 
-	protected void onQuickCraft(ItemStack stack, int count) {
-		this.removeCount += count;
+	public void onQuickCraft(ItemStack stack, int count) {
+		this.removeCount = count;
 		this.getExp(stack, this.removeCount);
 	}
 
-	public void getExp (ItemStack stack, int count) {
-
+	public void getExp(ItemStack stack, int count) {
 		Item item = stack.getItem();
-		if ( !item.isEdible()) { return; }
+		if (!item.isEdible() || this.player == null) { return; }
 
-		ItemStack leg = player.getItemBySlot(EquipmentSlot.LEGS);
+		if (item instanceof IFood food) {
+			IFood.getExpValue(this.player, new FoodInfo(stack), count);
+			ICookingStatus.sendPKT(this.player);
+		}
+
+		ItemStack leg = this.player.getItemBySlot(EquipmentSlot.LEGS);
 		if (leg.isEmpty() || !(leg.getItem() instanceof IPorch porch) || !porch.hasAcce(leg, ItemInit.mysterious_fork)) { return; }
 
 		FoodProperties food = item.getFoodProperties();
 		float amount = Math.max(food.getNutrition(), 1F) * Math.max(food.getSaturationModifier(), 0.5F) * count;
 		int xp = (int) (Math.max(1, amount));
-		Level world = player.level;
+		Level world = this.player.level;
 
 		if (!world.isClientSide) {
-	    	ExperienceOrb entity = new ExperienceOrb(world, player.getX(), player.getY(), player.getZ(), xp);
-	    	world.addFreshEntity(entity);
+			int cookLevel = ICookingStatus.getState(this.player).getLevel();
+			float rate = 1F + cookLevel * 0.05F;
+
+			ExperienceOrb entity = new ExperienceOrb(world, this.player.getX(), this.player.getY(), this.player.getZ(), (int) (xp * rate));
+			world.addFreshEntity(entity);
 		}
 	}
 }

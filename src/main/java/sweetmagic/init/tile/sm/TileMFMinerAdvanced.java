@@ -29,11 +29,10 @@ import sweetmagic.util.ItemHelper;
 public class TileMFMinerAdvanced extends TileSMMagic {
 
 	public int craftTime = 0;
+	public int maxMagiaFlux = 100000;
 	public static final int MAXCRAFT_TIME = 10;
-	public int maxMagiaFlux = 100000;				// 最大MF量を設定
 	public boolean isCraft = false;
 	public ItemStack outStack = ItemStack.EMPTY;
-
 	protected final StackHandler inputInv = new StackHandler(10);
 	protected final StackHandler outInv = new StackHandler(this.getInvSize());
 
@@ -110,24 +109,24 @@ public class TileMFMinerAdvanced extends TileSMMagic {
 
 	// インベントリサイズの取得
 	@Override
-	public int getInvSize () {
+	public int getInvSize() {
 		return 27;
 	}
 
 	// 最大MFの取得
 	@Override
-	public int getMaxMF () {
+	public int getMaxMF() {
 		return this.maxMagiaFlux;
 	}
 
 	// 受信するMF量の取得
 	@Override
-	public int getReceiveMF () {
+	public int getReceiveMF() {
 		return 5000;
 	}
 
 	// 必要MF
-	public int getNeedMF () {
+	public int getNeedMF() {
 		return 500;
 	}
 
@@ -137,7 +136,7 @@ public class TileMFMinerAdvanced extends TileSMMagic {
 	}
 
 	// 入力スロットのアイテムを取得
-	public  ItemStack getInputItem(int i) {
+	public ItemStack getInputItem(int i) {
 		return this.getInput().getStackInSlot(i);
 	}
 
@@ -147,7 +146,7 @@ public class TileMFMinerAdvanced extends TileSMMagic {
 	}
 
 	// 出力スロットのアイテムを取得
-	public  ItemStack getOutItem(int i) {
+	public ItemStack getOutItem(int i) {
 		return this.getOut().getStackInSlot(i);
 	}
 
@@ -179,17 +178,17 @@ public class TileMFMinerAdvanced extends TileSMMagic {
 	}
 
 	// RS信号で動作を停止するかどうか
-	public boolean isRSStop () {
+	public boolean isRSStop() {
 		return true;
 	}
 
-	// MFゲージの描画量を計算するためのメソッド
-	public int getCraftProgressScaled(int value) {
+	// クラフト描画量を計算するためのメソッド
+	public int getCraftProgress(int value) {
 		return Math.min(value, (int) (value * (float) (this.craftTime) / (float) (MAXCRAFT_TIME)));
-    }
+	}
 
 	// インベントリのアイテムを取得
-	public List<ItemStack> getInvList () {
+	public List<ItemStack> getInvList() {
 		List<ItemStack> stackList = new ArrayList<>();
 
 		for (int i = 0; i < this.getInvSize(); i++) {

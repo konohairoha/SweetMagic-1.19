@@ -51,17 +51,17 @@ public class TileAetherLanp extends TileSMMagic {
 	}
 
 	// 周囲のMF回収
-	public void roundMFRecive () {
+	public void roundMFRecive() {
 
 		// 範囲の座標取得
 		int sumMF = 0;
-		Iterable<BlockPos> posList = this.getRangePosUnder(this.getRange());
+		Iterable<BlockPos> posList = this.getRangePosUnder(this.getBlockPos(), this.getRange());
 
 		// リスト分まわす
 		for (BlockPos pos : posList) {
 
 			// MFブロック以外なら終了
-			if ( !(this.getTile(pos) instanceof TileSMMagic tile) || tile.getReceive()) { continue; }
+			if (!(this.getTile(pos) instanceof TileSMMagic tile) || tile.getReceive()) { continue; }
 
 			// MFブロックからMFを入れるときの処理
 			int oldMF = this.getMF();
@@ -78,16 +78,16 @@ public class TileAetherLanp extends TileSMMagic {
 	}
 
 	// 周囲のMF回収
-	public void roundMFEffect () {
+	public void roundMFEffect() {
 
 		BlockPos pos = this.getBlockPos();
-		Iterable<BlockPos> posArray = this.getRangePosUnder(this.getRange());
+		Iterable<BlockPos> posArray = this.getRangePosUnder(this.getBlockPos(), this.getRange());
 
 		// リスト分まわす
 		for (BlockPos p : posArray) {
 
 			// MFブロック以外なら終了
-			if ( !(this.getTile(p) instanceof TileSMMagic tile) || tile.getReceive() || tile.isMFEmpty()) { continue; }
+			if (!(this.getTile(p) instanceof TileSMMagic tile) || tile.getReceive() || tile.isMFEmpty()) { continue; }
 
 			float pX = pos.getX() - p.getX();
 			float pY = pos.getY() - p.getY();
@@ -106,12 +106,12 @@ public class TileAetherLanp extends TileSMMagic {
 				float ySpeed = pY * 0.1175F;
 				float zSpeed = pZ * 0.1175F;
 
-				this.level.addParticle(ParticleInit.NORMAL.get(), x, y, z, xSpeed, ySpeed, zSpeed);
+				this.level.addParticle(ParticleInit.NORMAL, x, y, z, xSpeed, ySpeed, zSpeed);
 			}
 		}
 	}
 
-	public void addRange (int id) {
+	public void addRange(int id) {
 
 		int addValue = 0;
 
@@ -135,18 +135,18 @@ public class TileAetherLanp extends TileSMMagic {
 		this.sendPKT();
 	}
 
-	public int getRange () {
+	public int getRange() {
 		return this.range;
 	}
 
 	// 受信するMF量の取得
-	public int getReceiveMF () {
+	public int getReceiveMF() {
 		return 5000;
 	}
 
 	// 最大MFの取得
 	@Override
-	public int getMaxMF () {
+	public int getMaxMF() {
 		return this.maxMagiaFlux;
 	}
 

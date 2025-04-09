@@ -7,8 +7,8 @@ import sweetmagic.init.TileInit;
 
 public class TileMFFurnaceAdvanced extends TileMFFurnace {
 
-	protected final int maxMagiaFlux = 200000;				// 最大MF量を設定
 	protected final int costMF = 10;
+	protected final int maxMagiaFlux = 200000;
 
 	public TileMFFurnaceAdvanced(BlockPos pos, BlockState state) {
 		super(TileInit.mffurnaceAdavance, pos, state);
@@ -20,22 +20,22 @@ public class TileMFFurnaceAdvanced extends TileMFFurnace {
 
 	// 最大MFの取得
 	@Override
-	public int getMaxMF () {
+	public int getMaxMF() {
 		return this.maxMagiaFlux;
 	}
 
 	// 消費MFの取得
-	public int getCostMF () {
+	public int getCostMF() {
 		return this.costMF;
 	}
 
 	// 受信するMF量の取得
 	@Override
-	public int getReceiveMF () {
+	public int getReceiveMF() {
 		return 20000;
 	}
 
-	public float getCraftRate () {
+	public float getCraftRate() {
 		return 10F;
 	}
 }

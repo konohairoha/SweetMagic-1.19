@@ -33,10 +33,9 @@ public class TileAetherReverse extends TileSMMagic {
 	public boolean canCraft = false;
 	public int craftTime = 0;
 	public int shrinkValue = 0;
-	public int maxMagiaFlux = 100000;				// 最大MF量を設定
+	public int maxMagiaFlux = 100000;
 	public ItemStack stack = ItemStack.EMPTY;
 	public List<ItemStack> craftList = new ArrayList<>();
-
 	protected final StackHandler inputInv = new StackHandler(1, true);
 	protected final StackHandler outputInv = new StackHandler(9, true);
 	protected final StackHandler chestInv = new StackHandler(27);
@@ -96,13 +95,13 @@ public class TileAetherReverse extends TileSMMagic {
 		if (this.getInputItem().isEmpty()) { return; }
 
 		for (int i = 0; i < 8; i++) {
-			this.spawnParticleCycle(world, ParticleInit.CYCLE_ORB.get(), pos.getX() + 0.5D, pos.getY() + 1.35D, pos.getZ() + 0.5D, Direction.UP, 0.25D, (i * 45), false);
-			this.spawnParticleCycle(world, ParticleInit.CYCLE_ORB.get(), pos.getX() + 0.5D, pos.getY() + 1.1D, pos.getZ() + 0.5D, Direction.UP, 0.4D, (i * 45), true);
+			this.spawnParticleCycle(world, ParticleInit.CYCLE_ORB, pos.getX() + 0.5D, pos.getY() + 1.35D, pos.getZ() + 0.5D, Direction.UP, 0.25D, (i * 45), false);
+			this.spawnParticleCycle(world, ParticleInit.CYCLE_ORB, pos.getX() + 0.5D, pos.getY() + 1.1D, pos.getZ() + 0.5D, Direction.UP, 0.4D, (i * 45), true);
 		}
 	}
 
 	// 作成開始
-	public void craftStart () {
+	public void craftStart() {
 		int needMF = this.getReverseCost();
 		if (needMF > this.getMF()) { return; }
 
@@ -123,20 +122,14 @@ public class TileAetherReverse extends TileSMMagic {
 	}
 
 	// クラフトの完成
-	public void craftFinish () {
-
-		for (ItemStack stack : this.craftList) {
-			ItemHandlerHelper.insertItemStacked(this.getChest(), stack.copy(), false);
-		}
-
+	public void craftFinish() {
+		this.craftList.forEach(s -> ItemHandlerHelper.insertItemStacked(this.getChest(), s.copy(), false));
 		this.playSound(this.getBlockPos(), SoundEvents.ANVIL_USE, 0.1F, 1.125F);
-
-		// 初期化
 		this.clearInfo();
 	}
 
 	// 初期化
-	public void clearInfo () {
+	public void clearInfo() {
 		this.craftTime = 0;
 		this.maxCraftTime = 9;
 		this.shrinkValue = 0;
@@ -146,7 +139,7 @@ public class TileAetherReverse extends TileSMMagic {
 		this.sendPKT();
 	}
 
-	public List<ItemStack> getReverseStack (Level world) {
+	public List<ItemStack> getReverseStack(Level world) {
 
 		List<ItemStack> stackList = new ArrayList<>();
 		ItemStack stack = this.getInputItem();
@@ -207,7 +200,7 @@ public class TileAetherReverse extends TileSMMagic {
 	}
 
 	// レシピの検索条件取得
-	public boolean checkRecipe (Recipe<?> recipe) {
+	public boolean checkRecipe(Recipe<?> recipe) {
 		return (recipe instanceof CraftingRecipe || recipe instanceof ShapedRecipe) && !recipe.isIncomplete() && recipe.canCraftInDimensions(3, 3) && !recipe.getIngredients().isEmpty();
 	}
 
@@ -233,7 +226,7 @@ public class TileAetherReverse extends TileSMMagic {
 	}
 
 	// リバースクラフトのコスト取得
-	public int getReverseCost () {
+	public int getReverseCost() {
 
 		int mf = 500;
 		float rate = 1F;
@@ -281,13 +274,13 @@ public class TileAetherReverse extends TileSMMagic {
 
 	// 受信するMF量の取得
 	@Override
-	public int getReceiveMF () {
+	public int getReceiveMF() {
 		return 10000;
 	}
 
 	// 最大MFの取得
 	@Override
-	public int getMaxMF () {
+	public int getMaxMF() {
 		return this.maxMagiaFlux;
 	}
 
@@ -297,7 +290,7 @@ public class TileAetherReverse extends TileSMMagic {
 	}
 
 	// 素材スロットのアイテムを取得
-	public  ItemStack getInputItem() {
+	public ItemStack getInputItem() {
 		return this.getInput().getStackInSlot(0);
 	}
 
@@ -307,7 +300,7 @@ public class TileAetherReverse extends TileSMMagic {
 	}
 
 	// 素材スロットのアイテムを取得
-	public  ItemStack getOutItem(int i) {
+	public ItemStack getOutItem(int i) {
 		return this.getOut().getStackInSlot(i);
 	}
 
@@ -317,14 +310,14 @@ public class TileAetherReverse extends TileSMMagic {
 	}
 
 	// 素材スロットのアイテムを取得
-	public  ItemStack getChestItem(int i) {
+	public ItemStack getChestItem(int i) {
 		return this.getChest().getStackInSlot(i);
 	}
 
-	// MFゲージの描画量を計算するためのメソッド
-	public int getCraftProgressScaled(int value) {
+	// クラフト描画量を計算するためのメソッド
+	public int getCraftProgress(int value) {
 		return Math.min(value, (int) (value * (float) (this.craftTime) / (float) (this.maxCraftTime)));
-    }
+	}
 
 	@Override
 	public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player) {
@@ -332,7 +325,7 @@ public class TileAetherReverse extends TileSMMagic {
 	}
 
 	// インベントリのアイテムを取得
-	public List<ItemStack> getInvList () {
+	public List<ItemStack> getInvList() {
 		List<ItemStack> stackList = new ArrayList<>();
 		this.addStackList(stackList, this.getInputItem());
 

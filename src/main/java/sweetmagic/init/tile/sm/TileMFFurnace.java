@@ -29,16 +29,14 @@ import sweetmagic.util.ItemHelper;
 
 public class TileMFFurnace extends TileSMMagic {
 
-	protected final int maxMagiaFlux = 20000;				// 最大MF量を設定
-	protected final int costMF = 5;
-	public int maxCraftTime = 0;
-	public int craftTime = 0;
-	protected ItemStack stack = ItemStack.EMPTY;
-	public boolean isCraft = false;
 	public float exp = 0F;
-
+	public int craftTime = 0;
+	public int maxCraftTime = 0;
+	protected final int costMF = 5;
+	protected final int maxMagiaFlux = 20000;
+	public boolean isCraft = false;
+	protected ItemStack stack = ItemStack.EMPTY;
 	protected final RecipeWrapper dummyFurnace = new RecipeWrapper(new ItemStackHandler());
-
 	protected final StackHandler inputInv = new StackHandler(this.getInvSize() + 1);
 	protected final StackHandler outInv = new StackHandler(this.getInvSize());
 
@@ -76,7 +74,7 @@ public class TileMFFurnace extends TileSMMagic {
 	}
 
 	// 精錬できるか
-	public boolean canSmelt (Level world, BlockPos pos) {
+	public boolean canSmelt(Level world, BlockPos pos) {
 
 		// インベントリの整理
 		ItemHelper.compactSimpleInventory(this.inputInv);
@@ -90,7 +88,7 @@ public class TileMFFurnace extends TileSMMagic {
 	}
 
 	// 精錬できるか
-	public boolean canSmelt (Level world, ItemStack stack) {
+	public boolean canSmelt(Level world, ItemStack stack) {
 
 		// 精錬するアイテムがないなら終了
 		if (stack.isEmpty()) { return false; }
@@ -117,7 +115,7 @@ public class TileMFFurnace extends TileSMMagic {
 		return recipe.map(Recipe::getResultItem).orElse(ItemStack.EMPTY);
 	}
 
-	public void craftStart (Level world, BlockPos pos) {
+	public void craftStart(Level world, BlockPos pos) {
 
 		ItemStack stack = this.getInputItem(0);
 		this.stack = stack.copy();
@@ -139,7 +137,7 @@ public class TileMFFurnace extends TileSMMagic {
 		world.setBlock(pos, this.getState(pos).setValue(MFFurnace.ISCRAFT, true), 3);
 	}
 
-	public void craftFinish (Level world, BlockPos pos) {
+	public void craftFinish(Level world, BlockPos pos) {
 
 		// 精錬後のアイテムを出力スロットに入れる
 		ItemStack result = this.checkSmeltResult(world, this.stack).copy();
@@ -164,7 +162,7 @@ public class TileMFFurnace extends TileSMMagic {
 	}
 
 	// アイテム吸い込み
-	public void suctionItem (Level world, BlockPos pos) {
+	public void suctionItem(Level world, BlockPos pos) {
 		BlockEntity tile = this.getTile(pos.above());
 		if (tile == null) { return; }
 
@@ -182,7 +180,7 @@ public class TileMFFurnace extends TileSMMagic {
 	}
 
 	// ホッパーからアイテムをチェストに入れる
-	public void extractItem (BlockPos pos) {
+	public void extractItem(BlockPos pos) {
 		BlockEntity tile = this.getTile(pos.below());
 		if (tile == null) { return; }
 
@@ -204,28 +202,28 @@ public class TileMFFurnace extends TileSMMagic {
 
 	// インベントリサイズの取得
 	@Override
-	public int getInvSize () {
+	public int getInvSize() {
 		return 18;
 	}
 
 	// 最大MFの取得
 	@Override
-	public int getMaxMF () {
+	public int getMaxMF() {
 		return this.maxMagiaFlux;
 	}
 
 	// 消費MFの取得
-	public int getCostMF () {
+	public int getCostMF() {
 		return this.costMF;
 	}
 
 	// 受信するMF量の取得
 	@Override
-	public int getReceiveMF () {
+	public int getReceiveMF() {
 		return 5000;
 	}
 
-	public float getCraftRate () {
+	public float getCraftRate() {
 		return 5F;
 	}
 
@@ -235,7 +233,7 @@ public class TileMFFurnace extends TileSMMagic {
 	}
 
 	// メインスロットのアイテムを取得
-	public  ItemStack getInputItem(int i) {
+	public ItemStack getInputItem(int i) {
 		return this.getInput().getStackInSlot(i);
 	}
 
@@ -245,7 +243,7 @@ public class TileMFFurnace extends TileSMMagic {
 	}
 
 	// 出力スロットのアイテムを取得
-	public  ItemStack getOutItem(int i) {
+	public ItemStack getOutItem(int i) {
 		return this.getOut().getStackInSlot(i);
 	}
 
@@ -277,10 +275,10 @@ public class TileMFFurnace extends TileSMMagic {
 		this.stack = ItemStack.of(tag.getCompound("outPutStack"));
 	}
 
-	// MFゲージの描画量を計算するためのメソッド
-	public int getCraftProgressScaled(int value) {
+	// クラフト描画量を計算するためのメソッド
+	public int getCraftProgress(int value) {
 		return Math.min(value, (int) (value * (float) (this.craftTime) / (float) (this.maxCraftTime)));
-    }
+	}
 
 	@Override
 	public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player) {
@@ -288,12 +286,12 @@ public class TileMFFurnace extends TileSMMagic {
 	}
 
 	// RS信号で動作を停止するかどうか
-	public boolean isRSStop () {
+	public boolean isRSStop() {
 		return true;
 	}
 
 	// インベントリのアイテムを取得
-	public List<ItemStack> getInvList () {
+	public List<ItemStack> getInvList() {
 		List<ItemStack> stackList = new ArrayList<>();
 
 		for (int i = 0; i < this.getInvSize() + 1; i++) {

@@ -26,17 +26,15 @@ import sweetmagic.recipe.recycler.RecyclerRecipe;
 
 public class TileAetherRecycler extends TileSMMagic {
 
-	public int maxMagiaFlux = 20000;				// 最大MF量を設定
+	public int maxMagiaFlux = 20000;
 	public boolean isCraft = false;
 	private static final int MAX_CRAFT_TIME = 10;
 	public int craftTime = 0;
 	public int amount = 0;
-
 	public List<Float> chanceList = new ArrayList<>();
 	public List<ItemStack> inputStackList = new ArrayList<>();			// 投入アイテム
 	public List<List<ItemStack>> outStackListList = new ArrayList<>();	// 出力アイテム
 	public List<ItemStack> outStackOverList = new ArrayList<>();		// 投入できなかったアイテム
-
 	protected final StackHandler handInv = new StackHandler(24);
 	protected final StackHandler inputInv = new StackHandler(1);
 	protected final StackHandler outputInv = new StackHandler(this.getInvSize());
@@ -93,7 +91,7 @@ public class TileAetherRecycler extends TileSMMagic {
 	}
 
 	// 作成開始
-	public void craftStart () {
+	public void craftStart() {
 
 		if (this.tickTime % 20 == 0) {
 			this.insertInput();
@@ -156,7 +154,7 @@ public class TileAetherRecycler extends TileSMMagic {
 	}
 
 	// クラフトの完成
-	public void craftFinish () {
+	public void craftFinish() {
 
 		// リザルト分回す
 		for (int i = 0; i < this.outStackListList.size(); i++) {
@@ -183,7 +181,7 @@ public class TileAetherRecycler extends TileSMMagic {
 		this.sendPKT();
 	}
 
-	public void craftOverInsert () {
+	public void craftOverInsert() {
 
 		List<ItemStack> stackList = new ArrayList<>();
 
@@ -202,7 +200,7 @@ public class TileAetherRecycler extends TileSMMagic {
 		}
 	}
 
-	public void insertInput () {
+	public void insertInput() {
 		for (int i = 0; i < 24; i++) {
 			ItemStack stack = this.getHandItem(i);
 			if (stack.isEmpty()) { continue; }
@@ -213,7 +211,7 @@ public class TileAetherRecycler extends TileSMMagic {
 	}
 
 	// 初期化
-	public void clearInfo () {
+	public void clearInfo() {
 		this.amount = 0;
 		this.craftTime = 0;
 		this.isCraft = false;
@@ -224,7 +222,7 @@ public class TileAetherRecycler extends TileSMMagic {
 	}
 
 	// レシピチェック
-	public boolean checkRecipe () {
+	public boolean checkRecipe() {
 		return !RecyclerRecipe.getRecipe(this.level, this.getStackList()).isEmpty();
 	}
 
@@ -263,35 +261,35 @@ public class TileAetherRecycler extends TileSMMagic {
 	}
 
 	// クラフトゲージの描画量を計算するためのメソッド
-	public int getCraftProgressScaled(int value) {
+	public int getCraftProgress(int value) {
 		return Math.min(value, (int) (value * (float) (this.craftTime) / (float) (MAX_CRAFT_TIME)));
-    }
+	}
 
 	// 受信するMF量の取得
 	@Override
-	public int getReceiveMF () {
+	public int getReceiveMF() {
 		return 10000;
 	}
 
 	// 最大MFの取得
 	@Override
-	public int getMaxMF () {
+	public int getMaxMF() {
 		return this.maxMagiaFlux;
 	}
 
 	// 消費MF
-	public int getUseMF () {
+	public int getUseMF() {
 		return 50;
 	}
 
 	// インベントリサイズの取得
 	@Override
-	public int getInvSize () {
+	public int getInvSize() {
 		return 27;
 	}
 
 	// 素材の取得
-	public List<ItemStack> getStackList () {
+	public List<ItemStack> getStackList() {
 		return Arrays.<ItemStack> asList(this.getInputItem());
 	}
 
@@ -301,7 +299,7 @@ public class TileAetherRecycler extends TileSMMagic {
 	}
 
 	// メインスロットのアイテムを取得
-	public  ItemStack getHandItem(int i) {
+	public ItemStack getHandItem(int i) {
 		return this.getHand().getStackInSlot(i);
 	}
 
@@ -311,7 +309,7 @@ public class TileAetherRecycler extends TileSMMagic {
 	}
 
 	// 素材スロットのアイテムを取得
-	public  ItemStack getInputItem() {
+	public ItemStack getInputItem() {
 		return this.getInput().getStackInSlot(0);
 	}
 
@@ -321,7 +319,7 @@ public class TileAetherRecycler extends TileSMMagic {
 	}
 
 	// 出力のアイテムを取得
-	public  ItemStack getOutputItem(int i) {
+	public ItemStack getOutputItem(int i) {
 		return this.getOutput().getStackInSlot(i);
 	}
 
@@ -331,12 +329,12 @@ public class TileAetherRecycler extends TileSMMagic {
 	}
 
 	// RS信号で動作を停止するかどうか
-	public boolean isRSStop () {
+	public boolean isRSStop() {
 		return true;
 	}
 
 	// インベントリのアイテムを取得
-	public List<ItemStack> getInvList () {
+	public List<ItemStack> getInvList() {
 		List<ItemStack> stackList = new ArrayList<>();
 
 		for (int i = 0; i < 10; i++) {

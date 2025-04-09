@@ -24,12 +24,11 @@ import sweetmagic.init.tile.menu.AccessoryTableMenu;
 
 public class TileAccessoryTable extends TileSMMagic {
 
-	public int maxCraftTime = 10;
 	public int craftTime = 0;
+	public int maxCraftTime = 10;
+	public int maxMagiaFlux = 100000;
 	public boolean isCraft = false;
 	public ItemStack outStack = ItemStack.EMPTY;
-	public int maxMagiaFlux = 100000;				// 最大MF量を設定
-
 	protected final StackHandler inputInv = new StackHandler(this.getInvSize());
 	protected final StackHandler acceInv = new StackHandler(this.getInvSize());
 	protected final StackHandler starInv = new StackHandler(this.getInvSize());
@@ -84,11 +83,11 @@ public class TileAccessoryTable extends TileSMMagic {
 			float xSpeed = this.getRandFloat(0.1F);
 			float ySpeed = this.getRandFloat(0.05F);
 			float zSpeed = this.getRandFloat(0.1F);
-			this.level.addParticle(ParticleInit.NORMAL.get(), x, y, z, xSpeed, ySpeed, zSpeed);
+			this.level.addParticle(ParticleInit.NORMAL, x, y, z, xSpeed, ySpeed, zSpeed);
 		}
 	}
 
-	public void craftParticle (Level world, BlockPos pos, float posX, float posZ) {
+	public void craftParticle(Level world, BlockPos pos, float posX, float posZ) {
 
 		float x = pos.getX() + 0.5F + posX;
 		float y = pos.getY() + 1.025F;
@@ -97,10 +96,10 @@ public class TileAccessoryTable extends TileSMMagic {
 		float ySpeed = 0F;
 		float zSpeed = -posZ * 0.08F;
 
-		this.level.addParticle(ParticleInit.TWILIGHTLIGHT.get(), x, y, z, xSpeed, ySpeed, zSpeed);
+		this.level.addParticle(ParticleInit.TWILIGHTLIGHT, x, y, z, xSpeed, ySpeed, zSpeed);
 	}
 
-	public boolean canCraft () {
+	public boolean canCraft() {
 
 		// メインスロットが空なら終了
 		ItemStack input = this.getInputItem();
@@ -133,7 +132,7 @@ public class TileAccessoryTable extends TileSMMagic {
 	}
 
 	// 作成開始
-	public void craftStart () {
+	public void craftStart() {
 		ItemStack input = this.getInputItem();
 		AcceInfo acceInfo = new AcceInfo(input);
 		int stackCount = acceInfo.getAcce().getStackCount(acceInfo);
@@ -152,14 +151,14 @@ public class TileAccessoryTable extends TileSMMagic {
 	}
 
 	// クラフトの完成
-	public void craftFinish () {
+	public void craftFinish() {
 		ItemHandlerHelper.insertItemStacked(this.getOutput(), this.outStack.copy(), false);
 		this.clearInfo();
 		this.playSound(this.getBlockPos(), SoundEvents.ANVIL_USE, 0.25F, 1F);
 	}
 
 	// 初期化
-	public void clearInfo () {
+	public void clearInfo() {
 		this.craftTime = 0;
 		this.maxCraftTime = 10;
 		this.isCraft = false;
@@ -167,7 +166,7 @@ public class TileAccessoryTable extends TileSMMagic {
 		this.sendPKT();
 	}
 
-	public String getTip () {
+	public String getTip() {
 		String tip = "";
 
 		// メインスロット、装備品スロットが空なら終了
@@ -197,18 +196,18 @@ public class TileAccessoryTable extends TileSMMagic {
 
 	// インベントリサイズの取得
 	@Override
-	public int getInvSize () {
+	public int getInvSize() {
 		return 1;
 	}
 
 	// 最大MFの取得
 	@Override
-	public int getMaxMF () {
+	public int getMaxMF() {
 		return this.maxMagiaFlux;
 	}
 
 	// 受信するMF量の取得
-	public int getReceiveMF () {
+	public int getReceiveMF() {
 		return 10000;
 	}
 
@@ -218,7 +217,7 @@ public class TileAccessoryTable extends TileSMMagic {
 	}
 
 	// 素材スロットのアイテムを取得
-	public  ItemStack getInputItem() {
+	public ItemStack getInputItem() {
 		return this.getInput().getStackInSlot(0);
 	}
 
@@ -228,7 +227,7 @@ public class TileAccessoryTable extends TileSMMagic {
 	}
 
 	// 素材スロットのアイテムを取得
-	public  ItemStack getAcceItem() {
+	public ItemStack getAcceItem() {
 		return this.getAcce().getStackInSlot(0);
 	}
 
@@ -238,7 +237,7 @@ public class TileAccessoryTable extends TileSMMagic {
 	}
 
 	// 星なる光スロットのアイテムを取得
-	public  ItemStack getStarItem() {
+	public ItemStack getStarItem() {
 		return this.getStar().getStackInSlot(0);
 	}
 
@@ -248,7 +247,7 @@ public class TileAccessoryTable extends TileSMMagic {
 	}
 
 	// 出力のアイテムを取得
-	public  ItemStack getOutputItem() {
+	public ItemStack getOutputItem() {
 		return this.getOutput().getStackInSlot(0);
 	}
 
@@ -280,17 +279,17 @@ public class TileAccessoryTable extends TileSMMagic {
 		this.outStack = ItemStack.of(tag.getCompound("outPutStack"));
 	}
 
-	public void setInv (StackHandler inv, CompoundTag tags, String name) {
+	public void setInv(StackHandler inv, CompoundTag tags, String name) {
 		CompoundTag tag = tags.getCompound(name);
 		if (tag == null) { return; }
 
 		inv.deserializeNBT(tag);
 	}
 
-	// MFゲージの描画量を計算するためのメソッド
-	public int getProgressScale(int value) {
+	// 描画量を計算するためのメソッド
+	public int getProgress(int value) {
 		return Math.min(value, (int) (value * (float) (this.craftTime) / (float) (this.maxCraftTime)));
-    }
+	}
 
 	@Override
 	public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player) {
@@ -298,7 +297,7 @@ public class TileAccessoryTable extends TileSMMagic {
 	}
 
 	// インベントリのアイテムを取得
-	public List<ItemStack> getInvList () {
+	public List<ItemStack> getInvList() {
 		List<ItemStack> stackList = new ArrayList<>();
 		this.addStackList(stackList, this.getInputItem());
 		this.addStackList(stackList, this.getAcceItem());

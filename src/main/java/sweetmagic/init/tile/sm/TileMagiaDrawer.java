@@ -20,11 +20,10 @@ import sweetmagic.init.tile.menu.MagiaDrawerMenu;
 
 public class TileMagiaDrawer extends TileSMMagic {
 
-	public int maxMagiaFlux = 100000;				// 最大MF量を設定
-	public int range = 4;							// 範囲
-	private static final int MIN_RANGE = 1;			// 最小範囲
-	private static final int MAX_RANGE = 64;		// 最大範囲
-
+	public int maxMagiaFlux = 100000;
+	public int range = 4;						// 範囲
+	private static final int MIN_RANGE = 1;		// 最小範囲
+	private static final int MAX_RANGE = 64;	// 最大範囲
 	public final StackHandler inputInv = new StackHandler(this.getInvSize());
 
 	public TileMagiaDrawer(BlockPos pos, BlockState state) {
@@ -50,7 +49,7 @@ public class TileMagiaDrawer extends TileSMMagic {
 	}
 
 	// アイテム吸い込み
-	public void suctionItem (Level world, BlockPos pos) {
+	public void suctionItem(Level world, BlockPos pos) {
 		List<ItemEntity> entityList = this.getEntityList(ItemEntity.class, e -> !e.getItem().isEmpty(), this.range);
 		if (entityList.isEmpty()) { return; }
 
@@ -77,7 +76,7 @@ public class TileMagiaDrawer extends TileSMMagic {
 		}
 	}
 
-	public void addRange (int id) {
+	public void addRange(int id) {
 
 		int addValue = 0;
 
@@ -103,19 +102,19 @@ public class TileMagiaDrawer extends TileSMMagic {
 
 	// インベントリサイズの取得
 	@Override
-	public int getInvSize () {
+	public int getInvSize() {
 		return 104;
 	}
 
 	// 受信するMF量の取得
 	@Override
-	public int getReceiveMF () {
+	public int getReceiveMF() {
 		return 10000;
 	}
 
 	// 最大MFの取得
 	@Override
-	public int getMaxMF () {
+	public int getMaxMF() {
 		return this.maxMagiaFlux;
 	}
 
@@ -125,11 +124,11 @@ public class TileMagiaDrawer extends TileSMMagic {
 	}
 
 	// 杖スロットのアイテムを取得
-	public  ItemStack getInputItem(int i) {
+	public ItemStack getInputItem(int i) {
 		return this.getInput().getStackInSlot(i);
 	}
 
-	public boolean isInvEmpty () {
+	public boolean isInvEmpty() {
 
 		for (int i = 0; i < this.getInvSize(); i ++) {
 			if (!this.getInputItem(i).isEmpty()) { return false; }
@@ -160,12 +159,12 @@ public class TileMagiaDrawer extends TileSMMagic {
 	}
 
 	// RS信号で動作を停止するかどうか
-	public boolean isRSStop () {
+	public boolean isRSStop() {
 		return true;
 	}
 
 	// インベントリのアイテムを取得
-	public List<ItemStack> getInputList () {
+	public List<ItemStack> getInputList() {
 		List<ItemStack> stackList = new ArrayList<>();
 
 		for (int i = 0; i < this.getInvSize(); i++) {
@@ -176,7 +175,7 @@ public class TileMagiaDrawer extends TileSMMagic {
 	}
 
 	// インベントリのアイテムを取得
-	public List<ItemStack> getInvList () {
+	public List<ItemStack> getInvList() {
 		List<ItemStack> stackList = new ArrayList<>();
 
 		for (int i = 0; i < this.getInvSize(); i++) {

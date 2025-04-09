@@ -2,7 +2,6 @@ package sweetmagic.init.tile.sm;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import javax.annotation.Nullable;
 
@@ -36,15 +35,13 @@ import sweetmagic.init.tile.menu.MagiaRewriteMenu;
 
 public class TileMagiaRewrite extends TileSMMagic {
 
-	private static final int MAX_CRAFT_TIME = 30;
 	public boolean isCraft = false;
+	public int nowLevel = 1;
 	public int craftTime = 0;
 	public int craftTick = 0;
-	public int maxMagiaFlux = 1000000;				// 最大MF量を設定
-	public int nowLevel = 1;				// 最大MF量を設定
-
+	public int maxMagiaFlux = 1000000;
+	private static final int MAX_CRAFT_TIME = 30;
 	public ItemStack outStack = ItemStack.EMPTY;
-
 	protected final StackHandler inputInv = new StackHandler(1, true);
 	protected final StackHandler outInv = new StackHandler(1, true);
 	protected final StackHandler bookInv = new StackHandler(1);
@@ -59,8 +56,8 @@ public class TileMagiaRewrite extends TileSMMagic {
 	}
 
 	// サーバー側処理
-	public void serverTick(Level level, BlockPos pos, BlockState state) {
-		super.serverTick(level, pos, state);
+	public void serverTick(Level world, BlockPos pos, BlockState state) {
+		super.serverTick(world, pos, state);
 
 		if (this.isCraft) {
 
@@ -109,7 +106,7 @@ public class TileMagiaRewrite extends TileSMMagic {
 
 		if (this.isCraft && this.tickTime % 10 == 0 && this.craftTime > 3 && this.craftTime < 27) {
 
-			ParticleOptions par = ParticleInit.CYCLE_RERITE.get();
+			ParticleOptions par = ParticleInit.CYCLE_RERITE;
 			for (int i = 0; i < 2; i++) {
 				this.spawnParticleCycle(world, par, pos.getX() + 0.5D, pos.getY() + 0.85D, pos.getZ() + 0.5D, Direction.UP, 0.7D, (i * 180), false);
 				this.spawnParticleCycle(world, par, pos.getX() + 0.5D, pos.getY() + 0.55D, pos.getZ() + 0.5D, Direction.UP, 0.6D, (i * 180), true);
@@ -118,7 +115,7 @@ public class TileMagiaRewrite extends TileSMMagic {
 	}
 
 	// 作成開始
-	public void craftStart (int id) {
+	public void craftStart(int id) {
 		ItemStack magicBook = this.getBookItem();
 		if (magicBook.isEmpty()) { return; }
 
@@ -134,6 +131,7 @@ public class TileMagiaRewrite extends TileSMMagic {
 		if (changedLevel <= 0) { return; }
 
 		// エンチャントレベルの設定
+		int tier = this.getTier();
 		int nowLevel = this.getNowEnchantLevel(id, input);
 		this.setEnchant(id, input, changedLevel);
 
@@ -146,7 +144,7 @@ public class TileMagiaRewrite extends TileSMMagic {
 		input.shrink(1);
 		this.setMF(this.getMF() - needMF);
 
-		if (this.getTier() == 3) {
+		if (tier == 3) {
 			int levelUp = changedLevel - nowLevel;
 			magicBook.shrink(levelUp);
 		}
@@ -156,14 +154,14 @@ public class TileMagiaRewrite extends TileSMMagic {
 	}
 
 	// クラフトの完成
-	public void craftFinish () {
+	public void craftFinish() {
 		ItemHandlerHelper.insertItemStacked(this.getOut(), this.outStack, false);
 		this.playSound(this.getBlockPos(), SoundEvents.ENCHANTMENT_TABLE_USE, 1F, 1F);
 		this.clearInfo();
 	}
 
 	// エンチャントの取得
-	public Enchantment getEnchant (int id) {
+	public Enchantment getEnchant(int id) {
 		ItemStack stack = this.getInputItem();
 		if (stack.isEmpty()) { return null; }
 
@@ -174,7 +172,7 @@ public class TileMagiaRewrite extends TileSMMagic {
 		return enchaList.get(id);
 	}
 
-	public int getEnchaLevel (int id) {
+	public int getEnchaLevel(int id) {
 		ItemStack stack = this.getInputItem();
 		ListTag listTags = stack.getEnchantmentTags();
 		CompoundTag tags = listTags.getCompound(id);
@@ -182,12 +180,12 @@ public class TileMagiaRewrite extends TileSMMagic {
 		return level;
 	}
 
-	public List<Enchantment> getEnchaList () {
+	public List<Enchantment> getEnchaList() {
 		return this.stackEnchaList(this.getInputItem());
 	}
 
 	// 既にエンチャントされているリストを取得
-	public List<Enchantment> stackEnchaList (ItemStack stack) {
+	public List<Enchantment> stackEnchaList(ItemStack stack) {
 
 		// 既にエンチャントされているリストを取得
 		ListTag listTag = stack.getEnchantmentTags();
@@ -201,7 +199,7 @@ public class TileMagiaRewrite extends TileSMMagic {
 	}
 
 	// エンチャントコストの取得
-	public int getEnchantCost (int id) {
+	public int getEnchantCost(int id) {
 		ItemStack stack = this.getInputItem();
 		if (stack.isEmpty()) { return 0; }
 
@@ -223,12 +221,18 @@ public class TileMagiaRewrite extends TileSMMagic {
 		int tier = this.getTier();
 		int maxLevel = encha.getMaxLevel();
 		int canAddLevel = this.getMaxRwiteLevel(maxLevel);
-		if (maxLevel == 1 || level >= canAddLevel || ( tier >= 3 && level < maxLevel )  /*level >= this.getMaxLevel(maxLevel)*/) { return 0; }
+		if (maxLevel == 1 || level >= canAddLevel || ( tier >= 3 && level < maxLevel )) { return 0; }
 
-		int rate =  (6 - Math.min(maxLevel, 5));
+		int rate = (6 - Math.min(maxLevel, 5));
 		int addRate = Math.min(maxLevel, level + this.nowLevel) - level;
 
 		if (tier >= 3) {
+
+			ItemStack magicBook = this.getBookItem();
+			int changedLevel = this.getChanedLevel(id, stack);
+			int nowLevel = this.getNowEnchantLevel(id, stack);
+			if (magicBook.getCount() < changedLevel - nowLevel) { return -1; }
+
 			addRate = (Math.min(maxLevel * 2, level + this.nowLevel) - level) * 5;
 
 			if (encha.getRarity().getWeight() == 1 || encha == Enchantments.BLOCK_FORTUNE) {
@@ -239,11 +243,11 @@ public class TileMagiaRewrite extends TileSMMagic {
 		return (11 - encha.getRarity().getWeight() ) * 1500 * rate * rate * addRate;
 	}
 
-	public int getChanedLevel (int id) {
+	public int getChanedLevel(int id) {
 		return this.getChanedLevel(id, this.getInputItem());
 	}
 
-	public int getChanedLevel (int id, ItemStack stack) {
+	public int getChanedLevel(int id, ItemStack stack) {
 		Enchantment encha = this.getEnchant(id);
 		if (encha == null) { return 0; }
 
@@ -261,18 +265,18 @@ public class TileMagiaRewrite extends TileSMMagic {
 		return addLevel <= 0 ? 0 : level + addLevel;
 	}
 
-	public int getNowEnchantLevel (int id) {
+	public int getNowEnchantLevel(int id) {
 		return this.getNowEnchantLevel(id, this.getInputItem());
 	}
 
-	public int getNowEnchantLevel (int id, ItemStack stack) {
+	public int getNowEnchantLevel(int id, ItemStack stack) {
 		ListTag listTags = stack.getEnchantmentTags();
 		CompoundTag tags = listTags.getCompound(id);
 		return EnchantmentHelper.getEnchantmentLevel(tags);
 	}
 
 	// エンチャントレベルの設定
-	public void setEnchant (int id, ItemStack stack, int level) {
+	public void setEnchant(int id, ItemStack stack, int level) {
 		ListTag listTags = stack.getEnchantmentTags();
 		CompoundTag tags = listTags.getCompound(id);
 		EnchantmentHelper.setEnchantmentLevel(tags, level);
@@ -284,7 +288,7 @@ public class TileMagiaRewrite extends TileSMMagic {
 		return ResourceLocation.tryParse(id.getString("id"));
 	}
 
-	public void clickLevelButton (int id) {
+	public void clickLevelButton(int id) {
 		ItemStack stack = this.getBookItem();
 		if (stack.isEmpty()) { return; }
 
@@ -316,12 +320,12 @@ public class TileMagiaRewrite extends TileSMMagic {
 	}
 
 	// 最大エンチャントレベル
-	public int getMaxEnchantLevel () {
+	public int getMaxEnchantLevel() {
 		return this.getMaxEnchantLevel(this.getTier());
 	}
 
 	// 最大書き換えレベル
-	public int getMaxRwiteLevel (int maxLevel) {
+	public int getMaxRwiteLevel(int maxLevel) {
 
 		// tier1なら最大3まで
 		int tier = this.getTier();
@@ -337,32 +341,32 @@ public class TileMagiaRewrite extends TileSMMagic {
 	}
 
 	// 最大エンチャントレベル
-	public int getMaxEnchantLevel (int tier) {
+	public int getMaxEnchantLevel(int tier) {
 		switch (tier) {
 		case 1: return 3;
 		case 2: return 5;
 		case 3: return this.getWishMaxLevel();
-		default : return 3;
+		default: return 3;
 		}
 	}
 
 	// 最大エンチャントレベル
-	public int getAddMaxEnchantLevel () {
+	public int getAddMaxEnchantLevel() {
 		return this.getAddMaxEnchantLevel(this.getTier());
 	}
 
 	// 最大エンチャントレベル
-	public int getAddMaxEnchantLevel (int tier) {
+	public int getAddMaxEnchantLevel(int tier) {
 		switch (tier) {
 		case 1: return 3;
 		case 2: return 5;
 		case 3: return 6;
-		default : return 3;
+		default: return 3;
 		}
 	}
 
 	// 魔術書のtierによってページ数を返す
-	public int getTier () {
+	public int getTier() {
 
 		ItemStack stack = this.getBookItem();
 		Item item = stack.getItem();
@@ -378,12 +382,12 @@ public class TileMagiaRewrite extends TileSMMagic {
 		return 0;
 	}
 
-	public int getMaxLevel (int maxLevel) {
+	public int getMaxLevel(int maxLevel) {
 		return !this.getBookItem().is(ItemInit.wish_crystal) ? maxLevel : this.getWishMaxLevel();
 	}
 
 	// 願いの結晶の個数で付与可能な最大レベルを取得
-	public int getWishMaxLevel () {
+	public int getWishMaxLevel() {
 		switch (this.getBookItem().getCount()) {
 		case 0:  return 0;
 		case 1:  return 6;
@@ -395,7 +399,7 @@ public class TileMagiaRewrite extends TileSMMagic {
 	}
 
 	// 現在のレベルから必要な願いの結晶の個数を取得
-	public int getWishShirinCount () {
+	public int getWishShirinCount() {
 		switch (this.nowLevel) {
 		case 6:  return 1;
 		case 7:  return 2;
@@ -406,24 +410,24 @@ public class TileMagiaRewrite extends TileSMMagic {
 		}
 	}
 
-	public int getNowLevel () {
+	public int getNowLevel() {
 		return this.nowLevel;
 	}
 
 	// 最大MFの取得
 	@Override
-	public int getMaxMF () {
+	public int getMaxMF() {
 		return this.maxMagiaFlux;
 	}
 
 	// 受信するMF量の取得
 	@Override
-	public int getReceiveMF () {
+	public int getReceiveMF() {
 		return 20000;
 	}
 
 	// インベントリサイズの取得
-	public int getInvSize () {
+	public int getInvSize() {
 		return 1;
 	}
 
@@ -461,7 +465,7 @@ public class TileMagiaRewrite extends TileSMMagic {
 	}
 
 	// 素材スロットのアイテムを取得
-	public  ItemStack getBookItem() {
+	public ItemStack getBookItem() {
 		return this.getBook().getStackInSlot(0);
 	}
 
@@ -471,7 +475,7 @@ public class TileMagiaRewrite extends TileSMMagic {
 	}
 
 	// 素材スロットのアイテムを取得
-	public  ItemStack getInputItem() {
+	public ItemStack getInputItem() {
 		return this.getInput().getStackInSlot(0);
 	}
 
@@ -481,26 +485,24 @@ public class TileMagiaRewrite extends TileSMMagic {
 	}
 
 	// 素材スロットのアイテムを取得
-	public  ItemStack getOutItem() {
+	public ItemStack getOutItem() {
 		return this.getOut().getStackInSlot(0);
 	}
 
-	// MFゲージの描画量を計算するためのメソッド
-	public int getCraftProgressScaled(int value) {
+	// クラフト描画量を計算するためのメソッド
+	public int getCraftProgress(int value) {
 		return Math.min(value, (int) (value * (float) (this.craftTime) / (float) (MAX_CRAFT_TIME)));
-    }
+	}
 
-	public void spawnParticl () {
+	public void spawnParticl() {
 
-		Random rand = this.rand;
 		BlockPos pos = this.getBlockPos();
 
 		for (int i = 0; i < this.craftTime / 6; i++) {
 
-			float randX = rand.nextFloat() - rand.nextFloat();
-			float randY = rand.nextFloat() - rand.nextFloat();
-			float randZ = rand.nextFloat() - rand.nextFloat();
-
+			float randX = this.getRandFloat();
+			float randY = this.getRandFloat();
+			float randZ = this.getRandFloat();
 			float x = pos.getX() + 0.5F + randX;
 			float y = pos.getY() + 1.1F + randY;
 			float z = pos.getZ() + 0.5F + randZ;
@@ -508,7 +510,7 @@ public class TileMagiaRewrite extends TileSMMagic {
 			float ySpeed = -randY * 0.075F;
 			float zSpeed = -randZ * 0.075F;
 
-			this.level.addParticle(ParticleInit.NORMAL.get(), x, y, z, xSpeed, ySpeed, zSpeed);
+			this.level.addParticle(ParticleInit.NORMAL, x, y, z, xSpeed, ySpeed, zSpeed);
 		}
 	}
 
@@ -518,7 +520,7 @@ public class TileMagiaRewrite extends TileSMMagic {
 	}
 
 	// インベントリのアイテムを取得
-	public List<ItemStack> getInvList () {
+	public List<ItemStack> getInvList() {
 		List<ItemStack> stackList = new ArrayList<>();
 		this.addStackList(stackList, this.getInputItem());
 		this.addStackList(stackList, this.getOutItem());

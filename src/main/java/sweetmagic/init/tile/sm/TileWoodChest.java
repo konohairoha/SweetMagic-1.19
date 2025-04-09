@@ -29,9 +29,10 @@ import sweetmagic.init.tile.menu.WoodChestMenu;
 
 public class TileWoodChest extends TileAbstractSM {
 
-	public ResourceLocation lootTable = null;
 	public int count = 4;
 	public float chance = 0.825F;
+	public ResourceLocation lootTable = null;
+	public final StackHandler inputInv = new StackHandler(this.getInvSize());
 
 	public TileWoodChest(BlockPos pos, BlockState state) {
 		this(TileInit.woodChest, pos, state);
@@ -41,8 +42,6 @@ public class TileWoodChest extends TileAbstractSM {
 		super(type, pos, state);
 		this.resolver = new SingleHandlerProvider(this.inputInv, IN_OUT);
 	}
-
-	public final StackHandler inputInv = new StackHandler(this.getInvSize());
 
 	// NBTの書き込み
 	@Override
@@ -64,19 +63,17 @@ public class TileWoodChest extends TileAbstractSM {
 		this.inputInv.deserializeNBT(tag);
 
 		if (tag.contains("LootTable")) {
-	        this.lootTable = new ResourceLocation(tag.getString("LootTable"));
-	        this.count = tag.getInt("count");
-	        this.chance = tag.getFloat("chance");
+			this.lootTable = new ResourceLocation(tag.getString("LootTable"));
+			this.count = tag.getInt("count");
+			this.chance = tag.getFloat("chance");
 		}
 	}
 
-	public void setLootInv (@Nullable Player player) {
-
+	public void setLootInv(@Nullable Player player) {
 		if (this.lootTable == null) { return; }
 
 		RandomSource rand = this.level.random;
 		LootContext.Builder builder = (new LootContext.Builder((ServerLevel)this.level)).withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(this.worldPosition)).withOptionalRandomSeed(rand.nextLong());
-
  		List<ItemStack> stackList = new ArrayList<>();
 
  		for (int i = 0; i < this.count; i++ ) {
@@ -86,7 +83,6 @@ public class TileWoodChest extends TileAbstractSM {
 		IItemHandler handler = this.getItemHandler(this, Direction.UP);
 
 		for (int i = 0; i < this.getInvSize(); i++) {
-
 			if (rand.nextFloat() < this.chance) { continue; }
 
 			for (int s = 0; s < stackList.size(); s++) {
@@ -109,7 +105,7 @@ public class TileWoodChest extends TileAbstractSM {
 
 	// インベントリサイズの取得
 	@Override
-	public int getInvSize () {
+	public int getInvSize() {
 		return 104;
 	}
 
@@ -119,7 +115,7 @@ public class TileWoodChest extends TileAbstractSM {
 	}
 
 	// スロットのアイテムを取得
-	public  ItemStack getInputItem(int i) {
+	public ItemStack getInputItem(int i) {
 		return this.getInput().getStackInSlot(i);
 	}
 
@@ -133,7 +129,7 @@ public class TileWoodChest extends TileAbstractSM {
 		return this.getInputList().isEmpty() && this.lootTable == null;
 	}
 
-	public List<ItemStack> getInputList () {
+	public List<ItemStack> getInputList() {
 		List<ItemStack> stackList = new ArrayList<>();
 
 		for (int i = 0; i < this.getInvSize(); i++) {
@@ -143,7 +139,7 @@ public class TileWoodChest extends TileAbstractSM {
 		return stackList;
 	}
 
-	public List<ItemStack> getInvList () {
+	public List<ItemStack> getInvList() {
 		List<ItemStack> stackList = new ArrayList<>();
 
 		for (int i = 0; i < this.getInvSize(); i++) {
@@ -153,7 +149,7 @@ public class TileWoodChest extends TileAbstractSM {
 		return stackList;
 	}
 
-	public void invTrash (boolean isRS) {
+	public void invTrash(boolean isRS) {
 
 		boolean isTrash = isRS;
 

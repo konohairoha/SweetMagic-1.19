@@ -74,7 +74,7 @@ public class TileMFTable extends TileSMMagic {
 	}
 
 	// インプットスロットのMFを取得
-	public void smeltItem () {
+	public void smeltItem() {
 		ItemStack stack = this.getFuelItem();
 		if (stack.isEmpty()) { return; }
 
@@ -88,7 +88,7 @@ public class TileMFTable extends TileSMMagic {
 	}
 
 	// 杖スロットにある杖にMFを入れる
-	public void wandChargeMF () {
+	public void wandChargeMF() {
 
 		for (int i = 0; i < this.getInvSize(); i++) {
 
@@ -103,13 +103,13 @@ public class TileMFTable extends TileSMMagic {
 			// MFが最大になったときに通知
 			if (this.wandMaxMF(stack)) {
 				this.playSound(this.getTilePos(), SoundEvents.PLAYER_LEVELUP, 1F, 1F);
-		        this.level.levelEvent(2003, this.getBlockPos().above(2), 0);
+				this.level.levelEvent(2003, this.getBlockPos().above(2), 0);
 			}
 		}
 	}
 
 	// 杖の杖が最大値を超えているか
-	public boolean wandMaxMF (ItemStack stack) {
+	public boolean wandMaxMF(ItemStack stack) {
 		IMFTool wand = (IMFTool) stack.getItem();
 		return wand.getMF(stack) >= wand.getMaxMF(stack);
 	}
@@ -126,19 +126,19 @@ public class TileMFTable extends TileSMMagic {
 
 	// 最大MFの取得
 	@Override
-	public int getMaxMF () {
+	public int getMaxMF() {
 		return this.maxMagiaFlux;
 	}
 
 	// 受信側かどうかの取得
 	@Override
-	public boolean getReceive () {
+	public boolean getReceive() {
 		return this.isReceive;
 	}
 
 	// インベントリサイズの取得
 	@Override
-	public int getInvSize () {
+	public int getInvSize() {
 		return 1;
 	}
 
@@ -148,7 +148,7 @@ public class TileMFTable extends TileSMMagic {
 	}
 
 	// 杖スロットのアイテムを取得
-	public  ItemStack getInputItem(int i) {
+	public ItemStack getInputItem(int i) {
 		return this.getInput().getStackInSlot(i);
 	}
 
@@ -158,12 +158,12 @@ public class TileMFTable extends TileSMMagic {
 	}
 
 	// 燃焼スロットのアイテムを取得
-	public  ItemStack getFuelItem() {
+	public ItemStack getFuelItem() {
 		return this.getFuel().getStackInSlot(0);
 	}
 
 	// 消費MF量の取得
-	public int getShrinkMF () {
+	public int getShrinkMF() {
 		return 5000;
 	}
 
@@ -178,7 +178,7 @@ public class TileMFTable extends TileSMMagic {
 	}
 
 	// インベントリのアイテムを取得
-	public List<ItemStack> getInvList () {
+	public List<ItemStack> getInvList() {
 		List<ItemStack> stackList = new ArrayList<>();
 
 		for (int i = 0; i < this.getInvSize(); i++) {

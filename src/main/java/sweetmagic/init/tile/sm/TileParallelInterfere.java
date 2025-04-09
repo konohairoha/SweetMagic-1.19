@@ -5,7 +5,6 @@ import java.util.Random;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -29,7 +28,6 @@ public class TileParallelInterfere extends TileWoodChest {
 	public float rot;
 	public float oRot;
 	public float tRot;
-	private static final RandomSource RANDOM = RandomSource.create();
 
 	public TileParallelInterfere(BlockPos pos, BlockState state) {
 		this(TileInit.parallelInterfere, pos, state);
@@ -42,7 +40,7 @@ public class TileParallelInterfere extends TileWoodChest {
 
 	public final StackHandler inputInv = new StackHandler(this.getInvSize());
 
-	public StackHandler getInputInv () {
+	public StackHandler getInputInv() {
 		return this.inputInv;
 	}
 
@@ -60,15 +58,13 @@ public class TileParallelInterfere extends TileWoodChest {
 			this.tRot = (float) Mth.atan2(d1, d0);
 			this.open += 0.1F;
 
-			if (this.open < 0.5F || RANDOM.nextInt(40) == 0) {
+			if (this.open < 0.5F || this.rand.nextInt(40) == 0) {
 				float f1 = this.flipT;
 
 				do {
-					this.flipT += (float) (RANDOM.nextInt(4) - RANDOM.nextInt(4));
+					this.flipT += (float) (this.rand.nextInt(4) - this.rand.nextInt(4));
 				} while (f1 == this.flipT);
 			}
-
-			this.playSound();
 
 			if (this.tickTime % 10 == 0) {
 				this.spawnParticle(pos, this.rand);
@@ -87,7 +83,6 @@ public class TileParallelInterfere extends TileWoodChest {
 
 		float f2;
 		for (f2 = this.tRot - this.rot; f2 >= (float) Math.PI; f2 -= ((float) Math.PI * 2F)) { }
-
 		while (f2 < -(float) Math.PI) { f2 += ((float) Math.PI * 2F); }
 
 		this.rot += f2 * 0.4F;
@@ -100,23 +95,16 @@ public class TileParallelInterfere extends TileWoodChest {
 		this.flip += this.flipA;
 	}
 
-	public void playSound () {
-//		this.playSound(this.getBlockPos(), SoundInit, flipA, flip);
-	}
-
-	public void spawnParticle (BlockPos pos, Random rand) {
-
-		float randX = (rand.nextFloat() - rand.nextFloat()) * 0.5F;
-		float randZ = (rand.nextFloat() - rand.nextFloat()) * 0.5F;
-
+	public void spawnParticle(BlockPos pos, Random rand) {
+		float randX = this.getRandFloat(0.5F);
+		float randZ = this.getRandFloat(0.5F);
 		float x = pos.getX() + 0.5F + randX;
 		float y = pos.getY() + 1F;
 		float z = pos.getZ() + 0.5F + randZ;
-		float xSpeed = (rand.nextFloat() - rand.nextFloat()) * 0.05F;
+		float xSpeed = this.getRandFloat(0.05F);
 		float ySpeed = 0.025F + rand.nextFloat() * 0.05F;
-		float zSpeed = (rand.nextFloat() - rand.nextFloat()) * 0.05F;
-
-		this.level.addParticle(ParticleInit.NORMAL.get(), x, y, z, xSpeed, ySpeed, zSpeed);
+		float zSpeed = this.getRandFloat(0.05F);
+		this.level.addParticle(ParticleInit.NORMAL, x, y, z, xSpeed, ySpeed, zSpeed);
 	}
 
 	// NBTの書き込み
@@ -135,7 +123,7 @@ public class TileParallelInterfere extends TileWoodChest {
 
 	// インベントリサイズの取得
 	@Override
-	public int getInvSize () {
+	public int getInvSize() {
 		return 540;
 	}
 
@@ -149,7 +137,7 @@ public class TileParallelInterfere extends TileWoodChest {
 		return new ParallelInterfereMenu(windowId, inv, this);
 	}
 
-	public int getData () {
+	public int getData() {
 		return 1024;
 	}
 }

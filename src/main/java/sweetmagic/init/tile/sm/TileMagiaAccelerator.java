@@ -43,7 +43,7 @@ public class TileMagiaAccelerator extends TileSMMagic {
 
 		int sumMF = 0;
 		int mf = this.getMF();
-		Iterable<BlockPos> posList = this.getRangePosUnder(this.range);
+		Iterable<BlockPos> posList = this.getRangePosUnder(this.getBlockPos(), this.range);
 
 		// リスト分まわす
 		for (BlockPos pos : posList) {

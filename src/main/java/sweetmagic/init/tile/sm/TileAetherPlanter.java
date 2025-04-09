@@ -32,7 +32,7 @@ import sweetmagic.init.tile.menu.AetherPlanterMenu;
 public class TileAetherPlanter extends TileSMMagic {
 
 	public boolean isMaxGlow = false;
-	public int maxMagiaFlux = 20000;				// 最大MF量を設定
+	public int maxMagiaFlux = 20000;
 	public final StackHandler inputInv = new StackHandler(this.getInvSize());
 	public ItemStack stack = ItemStack.EMPTY;
 
@@ -68,7 +68,7 @@ public class TileAetherPlanter extends TileSMMagic {
 		}
 	}
 
-	public void glowPlant (ServerLevel world, BlockPos pos) {
+	public void glowPlant(ServerLevel world, BlockPos pos) {
 
 		BlockPos upPos = pos.above();
 		BlockState upState = world.getBlockState(upPos);
@@ -101,7 +101,7 @@ public class TileAetherPlanter extends TileSMMagic {
 		this.sendPKT();
 	}
 
-	public boolean glowPlant (ServerLevel world, BlockPos upPos, BlockState upState, Block upBlock) {
+	public boolean glowPlant(ServerLevel world, BlockPos upPos, BlockState upState, Block upBlock) {
 
 		boolean isGlow = false;
 
@@ -148,7 +148,7 @@ public class TileAetherPlanter extends TileSMMagic {
 		return isGlow;
 	}
 
-	public void getCropStack (ServerLevel world, BlockPos pos) {
+	public void getCropStack(ServerLevel world, BlockPos pos) {
 
 		BlockPos upPos = pos.above();
 		BlockState upState = world.getBlockState(upPos);
@@ -224,23 +224,23 @@ public class TileAetherPlanter extends TileSMMagic {
 
 	// インベントリサイズの取得
 	@Override
-	public int getInvSize () {
+	public int getInvSize() {
 		return 27;
 	}
 
 	// 受信するMF量の取得
 	@Override
-	public int getReceiveMF () {
+	public int getReceiveMF() {
 		return 5000;
 	}
 
-	public int getUserMF () {
+	public int getUserMF() {
 		return 50;
 	}
 
 	// 最大MFの取得
 	@Override
-	public int getMaxMF () {
+	public int getMaxMF() {
 		return this.maxMagiaFlux;
 	}
 
@@ -250,11 +250,11 @@ public class TileAetherPlanter extends TileSMMagic {
 	}
 
 	// 杖スロットのアイテムを取得
-	public  ItemStack getInputItem(int i) {
+	public ItemStack getInputItem(int i) {
 		return this.getInput().getStackInSlot(i);
 	}
 
-	public boolean isInvEmpty () {
+	public boolean isInvEmpty() {
 		for (int i = 0; i < this.getInvSize(); i ++) {
 			if (!this.getInputItem(i).isEmpty()) { return false; }
 		}

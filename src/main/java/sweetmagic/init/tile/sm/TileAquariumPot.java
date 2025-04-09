@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleOptions;
@@ -20,40 +22,58 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BaseFireBlock;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.SnowLayerBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.DropperBlockEntity;
 import net.minecraft.world.level.block.entity.HopperBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.storage.ServerLevelData;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.IItemHandler;
 import sweetmagic.api.SweetMagicAPI;
 import sweetmagic.api.iblock.ISMCrop;
+import sweetmagic.api.iblock.ITileFluid;
 import sweetmagic.init.TileInit;
 import sweetmagic.init.block.magic.AquariumPot;
+import sweetmagic.init.fluid.FluidTankHandler;
+import sweetmagic.init.fluid.FluidTankHandler.TankProperty;
 import sweetmagic.init.tile.menu.AquariumPotMenu;
+import sweetmagic.util.WorldHelper;
 
-public class TileAquariumPot extends TileSMMagic {
+public class TileAquariumPot extends TileSMMagic implements ITileFluid {
 
-	public int maxMagiaFlux = 500000;				// 最大MF量を設定
+	public int maxMagiaFlux = 500000;
 	public boolean isReceive = false;				// 受け取る側かどうか
 	private int stackCount = 1;						// スタック数
 	public static final int MAX_STACKCOUNT = 8;		// 最大スタック数
 	private ItemStack stack = ItemStack.EMPTY;
 	private Direction face = Direction.NORTH;
-//    private final static Direction[] ALLFACE = new Direction[] {Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
+	private final static Direction[] ALLFACE = new Direction[] {Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
 
+	private static final int MAX_FLUID_VALUE = 64_000;
+	public FluidStack fluid = new FluidStack(Fluids.EMPTY, 0);
+	protected final TankProperty fluidPro;
+	public LazyOptional<IFluidHandler> fluidHandler = LazyOptional.of(() -> this.createFluidHandler());
 	protected final StackHandler inputInv = new StackHandler(1);
 
 	public TileAquariumPot(BlockPos pos, BlockState state) {
-		super(TileInit.aquariumpot, pos, state);
+		this(TileInit.aquariumpot, pos, state);
 	}
 
 	public TileAquariumPot(BlockEntityType<?> type, BlockPos pos, BlockState state) {
 		super(type, pos, state);
 		this.resolver = new SingleHandlerProvider(this.inputInv, IN);
+		this.fluidPro = new TankProperty(MAX_FLUID_VALUE, true, false, f -> f.isSame(Fluids.LAVA));
 	}
 
 	// サーバー側処理
@@ -84,7 +104,7 @@ public class TileAquariumPot extends TileSMMagic {
 		}
 	}
 
-	public void onUpdate (Level world, BlockPos pos, boolean isClient) {
+	public void onUpdate(Level world, BlockPos pos, boolean isClient) {
 		if (this.isMaxMF() || isClient) { return; }
 
 		switch (this.getData(pos)) {
@@ -104,6 +124,14 @@ public class TileAquariumPot extends TileSMMagic {
 			// 群青の薔薇
 			this.ultramarineRosePot(world, pos, isClient);
 			break;
+		case 5:
+			// ソリッドスター
+			this.solidStarPot(world, pos, isClient);
+			break;
+		case 6:
+			// ジニア
+			this.zinniaPot(world, pos, isClient);
+			break;
 		case 7:
 			// ハイドラ
 			this.hydoraPot(world, pos, isClient);
@@ -116,10 +144,14 @@ public class TileAquariumPot extends TileSMMagic {
 			// エリックスミシィ
 			this.ericsPot(world, pos, isClient);
 			break;
+		case 10:
+			// コスモス
+			this.cosmosPot(world, pos, isClient);
+			break;
 		}
 	}
 
-	public void addStackCount (ItemStack stack) {
+	public void addStackCount(ItemStack stack) {
 
 		this.setStackCount(this.getStackCount() + 1);
 		CompoundTag tags = stack.getTag();
@@ -133,7 +165,7 @@ public class TileAquariumPot extends TileSMMagic {
 	}
 
 	// ドリズリィ
-	public void dmPot (Level world, BlockPos pos, boolean isClient) {
+	public void dmPot(Level world, BlockPos pos, boolean isClient) {
 
 		// 雨が降っていてMFが溜めれる状態なら
 		if (world.isRaining()) {
@@ -167,7 +199,7 @@ public class TileAquariumPot extends TileSMMagic {
 	}
 
 	// スノードロップ
-	public void snodDropPot (Level world, BlockPos pos, boolean isClient) {
+	public void snodDropPot(Level world, BlockPos pos, boolean isClient) {
 		if(world.getBiome(pos).get().getBaseTemperature() > 0 && pos.getY() < 120) { return; }
 
 		if (this.tickTime % 20 == 0 && !isClient) {
@@ -181,7 +213,7 @@ public class TileAquariumPot extends TileSMMagic {
 	}
 
 	// トルコキキョウ
-	public void turkeyBalloonPot (Level world, BlockPos pos, boolean isClient) {
+	public void turkeyBalloonPot(Level world, BlockPos pos, boolean isClient) {
 		if (this.tickTime % 10 != 0) { return; }
 
 		// 死んでいるえんちちーが居なければ終了
@@ -198,7 +230,7 @@ public class TileAquariumPot extends TileSMMagic {
 	}
 
 	// 群青の薔薇
-	public void ultramarineRosePot (Level world, BlockPos pos, boolean isClient) {
+	public void ultramarineRosePot(Level world, BlockPos pos, boolean isClient) {
 		if (this.tickTime % 600 != 0) { return; }
 
 		BlockEntity tile = this.getTile(pos.below());
@@ -232,8 +264,85 @@ public class TileAquariumPot extends TileSMMagic {
 		}
 	}
 
+	// ジニア
+	public void zinniaPot(Level world, BlockPos pos, boolean isClient) {
+		if (this.tickTime % 40 != 0) { return; }
+
+		boolean isCharge = false;
+		float sumLightValue = 0F;
+
+		for (int x = -2; x <= 2; ++x) {
+			for (int z = -2; z <= 2; ++z) {
+
+				if (x > -2 && x < 2 && z == -1) { z = 2; }
+
+				for (int y = 0; y <= 1; ++y) {
+
+					BlockState state = this.getState(pos.offset(x, y, z));
+					Block block = state.getBlock();
+					if (block == Blocks.AIR) { continue; }
+
+					float power = block.getLightEmission(state, world, pos) * 0.5F;
+					if (power <= 0F) { continue; }
+
+					if (!this.getState(pos.offset(x / 2, 0, z / 2)).isAir()) { return; }
+
+					isCharge = true;
+					sumLightValue += power;
+				}
+			}
+		}
+
+		if (isCharge) {
+			if (!isClient) {
+				int stackCount = this.getStackCount();
+				this.setMF(this.getMF() + (int) (sumLightValue * (0.75F + stackCount * 0.25F)));
+				this.sentClient();
+			}
+
+			else {
+				this.spawnParticles(world, pos);
+			}
+		}
+	}
+
+	// ジニア
+	public void solidStarPot(Level world, BlockPos pos, boolean isClient) {
+		if (this.tickTime % 40 != 0) { return; }
+
+		float sumLightValue = 0F;
+
+		for (int x = -2; x <= 2; ++x) {
+			for (int z = -2; z <= 2; ++z) {
+
+				if (x == 0 && z == 0) { continue; }
+
+				if (x > -2 && x < 2 && z == -1) { z = 2; }
+
+				for (int y = 0; y <= 1; ++y) {
+
+					BlockPos p = pos.offset(x, y, z);
+					BlockState state = this.getState(p);
+					sumLightValue += state.getBlock().getEnchantPowerBonus(state, world, p) * 1.5F;
+				}
+			}
+		}
+
+		if (sumLightValue > 0) {
+			if (!isClient) {
+				int stackCount = this.getStackCount();
+				this.setMF(this.getMF() + (int) (sumLightValue * (0.75F + stackCount * 0.25F)));
+				this.sentClient();
+			}
+
+			else {
+				this.spawnParticles(world, pos);
+			}
+		}
+	}
+
 	// ハイドラ
-	public void hydoraPot (Level world, BlockPos pos, boolean isClient) {
+	public void hydoraPot(Level world, BlockPos pos, boolean isClient) {
 		if (this.tickTime % 10 != 0) { return; }
 
 		// 死んでいるえんちちーが居なければ終了
@@ -266,13 +375,12 @@ public class TileAquariumPot extends TileSMMagic {
 	}
 
 	// カーネーション
-	public void carnationPot (Level world, BlockPos pos, boolean isClient) {
+	public void carnationPot(Level world, BlockPos pos, boolean isClient) {
 		if (this.tickTime % 20 != 0) { return; }
 
-		List<ItemStack> stackList = new ArrayList<>();
-
 		// 範囲の座標取得
-		Iterable<BlockPos> posList = BlockPos.betweenClosed(pos.offset(-1, 0, -1), pos.offset(1, 0, 1));
+		Iterable<BlockPos> posList = WorldHelper.getRangePos(pos, -1, 0, -1, 1, 0, 1);
+		List<ItemStack> stackList = new ArrayList<>();
 
 		for (BlockPos p : posList) {
 
@@ -280,7 +388,7 @@ public class TileAquariumPot extends TileSMMagic {
 
 			BlockState state = this.getState(p);
 			Block block = state.getBlock();
-			if ( !( block instanceof ISMCrop crop ) || !crop.isMaxAge(state) || !SweetMagicAPI.hasMF(crop.getCrop().asItem())) { continue; }
+			if (!(block instanceof ISMCrop crop) || !crop.isMaxAge(state) || !SweetMagicAPI.hasMF(crop.getCrop().asItem())) { continue; }
 
 			stackList.addAll(crop.rightClickStack(world, state, p));
 		}
@@ -293,7 +401,7 @@ public class TileAquariumPot extends TileSMMagic {
 				int stackCount = this.getStackCount();
 
 				for (ItemStack stack : stackList) {
-					sumMF += (SweetMagicAPI.getMF(stack) * 2F * stackCount);
+					sumMF += SweetMagicAPI.getMF(stack) * 2F * stackCount;
 				}
 
 				this.setMF(this.getMF() + sumMF);
@@ -308,7 +416,7 @@ public class TileAquariumPot extends TileSMMagic {
 	}
 
 	// エリックスミシィ
-	public void ericsPot (Level world, BlockPos pos, boolean isClient) {
+	public void ericsPot(Level world, BlockPos pos, boolean isClient) {
 		if (this.getTime() % 7 != 0) { return; }
 
 		BlockPos p = pos.relative(this.face);
@@ -331,26 +439,60 @@ public class TileAquariumPot extends TileSMMagic {
 		this.face = this.face.getClockWise();
 	}
 
-	public int getData (BlockPos pos) {
-		if (this.getBlock(pos) instanceof AquariumPot pot) {
-			return pot.getData();
+	// コスモス
+	public void cosmosPot(Level world, BlockPos pos, boolean isClient) {
+		if (this.tickTime % 60 != 0) { return; }
+
+		int sumMF = 0;
+
+		for (Direction face : ALLFACE) {
+
+			BlockPos p = pos.relative(face);
+			BlockState state = this.getState(p);
+			Block block = state.getBlock();
+			if (!state.is(Blocks.LAVA) && !(block instanceof BaseFireBlock)) { continue; }
+			if (block instanceof LiquidBlock liq && state.getValue(LiquidBlock.LEVEL) != 0) { continue; }
+
+			sumMF += state.is(Blocks.LAVA) ? 2000 : 200;
+			world.setBlock(p, Blocks.AIR.defaultBlockState(), 3);
+			this.playSound(p, SoundEvents.FIRE_EXTINGUISH, 1F, 1F);
 		}
 
-		return 0;
+		if (!this.getContent().isEmpty() && this.getFluidValue() > 0) {
+			int value = Math.min(1000, this.getFluidValue());
+			sumMF += value * 2;
+			this.getContent().shrink(value);
+		}
+
+		if (sumMF > 0) {
+
+			if (!isClient) {
+				int stackCount = this.getStackCount();
+				this.setMF(this.getMF() + (int) (sumMF * (0.9F + stackCount * 0.1F)) );
+				this.sendPKT();
+			}
+
+			else {
+				this.spawnParticles(world, pos);
+			}
+		}
 	}
 
-	public ItemStack getStack () {
+	public int getData(BlockPos pos) {
+		return this.getBlock(pos) instanceof AquariumPot pot ? pot.getData() : 0;
+	}
+
+	public ItemStack getStack() {
 		return this.stack.isEmpty() ? ((AquariumPot) this.getBlock(this.getBlockPos())).getStack() : this.stack;
 	}
 
 	// 最大MFの取得
-	@Override
-	public int getMaxMF () {
+	public int getMaxMF() {
 		return this.maxMagiaFlux;
 	}
 
 	// 受信側かどうかの取得
-	public boolean getReceive () {
+	public boolean getReceive() {
 		return this.isReceive;
 	}
 
@@ -372,6 +514,9 @@ public class TileAquariumPot extends TileSMMagic {
 		super.saveAdditional(tag);
 		tag.put("inputInv", this.inputInv.serializeNBT());
 		tag.putInt("stackCount", this.getStackCount());
+		CompoundTag fluidNBT = new CompoundTag();
+		this.getContent().writeToNBT(fluidNBT);
+		tag.put("fluid", fluidNBT);
 	}
 
 	// NBTの読み込み
@@ -380,17 +525,18 @@ public class TileAquariumPot extends TileSMMagic {
 		super.load(tag);
 		this.inputInv.deserializeNBT(tag.getCompound("inputInv"));
 		this.setStackCount(tag.getInt("stackCount"));
+		this.setContent(FluidStack.loadFluidStackFromNBT(tag.getCompound("fluid")));
 	}
 
-	public int getStackCount () {
+	public int getStackCount() {
 		return this.stackCount;
 	}
 
-	public void setStackCount (int stackCount) {
+	public void setStackCount(int stackCount) {
 		this.stackCount = stackCount;
 	}
 
-	public boolean isMaxStackCount () {
+	public boolean isMaxStackCount() {
 		return this.getStackCount() >= MAX_STACKCOUNT;
 	}
 
@@ -400,14 +546,74 @@ public class TileAquariumPot extends TileSMMagic {
 	}
 
 	// スロットのアイテムを取得
-	public  ItemStack getInputItem() {
+	public ItemStack getInputItem() {
 		return this.getInput().getStackInSlot(0);
 	}
 
 	// ゲージの描画量を計算するためのメソッド
-	public int getProgressScaled(int value) {
+	public int getProgress(int value) {
 		return Math.min(value, (int) (value * (float) this.getStackCount() / (float) MAX_STACKCOUNT));
-    }
+	}
+
+	public int fluidTanks() {
+		return 1;
+	}
+
+	public IFluidHandler createFluidHandler() {
+		return new FluidTankHandler(this);
+	}
+
+	public void setContent(FluidStack fluid) {
+		this.fluid = fluid;
+		this.setChanged();
+	}
+
+	public TankProperty getTank() {
+		return this.fluidPro;
+	}
+
+	public FluidStack getContent() {
+		return this.fluid;
+	}
+
+	public void setAmount(int amount) {
+		this.fluid.setAmount(amount);
+	}
+
+	public int getFluidValue() {
+		return this.getContent().getAmount();
+	}
+
+	public void sendData() {
+		this.sendInfo();
+	}
+
+	public LazyOptional<IFluidHandler> getFluidHandler() {
+		return this.fluidHandler;
+	}
+
+	@Override
+	public <T> LazyOptional<T> getCapability(Capability<T> cap, @Nullable Direction face) {
+
+		if (cap == ForgeCapabilities.FLUID_HANDLER && this.getData(this.getBlockPos()) == 10) {
+			return (LazyOptional<T>) this.getFluidHandler();
+		}
+
+		return super.getCapability(cap, face);
+	}
+
+	@Override
+	public void setRemoved() {
+		super.setRemoved();
+		if (this.getFluidHandler() != null) {
+			this.getFluidHandler().invalidate();
+		}
+	}
+
+	// 最大水量を設定
+	public int getMaxFuildValue() {
+		return MAX_FLUID_VALUE;
+	}
 
 	@Override
 	public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player) {

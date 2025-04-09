@@ -68,4 +68,8 @@ public class TileMagicianLecternFrost extends TileAbstractMagicianLectern {
 	public int getBattleLevel () {
 		return 1;
 	}
+
+	public int getMaxMF() {
+		return 0;
+	}
 }

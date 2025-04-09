@@ -28,6 +28,7 @@ import sweetmagic.init.entity.monster.DwarfZombie;
 import sweetmagic.init.entity.monster.EnderMage;
 import sweetmagic.init.entity.monster.SkullFlame;
 import sweetmagic.init.entity.monster.SkullFrost;
+import sweetmagic.init.entity.monster.boss.AbstractSMBoss;
 import sweetmagic.init.tile.menu.SMSpawnerMenu;
 
 public class TileSMSpawner extends TileAbstractSM {
@@ -108,6 +109,7 @@ public class TileSMSpawner extends TileAbstractSM {
 		String uniqueName = this.getUniqueTagName();
 		int entityListSize = this.getEntityList(LivingEntity.class, e -> e.isAlive() && e.getPersistentData().getBoolean(uniqueName), this.getRange() * 4).size();
 		int canSpawnCount = MAX_SPAWNCOUNT - entityListSize;
+		if (canSpawnCount <= 0) { return; }
 
 		// 最大スポーン可能数からランダムにスポーン可能数を設定
 		canSpawnCount = canSpawnCount == 0 ? 0 : Math.min(canSpawnCount, rand.nextInt(canSpawnCount) + 1);
@@ -146,9 +148,11 @@ public class TileSMSpawner extends TileAbstractSM {
 			float aY = rand.nextFloat() * 0.15F;
 			float aZ = this.getRand(rand) * 0.1F;
 
-			server.sendParticles(ParticleInit.NORMAL.get(), x, y, z, 0, aX, aY, aZ, 1F);
+			server.sendParticles(ParticleInit.NORMAL, x, y, z, 0, aX, aY, aZ, 1F);
 		}
 	}
+
+	public void startInfo (AbstractSMBoss mob) { }
 
 	// プレイヤーが周囲にいるかのチェック
 	public boolean checkPlayer (Level world, double range) {

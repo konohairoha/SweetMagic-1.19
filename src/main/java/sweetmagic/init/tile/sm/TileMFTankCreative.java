@@ -10,7 +10,7 @@ import sweetmagic.init.TileInit;
 
 public class TileMFTankCreative extends TileMFTank {
 
-	public int maxMagiaFlux = Integer.MAX_VALUE;				// 最大MF量を設定
+	public int maxMagiaFlux = Integer.MAX_VALUE;
 
 	public TileMFTankCreative(BlockPos pos, BlockState state) {
 		this(TileInit.tankCreative, pos, state);
@@ -27,7 +27,6 @@ public class TileMFTankCreative extends TileMFTank {
 	// サーバー側処理
 	@Override
 	public void serverTick(Level level, BlockPos pos, BlockState state) {
-
 		super.serverTick(level, pos, state);
 		if (this.getTickTime() % 10 != 0) { return; }
 
@@ -37,9 +36,7 @@ public class TileMFTankCreative extends TileMFTank {
 		}
 	}
 
-	public void smeltAction () {
-
-		// 精錬可能かつ必要MF以上なら
+	public void smeltAction() {
 		if (!this.hasNeedMF()) { return; }
 
 		for (int i = 0; i < 3; i++) {
@@ -67,23 +64,23 @@ public class TileMFTankCreative extends TileMFTank {
 
 	// 受信するMF量の取得
 	@Override
-	public int getReceiveMF () {
+	public int getReceiveMF() {
 		return 0;
 	}
 
 	// インベントリサイズの取得
 	@Override
-	public int getInvSize () {
+	public int getInvSize() {
 		return 9;
 	}
 
-	public int getSubInvSize () {
+	public int getSubInvSize() {
 		return 9;
 	}
 
 	// 最大MFの取得
 	@Override
-	public int getMaxMF () {
+	public int getMaxMF() {
 		return this.maxMagiaFlux;
 	}
 

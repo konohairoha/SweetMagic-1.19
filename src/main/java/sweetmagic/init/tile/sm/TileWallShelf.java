@@ -17,7 +17,7 @@ public class TileWallShelf extends TileModenRack {
 
 	// インベントリサイズの取得
 	@Override
-	public int getInvSize () {
+	public int getInvSize() {
 		return 6;
 	}
 }

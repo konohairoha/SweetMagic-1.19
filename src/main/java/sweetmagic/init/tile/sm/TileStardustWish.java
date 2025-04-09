@@ -24,7 +24,7 @@ public class TileStardustWish extends TileParallelInterfere {
 
 	public final StackHandler inputInv = new StackHandler(this.getInvSize());
 
-	public StackHandler getInputInv () {
+	public StackHandler getInputInv() {
 		return this.inputInv;
 	}
 
@@ -44,7 +44,7 @@ public class TileStardustWish extends TileParallelInterfere {
 
 	// インベントリサイズの取得
 	@Override
-	public int getInvSize () {
+	public int getInvSize() {
 		return 1080;
 	}
 

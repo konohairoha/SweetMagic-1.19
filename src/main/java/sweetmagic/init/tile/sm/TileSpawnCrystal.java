@@ -53,7 +53,7 @@ public class TileSpawnCrystal extends TileAbstractSM {
 		super.serverTick(world, pos, state);
 		if (this.tickTime % 10 != 0 || this.isPeaceful(world)) { return; }
 
-		List<Player> playerList = this.getEntityListHalf(Player.class, e -> e.isAlive() && !e.isCreative() && !e.isSpectator(), this.range);
+		List<Player> playerList = this.getEntityListUp(Player.class, e -> e.isAlive() && !e.isCreative() && !e.isSpectator(), this.range);
 		if (playerList.isEmpty()) { return; }
 
 		SpawnCrystal crystal = (SpawnCrystal) this.getBlock(pos);
@@ -70,7 +70,7 @@ public class TileSpawnCrystal extends TileAbstractSM {
 		}
 	}
 
-	public void spawnMob (Level world, BlockPos pos, int data) {
+	public void spawnMob(Level world, BlockPos pos, int data) {
 
 		int count = 0;
 		Random rand = this.rand;
@@ -119,7 +119,7 @@ public class TileSpawnCrystal extends TileAbstractSM {
 	}
 
 	// 雑魚モブの設定
-	public LivingEntity setMob (Level world, int spawnMobType, int data, float addHealth) {
+	public LivingEntity setMob(Level world, int spawnMobType, int data, float addHealth) {
 
 		LivingEntity entity = null;
 
@@ -160,7 +160,7 @@ public class TileSpawnCrystal extends TileAbstractSM {
 	}
 
 	// 雑魚モブの設定
-	public LivingEntity setBigMob (Level world, int spawnMobType, int data, float addHealth) {
+	public LivingEntity setBigMob(Level world, int spawnMobType, int data, float addHealth) {
 
 		LivingEntity entity = null;
 
@@ -183,6 +183,7 @@ public class TileSpawnCrystal extends TileAbstractSM {
 		case 4:
 			entity = new ElectricCube(world);
 			( (ElectricCube) entity).setSize(8);
+			this.addPotion(entity, PotionInit.leader_flag, 99999, 0);
 			break;
 		case 5:
 			entity = new SkullFlame(world);
@@ -201,31 +202,33 @@ public class TileSpawnCrystal extends TileAbstractSM {
 		return entity;
 	}
 
-	public int getRand (Random rand, int range) {
+	public int getRand(Random rand, int range) {
 		return rand.nextInt(range) - rand.nextInt(range);
 	}
 
-	public int getSummonSize (int data) {
+	public int getSummonSize(int data) {
 		switch (data) {
 		case 1: return 6;
 		case 2: return 8;
 		case 3: return 9;
 		case 4: return 10;
+		case 5: return 12;
 		default: return 4;
 		}
 	}
 
-	public double getMobHealth (int data) {
+	public double getMobHealth(int data) {
 		switch (data) {
 		case 1: return 50D;
 		case 2: return 70D;
 		case 3: return 100D;
 		case 4: return 120D;
+		case 5: return 160D;
 		default: return 30D;
 		}
 	}
 
-	public void setMobBuff (LivingEntity entity, int data) {
+	public void setMobBuff(LivingEntity entity, int data) {
 		this.addPotion(entity, PotionInit.resistance_blow, 99999, 5);
 		if (data >= 1) {
 			this.addPotion(entity, MobEffects.DAMAGE_BOOST, 99999, data);
@@ -233,30 +236,31 @@ public class TileSpawnCrystal extends TileAbstractSM {
 		}
 	}
 
-	public void setBigMobBuff (LivingEntity entity, int data) {
+	public void setBigMobBuff(LivingEntity entity, int data) {
 		this.addPotion(entity, PotionInit.leader_flag, 99999, 0);
 		this.addPotion(entity, PotionInit.resistance_blow, 99999, 5);
 		this.addPotion(entity, MobEffects.DAMAGE_BOOST, 99999, 1 + (data * 2) );
 	}
 
-	public double getBigMobHealth (int data) {
+	public double getBigMobHealth(int data) {
 		switch (data) {
 		case 1: return 120D;
 		case 2: return 150D;
 		case 3: return 170D;
 		case 4: return 200D;
+		case 5: return 240D;
 		default: return 70D;
 		}
 	}
 
 	// 範囲の取得
-	public AABB getAABB (double x, double  y, double  z) {
+	public AABB getAABB(double x, double y, double z) {
 		BlockPos pos = this.getBlockPos();
 		return new AABB(pos.offset(-x, 0, -z), pos.offset(x, y, z));
 	}
 
 	// ボタンクリック
-	public void clickButton (int id) {
+	public void clickButton(int id) {
 		switch (id) {
 		case 0:
 			this.setRange(Math.min(16, this.getRange() + 1));
@@ -287,12 +291,12 @@ public class TileSpawnCrystal extends TileAbstractSM {
 	}
 
 	// スポーン範囲の取得
-	public int getRange () {
+	public int getRange() {
 		return this.range;
 	}
 
 	// スポーン範囲の設定
-	public void setRange (int range) {
+	public void setRange(int range) {
 		this.range = range;
 	}
 

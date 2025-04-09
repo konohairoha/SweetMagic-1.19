@@ -50,10 +50,6 @@ import sweetmagic.util.SMDamage;
 
 public abstract class TileAbstractMagicianLectern extends TileSMMagic implements ISMTip {
 
-	public TileAbstractMagicianLectern(BlockEntityType<?> type, BlockPos pos, BlockState state) {
-		super(type, pos, state);
-	}
-
 	public int tileTime = 0;
 	public int oldCharge = 8;
 	public int wave = 1;
@@ -66,14 +62,16 @@ public abstract class TileAbstractMagicianLectern extends TileSMMagic implements
 	public int chageTime = 0;
 	public boolean deathBoss = false;
 	public boolean isHard = false;
-
 	public boolean isButtle = false;
 	public SummonType summonType = SummonType.START;
 	public ItemStack stack = ItemStack.EMPTY;
 	public Monster boss = null;
 	public UUID bossId = null;
-
 	protected final ServerBossEvent bossEvent = (ServerBossEvent) (new ServerBossEvent(this.getDisplayName(), BossEvent.BossBarColor.YELLOW, BossEvent.BossBarOverlay.NOTCHED_12)).setDarkenScreen(true);
+
+	public TileAbstractMagicianLectern(BlockEntityType<?> type, BlockPos pos, BlockState state) {
+		super(type, pos, state);
+	}
 
 	// サーバー側処理
 	@Override
@@ -137,7 +135,7 @@ public abstract class TileAbstractMagicianLectern extends TileSMMagic implements
 	}
 
 	// Waveの最大召喚数の設定
-	public void setMobSize (Level wrold, BlockPos pos) {
+	public void setMobSize(Level wrold, BlockPos pos) {
 
 		List<ServerPlayer> playerList = this.getPlayer(ServerPlayer.class);
 
@@ -163,11 +161,11 @@ public abstract class TileAbstractMagicianLectern extends TileSMMagic implements
 			break;
 		}
 
-		this.summonMaxCount = baseWave +  playerAddWave * (playerList.size() - 1);
+		this.summonMaxCount = baseWave + playerAddWave * (playerList.size() - 1);
 	}
 
 	// ボスケージをプレイヤーに付与
-	public void addPlayerBossBar (Level wrold, BlockPos pos) {
+	public void addPlayerBossBar(Level wrold, BlockPos pos) {
 
 		List<ServerPlayer> playerList = this.getPlayer(ServerPlayer.class);
 		List<? extends Player> outrangePlayerList = wrold.players().stream().filter(e -> !playerList.contains(e)).toList();
@@ -185,7 +183,7 @@ public abstract class TileAbstractMagicianLectern extends TileSMMagic implements
 	}
 
 	// ボスケージをプレイヤーに付与
-	public void removeAllPlayerBossBar () {
+	public void removeAllPlayerBossBar() {
 		this.bossEvent.removeAllPlayers();
 	}
 
@@ -193,33 +191,33 @@ public abstract class TileAbstractMagicianLectern extends TileSMMagic implements
 	public void setBossBar (Level world, BlockPos pos) {
 
 		if (this.wave >= 4) {
-			if (this.boss != null) {
-				float gage = (float) this.boss.getHealth() / (float) this.boss.getMaxHealth();
-				this.bossEvent.setProgress(gage);
-				this.bossEvent.setName(this.boss.getDisplayName());
-				this.deathBoss = !this.boss.isAlive();
+			if (this.boss == null) { return; }
 
-				if (!this.deathBoss) { return; }
+			float gage = (float) this.boss.getHealth() / (float) this.boss.getMaxHealth();
+			this.bossEvent.setProgress(gage);
+			this.bossEvent.setName(this.boss.getDisplayName());
+			this.deathBoss = !this.boss.isAlive();
 
-				// 召喚したモブを消す
-				List<Monster> mobList = this.getMobList();
+			if (!this.deathBoss) { return; }
 
-				for (Monster entity : mobList) {
-					entity.setHealth(1F);
-					entity.hurt(SMDamage.MAGIC, 999F);
-				}
+			// 召喚したモブを消す
+			List<Monster> mobList = this.getMobList();
 
-				// 破魔矢のえんちちーアイテムを消す
-				List<ItemEntity> entityItemList = this.getEntityList(ItemEntity.class, e -> e.getItem().is(ItemInit.evil_arrow), 128D);
-				entityItemList.forEach(e -> e.discard());
+			for (Monster entity : mobList) {
+				entity.setHealth(1F);
+				entity.hurt(SMDamage.MAGIC, 999F);
+			}
 
-				// プレイヤーのインベントリに入った破魔矢のアイテムを消す
-				List<Player> playerList = this.getPlayer(Player.class);
+			// 破魔矢のえんちちーアイテムを消す
+			List<ItemEntity> entityItemList = this.getEntityList(ItemEntity.class, e -> e.getItem().is(ItemInit.evil_arrow), 128D);
+			entityItemList.forEach(e -> e.discard());
 
-				for (Player player : playerList) {
-					List<ItemStack> stackList = player.getInventory().items.stream().filter(s -> !s.isEmpty() && s.is(ItemInit.evil_arrow)).toList();
-					stackList.forEach(s -> s.shrink(s.getCount()));
-				}
+			// プレイヤーのインベントリに入った破魔矢のアイテムを消す
+			List<Player> playerList = this.getPlayer(Player.class);
+
+			for (Player player : playerList) {
+				List<ItemStack> stackList = player.getInventory().items.stream().filter(s -> !s.isEmpty() && s.is(ItemInit.evil_arrow)).toList();
+				stackList.forEach(s -> s.shrink(s.getCount()));
 			}
 		}
 
@@ -244,19 +242,19 @@ public abstract class TileAbstractMagicianLectern extends TileSMMagic implements
 	}
 
 	//　周囲のプレイヤー取得
-	public <T extends Player> List<T> getPlayer (Class<T> enClass) {
+	public <T extends Player> List<T> getPlayer(Class<T> enClass) {
 		return this.getEntityList(enClass, p -> !p.isSpectator() && p.isAlive(), 64D);
 	}
 
 	// 召喚した周囲の敵モブ取得
-	public List<Monster> getMobList () {
+	public List<Monster> getMobList() {
 		return this.getEntityList(Monster.class, e -> e.isAlive() && e.hasEffect(PotionInit.darkness_fog) && !(e instanceof QueenFrost), 128D);
 	}
 
-	public abstract String deadTip ();
+	public abstract String deadTip();
 
 	// ウェーブの表記設定
-	public MutableComponent getWaveName () {
+	public MutableComponent getWaveName() {
 
 		MutableComponent tip = null;
 
@@ -268,7 +266,7 @@ public abstract class TileAbstractMagicianLectern extends TileSMMagic implements
 	}
 
 	// ボスケージのチャージ中
-	public void chargeBossBar (Level world, BlockPos pos) {
+	public void chargeBossBar(Level world, BlockPos pos) {
 
 		this.chageTime++;
 		float chargeGage = this.chargeSummonSize + (this.summonMaxCount / 80F);
@@ -294,31 +292,27 @@ public abstract class TileAbstractMagicianLectern extends TileSMMagic implements
 
 		this.bossEvent.setName(this.getTipArray(this.getTip(wave + " : "), this.getText("preparing"), this.getTip(" " + name)));
 		this.spawnParticle(world, pos);
+		if (chargeGage < this.summonMaxCount) { return; }
 
-		if (chargeGage >= this.summonMaxCount) {
-			this.summonType = SummonType.SUMMON;
 
-			if (this.wave >= 4) {
-
-				int summonMobSize = this.getEntityList(AbstractSummonMob.class, e -> e.isAlive(), 80D).size();
-				float addHealth = 1F + summonMobSize * (0.05F * this.getBattleLevel());
-
-				this.summonBoss(world, pos, addHealth);
-				this.playSound(pos, SoundEvents.GOAT_HORN_SOUND_VARIANTS.get(5), 1F, 0.875F);
-			}
-
-			else {
-				this.playSound(pos, SoundEvents.GOAT_HORN_SOUND_VARIANTS.get(2), 1F, 0.875F);
-			}
-
-			this.tickTime = -1;
-			this.sendPKT();
+		if (this.wave >= 4) {
+			int summonMobSize = this.getEntityList(AbstractSummonMob.class, e -> e.isAlive(), 80D).size();
+			float addHealth = 1F + summonMobSize * (0.05F * this.getBattleLevel());
+			this.summonBoss(world, pos, addHealth);
+			this.playSound(pos, SoundEvents.GOAT_HORN_SOUND_VARIANTS.get(5), 1F, 0.875F);
 		}
+
+		else {
+			this.playSound(pos, SoundEvents.GOAT_HORN_SOUND_VARIANTS.get(2), 1F, 0.875F);
+		}
+
+		this.summonType = SummonType.SUMMON;
+		this.tickTime = -1;
+		this.sendPKT();
 	}
 
 	// モブ召喚
-	public void onSummonMob (Level world, BlockPos pos) {
-
+	public void onSummonMob(Level world, BlockPos pos) {
 		int value = this.wave == 4 ? 4 : 8;
 		List<Monster> mobList = this.getMobList();
 		if (mobList.size() >= value) { return; }
@@ -333,7 +327,7 @@ public abstract class TileAbstractMagicianLectern extends TileSMMagic implements
 		}
 
 		int summonMobSize = this.getEntityList(AbstractSummonMob.class, e -> e.isAlive(), 80D).size();
-		float addHealth = 1F + summonMobSize * (0.05F * this.getBattleLevel());;
+		float addHealth = 1F + summonMobSize * (0.05F * this.getBattleLevel());
 
 		for (int i = 0; i < count; i++) {
 
@@ -378,12 +372,12 @@ public abstract class TileAbstractMagicianLectern extends TileSMMagic implements
 		}
 	}
 
-	protected int getRand (Random rand, int range) {
+	protected int getRand(Random rand, int range) {
 		return rand.nextInt(range) - rand.nextInt(range);
 	}
 
 	// 召喚間隔
-	public int getSummonInterval () {
+	public int getSummonInterval() {
 		switch (this.wave) {
 		case 2: return 168;
 		case 3: return 144;
@@ -393,7 +387,7 @@ public abstract class TileAbstractMagicianLectern extends TileSMMagic implements
 	}
 
 	// 雑魚モブの設定
-	public Monster setMob (Level world, Random rand, float addHealth) {
+	public Monster setMob(Level world, Random rand, float addHealth) {
 
 		Monster entity = null;
 
@@ -434,7 +428,7 @@ public abstract class TileAbstractMagicianLectern extends TileSMMagic implements
 	}
 
 	// 雑魚モブの設定
-	public Monster setBigMob (Level world, Random rand, float addHealth) {
+	public Monster setBigMob(Level world, Random rand, float addHealth) {
 
 		Monster entity = null;
 
@@ -485,10 +479,10 @@ public abstract class TileAbstractMagicianLectern extends TileSMMagic implements
 	}
 
 	// ボス召喚
-	public abstract void summonBoss (Level world, BlockPos pos, float addHealth);
+	public abstract void summonBoss(Level world, BlockPos pos, float addHealth);
 
 	// 次のウェーブを設定
-	public void setNextWave (Level world, BlockPos pos) {
+	public void setNextWave(Level world, BlockPos pos) {
 
 		if (this.wave >= 4) {
 
@@ -567,7 +561,7 @@ public abstract class TileAbstractMagicianLectern extends TileSMMagic implements
 		}
 	}
 
-	public void spawnParticle (Level world, BlockPos pos) {
+	public void spawnParticle(Level world, BlockPos pos) {
 		if ( !(world instanceof ServerLevel server) ) { return; }
 
 		float addY = Math.min(2F, this.tileTime * 0.0125F);
@@ -577,7 +571,6 @@ public abstract class TileAbstractMagicianLectern extends TileSMMagic implements
 			float randX = this.getRand(this.rand, 4);
 			float randY = this.getRand(this.rand, 4);
 			float randZ = this.getRand(this.rand, 4);
-
 			float x = pos.getX() + 0.5F + randX;
 			float y = pos.getY() + 1.5F + randY + addY;
 			float z = pos.getZ() + 0.5F + randZ;
@@ -585,12 +578,12 @@ public abstract class TileAbstractMagicianLectern extends TileSMMagic implements
 			float ySpeed = -randY * 0.115F;
 			float zSpeed = -randZ * 0.115F;
 
-			server.sendParticles(ParticleInit.NORMAL.get(), x, y, z, 0, xSpeed, ySpeed, zSpeed, 1F);
+			server.sendParticles(ParticleInit.NORMAL, x, y, z, 0, xSpeed, ySpeed, zSpeed, 1F);
 		}
 	}
 
-	public void spawnDeathParticle (Level world, BlockPos pos, Monster entity) {
-		if ( !(world instanceof ServerLevel server) ) { return; }
+	public void spawnDeathParticle(Level world, BlockPos pos, Monster entity) {
+		if (!(world instanceof ServerLevel server)) { return; }
 
 		float addY = Math.min(2F, this.tileTime * 0.0125F);
 		float entityX = (float) entity.getX();
@@ -602,7 +595,6 @@ public abstract class TileAbstractMagicianLectern extends TileSMMagic implements
 			float randX = this.getRandFloat();
 			float randY = this.getRandFloat();
 			float randZ = this.getRandFloat();
-
 			float x = entityX + 0.5F + randX;
 			float y = entityY + 1.5F + randY + addY;
 			float z = entityZ + 0.5F + randZ;
@@ -610,7 +602,7 @@ public abstract class TileAbstractMagicianLectern extends TileSMMagic implements
 			float ySpeed = (pos.getY() - entityY - randY) * 0.115F;
 			float zSpeed = (pos.getZ() - entityZ - randZ) * 0.115F;
 
-			server.sendParticles(ParticleInit.BLOOD.get(), x, y, z, 0, xSpeed, ySpeed, zSpeed, 1F);
+			server.sendParticles(ParticleInit.BLOOD, x, y, z, 0, xSpeed, ySpeed, zSpeed, 1F);
 		}
 	}
 
@@ -668,9 +660,9 @@ public abstract class TileAbstractMagicianLectern extends TileSMMagic implements
 		return null;
 	}
 
-	public abstract ItemStack getStack ();
+	public abstract ItemStack getStack();
 
-	public abstract int getBattleLevel ();
+	public abstract int getBattleLevel();
 
 	public enum SummonType {
 
@@ -686,11 +678,11 @@ public abstract class TileAbstractMagicianLectern extends TileSMMagic implements
 			this.id = id;
 		}
 
-		public int getId () {
+		public int getId() {
 			return this.id;
 		}
 
-		public static SummonType getType (int id) {
+		public static SummonType getType(int id) {
 			switch (id) {
 			case 0: return START;
 			case 1: return CHARGE;

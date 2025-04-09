@@ -25,18 +25,14 @@ import sweetmagic.init.tile.menu.WarpMenu;
 public class TileWarp extends TileAbstractSM {
 
 	protected final StackHandler inputInv = new StackHandler(this.getInvSize()) {
-
-        @Override
-		public int getSlotLimit(int slot) {
-			return 1;
-		}
+		public int getSlotLimit(int slot) { return 1; }
 	};
 
 	public TileWarp(BlockPos pos, BlockState state) {
 		super(TileInit.warpBlock, pos, state);
 	}
 
-	public void doTereport (Player player, int id) {
+	public void doTereport(Player player, int id) {
 		ItemStack stack = this.getInputItem(id);
 		if (stack.isEmpty() || !(stack.getItem() instanceof MFTeleport) ) { return; }
 
@@ -44,10 +40,10 @@ public class TileWarp extends TileAbstractSM {
 		if (tags == null || !tags.contains("pX")) { return; }
 
 		this.clickButton();
-        this.playSound(player.blockPosition(), SoundEvents.ENDERMAN_TELEPORT, 1F, 1F);
+		this.playSound(player.blockPosition(), SoundEvents.ENDERMAN_TELEPORT, 1F, 1F);
 
-        BlockPos pos = new BlockPos(tags.getInt("pX") + 0.5F, tags.getInt("pY") + 1F, tags.getInt("pZ") + 0.5F);
-        ResourceLocation dim = new ResourceLocation(tags.getString("dim"));
+		BlockPos pos = new BlockPos(tags.getInt("pX") + 0.5F, tags.getInt("pY") + 1F, tags.getInt("pZ") + 0.5F);
+		ResourceLocation dim = new ResourceLocation(tags.getString("dim"));
 
 		if (this.level instanceof ServerLevel server) {
 
@@ -70,7 +66,7 @@ public class TileWarp extends TileAbstractSM {
 				this.spawnParticleRing(server, ParticleTypes.PORTAL, range, pos.below(2), i / 3D, ySpeed, 1D);
 			}
 
-	        this.playSound(server, pos, SoundEvents.ENDERMAN_TELEPORT, 1F, 1F);
+			this.playSound(server, pos, SoundEvents.ENDERMAN_TELEPORT, 1F, 1F);
 		}
 
 		player.fallDistance = 0.0F;
@@ -79,7 +75,7 @@ public class TileWarp extends TileAbstractSM {
 
 	// インベントリサイズの取得
 	@Override
-	public int getInvSize () {
+	public int getInvSize() {
 		return 4;
 	}
 
@@ -89,7 +85,7 @@ public class TileWarp extends TileAbstractSM {
 	}
 
 	// 素材スロットのアイテムを取得
-	public  ItemStack getInputItem(int i) {
+	public ItemStack getInputItem(int i) {
 		return this.getInput().getStackInSlot(i);
 	}
 
@@ -98,7 +94,7 @@ public class TileWarp extends TileAbstractSM {
 		return this.getInputList().isEmpty();
 	}
 
-	public List<ItemStack> getInputList () {
+	public List<ItemStack> getInputList() {
 		List<ItemStack> stackList = new ArrayList<>();
 
 		for (int i = 0; i < this.getInvSize(); i++) {
@@ -122,10 +118,9 @@ public class TileWarp extends TileAbstractSM {
 		this.setInv(this.inputInv, tag, "inputInv");
 	}
 
-	public void setInv (StackHandler inv, CompoundTag tags, String name) {
+	public void setInv(StackHandler inv, CompoundTag tags, String name) {
 		CompoundTag tag = tags.getCompound(name);
 		if (tag == null) { return; }
-
 		inv.deserializeNBT(tag);
 	}
 

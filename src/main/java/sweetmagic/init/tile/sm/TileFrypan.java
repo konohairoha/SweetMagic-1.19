@@ -62,24 +62,28 @@ public class TileFrypan extends TileAbstractSMCook {
 		double y = pos.getY() + 0.45D;
 		double z = (double) pos.getZ() + 0.5D + (this.rand.nextDouble() * 0.3D - 0.15D);
 		double speedY = this.rand.nextDouble() * 0.0175D;
-	     world.addAlwaysVisibleParticle(ParticleTypes.CAMPFIRE_SIGNAL_SMOKE, true, x, y, z, 0D, 0.0325D + speedY, 0D);
+		world.addAlwaysVisibleParticle(ParticleTypes.CAMPFIRE_SIGNAL_SMOKE, true, x, y, z, 0D, 0.0325D + speedY, 0D);
 	}
 
 	// レシピチェック
-	public boolean checkRecipe () {
+	public boolean checkRecipe() {
 		return !OvenRecipe.getRecipe(this.level, this.craftList).isEmpty();
 	}
 
 	// 作成開始
-	public void craftStart () {
+	public void craftStart() {
 		this.isCraft = true;
 		this.setState(1);
 		this.sendPKT();
 		this.playSound(this.getBlockPos(), SoundInit.FRYPAN, 0.1F, 1F);
+
+		if (this.player != null) {
+			this.resultList = this.setCookQuality(this.player, this.resultList, this.amount);
+		}
 	}
 
 	// クラフトの完成
-	public void craftFinish () {
+	public void craftFinish() {
 		this.isCraft = false;
 		this.setState(2);
 		this.sendPKT();
@@ -87,7 +91,7 @@ public class TileFrypan extends TileAbstractSMCook {
 	}
 
 	// 初期化
-	public void clearInfo () {
+	public void clearInfo() {
 		this.amount = 0;
 		this.craftTime = 0;
 		this.isCraft = false;
@@ -120,6 +124,10 @@ public class TileFrypan extends TileAbstractSMCook {
 	// 料理中か
 	public boolean isCook() {
 		return this.isCraft;
+	}
+
+	public List<ItemStack> getCraftList() {
+		return this.craftList;
 	}
 
 	// NBTの書き込み

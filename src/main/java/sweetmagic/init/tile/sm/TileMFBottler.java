@@ -68,7 +68,6 @@ public class TileMFBottler extends TileSMMagic {
 		return this.stackList;
 	}
 
-
 	// インベントリサイズの取得
 	@Override
 	public int getInvSize () {
@@ -93,7 +92,7 @@ public class TileMFBottler extends TileSMMagic {
 	}
 
 	// 出力スロットのアイテムを取得
-	public  ItemStack getInputItem(int i) {
+	public ItemStack getInputItem(int i) {
 		return this.getInput().getStackInSlot(i);
 	}
 

@@ -29,7 +29,6 @@ public class TileObMagia extends TileAbstractSM {
 	public ItemStack outStack = ItemStack.EMPTY;
 	public ItemStack viewStack = ItemStack.EMPTY;
 	public List<ItemStack> craftList = new ArrayList<>();
-
 	protected final StackHandler baseInv = new StackHandler(1);
 	protected final StackHandler pageInv = new StackHandler(1);
 	protected final StackHandler handInv = new StackHandler(1);
@@ -83,7 +82,7 @@ public class TileObMagia extends TileAbstractSM {
 	}
 
 	// 素材の取得
-	public List<ItemStack> getStackList () {
+	public List<ItemStack> getStackList() {
 
 		List<ItemStack> stackList = new ArrayList<>();
 		stackList.add(this.getHandItem());
@@ -100,7 +99,7 @@ public class TileObMagia extends TileAbstractSM {
 	}
 
 	// レシピチェック
-	public boolean checkRecipe () {
+	public boolean checkRecipe() {
 
 		// 素材の取得
 		List<ItemStack> stackList = this.getStackList();
@@ -110,8 +109,6 @@ public class TileObMagia extends TileAbstractSM {
 		// レシピを取得して見つからなければ終了
 		boolean isCraft = !ObMagiaRecipe.getRecipe(this.level, stackList, page, base).isEmpty();
 		if (isCraft) {
-
-			// レシピを取得して見つからなければ終了
 			ObMagiaRecipe recipe = ObMagiaRecipe.getRecipe(this.level, stackList, page, base).get();
 			this.viewStack = recipe.getResultItem().copy();
 		}
@@ -120,7 +117,7 @@ public class TileObMagia extends TileAbstractSM {
 	}
 
 	// 作成開始
-	public void craftStart () {
+	public void craftStart() {
 
 		// 素材の取得
 		List<ItemStack> stackList = this.getStackList();
@@ -162,14 +159,14 @@ public class TileObMagia extends TileAbstractSM {
 	}
 
 	// クラフトの完成
-	public void craftFinish () {
+	public void craftFinish() {
 		ItemHandlerHelper.insertItemStacked(this.getOutput(), this.outStack, false);
 		this.playSound(this.getBlockPos(), SoundInit.WRITE, 0.1F, 1F);
 		this.clearInfo();
 	}
 
 	// 初期化
-	public void clearInfo () {
+	public void clearInfo() {
 		this.craftTime = 0;
 		this.maxCraftTime = 10;
 		this.isCraft = false;
@@ -180,7 +177,7 @@ public class TileObMagia extends TileAbstractSM {
 	}
 
 	// ドロップリストを取得
-	public List<ItemStack> getDropList () {
+	public List<ItemStack> getDropList() {
 
 		List<ItemStack> stackList = new ArrayList<>();
 		this.addStackList(stackList, this.getHandItem());
@@ -233,14 +230,13 @@ public class TileObMagia extends TileAbstractSM {
 		this.viewStack = ItemStack.of(tag.getCompound("viewStack"));
 	}
 
-	public void setInv (StackHandler inv, CompoundTag tags, String name) {
+	public void setInv(StackHandler inv, CompoundTag tags, String name) {
 		CompoundTag tag = tags.getCompound(name);
 		if (tag == null) { return; }
-
 		inv.deserializeNBT(tag);
 	}
 
-	public boolean isInfoEmpty () {
+	public boolean isInfoEmpty() {
 
 		List<ItemStack> stackList = new ArrayList<>();
 		this.addStackList(stackList, this.outStack);
@@ -258,7 +254,7 @@ public class TileObMagia extends TileAbstractSM {
 
 	// インベントリサイズの取得
 	@Override
-	public int getInvSize () {
+	public int getInvSize() {
 		return 8;
 	}
 
@@ -268,25 +264,27 @@ public class TileObMagia extends TileAbstractSM {
 	}
 
 	// ベーススロットのアイテムを取得
-	public  ItemStack getBaseItem() {
+	public ItemStack getBaseItem() {
 		return this.getBase().getStackInSlot(0);
 	}
+
 	// ページスロットの取得
 	public IItemHandler getpage() {
 		return this.pageInv;
 	}
 
 	// ページスロットのアイテムを取得
-	public  ItemStack getPageItem() {
+	public ItemStack getPageItem() {
 		return this.getpage().getStackInSlot(0);
 	}
+
 	// メインスロットの取得
 	public IItemHandler getHand() {
 		return this.handInv;
 	}
 
 	// メインスロットのアイテムを取得
-	public  ItemStack getHandItem() {
+	public ItemStack getHandItem() {
 		return this.getHand().getStackInSlot(0);
 	}
 
@@ -296,7 +294,7 @@ public class TileObMagia extends TileAbstractSM {
 	}
 
 	// 素材スロットのアイテムを取得
-	public  ItemStack getInputItem(int i) {
+	public ItemStack getInputItem(int i) {
 		return this.getInput().getStackInSlot(i);
 	}
 
@@ -306,7 +304,7 @@ public class TileObMagia extends TileAbstractSM {
 	}
 
 	// 出力のアイテムを取得
-	public  ItemStack getOutputItem() {
+	public ItemStack getOutputItem() {
 		return this.getOutput().getStackInSlot(0);
 	}
 
@@ -315,10 +313,10 @@ public class TileObMagia extends TileAbstractSM {
 		return this.sideInv;
 	}
 
-	// MFゲージの描画量を計算するためのメソッド
-	public int getMfProgressScaled(int value) {
+	// 描画量を計算するためのメソッド
+	public int getProgress(int value) {
 		return Math.min(value, (int) (value * (float) (this.craftTime) / (float) (this.maxCraftTime)));
-    }
+	}
 
 	@Override
 	public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player) {

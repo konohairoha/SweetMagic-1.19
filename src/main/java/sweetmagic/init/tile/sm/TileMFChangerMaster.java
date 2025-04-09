@@ -13,7 +13,7 @@ import sweetmagic.init.TileInit;
 
 public class TileMFChangerMaster extends TileMFChanger {
 
-	public int maxMagiaFlux = 4000000;				// 最大MF量を設定
+	public int maxMagiaFlux = 4000000;
 
 	public TileMFChangerMaster(BlockPos pos, BlockState state) {
 		this(TileInit.changerMaster, pos, state);
@@ -47,13 +47,13 @@ public class TileMFChangerMaster extends TileMFChanger {
 
 	// 最大MFの取得
 	@Override
-	public int getMaxMF () {
+	public int getMaxMF() {
 		return this.maxMagiaFlux;
 	}
 
 	// インベントリサイズの取得
 	@Override
-	public int getInvSize () {
+	public int getInvSize() {
 		return 10;
 	}
 
