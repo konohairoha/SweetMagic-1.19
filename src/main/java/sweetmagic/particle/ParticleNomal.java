@@ -10,7 +10,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 @OnlyIn(Dist.CLIENT)
 public class ParticleNomal extends ParticleSMBase {
 
-    public boolean isDown = true;
+	public boolean isDown = true;
 
 	public ParticleNomal(ClientLevel level, double x, double y, double z, double vx, double vy, double vz, float scale, SpriteSet spriteSet) {
 		super(level, x, y, z, vx, vy, vz, scale, spriteSet);
@@ -96,7 +96,7 @@ public class ParticleNomal extends ParticleSMBase {
 		@Override
 		public Particle createParticle(SimpleParticleType type, ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
 			ParticleNomal par = new ParticleNomal(level, x, y, z, xSpeed, ySpeed, zSpeed, 0.2F, this.sprite);
-			par.addColor( 89F, this.getRand(255F), 255F);
+			par.addColor(89F, this.getRand(255F), 255F);
 			par.scale(this.getRand(0.3F) + 0.15F);
 			return par;
 		}
@@ -108,7 +108,7 @@ public class ParticleNomal extends ParticleSMBase {
 		@Override
 		public Particle createParticle(SimpleParticleType type, ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
 			ParticleNomal par = new ParticleNomal(level, x, y, z, xSpeed, ySpeed, zSpeed, 0.2F, this.sprite);
-			par.addColor( (this.getRand(255F)), 163F, 255F);
+			par.addColor(this.getRand(255F), 163F, 255F);
 			par.scale(this.getRand(0.3F) + 0.15F);
 			return par;
 		}
@@ -203,12 +203,11 @@ public class ParticleNomal extends ParticleSMBase {
 		@Override
 		public Particle createParticle(SimpleParticleType type, ClientLevel world, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
 			ParticleNomal par = new ParticleNomal(world, x, y, z, xSpeed, ySpeed, zSpeed, 0.2F, this.sprite);
-			par.addColor( (20F + rand.nextInt(100)), (103F + rand.nextInt(100)), (180F + rand.nextInt(75)));
-			par.scale(0.5F + world.random.nextFloat() * 0.25F);
+			par.addColor(20F + rand.nextInt(100), 103F + rand.nextInt(100), 180F + rand.nextInt(75));
+			par.scale(0.5F + rand.nextFloat() * 0.25F);
 			return par;
 		}
 	}
-
 
 	@OnlyIn(Dist.CLIENT)
 	public record AddAttack(SpriteSet sprite) implements BaseCreateParticle {
@@ -217,6 +216,23 @@ public class ParticleNomal extends ParticleSMBase {
 		public Particle createParticle(SimpleParticleType type, ClientLevel level, double x, double y, double z, double red, double blue, double green) {
 			ParticleNomal par = new ParticleNomal(level, x, y, z, 0, 0, 0, 0.1F, this.sprite);
 			par.setColor((float) red, (float) blue, (float) green);
+			return par;
+		}
+	}
+
+	@OnlyIn(Dist.CLIENT)
+	public record Storage(SpriteSet sprite) implements BaseCreateParticle {
+
+		@Override
+		public Particle createParticle(SimpleParticleType type, ClientLevel world, double x, double y, double z, double r, double g, double b) {
+
+			float xSpeed = (rand.nextFloat() - rand.nextFloat()) * 0.1F;
+			float ySpeed = (rand.nextFloat() - rand.nextFloat()) * 0.1F;
+			float zSpeed = (rand.nextFloat() - rand.nextFloat()) * 0.1F;
+
+			ParticleNomal par = new ParticleNomal(world, x, y, z, xSpeed, ySpeed, zSpeed, 0.2F, this.sprite);
+			par.addColor((float) r, (float) g, (float) b);
+			par.scale(0.5F + world.random.nextFloat() * 0.25F);
 			return par;
 		}
 	}

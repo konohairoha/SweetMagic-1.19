@@ -24,17 +24,17 @@ public class IrisRecipe extends AbstractRecipe {
 
 	// LevelとItemStackのリストを引数に、利用可能なレシピを検索する
 	public static Optional<IrisRecipe> getRecipe(Level world, List<ItemStack> ingredList) {
-		return AbstractRecipe.getRecipe(world, RecipeTypeInit.IRIS.get()).filter(t -> t.matches(ingredList)).findFirst();
+		return AbstractRecipe.getRecipe(world, RecipeTypeInit.IRIS).filter(t -> t.matches(ingredList)).findFirst();
 	}
 
 	@Override
 	public RecipeSerializer<?> getSerializer() {
-		return RecipeSerializerInit.IRIS.get();
+		return RecipeSerializerInit.IRIS;
 	}
 
 	@Override
 	public RecipeType<?> getType() {
-		return RecipeTypeInit.IRIS.get();
+		return RecipeTypeInit.IRIS;
 	}
 
 	// クラフト素材リストの取得

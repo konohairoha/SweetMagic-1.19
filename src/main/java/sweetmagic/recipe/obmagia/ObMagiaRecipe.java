@@ -35,7 +35,7 @@ public class ObMagiaRecipe extends AbstractRecipe {
 
 	// LevelとItemStackのリストを引数に、利用可能なレシピを検索する
 	public static Optional<ObMagiaRecipe> getRecipe(Level world, List<ItemStack> ingredList, ItemStack page, ItemStack base) {
-		return AbstractRecipe.getRecipe(world, RecipeTypeInit.OBMAGIA.get()).filter(t -> t.matches(ingredList, page, base)).findFirst();
+		return AbstractRecipe.getRecipe(world, RecipeTypeInit.OBMAGIA).filter(t -> t.matches(ingredList, page, base)).findFirst();
 	}
 
 	// 要求アイテムが足りているかどうか
@@ -54,12 +54,12 @@ public class ObMagiaRecipe extends AbstractRecipe {
 
 	@Override
 	public RecipeSerializer<?> getSerializer() {
-		return RecipeSerializerInit.OBMAGIA.get();
+		return RecipeSerializerInit.OBMAGIA;
 	}
 
 	@Override
 	public RecipeType<?> getType() {
-		return RecipeTypeInit.OBMAGIA.get();
+		return RecipeTypeInit.OBMAGIA;
 	}
 
 	// クラフト素材リストの取得

@@ -24,17 +24,17 @@ public class JuiceMakerRecipe extends AbstractRecipe {
 
 	// LevelとItemStackのリストを引数に、利用可能なレシピを検索する
 	public static Optional<JuiceMakerRecipe> getRecipe(Level world, List<ItemStack> ingredList) {
-		return AbstractRecipe.getRecipe(world, RecipeTypeInit.JUICEMAKER.get()).filter(t -> t.matches(ingredList)).findFirst();
+		return AbstractRecipe.getRecipe(world, RecipeTypeInit.JUICEMAKER).filter(t -> t.matches(ingredList)).findFirst();
 	}
 
 	@Override
 	public RecipeSerializer<?> getSerializer() {
-		return RecipeSerializerInit.JUICEMAKER.get();
+		return RecipeSerializerInit.JUICEMAKER;
 	}
 
 	@Override
 	public RecipeType<?> getType() {
-		return RecipeTypeInit.JUICEMAKER.get();
+		return RecipeTypeInit.JUICEMAKER;
 	}
 
 	// クラフト素材リストの取得

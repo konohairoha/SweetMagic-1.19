@@ -23,23 +23,23 @@ public class FurnitureRecipe extends AbstractRecipe {
 		super(id, resultList, ingredList, Arrays.<Integer> asList(1));
 	}
 
-	public boolean matches(Container p_44483_, Level p_44484_) {
-		return this.ingredList.get(0).test(p_44483_.getItem(0));
+	public boolean matches(Container con, Level world) {
+		return this.ingredList.get(0).test(con.getItem(0));
 	}
 
 	// LevelとItemStackのリストを引数に、利用可能なレシピを検索する
 	public static Optional<FurnitureRecipe> getRecipe(Level world, List<ItemStack> ingredList) {
-		return AbstractRecipe.getRecipe(world, RecipeTypeInit.FURNITURE.get()).filter(t -> t.matches(ingredList)).findFirst();
+		return AbstractRecipe.getRecipe(world, RecipeTypeInit.FURNITURE).filter(t -> t.matches(ingredList)).findFirst();
 	}
 
 	@Override
 	public RecipeSerializer<?> getSerializer() {
-		return RecipeSerializerInit.FURNITURE.get();
+		return RecipeSerializerInit.FURNITURE;
 	}
 
 	@Override
 	public RecipeType<?> getType() {
-		return RecipeTypeInit.FURNITURE.get();
+		return RecipeTypeInit.FURNITURE;
 	}
 
 	// クラフト素材リストの取得

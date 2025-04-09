@@ -67,7 +67,7 @@ public class ObMagiaRecipeCategory extends AbstractRecipeCategory implements IRe
 		this.addSlotList(builder, 71, 76, recipe, ingredList, 4);
 		this.addSlotList(builder, 43, 86, recipe, ingredList, 5);
 		this.addSlotList(builder, 16, 76, recipe, ingredList, 6);
-		this.addSlotList(builder,  6, 49, recipe, ingredList, 7);
+		this.addSlotList(builder, 6, 49, recipe, ingredList, 7);
 		this.addSlotList(builder, 16, 21, recipe, ingredList, 8);
 
 		builder.addSlot(RecipeIngredientRole.OUTPUT, 148, 47).addItemStack(resultStack);

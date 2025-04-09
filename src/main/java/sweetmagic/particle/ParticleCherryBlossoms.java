@@ -24,22 +24,22 @@ public class ParticleCherryBlossoms extends ParticleSMBase {
 	@Override
 	public void tick() {
 
-    	int age = this.age;
+		int age = this.age;
 		super.tick();
 
-        if (this.onGround) {
-        	this.age = age;
+		if (this.onGround) {
+			this.age = age;
 
-        	if ( this.tickTime++ >= this.maxTick ) {
-        		this.remove();
-        	}
-        }
+			if (this.tickTime++ >= this.maxTick) {
+				this.remove();
+			}
+		}
 
-        else if (this.quadSize >= 0.25F) {
-        	this.xd *= (1D + (this.random.nextDouble() - this.random.nextDouble()) * 0.04D);
-        	this.yd *= (1D + (this.random.nextDouble() - this.random.nextDouble()) * 0.01D);
-        	this.zd *= (1D + (this.random.nextDouble() - this.random.nextDouble()) * 0.04D);
-        }
+		else if (this.quadSize >= 0.25F) {
+			this.xd *= (1D + (this.random.nextDouble() - this.random.nextDouble()) * 0.04D);
+			this.yd *= (1D + (this.random.nextDouble() - this.random.nextDouble()) * 0.01D);
+			this.zd *= (1D + (this.random.nextDouble() - this.random.nextDouble()) * 0.04D);
+		}
 
 		this.setSpriteFromAge(sprite);
 	}

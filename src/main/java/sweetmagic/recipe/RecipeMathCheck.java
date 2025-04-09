@@ -6,10 +6,13 @@ import java.util.List;
 
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraftforge.fluids.FluidStack;
+import sweetmagic.init.ItemInit;
+import sweetmagic.init.item.sm.SMBucket;
 
 public class RecipeMathCheck {
 
-	public static RecipeInfo checkRecipe (List<ItemStack> stackList, List<Ingredient> ingList, List<Integer> countList) {
+	public static RecipeInfo checkRecipe(List<ItemStack> stackList, List<Ingredient> ingList, List<Integer> countList) {
 
 		// 使用するアイテムのリスト
 		List<ItemStack> requestStackList = new ArrayList<>();
@@ -60,6 +63,17 @@ public class RecipeMathCheck {
 							slotIdList.add(i);
 							break;
 						}
+
+						else if (ingStack.is(ItemInit.alt_bucket_water) && stack.getItem() instanceof SMBucket bucket) {
+
+							FluidStack fluid = bucket.getFluidStack(stack);
+							if (!fluid.isEmpty() && fluid.getAmount() >= ingStack.getCount()) {
+								successFlg = true;
+								requestStackList.add(ingStack);
+								slotIdList.add(i);
+								break;
+							}
+						}
 					}
 				}
 
@@ -77,17 +91,18 @@ public class RecipeMathCheck {
 		return new RecipeInfo(requestStackList);
 	}
 
-	public static RecipeInfo checkObMagiaRecipe (List<ItemStack> stackList, ItemStack pageStack, ItemStack baseStack, List<Ingredient> ingList, List<Integer> countList, Ingredient recipePageList, Ingredient recipeBaseList) {
+	public static RecipeInfo checkObMagiaRecipe(List<ItemStack> stackList, ItemStack pageStack, ItemStack baseStack, List<Ingredient> ingList, List<Integer> countList, Ingredient recipePageList, Ingredient recipeBaseList) {
 
 		ItemStack req_page = ItemStack.EMPTY;
 
 		// 大分類に格納されたアイテムをリストで取得
 		List<ItemStack> pageIngredList = new ArrayList<ItemStack>(Arrays.asList(recipePageList.getItems()));
+		List<Integer> slotIdList = new ArrayList<>();
 		boolean isPageComplete = pageIngredList.isEmpty();
 
 		for (ItemStack page : pageIngredList) {
 
-			if ( !pageStack.isEmpty() &&  pageStack.is(page.getItem()) && pageStack.getCount() >= page.getCount() ) {
+			if (!pageStack.isEmpty() && pageStack.is(page.getItem()) && pageStack.getCount() >= page.getCount()) {
 				isPageComplete = true;
 				req_page = page;
 				break;
@@ -147,12 +162,17 @@ public class RecipeMathCheck {
 				else {
 
 					// 小分類(インベントリアイテム)
-					for (ItemStack stack : stackList) {
+					for (int i = 1; i < stackList.size(); i++) {
+
+						if (slotIdList.contains(i)) { continue; }
+
+						ItemStack stack = stackList.get(i);
 
 						// アイテムが一致して要求個数以上なら検索完了
 						if (ingStack.is(stack.getItem()) && stack.getCount() >= ingStack.getCount()) {
 							successFlg = true;
 							requestStackList.add(ingStack);
+							slotIdList.add(i);
 							break;
 						}
 					}

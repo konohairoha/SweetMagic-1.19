@@ -30,8 +30,8 @@ public class JadeDataProvider implements IBlockComponentProvider, ISMTip {
 		Block block = acce.getBlock();
 		BlockEntity bEntity = acce.getBlockEntity();
 
-		if ( bEntity != null && bEntity instanceof TileSMMagic tile ) {
-		    tooltip.add(tooltip.getElementHelper().item(new ItemStack(ItemInit.aether_crystal), 0.67F));
+		if (bEntity != null && bEntity instanceof TileSMMagic tile) {
+			tooltip.add(tooltip.getElementHelper().item(new ItemStack(ItemInit.aether_crystal), 0.67F));
 			tooltip.append(this.getTip("MF: " + String.format("%,d", tile.getMF())).withStyle(GREEN));
 		}
 

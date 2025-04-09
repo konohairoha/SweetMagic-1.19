@@ -26,17 +26,17 @@ public class TankRecipe extends AbstractRecipe {
 
 	// LevelとItemStackのリストを引数に、利用可能なレシピを検索する
 	public static Optional<TankRecipe> getRecipe(Level world, List<ItemStack> ingredList) {
-		return AbstractRecipe.getRecipe(world, RecipeTypeInit.TANK.get()).filter(t -> t.matches(ingredList)).findFirst();
+		return AbstractRecipe.getRecipe(world, RecipeTypeInit.TANK).filter(t -> t.matches(ingredList)).findFirst();
 	}
 
 	@Override
 	public RecipeSerializer<?> getSerializer() {
-		return RecipeSerializerInit.TANK.get();
+		return RecipeSerializerInit.TANK;
 	}
 
 	@Override
 	public RecipeType<?> getType() {
-		return RecipeTypeInit.TANK.get();
+		return RecipeTypeInit.TANK;
 	}
 
 	// クラフト素材リストの取得
@@ -60,7 +60,7 @@ public class TankRecipe extends AbstractRecipe {
 	}
 
 	// MF要求リストの取得
-	public List<Integer> getMFList () {
+	public List<Integer> getMFList() {
 		return this.mfList;
 	}
 

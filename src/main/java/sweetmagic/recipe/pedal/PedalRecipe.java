@@ -28,17 +28,17 @@ public class PedalRecipe extends AbstractRecipe {
 
 	// LevelとItemStackのリストを引数に、利用可能なレシピを検索する
 	public static Optional<PedalRecipe> getRecipe(Level world, List<ItemStack> ingredList) {
-		return AbstractRecipe.getRecipe(world, RecipeTypeInit.PEDAL.get()).filter(t -> t.matches(ingredList)).findFirst();
+		return AbstractRecipe.getRecipe(world, RecipeTypeInit.PEDAL).filter(t -> t.matches(ingredList)).findFirst();
 	}
 
 	@Override
 	public RecipeSerializer<?> getSerializer() {
-		return RecipeSerializerInit.PEDAL.get();
+		return RecipeSerializerInit.PEDAL;
 	}
 
 	@Override
 	public RecipeType<?> getType() {
-		return RecipeTypeInit.PEDAL.get();
+		return RecipeTypeInit.PEDAL;
 	}
 
 	// クラフト素材リストの取得

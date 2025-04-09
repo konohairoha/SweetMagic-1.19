@@ -25,19 +25,19 @@ public class AlstroemeriaRecipe extends AbstractRecipe {
 	// LevelとItemStackのリストを引数に、利用可能なレシピを検索する
 	public static Optional<AlstroemeriaRecipe> getRecipe(Level world, List<ItemStack> ingredList) {
 		// 引数のLevelからRecipeManagerを呼び出し、全てのSimpleProcessorRecipeを取得
-		return AbstractRecipe.getRecipe(world, RecipeTypeInit.ALSTROMERIA.get())
+		return AbstractRecipe.getRecipe(world, RecipeTypeInit.ALSTROMERIA)
 				// 材料が合致するかどうかでフィルタリングを行い、最初にヒットしたレシピを返す
 				.filter(t -> t.matches(ingredList)).findFirst();
 	}
 
 	@Override
 	public RecipeSerializer<?> getSerializer() {
-		return RecipeSerializerInit.ALSTROMERIA.get();
+		return RecipeSerializerInit.ALSTROMERIA;
 	}
 
 	@Override
 	public RecipeType<?> getType() {
-		return RecipeTypeInit.ALSTROMERIA.get();
+		return RecipeTypeInit.ALSTROMERIA;
 	}
 
 	// クラフト素材リストの取得

@@ -14,12 +14,12 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 @OnlyIn(Dist.CLIENT)
 public abstract class ParticleSMBase extends TextureSheetParticle {
 
-    protected final SpriteSet sprite;
+	protected final SpriteSet sprite;
 
 	public ParticleSMBase(ClientLevel level, double x, double y, double z, double vx, double vy, double vz, float scale, SpriteSet sprite) {
 		super(level, x, y, z, vx, vy, vz);
 		this.pickSprite(sprite);
-        this.sprite = sprite;
+		this.sprite = sprite;
 		this.xd = this.yd = this.zd= 0;
 		this.rCol = this.gCol = this.bCol = 1F;
 		this.quadSize = scale;
@@ -30,13 +30,12 @@ public abstract class ParticleSMBase extends TextureSheetParticle {
 		this.zd = vz;
 	}
 
-	public void addColor (float r, float g, float b) {
-		this.setColor( r / 255F, g / 255F, b / 255F);
+	public void addColor(float r, float g, float b) {
+		this.setColor(r / 255F, g / 255F, b / 255F);
 	}
 
 	@Override
 	public ParticleRenderType getRenderType() {
-//		return ParticleRenderType.PARTICLE_SHEET_OPAQUE;
 		return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
 	}
 

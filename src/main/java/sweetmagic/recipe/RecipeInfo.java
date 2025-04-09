@@ -10,17 +10,17 @@ public class RecipeInfo {
 	private ItemStack page;
 	private ItemStack base;
 
-	public RecipeInfo (List<ItemStack> stackList) {
+	public RecipeInfo(List<ItemStack> stackList) {
 		this.stackList = stackList;
 	}
 
-	public RecipeInfo (List<ItemStack> stackList, ItemStack page, ItemStack base) {
+	public RecipeInfo(List<ItemStack> stackList, ItemStack page, ItemStack base) {
 		this.stackList = stackList;
 		this.page = page;
 		this.base = base;
 	}
 
-	public List<ItemStack> getStackList () {
+	public List<ItemStack> getStackList() {
 		return this.stackList;
 	}
 
@@ -33,7 +33,7 @@ public class RecipeInfo {
 	}
 
 	// 要求アイテムがすべてそろっているなら
-	public boolean isCompleted () {
+	public boolean isCompleted() {
 		return !this.getStackList().isEmpty();
 	}
 }

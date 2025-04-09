@@ -24,17 +24,17 @@ public class BottleRecipe extends AbstractRecipe {
 
 	// LevelとItemStackのリストを引数に、利用可能なレシピを検索する
 	public static Optional<BottleRecipe> getRecipe(Level world, List<ItemStack> ingredList) {
-		return AbstractRecipe.getRecipe(world, RecipeTypeInit.BOTTLE.get()).filter(t -> t.matches(ingredList)).findFirst();
+		return AbstractRecipe.getRecipe(world, RecipeTypeInit.BOTTLE).filter(t -> t.matches(ingredList)).findFirst();
 	}
 
 	@Override
 	public RecipeSerializer<?> getSerializer() {
-		return RecipeSerializerInit.BOTTLE.get();
+		return RecipeSerializerInit.BOTTLE;
 	}
 
 	@Override
 	public RecipeType<?> getType() {
-		return RecipeTypeInit.BOTTLE.get();
+		return RecipeTypeInit.BOTTLE;
 	}
 
 	// クラフト素材リストの取得

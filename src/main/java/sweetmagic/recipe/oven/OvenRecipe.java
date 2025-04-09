@@ -24,17 +24,17 @@ public class OvenRecipe extends AbstractRecipe {
 
 	// LevelとItemStackのリストを引数に、利用可能なレシピを検索する
 	public static Optional<OvenRecipe> getRecipe(Level world, List<ItemStack> ingredList) {
-		return AbstractRecipe.getRecipe(world, RecipeTypeInit.OVEN.get()).filter(t -> t.matches(ingredList)).findFirst();
+		return AbstractRecipe.getRecipe(world, RecipeTypeInit.OVEN).filter(t -> t.matches(ingredList)).findFirst();
 	}
 
 	@Override
 	public RecipeSerializer<?> getSerializer() {
-		return RecipeSerializerInit.OVEN.get();
+		return RecipeSerializerInit.OVEN;
 	}
 
 	@Override
 	public RecipeType<?> getType() {
-		return RecipeTypeInit.OVEN.get();
+		return RecipeTypeInit.OVEN;
 	}
 
 	// クラフト素材リストの取得

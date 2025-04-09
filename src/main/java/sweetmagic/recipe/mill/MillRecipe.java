@@ -26,17 +26,17 @@ public class MillRecipe extends AbstractRecipe {
 
 	// LevelとItemStackのリストを引数に、利用可能なレシピを検索する
 	public static Optional<MillRecipe> getRecipe(Level world, List<ItemStack> ingredList) {
-		return AbstractRecipe.getRecipe(world, RecipeTypeInit.MILL.get()).filter(t -> t.matches(ingredList)).findFirst();
+		return AbstractRecipe.getRecipe(world, RecipeTypeInit.MILL).filter(t -> t.matches(ingredList)).findFirst();
 	}
 
 	@Override
 	public RecipeSerializer<?> getSerializer() {
-		return RecipeSerializerInit.MILL.get();
+		return RecipeSerializerInit.MILL;
 	}
 
 	@Override
 	public RecipeType<?> getType() {
-		return RecipeTypeInit.MILL.get();
+		return RecipeTypeInit.MILL;
 	}
 
 	// クラフト後のチャンスを取得

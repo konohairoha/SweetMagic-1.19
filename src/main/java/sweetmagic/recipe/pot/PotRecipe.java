@@ -24,17 +24,17 @@ public class PotRecipe extends AbstractRecipe {
 
 	// LevelとItemStackのリストを引数に、利用可能なレシピを検索する
 	public static Optional<PotRecipe> getRecipe(Level world, List<ItemStack> ingredList) {
-		return AbstractRecipe.getRecipe(world, RecipeTypeInit.POT.get()).filter(t -> t.matches(ingredList)).findFirst();
+		return AbstractRecipe.getRecipe(world, RecipeTypeInit.POT).filter(t -> t.matches(ingredList)).findFirst();
 	}
 
 	@Override
 	public RecipeSerializer<?> getSerializer() {
-		return RecipeSerializerInit.POT.get();
+		return RecipeSerializerInit.POT;
 	}
 
 	@Override
 	public RecipeType<?> getType() {
-		return RecipeTypeInit.POT.get();
+		return RecipeTypeInit.POT;
 	}
 
 	// クラフト素材リストの取得

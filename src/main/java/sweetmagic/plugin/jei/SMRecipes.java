@@ -6,7 +6,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraftforge.registries.RegistryObject;
 import sweetmagic.init.RecipeTypeInit;
 import sweetmagic.recipe.alstrameria.AlstroemeriaRecipe;
 import sweetmagic.recipe.base.AbstractRecipe;
@@ -97,7 +96,7 @@ public class SMRecipes {
 		return this.getRecipe(RecipeTypeInit.RECYCLER);
 	}
 
-	public <T extends AbstractRecipe> List<T> getRecipe (RegistryObject<RecipeType<T>> recipe) {
-		return this.recipeManager.getAllRecipesFor(recipe.get()).stream().toList();
+	public <T extends AbstractRecipe> List<T> getRecipe (RecipeType<T> recipe) {
+		return this.recipeManager.getAllRecipesFor(recipe).stream().toList();
 	}
 }

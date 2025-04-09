@@ -12,6 +12,7 @@ import sweetmagic.api.iitem.IPorch;
 import sweetmagic.api.iitem.IRobe;
 import sweetmagic.api.iitem.IWand;
 import sweetmagic.init.ItemInit;
+import sweetmagic.init.item.magic.StartLightWand;
 import sweetmagic.init.item.sm.SMAxe;
 import sweetmagic.key.SMKeybind;
 
@@ -28,7 +29,7 @@ public record KeyPressPKT(SMKeybind key) implements IPacket {
 		ItemStack chest = player.getItemBySlot(EquipmentSlot.CHEST);
 		ItemStack leg = player.getItemBySlot(EquipmentSlot.LEGS);
 
-		switch  (this.key) {
+		switch (this.key) {
 		case OPEN:
 
 			if (item instanceof IWand wand) {
@@ -54,8 +55,12 @@ public record KeyPressPKT(SMKeybind key) implements IPacket {
 				}
 			}
 
-			if (item instanceof IWand wand) {
+			else if (item instanceof IWand wand) {
 				wand.nextSlot(level, player, stack);
+			}
+
+			else if (item instanceof StartLightWand wand) {
+				wand.resetPos(player, stack);
 			}
 
 			break;
@@ -67,6 +72,10 @@ public record KeyPressPKT(SMKeybind key) implements IPacket {
 
 			else if (item instanceof IWand wand) {
 				wand.backSlot(level, player, stack);
+			}
+
+			else if (item instanceof StartLightWand wand) {
+				wand.changeExchange(player, stack);
 			}
 			break;
 		case POUCH:

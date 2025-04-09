@@ -24,17 +24,17 @@ public class FrypanRecipe extends AbstractRecipe {
 
 	// LevelとItemStackのリストを引数に、利用可能なレシピを検索する
 	public static Optional<FrypanRecipe> getRecipe(Level world, List<ItemStack> ingredList) {
-		return AbstractRecipe.getRecipe(world, RecipeTypeInit.FRYPAN.get()).filter(t -> t.matches(ingredList)).findFirst();
+		return AbstractRecipe.getRecipe(world, RecipeTypeInit.FRYPAN).filter(t -> t.matches(ingredList)).findFirst();
 	}
 
 	@Override
 	public RecipeSerializer<?> getSerializer() {
-		return RecipeSerializerInit.FRYPAN.get();
+		return RecipeSerializerInit.FRYPAN;
 	}
 
 	@Override
 	public RecipeType<?> getType() {
-		return RecipeTypeInit.FRYPAN.get();
+		return RecipeTypeInit.FRYPAN;
 	}
 
 	// クラフト素材リストの取得

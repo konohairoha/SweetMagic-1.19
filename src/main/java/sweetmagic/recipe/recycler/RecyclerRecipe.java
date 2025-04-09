@@ -30,17 +30,17 @@ public class RecyclerRecipe extends AbstractRecipe {
 
 	// LevelとItemStackのリストを引数に、利用可能なレシピを検索する
 	public static Optional<RecyclerRecipe> getRecipe(Level world, List<ItemStack> ingredList) {
-		return AbstractRecipe.getRecipe(world, RecipeTypeInit.RECYCLER.get()).filter(t -> t.matches(ingredList)).findFirst();
+		return AbstractRecipe.getRecipe(world, RecipeTypeInit.RECYCLER).filter(t -> t.matches(ingredList)).findFirst();
 	}
 
 	@Override
 	public RecipeSerializer<?> getSerializer() {
-		return RecipeSerializerInit.RECYCLER.get();
+		return RecipeSerializerInit.RECYCLER;
 	}
 
 	@Override
 	public RecipeType<?> getType() {
-		return RecipeTypeInit.RECYCLER.get();
+		return RecipeTypeInit.RECYCLER;
 	}
 
 	public ItemStack getResultItem() {
