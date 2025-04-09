@@ -22,7 +22,7 @@ public class QueenFrostLayer <T extends QueenFrost, M extends EntityModel<T>> ex
 
 	public QueenFrostLayer(RenderLayerParent<T, M> layer, EntityRendererProvider.Context con) {
 		super(layer, con);
-		this.setModel(new QuenModel<>(con.getModelSet().bakeLayer(QuenModel.LAYER)));
+		this.setModel(new QuenModel<>(this.getModel(con, QuenModel.LAYER)));
 	}
 
 	public void render(PoseStack pose, MultiBufferSource buf, int light, QueenFrost entity, float swing, float swingAmount, float parTick, float ageTick, float netHeadYaw, float headPitch) {

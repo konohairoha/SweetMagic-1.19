@@ -6,23 +6,25 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import sweetmagic.SweetMagicCore;
 import sweetmagic.init.entity.animal.WitchAllay;
+import sweetmagic.init.render.entity.layer.MagicCycleLayer;
 import sweetmagic.init.render.entity.layer.WitchAllayLayer;
 import sweetmagic.init.render.entity.model.WitchAllayModel;
 
-public class RenderWitchAllay extends MobRenderer<WitchAllay, WitchAllayModel<WitchAllay>> {
+public class RenderWitchAllay<T extends WitchAllay> extends MobRenderer<T, WitchAllayModel<T>> {
 
 	private static final ResourceLocation TEX = SweetMagicCore.getSRC("textures/entity/witchallay.png");
 
 	public RenderWitchAllay(EntityRendererProvider.Context con) {
 		super(con, new WitchAllayModel<>(con.bakeLayer(WitchAllayModel.LAYER)), 0.4F);
-		this.addLayer(new WitchAllayLayer<WitchAllay, WitchAllayModel<WitchAllay>>(this, con));
+		this.addLayer(new WitchAllayLayer<T, WitchAllayModel<T>>(this, con));
+		this.addLayer(new MagicCycleLayer<T, WitchAllayModel<T>>(this, con));
 	}
 
-	public ResourceLocation getTextureLocation(WitchAllay entity) {
+	public ResourceLocation getTextureLocation(T entity) {
 		return TEX;
 	}
 
-	protected int getBlockLightLevel(WitchAllay entity, BlockPos pos) {
+	protected int getBlockLightLevel(T entity, BlockPos pos) {
 		return 15;
 	}
 }

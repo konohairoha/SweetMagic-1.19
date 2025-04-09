@@ -11,20 +11,20 @@ import sweetmagic.SweetMagicCore;
 import sweetmagic.init.entity.monster.DwarfZombieMaster;
 import sweetmagic.init.render.entity.model.SMZombieModel;
 
-public class RenderDwarfZombieMaster extends MobRenderer<DwarfZombieMaster, SMZombieModel<DwarfZombieMaster>> {
+public class RenderDwarfZombieMaster<T extends DwarfZombieMaster> extends MobRenderer<T, SMZombieModel<T>> {
 
 	private static final ResourceLocation TEX = SweetMagicCore.getSRC("textures/entity/dwarfzombie_master.png");
 
 	public RenderDwarfZombieMaster(EntityRendererProvider.Context con) {
-		super(con, new SMZombieModel<DwarfZombieMaster>(con.bakeLayer(ModelLayers.ZOMBIE)), 0.5F);
+		super(con, new SMZombieModel<>(con.bakeLayer(ModelLayers.ZOMBIE)), 0.5F);
 		this.addLayer(new ItemInHandLayer<>(this, con.getItemInHandRenderer()));
 	}
 
-	protected void scale(DwarfZombieMaster entity, PoseStack pose, float par1) {
+	protected void scale(T entity, PoseStack pose, float par1) {
 		pose.scale(1.25F, 1.25F, 1.25F);
 	}
 
-	public ResourceLocation getTextureLocation(DwarfZombieMaster entity) {
+	public ResourceLocation getTextureLocation(T entity) {
 		return TEX;
 	}
 }

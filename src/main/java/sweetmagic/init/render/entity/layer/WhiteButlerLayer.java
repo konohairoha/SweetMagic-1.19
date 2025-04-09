@@ -12,17 +12,15 @@ import sweetmagic.init.ItemInit;
 import sweetmagic.init.entity.monster.boss.WhiteButler;
 import sweetmagic.init.render.entity.model.WhiteButlerModel;
 
-public class WhiteButlerLayer <T extends WhiteButler, M extends WhiteButlerModel<T>> extends AbstractEntityLayer<T, M> {
+public class WhiteButlerLayer<T extends WhiteButler, M extends WhiteButlerModel<T>> extends AbstractEntityLayer<T, M> {
 
 	private static final ItemStack KNIFE = new ItemStack(ItemInit.alt_sword);
 	private static final ItemStack SICKLE = new ItemStack(ItemInit.alt_sickle);
 	private static final ItemStack RIFLE = new ItemStack(ItemInit.cosmic_rifle);
-	private final WhiteButlerModel<T> model;
 
 	public WhiteButlerLayer(RenderLayerParent<T, M> layer, EntityRendererProvider.Context con) {
 		super(layer, con);
-		this.model = new WhiteButlerModel<>(con.getModelSet().bakeLayer(WhiteButlerModel.LAYER));
-		this.setModel(this.model);
+		this.model = new WhiteButlerModel<>(this.getModel(con, WhiteButlerModel.LAYER));
 	}
 
 	public void render(PoseStack pose, MultiBufferSource buf, int light, T entity, float swing, float swingAmount, float parTick, float ageTick, float netHeadYaw, float headPitch) {
@@ -31,11 +29,11 @@ public class WhiteButlerLayer <T extends WhiteButler, M extends WhiteButlerModel
 
 	protected void renderItem(T entity, PoseStack pose, MultiBufferSource buf, int light) {
 
+		WhiteButlerModel<T> model = this.getParentModel();
+
 		if (entity.getKnife()) {
 			pose.pushPose();
-
-			this.model.translateAndRotate(model.getArm(false), pose);
-
+			model.translateAndRotate(model.getArm(false), pose);
 			pose.mulPose(Vector3f.XP.rotationDegrees(-90F));
 			pose.mulPose(Vector3f.YP.rotationDegrees(180F));
 			pose.translate(0D, 0.15D, -0.7D);
@@ -56,9 +54,7 @@ public class WhiteButlerLayer <T extends WhiteButler, M extends WhiteButlerModel
 
 		if (entity.getRifle()) {
 			pose.pushPose();
-
-			this.model.translateAndRotate(model.getArm(true), pose);
-
+			model.translateAndRotate(model.getArm(true), pose);
 			pose.mulPose(Vector3f.XP.rotationDegrees(180F));
 			pose.mulPose(Vector3f.YP.rotationDegrees(190F));
 			pose.translate(0.225D, 0.08D, -0.65D);

@@ -14,20 +14,20 @@ import sweetmagic.init.PotionInit;
 import sweetmagic.init.entity.monster.BlazeTempest;
 import sweetmagic.init.render.entity.layer.TempestLayer;
 
-public class RenderBlazeTempest extends MobRenderer<BlazeTempest, BlazeModel<BlazeTempest>> {
+public class RenderBlazeTempest<T extends BlazeTempest> extends MobRenderer<T, BlazeModel<T>> {
 
 	private static final ResourceLocation TEX = SweetMagicCore.getSRC("textures/entity/blazetempest.png");
 
 	public RenderBlazeTempest(EntityRendererProvider.Context con) {
 		super(con, new BlazeModel<>(con.bakeLayer(ModelLayers.BLAZE)), 0.5F);
-		this.addLayer(new TempestLayer<BlazeTempest, BlazeModel<BlazeTempest>>(this, con));
+		this.addLayer(new TempestLayer<>(this, con));
 	}
 
-	protected int getBlockLightLevel(BlazeTempest entity, BlockPos pos) {
+	protected int getBlockLightLevel(T entity, BlockPos pos) {
 		return 15;
 	}
 
-	protected void scale(BlazeTempest entity, PoseStack pose, float par1) {
+	protected void scale(T entity, PoseStack pose, float par1) {
 		float size = this.getSize(entity, 1F);
 		pose.scale(size, size, size);
 	}
@@ -36,7 +36,7 @@ public class RenderBlazeTempest extends MobRenderer<BlazeTempest, BlazeModel<Bla
 		return mob.hasEffect(PotionInit.leader_flag) ? size + 0.35F : size;
 	}
 
-	public ResourceLocation getTextureLocation(BlazeTempest entity) {
+	public ResourceLocation getTextureLocation(T entity) {
 		return TEX;
 	}
 }

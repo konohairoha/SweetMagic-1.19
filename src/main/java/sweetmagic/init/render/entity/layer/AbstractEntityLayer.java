@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Vector3f;
 
 import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.ItemInHandRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -22,10 +23,11 @@ import sweetmagic.init.entity.monster.boss.AbstractSMBoss;
 import sweetmagic.util.RenderUtil;
 import sweetmagic.util.RenderUtil.RenderColor;
 
-public abstract class AbstractEntityLayer <T extends LivingEntity, M extends EntityModel<T>> extends RenderLayer<T, M> {
+public abstract class AbstractEntityLayer<T extends LivingEntity, M extends EntityModel<T>> extends RenderLayer<T, M> {
 
 	protected EntityModel<T> model;
 	protected final ItemInHandRenderer render;
+	protected final float pi = 180F / (float) Math.PI;
 
 	public AbstractEntityLayer(RenderLayerParent<T, M> layer, EntityRendererProvider.Context con) {
 		super(layer);
@@ -33,9 +35,8 @@ public abstract class AbstractEntityLayer <T extends LivingEntity, M extends Ent
 	}
 
 	protected void renderHead(T entity, ModelPart head, PoseStack pose, MultiBufferSource buf, int light, float scale, float x, float y, float z) {
-
 		ItemStack stack = entity.getItemBySlot(EquipmentSlot.HEAD);
-		if (stack.isEmpty() || !(stack.getItem() instanceof BlockItem bItem) ) { return; }
+		if (stack.isEmpty() || !(stack.getItem() instanceof BlockItem bItem)) { return; }
 
 		pose.pushPose();
 		head.translateAndRotate(pose);
@@ -47,18 +48,17 @@ public abstract class AbstractEntityLayer <T extends LivingEntity, M extends Ent
 		pose.popPose();
 	}
 
-	public void renderShadow (AbstractSMBoss entity, PoseStack pose, MultiBufferSource buf, float swing, float swingAmount, float parTick, int light, float ageTick, float netHeadYaw, float headPitch, float rgb, float addY, float scale) {
-
+	public void renderShadow(AbstractSMBoss entity, PoseStack pose, MultiBufferSource buf, float swing, float swingAmount, float parTick, int light, float ageTick, float headYaw, float headPitch, float rgb, float addY, float scale) {
 		if (!entity.isMagic()) { return; }
 
 		pose.pushPose();
 		pose.scale(scale, scale, scale);
-		EntityModel<T> eModel = this.getModel();
-		eModel.prepareMobModel((T) entity, swing, swingAmount, parTick);
-		this.getParentModel().copyPropertiesTo(eModel);
+		EntityModel<T> model = this.getModel();
+		model.prepareMobModel((T) entity, swing, swingAmount, parTick);
+		this.getParentModel().copyPropertiesTo(model);
 		VertexConsumer ver = buf.getBuffer(RenderType.entityCutoutNoCull(this.getTex()));
-		eModel.setupAnim((T) entity, swing, swingAmount, ageTick, netHeadYaw, headPitch);
-		eModel.renderToBuffer(pose, ver, light, OverlayTexture.NO_OVERLAY, rgb, rgb, rgb, 1F);
+		model.setupAnim((T) entity, swing, swingAmount, ageTick, headYaw, headPitch);
+		model.renderToBuffer(pose, ver, light, OverlayTexture.NO_OVERLAY, rgb, rgb, rgb, 1F);
 		pose.popPose();
 	}
 
@@ -76,5 +76,9 @@ public abstract class AbstractEntityLayer <T extends LivingEntity, M extends Ent
 
 	protected void setModel(EntityModel<T> model) {
 		this.model = model;
+	}
+
+	protected ModelPart getModel(EntityRendererProvider.Context con, ModelLayerLocation layer) {
+		return con.getModelSet().bakeLayer(layer);
 	}
 }

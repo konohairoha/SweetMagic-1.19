@@ -28,7 +28,6 @@ public class FrostEffectRender <T extends LivingEntity, M extends EntityModel<T>
 
 	@Override
 	public void render(PoseStack pose, MultiBufferSource buffer, int light, T entity, float limbSwing, float swingAmount, float parTick, float ageTick, float headYaw, float headPitch) {
-
 		AttributeInstance speed = entity.getAttribute(Attributes.MOVEMENT_SPEED);
 		if (speed == null || speed.getModifier(SMEffect.MODIFIER_UUID) == null) { return; }
 

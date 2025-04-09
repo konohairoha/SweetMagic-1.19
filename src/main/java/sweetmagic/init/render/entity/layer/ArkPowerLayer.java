@@ -18,26 +18,26 @@ import sweetmagic.init.PotionInit;
 
 public class ArkPowerLayer <T extends Spider, M extends SpiderModel<T>> extends AbstractEntityLayer<T, M> {
 
-	private static final ResourceLocation TEX = SweetMagicCore.getSRC("textures/entity/creeper_armor2.png");
+	private static final ResourceLocation TEX = SweetMagicCore.getSRC("textures/entity/mob_armor.png");
 
 	public ArkPowerLayer(RenderLayerParent<T, M> layer, EntityRendererProvider.Context con) {
 		super(layer, con);
-		this.setModel(new SpiderModel<>(con.getModelSet().bakeLayer(ModelLayers.SPIDER)));
+		this.setModel(new SpiderModel<>(this.getModel(con, ModelLayers.SPIDER)));
 	}
 
-	public void render(PoseStack pose, MultiBufferSource buf, int light, T entity, float swing, float swingAmount, float parTick, float ageTick, float netHeadYaw, float headPitch) {
+	public void render(PoseStack pose, MultiBufferSource buf, int light, T entity, float swing, float swingAmount, float parTick, float ageTick, float headYaw, float headPitch) {
 		if (!entity.hasEffect(PotionInit.leader_flag)) { return; }
 
 		pose.pushPose();
 		pose.scale(1.075F, 1.075F, 1.075F);
 		pose.translate(0F, -0.05F, 0F);
 		float f = (float) entity.tickCount + parTick;
-		EntityModel<T> eModel = this.getModel();
-		eModel.prepareMobModel(entity, swing, swingAmount, parTick);
-		this.getParentModel().copyPropertiesTo(eModel);
+		EntityModel<T> model = this.getModel();
+		model.prepareMobModel(entity, swing, swingAmount, parTick);
+		this.getParentModel().copyPropertiesTo(model);
 		VertexConsumer ver = buf.getBuffer(RenderType.energySwirl(this.getTex(), this.xOffset(f) % 1F, f * 0.025F % 1F));
-		eModel.setupAnim(entity, swing, swingAmount, ageTick, netHeadYaw, headPitch);
-		eModel.renderToBuffer(pose, ver, light, OverlayTexture.NO_OVERLAY, 0.65F, 0.65F, 0.65F, 1F);
+		model.setupAnim(entity, swing, swingAmount, ageTick, headYaw, headPitch);
+		model.renderToBuffer(pose, ver, light, OverlayTexture.NO_OVERLAY, 0.65F, 0.65F, 0.65F, 1F);
 		pose.popPose();
 	}
 

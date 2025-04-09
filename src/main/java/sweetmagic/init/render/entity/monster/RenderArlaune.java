@@ -10,13 +10,13 @@ import sweetmagic.init.entity.monster.boss.Arlaune;
 import sweetmagic.init.render.entity.layer.ArlauneLayer;
 import sweetmagic.init.render.entity.model.ArlauneModel;
 
-public class RenderArlaune extends MobRenderer<Arlaune, ArlauneModel<Arlaune>> {
+public class RenderArlaune<T extends Arlaune> extends MobRenderer<T, ArlauneModel<T>> {
 
 	private static final ResourceLocation TEX = SweetMagicCore.getSRC("textures/entity/arlaune.png");
 
 	public RenderArlaune(EntityRendererProvider.Context con) {
-		super(con, new ArlauneModel<Arlaune>(con.bakeLayer(ArlauneModel.LAYER)), 0.5F);
-		this.addLayer(new ArlauneLayer<Arlaune, ArlauneModel<Arlaune>>(this, con));
+		super(con, new ArlauneModel<>(con.bakeLayer(ArlauneModel.LAYER)), 0.5F);
+		this.addLayer(new ArlauneLayer<>(this, con));
 	}
 
 	protected void scale(Arlaune entity, PoseStack pose, float par1) {

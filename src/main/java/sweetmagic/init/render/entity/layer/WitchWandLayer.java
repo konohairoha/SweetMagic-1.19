@@ -3,7 +3,6 @@ package sweetmagic.init.render.entity.layer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
 
-import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -14,7 +13,7 @@ import sweetmagic.api.ientity.ISMMob;
 import sweetmagic.init.entity.animal.AbstractWitch;
 import sweetmagic.init.render.entity.model.SMWitchModel;
 
-public class WitchWandLayer <T extends Mob, M extends EntityModel<T>> extends AbstractEntityLayer<T, M> {
+public class WitchWandLayer<T extends Mob, M extends SMWitchModel<T>> extends AbstractEntityLayer<T, M> {
 
 	public WitchWandLayer(RenderLayerParent<T, M> layer, EntityRendererProvider.Context con) {
 		super(layer, con);
@@ -22,10 +21,7 @@ public class WitchWandLayer <T extends Mob, M extends EntityModel<T>> extends Ab
 
 	public void render(PoseStack pose, MultiBufferSource buf, int light, T entity, float swing, float swingAmount, float parTick, float ageTick, float netHeadYaw, float headPitch) {
 		this.renderArmWithItem(entity, pose, buf, light);
-
-		if (this.getParentModel() instanceof SMWitchModel model) {
-			this.renderHead(entity, model.getHead(), pose, buf, light, 0.67F, -0.33F, -0.1F, -0.33F);
-		}
+		this.renderHead(entity, this.getParentModel().getHead(), pose, buf, light, 0.67F, -0.33F, -0.1F, -0.33F);
 	}
 
 	protected void renderArmWithItem(T entity, PoseStack pose, MultiBufferSource buf, int light) {
@@ -61,11 +57,8 @@ public class WitchWandLayer <T extends Mob, M extends EntityModel<T>> extends Ab
 		}
 
 		if(flag) {
-
-			if (this.getParentModel() instanceof SMWitchModel model) {
-				model.translateAndRotate(model.getArm(false), pose);
-			}
-
+			SMWitchModel<T> model = this.getParentModel();
+			model.translateAndRotate(model.getArm(false), pose);
 			pose.mulPose(Vector3f.XP.rotationDegrees(225F));
 			pose.mulPose(Vector3f.YP.rotationDegrees(180F));
 			pose.translate(0.0D, -0.2D, -0.5D);

@@ -56,7 +56,7 @@ public abstract class SMBaseModel<T extends Mob> extends EntityModel<T> {
 	}
 
 	public void animHead(float headYaw, float headPitch) {
-		Vector3f vec =  new Vector3f(headPitch * TORADIAN, headYaw * TORADIAN, 0F);
+		Vector3f vec = new Vector3f(headPitch * TORADIAN, headYaw * TORADIAN, 0F);
 		this.head.resetPose();
 		this.head.offsetRotation(vec);
 		this.head.setRotation(headPitch * TORADIAN, headYaw * TORADIAN, 0F);
@@ -118,11 +118,11 @@ public abstract class SMBaseModel<T extends Mob> extends EntityModel<T> {
 		}
 	}
 
-	public ModelPart getHead () {
+	public ModelPart getHead() {
 		return this.head;
 	}
 
-	public static ModelLayerLocation getLayer (String name) {
+	public static ModelLayerLocation getLayer(String name) {
 		return new ModelLayerLocation(SweetMagicCore.getSRC(name), "main");
 	}
 }

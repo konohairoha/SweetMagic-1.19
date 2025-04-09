@@ -19,7 +19,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import sweetmagic.api.iitem.IWand;
 
-public class WandRenderLayer <T extends LivingEntity, M extends EntityModel<T>> extends RenderLayer<T, M> {
+public class WandRenderLayer<T extends LivingEntity, M extends EntityModel<T>> extends RenderLayer<T, M> {
 
 	public WandRenderLayer(RenderLayerParent<T, M> render) {
 		super(render);
@@ -27,9 +27,7 @@ public class WandRenderLayer <T extends LivingEntity, M extends EntityModel<T>> 
 
 	@Override
 	public void render(PoseStack pose, MultiBufferSource buffer, int light, T entity, float limbSwing, float swingAmount, float parTick, float ageTick, float headYaw, float headPitch) {
-
-		// プレイヤー出ないなら終了
-		if ( !(entity instanceof Player player) ) { return; }
+		if (!(entity instanceof Player player)) { return; }
 
 		// メインハンドが杖なら終了
 		ItemStack mainStack = player.getMainHandItem();
@@ -39,7 +37,6 @@ public class WandRenderLayer <T extends LivingEntity, M extends EntityModel<T>> 
 		if (stackList.isEmpty()) { return; }
 
 		ItemStack stack = stackList.get(0);
-
 		pose.pushPose();
 
 		if (this.getParentModel() instanceof HumanoidModel model) {

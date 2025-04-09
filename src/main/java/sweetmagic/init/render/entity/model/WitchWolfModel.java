@@ -21,7 +21,6 @@ import sweetmagic.init.entity.animal.WitchWolf;
 public class WitchWolfModel<T extends LivingEntity> extends ColorableAgeableListModel<T> {
 
 	public static final ModelLayerLocation LAYER = getLayer("witchwolf");
-
 	private final ModelPart head;
 	private final ModelPart realHead;
 	private final ModelPart body;
@@ -123,7 +122,7 @@ public class WitchWolfModel<T extends LivingEntity> extends ColorableAgeableList
 		this.tail.xRot = 0.75F + Mth.cos(ageTick * 0.01F) * 0.3F;
 	}
 
-	public static ModelLayerLocation getLayer (String name) {
+	public static ModelLayerLocation getLayer(String name) {
 		return new ModelLayerLocation(SweetMagicCore.getSRC(name), "main");
 	}
 }

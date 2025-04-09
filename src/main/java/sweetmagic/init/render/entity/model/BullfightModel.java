@@ -16,7 +16,6 @@ public class BullfightModel extends HierarchicalModel<BullFight> {
 
 	// モデルの登録のために、他と被らない名前でResourceLocationを登録しておく
 	public static final ModelLayerLocation LAYER = getLayer("bullfight");
-
 	private final ModelPart root;
 	private final ModelPart head;
 	private final ModelPart rightHindLeg;
@@ -69,7 +68,7 @@ public class BullfightModel extends HierarchicalModel<BullFight> {
 		this.leftFrontLeg.xRot = Mth.cos(swing * rate) * f;
 	}
 
-	public static ModelLayerLocation getLayer (String name) {
+	public static ModelLayerLocation getLayer(String name) {
 		return new ModelLayerLocation(SweetMagicCore.getSRC(name), "main");
 	}
 }

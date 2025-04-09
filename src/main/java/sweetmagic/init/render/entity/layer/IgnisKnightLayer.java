@@ -3,7 +3,6 @@ package sweetmagic.init.render.entity.layer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
 
-import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -22,7 +21,7 @@ import sweetmagic.init.render.entity.model.IgnisModel;
 import sweetmagic.util.RenderUtil;
 import sweetmagic.util.RenderUtil.RenderColor;
 
-public class IgnisKnightLayer <T extends IgnisKnight, M extends EntityModel<T>> extends AbstractEntityLayer<T, M> {
+public class IgnisKnightLayer <T extends IgnisKnight, M extends IgnisModel<T>> extends AbstractEntityLayer<T, M> {
 
 	private static final ItemStack ARMOR = new ItemStack(ItemInit.ignis_armor);
 	private static final ItemStack HAMMER = new ItemStack(ItemInit.aether_hammer);
@@ -31,20 +30,19 @@ public class IgnisKnightLayer <T extends IgnisKnight, M extends EntityModel<T>> 
 
 	public IgnisKnightLayer(RenderLayerParent<T, M> layer, EntityRendererProvider.Context con) {
 		super(layer, con);
-		this.setModel(new IgnisModel<>(con.getModelSet().bakeLayer(IgnisModel.LAYER)));
+		this.setModel(new IgnisModel<>(this.getModel(con, IgnisModel.LAYER)));
 	}
 
-	public void render(PoseStack pose, MultiBufferSource buf, int light, T entity, float swing, float swingAmount, float parTick, float ageTick, float netHeadYaw, float headPitch) {
-		this.renderShadow(entity, pose, buf, swing, swingAmount, parTick, light, ageTick, netHeadYaw, headPitch, 0.5F, -0.65F, 1.15F);
-		this.renderArmWithItem(entity, pose, buf, light, swing, swingAmount, parTick, ageTick, netHeadYaw, headPitch);
+	public void render(PoseStack pose, MultiBufferSource buf, int light, T entity, float swing, float swingAmount, float parTick, float ageTick, float headYaw, float headPitch) {
+		this.renderShadow(entity, pose, buf, swing, swingAmount, parTick, light, ageTick, headYaw, headPitch, 0.5F, -0.65F, 1.15F);
+		this.renderArmWithItem(entity, pose, buf, light, swing, swingAmount, parTick, ageTick, headYaw, headPitch);
 	}
 
-	protected void renderArmWithItem(T entity, PoseStack pose, MultiBufferSource buf, int light, float swing, float swingAmount, float parTick, float ageTick, float netHeadYaw, float headPitch) {
+	protected void renderArmWithItem(T entity, PoseStack pose, MultiBufferSource buf, int light, float swing, float swingAmount, float parTick, float ageTick, float headYaw, float headPitch) {
 
 		int attackType = entity.getAttackType();
 
 		if (entity.isOnGround() && attackType == 2 && entity.isSwing()) {
-
 			pose.pushPose();
 			long gameTime = entity.level.getGameTime();
 			pose.translate(0D, Math.sin((gameTime + parTick) / 15F) * 0.02D, 0D);
@@ -78,10 +76,7 @@ public class IgnisKnightLayer <T extends IgnisKnight, M extends EntityModel<T>> 
 			}
 		}
 
-		if (this.getParentModel() instanceof IgnisModel model) {
-			model.translateAndRotate(model.getArm(true), pose);
-		}
-
+		this.getParentModel().translateAndRotate(this.getParentModel().getArm(true), pose);
 		boolean hasTag = HAMMER.hasTag();
 
 		if (attackType == 2 && !hasTag) {

@@ -13,13 +13,13 @@ import sweetmagic.init.ItemInit;
 import sweetmagic.init.entity.animal.WitchAllay;
 import sweetmagic.init.render.entity.model.WitchAllayModel;
 
-public class WitchAllayLayer <T extends WitchAllay, M extends WitchAllayModel<T>> extends AbstractEntityLayer<T, M> {
+public class WitchAllayLayer<T extends WitchAllay, M extends WitchAllayModel<T>> extends AbstractEntityLayer<T, M> {
 
 	private static final ItemStack WAND = new ItemStack(ItemInit.divine_wand);
 
 	public WitchAllayLayer(RenderLayerParent<T, M> layer, EntityRendererProvider.Context con) {
 		super(layer, con);
-		this.setModel(new WitchAllayModel<>(con.getModelSet().bakeLayer(WitchAllayModel.LAYER)));
+		this.setModel(new WitchAllayModel<>(this.getModel(con, WitchAllayModel.LAYER)));
 	}
 
 	public void render(PoseStack pose, MultiBufferSource buf, int light, T entity, float swing, float swingAmount, float parTick, float ageTick, float netHeadYaw, float headPitch) {

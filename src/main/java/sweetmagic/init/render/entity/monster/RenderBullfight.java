@@ -12,7 +12,7 @@ public class RenderBullfight extends MobRenderer<BullFight, BullfightModel> {
 	private static final ResourceLocation TEX = SweetMagicCore.getSRC("textures/entity/bullfight.png");
 
 	public RenderBullfight(EntityRendererProvider.Context con) {
-	      super(con, new BullfightModel(con.bakeLayer(BullfightModel.LAYER)), 1.1F);
+		super(con, new BullfightModel(con.bakeLayer(BullfightModel.LAYER)), 1.1F);
 	}
 
 	public ResourceLocation getTextureLocation(BullFight entity) {

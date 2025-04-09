@@ -3,7 +3,6 @@ package sweetmagic.init.render.entity.layer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
 
-import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -17,7 +16,7 @@ import sweetmagic.init.entity.monster.boss.Arlaune;
 import sweetmagic.init.item.sm.JapaneseUmbrella;
 import sweetmagic.init.render.entity.model.ArlauneModel;
 
-public class ArlauneLayer <T extends Arlaune, M extends EntityModel<T>> extends AbstractEntityLayer<T, M> {
+public class ArlauneLayer <T extends Arlaune, M extends ArlauneModel<T>> extends AbstractEntityLayer<T, M> {
 
 	private static final ItemStack HAIRPIN = new ItemStack(ItemInit.cherry_ornate_hairpin);
 	private static final ItemStack UMBRELLA = new ItemStack(ItemInit.japanese_umbrella);
@@ -25,7 +24,7 @@ public class ArlauneLayer <T extends Arlaune, M extends EntityModel<T>> extends 
 
 	public ArlauneLayer(RenderLayerParent<T, M> layer, EntityRendererProvider.Context con) {
 		super(layer, con);
-		this.setModel(new ArlauneModel<>(con.getModelSet().bakeLayer(ArlauneModel.LAYER)));
+		this.setModel(new ArlauneModel<>(this.getModel(con, ArlauneModel.LAYER)));
 	}
 
 	public void render(PoseStack pose, MultiBufferSource buf, int light, T entity, float swing, float swingAmount, float parTick, float ageTick, float netHeadYaw, float headPitch) {
@@ -36,14 +35,7 @@ public class ArlauneLayer <T extends Arlaune, M extends EntityModel<T>> extends 
 	protected void renderArmWithItem(T entity, PoseStack pose, MultiBufferSource buf, int light, float swing, float swingAmount, float parTick, float ageTick, float netHeadYaw, float headPitch) {
 
 		pose.pushPose();
-		if (this.getParentModel() instanceof ArlauneModel model) {
-			model.translateAndRotate(model.head, pose);
-		}
-
-		if (entity.isMagic()) {
-			pose.translate(0D, -1D, 0D);
-		}
-
+		this.getParentModel().translateAndRotate(this.getParentModel().head, pose);
 		pose.mulPose(Vector3f.YP.rotationDegrees(180F));
 		pose.mulPose(Vector3f.XP.rotationDegrees(180F));
 		pose.translate(0.0D, -0.2D, -0.5D);
@@ -52,9 +44,7 @@ public class ArlauneLayer <T extends Arlaune, M extends EntityModel<T>> extends 
 		pose.popPose();
 
 		pose.pushPose();
-		if (this.getParentModel() instanceof ArlauneModel model) {
-			model.translateAndRotate(model.getArm(true), pose);
-		}
+		this.getParentModel().translateAndRotate(this.getParentModel().getArm(true), pose);
 
 		CompoundTag tags = UMBRELLA.getOrCreateTag();
 		tags.putBoolean(JapaneseUmbrella.ACTIVE, true);
@@ -62,13 +52,10 @@ public class ArlauneLayer <T extends Arlaune, M extends EntityModel<T>> extends 
 		if (tags.getBoolean(JapaneseUmbrella.ACTIVE)) {
 			pose.mulPose(Vector3f.YP.rotationDegrees(0F));
 			pose.mulPose(Vector3f.XP.rotationDegrees(120F));
+			pose.translate(0.0D, -0.1D, -0.2D);
 
 			if (entity.isMagic()) {
-				pose.translate(-0.1D, 0.15D, 0.7D);
-			}
-
-			else {
-				pose.translate(0.0D, -0.1D, -0.2D);
+				pose.translate(0D, 0.2D, 0D);
 			}
 		}
 

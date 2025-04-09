@@ -29,7 +29,7 @@ public class TempestTornadoLayer <T extends BlazeTempestTornado, M extends Entit
 
 	public TempestTornadoLayer(RenderLayerParent<T, M> layer, EntityRendererProvider.Context con) {
 		super(layer, con);
-		this.setModel(new TempestModel<>(con.getModelSet().bakeLayer(TempestModel.LAYER)));
+		this.setModel(new TempestModel<>(this.getModel(con, TempestModel.LAYER)));
 	}
 
 	public void render(PoseStack pose, MultiBufferSource buf, int light, T entity, float swing, float swingAmount, float parTick, float ageTick, float netHeadYaw, float headPitch) {

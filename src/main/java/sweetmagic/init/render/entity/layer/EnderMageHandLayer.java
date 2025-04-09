@@ -43,7 +43,7 @@ public class EnderMageHandLayer <T extends Monster, M extends EndermanModel<T>> 
 		pose.popPose();
 	}
 
-	public ItemStack getStack (EntityType<?> type) {
+	public ItemStack getStack(EntityType<?> type) {
 
 		if (type == EntityInit.enderMage) {
 			return WAND;

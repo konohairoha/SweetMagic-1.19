@@ -19,12 +19,11 @@ import net.minecraft.world.entity.monster.Monster;
 
 public class TempestModel<T extends Monster> extends EntityModel<T> {
 
+	// モデルの登録のために、他と被らない名前でResourceLocationを登録しておく
+	public static final ModelLayerLocation LAYER = SMBaseModel.getLayer("blaze_tempest");
 	private final ModelPart root;
 	private final ModelPart[] upperBodyParts;
 	private final ModelPart head;
-
-	// モデルの登録のために、他と被らない名前でResourceLocationを登録しておく
-	public static final ModelLayerLocation LAYER = SMBaseModel.getLayer("blaze_tempest");
 
 	public TempestModel(ModelPart root) {
 		this.root = root;
@@ -76,9 +75,9 @@ public class TempestModel<T extends Monster> extends EntityModel<T> {
 		float f = ageTick * (float) Math.PI * -0.1F;
 
 		for (int i = 0; i < 6; i++) {
-	         this.upperBodyParts[i].y = 0F + Mth.cos(((float)(i * 2) + ageTick) * 0.25F);
-	         this.upperBodyParts[i].x = Mth.cos(f) * 11F;
-	         this.upperBodyParts[i].z = Mth.sin(f) * 11F;
+			this.upperBodyParts[i].y = 0F + Mth.cos(((float) (i * 2) + ageTick) * 0.25F);
+			this.upperBodyParts[i].x = Mth.cos(f) * 11F;
+			this.upperBodyParts[i].z = Mth.sin(f) * 11F;
 			++f;
 		}
 

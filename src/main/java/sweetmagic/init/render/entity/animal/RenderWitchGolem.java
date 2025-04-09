@@ -8,21 +8,23 @@ import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 import sweetmagic.SweetMagicCore;
 import sweetmagic.init.entity.animal.WitchGolem;
+import sweetmagic.init.render.entity.layer.MagicCycleLayer;
 import sweetmagic.init.render.entity.model.WitchGolemModel;
 
-public class RenderWitchGolem extends MobRenderer<WitchGolem, WitchGolemModel<WitchGolem>> {
+public class RenderWitchGolem<T extends WitchGolem> extends MobRenderer<T, WitchGolemModel<T>> {
 
 	private static final ResourceLocation TEX = SweetMagicCore.getSRC("textures/entity/witchgolem.png");
 
 	public RenderWitchGolem(EntityRendererProvider.Context con) {
 		super(con, new WitchGolemModel<>(con.bakeLayer(WitchGolemModel.LAYER)), 0.7F);
+		this.addLayer(new MagicCycleLayer<T, WitchGolemModel<T>>(this, con));
 	}
 
-	public ResourceLocation getTextureLocation(WitchGolem entity) {
+	public ResourceLocation getTextureLocation(T entity) {
 		return TEX;
 	}
 
-	protected void setupRotations(WitchGolem entity, PoseStack pose, float par1, float par2, float par3) {
+	protected void setupRotations(T entity, PoseStack pose, float par1, float par2, float par3) {
 		super.setupRotations(entity, pose, par1, par2, par3);
 		if (((double) entity.animationSpeed < 0.01D)) { return; }
 

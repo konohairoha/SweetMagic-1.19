@@ -9,19 +9,19 @@ import sweetmagic.SweetMagicCore;
 import sweetmagic.init.entity.monster.boss.AncientFairy;
 import sweetmagic.init.render.entity.model.AncientFairyModel;
 
-public class RenderAncientFairy extends HumanoidMobRenderer<AncientFairy, AncientFairyModel<AncientFairy>> {
+public class RenderAncientFairy<T extends AncientFairy> extends HumanoidMobRenderer<T, AncientFairyModel<T>> {
 
 	private static final ResourceLocation TEX = SweetMagicCore.getSRC("textures/entity/ancientfairy.png");
 
 	public RenderAncientFairy(EntityRendererProvider.Context con) {
-		super(con, new AncientFairyModel<AncientFairy>(con.bakeLayer(AncientFairyModel.LAYER)), 0.3F);
+		super(con, new AncientFairyModel<>(con.bakeLayer(AncientFairyModel.LAYER)), 0.3F);
 	}
 
-	public ResourceLocation getTextureLocation(AncientFairy entity) {
+	public ResourceLocation getTextureLocation(T entity) {
 		return TEX;
 	}
 
-	protected void scale(AncientFairy entity, PoseStack pose, float par1) {
+	protected void scale(T entity, PoseStack pose, float par1) {
 		pose.scale(1.75F, 1.75F, 1.75F);
 	}
 }

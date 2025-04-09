@@ -22,7 +22,6 @@ import sweetmagic.init.entity.animal.WitchAllay;
 public class WitchAllayModel<T extends WitchAllay> extends HierarchicalModel<T> implements ArmedModel {
 
 	public static final ModelLayerLocation LAYER = getLayer("witch_allay");
-
 	private final ModelPart root;
 	private final ModelPart head;
 	private final ModelPart body;
@@ -44,10 +43,8 @@ public class WitchAllayModel<T extends WitchAllay> extends HierarchicalModel<T> 
 	}
 
 	public static LayerDefinition createBodyLayer() {
-
 		MeshDefinition mesh = new MeshDefinition();
 		PartDefinition part = mesh.getRoot();
-
 		PartDefinition part1 = part.addOrReplaceChild("root", CubeListBuilder.create(), PartPose.offset(0F, 23.5F, 0F));
 		part1.addOrReplaceChild("head", CubeListBuilder.create().texOffs(0, 0).addBox(-2.5F, -5F, -2.5F, 5F, 5F, 5F, new CubeDeformation(0F)), PartPose.offset(0F, -3.99F, 0F));
 		PartDefinition part2 = part1.addOrReplaceChild("body", CubeListBuilder.create().texOffs(0, 10).addBox(-1.5F, 0F, -1F, 3F, 4F, 2F, new CubeDeformation(0F)).texOffs(0, 16).addBox(-1.5F, 0F, -1F, 3F, 5F, 2F, new CubeDeformation(-0.2F)), PartPose.offset(0F, -4F, 0F));
@@ -97,6 +94,7 @@ public class WitchAllayModel<T extends WitchAllay> extends HierarchicalModel<T> 
 	public void renderToBuffer(PoseStack pose, VertexConsumer ver, int par1, int par2, float par3, float par4, float par5, float par6) {
 		this.root.render(pose, ver, par1, par2);
 	}
+
 	public void translateToBody(PoseStack pose) {
 		this.root.translateAndRotate(pose);
 		this.body.translateAndRotate(pose);
@@ -114,7 +112,7 @@ public class WitchAllayModel<T extends WitchAllay> extends HierarchicalModel<T> 
 		pose.translate(0.0625D, 0D, 0D);
 	}
 
-	public static ModelLayerLocation getLayer (String name) {
+	public static ModelLayerLocation getLayer(String name) {
 		return new ModelLayerLocation(SweetMagicCore.getSRC(name), "main");
 	}
 }

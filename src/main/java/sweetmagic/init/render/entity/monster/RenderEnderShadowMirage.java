@@ -13,7 +13,7 @@ import sweetmagic.init.PotionInit;
 import sweetmagic.init.entity.monster.EnderShadowMirage;
 import sweetmagic.init.render.entity.layer.EnderMageHandLayer;
 
-public class RenderEnderShadowMirage extends MobRenderer<EnderShadowMirage, EndermanModel<EnderShadowMirage>> {
+public class RenderEnderShadowMirage<T extends EnderShadowMirage> extends MobRenderer<T, EndermanModel<T>> {
 
 	private static final ResourceLocation TEX = SweetMagicCore.getSRC("textures/entity/endershadow_mirage.png");
 
@@ -22,7 +22,7 @@ public class RenderEnderShadowMirage extends MobRenderer<EnderShadowMirage, Ende
 		this.addLayer(new EnderMageHandLayer<>(this, con));
 	}
 
-	protected void scale(EnderShadowMirage entity, PoseStack pose, float par1) {
+	protected void scale(T entity, PoseStack pose, float par1) {
 		float size = this.getSize(entity, 1F);
 		pose.scale(size, size, size);
 	}
@@ -31,7 +31,7 @@ public class RenderEnderShadowMirage extends MobRenderer<EnderShadowMirage, Ende
 		return mob.hasEffect(PotionInit.leader_flag) ? size + 0.35F : size;
 	}
 
-	public ResourceLocation getTextureLocation(EnderShadowMirage entity) {
+	public ResourceLocation getTextureLocation(T entity) {
 		return TEX;
 	}
 }

@@ -45,7 +45,6 @@ public class AncientFairyModel<T extends LivingEntity> extends HumanoidModel<T> 
 	}
 
 	public void setupAnim(T entity, float swing, float swingAmount, float ageTick, float headYaw, float headPitch) {
-
 		super.setupAnim(entity, swing, swingAmount, ageTick, headYaw, headPitch);
 
 		this.rightLeg.xRot += ((float) Math.PI / 5F);
@@ -61,7 +60,7 @@ public class AncientFairyModel<T extends LivingEntity> extends HumanoidModel<T> 
 		this.rightWing.zRot = 0.47123894F;
 	}
 
-	public static ModelLayerLocation getLayer (String name) {
+	public static ModelLayerLocation getLayer(String name) {
 		return new ModelLayerLocation(SweetMagicCore.getSRC(name), "main");
 	}
 }

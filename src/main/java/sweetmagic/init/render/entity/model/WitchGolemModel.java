@@ -10,13 +10,13 @@ import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.LivingEntity;
 import sweetmagic.SweetMagicCore;
-import sweetmagic.init.entity.animal.WitchGolem;
+import sweetmagic.api.ientity.IGolem;
 
-public class WitchGolemModel<T extends WitchGolem> extends HierarchicalModel<T> {
+public class WitchGolemModel<T extends LivingEntity & IGolem> extends HierarchicalModel<T> {
 
 	public static final ModelLayerLocation LAYER = getLayer("witchgolem");
-
 	private final ModelPart root;
 	private final ModelPart head;
 	private final ModelPart rightArm;
@@ -77,7 +77,7 @@ public class WitchGolemModel<T extends WitchGolem> extends HierarchicalModel<T> 
 		return this.rightArm;
 	}
 
-	public static ModelLayerLocation getLayer (String name) {
+	public static ModelLayerLocation getLayer(String name) {
 		return new ModelLayerLocation(SweetMagicCore.getSRC(name), "main");
 	}
 }

@@ -14,12 +14,11 @@ import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.world.entity.LivingEntity;
-import sweetmagic.SweetMagicCore;
 
 public class SMRobeModel<T extends LivingEntity> extends HumanoidModel<T> {
 
 	// モデルの登録のために、他と被らない名前でResourceLocationを登録しておく
-	public static final ModelLayerLocation LAYER = new ModelLayerLocation(SweetMagicCore.getSRC("sm_robe"), "main");
+	public static final ModelLayerLocation LAYER = SMBaseModel.getLayer("sm_robe");
 
 	public SMRobeModel(ModelPart root) {
 		super(root);
@@ -33,12 +32,10 @@ public class SMRobeModel<T extends LivingEntity> extends HumanoidModel<T> {
 		part.addOrReplaceChild("body", CubeListBuilder.create().texOffs(16, 16).addBox(-4F, 0F, -2F, 8F, 12F, 4F, new CubeDeformation(0.25F)), PartPose.offset(-1F, 0F, 0F));
 		part.addOrReplaceChild("hat", CubeListBuilder.create().texOffs(64, 32).addBox(-3F, 0F, -2F, 8F, 12F, 4F, new CubeDeformation(0.35F)), PartPose.offset(-1F, 0.3F, -0.15F));
 
-		part.addOrReplaceChild("left_arm", CubeListBuilder.create().texOffs(40, 16).addBox(-1F, -2F, -2F, 4F, 12F, 4F, new CubeDeformation(0.1F)), PartPose.offset(-5F, 1.8F, 0F));
-		part.addOrReplaceChild("right_arm", CubeListBuilder.create().texOffs(40, 16).addBox(-3F, -2F, -2F, 4F, 12F, 4F, new CubeDeformation(0.1F)), PartPose.offset(5F, 1.8F, 0F));
-
-		part.addOrReplaceChild("left_leg", CubeListBuilder.create().texOffs(0, 0).addBox(-1F, -2F, -2F, 4F, 12F, 4F, new CubeDeformation(0.1F)), PartPose.offset(1F, 14F, 0F));
-		part.addOrReplaceChild("right_leg", CubeListBuilder.create().texOffs(0, 16).addBox(-1F, -2F, -2F, 4F, 12F, 4F, new CubeDeformation(0.1F)), PartPose.offset(1F, 14F, 0F));
-
+		part.addOrReplaceChild("left_arm", CubeListBuilder.create().texOffs(40, 16).addBox(-1F, -2F, -2F, 4F, 12F, 4F, new CubeDeformation(0.325F)), PartPose.offset(-5F, 1.8F, 0F));
+		part.addOrReplaceChild("right_arm", CubeListBuilder.create().texOffs(40, 16).addBox(-3F, -2F, -2F, 4F, 12F, 4F, new CubeDeformation(0.325F)), PartPose.offset(5F, 1.8F, 0F));
+		part.addOrReplaceChild("left_leg", CubeListBuilder.create().texOffs(0, 0).addBox(-1F, -2F, -2F, 4F, 12F, 4F, new CubeDeformation(0.3F)), PartPose.offset(1F, 14F, 0F));
+		part.addOrReplaceChild("right_leg", CubeListBuilder.create().texOffs(0, 16).addBox(-1F, -2F, -2F, 4F, 12F, 4F, new CubeDeformation(0.3F)), PartPose.offset(1F, 14F, 0F));
 		part.addOrReplaceChild("headdress", CubeListBuilder.create().texOffs(16, 16).addBox(-3F, 0F, 0F, 10F, 3F, 1F, new CubeDeformation(0F)), PartPose.offset(-2F, 10F, -3F));
 		return LayerDefinition.create(mesh, 64, 32);
 	}

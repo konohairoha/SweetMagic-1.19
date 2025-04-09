@@ -8,7 +8,7 @@ import net.minecraft.resources.ResourceLocation;
 import sweetmagic.SweetMagicCore;
 import sweetmagic.init.entity.monster.CreeperCalamity;
 
-public class RenderCreeperCalamity extends MobRenderer<CreeperCalamity, CreeperModel<CreeperCalamity>> {
+public class RenderCreeperCalamity<T extends CreeperCalamity> extends MobRenderer<T, CreeperModel<T>> {
 
 	private static final ResourceLocation TEX = SweetMagicCore.getSRC("textures/entity/creepercal.png");
 
@@ -16,7 +16,7 @@ public class RenderCreeperCalamity extends MobRenderer<CreeperCalamity, CreeperM
 		super(cont, new CreeperModel<>(cont.bakeLayer(ModelLayers.CREEPER)), 0.5F);
 	}
 
-	public ResourceLocation getTextureLocation(CreeperCalamity entity) {
+	public ResourceLocation getTextureLocation(T entity) {
 		return TEX;
 	}
 }

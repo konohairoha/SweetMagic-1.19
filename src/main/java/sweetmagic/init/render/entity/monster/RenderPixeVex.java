@@ -9,19 +9,19 @@ import sweetmagic.SweetMagicCore;
 import sweetmagic.init.entity.monster.PixeVex;
 import sweetmagic.init.render.entity.model.AncientFairyModel;
 
-public class RenderPixeVex extends HumanoidMobRenderer<PixeVex, AncientFairyModel<PixeVex>> {
+public class RenderPixeVex<T extends PixeVex> extends HumanoidMobRenderer<T, AncientFairyModel<T>> {
 
 	private static final ResourceLocation TEX = SweetMagicCore.getSRC("textures/entity/pixevex.png");
 
 	public RenderPixeVex(EntityRendererProvider.Context con) {
-		super(con, new AncientFairyModel<PixeVex>(con.bakeLayer(AncientFairyModel.LAYER)), 0.3F);
+		super(con, new AncientFairyModel<>(con.bakeLayer(AncientFairyModel.LAYER)), 0.3F);
 	}
 
-	public ResourceLocation getTextureLocation(PixeVex entity) {
+	public ResourceLocation getTextureLocation(T entity) {
 		return TEX;
 	}
 
-	protected void scale(PixeVex entity, PoseStack pose, float par1) {
+	protected void scale(T entity, PoseStack pose, float par1) {
 		pose.scale(0.65F, 0.65F, 0.65F);
 	}
 }

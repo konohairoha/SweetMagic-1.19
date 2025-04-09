@@ -17,7 +17,7 @@ import sweetmagic.SweetMagicCore;
 import sweetmagic.init.BlockInit;
 import sweetmagic.init.ItemInit;
 import sweetmagic.init.entity.monster.boss.HolyAngel;
-import sweetmagic.init.render.entity.model.SMHolyModel;
+import sweetmagic.init.render.entity.model.HolyModel;
 import sweetmagic.util.RenderUtil;
 import sweetmagic.util.RenderUtil.RenderColor;
 
@@ -26,11 +26,11 @@ public class HolyAngelLayer <T extends HolyAngel, M extends EntityModel<T>> exte
 	private static final Block RING = BlockInit.kogen;
 	private static final Block GLASS = BlockInit.yellow_glass;
 	private static final ItemStack STACK = new ItemStack(ItemInit.angel_wing);
-	private static final ResourceLocation TEX = SweetMagicCore.getSRC("textures/entity/queenfrost.png");
+	private static final ResourceLocation TEX = SweetMagicCore.getSRC("textures/entity/holyshining.png");
 
 	public HolyAngelLayer(RenderLayerParent<T, M> layer, EntityRendererProvider.Context con) {
 		super(layer, con);
-		this.setModel(new SMHolyModel<>(con.getModelSet().bakeLayer(SMHolyModel.LAYER)));
+		this.setModel(new HolyModel<>(con.getModelSet().bakeLayer(HolyModel.LAYER)));
 	}
 
 	public void render(PoseStack pose, MultiBufferSource buf, int light, T entity, float swing, float swingAmount, float parTick, float ageTick, float netHeadYaw, float headPitch) {
@@ -43,7 +43,7 @@ public class HolyAngelLayer <T extends HolyAngel, M extends EntityModel<T>> exte
 		this.renderShadow(entity, pose, buf, swing, swingAmount, parTick, light, ageTick, netHeadYaw, headPitch, 0.5F, 0F, 1.15F);
 	}
 
-	public void renderAngelWingBig (T entity, PoseStack pose, MultiBufferSource buf, int light, boolean isReverse) {
+	public void renderAngelWingBig(T entity, PoseStack pose, MultiBufferSource buf, int light, boolean isReverse) {
 		float scale = 1.35F;
 		float reverseRate = (isReverse ? -1F : 1F);
 		pose.pushPose();
@@ -54,7 +54,7 @@ public class HolyAngelLayer <T extends HolyAngel, M extends EntityModel<T>> exte
 		pose.popPose();
 	}
 
-	public void renderAngelWingSmall (T entity, PoseStack pose, MultiBufferSource buf, int light, boolean isReverse) {
+	public void renderAngelWingSmall(T entity, PoseStack pose, MultiBufferSource buf, int light, boolean isReverse) {
 		float scale = 1.15F;
 		float reverseRate = (isReverse ? -1F : 1F);
 		pose.pushPose();
@@ -66,7 +66,7 @@ public class HolyAngelLayer <T extends HolyAngel, M extends EntityModel<T>> exte
 		pose.popPose();
 	}
 
-	public void renderAngelRing (T entity, PoseStack pose, MultiBufferSource buf, int light) {
+	public void renderAngelRing(T entity, PoseStack pose, MultiBufferSource buf, int light) {
 		float scale = 1.15F;
 		pose.pushPose();
 		pose.translate(-0.575F, -0.65F, -0.55F);
@@ -75,7 +75,7 @@ public class HolyAngelLayer <T extends HolyAngel, M extends EntityModel<T>> exte
 		pose.popPose();
 	}
 
-	public void renderORU (T entity, PoseStack pose, MultiBufferSource buf, float parTick, int light) {
+	public void renderORU(T entity, PoseStack pose, MultiBufferSource buf, float parTick, int light) {
 
 		int oruSize = entity.getORU();
 		float scale = 0.25F;

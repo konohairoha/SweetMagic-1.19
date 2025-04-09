@@ -16,12 +16,8 @@ import sweetmagic.init.entity.monster.boss.IgnisKnight;
 
 public class IgnisModel<T extends IgnisKnight> extends SMBaseModel<T> {
 
-	public int tickTime = 0;
-	private boolean isSwing = false;
-
 	// モデルの登録のために、他と被らない名前でResourceLocationを登録しておく
 	public static final ModelLayerLocation LAYER = getLayer("sm_ignis");
-
 	private final ModelPart body;
 	private final ModelPart jacket;
 	private final ModelPart legJacketLeft;
@@ -30,6 +26,8 @@ public class IgnisModel<T extends IgnisKnight> extends SMBaseModel<T> {
 	private final ModelPart earRight;
 	private final ModelPart tail;
 	private final ModelPart skirt;
+	private boolean isSwing = false;
+	public int tickTime = 0;
 
 	// まとめて描画するためにrootを取得
 	// そのほか、アニメーションしたい部位に応じてModelPartを取得しておく
@@ -50,29 +48,23 @@ public class IgnisModel<T extends IgnisKnight> extends SMBaseModel<T> {
 		PartDefinition part = mesh.getRoot();
 
 		part.addOrReplaceChild("head", CubeListBuilder.create().texOffs(0, 0).addBox(-4F, -7F, -4F, 8F, 8F, 8F, new CubeDeformation(-0.5F)), PartPose.offset(0F, 0F, 0F));
-
 		part.addOrReplaceChild("body", CubeListBuilder.create().texOffs(16, 16).addBox(-3F, 0F, -2F, 8F, 12F, 4F, new CubeDeformation(0F)), PartPose.offset(-1F, 0F, 0F));
 		part.addOrReplaceChild("jacket", CubeListBuilder.create().texOffs(32, 0).addBox(-3F, 0F, -2F, 8F, 12F, 4F, new CubeDeformation(0.35F)), PartPose.offset(-1F, 0.3F, -0.15F));
 
 		part.addOrReplaceChild("armLeft", CubeListBuilder.create().texOffs(40, 32).addBox(-2F, -2F, -2F, 4F, 12F, 4F, new CubeDeformation(-0.2F)), PartPose.offset(-5.75F, 1.8F, 0F));
 		part.addOrReplaceChild("armRight", CubeListBuilder.create().texOffs(40, 16).addBox(-2F, -2F, -2F, 4F, 12F, 4F, new CubeDeformation(-0.2F)), PartPose.offset(5.75F, 1.8F, 0F));
-
 		part.addOrReplaceChild("armJacketLeft", CubeListBuilder.create().texOffs(40, 48).addBox(-2F, -2F, -2F, 4F, 12F, 4F, new CubeDeformation(0F)), PartPose.offset(-5.75F, 1.95F, 0F));
 		part.addOrReplaceChild("armJacketRight", CubeListBuilder.create().texOffs(40, 48).addBox(-2F, -2F, -2F, 4F, 12F, 4F, new CubeDeformation(0F)), PartPose.offset(5.75F, 1.95F, 0F));
 
 		part.addOrReplaceChild("legLeft", CubeListBuilder.create().texOffs(0, 16).addBox(-1F, -2F, -2F, 4F, 12F, 4F, new CubeDeformation(-0.075F)), PartPose.offset(1F, 14F, 0F));
 		part.addOrReplaceChild("legRight", CubeListBuilder.create().texOffs(0, 16).addBox(-1F, -2F, -2F, 4F, 12F, 4F, new CubeDeformation(-0.075F)), PartPose.offset(-3F, 14F, 0F));
-
 		part.addOrReplaceChild("legJacketLeft", CubeListBuilder.create().texOffs(0, 32).addBox(-1F, -2F, -2F, 4F, 12F, 4F, new CubeDeformation(0.1F)), PartPose.offset(1F, 14F, 0F));
 		part.addOrReplaceChild("legJacketRight", CubeListBuilder.create().texOffs(0, 32).addBox(-1F, -2F, -2F, 4F, 12F, 4F, new CubeDeformation(0.1F)), PartPose.offset(-3F, 14F, 0F));
 
 		part.addOrReplaceChild("skirt", CubeListBuilder.create().texOffs(16, 45).addBox(-3F, 0F, -2F, 8F, 4F, 4F, new CubeDeformation(0.0F)), PartPose.offset(-1F, 10F, -0.15F));
-
 		part.addOrReplaceChild("earRight", CubeListBuilder.create().texOffs(0, 57).addBox(-2.5F, -9F, -1F, 3F, 5F, 1F, new CubeDeformation(-0.2F)), PartPose.offset(0F, 0.5F, -1F));
 		part.addOrReplaceChild("earLeft", CubeListBuilder.create().texOffs(8, 57).addBox(0.5F, -9F, -1F, 3F, 5F, 1F, new CubeDeformation(-0.2F)), PartPose.offset(0F, 0F, -1F));
-
 		part.addOrReplaceChild("tail", CubeListBuilder.create().texOffs(16, 32).addBox(-0.5F, 0F, 0F, 1, 12, 1, new CubeDeformation(-0.2F)), PartPose.offset(0F, 15F, 8F));
-
 		return LayerDefinition.create(mesh, 64, 64);
 	}
 
@@ -90,9 +82,7 @@ public class IgnisModel<T extends IgnisKnight> extends SMBaseModel<T> {
 
 	public void animHead(T entity, float ageTick, float headYaw, float headPitch) {
 
-		if (entity.isMagic()) { return; }
-
-		Vector3f vec =  new Vector3f(headPitch * TORADIAN, headYaw * TORADIAN, 0F);
+		Vector3f vec = new Vector3f(headPitch * TORADIAN, headYaw * TORADIAN, 0F);
 		this.head.resetPose();
 		this.head.offsetRotation(vec);
 		this.head.setRotation(headPitch * TORADIAN, headYaw * TORADIAN, 0F);
@@ -155,7 +145,7 @@ public class IgnisModel<T extends IgnisKnight> extends SMBaseModel<T> {
 		this.armJacketRight.copyFrom(this.armRight);
 	}
 
-	public void hammerAttack (T entity) {
+	public void hammerAttack(T entity) {
 
 		// 振りかざしているかつ時間経過がない場合
 		if (!this.isSwing) {
@@ -186,7 +176,7 @@ public class IgnisModel<T extends IgnisKnight> extends SMBaseModel<T> {
 		this.body.yRot = -(0.5F * tickRate);
 	}
 
-	public void hammerGroundwork (T entity) {
+	public void hammerGroundwork(T entity) {
 
 		// 振りかざしているかつ時間経過がない場合
 		if (!this.isSwing) {
@@ -218,7 +208,7 @@ public class IgnisModel<T extends IgnisKnight> extends SMBaseModel<T> {
 		this.body.yRot = 0.5F - (0.5F * tickRate);
 	}
 
-	public void hammerBlast (T entity) {
+	public void hammerBlast(T entity) {
 
 		// 振りかざしているかつ時間経過がない場合
 		if (!this.isSwing) {
@@ -259,11 +249,9 @@ public class IgnisModel<T extends IgnisKnight> extends SMBaseModel<T> {
 		this.legJacketLeft.x = 1.075F;
 	}
 
-	public void hammerBlastItem (PoseStack pose) {
-
+	public void hammerBlastItem(PoseStack pose) {
 		int maxtick = 15;									// 最大時間の設定
 		float tickRate = this.tickTime / (float) maxtick;	// 最大時間までの割合を算出
-
 		pose.mulPose(Vector3f.XP.rotationDegrees(135.0F));
 		pose.mulPose(Vector3f.YP.rotationDegrees(0F - (37F * tickRate)));
 		pose.mulPose(Vector3f.ZP.rotationDegrees(270.0F));

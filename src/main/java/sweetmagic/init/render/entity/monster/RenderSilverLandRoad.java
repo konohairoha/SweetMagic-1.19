@@ -9,18 +9,18 @@ import sweetmagic.SweetMagicCore;
 import sweetmagic.init.entity.monster.boss.SilverLandRoad;
 import sweetmagic.init.render.entity.model.WitchWolfModel;
 
-public class RenderSilverLandRoad extends MobRenderer<SilverLandRoad, WitchWolfModel<SilverLandRoad>> {
+public class RenderSilverLandRoad<T extends SilverLandRoad> extends MobRenderer<T, WitchWolfModel<T>> {
 
 	private static final ResourceLocation TEX = SweetMagicCore.getSRC("textures/entity/silver_land_road.png");
 
 	public RenderSilverLandRoad(EntityRendererProvider.Context con) {
 		super(con, new WitchWolfModel<>(con.bakeLayer(WitchWolfModel.LAYER)), 0.5F);
 	}
-	protected void scale(SilverLandRoad entity, PoseStack pose, float par1) {
+	protected void scale(T entity, PoseStack pose, float par1) {
 		pose.scale(2F, 2F, 2F);
 	}
 
-	public ResourceLocation getTextureLocation(SilverLandRoad entity) {
+	public ResourceLocation getTextureLocation(T entity) {
 		return TEX;
 	}
 }
