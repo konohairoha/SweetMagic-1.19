@@ -1,15 +1,7 @@
 {
-	"name": "sweetmagic:labyrinth/left",
-	"fallback": "minecraft:empty",
-	"elements": [
-		{
-			"weight": 1,
-			"element": {
-				"location": "sweetmagic:labyrinth/laby_left",
-				"processors": "minecraft:empty",
-				"projection": "rigid",
-				"element_type": "minecraft:single_pool_element"
-			}
+	"name": "sweetmagic:labyrinth/left", "fallback": "minecraft:empty", "elements": [{
+		"weight": 1, "element": {
+			"location": "sweetmagic:labyrinth/laby_left", "processors": "minecraft:empty", "projection": "rigid", "element_type": "minecraft:single_pool_element"
 		}
-	]
+	}]
 }

@@ -1,0 +1,7 @@
+{
+	"name": "sweetmagic:fluo_street_light/start_pool", "fallback": "minecraft:empty", "elements": [{
+		"weight": 1, "element": {
+			"location": "sweetmagic:fluo_street_light", "processors": "minecraft:empty", "projection": "rigid", "element_type": "minecraft:single_pool_element"
+		}
+	}]
+}

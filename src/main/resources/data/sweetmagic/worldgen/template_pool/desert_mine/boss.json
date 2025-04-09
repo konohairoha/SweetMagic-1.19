@@ -1,15 +1,7 @@
 {
-	"name": "sweetmagic:desert_mine/mine_boss",
-	"fallback": "minecraft:empty",
-	"elements": [
-		{
-			"weight": 1,
-			"element": {
-				"location": "sweetmagic:desert_mine/mine_boss",
-				"processors": "minecraft:empty",
-				"projection": "rigid",
-				"element_type": "minecraft:single_pool_element"
-			}
+	"name": "sweetmagic:desert_mine/mine_boss", "fallback": "minecraft:empty", "elements": [ {
+		"weight": 1, "element": {
+			"location": "sweetmagic:desert_mine/mine_boss", "processors": "minecraft:empty", "projection": "rigid", "element_type": "minecraft:single_pool_element"
 		}
-	]
+	}]
 }

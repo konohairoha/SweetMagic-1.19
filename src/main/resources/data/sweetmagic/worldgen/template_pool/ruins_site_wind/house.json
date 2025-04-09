@@ -1,15 +1,7 @@
 {
-	"name": "sweetmagic:ruins_site_wind/house",
-	"fallback": "minecraft:empty",
-	"elements": [
-		{
-			"weight": 1,
-			"element": {
-				"location": "sweetmagic:ruins_site_wind/house",
-				"processors": "minecraft:empty",
-				"projection": "rigid",
-				"element_type": "minecraft:single_pool_element"
-			}
+	"name": "sweetmagic:ruins_site_wind/house", "fallback": "minecraft:empty", "elements": [{
+		"weight": 1, "element": {
+			"location": "sweetmagic:ruins_site_wind/house", "processors": "minecraft:empty", "projection": "rigid", "element_type": "minecraft:single_pool_element"
 		}
-	]
+	}]
 }

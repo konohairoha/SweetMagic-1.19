@@ -1,13 +1,7 @@
 {
-	"name": "sweetmagic:skyisland/start_pool",
-	"fallback": "minecraft:empty",
-	"elements": [{
-	"weight": 1,
-		"element": {
-			"location": "sweetmagic:skyisland",
-			"processors": "minecraft:empty",
-			"projection": "rigid",
-			"element_type": "minecraft:single_pool_element"
+	"name": "sweetmagic:skyisland/start_pool", "fallback": "minecraft:empty", "elements": [{
+		"weight": 1, "element": {
+			"location": "sweetmagic:skyisland", "processors": "minecraft:empty", "projection": "rigid", "element_type": "minecraft:single_pool_element"
 		}
 	}]
 }

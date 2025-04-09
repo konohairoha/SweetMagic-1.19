@@ -1,13 +1,6 @@
 {
-	"name": "sweetmagic:bonus/start_pool",
-	"fallback": "minecraft:empty",
-	"elements": [{
-	"weight": 1,
-		"element": {
-			"location": "sweetmagic:bonus",
-			"processors": "minecraft:empty",
-			"projection": "rigid",
-			"element_type": "minecraft:single_pool_element"
-		}
-	}]
+	"name": "sweetmagic:bonus/start_pool", "fallback": "minecraft:empty", "elements": [{
+	"weight": 1, "element": {
+		"location": "sweetmagic:bonus", "processors": "minecraft:empty", "projection": "rigid", "element_type": "minecraft:single_pool_element"
+	} }]
 }

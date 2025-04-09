@@ -1,15 +1,7 @@
 {
-	"name": "sweetmagic:ruins_site_wind/altar",
-	"fallback": "minecraft:empty",
-	"elements": [
-		{
-			"weight": 1,
-			"element": {
-				"location": "sweetmagic:ruins_site_wind/altar",
-				"processors": "minecraft:empty",
-				"projection": "rigid",
-				"element_type": "minecraft:single_pool_element"
-			}
+	"name": "sweetmagic:ruins_site_wind/altar", "fallback": "minecraft:empty", "elements": [{
+		"weight": 1, "element": {
+			"location": "sweetmagic:ruins_site_wind/altar", "processors": "minecraft:empty", "projection": "rigid", "element_type": "minecraft:single_pool_element"
 		}
-	]
+	}]
 }

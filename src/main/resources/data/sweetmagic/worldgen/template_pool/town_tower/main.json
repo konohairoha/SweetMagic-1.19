@@ -1,0 +1,7 @@
+{
+	"name": "sweetmagic:town_tower/main", "fallback": "minecraft:empty", "elements": [{
+		"weight": 1, "element": {
+			"location": "sweetmagic:town_tower/town_tower_main", "processors": "minecraft:empty", "projection": "rigid", "element_type": "minecraft:single_pool_element"
+		}
+	}]
+}

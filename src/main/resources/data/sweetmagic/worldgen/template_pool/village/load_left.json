@@ -1,15 +1,7 @@
 {
-	"name": "sweetmagic:village/load4",
-	"fallback": "minecraft:empty",
-	"elements": [
-		{
-			"weight": 1,
-			"element": {
-				"location": "sweetmagic:village/vil_load4",
-				"processors": "minecraft:empty",
-				"projection": "rigid",
-				"element_type": "minecraft:single_pool_element"
-			}
+	"name": "sweetmagic:village/load4", "fallback": "minecraft:empty", "elements": [{
+		"weight": 1, "element": {
+			"location": "sweetmagic:village/vil_load4", "processors": "minecraft:empty", "projection": "rigid", "element_type": "minecraft:single_pool_element"
 		}
-	]
+	}]
 }

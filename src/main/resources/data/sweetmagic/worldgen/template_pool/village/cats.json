@@ -1,28 +1,23 @@
 {
-	"name": "sweetmagic:village/cats", "fallback": "minecraft:empty",
-	"elements": [
+	"name": "sweetmagic:village/cats", "fallback": "minecraft:empty", "elements": [
 		{
 			"weight": 1, "element": {
-				"location": "minecraft:village/common/animals/cat_black",
-				"processors": "minecraft:empty", "projection": "rigid", "element_type": "minecraft:single_pool_element"
+				"location": "minecraft:village/common/animals/cat_black", "processors": "minecraft:empty", "projection": "rigid", "element_type": "minecraft:single_pool_element"
 			}
 		},
 		{
 			"weight": 1, "element": {
-				"location": "minecraft:village/common/animals/cat_british",
-				"processors": "minecraft:empty", "projection": "rigid", "element_type": "minecraft:single_pool_element"
+				"location": "minecraft:village/common/animals/cat_british", "processors": "minecraft:empty", "projection": "rigid", "element_type": "minecraft:single_pool_element"
 			}
 		},
 		{
 			"weight": 1, "element": {
-				"location": "minecraft:village/common/animals/cat_calico",
-				"processors": "minecraft:empty", "projection": "rigid", "element_type": "minecraft:single_pool_element"
+				"location": "minecraft:village/common/animals/cat_calico", "processors": "minecraft:empty", "projection": "rigid", "element_type": "minecraft:single_pool_element"
 			}
 		},
 		{
 			"weight": 1, "element": {
-				"location": "minecraft:village/common/animals/cat_jellie",
-				"processors": "minecraft:empty", "projection": "rigid", "element_type": "minecraft:single_pool_element"
+				"location": "minecraft:village/common/animals/cat_jellie", "processors": "minecraft:empty", "projection": "rigid", "element_type": "minecraft:single_pool_element"
 			}
 		},
 		{
@@ -33,38 +28,32 @@
 		},
 		{
 			"weight": 1, "element": {
-				"location": "minecraft:village/common/animals/cat_red",
-				"processors": "minecraft:empty", "projection": "rigid", "element_type": "minecraft:single_pool_element"
+				"location": "minecraft:village/common/animals/cat_red", "processors": "minecraft:empty", "projection": "rigid", "element_type": "minecraft:single_pool_element"
 			}
 		},
 		{
 			"weight": 1, "element": {
-				"location": "minecraft:village/common/animals/cat_siamese",
-				"processors": "minecraft:empty", "projection": "rigid", "element_type": "minecraft:single_pool_element"
+				"location": "minecraft:village/common/animals/cat_siamese", "processors": "minecraft:empty", "projection": "rigid", "element_type": "minecraft:single_pool_element"
 			}
 		},
 		{
 			"weight": 1, "element": {
-				"location": "minecraft:village/common/animals/cat_black",
-				"processors": "minecraft:empty", "projection": "rigid", "element_type": "minecraft:single_pool_element"
+				"location": "minecraft:village/common/animals/cat_black", "processors": "minecraft:empty", "projection": "rigid", "element_type": "minecraft:single_pool_element"
 			}
 		},
 		{
 			"weight": 1, "element": {
-				"location": "minecraft:village/common/animals/cat_tabby",
-				"processors": "minecraft:empty", "projection": "rigid", "element_type": "minecraft:single_pool_element"
+				"location": "minecraft:village/common/animals/cat_tabby", "processors": "minecraft:empty", "projection": "rigid", "element_type": "minecraft:single_pool_element"
 			}
 		},
 		{
 			"weight": 1, "element": {
-				"location": "minecraft:village/common/animals/cat_tuxedo",
-				"processors": "minecraft:empty", "projection": "rigid", "element_type": "minecraft:single_pool_element"
+				"location": "minecraft:village/common/animals/cat_tuxedo", "processors": "minecraft:empty", "projection": "rigid", "element_type": "minecraft:single_pool_element"
 			}
 		},
 		{
 			"weight": 1, "element": {
-				"location": "minecraft:village/common/animals/cat_white",
-				"processors": "minecraft:empty", "projection": "rigid", "element_type": "minecraft:single_pool_element"
+				"location": "minecraft:village/common/animals/cat_white", "processors": "minecraft:empty", "projection": "rigid", "element_type": "minecraft:single_pool_element"
 			}
 		}
 	]
