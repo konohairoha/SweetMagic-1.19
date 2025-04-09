@@ -33,7 +33,7 @@ public class WoodBench extends SMChair {
 	}
 
 	// 当たり判定
-	public VoxelShape getShape(BlockState state, BlockGetter get, BlockPos pos, CollisionContext col) {
+	public VoxelShape getShape(BlockState state, BlockGetter get, BlockPos pos, CollisionContext con) {
 		return FaceAABB.getAABB(AABB, state);
 	}
 
@@ -51,7 +51,7 @@ public class WoodBench extends SMChair {
 		return this.setVertical(world, pos1, state.getValue(FACING));
 	}
 
-	public BlockState setVertical (LevelAccessor world, BlockPos pos, Direction face) {
+	public BlockState setVertical(LevelAccessor world, BlockPos pos, Direction face) {
 		boolean right = this.getBlock(world, pos.relative(face.getCounterClockWise())) == this;
 		boolean left = this.getBlock(world, pos.relative(face.getClockWise())) == this;
 		return this.setState(face).setValue(HORIZONTAL, EnumHorizontal.getHorizontal(left, right));

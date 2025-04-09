@@ -22,23 +22,24 @@ import sweetmagic.init.tile.sm.TileWarp;
 
 public class WarpBlock extends BaseModelBlock implements EntityBlock {
 
-	public WarpBlock (String name) {
+	public WarpBlock(String name) {
 		super(name, SweetMagicCore.smMagicTab);
 	}
 
 	// 右クリック出来るか
-	public boolean canRightClick (Player player, ItemStack stack) {
+	public boolean canRightClick(Player player, ItemStack stack) {
 		return true;
 	}
 
 	// ブロックでのアクション
-	public void actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
-		if (world.isClientSide) { return; }
+	public boolean actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
+		if (world.isClientSide) { return true; }
 		this.openGUI(world, pos, player, (TileWarp) world.getBlockEntity(pos));
+		return true;
 	}
 
 	// tileの中身を保持するか
-	public boolean isKeepTile () {
+	public boolean isKeepTile() {
 		return true;
 	}
 
@@ -47,23 +48,22 @@ public class WarpBlock extends BaseModelBlock implements EntityBlock {
 		return new TileWarp(pos, state);
 	}
 
-	public BlockEntityType<? extends TileAbstractSM> getTileType () {
+	public BlockEntityType<? extends TileAbstractSM> getTileType() {
 		return TileInit.warpBlock;
 	}
 
 	@Nullable
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
-		BlockEntityType<? extends TileAbstractSM> tileType = this.getTileType();
-		return tileType != null ? this.createMailBoxTicker(world, type, tileType) : null;
+		return this.createMailBoxTicker(world, type, this.getTileType());
 	}
 
 	@Override
-	public void addBlockTip (List<Component> toolTip) {
+	public void addBlockTip(List<Component> toolTip) {
 		toolTip.add(this.getText(this.name).withStyle(GREEN));
 	}
 
 	// ドロップするかどうか
-	protected boolean isDrop () {
+	protected boolean isDrop() {
 		return false;
 	}
 }

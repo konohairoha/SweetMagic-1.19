@@ -33,7 +33,7 @@ public class WoodenFrameWindow extends SMGlassPane {
 		return state.setValue(UP, this.isConect(upBlock)).setValue(DOWN, this.isConect(downBlock));
 	}
 
-	public boolean isConect (Block block) {
+	public boolean isConect(Block block) {
 		return block instanceof WoodenFrameWindow;
 	}
 

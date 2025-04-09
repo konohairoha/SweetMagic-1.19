@@ -28,6 +28,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import sweetmagic.SweetMagicCore;
+import sweetmagic.api.iblock.IFoodExpBlock;
 import sweetmagic.api.iblock.IWaterBlock;
 import sweetmagic.init.BlockInit.BlockInfo;
 import sweetmagic.init.ItemInit;
@@ -37,7 +38,7 @@ import sweetmagic.init.tile.sm.TileAbstractSM;
 import sweetmagic.init.tile.sm.TileWoodChest;
 import sweetmagic.util.FaceAABB;
 
-public class WoodChest extends BaseFaceBlock implements EntityBlock, IWaterBlock {
+public class WoodChest extends BaseFaceBlock implements EntityBlock, IWaterBlock, IFoodExpBlock {
 
 	public final int data;
 	private final static VoxelShape[] AABB = FaceAABB.create(0D, 0D, 8D, 16D, 16D, 16D);
@@ -61,23 +62,23 @@ public class WoodChest extends BaseFaceBlock implements EntityBlock, IWaterBlock
 	}
 
 	// 右クリック出来るか
-	public boolean canRightClick (Player player, ItemStack stack) {
+	public boolean canRightClick(Player player, ItemStack stack) {
 		return true;
 	}
 
 	// ブロックでのアクション
-	public void actionBlock (Level world, BlockPos pos, Player player, ItemStack stack) {
-		if (world.isClientSide) { return; }
+	public boolean actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
+		if (world.isClientSide) { return true; }
 
 		TileWoodChest tile = (TileWoodChest) this.getTile(world, pos);
 
 		if (player.isCreative() && stack.is(ItemInit.creative_wand)) {
 			this.openGUI(world, pos, player, new ContainerWoodChest(pos));
-			return;
+			return true;
 		}
 
 		if (tile.lootTable != null) {
-			if (player.isSpectator()) { return; }
+			if (player.isSpectator()) { return false; }
 			tile.setLootInv(player);
 		}
 
@@ -87,6 +88,7 @@ public class WoodChest extends BaseFaceBlock implements EntityBlock, IWaterBlock
 		switch (this.data) {
 		case 0:
 		case 5:
+		case 7:
 			sound = SoundEvents.PISTON_CONTRACT;
 			break;
 		case 1:
@@ -101,10 +103,11 @@ public class WoodChest extends BaseFaceBlock implements EntityBlock, IWaterBlock
 		}
 
 		this.playerSound(world, pos, sound, 0.5F, world.random.nextFloat() * 0.1F + 0.9F);
+		return true;
 	}
 
 	// 当たり判定
-	public VoxelShape getShape(BlockState state, BlockGetter get, BlockPos pos, CollisionContext col) {
+	public VoxelShape getShape(BlockState state, BlockGetter get, BlockPos pos, CollisionContext con) {
 		switch (this.data) {
 		case 0: return FaceAABB.getAABB(AABB, state);
 		case 4: return FaceAABB.getAABB(WOOD_CHEST, state);
@@ -113,21 +116,21 @@ public class WoodChest extends BaseFaceBlock implements EntityBlock, IWaterBlock
 	}
 
 	// ドロップするかどうか
-	protected boolean isDrop () {
+	protected boolean isDrop() {
 		return false;
 	}
 
 	// tileの中身を保持するか
-	public boolean isKeepTile () {
+	public boolean isKeepTile() {
 		return true;
 	}
 
-	public ItemStack getDropStack (TileAbstractSM tile) {
+	public ItemStack getDropStack(TileAbstractSM tile) {
 		return tile.getDropStack(new ItemStack(this));
 	}
 
 	@Override
-	public void addBlockTip (List<Component> toolTip) {
+	public void addBlockTip(List<Component> toolTip) {
 		toolTip.add(this.getText("sm_chest").withStyle(GREEN));
 	}
 
@@ -151,5 +154,9 @@ public class WoodChest extends BaseFaceBlock implements EntityBlock, IWaterBlock
 
 	public boolean isPathfindable(BlockState state, BlockGetter get, BlockPos pos, PathComputationType type) {
 		return type == PathComputationType.WATER ? get.getFluidState(pos).is(FluidTags.WATER) : false;
+	}
+
+	public boolean isChanceUp() {
+		return this.data == 4 || this.data == 7;
 	}
 }
