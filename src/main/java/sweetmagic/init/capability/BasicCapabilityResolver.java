@@ -14,8 +14,8 @@ import net.minecraftforge.items.IItemHandler;
 
 public abstract class BasicCapabilityResolver<CAPABILITY> implements ICapabilityResolver<CAPABILITY> {
 
-	private final NonNullSupplier<CAPABILITY> supplier;
-	private LazyOptional<CAPABILITY> capability;
+	private final NonNullSupplier<CAPABILITY> sup;
+	private LazyOptional<CAPABILITY> cap;
 
 	public static ICapabilityResolver<IItemHandler> getBasicItemHandlerResolver(NonNullSupplier<IItemHandler> sup) {
 		return new BasicCapabilityResolver<>(sup) {
@@ -38,20 +38,20 @@ public abstract class BasicCapabilityResolver<CAPABILITY> implements ICapability
 	}
 
 	protected BasicCapabilityResolver(CAPABILITY con) {
-		this.supplier = () -> con;
+		this.sup = () -> con;
 	}
 
 	protected BasicCapabilityResolver(NonNullSupplier<CAPABILITY> sup) {
-		this.supplier = sup instanceof NonNullLazy ? sup : NonNullLazy.of(sup);
+		this.sup = sup instanceof NonNullLazy ? sup : NonNullLazy.of(sup);
 	}
 
 	@NotNull
 	@Override
 	public <T> LazyOptional<T> getCapabilityUnchecked(@NotNull Capability<T> cap, @Nullable Direction face) {
-		if (this.capability == null || !this.capability.isPresent()) {
-			this.capability = LazyOptional.of(this.supplier);
+		if (this.cap == null || !this.cap.isPresent()) {
+			this.cap = LazyOptional.of(this.sup);
 		}
-		return this.capability.cast();
+		return this.cap.cast();
 	}
 
 	@Override
@@ -61,9 +61,9 @@ public abstract class BasicCapabilityResolver<CAPABILITY> implements ICapability
 
 	@Override
 	public void invalidateAll() {
-		if (this.capability != null && this.capability.isPresent()) {
-			this.capability.invalidate();
-			this.capability = null;
+		if (this.cap != null && this.cap.isPresent()) {
+			this.cap.invalidate();
+			this.cap = null;
 		}
 	}
 }

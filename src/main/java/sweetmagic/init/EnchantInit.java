@@ -19,6 +19,7 @@ import sweetmagic.api.iitem.IWand;
 import sweetmagic.init.enchant.SMEnchant1;
 import sweetmagic.init.enchant.SMEnchant3;
 import sweetmagic.init.enchant.SMEnchant5;
+import sweetmagic.init.item.magic.StartLightWand;
 
 public class EnchantInit {
 
@@ -28,7 +29,7 @@ public class EnchantInit {
 	public static final EnchantmentCategory ALL = create("is_all", s -> true);
 	public static final EnchantmentCategory ISWAND = create("is_wand", i -> i instanceof IWand);
 	public static final EnchantmentCategory ISWAND5 = create("is_wand", i -> i instanceof IWand wand && wand.getWandTier() >= 5);
-	public static final EnchantmentCategory ISWAND_HARNESS = create("is_wand_harness", i -> i instanceof IWand || i instanceof IHarness || i instanceof IRobe);
+	public static final EnchantmentCategory ISWAND_HARNESS = create("is_wand_harness", i -> i instanceof IWand || i instanceof IHarness || i instanceof IRobe || i instanceof StartLightWand);
 	public static final EnchantmentCategory ISMFTOOL = create("is_mftool", i -> i instanceof IMFTool);
 	public static final EnchantmentCategory ISALL = create("is_all", i -> i instanceof IMFTool || i instanceof ISMArmor);
 

@@ -23,6 +23,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FlowerPotBlock;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegisterEvent;
 import sweetmagic.SweetMagicCore;
@@ -36,117 +37,8 @@ import sweetmagic.init.block.crop.SweetCrops_STAGE3;
 import sweetmagic.init.block.crop.SweetCrops_STAGE4;
 import sweetmagic.init.block.crop.SweetCrops_STAGE5;
 import sweetmagic.init.block.crop.Whitenet;
-import sweetmagic.init.block.magic.AetherHopper;
-import sweetmagic.init.block.magic.AetherLanp;
-import sweetmagic.init.block.magic.AetherRecycler;
-import sweetmagic.init.block.magic.AquariumPot;
-import sweetmagic.init.block.magic.MFChager;
-import sweetmagic.init.block.magic.MFFisher;
-import sweetmagic.init.block.magic.MFFurnace;
-import sweetmagic.init.block.magic.MFLiquidBlock;
-import sweetmagic.init.block.magic.MFPot;
-import sweetmagic.init.block.magic.MFTable;
-import sweetmagic.init.block.magic.MFTank;
-import sweetmagic.init.block.magic.MagicLight;
-import sweetmagic.init.block.magic.MagicianLectern;
-import sweetmagic.init.block.magic.ObMagia;
-import sweetmagic.init.block.magic.PedalCreate;
-import sweetmagic.init.block.magic.RuneCharacter;
-import sweetmagic.init.block.magic.SMSpawner;
-import sweetmagic.init.block.magic.SMStone;
-import sweetmagic.init.block.magic.SpawnCrystal;
-import sweetmagic.init.block.magic.SturdustCrystal;
-import sweetmagic.init.block.magic.ToolRepair;
-import sweetmagic.init.block.sm.AetherCraftTable;
-import sweetmagic.init.block.sm.AwningTent;
-import sweetmagic.init.block.sm.BedSideLamp;
-import sweetmagic.init.block.sm.BookShelf;
-import sweetmagic.init.block.sm.BossFigurine;
-import sweetmagic.init.block.sm.Bottle;
-import sweetmagic.init.block.sm.BuildGlass;
-import sweetmagic.init.block.sm.CafeBoard;
-import sweetmagic.init.block.sm.Candle;
-import sweetmagic.init.block.sm.CandleStick;
-import sweetmagic.init.block.sm.CeilingLight;
-import sweetmagic.init.block.sm.CherryPlantBlock;
-import sweetmagic.init.block.sm.ChestReader;
-import sweetmagic.init.block.sm.ChoppingBoard;
-import sweetmagic.init.block.sm.CounterTable;
-import sweetmagic.init.block.sm.CounterTableSink;
-import sweetmagic.init.block.sm.FaceWood;
-import sweetmagic.init.block.sm.FlowerBuscket;
-import sweetmagic.init.block.sm.Freezer;
-import sweetmagic.init.block.sm.FreezerChest;
-import sweetmagic.init.block.sm.FruitLeaves;
-import sweetmagic.init.block.sm.Frypan;
-import sweetmagic.init.block.sm.FurnitureTable;
-import sweetmagic.init.block.sm.GroundLight;
-import sweetmagic.init.block.sm.IrisCreation;
-import sweetmagic.init.block.sm.IronFence;
-import sweetmagic.init.block.sm.JuiceMaker;
-import sweetmagic.init.block.sm.LeaveCarpet;
-import sweetmagic.init.block.sm.MagiaPortal;
-import sweetmagic.init.block.sm.MagicBarrierGlass;
-import sweetmagic.init.block.sm.MagicBarrierGlassLock;
-import sweetmagic.init.block.sm.MetalPole;
-import sweetmagic.init.block.sm.Mill;
-import sweetmagic.init.block.sm.MirageGlass;
-import sweetmagic.init.block.sm.ModenLamp;
-import sweetmagic.init.block.sm.ModenRack;
-import sweetmagic.init.block.sm.ModenStair;
-import sweetmagic.init.block.sm.Oven;
-import sweetmagic.init.block.sm.ParallelInterfere;
-import sweetmagic.init.block.sm.PillarStone;
-import sweetmagic.init.block.sm.PlantPot;
-import sweetmagic.init.block.sm.Planting;
-import sweetmagic.init.block.sm.Plate;
-import sweetmagic.init.block.sm.Pole;
-import sweetmagic.init.block.sm.PoleLight;
-import sweetmagic.init.block.sm.Pot;
-import sweetmagic.init.block.sm.PottingSoil;
-import sweetmagic.init.block.sm.RangeFood;
-import sweetmagic.init.block.sm.RollerBlind;
-import sweetmagic.init.block.sm.SMBrick;
-import sweetmagic.init.block.sm.SMChair;
-import sweetmagic.init.block.sm.SMDoor;
-import sweetmagic.init.block.sm.SMDoor3;
-import sweetmagic.init.block.sm.SMFlower;
-import sweetmagic.init.block.sm.SMFlowerDiff;
-import sweetmagic.init.block.sm.SMFlowerPot;
-import sweetmagic.init.block.sm.SMGlass;
-import sweetmagic.init.block.sm.SMGlassPane;
-import sweetmagic.init.block.sm.SMHutiBlock;
-import sweetmagic.init.block.sm.SMIron;
-import sweetmagic.init.block.sm.SMLeave;
-import sweetmagic.init.block.sm.SMLight;
-import sweetmagic.init.block.sm.SMLog;
-import sweetmagic.init.block.sm.SMOre;
-import sweetmagic.init.block.sm.SMPlanks;
-import sweetmagic.init.block.sm.SMPressurePlate;
-import sweetmagic.init.block.sm.SMSapling;
-import sweetmagic.init.block.sm.SMSlab;
-import sweetmagic.init.block.sm.SMStair;
-import sweetmagic.init.block.sm.SMTable;
-import sweetmagic.init.block.sm.SMTrapDoor;
-import sweetmagic.init.block.sm.ShowCase;
-import sweetmagic.init.block.sm.Sofa;
-import sweetmagic.init.block.sm.StendGlassLamp;
-import sweetmagic.init.block.sm.Stove;
-import sweetmagic.init.block.sm.TableLanp;
-import sweetmagic.init.block.sm.TransferGate;
-import sweetmagic.init.block.sm.TrashCan;
-import sweetmagic.init.block.sm.TrunkCase;
-import sweetmagic.init.block.sm.VerticalGlass;
-import sweetmagic.init.block.sm.VerticalGlassPane;
-import sweetmagic.init.block.sm.WallHungCafeSign;
-import sweetmagic.init.block.sm.WallLantern;
-import sweetmagic.init.block.sm.WallTowel;
-import sweetmagic.init.block.sm.WandPedastal;
-import sweetmagic.init.block.sm.WarpBlock;
-import sweetmagic.init.block.sm.WoodBench;
-import sweetmagic.init.block.sm.WoodChest;
-import sweetmagic.init.block.sm.WoodPole;
-import sweetmagic.init.block.sm.WoodenFrameWindow;
+import sweetmagic.init.block.magic.*;
+import sweetmagic.init.block.sm.*;
 
 public class BlockInit {
 
@@ -227,6 +119,7 @@ public class BlockInit {
 	public static final Block prism_stairs = new SMStair("prism_stairs", prism_planks);
 	public static final Block prism_planks_plate = new SMPressurePlate("prism_planks_plate", 0);
 
+
 	public static final Block banana_leaves = new SMLeave("banana_leaves", 3);
 	public static final Block banana_sapling = new SMSapling("banana_sapling", 5);
 
@@ -262,6 +155,9 @@ public class BlockInit {
 	public static final Block cherry_blossoms_stairs = new SMStair("cherry_blossoms_stairs", cherry_blossoms_planks);
 	public static final Block cherry_blossoms_planks_plate = new SMPressurePlate("cherry_blossoms_planks_plate", 0);
 	public static final Block cherry_blossoms_leaves_carpet = new LeaveCarpet("cherry_blossoms_leaves_carpet", 0);
+
+	public static final Block maple_leaves = new MapleLeave("maple_leaves", 6);
+	public static final Block maple_sapling = new SMSapling("maple_sapling", 10);
 
 	// 木製トラップドア
 	public static final Block lemon_trapdoor = new SMTrapDoor("lemon_trapdoor", 0);
@@ -594,6 +490,12 @@ public class BlockInit {
 	public static final Block flagstone_color_trapdoor = new SMTrapDoor("flagstone_color_trapdoor", 1);
 	public static final Block flagstone_color_plate = new SMPressurePlate("flagstone_color_plate", 1);
 
+	public static final Block flagstone_brown = new SMBrick("flagstone_brown", flagstone);
+	public static final Block flagstone_brown_slab = new SMSlab("flagstone_brown_slab", flagstone_brown);
+	public static final Block flagstone_brown_stairs = new SMStair("flagstone_brown_stairs", flagstone_brown);
+	public static final Block flagstone_brown_trapdoor = new SMTrapDoor("flagstone_brown_trapdoor", 1);
+	public static final Block flagstone_brown_plate = new SMPressurePlate("flagstone_brown_plate", 1);
+
 	public static final Block white_stone = new SMBrick("white_stone");
 	public static final Block white_stone_slab = new SMSlab("white_stone_slab", white_stone);
 	public static final Block white_stone_stairs = new SMStair("white_stone_stairs", white_stone);
@@ -621,6 +523,15 @@ public class BlockInit {
 	public static final Block half_timber_s = new PillarStone("half_timber_s");
 	public static final Block half_timber_y = new PillarStone("half_timber_y");
 	public static final Block half_timber_w = new PillarStone("half_timber_w");
+
+	public static final Block half_timber_w_b = new PillarStone("half_timber_w_b");
+	public static final Block half_timber_w_l = new PillarStone("half_timber_w_l");
+	public static final Block half_timber_w_o = new PillarStone("half_timber_w_o");
+	public static final Block half_timber_w_pi = new PillarStone("half_timber_w_pi");
+	public static final Block half_timber_w_pu = new PillarStone("half_timber_w_pu");
+	public static final Block half_timber_w_r = new PillarStone("half_timber_w_r");
+	public static final Block half_timber_w_s = new PillarStone("half_timber_w_s");
+	public static final Block half_timber_w_y = new PillarStone("half_timber_w_y");
 
 	public static final Block pillar_stone_s = new PillarStone("pillar_stone_s");
 	public static final Block pillar_stone_w = new PillarStone("pillar_stone_w");
@@ -665,7 +576,9 @@ public class BlockInit {
 	public static final Block frosted_glass_line = new SMGlass("frosted_glass_line", false, false);
 	public static final Block prismglass = new SMGlass("prismglass", false, true);
 	public static final Block shading_prismglass = new SMGlass("shading_prismglass", true, true);
-	public static final Block mirage_glass = new MirageGlass("mirage_glass");
+	public static final Block mirage_glass = new MirageGlass("mirage_glass", 0);
+	public static final Block mirage_gate_glass = new MirageGlass("mirage_gate_glass", 1);
+	public static final Block mirage_wall_glass = new MirageGlass("mirage_wall_glass", 2);
 
 	public static final Block green4panel_glass = new VerticalGlass("green4panel_glass");
 	public static final Block lightbrown4panel_glass = new VerticalGlass("lightbrown4panel_glass");
@@ -722,6 +635,11 @@ public class BlockInit {
 
 	public static final Block ground_light = new GroundLight("ground_light");
 
+	public static final Block aether_crystal_light = new CrystalLight("aether_crystal_light");
+	public static final Block divine_crystal_light = new CrystalLight("divine_crystal_light");
+
+	public static final Block magia_crystal_light = new MagiaCrystalLight("magia_crystal_light");
+
 	public static final Block wall_lantern = new WallLantern("wall_lantern", 0);
 	public static final Block wall_lantern_gothic = new WallLantern("wall_lantern_gothic", 1);
 
@@ -762,10 +680,6 @@ public class BlockInit {
 	public static final Block fluorite_block = new SMIron("fluorite_block", 2.5F, 15);
 	public static final Block redberyl_block = new SMIron("redberyl_block", 4F, 15);
 
-	public static final Block aethercrystal_block_alpha = new SMIron("aethercrystal_block_alpha", 1F, false);
-	public static final Block divinecrystal_block_alpha = new SMIron("divinecrystal_block_alpha", 2.5F, false);
-	public static final Block purecrystal_block_alpha = new SMIron("purecrystal_block_alpha", 5F, false);
-
 	// 魔法関連
 	public static final Block mfchanger = new MFChager("mfchanger", 0);
 	public static final Block mfchanger_adavance = new MFChager("mfchanger_adavance", 1);
@@ -801,6 +715,9 @@ public class BlockInit {
 	public static final Block aether_planter = new ToolRepair("aether_planter", 8);
 	public static final Block mf_miner_advanced = new ToolRepair("mf_miner_advanced", 9);
 	public static final Block mf_bottler = new ToolRepair("mf_bottler", 10);
+	public static final Block mf_bottler_advance = new ToolRepair("mf_bottler_advance", 11);
+	public static final Block mf_generater = new ToolRepair("mf_generater", 12);
+	public static final Block magia_table = new ToolRepair("magia_table", 13);
 
 	public static final Block aether_recycler = new AetherRecycler("aether_recycler");
 
@@ -815,6 +732,7 @@ public class BlockInit {
 	public static final Block aehter_furnace = new MFFisher("aehter_furnace", 3);
 	public static final Block aehter_furnace_adavance = new MFFisher("aehter_furnace_adavance", 4);
 	public static final Block mf_miner = new MFFisher("mf_miner", 5);
+	public static final Block mf_egg_launcher = new MFFisher("mf_egg_launcher", 6);
 
 	// 花瓶
 	public static final Block carnation_crayola_pot = new MFPot("carnation_crayola_pot", 8, 1);
@@ -834,8 +752,11 @@ public class BlockInit {
 	public static final Block snowdrop_aquarium = new AquariumPot("snowdrop_aquarium", BlockInit.snowdrop_pot, 2, 2);
 	public static final Block turkey_balloonflower_aquarium = new AquariumPot("turkey_balloonflower_aquarium", BlockInit.turkey_balloonflower_pot, 3, 2);
 	public static final Block ultramarine_rose_aquarium = new AquariumPot("ultramarine_rose_aquarium", BlockInit.ultramarine_rose_pot, 4, 2);
+	public static final Block solid_star_aquarium = new AquariumPot("solid_star_aquarium", BlockInit.solid_star_pot, 5, 3);
+	public static final Block zinnia_aquarium = new AquariumPot("zinnia_aquarium", BlockInit.zinnia_pot, 6, 3);
 	public static final Block hydrangea_aquarium = new AquariumPot("hydrangea_aquarium", BlockInit.hydrangea_pot, 7, 2);
 	public static final Block christmarose_aquarium = new AquariumPot("christmarose_ericsmithii_aquarium", BlockInit.christmarose_pot, 9, 2);
+	public static final Block cosmos_aquarium = new AquariumPot("cosmos_aquarium", BlockInit.cosmos_pot, 10, 2);
 
 	public static final Block sturdust_crystal = new SturdustCrystal("sturdust_crystal");
 
@@ -855,6 +776,16 @@ public class BlockInit {
 	public static final Block figurine_arlaune = new BossFigurine("figurine_arlaune", 6);
 	public static final Block figurine_landroad = new BossFigurine("figurine_landroad", 7);
 	public static final Block figurine_butler = new BossFigurine("figurine_butler", 8);
+	public static final Block figurine_hora = new BossFigurine("figurine_hora", 9);
+	public static final Block figurine_brave = new BossFigurine("figurine_brave", 10);
+	public static final Block figurine_curious = new BossFigurine("figurine_curious", 11);
+	public static final Block figurine_sandryon = new BossFigurine("figurine_sandryon", 12);
+	public static final Block figurine_blitz = new BossFigurine("figurine_blitz", 13);
+
+	public static final Block summon_pedal = new SummonPedal("summon_pedal");
+
+	public static final Block alternative_tank = new AlternativeTank("alternative_tank", 0);
+	public static final Block cosmos_light_tank = new AlternativeTank("cosmos_light_tank", 1);
 
 	// 調理ブロック
 	public static final Block mill = new Mill("mill");
@@ -926,31 +857,31 @@ public class BlockInit {
 	public static final Block couter_table_sink_white_brick_r = new CounterTableSink("couter_table_sink_white_brick_r");
 	public static final Block couter_table_oven_white_brick_r = new Oven("couter_table_oven_white_brick_r", 1);
 	public static final Block couter_table_stove_white_brick_r = new Stove("couter_table_stove_white_brick_r", SweetMagicCore.smTab);
-	public static final Block couter_table_chest_white_brick_r = new WoodChest("couter_table_chest_white_brick_r", 5);
+	public static final Block couter_table_chest_white_brick_r = new WoodChest("couter_table_chest_white_brick_r", 7);
 
 	public static final Block couter_table_white_brick_y = new CounterTable("couter_table_white_brick_y");
 	public static final Block couter_table_sink_white_brick_y = new CounterTableSink("couter_table_sink_white_brick_y");
 	public static final Block couter_table_oven_white_brick_y = new Oven("couter_table_oven_white_brick_y", 1);
 	public static final Block couter_table_stove_white_brick_y = new Stove("couter_table_stove_white_brick_y", SweetMagicCore.smTab);
-	public static final Block couter_table_chest_white_brick_y = new WoodChest("couter_table_chest_white_brick_y", 5);
+	public static final Block couter_table_chest_white_brick_y = new WoodChest("couter_table_chest_white_brick_y", 7);
 
 	public static final Block couter_table_white_brick_b = new CounterTable("couter_table_white_brick_b");
 	public static final Block couter_table_sink_white_brick_b = new CounterTableSink("couter_table_sink_white_brick_b");
 	public static final Block couter_table_oven_white_brick_b = new Oven("couter_table_oven_white_brick_b", 1);
 	public static final Block couter_table_stove_white_brick_b = new Stove("couter_table_stove_white_brick_b", SweetMagicCore.smTab);
-	public static final Block couter_table_chest_white_brick_b = new WoodChest("couter_table_chest_white_brick_b", 5);
+	public static final Block couter_table_chest_white_brick_b = new WoodChest("couter_table_chest_white_brick_b", 7);
 
 	public static final Block couter_table_white_brick_m = new CounterTable("couter_table_white_brick_m");
 	public static final Block couter_table_sink_white_brick_m = new CounterTableSink("couter_table_sink_white_brick_m");
 	public static final Block couter_table_oven_white_brick_m = new Oven("couter_table_oven_white_brick_m", 1);
 	public static final Block couter_table_stove_white_brick_m = new Stove("couter_table_stove_white_brick_m", SweetMagicCore.smTab);
-	public static final Block couter_table_chest_white_brick_m = new WoodChest("couter_table_chest_white_brick_m", 5);
+	public static final Block couter_table_chest_white_brick_m = new WoodChest("couter_table_chest_white_brick_m", 7);
 
 	public static final Block couter_table_white_brick_w = new CounterTable("couter_table_white_brick_w");
 	public static final Block couter_table_sink_white_brick_w = new CounterTableSink("couter_table_sink_white_brick_w");
 	public static final Block couter_table_oven_white_brick_w = new Oven("couter_table_oven_white_brick_w", 1);
 	public static final Block couter_table_stove_white_brick_w = new Stove("couter_table_stove_white_brick_w", SweetMagicCore.smTab);
-	public static final Block couter_table_chest_white_brick_w = new WoodChest("couter_table_chest_white_brick_w", 5);
+	public static final Block couter_table_chest_white_brick_w = new WoodChest("couter_table_chest_white_brick_w", 7);
 
 	public static final Block range_food = new RangeFood("range_food", 0);
 	public static final Block range_food_light = new RangeFood("range_food_light", 1);
@@ -977,6 +908,10 @@ public class BlockInit {
 	public static final Block trash_can_pu = new TrashCan("trash_can_pu", 4);
 	public static final Block japanese_dance = new WoodChest("japanese_dance", 5);
 	public static final Block western_style_dance = new WoodChest("western_style_dance", 5);
+	public static final Block lowshelf = new WoodChest("lowshelf", 5);
+
+	public static final Block cardboard_storage = new CardboardStorage("cardboard_storage");
+	public static final Block dresser = new Dresser("dresser");
 
 	public static final Block trunk_case_s = new TrunkCase("trunk_case_s");
 	public static final Block trunk_case_pi = new TrunkCase("trunk_case_pi");
@@ -989,6 +924,12 @@ public class BlockInit {
 
 	public static final Block parallel_interfere = new ParallelInterfere("parallel_interfere", 0);
 	public static final Block stardust_wish = new ParallelInterfere("stardust_wish", 1);
+
+	public static final Block magia_storage_1 = new MagiaStorage("magia_storage_1", 0);
+	public static final Block magia_storage_2 = new MagiaStorage("magia_storage_2", 1);
+	public static final Block magia_storage_3 = new MagiaStorage("magia_storage_3", 2);
+	public static final Block magia_storage_4 = new MagiaStorage("magia_storage_4", 3);
+	public static final Block magia_storage_5 = new MagiaStorage("magia_storage_5", 4);
 
 	public static final Block aether_crafttable = new AetherCraftTable("aether_crafttable");
 	public static final Block chest_reader = new ChestReader("chest_reader");
@@ -1109,12 +1050,23 @@ public class BlockInit {
 	public static final Block cafe_chair = new SMChair("cafe_chair", 2);
 	public static final Block cafe_chair_b = new SMChair("cafe_chair_b", 2);
 	public static final Block cafe_chair_l = new SMChair("cafe_chair_l", 2);
+	public static final Block dresser_chair = new SMChair("dresser_chair", 4);
 	public static final Block backrest_woodbench_d = new WoodBench("backrest_woodbench_d", 3);
 	public static final Block backrest_woodbench_t = new WoodBench("backrest_woodbench_t", 3);
 	public static final Block backrest_woodbench_b = new WoodBench("backrest_woodbench_b", 3);
 	public static final Block woodbench_d = new WoodBench("woodbench_d", 3);
 	public static final Block woodbench_t = new WoodBench("woodbench_t", 3);
 	public static final Block woodbench_b = new WoodBench("woodbench_b", 3);
+	public static final Block simple_chair = new SMChair("simple_chair", 1);
+	public static final Block counter_chair_b = new SMChair("counter_chair_b", 2);
+	public static final Block counter_chair_l = new SMChair("counter_chair_l", 2);
+	public static final Block counter_chair_o = new SMChair("counter_chair_o", 2);
+	public static final Block counter_chair_pi = new SMChair("counter_chair_pi", 2);
+	public static final Block counter_chair_pu = new SMChair("counter_chair_pu", 2);
+	public static final Block counter_chair_r = new SMChair("counter_chair_r", 2);
+	public static final Block counter_chair_s = new SMChair("counter_chair_s", 2);
+	public static final Block counter_chair_y = new SMChair("counter_chair_y", 2);
+	public static final Block counter_chair_w = new SMChair("counter_chair_w", 2);
 
 	public static final Block sofa_b = new Sofa("sofa_b");
 	public static final Block sofa_l = new Sofa("sofa_l");
@@ -1130,6 +1082,8 @@ public class BlockInit {
 	public static final Block moden_table_b = new SMTable("moden_table_b", 0);
 	public static final Block smtable = new SMTable("smtable", 0);
 	public static final Block smtable_lace = new SMTable("smtable_lace", 0);
+	public static final Block simple_table = new SMTable("simple_table", 2);
+	public static final Block cafe_table = new SMTable("cafe_table", 2);
 
 	public static final Block moden_stairs_t = new ModenStair("moden_stairs_t");
 	public static final Block moden_stairs_b = new ModenStair("moden_stairs_b");
@@ -1165,6 +1119,8 @@ public class BlockInit {
 	public static final Block roller_blind_s = new RollerBlind("roller_blind_s");
 	public static final Block roller_blind_y = new RollerBlind("roller_blind_y");
 
+	public static final Block ceiling_fan = new CeilingFan("ceiling_fan");
+
 	public static final Block cafeboard_b = new CafeBoard("cafeboard_b", 0);
 	public static final Block cafeboard_w = new CafeBoard("cafeboard_w", 0);
 
@@ -1187,6 +1143,14 @@ public class BlockInit {
 	public static final Block showcase_stand = new FaceWood("showcase_stand", 6);
 
 	public static final Block wall_towel = new WallTowel("wall_towel");
+
+	public static final Block woodbed_b = new WoodBed("woodbed_b");
+	public static final Block woodbed_l = new WoodBed("woodbed_l");
+	public static final Block woodbed_o = new WoodBed("woodbed_o");
+	public static final Block woodbed_pi = new WoodBed("woodbed_pi");
+	public static final Block woodbed_pu = new WoodBed("woodbed_pu");
+	public static final Block woodbed_r = new WoodBed("woodbed_r");
+	public static final Block woodbed_s = new WoodBed("woodbed_s");
 
 	// 花
 	public static final Block cornflower = new SMFlowerDiff("cornflower");
@@ -1282,10 +1246,6 @@ public class BlockInit {
 	public static final Block coconut_plant = new SweetCrops_STAGE2("coconut_plant", 1, 3);
 	public static final Block banana_plant = new SweetCrops_STAGE2("banana_plant", 2, 3);
 
-	public static final Block magiaflux_liquidblock = new MFLiquidBlock("magiaflux_liquidblock");
-	public static final Block water_clear = new MFLiquidBlock("water_clear");
-	public static final Block water = new MFLiquidBlock("water");
-
 	public static final Block magia_rewrite_bot = new BaseModelBlock("magia_rewrite_bot");
 	public static final Block magia_rewrite_top = new BaseModelBlock("magia_rewrite_top");
 
@@ -1302,18 +1262,28 @@ public class BlockInit {
 	public static final Block tornado = new BaseModelBlock("tornado");
 	public static final Block cherry_plant = new CherryPlantBlock("cherry_plant");
 	public static final Block poison_block = new BaseModelBlock("poison_block");
+	public static final Block select_block = new BaseModelBlock("select_block");
+	public static final Block ceiling_fan_blade = new BaseModelBlock("ceiling_fan_blade");
+	public static final Block electricsphere = new BaseModelBlock("electricsphere");
+
+	public static final Block water_clear = new MFLiquidBlock("water_clear");
+	public static final Block water = new MFLiquidBlock("water");
 
 	public static final Block spawn_stone_a = new SpawnCrystal("spawn_stone_a", 0);
 	public static final Block spawn_stone_d = new SpawnCrystal("spawn_stone_d", 1);
 	public static final Block spawn_stone_p = new SpawnCrystal("spawn_stone_p", 2);
 	public static final Block spawn_stone_f = new SpawnCrystal("spawn_stone_f", 3);
 	public static final Block spawn_stone_r = new SpawnCrystal("spawn_stone_r", 4);
+	public static final Block spawn_stone_m = new SpawnCrystal("spawn_stone_m", 5);
 	public static final Block smspawner = new SMSpawner("smspawner", 0);
 	public static final Block smspawner_boss = new SMSpawner("smspawner_boss", 1);
 	public static final Block spawn_stone = new SMStone("spawn_stone");
 	public static final Block transfer_gate = new TransferGate("transfer_gate", 0);
 	public static final Block transfer_gate_top = new TransferGate("transfer_gate_top", 1);
-	public static final Block build_glass = new BuildGlass("build_glass");
+	public static final Block transfer_gate_vertical = new TransferGateVertical("transfer_gate_vertical", 0);
+	public static final Block transfer_gate_vertical_top = new TransferGateVertical("transfer_gate_vertical_top", 1);
+	public static final Block build_glass = new BuildGlass("build_glass", 0);
+	public static final Block build_water_glass = new BuildGlass("build_water_glass", 1);
 	public static final Block magia_portal = new MagiaPortal("magia_portal", BlockInit.design_brick_w);
 
 	@SubscribeEvent
@@ -1358,6 +1328,32 @@ public class BlockInit {
 
 						public int getMF(ItemStack stack) {
 							return stack.getOrCreateTag().getInt("mf");
+						}
+					};
+				}
+
+				else if (block instanceof AlternativeTank tank) {
+
+					bItem = new BlockItem(block, pro.stacksTo(1)) {
+
+						@Override
+						public int getBarColor(@NotNull ItemStack stack) {
+							return this.getFluidValue(stack) >= tank.getMaxFluidValue() ? 0X30FF89 : 0X00C3FF;
+						}
+
+						@Override
+						public boolean isBarVisible(@NotNull ItemStack stack) {
+							return this.getFluidValue(stack) != 0;
+						}
+
+						@Override
+						public int getBarWidth(@NotNull ItemStack stack) {
+							return Math.min(13, Math.round(13F * (float) this.getFluidValue(stack) / (float) tank.getMaxFluidValue()));
+						}
+
+						public int getFluidValue(ItemStack stack) {
+							if (!stack.getOrCreateTag().contains("BlockEntityTag")) { return 0; }
+							return FluidStack.loadFluidStackFromNBT(stack.getTagElement("BlockEntityTag").getCompound("fluid")).getAmount();
 						}
 					};
 				}
@@ -1429,36 +1425,36 @@ public class BlockInit {
 		}
 	}
 
-    public static void registerPots() {
-        FlowerPotBlock pot = (FlowerPotBlock) Blocks.FLOWER_POT;
-        BlockInit.registerPot(pot, BlockInit.cornflower_flowerpot);
-        BlockInit.registerPot(pot, BlockInit.lily_valley_flowerpot);
-        BlockInit.registerPot(pot, BlockInit.cosmos_flowerpot);
-        BlockInit.registerPot(pot, BlockInit.blackrose_flowerpot);
-        BlockInit.registerPot(pot, BlockInit.white_clover_flowerpot);
-        BlockInit.registerPot(pot, BlockInit.foxtail_grass_flowerpot);
-        BlockInit.registerPot(pot, BlockInit.snowdrop_flowerpot);
-        BlockInit.registerPot(pot, BlockInit.turkey_balloonflower_flowerpot);
-        BlockInit.registerPot(pot, BlockInit.iberis_umbellata_flowerpot);
-        BlockInit.registerPot(pot, BlockInit.ultramarine_rose_flowerpot);
-        BlockInit.registerPot(pot, BlockInit.solid_star_flowerpot);
-        BlockInit.registerPot(pot, BlockInit.zinnia_flowerpot);
-        BlockInit.registerPot(pot, BlockInit.campanula_flowerpot);
-        BlockInit.registerPot(pot, BlockInit.primula_polyansa_flowerpot);
-        BlockInit.registerPot(pot, BlockInit.hydrangea_flowerpot);
-        BlockInit.registerPot(pot, BlockInit.carnation_crayola_flowerpot);
-        BlockInit.registerPot(pot, BlockInit.christmas_rose_flowerpot);
-        BlockInit.registerPot(pot, BlockInit.cornflower_flowerpot);
-        BlockInit.registerPot(pot, BlockInit.portulaca_flowerpot);
-        BlockInit.registerPot(pot, BlockInit.surfinia_flowerpot);
-        BlockInit.registerPot(pot, BlockInit.pansy_blue_flowerpot);
-        BlockInit.registerPot(pot, BlockInit.pansy_yellowmazenta_flowerpot);
-        BlockInit.registerPot(pot, BlockInit.marigold_flowerpot);
-        BlockInit.registerPot(pot, BlockInit.christmarose_ericsmithii_flowerpot);
-    }
+	public static void registerPots() {
+		FlowerPotBlock pot = (FlowerPotBlock) Blocks.FLOWER_POT;
+		BlockInit.registerPot(pot, BlockInit.cornflower_flowerpot);
+		BlockInit.registerPot(pot, BlockInit.lily_valley_flowerpot);
+		BlockInit.registerPot(pot, BlockInit.cosmos_flowerpot);
+		BlockInit.registerPot(pot, BlockInit.blackrose_flowerpot);
+		BlockInit.registerPot(pot, BlockInit.white_clover_flowerpot);
+		BlockInit.registerPot(pot, BlockInit.foxtail_grass_flowerpot);
+		BlockInit.registerPot(pot, BlockInit.snowdrop_flowerpot);
+		BlockInit.registerPot(pot, BlockInit.turkey_balloonflower_flowerpot);
+		BlockInit.registerPot(pot, BlockInit.iberis_umbellata_flowerpot);
+		BlockInit.registerPot(pot, BlockInit.ultramarine_rose_flowerpot);
+		BlockInit.registerPot(pot, BlockInit.solid_star_flowerpot);
+		BlockInit.registerPot(pot, BlockInit.zinnia_flowerpot);
+		BlockInit.registerPot(pot, BlockInit.campanula_flowerpot);
+		BlockInit.registerPot(pot, BlockInit.primula_polyansa_flowerpot);
+		BlockInit.registerPot(pot, BlockInit.hydrangea_flowerpot);
+		BlockInit.registerPot(pot, BlockInit.carnation_crayola_flowerpot);
+		BlockInit.registerPot(pot, BlockInit.christmas_rose_flowerpot);
+		BlockInit.registerPot(pot, BlockInit.cornflower_flowerpot);
+		BlockInit.registerPot(pot, BlockInit.portulaca_flowerpot);
+		BlockInit.registerPot(pot, BlockInit.surfinia_flowerpot);
+		BlockInit.registerPot(pot, BlockInit.pansy_blue_flowerpot);
+		BlockInit.registerPot(pot, BlockInit.pansy_yellowmazenta_flowerpot);
+		BlockInit.registerPot(pot, BlockInit.marigold_flowerpot);
+		BlockInit.registerPot(pot, BlockInit.christmarose_ericsmithii_flowerpot);
+	}
 
-    public static void registerPot (FlowerPotBlock pot, Block block) {
-    	SMFlowerPot fp = (SMFlowerPot) block;
-        pot.addPlant(SweetMagicCore.getSRC(fp.getFlowerName()), () -> fp);
-    }
+	public static void registerPot(FlowerPotBlock pot, Block block) {
+		SMFlowerPot fp = (SMFlowerPot) block;
+		pot.addPlant(SweetMagicCore.getSRC(fp.getFlowerName()), () -> fp);
+	}
 }

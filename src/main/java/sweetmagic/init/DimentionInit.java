@@ -7,9 +7,9 @@ import sweetmagic.SweetMagicCore;
 
 public class DimentionInit {
 
-    public static ResourceKey<Level> SweetMagicWorld;
+	public static ResourceKey<Level> SweetMagicWorld;
 
-    public static void init () {
-        SweetMagicWorld = ResourceKey.create(Registry.DIMENSION_REGISTRY, SweetMagicCore.getSRC("sweetmagic_world"));
-    }
+	public static void init() {
+		SweetMagicWorld = ResourceKey.create(Registry.DIMENSION_REGISTRY, SweetMagicCore.getSRC("sweetmagic_world"));
+	}
 }

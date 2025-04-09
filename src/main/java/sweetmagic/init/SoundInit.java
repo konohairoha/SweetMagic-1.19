@@ -11,7 +11,7 @@ import sweetmagic.SweetMagicCore;
 
 public class SoundInit {
 
-    public static Map<SoundEvent, String> soundMap = new HashMap<>();
+	public static Map<SoundEvent, String> soundMap = new HashMap<>();
 
 	public static SoundEvent PAGE = register("page");
 	public static SoundEvent HEAL = register("heal");
@@ -53,8 +53,10 @@ public class SoundInit {
 	public static SoundEvent RECAST_CLEAR = register("recast_clear");
 	public static SoundEvent KNIFE_SHOT = register("knife_shot");
 	public static SoundEvent RIFLE_SHOT = register("rifle_shot");
+	public static SoundEvent STORAGE = register("storage");
+	public static SoundEvent ELECTRIC = register("electric");
 
-	public static SoundEvent register (String name) {
+	public static SoundEvent register(String name) {
 		SoundEvent sound = new SoundEvent(SweetMagicCore.getSRC(name));
 		soundMap.put(sound, name);
 		return sound;

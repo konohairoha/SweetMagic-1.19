@@ -30,7 +30,7 @@ public class LootInit {
 
 	public static List<ResourceLocation> lootList = new ArrayList<>();
 
-	public static void init () {
+	public static void init() {
 		setLoot("biginer/biginer_chest");
 		setLoot("witchhouse/witchhouse_chest_0");
 		setLoot("witchhouse/witchhouse_chest_1");
@@ -70,9 +70,15 @@ public class LootInit {
 		setLoot("white_silver_house/house_0");
 		setLoot("white_silver_house/house_1");
 		setLoot("white_silver_house/house_2");
+		setLoot("castle/castle_0");
+		setLoot("castle/castle_1");
+		setLoot("castle/castle_2");
+		setLoot("wizard_house/house_0");
+		setLoot("wizard_house/house_1");
+		setLoot("wizard_house/house_2");
 	}
 
-	public static void setLoot (String name) {
+	public static void setLoot(String name) {
 		LootInit.lootList.add(SweetMagicCore.getSRC("chests/" + name));
 	}
 
@@ -84,15 +90,15 @@ public class LootInit {
 		// 大量のルートテーブルかチェック
 		if (LootInit.is(name, BuiltInLootTables.FISHING_FISH, BuiltInLootTables.FISHING, BuiltInLootTables.FISHING_JUNK)) {
 
-        	// 対象バイオームの取得
+			// 対象バイオームの取得
 			AlternativeLootItemCondition.Builder alt = LootInit.getAlt(Biomes.RIVER, Biomes.OCEAN, Biomes.COLD_OCEAN, Biomes.DEEP_COLD_OCEAN, Biomes.DEEP_FROZEN_OCEAN, Biomes.DEEP_LUKEWARM_OCEAN, Biomes.DEEP_OCEAN, Biomes.FROZEN_OCEAN, Biomes.LUKEWARM_OCEAN, Biomes.WARM_OCEAN);
-        	addLootTable(event.getTable(), LootInit.getLoot(ItemInit.shrimp, 9, alt));	// 釣れるアイテムの設定
-        	addLootTable(event.getTable(), LootInit.getLoot(ItemInit.seaweed, 7, alt));	// 釣れるアイテムの設定
-        }
-    }
+			addLootTable(event.getTable(), LootInit.getLoot(ItemInit.shrimp, 9, alt)); // 釣れるアイテムの設定
+			addLootTable(event.getTable(), LootInit.getLoot(ItemInit.seaweed, 7, alt)); // 釣れるアイテムの設定
+		}
+	}
 
 	// 大量のルートテーブルかチェック
-	public static boolean is (ResourceLocation name, ResourceLocation... targetArray) {
+	public static boolean is(ResourceLocation name, ResourceLocation... targetArray) {
 		for (ResourceLocation target : targetArray) {
 			if (name.equals(target)) { return true; }
 		}
@@ -100,7 +106,7 @@ public class LootInit {
 	}
 
 	// 対象バイオームの取得
-	public static AlternativeLootItemCondition.Builder getAlt (ResourceKey<Biome>... biomesArray) {
+	public static AlternativeLootItemCondition.Builder getAlt(ResourceKey<Biome>... biomesArray) {
 
 		List<LootItemCondition.Builder> buildList = new ArrayList<>();
 
@@ -108,36 +114,37 @@ public class LootInit {
 			buildList.add(LocationCheck.checkLocation(LocationPredicate.Builder.location().setBiome(biome)));
 		}
 
-		return AlternativeLootItemCondition.alternative(buildList.toArray(new LootItemCondition.Builder[buildList.size()]));
+		return AlternativeLootItemCondition
+				.alternative(buildList.toArray(new LootItemCondition.Builder[buildList.size()]));
 	}
 
 	// ルートテーブルの取得
-	public static LootPoolEntryContainer getLoot (ItemLike item, int weiight, AlternativeLootItemCondition.Builder alt) {
+	public static LootPoolEntryContainer getLoot(ItemLike item, int weiight, AlternativeLootItemCondition.Builder alt) {
 		return LootItem.lootTableItem(item).setWeight(weiight).when(alt).build();
 	}
 
-    public static void addLootTable(LootTable loot, LootPoolEntryContainer... entry) {
-        LootPool pool = Objects.requireNonNull(loot.getPool("main"));
-        try {
-            for (LootPoolEntryContainer lootEntry : entry) {
-                addEntryToLootPool(pool, lootEntry);
-            }
-        }
+	public static void addLootTable(LootTable loot, LootPoolEntryContainer... entry) {
+		LootPool pool = Objects.requireNonNull(loot.getPool("main"));
+		try {
+			for (LootPoolEntryContainer lootEntry : entry) {
+				addEntryToLootPool(pool, lootEntry);
+			}
+		}
 
-        catch (IllegalAccessException e) { }
-    }
+		catch (IllegalAccessException e) { }
+	}
 
-    private static void addEntryToLootPool(LootPool pool, LootPoolEntryContainer entry) throws IllegalAccessException {
+	private static void addEntryToLootPool(LootPool pool, LootPoolEntryContainer entry) throws IllegalAccessException {
 
-        Field entries = ObfuscationReflectionHelper.findField(LootPool.class, "f_79023_");
-        LootPoolEntryContainer[] entryArray = (LootPoolEntryContainer[]) entries.get(pool);
-        List<LootPoolEntryContainer> newLoot = new ArrayList<>(List.of(entryArray));
+		Field entries = ObfuscationReflectionHelper.findField(LootPool.class, "f_79023_");
+		LootPoolEntryContainer[] entryArray = (LootPoolEntryContainer[]) entries.get(pool);
+		List<LootPoolEntryContainer> newLoot = new ArrayList<>(List.of(entryArray));
 
-        if (newLoot.stream().anyMatch(e -> e == entry)) {
-            throw new RuntimeException("Attempted to add a duplicate entry to pool: " + entry);
-        }
+		if (newLoot.stream().anyMatch(e -> e == entry)) {
+			throw new RuntimeException("Attempted to add a duplicate entry to pool: " + entry);
+		}
 
-        newLoot.add(entry);
-        entries.set(pool, newLoot.toArray(new LootPoolEntryContainer[0]));
-    }
+		newLoot.add(entry);
+		entries.set(pool, newLoot.toArray(new LootPoolEntryContainer[0]));
+	}
 }

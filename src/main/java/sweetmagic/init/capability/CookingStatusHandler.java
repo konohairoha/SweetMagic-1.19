@@ -14,7 +14,7 @@ public class CookingStatusHandler implements ICookingStatus {
 		this.host = entity;
 	}
 
-	public LivingEntity getEntity () {
+	public LivingEntity getEntity() {
 		return this.host;
 	}
 
@@ -31,14 +31,14 @@ public class CookingStatusHandler implements ICookingStatus {
 	}
 
 	public int getLevel() {
-		return this.level;
+		return Math.max(1, this.level);
 	}
 
-	public void setHealth (float health) {
+	public void setHealth(float health) {
 		this.health = health;
 	}
 
-	public float getHealth () {
+	public float getHealth() {
 		return this.health;
 	}
 

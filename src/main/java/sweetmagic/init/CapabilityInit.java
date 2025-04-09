@@ -27,7 +27,6 @@ public class CapabilityInit {
 	}
 
 	public static void attachEntityCapability(AttachCapabilitiesEvent<Entity> event) {
-
 		if (!(event.getObject() instanceof LivingEntity living)) { return; }
 
 		event.addCapability(ICookingStatus.ID, new ICapabilitySerializable<CompoundTag>() {
@@ -40,18 +39,18 @@ public class CapabilityInit {
 
 			@Nonnull
 			@Override
-			public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, Direction facing) {
-				return COOK.orEmpty(capability, inst.cast());
+			public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, Direction face) {
+				return COOK.orEmpty(cap, this.inst.cast());
 			}
 
 			@Override
 			public CompoundTag serializeNBT() {
-				return inst.orElseThrow(NullPointerException::new).serializeNBT();
+				return this.inst.orElseThrow(NullPointerException::new).serializeNBT();
 			}
 
 			@Override
-			public void deserializeNBT(CompoundTag nbt) {
-				inst.orElseThrow(NullPointerException::new).deserializeNBT(nbt);
+			public void deserializeNBT(CompoundTag tag) {
+				this.inst.orElseThrow(NullPointerException::new).deserializeNBT(tag);
 			}
 		});
 	}

@@ -16,7 +16,7 @@ public class SMEnchant1 extends Enchantment {
 	}
 
 	public int getMinCost(int cost) {
-	      return 25;
+		return 25;
 	}
 
 	public int getMaxCost(int cost) {

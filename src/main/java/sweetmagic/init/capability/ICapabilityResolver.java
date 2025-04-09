@@ -26,7 +26,7 @@ public interface ICapabilityResolver<CAPABILITY> extends ICapabilityProvider {
 
 	@NotNull
 	@Override
-	default  <T> LazyOptional<T> getCapability(@NotNull Capability<T> capability, @Nullable Direction side) {
+	default <T> LazyOptional<T> getCapability(@NotNull Capability<T> capability, @Nullable Direction side) {
 		if (capability == getMatchingCapability()) {
 			return getCapabilityUnchecked(capability, side);
 		}
@@ -37,11 +37,11 @@ public interface ICapabilityResolver<CAPABILITY> extends ICapabilityProvider {
 
 	void invalidateAll();
 
-	default NonNullLazy<IItemHandler> getHandler (IItemHandlerModifiable compose, WriteMode mode) {
+	default NonNullLazy<IItemHandler> getHandler(IItemHandlerModifiable compose, WriteMode mode) {
 		return () -> new WrappedItemHandler(compose, mode);
 	}
 
-	default NonNullLazy<IItemHandler> getHandlerArray (IItemHandlerModifiable... compose) {
+	default NonNullLazy<IItemHandler> getHandlerArray(IItemHandlerModifiable... compose) {
 		return () -> new CombinedInvWrapper(compose);
 	}
 

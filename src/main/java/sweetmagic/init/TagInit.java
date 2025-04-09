@@ -19,6 +19,8 @@ public class TagInit {
 	public static final TagKey<Biome> IS_CHERRY_BLOSSOM = smBiomeTag("is_cherry_blossom");
 	public static final TagKey<Biome> IS_MAGIA = smBiomeTag("is_magia");
 	public static final TagKey<Biome> IS_FLOWERGARDEN = smBiomeTag("is_flowergarden");
+	public static final TagKey<Biome> IS_FROZEN = smBiomeTag("is_frozen");
+	public static final TagKey<Biome> IS_MAPLE = smBiomeTag("is_maple");
 	public static final TagKey<Biome> IS_SWEETMAGIC = smBiomeTag("is_sweetmagic");
 
 	public static final TagKey<Block> ALL_TOOLS = smBlockTag("mineable/all_tools");
@@ -34,6 +36,7 @@ public class TagInit {
 	public static final TagKey<Item> WISH_CRYSTAL = smItemTag("wish_crystal");
 	public static final TagKey<Item> MAGIC_PAGE = smItemTag("magic_page");
 	public static final TagKey<Item> COSMIC_ORE = smItemTag("cosmic_ore");
+	public static final TagKey<Item> LAVA = smItemTag("lava_bucket");
 
 	public static final TagKey<Block> STONE = forgeBlockTag("stone");
 

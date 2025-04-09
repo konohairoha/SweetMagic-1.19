@@ -24,87 +24,46 @@ import net.minecraftforge.registries.RegisterEvent;
 import sweetmagic.SweetMagicCore;
 import sweetmagic.api.ientity.ISMMob;
 import sweetmagic.init.entity.animal.WitchAllay;
+import sweetmagic.init.entity.animal.WitchCat;
+import sweetmagic.init.entity.animal.WitchFox;
 import sweetmagic.init.entity.animal.WitchGolem;
 import sweetmagic.init.entity.animal.WitchIfrit;
 import sweetmagic.init.entity.animal.WitchMaster;
 import sweetmagic.init.entity.animal.WitchWindine;
 import sweetmagic.init.entity.animal.WitchWolf;
 import sweetmagic.init.entity.block.ChairEntity;
-import sweetmagic.init.entity.monster.ArchSpider;
-import sweetmagic.init.entity.monster.BlazeTempest;
-import sweetmagic.init.entity.monster.BlazeTempestTornado;
-import sweetmagic.init.entity.monster.CherryPlant;
-import sweetmagic.init.entity.monster.CreeperCalamity;
-import sweetmagic.init.entity.monster.DwarfZombie;
-import sweetmagic.init.entity.monster.DwarfZombieMaster;
-import sweetmagic.init.entity.monster.ElectricCube;
-import sweetmagic.init.entity.monster.EnderMage;
-import sweetmagic.init.entity.monster.EnderShadow;
-import sweetmagic.init.entity.monster.EnderShadowMirage;
-import sweetmagic.init.entity.monster.PhantomWolf;
-import sweetmagic.init.entity.monster.PixeVex;
-import sweetmagic.init.entity.monster.SkullFlame;
-import sweetmagic.init.entity.monster.SkullFlameArcher;
-import sweetmagic.init.entity.monster.SkullFrost;
-import sweetmagic.init.entity.monster.SkullFrostRoyalGuard;
-import sweetmagic.init.entity.monster.WindWitch;
-import sweetmagic.init.entity.monster.WitchCrystal;
+import sweetmagic.init.entity.monster.*;
 import sweetmagic.init.entity.monster.boss.AncientFairy;
 import sweetmagic.init.entity.monster.boss.Arlaune;
+import sweetmagic.init.entity.monster.boss.BlitzWizardMaster;
+import sweetmagic.init.entity.monster.boss.BraveSkeleton;
 import sweetmagic.init.entity.monster.boss.BullFight;
+import sweetmagic.init.entity.monster.boss.ElshariaCurious;
 import sweetmagic.init.entity.monster.boss.HolyAngel;
 import sweetmagic.init.entity.monster.boss.IgnisKnight;
 import sweetmagic.init.entity.monster.boss.QueenFrost;
 import sweetmagic.init.entity.monster.boss.SilverLandRoad;
+import sweetmagic.init.entity.monster.boss.TwilightHora;
 import sweetmagic.init.entity.monster.boss.WhiteButler;
 import sweetmagic.init.entity.monster.boss.WindWitchMaster;
-import sweetmagic.init.entity.projectile.BloodMagicShot;
-import sweetmagic.init.entity.projectile.BubbleMagicShot;
-import sweetmagic.init.entity.projectile.BulletMagicShot;
-import sweetmagic.init.entity.projectile.CalamityBomb;
-import sweetmagic.init.entity.projectile.CherryMagicShot;
-import sweetmagic.init.entity.projectile.CherryRainMagic;
-import sweetmagic.init.entity.projectile.CycloneMagicShot;
-import sweetmagic.init.entity.projectile.DigMagicShot;
-import sweetmagic.init.entity.projectile.ElectricMagicShot;
-import sweetmagic.init.entity.projectile.EnderBall;
-import sweetmagic.init.entity.projectile.EvilArrow;
-import sweetmagic.init.entity.projectile.ExplosionMagicShot;
-import sweetmagic.init.entity.projectile.FireMagicShot;
-import sweetmagic.init.entity.projectile.FrostLaserMagic;
-import sweetmagic.init.entity.projectile.FrostMagicShot;
-import sweetmagic.init.entity.projectile.GravityMagicShot;
-import sweetmagic.init.entity.projectile.HolyBusterMagic;
-import sweetmagic.init.entity.projectile.IgnisBlastMagic;
-import sweetmagic.init.entity.projectile.KnifeShot;
-import sweetmagic.init.entity.projectile.LightMagicShot;
-import sweetmagic.init.entity.projectile.MagicSquareMagic;
-import sweetmagic.init.entity.projectile.MeteorMagicShot;
-import sweetmagic.init.entity.projectile.NormalMagicShot;
-import sweetmagic.init.entity.projectile.PoisonMagicShot;
-import sweetmagic.init.entity.projectile.RainMagicShot;
-import sweetmagic.init.entity.projectile.RockBlastMagicShot;
-import sweetmagic.init.entity.projectile.SickleShot;
-import sweetmagic.init.entity.projectile.ToxicCircle;
-import sweetmagic.init.entity.projectile.TripleTornadoShot;
-import sweetmagic.init.entity.projectile.WindStormMagic;
-import sweetmagic.init.entity.projectile.WindStormShot;
+import sweetmagic.init.entity.monster.boss.WitchSandryon;
+import sweetmagic.init.entity.projectile.*;
 
 public class EntityInit {
 
 	private static final MobCategory MISC = MobCategory.MISC;
 	private static final MobCategory CREATURE = MobCategory.CREATURE;
 	private static final MobCategory MONSTER = MobCategory.MONSTER;
-
-    public static final DeferredRegister<EntityType<?>> ENTITY_TYPE = SweetMagicCore.getDef(ForgeRegistries.ENTITY_TYPES);
+	public static final DeferredRegister<EntityType<?>> ENTITY_TYPE = SweetMagicCore.getDef(ForgeRegistries.ENTITY_TYPES);
 	public static final DeferredRegister<Item> SPAWN_EGGS = SweetMagicCore.getDef(ForgeRegistries.ITEMS);
-
 	public static Map<EntityType<?>, String> entityMap = new HashMap<>();
 	public static Map<EntityInfo, String> entityEggMap = new HashMap<>();
 
 	public static EntityType<EnderBall> enderBall = getEntity("enderball", EnderBall::new, MISC);
 	public static EntityType<EvilArrow> evilArrow = getEntity("evilarrow", EvilArrow::new, MISC);
 	public static EntityType<CalamityBomb> calamityBomb = getEntity("calamitybomb", CalamityBomb::new, MISC);
+	public static EntityType<LightningRod> lightningRod = getEntity("lightningrod", LightningRod::new, MISC);
+	public static EntityType<TridentThunder> tridentThunder = getEntity("tridentthunder", TridentThunder::new, MISC, 0.5F, 0.5F);
 
 	public static EntityType<LightMagicShot> lightMagic = getEntity("lightmagic", LightMagicShot::new, MISC);
 	public static EntityType<FireMagicShot> fireMagic = getEntity("firemagic", FireMagicShot::new, MISC);
@@ -119,8 +78,6 @@ public class EntityInit {
 	public static EntityType<BulletMagicShot> bulletMagic = getEntity("bulletmagic", BulletMagicShot::new, MISC);
 	public static EntityType<BubbleMagicShot> bubbleMagic = getEntity("bubblemagic", BubbleMagicShot::new, MISC);
 	public static EntityType<BloodMagicShot> bloodMagic = getEntity("bloodmagic", BloodMagicShot::new, MISC);
-	public static EntityType<RainMagicShot> rainMagic = getEntity("rain_magic", RainMagicShot::new, MISC);
-	public static EntityType<MeteorMagicShot> meteorMagic = getEntity("meteomagic", MeteorMagicShot::new, MISC);
 	public static EntityType<RockBlastMagicShot> rockBlastMagic = getEntity("rockblastmagic", RockBlastMagicShot::new, MISC);
 	public static EntityType<FrostLaserMagic> frostLaser = getEntity("frost_laser", FrostLaserMagic::new, MISC);
 	public static EntityType<HolyBusterMagic> holyBusert = getEntity("holy_buster", HolyBusterMagic::new, MISC);
@@ -134,14 +91,23 @@ public class EntityInit {
 	public static EntityType<ToxicCircle> toxicCircle = getEntity("toxic_circle", ToxicCircle::new, MISC);
 	public static EntityType<KnifeShot> knifeShot = getEntity("knifeshot", KnifeShot::new, MISC);
 	public static EntityType<SickleShot> sickleShot = getEntity("sickleshot", SickleShot::new, MISC);
+	public static EntityType<SoulBlazeShot> soulBlazeShot = getEntity("soulblaze", SoulBlazeShot::new, MISC);
+	public static EntityType<TwiLightShot> twiLightShot = getEntity("twilightshot", TwiLightShot::new, MISC);
+	public static EntityType<BraveShot> braveShot = getEntity("braveshot", BraveShot::new, MISC);
+	public static EntityType<ExplosionThunderShot> explosionThunder = getEntity("explosionthunder", ExplosionThunderShot::new, MISC);
+	public static EntityType<LigningBulletShot> ligningBullet = getEntity("ligningbullet", LigningBulletShot::new, MISC);
+	public static EntityType<InfinitWandMagic> infinitWand = getEntity("infinit_wand", InfinitWandMagic::new, MISC);
+	public static EntityType<ElectricSphere> electricSphere = getEntity("electricsphere", ElectricSphere::new, MISC);
 
 	public static EntityType<ChairEntity> chair = getEntity("chair", ChairEntity::new, MISC);
 	public static EntityType<WitchCrystal> witchCrystal = getEntity("witch_crystal", WitchCrystal::new, MONSTER, 1F, 2F);
 	public static EntityType<CherryPlant> cherryPlant = getEntity("cherry_plant", CherryPlant::new, MONSTER, 1.75F, 1.75F);
 
 	public static EntityType<WitchWolf> witchWolf = getEntityFire("witch_wolf", WitchWolf::new, CREATURE, 0.85F, 0.9F);
-	public static EntityType<WitchGolem> witchGolem = getEntityFire("witch_golem", WitchGolem::new, CREATURE, 1.25F, 2.75F);
 	public static EntityType<WitchAllay> witchAllay = getEntityFire("witch_allay", WitchAllay::new, CREATURE, 0.75F, 0.75F);
+	public static EntityType<WitchGolem> witchGolem = getEntityFire("witch_golem", WitchGolem::new, CREATURE, 1.25F, 2.75F);
+	public static EntityType<WitchFox> witchFox = getEntityFire("witch_fox", WitchFox::new, CREATURE, 0.85F, 0.9F);
+	public static EntityType<WitchCat> witchCat = getEntityFire("witch_cat", WitchCat::new, CREATURE, 0.85F, 0.9F);
 	public static EntityType<WitchMaster> witchMaster = getEntityFire("witch_master", WitchMaster::new, CREATURE, 0.7F, 1.275F);
 	public static EntityType<WitchWindine> witchWindine = getEntityFire("witch_windine", WitchWindine::new, CREATURE, 0.8F, 1.95F);
 	public static EntityType<WitchIfrit> witchIfrit = getEntityFire("witch_ifrit", WitchIfrit::new, CREATURE, 0.8F, 1.95F);
@@ -156,7 +122,9 @@ public class EntityInit {
 	public static EntityType<DwarfZombie> dwarfZombie = getEntityEgg("dwarfzombie", DwarfZombie::new, MONSTER, true, 0.6F, 1.99F, 15040352);
 	public static EntityType<WindWitch> windWitch = getEntityEgg("windwitch", WindWitch::new, MONSTER, true, 0.45F, 1.4F, 6507327);
 	public static EntityType<PixeVex> pixeVex = getEntityEgg("pixevex", PixeVex::new, MONSTER, true, 0.525F, 1.4F, 9237157);
-	public static EntityType<PhantomWolf> phantomWolf = getEntityEgg("phantomwolf", PhantomWolf::new, MONSTER, true, 0.525F, 1.4F, 9237157);
+	public static EntityType<PhantomWolf> phantomWolf = getEntityEgg("phantomwolf", PhantomWolf::new, MONSTER, true, 0.525F, 1.4F, 15066597);
+	public static EntityType<ElectricGolem> electricGolem = getEntityEgg("electricgolem", ElectricGolem::new, MONSTER, true, 1.25F, 2.75F, 15066597);
+	public static EntityType<BlitzWizard> blitzWizard = getEntityEgg("blitz_wizard", BlitzWizard::new, MONSTER, true, 1.2F, 2.25F, 15066597);
 
 	public static EntityType<SkullFrostRoyalGuard> skullFrostRoyalGuard = getEntityUniqueEgg("skullfrost_royalguard", SkullFrostRoyalGuard::new, MONSTER, true, 1F, 2.6F, 7842303);
 	public static EntityType<SkullFlameArcher> skullFlameArcher = getEntityUniqueEgg("skullflame_archer", SkullFlameArcher::new, MONSTER, true, 1F, 2.6F, 6507327);
@@ -173,8 +141,13 @@ public class EntityInit {
 	public static EntityType<BullFight> bullfight = getEntitySMBossEgg("bullfight", BullFight::new, MONSTER, 3F, 2.25F, 6167571);
 	public static EntityType<AncientFairy> ancientFairy = getEntitySMBossEgg("ancientfairy", AncientFairy::new, MONSTER, 1.2F, 3.5F, 9237157);
 	public static EntityType<Arlaune> arlaune = getEntitySMBossEgg("arlaune", Arlaune::new, MONSTER, 1.2F, 2.5F, 16418982);
-	public static EntityType<SilverLandRoad> silverLandRoad = getEntitySMBossEgg("silver_landroad", SilverLandRoad::new, MONSTER, 2F, 2F, 16418982);
-	public static EntityType<WhiteButler> whiteButler = getEntitySMBossEgg("white_butler", WhiteButler::new, MONSTER, 1.2F, 2.5F, 16418982);
+	public static EntityType<SilverLandRoad> silverLandRoad = getEntitySMBossEgg("silver_landroad", SilverLandRoad::new, MONSTER, 2F, 2F, 15066597);
+	public static EntityType<WhiteButler> whiteButler = getEntitySMBossEgg("white_butler", WhiteButler::new, MONSTER, 1.2F, 2.5F, 16382716);
+	public static EntityType<BlitzWizardMaster> blitzWizardMaster = getEntitySMBossEgg("blitz_wizard_master", BlitzWizardMaster::new, MONSTER, 1.2F, 2.5F, 16382716);
+	public static EntityType<TwilightHora> twilightHora = getEntitySMBossEgg("twilight_hora", TwilightHora::new, MONSTER, 1.2F, 2.5F, 16382716);
+	public static EntityType<BraveSkeleton> braveSkeleton = getEntitySMBossEgg("brave_skeleton", BraveSkeleton::new, MONSTER, 1.2F, 3F, 16382716);
+	public static EntityType<ElshariaCurious> elshariaCurious = getEntitySMBossEgg("elsharia_curious", ElshariaCurious::new, MONSTER, 1.2F, 3.5F, 16382716);
+	public static EntityType<WitchSandryon> witchSandryon = getEntitySMBossEgg("witch_sandryon", WitchSandryon::new, MONSTER, 1.2F, 2.25F, 16382716);
 
 	// えんちちーのステータスを設定
 	@SubscribeEvent
@@ -197,13 +170,17 @@ public class EntityInit {
 		event.put(witchCrystal, WitchCrystal.registerAttributes().build());
 		event.put(cherryPlant, CherryPlant.registerAttributes().build());
 		event.put(witchWolf, WitchWolf.registerAttributes().build());
-		event.put(witchGolem, WitchGolem.registerAttributes().build());
 		event.put(witchAllay, WitchAllay.registerAttributes().build());
+		event.put(witchGolem, WitchGolem.registerAttributes().build());
+		event.put(witchFox, WitchFox.registerAttributes().build());
+		event.put(witchCat, WitchCat.registerAttributes().build());
 		event.put(witchMaster, WitchMaster.registerAttributes().build());
 		event.put(witchWindine, WitchWindine.registerAttributes().build());
 		event.put(witchIfrit, WitchIfrit.registerAttributes().build());
 		event.put(pixeVex, PixeVex.registerAttributes().build());
 		event.put(phantomWolf, PhantomWolf.registerAttributes().build());
+		event.put(electricGolem, ElectricGolem.registerAttributes().build());
+		event.put(blitzWizard, BlitzWizard.registerAttributes().build());
 		event.put(queenFrost, QueenFrost.registerAttributes().build());
 		event.put(holyAngel, HolyAngel.registerAttributes().build());
 		event.put(ignisKnight, IgnisKnight.registerAttributes().build());
@@ -213,6 +190,11 @@ public class EntityInit {
 		event.put(arlaune, Arlaune.registerAttributes().build());
 		event.put(silverLandRoad, SilverLandRoad.registerAttributes().build());
 		event.put(whiteButler, WhiteButler.registerAttributes().build());
+		event.put(blitzWizardMaster, BlitzWizardMaster.registerAttributes().build());
+		event.put(twilightHora, TwilightHora.registerAttributes().build());
+		event.put(braveSkeleton, BraveSkeleton.registerAttributes().build());
+		event.put(elshariaCurious, ElshariaCurious.registerAttributes().build());
+		event.put(witchSandryon, WitchSandryon.registerAttributes().build());
 	}
 
 	// えんちちースポーンの設定
@@ -248,26 +230,26 @@ public class EntityInit {
 	}
 
 	// スポーンエッグなしのえんちちー設定
-	public static <T extends Entity> EntityType<T> getEntity (String name, EntityType.EntityFactory<T> fact, MobCategory cate, float xSize, float ySize) {
+	public static <T extends Entity> EntityType<T> getEntity(String name, EntityType.EntityFactory<T> fact, MobCategory cate, float xSize, float ySize) {
 		EntityType<T> eType = entityBuild(fact, cate).sized(xSize, ySize).clientTrackingRange(8).setTrackingRange(512).setUpdateInterval(1).build(name);
 		entityMap.put(eType, name);
 		return eType;
 	}
 
 	// スポーンエッグなしのえんちちー設定
-	public static <T extends Entity> EntityType<T> getEntityFire (String name, EntityType.EntityFactory<T> fact, MobCategory cate, float xSize, float ySize) {
+	public static <T extends Entity> EntityType<T> getEntityFire(String name, EntityType.EntityFactory<T> fact, MobCategory cate, float xSize, float ySize) {
 		EntityType<T> eType = entityBuild(fact, cate).fireImmune().sized(xSize, ySize).clientTrackingRange(8).setTrackingRange(512).setUpdateInterval(1).build(name);
 		entityMap.put(eType, name);
 		return eType;
 	}
 
 	// スポーンエッグなしのえんちちー設定（サイズ固定）
-	public static <T extends Entity> EntityType<T> getEntity (String name, EntityType.EntityFactory<T> fact, MobCategory cate) {
+	public static <T extends Entity> EntityType<T> getEntity(String name, EntityType.EntityFactory<T> fact, MobCategory cate) {
 		return getEntity(name, fact, cate, 1F, 1F);
 	}
 
 	// スポーンエッグ付きえんちちー設定
-	public static <T extends Entity> EntityType<T> getEntityEgg (String name, EntityType.EntityFactory<T> fact, MobCategory cate, boolean isFire, float x, float z, int secondary) {
+	public static <T extends Entity> EntityType<T> getEntityEgg(String name, EntityType.EntityFactory<T> fact, MobCategory cate, boolean isFire, float x, float z, int secondary) {
 		EntityType.Builder<T> build = isFire ? entityBuild(fact, cate).fireImmune() : entityBuild(fact, cate);
 		EntityType<T> eType = build.sized(x, z).clientTrackingRange(8).build(SweetMagicCore.MODID + ":" + name);
 		entityEggMap.put(new EntityInfo(eType, 15985789, secondary), name);
@@ -275,7 +257,7 @@ public class EntityInit {
 	}
 
 	// スポーンエッグ付き中ボスえんちちー設定
-	public static <T extends Entity> EntityType<T> getEntityUniqueEgg (String name, EntityType.EntityFactory<T> fact, MobCategory cate, boolean isFire, float x, float z, int secondary) {
+	public static <T extends Entity> EntityType<T> getEntityUniqueEgg(String name, EntityType.EntityFactory<T> fact, MobCategory cate, boolean isFire, float x, float z, int secondary) {
 		EntityType.Builder<T> build = isFire ? entityBuild(fact, cate).fireImmune() : entityBuild(fact, cate);
 		EntityType<T> eType = build.sized(x, z).clientTrackingRange(8).build(SweetMagicCore.MODID + ":" + name);
 		entityEggMap.put(new EntityInfo(eType, 16237196, secondary), name);
@@ -283,14 +265,14 @@ public class EntityInit {
 	}
 
 	// スポーンエッグ付き大ボスえんちちー設定
-	public static <T extends Entity> EntityType<T> getEntityBossEgg (String name, EntityType.EntityFactory<T> fact, MobCategory cate, float x, float z, int secondary) {
+	public static <T extends Entity> EntityType<T> getEntityBossEgg(String name, EntityType.EntityFactory<T> fact, MobCategory cate, float x, float z, int secondary) {
 		EntityType<T> eType = entityBuild(fact, cate).fireImmune().sized(x, z).clientTrackingRange(8).build(SweetMagicCore.MODID + ":" + name);
 		entityEggMap.put(new EntityInfo(eType, 15250701, secondary), name);
 		return eType;
 	}
 
 	// スポーンエッグ付き大ボスえんちちー設定
-	public static <T extends Entity> EntityType<T> getEntitySMBossEgg (String name, EntityType.EntityFactory<T> fact, MobCategory cate, float x, float z, int secondary) {
+	public static <T extends Entity> EntityType<T> getEntitySMBossEgg(String name, EntityType.EntityFactory<T> fact, MobCategory cate, float x, float z, int secondary) {
 		EntityType<T> eType = entityBuild(fact, cate).fireImmune().sized(x, z).clientTrackingRange(8).build(SweetMagicCore.MODID + ":" + name);
 		entityEggMap.put(new EntityInfo(eType, 14710285, secondary), name);
 		return eType;
@@ -298,41 +280,28 @@ public class EntityInit {
 
 	// えんちちータイプ設定
 	public static <T extends Entity> EntityType.Builder<T> entityBuild(EntityType.EntityFactory<T> fact, MobCategory cate) {
-        return EntityType.Builder.<T>of(fact, cate);
+		return EntityType.Builder.<T>of(fact, cate);
 	}
 
 	@SubscribeEvent
-    public static void registerEntity(RegisterEvent event) {
-        event.register(ForgeRegistries.Keys.ENTITY_TYPES, h -> {
-    		entityMap.forEach((key, val) -> h.register(SweetMagicCore.getSRC(val), key));
-    		entityEggMap.forEach((key, val) -> h.register(SweetMagicCore.getSRC(val), key.getEntityType()));
+	public static void registerEntity(RegisterEvent event) {
+		event.register(ForgeRegistries.Keys.ENTITY_TYPES, h -> {
+			entityMap.forEach((key, val) -> h.register(SweetMagicCore.getSRC(val), key));
+			entityEggMap.forEach((key, val) -> h.register(SweetMagicCore.getSRC(val), key.eType()));
 		});
 
-        event.register(ForgeRegistries.Keys.ITEMS, h -> {
-        	for (Entry<EntityInfo, String> map : entityEggMap.entrySet()) {
-        		EntityInfo enInfo = map.getKey();
-        		Item item = new ForgeSpawnEggItem(() -> (EntityType<? extends Mob>) enInfo.getEntityType(), enInfo.getPrimary(), enInfo.getSecondary(), new Item.Properties().tab(CreativeModeTab.TAB_MISC));
-    			h.register(SweetMagicCore.getSRC(map.getValue() + "_spawn_egg"), item);
-        	}
+		event.register(ForgeRegistries.Keys.ITEMS, h -> {
+			for (Entry<EntityInfo, String> map : entityEggMap.entrySet()) {
+				EntityInfo enInfo = map.getKey();
+				Item item = new ForgeSpawnEggItem(() -> (EntityType<? extends Mob>) enInfo.eType(), enInfo.primary(), enInfo.secondary(), new Item.Properties().tab(CreativeModeTab.TAB_MISC));
+				h.register(SweetMagicCore.getSRC(map.getValue() + "_spawn_egg"), item);
+			}
 		});
-    }
+	}
 
 	public static <T extends Mob> void register (EntityType<T> eType, SpawnPlacements.SpawnPredicate<T> spawnRule) {
 		SpawnPlacements.register(eType, SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, spawnRule);
 	}
 
-	public static record EntityInfo(EntityType<?> eType, int primary, int secondary) {
-
-		public EntityType<?> getEntityType () {
-			return this.eType;
-		}
-
-		public int getPrimary () {
-			return this.primary;
-		}
-
-		public int getSecondary () {
-			return this.secondary;
-		}
-	}
+	public static record EntityInfo(EntityType<?> eType, int primary, int secondary) { }
 }

@@ -13,10 +13,9 @@ import sweetmagic.init.potion.SMEffect;
 
 public class PotionInit {
 
-	private static final MobEffectCategory BUFF = MobEffectCategory.BENEFICIAL;
-	private static final MobEffectCategory DEBUFF = MobEffectCategory.HARMFUL;
-	private static final MobEffectCategory NONE = MobEffectCategory.NEUTRAL;
-
+	public static final MobEffectCategory BUFF = MobEffectCategory.BENEFICIAL;
+	public static final MobEffectCategory DEBUFF = MobEffectCategory.HARMFUL;
+	public static final MobEffectCategory NONE = MobEffectCategory.NEUTRAL;
 	public static Map<MobEffect, String> potionMap = new HashMap<>();
 
 	public static final MobEffect aether_armor = new SMEffect("aether_armor", 0, BUFF, false);
@@ -52,6 +51,13 @@ public class PotionInit {
 	public static final MobEffect lightning_wind_vulnerable = new SMEffect("lightning_wind_vulnerable", 30, NONE, false);
 	public static final MobEffect dig_poison_vulnerable = new SMEffect("dig_poison_vulnerable", 31, NONE, false);
 	public static final MobEffect recast_reduction = new SMEffect("recast_reduction", 32, NONE, false);
+	public static final MobEffect magic_array = new SMEffect("magic_array", 33, NONE, false);
+	public static final MobEffect queen_bless = new SMEffect("queen_bless", 34, NONE, false);
+	public static final MobEffect holy_bless = new SMEffect("holy_bless", 35, NONE, false);
+	public static final MobEffect knight_bless = new SMEffect("knight_bless", 36, NONE, false);
+	public static final MobEffect witch_bless = new SMEffect("witch_bless", 37, NONE, false);
+	public static final MobEffect arlaune_bless = new SMEffect("arlaune_bless", 38, NONE, false);
+	public static final MobEffect sandryon_bless = new SMEffect("sandryon_bless", 39, NONE, false);
 
 	@SubscribeEvent
 	public static void registerPotion(RegisterEvent event) {

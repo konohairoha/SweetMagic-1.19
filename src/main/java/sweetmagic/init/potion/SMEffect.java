@@ -1,5 +1,6 @@
 package sweetmagic.init.potion;
 
+import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
@@ -12,10 +13,10 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import sweetmagic.init.ParticleInit;
 import sweetmagic.init.PotionInit;
+import sweetmagic.util.PlayerHelper;
 import sweetmagic.util.SMDamage;
 
 public class SMEffect extends MobEffect {
@@ -24,15 +25,14 @@ public class SMEffect extends MobEffect {
 	private final boolean isActive;
 	public static final UUID MODIFIER_UUID = UUID.fromString("CE9DBC2A-EE3F-43F5-9DF7-F7F1EE4915A9");
 	public static final UUID SPEED_UUID = UUID.fromString("CE9DBC2A-EE3F-43F5-9DF7-F7F1EE1222A9");
-//	public static final UUID SWIM_UUID = UUID.fromString("CE9DBC2A-EE3F-43F5-9DF7-F7F1EE1299A9");
 
-	public SMEffect (String name, int data, MobEffectCategory buff, boolean isActive) {
+	public SMEffect(String name, int data, MobEffectCategory buff, boolean isActive) {
 		super(buff, 0);
 		this.isActive = isActive;
 		PotionInit.potionMap.put(this, name);
 	}
 
-	public SMEffect (String name, int data, MobEffectCategory buff) {
+	public SMEffect(String name, int data, MobEffectCategory buff) {
 		super(buff, 0);
 		this.isActive = data == 7;
 
@@ -76,10 +76,8 @@ public class SMEffect extends MobEffect {
 			if (entity.getHealth() < entity.getMaxHealth()) {
 				entity.heal(1F);
 
-				Level world = entity.level;
-
-				if (world instanceof ServerLevel sever) {
-					RandomSource rand = world.random;
+				if (entity.level instanceof ServerLevel sever) {
+					RandomSource rand = sever.random;
 					double x = entity.xo;
 					double y = entity.yo + 1D;
 					double z = entity.zo;
@@ -103,11 +101,9 @@ public class SMEffect extends MobEffect {
 		else if (this == PotionInit.flame) {
 			this.magicDamage(entity, SMDamage.flameDamage, 0.75F);
 
-			Level world = entity.level;
+			if (entity.level instanceof ServerLevel sever) {
 
-			if (world instanceof ServerLevel sever) {
-
-				RandomSource rand = world.random;
+				RandomSource rand = sever.random;
 				double x = entity.xo;
 				double y = entity.yo + 1D;
 				double z = entity.zo;
@@ -167,19 +163,16 @@ public class SMEffect extends MobEffect {
 				float z = (float) (entity.getZ() - 0.15F + rand.nextFloat() * 0.5F);
 
 				for (int i = 0; i < 1; i++) {
-					sever.sendParticles(ParticleInit.BUBBLE.get(), x, y, z, 1, 0F, 0F, 0F, 0.03F);
+					sever.sendParticles(ParticleInit.BUBBLE, x, y, z, 1, 0F, 0F, 0F, 0.03F);
 				}
 			}
 		}
 
-
 		else if (this == PotionInit.darkness_fog) {
 
-			Level world = entity.level;
+			if (entity.level instanceof ServerLevel sever) {
 
-			if (world instanceof ServerLevel sever) {
-
-				RandomSource rand = world.random;
+				RandomSource rand = sever.random;
 				double x = entity.xo;
 				double y = entity.yo + 1D;
 				double z = entity.zo;
@@ -188,7 +181,7 @@ public class SMEffect extends MobEffect {
 					double d0 = rand.nextDouble() * 0.075D;
 					double d1 = 0.05D + rand.nextDouble() * 0.1D;
 					double d2 = rand.nextDouble() * 0.075D;
-					sever.sendParticles(ParticleInit.DARK.get(), this.getRandPos(x, rand, 0.75D), this.getRandPos(y, rand, 1D) + 0.5D, this.getRandPos(z, rand, 0.75D), 0, d0, d1, d2, 1F);
+					sever.sendParticles(ParticleInit.DARK, this.getRandPos(x, rand, 0.75D), this.getRandPos(y, rand, 1D) + 0.5D, this.getRandPos(z, rand, 0.75D), 0, d0, d1, d2, 1F);
 				}
 			}
 		}
@@ -199,13 +192,9 @@ public class SMEffect extends MobEffect {
 	}
 
 	// デバフ解除
-	public void actionReflash (LivingEntity entity) {
-		for (MobEffectInstance effect : entity.getActiveEffects()) {
-			MobEffect potion = effect.getEffect();
-			if (potion.getCategory() == MobEffectCategory.HARMFUL) {
-				entity.removeEffect(potion);
-			}
-		}
+	public void actionReflash(LivingEntity entity) {
+		List<MobEffectInstance> effecList = PlayerHelper.getEffectList(entity, PotionInit.DEBUFF);
+		effecList.forEach(p -> entity.removeEffect(p.getEffect()));
 	}
 
 	// 毒発動が出来るか
@@ -216,7 +205,7 @@ public class SMEffect extends MobEffect {
 			return j > 0 ? level % j == 0 : true;
 		}
 
-		else if (this == PotionInit.frost && level > 1) {
+		else if (this == PotionInit.frost && level >= 1) {
 			int j = 40 >> time;
 			return j > 0 ? level % j == 0 : true;
 		}
@@ -228,7 +217,7 @@ public class SMEffect extends MobEffect {
 		return pos + ((rand.nextDouble() - rand.nextDouble()) * scale);
 	}
 
-	public void magicDamage (LivingEntity entity, SMDamage src, float dame) {
+	public void magicDamage(LivingEntity entity, SMDamage src, float dame) {
 		src.setDebuffFlag(true);
 		entity.hurt(src, dame);
 		entity.invulnerableTime = 0;
