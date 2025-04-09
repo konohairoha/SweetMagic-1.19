@@ -15,7 +15,7 @@ import sweetmagic.SweetMagicCore;
 import sweetmagic.init.entity.projectile.AbstractMagicShot;
 import sweetmagic.util.RenderUtil;
 
-public class RenderFrostShot extends EntityRenderer<AbstractMagicShot> {
+public class RenderFrostShot<T extends AbstractMagicShot> extends EntityRenderer<T> {
 
 	private static final ResourceLocation TEX = SweetMagicCore.getSRC("textures/block/empty.png");
 	private final BlockRenderDispatcher render;
@@ -27,19 +27,19 @@ public class RenderFrostShot extends EntityRenderer<AbstractMagicShot> {
 	}
 
 	@Override
-	public void render(AbstractMagicShot entity, float yaw, float part, PoseStack pose, MultiBufferSource buf, int light) {
-		if (entity.getData() <= 1) { return; }
+	public void render(T entity, float yaw, float part, PoseStack pose, MultiBufferSource buf, int light) {
+		if (entity.getData() <= 1 || entity.getChangeParticle()) { return; }
 
 		pose.pushPose();
 		pose.translate(-0.5D, 0D, -0.5D);
-        ModelBlockRenderer.enableCaching();
+		ModelBlockRenderer.enableCaching();
 		RenderUtil.renderBlock(entity.level, entity.blockPosition(), STATE, this.render, pose, buf, OverlayTexture.NO_OVERLAY);
-        ModelBlockRenderer.clearCache();
+		ModelBlockRenderer.clearCache();
 		pose.popPose();
 	}
 
 	@Override
-	public ResourceLocation getTextureLocation(AbstractMagicShot entity) {
+	public ResourceLocation getTextureLocation(T entity) {
 		return TEX;
 	}
 }

@@ -12,7 +12,7 @@ import net.minecraft.world.entity.LivingEntity;
 import sweetmagic.SweetMagicCore;
 import sweetmagic.init.entity.projectile.PoisonMagicShot;
 
-public class RenderPoisonMagic extends EntityRenderer<PoisonMagicShot> {
+public class RenderPoisonMagic<T extends PoisonMagicShot> extends EntityRenderer<T> {
 
 	private int tickTime = 0;
 	private static final ResourceLocation TEX = SweetMagicCore.getSRC("textures/block/empty.png");
@@ -24,7 +24,7 @@ public class RenderPoisonMagic extends EntityRenderer<PoisonMagicShot> {
 	}
 
 	@Override
-	public void render(PoisonMagicShot entity, float yaw, float part, PoseStack pose, MultiBufferSource buf, int light) {
+	public void render(T entity, float yaw, float part, PoseStack pose, MultiBufferSource buf, int light) {
 		if (!entity.getWolf()) { return; }
 
 		LivingEntity wolf = entity.getRenderEntity();
@@ -40,7 +40,7 @@ public class RenderPoisonMagic extends EntityRenderer<PoisonMagicShot> {
 	}
 
 	@Override
-	public ResourceLocation getTextureLocation(PoisonMagicShot entity) {
+	public ResourceLocation getTextureLocation(T entity) {
 		return TEX;
 	}
 }

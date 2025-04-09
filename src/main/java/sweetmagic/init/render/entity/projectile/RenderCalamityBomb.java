@@ -14,7 +14,7 @@ import sweetmagic.SweetMagicCore;
 import sweetmagic.init.BlockInit;
 import sweetmagic.init.entity.projectile.CalamityBomb;
 
-public class RenderCalamityBomb extends EntityRenderer<CalamityBomb> {
+public class RenderCalamityBomb<T extends CalamityBomb> extends EntityRenderer<T> {
 
 	private static final ItemStack stack = new ItemStack(BlockInit.calamity_bomb);
 	private static final ResourceLocation TEX = SweetMagicCore.getSRC("textures/block/empty.png");
@@ -24,7 +24,7 @@ public class RenderCalamityBomb extends EntityRenderer<CalamityBomb> {
 	}
 
 	@Override
-	public void render(CalamityBomb entity, float yaw, float part, PoseStack pose, MultiBufferSource buf, int light) {
+	public void render(T entity, float yaw, float part, PoseStack pose, MultiBufferSource buf, int light) {
 
 		pose.pushPose();
 		float size = 1.0F;
@@ -48,7 +48,7 @@ public class RenderCalamityBomb extends EntityRenderer<CalamityBomb> {
 	}
 
 	@Override
-	public ResourceLocation getTextureLocation(CalamityBomb entity) {
+	public ResourceLocation getTextureLocation(T entity) {
 		return TEX;
 	}
 }

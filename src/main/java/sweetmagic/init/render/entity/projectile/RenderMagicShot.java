@@ -16,7 +16,7 @@ import net.minecraft.util.Mth;
 import sweetmagic.SweetMagicCore;
 import sweetmagic.init.entity.projectile.AbstractMagicShot;
 
-public class RenderMagicShot extends EntityRenderer<AbstractMagicShot> {
+public class RenderMagicShot<T extends AbstractMagicShot> extends EntityRenderer<T> {
 
 	private static final ResourceLocation TEX = SweetMagicCore.getSRC("textures/block/empty.png");
 	public static final ResourceLocation ARROW = new ResourceLocation("textures/entity/projectiles/arrow.png");
@@ -26,7 +26,7 @@ public class RenderMagicShot extends EntityRenderer<AbstractMagicShot> {
 	}
 
 	@Override
-	public void render(AbstractMagicShot entity, float yaw, float part, PoseStack pose, MultiBufferSource buf, int light) {
+	public void render(T entity, float yaw, float part, PoseStack pose, MultiBufferSource buf, int light) {
 		if (!entity.getArrow()) { return; }
 
 		pose.pushPose();
@@ -68,7 +68,7 @@ public class RenderMagicShot extends EntityRenderer<AbstractMagicShot> {
 	}
 
 	@Override
-	public ResourceLocation getTextureLocation(AbstractMagicShot entity) {
+	public ResourceLocation getTextureLocation(T entity) {
 		return entity.getArrow() ? ARROW : TEX;
 	}
 

@@ -5,7 +5,7 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import sweetmagic.init.entity.projectile.EnderBall;
 
-public class RenderEnderBall extends RenderBase<EnderBall> {
+public class RenderEnderBall<T extends EnderBall> extends RenderBase<T> {
 
 	private static final ResourceLocation TEX = new ResourceLocation("textures/item/ender_pearl.png");
 	private static final RenderType RENDER_TYPE = RenderType.entityCutoutNoCull(TEX);
@@ -14,7 +14,7 @@ public class RenderEnderBall extends RenderBase<EnderBall> {
 		super(con);
 	}
 
-	public ResourceLocation getTextureLocation(EnderBall entity) {
+	public ResourceLocation getTextureLocation(T entity) {
 		return TEX;
 	}
 

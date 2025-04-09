@@ -16,7 +16,7 @@ import sweetmagic.init.BlockInit;
 import sweetmagic.init.entity.projectile.AbstractMagicShot;
 import sweetmagic.util.RenderUtil;
 
-public class RenderToxicCircle extends EntityRenderer<AbstractMagicShot> {
+public class RenderToxicCircle<T extends AbstractMagicShot> extends EntityRenderer<T> {
 
 	private static final ResourceLocation TEX = SweetMagicCore.getSRC("textures/block/empty.png");
 	private final BlockRenderDispatcher render;
@@ -28,22 +28,20 @@ public class RenderToxicCircle extends EntityRenderer<AbstractMagicShot> {
 	}
 
 	@Override
-	public void render(AbstractMagicShot entity, float yaw, float part, PoseStack pose, MultiBufferSource buf, int light) {
+	public void render(T entity, float yaw, float part, PoseStack pose, MultiBufferSource buf, int light) {
 		pose.pushPose();
-
 		float f1 = entity.tickCount * 3F;
 		pose.mulPose(Vector3f.YP.rotationDegrees(f1));
 		pose.scale(0.67F, 0.67F, 0.67F);
 		pose.translate(-0.5D, 0.25D, -0.5D);
-
-        ModelBlockRenderer.enableCaching();
+		ModelBlockRenderer.enableCaching();
 		RenderUtil.renderBlock(entity.level, entity.blockPosition(), STATE, this.render, pose, buf, OverlayTexture.NO_OVERLAY);
-        ModelBlockRenderer.clearCache();
+		ModelBlockRenderer.clearCache();
 		pose.popPose();
 	}
 
 	@Override
-	public ResourceLocation getTextureLocation(AbstractMagicShot entity) {
+	public ResourceLocation getTextureLocation(T entity) {
 		return TEX;
 	}
 }

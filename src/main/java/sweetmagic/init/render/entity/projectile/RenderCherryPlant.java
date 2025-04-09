@@ -17,7 +17,7 @@ import sweetmagic.init.BlockInit;
 import sweetmagic.init.entity.monster.CherryPlant;
 import sweetmagic.util.RenderUtil;
 
-public class RenderCherryPlant extends EntityRenderer<CherryPlant> {
+public class RenderCherryPlant<T extends CherryPlant> extends EntityRenderer<T> {
 
 	private static final Block PLANT = BlockInit.cherry_plant;
 	private final BlockRenderDispatcher render;
@@ -27,20 +27,20 @@ public class RenderCherryPlant extends EntityRenderer<CherryPlant> {
 		this.render = con.getBlockRenderDispatcher();
 	}
 
-	public ResourceLocation getTextureLocation(CherryPlant entity) {
+	public ResourceLocation getTextureLocation(T entity) {
 		return TextureAtlas.LOCATION_BLOCKS;
 	}
 
-	public void render(CherryPlant entity, float parTick, float par2, PoseStack pose, MultiBufferSource buf, int light) {
+	public void render(T entity, float parTick, float par2, PoseStack pose, MultiBufferSource buf, int light) {
 		pose.pushPose();
 		pose.translate(-0.5D, 0D, -0.5D);
 
 		BlockState state = PLANT.defaultBlockState();
 		state = state.setValue(ISMCrop.AGE3, entity.getStage());
 
-        ModelBlockRenderer.enableCaching();
+		ModelBlockRenderer.enableCaching();
 		RenderUtil.renderBlock(entity.level, entity.blockPosition(), state, this.render, pose, buf, OverlayTexture.NO_OVERLAY);
-        ModelBlockRenderer.clearCache();
+		ModelBlockRenderer.clearCache();
 		pose.popPose();
 	}
 }

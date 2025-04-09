@@ -6,7 +6,7 @@ import net.minecraft.resources.ResourceLocation;
 import sweetmagic.SweetMagicCore;
 import sweetmagic.init.entity.projectile.EvilArrow;
 
-public class RenderEvilArrow extends RenderBase<EvilArrow> {
+public class RenderEvilArrow<T extends EvilArrow> extends RenderBase<T> {
 
 	private static final ResourceLocation TEX = SweetMagicCore.getSRC("textures/item/dangerous_fruits.png");
 	private static final RenderType RENDER_TYPE = RenderType.entityCutoutNoCull(TEX);
@@ -15,7 +15,7 @@ public class RenderEvilArrow extends RenderBase<EvilArrow> {
 		super(con);
 	}
 
-	public ResourceLocation getTextureLocation(EvilArrow entity) {
+	public ResourceLocation getTextureLocation(T entity) {
 		return TEX;
 	}
 

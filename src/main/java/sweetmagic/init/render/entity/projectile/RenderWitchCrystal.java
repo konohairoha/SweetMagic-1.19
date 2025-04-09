@@ -21,7 +21,7 @@ import sweetmagic.SweetMagicCore;
 import sweetmagic.init.ItemInit;
 import sweetmagic.init.entity.monster.WitchCrystal;
 
-public class RenderWitchCrystal extends EntityRenderer<WitchCrystal> {
+public class RenderWitchCrystal<T extends WitchCrystal> extends EntityRenderer<T> {
 
 	private static final ResourceLocation CRYSTAL = SweetMagicCore.getSRC("textures/entity/witch_crystal.png");
 	private static final ItemStack STACK = new ItemStack(ItemInit.witch_tears);
@@ -37,11 +37,11 @@ public class RenderWitchCrystal extends EntityRenderer<WitchCrystal> {
 		this.glass = model.getChild("glass");
 	}
 
-	public ResourceLocation getTextureLocation(WitchCrystal entity) {
+	public ResourceLocation getTextureLocation(T entity) {
 		return TextureAtlas.LOCATION_BLOCKS;
 	}
 
-	public void render(WitchCrystal entity, float parTick, float par2, PoseStack pose, MultiBufferSource buf, int light) {
+	public void render(T entity, float parTick, float par2, PoseStack pose, MultiBufferSource buf, int light) {
 
 		int overray = OverlayTexture.NO_OVERLAY;
 		int tickCount = entity.tickCount;
@@ -52,7 +52,6 @@ public class RenderWitchCrystal extends EntityRenderer<WitchCrystal> {
 		pose.translate(0D, Math.sin(tickCount / 20F) * 0.4D, 0D);
 		float angle = tickCount / 20F * (180F / (float) Math.PI);
 		pose.mulPose(Vector3f.YP.rotationDegrees(angle));
-
 		pose.scale(size, size, size);
 		this.render.renderStatic(STACK, ItemTransforms.TransformType.FIXED, light, overray, pose, buf, 0);
 		pose.popPose();
@@ -61,7 +60,6 @@ public class RenderWitchCrystal extends EntityRenderer<WitchCrystal> {
 		size = 1.5F;
 		pose.scale(size, size, size);
 		pose.translate(0D, 0.75D, 0D);
-
 		float f1 = tickCount * 3F;
 		VertexConsumer vert = buf.getBuffer(RENDER_TYPE).color(0F, 0F, 0F, 1F);
 		pose.mulPose(Vector3f.YP.rotationDegrees(f1));

@@ -13,7 +13,7 @@ import sweetmagic.init.BlockInit;
 import sweetmagic.init.entity.projectile.MagicSquareMagic;
 import sweetmagic.util.RenderUtil;
 
-public class RenderMagicSquare extends EntityRenderer<MagicSquareMagic> {
+public class RenderMagicSquare<T extends MagicSquareMagic> extends EntityRenderer<T> {
 
 	private static final Block SQUARE_BLOCK_L = BlockInit.magic_square_l;
 
@@ -21,11 +21,11 @@ public class RenderMagicSquare extends EntityRenderer<MagicSquareMagic> {
 		super(con);
 	}
 
-	public ResourceLocation getTextureLocation(MagicSquareMagic entity) {
+	public ResourceLocation getTextureLocation(T entity) {
 		return TextureAtlas.LOCATION_BLOCKS;
 	}
 
-	public void render(MagicSquareMagic entity, float parTick, float par2, PoseStack pose, MultiBufferSource buf, int light) {
+	public void render(T entity, float parTick, float par2, PoseStack pose, MultiBufferSource buf, int light) {
 		long gameTime = entity.level.getGameTime();
 		float angle = -(gameTime + parTick) / 20.0F * (180F / (float) Math.PI);
 		float scale = (float) entity.getRange();

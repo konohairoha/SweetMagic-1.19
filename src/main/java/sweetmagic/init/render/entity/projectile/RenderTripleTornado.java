@@ -15,7 +15,7 @@ import sweetmagic.init.entity.projectile.TripleTornadoShot;
 import sweetmagic.util.RenderUtil;
 import sweetmagic.util.RenderUtil.RenderColor;
 
-public class RenderTripleTornado extends EntityRenderer<TripleTornadoShot> {
+public class RenderTripleTornado<T extends TripleTornadoShot> extends EntityRenderer<T> {
 
 	private static final Block SQUARE_BLOCK_L = BlockInit.magic_square_l_blank;
 
@@ -23,11 +23,11 @@ public class RenderTripleTornado extends EntityRenderer<TripleTornadoShot> {
 		super(con);
 	}
 
-	public ResourceLocation getTextureLocation(TripleTornadoShot entity) {
+	public ResourceLocation getTextureLocation(T entity) {
 		return TextureAtlas.LOCATION_BLOCKS;
 	}
 
-	public void render(TripleTornadoShot entity, float parTick, float par2, PoseStack pose, MultiBufferSource buf, int light) {
+	public void render(T entity, float parTick, float par2, PoseStack pose, MultiBufferSource buf, int light) {
 		long gameTime = entity.level.getGameTime();
 		float angle = -gameTime / 20.0F * (180F / (float) Math.PI);
 
