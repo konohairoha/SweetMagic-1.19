@@ -3,8 +3,6 @@ package sweetmagic.init.item.sm;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jetbrains.annotations.Nullable;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -15,7 +13,6 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -27,6 +24,7 @@ import net.minecraftforge.common.IPlantable;
 import sweetmagic.SweetMagicCore;
 import sweetmagic.api.iblock.ISMCrop;
 import sweetmagic.init.ItemInit;
+import sweetmagic.util.WorldHelper;
 
 public class SMSickle extends SMItem {
 
@@ -38,7 +36,7 @@ public class SMSickle extends SMItem {
 		ItemInit.itemMap.put(this, name);
 	}
 
-	public int getRange () {
+	public int getRange() {
 		switch (this.data) {
 		case 2: return 5;
 		default: return 2;
@@ -48,12 +46,9 @@ public class SMSickle extends SMItem {
 	// 右クリック
 	@Override
 	public InteractionResult useOn(UseOnContext con) {
-
 		Level world = con.getLevel();
 		BlockPos pos = con.getClickedPos();
 		Block block = world.getBlockState(pos).getBlock();
-
-		// 作物以外なら終了
 		if (!(block instanceof IPlantable) || !(world instanceof ServerLevel server)) { return InteractionResult.PASS; }
 
 		if (this.data == 0) { return InteractionResult.SUCCESS; }
@@ -64,7 +59,7 @@ public class SMSickle extends SMItem {
 
 		// 範囲とstackListの初期化
 		int area = this.getRange();
-		Iterable<BlockPos> posList = BlockPos.betweenClosed(pos.offset(-area, -area, -area), pos.offset(area, area, area));
+		Iterable<BlockPos> posList = WorldHelper.getRangePos(pos, area);
 		List<ItemStack> stackList = new ArrayList<>();
 
 		// 範囲分回す
@@ -110,17 +105,14 @@ public class SMSickle extends SMItem {
 		return InteractionResult.SUCCESS;
 	}
 
-	public void getPickPlant (Level world, Player player, BlockPos pos, ItemStack stack) {
-
-		// 作物以外なら終了
+	public void getPickPlant(Level world, Player player, BlockPos pos, ItemStack stack) {
 		if (!(world.getBlockState(pos).getBlock() instanceof IPlantable) || !(world instanceof ServerLevel server)) { return; }
 
 		// 範囲とstackListの初期化
 		int area = this.getRange();
-		List<ItemStack> stackList = new ArrayList<>();
-
 		RandomSource rand = world.random;
-		Iterable<BlockPos> posList = BlockPos.betweenClosed(pos.offset(-area, -area, -area), pos.offset(area, area, area));
+		List<ItemStack> stackList = new ArrayList<>();
+		Iterable<BlockPos> posList = WorldHelper.getRangePos(pos, area);
 
 		// 範囲分回す
 		for (BlockPos p : posList) {
@@ -155,15 +147,12 @@ public class SMSickle extends SMItem {
 		// Listが空なら終了
 		if (stackList.isEmpty()) { return; }
 
-		// リスト分スポーン
-		for (ItemStack crop : stackList) {
-			world.addFreshEntity(new ItemEntity(world, player.xo, player.yo, player.zo, crop));
-		}
+		stackList.forEach(s -> world.addFreshEntity(new ItemEntity(world, player.xo, player.yo, player.zo, s)));
 	}
 
 	// ツールチップの表示
 	@Override
-	public void appendHoverText(ItemStack stack, @Nullable Level world, List<Component> toolTip, TooltipFlag flag) {
+	public void addTip(ItemStack stack, List<Component> toolTip) {
 
 		if (this.data == 0) {
 			toolTip.add(this.getText(this.name).withStyle(GREEN));

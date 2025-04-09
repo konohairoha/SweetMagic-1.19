@@ -35,11 +35,10 @@ import sweetmagic.init.ItemInit;
 
 public class SMHarness extends ArmorItem implements IHarness, IAmorUtil {
 
-	private final String name;
-	public final int data;
 	public int maxMF;
-
+	public final int data;
 	private int tickTime = 0;
+	private final String name;
 
 	public SMHarness(String name, int data, int maxMF) {
 		super(IAmorUtil.getArmorMaterial(data), EquipmentSlot.FEET, IAmorUtil.getArmorPro());
@@ -115,7 +114,7 @@ public class SMHarness extends ArmorItem implements IHarness, IAmorUtil {
 	@Override
 	public int getMaxMF(ItemStack stack) {
 		int addMaxMF = (this.getEnchantLevel(EnchantInit.maxMFUP, stack) * 10) * (this.maxMF / 100);
-  		return this.maxMF + addMaxMF;
+		return this.maxMF + addMaxMF;
 	}
 
 	@Override
@@ -149,13 +148,13 @@ public class SMHarness extends ArmorItem implements IHarness, IAmorUtil {
 	}
 
 	@Override
-	public int getTier () {
+	public int getTier() {
 		return this.data + 1;
 	}
 
 	@Override
-	public void initializeClient(Consumer<IClientItemExtensions> consumer) {
-		consumer.accept(IAmorUtil.ArmorRobeRender.INSTANCE);
+	public void initializeClient(Consumer<IClientItemExtensions> con) {
+		con.accept(IAmorUtil.ArmorRobeRender.INSTANCE);
 	}
 
 	@Override

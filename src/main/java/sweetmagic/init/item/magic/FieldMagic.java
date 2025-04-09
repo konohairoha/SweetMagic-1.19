@@ -16,46 +16,79 @@ import sweetmagic.init.entity.projectile.MagicSquareMagic;
 public class FieldMagic extends BaseMagicItem {
 
 	public final int data;
+	public final int tier;
 
 	public FieldMagic(String name, SMElement ele, int tier, int coolTime, int useMF, int data) {
 		super(name, SMMagicType.FIELD, ele, tier, coolTime, useMF, false);
 		this.data = data;
+		this.tier = tier;
 	}
 
 	public FieldMagic(String name, SMElement ele, int tier, int coolTime, int useMF, int data, String iconName) {
 		super(name, SMMagicType.FIELD, ele, tier, coolTime, useMF, false, iconName);
 		this.data = data;
+		this.tier = tier;
 	}
 
 	// ツールチップ
-	public List<MutableComponent> magicToolTip (List<MutableComponent> toolTip) {
-		toolTip.add(this.getText("magic_square"));
+	public List<MutableComponent> magicToolTip(List<MutableComponent> toolTip) {
 
 		switch (this.data) {
 		case 0:
 		case 1:
 		case 2:
-			toolTip.add(this.getText("magic_gravityfield", String.format("%.1f%%", 10F + (this.data) * 7.5F )));
-			toolTip.add(this.getText(this.name + "_enemy"));
+		case 13:
+			toolTip.add(this.getText("magic_square_buff", "" + (60 + this.tier * 30)).withStyle(WHITE));
+			toolTip.add(this.getText("magic_gravityfield", String.format("%.1f%%", 10F + this.data * 7.5F )));
+
+			if (this.data == 13) {
+				toolTip.add(this.getText("magic_gravityfield2_enemy"));
+			}
+
+			else {
+				toolTip.add(this.getText(this.name + "_enemy"));
+			}
+
+			toolTip.add(this.getText("magic_square").withStyle(WHITE));
+			toolTip.add(this.getText("magic_gravityfield_finish", this.getEffectText("gravity").getString()));
+
 			break;
 		case 3:
 		case 4:
 		case 5:
-			toolTip.add(this.getText(this.name));
+		case 14:
+			toolTip.add(this.getText("magic_square_buff", "" + (60 + this.tier * 30)).withStyle(WHITE));
+			toolTip.add(this.getText("magic_windfield"));
+			toolTip.add(this.getText("magic_square").withStyle(WHITE));
 			toolTip.add(this.getText("magic_windfield_regene"));
+			toolTip.add(this.getText("magic_windfield_finish", this.getEffectText("bleeding").getString()));
 			break;
 		case 6:
 		case 7:
 		case 8:
-			String value = "" + (this.data - 5);
+		case 15:
+			toolTip.add(this.getText("magic_square_buff", "" + (60 + this.tier * 30)).withStyle(WHITE));
+			String value = "" + (this.data - (this.data == 15 ? 11 : 5));
 			toolTip.add(this.getText("magic_rainfield", value));
 			toolTip.add(this.getText("magic_rainfield_enemy", value));
+			toolTip.add(this.getText("magic_square").withStyle(WHITE));
+			toolTip.add(this.getText("magic_rainfield_finish", "" + (12.5F * this.tier)));
 			break;
 		case 9:
 		case 10:
 		case 11:
+		case 16:
+			toolTip.add(this.getText("magic_square").withStyle(WHITE));
 			toolTip.add(this.getText(this.name));
-			toolTip.add(this.getText("magic_future_visionfiled_enemy", String.format("%.1f", 2F + (this.data - 9) * 1.5F)));
+			toolTip.add(this.getText("magic_future_visionfiled_enemy", String.format("%.1f", 2F + (this.data == 16 ? 3 : this.data - 9) * 1.5F)));
+			toolTip.add(this.getText("magic_future_visionfiled_finish", "" + this.tier));
+			break;
+		case 12:
+			toolTip.add(this.getText("magic_square_buff", "" + (60 + this.tier * 30)).withStyle(WHITE));
+			toolTip.add(this.getText(this.name + "_enemy"));
+			toolTip.add(this.getText("magic_square").withStyle(WHITE));
+			toolTip.add(this.getText(this.name));
+			toolTip.add(this.getText(this.name + "_finish"));
 			break;
 		default:
 			toolTip.add(this.getText(this.name));
@@ -79,7 +112,7 @@ public class FieldMagic extends BaseMagicItem {
 
 		int level = wandInfo.getLevel();
 		entity.setRange(Math.min(3D + level * 0.5D, 12D));
-		entity.setMaxLifeTime((int) this.getHealValue(player, this.effectTime(wandInfo)));
+		entity.setMaxLifeTime(600 + level * 20);
 
 		switch (this.data) {
 		case 0:
@@ -129,6 +162,26 @@ public class FieldMagic extends BaseMagicItem {
 		case 11:
 			entity.setData(3);
 			entity.setTier(3);
+			break;
+		case 12:
+			entity.setData(4);
+			entity.setTier(4);
+			break;
+		case 13:
+			entity.setData(0);
+			entity.setTier(4);
+			break;
+		case 14:
+			entity.setData(1);
+			entity.setTier(4);
+			break;
+		case 15:
+			entity.setData(2);
+			entity.setTier(4);
+			break;
+		case 16:
+			entity.setData(3);
+			entity.setTier(4);
 			break;
 		}
 

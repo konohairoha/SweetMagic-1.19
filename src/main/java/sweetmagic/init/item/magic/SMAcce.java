@@ -13,7 +13,9 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ExperienceOrb;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -31,9 +33,10 @@ import sweetmagic.init.ParticleInit;
 import sweetmagic.init.PotionInit;
 import sweetmagic.init.SoundInit;
 import sweetmagic.init.item.sm.SMItem;
-import sweetmagic.init.tile.inventory.SMPorchInventory;
+import sweetmagic.init.tile.inventory.SMInventory.SMPorchInventory;
 import sweetmagic.key.SMKeybind;
 import sweetmagic.util.ItemHelper;
+import sweetmagic.util.SMUtil;
 
 public class SMAcce extends SMItem implements IAcce {
 
@@ -67,7 +70,7 @@ public class SMAcce extends SMItem implements IAcce {
 	 * 7 =  夜の帳
 	 * 8 =  守護のペンダント
 	 * 9 =  魔術師のグローブ
-	 * 10 = ★魔法使いの羽ペン
+	 * 10 = 魔法使いの羽ペン
 	 * 11 = アブソープペンダント
 	 * 12 = 毒牙
 	 * 13 = ペンデュラムネックレス
@@ -75,15 +78,18 @@ public class SMAcce extends SMItem implements IAcce {
 	 * 15 = フロストチェーン
 	 * 16 = ホーリーチャーム
 	 * 17 = ウィンドウレリーフ
-	 * 18 = ★エンジェルフリューゲル
+	 * 18 = エンジェルフリューゲル
 	 * 19 = 召喚の手引き書
-	 * 20 = ★電光のイアリング
-	 * 21 = ★ワイドレンジグローブ
+	 * 20 = 電光のイアリング
+	 * 21 = 魔術師のガントレット
 	 * 22 = 機敏な羽根
 	 * 23 = 不思議なフォーク
 	 * 24 = 拡張の指輪
 	 * 25 = 妖精の羽根
-	 * 26 = 桜宝珠のペンダント
+	 * 26 = 桜のかんざし
+	 * 27 = 逢魔時の砂時計
+	 * 28 = 戦士の烈火護符
+	 * 30 = 魔術師のガントレット
 	 */
 
 	// ツールチップ
@@ -129,6 +135,11 @@ public class SMAcce extends SMItem implements IAcce {
 			toolTip.add(this.getText(name + "_exp", String.format("%.1f%%", 12.5F * count)));
 			toolTip.add(this.getText(name + "_magic"));
 			break;
+		case 10:
+			toolTip.add(this.getText(name, this.getEffectText("aether_armor").getString()));
+			toolTip.add(this.getText(name + "_charge"));
+			toolTip.add(this.getText(name + "_boss"));
+			break;
 		case 11:
 			Component key = KeyPressEvent.getKeyName(SMKeybind.POUCH);
 			toolTip.add(this.getText(name));
@@ -154,13 +165,31 @@ public class SMAcce extends SMItem implements IAcce {
 			toolTip.add(this.getText(name + "_attack"));
 			toolTip.add(this.getText(name + "_add"));
 			break;
+		case 18:
+			toolTip.add(this.getText(name));
+			String heal = this.getEffectText("regeneration").getString();
+			String dame = this.getMCText("strength").getString() + this.getEnchaText(4).getString();
+			String mf = this.getEffectText("mfcostdown").getString() + this.getEnchaText(3).getString();
+
+			toolTip.add(this.getText(name + "_buff", heal, dame, mf));
+			toolTip.add(this.getText(name + "_heal"));
+			break;
 		case 19:
 			toolTip.add(this.getText(name, String.format("%.0f%%", 20F * count)));
+			break;
+		case 20:
+			toolTip.add(this.getText(name));
+			toolTip.add(this.getText("varrier_pendant_cooltime", String.format("%.1f", 600F - 37.5F * (count - 1)) ));
+			break;
+		case 21:
+			toolTip.add(this.getText(name));
+			toolTip.add(this.getText(name + "_ele"));
 			break;
 		case 23:
 			toolTip.add(this.getText(name));
 			toolTip.add(this.getText(name + "_debuff"));
 			toolTip.add(this.getText(name + "_xp"));
+			toolTip.add(this.getText(name + "_chance"));
 			break;
 		case 24:
 			toolTip.add(this.getText(name, String.format("%.1f%%", 12.5F * count)));
@@ -179,6 +208,15 @@ public class SMAcce extends SMItem implements IAcce {
 			break;
 		case 27:
 			toolTip.add(this.getText(name));
+			break;
+		case 28:
+			toolTip.add(this.getText(name));
+			toolTip.add(this.getText(name + "_twi"));
+			toolTip.add(this.getText(name + "_summon", String.format("%.1f%%", 25F)));
+			break;
+		case 29:
+			toolTip.add(this.getText(name, this.getMCText("strength").getString()));
+			toolTip.add(this.getText(name + "_attack", this.getEffectText("flame").getString()));
 			break;
 		default: toolTip.add(this.getText(name));
 			break;
@@ -209,30 +247,45 @@ public class SMAcce extends SMItem implements IAcce {
 	@Override
 	public void dropMobTip(List<MutableComponent> toolTip) {
 		switch (this.data) {
+		case 10:
+			toolTip.add(this.getEntityText("witch_sandryon"));
+			break;
 		case 13:
-			toolTip.add(this.getTip("entity.sweetmagic.silver_landroad"));
+			toolTip.add(this.getEntityText("silver_landroad"));
 			break;
 		case 14:
-			toolTip.add(this.getTip("entity.sweetmagic.ignisknight"));
+			toolTip.add(this.getEntityText("ignisknight"));
 			break;
 		case 15:
-			toolTip.add(this.getTip("entity.sweetmagic.queenfrost"));
+			toolTip.add(this.getEntityText("queenfrost"));
 			break;
 		case 16:
-			toolTip.add(this.getTip("entity.sweetmagic.holyangel"));
+			toolTip.add(this.getEntityText("holyangel"));
+			break;
+		case 18:
+			toolTip.add(this.getEntityText("elsharia_curious"));
+			break;
+		case 21:
+			toolTip.add(this.getEntityText("blitz_wizard_master"));
 			break;
 		case 26:
-			toolTip.add(this.getTip("entity.sweetmagic.ancientfairy"));
+			toolTip.add(this.getEntityText("ancientfairy"));
 			break;
 		case 27:
-			toolTip.add(this.getTip("entity.sweetmagic.arlaune"));
+			toolTip.add(this.getEntityText("arlaune"));
+			break;
+		case 28:
+			toolTip.add(this.getEntityText("twilight_hora"));
+			break;
+		case 29:
+			toolTip.add(this.getEntityText("brave_skeleton"));
 			break;
 		}
 	}
 
 	// 最大スタック数の取得
 	@Override
-	public int getMaxStackCount () {
+	public int getMaxStackCount() {
 		switch (this.data) {
 		case 0: return 5;
 		case 4: return 5;
@@ -243,9 +296,10 @@ public class SMAcce extends SMItem implements IAcce {
 		case 9: return 8;
 		case 13: return 4;
 		case 19: return 5;
+		case 20: return 4;
 		case 24: return 8;
+		default: return 1;
 		}
-		return 1;
 	}
 
 	// 効果が発動できるか
@@ -271,7 +325,7 @@ public class SMAcce extends SMItem implements IAcce {
 			break;
 		// 電光のイアリング
 		case 20:
-			flag = /*player.ticksExisted % 10 != 0 &&*/ true;
+			flag = player.tickCount % 30 != 0;
 		// 不思議なフォーク
 		case 23:
 			flag = this.tickTime % 10 == 0;
@@ -339,6 +393,9 @@ public class SMAcce extends SMItem implements IAcce {
 			break;
 		case 8:
 			this.varrierEffect(world, player, info, count);
+			break;
+		case 20:
+			this.electricEffect(world, player, info, count);
 			break;
 		case 11:
 			// アブソープペンダント
@@ -467,10 +524,8 @@ public class SMAcce extends SMItem implements IAcce {
 
 		// 重力状態を除去
 		this.checkDebuf(player, PotionInit.gravity);
-
 		List<ItemEntity> entityList = this.getEntityList(ItemEntity.class, player, 8D);
 		NonNullList<ItemStack> pInv = player.getInventory().items;
-
 		double x = player.getX();
 		double y = player.getY();
 		double z = player.getZ();
@@ -492,18 +547,17 @@ public class SMAcce extends SMItem implements IAcce {
 			}
 
 			if (world instanceof ServerLevel server) {
-
 				float randX = this.getRandFloat(1.5F);
 				float randY = this.getRandFloat(1.5F);
 				float randZ = this.getRandFloat(1.5F);
 				Vec3 vec = entity.getDeltaMovement();
-				float f1 = (float) entity.xo - 0.0F + randX + (float) vec.x * 1.5F;
+				float f1 = (float) entity.xo - 0F + randX + (float) vec.x * 1.5F;
 				float f2 = (float) (entity.yo + randY) + (float) vec.y * 1.5F;
-				float f3 = (float) entity.zo - 0.0F + randZ + (float) vec.z * 1.5F;
+				float f3 = (float) entity.zo - 0F + randZ + (float) vec.z * 1.5F;
 				float xSpeed = -randX * 0.125F;
 				float ySpeed = -randY * 0.125F;
 				float zSpeed = -randZ * 0.125F;
-				server.sendParticles(ParticleInit.NORMAL.get(), f1, f2, f3, 0, xSpeed, ySpeed, zSpeed, 1F);
+				server.sendParticles(ParticleInit.NORMAL, f1, f2, f3, 0, xSpeed, ySpeed, zSpeed, 1F);
 			}
 		}
 
@@ -548,11 +602,23 @@ public class SMAcce extends SMItem implements IAcce {
 		int value = (count - 1);
 
 		// 守護のペンダント
-		player.heal(player.getMaxHealth() * (0.5F + value * 0.125F) );
-
-		this.addPotion(player, MobEffects.ABSORPTION, value, 1200, true);
-		this.addPotion(player, MobEffects.DAMAGE_RESISTANCE, 4, 600, true);
+		player.heal(player.getMaxHealth() * (0.5F + value * 0.125F));
+		this.addPotion(player, MobEffects.ABSORPTION, value, 1200);
+		this.addPotion(player, MobEffects.DAMAGE_RESISTANCE, 4, 600);
 		player.getCooldowns().addCooldown(info.getStack().getItem(), 12000 - value * 1000);
+		this.playSound(player, SoundInit.HEAL, 0.0625F, 1.15F);
+		return true;
+	}
+
+	// 電光のイアリング
+	public boolean electricEffect(Level world, Player player, AcceInfo info, int count) {
+		List<Mob> entityList = this.getEntityList(Mob.class, player, e -> e instanceof Enemy, 7.5D);
+		if (entityList.isEmpty()) { return false; }
+
+		entityList.forEach(e -> SMUtil.tameAIDonmov(e, 60));
+		int value = (count - 1);
+		player.getCooldowns().addCooldown(info.getStack().getItem(), 12000 - value * 1000);
+		this.playSound(player, SoundInit.ELECTRIC, 0.0625F, 1.15F);
 		return true;
 	}
 
@@ -591,13 +657,13 @@ public class SMAcce extends SMItem implements IAcce {
 
 	// tierの取得
 	@Override
-	public int getTier () {
+	public int getTier() {
 		return this.tier;
 	}
 
 	// 重複できるか
 	@Override
-	public boolean isDuplication () {
+	public boolean isDuplication() {
 		return this.isDuplication;
 	}
 
@@ -605,10 +671,8 @@ public class SMAcce extends SMItem implements IAcce {
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
 
-		// アイテムスタックを取得
-		ItemStack stack = player.getItemInHand(hand);
-
 		// 腰の装飾品を取得
+		ItemStack stack = player.getItemInHand(hand);
 		ItemStack armor = player.getItemBySlot(EquipmentSlot.LEGS);
 		if ( !(armor.getItem() instanceof IPorch porch) ) { return InteractionResultHolder.consume(stack); }
 
@@ -629,7 +693,7 @@ public class SMAcce extends SMItem implements IAcce {
 	}
 
 	@Override
-	public boolean isSwitch () {
+	public boolean isSwitch() {
 		return this.data == 11;
 	}
 

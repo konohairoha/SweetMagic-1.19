@@ -39,15 +39,15 @@ public class CosmicWand extends SMWand implements ISMTip {
 	}
 
 	// 杖の属性
-	public SMElement getWandElement () {
+	public SMElement getWandElement() {
 		return this.ele;
 	}
 
-	public boolean isScope () {
+	public boolean isScope() {
 		return this.isScope;
 	}
 
-	public void shotSound (Player player) {
+	public void shotSound(Player player) {
 		if (this.isScope()) {
 			this.playSound(player.level, player, SoundInit.RIFLE_SHOT, 0.2F, 1F);
 		}
@@ -57,7 +57,7 @@ public class CosmicWand extends SMWand implements ISMTip {
 		}
 	}
 
-	public List<Component> addTip () {
+	public List<Component> addTip() {
 
 		List<Component> tipList = new ArrayList<>();
 
@@ -94,7 +94,7 @@ public class CosmicWand extends SMWand implements ISMTip {
 	}
 
 	// 杖のレンダー時の設定
-	public void renderWand (PoseStack pose, MultiBufferSource buffer, Player player, float parTick) {
+	public void renderWand(PoseStack pose, MultiBufferSource buffer, Player player, float parTick) {
 
 		if (!this.isScope()) {
 			super.renderWand(pose, buffer, player, parTick);

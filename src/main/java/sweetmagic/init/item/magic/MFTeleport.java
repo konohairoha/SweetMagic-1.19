@@ -2,8 +2,6 @@ package sweetmagic.init.item.magic;
 
 import java.util.List;
 
-import org.jetbrains.annotations.Nullable;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleTypes;
@@ -19,7 +17,6 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.network.NetworkHooks;
 import sweetmagic.api.emagic.SMElement;
@@ -36,7 +33,7 @@ public class MFTeleport extends BaseMagicItem {
 	}
 
 	// ツールチップ
-	public List<MutableComponent> magicToolTip (List<MutableComponent> toolTip) {
+	public List<MutableComponent> magicToolTip(List<MutableComponent> toolTip) {
 		toolTip.add(this.getText(this.name));
 		return toolTip;
 	}
@@ -65,16 +62,16 @@ public class MFTeleport extends BaseMagicItem {
 	}
 
 	// テレポート
-	public void teleportTo (Player player, BlockPos basePos, ItemStack stack, CompoundTag tags) {
+	public void teleportTo(Player player, BlockPos basePos, ItemStack stack, CompoundTag tags) {
 
 		Level world = player.level;
-        this.playSound(world, player.blockPosition(), SoundEvents.ENDERMAN_TELEPORT, 0.25F, 1F);
+		this.playSound(world, player.blockPosition(), SoundEvents.ENDERMAN_TELEPORT, 0.25F, 1F);
 
-        // NBTから座標取得
-        BlockPos pos = new BlockPos(tags.getInt("pX") + 0.5F, tags.getInt("pY") + 1F, tags.getInt("pZ") + 0.5F);
-        ResourceLocation dim = new ResourceLocation(tags.getString("dim"));
+		// NBTから座標取得
+		BlockPos pos = new BlockPos(tags.getInt("pX") + 0.5F, tags.getInt("pY") + 1F, tags.getInt("pZ") + 0.5F);
+		ResourceLocation dim = new ResourceLocation(tags.getString("dim"));
 
-        // テレポート前のパーティクル表示
+		// テレポート前のパーティクル表示
 		if (world instanceof ServerLevel server) {
 
 			double range = 0.875D;
@@ -94,12 +91,12 @@ public class MFTeleport extends BaseMagicItem {
 			double range = 0.875D;
 			double ySpeed = 1.0D;
 
-	        // テレポート後のパーティクル表示
-			for (int i= -1; i < 5; i++) {
+			// テレポート後のパーティクル表示
+			for (int i = -1; i < 5; i++) {
 				this.spawnParticleRing(server, ParticleTypes.PORTAL, range, pos.below(2), i / 3D, ySpeed, 1D);
 			}
 
-	        this.playSound(server, pos, SoundEvents.ENDERMAN_TELEPORT, 0.25F, 1F);
+			this.playSound(server, pos, SoundEvents.ENDERMAN_TELEPORT, 0.25F, 1F);
 		}
 
 		player.fallDistance = 0.0F;
@@ -132,14 +129,13 @@ public class MFTeleport extends BaseMagicItem {
 			player.sendSystemMessage(this.getText("posregi").withStyle(GREEN));
 		}
 
-        this.playSound(world, player, SoundEvents.ENDERMAN_TELEPORT, 1F, 1F);
-
+		this.playSound(world, player, SoundEvents.ENDERMAN_TELEPORT, 1F, 1F);
 		return InteractionResultHolder.consume(stack);
 	}
 
 	// ツールチップの表示
 	@Override
-	public void appendHoverText(ItemStack stack, @Nullable Level world, List<Component> toolTip, TooltipFlag flag) {
+	public void addTip(ItemStack stack, List<Component> toolTip) {
 
 		toolTip.add(this.getText("clerodendrum").withStyle(GREEN));
 		toolTip.add(this.getText("clero_rename").withStyle(GOLD));
@@ -152,7 +148,7 @@ public class MFTeleport extends BaseMagicItem {
 			int x = tag.getInt("pX");
 			int y = tag.getInt("pY");
 			int z = tag.getInt("pZ");
-            String dim = tag.getString("dim_view");
+			String dim = tag.getString("dim_view");
 
 			String pos = ": " + x + ", " + y + ", " + z;
 			toolTip.add(this.getTipArray( this.getText("regi_pos"), this.getLabel(pos).withStyle(WHITE)).withStyle(GREEN));

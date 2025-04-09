@@ -7,7 +7,7 @@ import sweetmagic.init.ItemInit;
 
 public class SMDoorItem extends DoubleHighBlockItem {
 
-	public SMDoorItem (String name, Block block) {
+	public SMDoorItem(String name, Block block) {
 		super(block, SMItem.setItem(SweetMagicCore.smTab));
 		ItemInit.itemMap.put(this, name);
 	}

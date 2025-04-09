@@ -60,7 +60,7 @@ public class SMSword extends SwordItem implements ISMTip {
 	}
 
 	// 範囲の取得
-	public AABB getAABB (BlockPos pos, double range) {
+	public AABB getAABB(BlockPos pos, double range) {
 		return new AABB(pos.getX() - range, pos.getY() - range, pos.getZ() - range, pos.getX() + range, pos.getY() + range, pos.getZ() + range);
 	}
 

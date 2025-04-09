@@ -27,12 +27,11 @@ import sweetmagic.init.ItemInit;
 
 public class SMChoker extends ArmorItem implements IChoker {
 
-	private final String name;
 	public final int data;
+	private int tickTime = 0;
+	private final String name;
 	public int maxMF;
 	private static final EquipmentSlot[] SLOT = new EquipmentSlot[] { EquipmentSlot.CHEST, EquipmentSlot.FEET, EquipmentSlot.MAINHAND };
-
-	private int tickTime = 0;
 
 	public SMChoker(String name, int data, int maxMF) {
 		super(IAmorUtil.getArmorMaterial(data), EquipmentSlot.HEAD, IAmorUtil.getArmorPro());
@@ -44,8 +43,6 @@ public class SMChoker extends ArmorItem implements IChoker {
 
 	@Override
 	public void onArmorTick(ItemStack stack, Level world, Player player) {
-
-		// 飛行中なら終了
 		if (this.isMFEmpty(stack) || ++this.tickTime % 200 != 0) { return; }
 
 		this.tickTime = 0;
@@ -65,7 +62,7 @@ public class SMChoker extends ArmorItem implements IChoker {
 		}
 	}
 
-	public int getHealValue () {
+	public int getHealValue() {
 		switch (this.data) {
 		case 1: return 2000;
 		case 2: return 5000;
@@ -76,7 +73,7 @@ public class SMChoker extends ArmorItem implements IChoker {
 	@Override
 	public int getMaxMF(ItemStack stack) {
 		int addMaxMF = (this.getEnchantLevel(EnchantInit.maxMFUP, stack) * 10) * (this.maxMF / 100);
-  		return this.maxMF + addMaxMF;
+		return this.maxMF + addMaxMF;
 	}
 
 	@Override
@@ -110,7 +107,7 @@ public class SMChoker extends ArmorItem implements IChoker {
 	}
 
 	@Override
-	public int getTier () {
+	public int getTier() {
 		return this.data + 1;
 	}
 

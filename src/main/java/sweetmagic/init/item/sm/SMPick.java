@@ -6,10 +6,7 @@ import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.PickaxeItem;
@@ -35,22 +32,17 @@ public class SMPick extends PickaxeItem implements ISMTip, IRangeTool {
 	}
 
 	@Override
-	public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
-		return InteractionResultHolder.consume(player.getItemInHand(hand));
-	}
+	public boolean mineBlock(ItemStack stack, Level world, BlockState state, BlockPos pos, LivingEntity entity) {
 
-	@Override
-	public boolean mineBlock(ItemStack stack, Level world, BlockState state, BlockPos pos, LivingEntity living) {
-
-		if (!living.isShiftKeyDown()) {
-			this.rangeBreake(stack, world, pos, living, Item::getPlayerPOVHitResult);
+		if (!entity.isShiftKeyDown()) {
+			this.rangeBreake(stack, world, pos, entity, Item::getPlayerPOVHitResult);
 		}
 
-		return super.mineBlock(stack, world, state, pos, living);
+		return super.mineBlock(stack, world, state, pos, entity);
 	}
 
-	public boolean isAllBlock () {
-		return this.data == 2;
+	public boolean isAllBlock() {
+		return this.data >= 2;
 	}
 
 	// ツールチップの表示
@@ -63,8 +55,13 @@ public class SMPick extends PickaxeItem implements ISMTip, IRangeTool {
 		switch (this.data) {
 		case 0: return 1;
 		case 2: return 1;
+		case 3: return 1;
 		default: return 0;
 		}
+	}
+
+	public boolean isDepth() {
+		return this.data >= 3;
 	}
 
 	// アイテム修理

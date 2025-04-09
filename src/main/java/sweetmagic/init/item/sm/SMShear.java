@@ -30,6 +30,7 @@ import sweetmagic.SweetMagicCore;
 import sweetmagic.api.util.ISMTip;
 import sweetmagic.init.ItemInit;
 import sweetmagic.util.SMDamage;
+import sweetmagic.util.WorldHelper;
 
 public class SMShear extends ShearsItem implements ISMTip {
 
@@ -45,18 +46,13 @@ public class SMShear extends ShearsItem implements ISMTip {
 	// 右クリック
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
-
-		// アイテムスタックを取得
 		ItemStack stack = player.getItemInHand(hand);
 		if (player.getCooldowns().isOnCooldown(stack.getItem())) { return InteractionResultHolder.consume(stack); }
 
-		//リストの作成（めっちゃ大事）
-		List<ItemStack> dropList = new ArrayList<>();
-		BlockPos p = player.blockPosition();
 		int range = 15;
-
-		// 範囲の座標取得
-		Iterable<BlockPos> posList = BlockPos.betweenClosed(p.offset(-range, -range, -range), p.offset(range, range, range));
+		BlockPos p = player.blockPosition();
+		List<ItemStack> dropList = new ArrayList<>();
+		Iterable<BlockPos> posList = WorldHelper.getRangePos(p, range);
 
 		for (BlockPos pos : posList) {
 
@@ -73,16 +69,16 @@ public class SMShear extends ShearsItem implements ISMTip {
 		}
 
 		if (!dropList.isEmpty()) {
-			dropList.forEach(s -> world.addFreshEntity( new ItemEntity(world, p.getX(), p.getY(), p.getZ(), s)));
-            stack.hurtAndBreak(1, player, e -> e.broadcastBreakEvent(hand));
-    		world.playSound(player, p, SoundEvents.GROWING_PLANT_CROP, SoundSource.BLOCKS, 1.0F, 1.0F);
+			dropList.forEach(s -> world.addFreshEntity(new ItemEntity(world, p.getX(), p.getY(), p.getZ(), s)));
+			stack.hurtAndBreak(1, player, e -> e.broadcastBreakEvent(hand));
+			world.playSound(player, p, SoundEvents.GROWING_PLANT_CROP, SoundSource.BLOCKS, 1.0F, 1.0F);
 		}
 
 		return InteractionResultHolder.consume(stack);
 	}
 
 	// ブロック破壊
-	public void breakBlock (Level world, Player player, Block block, BlockState state, BlockPos pos) {
+	public void breakBlock(Level world, Player player, Block block, BlockState state, BlockPos pos) {
 		world.destroyBlock(pos, false);
 		world.removeBlock(pos, false);
 		player.gameEvent(GameEvent.BLOCK_DESTROY);
@@ -93,18 +89,16 @@ public class SMShear extends ShearsItem implements ISMTip {
 
 		if (entity instanceof Chicken && !player.getCooldowns().isOnCooldown(stack.getItem())) {
 
-			if (entity.level.isClientSide) {
-				return InteractionResult.SUCCESS;
-			}
+			if (entity.level.isClientSide) { return InteractionResult.SUCCESS; }
 
-            stack.hurtAndBreak(1, player, e -> e.broadcastBreakEvent(hand));
-            Level world = player.getLevel();
-            BlockPos pos = player.blockPosition();
-    		ItemEntity item = new ItemEntity(world, pos.getX() + 0.5F, pos.getY() + 0.75F, pos.getZ() + 0.5F, new ItemStack(Items.FEATHER, world.random.nextInt(3) + 1));
-    		world.addFreshEntity(item);
-    		world.playSound(player, pos, SoundEvents.GROWING_PLANT_CROP, SoundSource.BLOCKS, 1.0F, 1.0F);
-    		entity.hurt(SMDamage.magicDamage, 0.5F);
-    		player.getCooldowns().addCooldown(stack.getItem(), 5);
+			stack.hurtAndBreak(1, player, e -> e.broadcastBreakEvent(hand));
+			Level world = player.getLevel();
+			BlockPos pos = player.blockPosition();
+			ItemEntity item = new ItemEntity(world, pos.getX() + 0.5F, pos.getY() + 0.75F, pos.getZ() + 0.5F, new ItemStack(Items.FEATHER, world.random.nextInt(3) + 1));
+			world.addFreshEntity(item);
+			world.playSound(player, pos, SoundEvents.GROWING_PLANT_CROP, SoundSource.BLOCKS, 1.0F, 1.0F);
+			entity.hurt(SMDamage.magicDamage, 0.5F);
+			player.getCooldowns().addCooldown(stack.getItem(), 5);
 
 			return InteractionResult.SUCCESS;
 		}

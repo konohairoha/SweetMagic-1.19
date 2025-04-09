@@ -23,7 +23,6 @@ import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUtils;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
 import sweetmagic.SweetMagicCore;
@@ -32,42 +31,46 @@ import sweetmagic.init.ItemInit;
 import sweetmagic.init.PotionInit;
 import sweetmagic.util.PlayerHelper;
 
-public class SMFood  extends SMItem implements IFood {
+public class SMFood extends SMItem implements IFood {
 
 	private final int data;
 	private final boolean isDrink;
-//	private final int healAmount;
-//	private final float saturation;
+	private final int healAmount;
+	private final float saturation;
 	private final boolean isQuality;
 	private int foodLevel;
+	private FoodType foodType;
 
 	public SMFood(String name, int healAmount, float saturation, int data, boolean isDrink) {
 		super(name, SMItem.setItem(SweetMagicCore.smFoodTab).food(foodBuild(healAmount, saturation)));
 		this.data = data;
 		this.isDrink = isDrink;
-//		this.healAmount = healAmount;
-//		this.saturation = saturation;
+		this.healAmount = healAmount;
+		this.saturation = saturation;
 		ItemInit.foodList.add(this);
 
 		this.isQuality = false;
 		this.foodLevel = 0;
+		this.foodType = null;
 	}
 
-	public SMFood(String name, int healAmount, float saturation, int data) {
+	public SMFood(String name, int healAmount, float saturation, int data, FoodType foodType, int foodLevel, boolean isDrink) {
 		super(name, SMItem.setItem(SweetMagicCore.smFoodTab).food(foodBuild(healAmount, saturation)));
 		this.data = data;
 		this.isDrink = false;
-//		this.healAmount = healAmount;
-//		this.saturation = saturation;
+		this.healAmount = healAmount;
+		this.saturation = saturation;
 		ItemInit.foodList.add(this);
 
 		this.isQuality = true;
-		this.foodLevel = 3;
+		this.foodLevel = foodLevel;
+		this.foodType = foodType;
 	}
 
-//	public FoodProperties getFoodProperties(ItemStack stack, @Nullable LivingEntity entity) {
-//		return foodBuild(this.healAmount * 10, this.saturation * 10);
-//	}
+	public FoodProperties getFoodProperties(ItemStack stack, @Nullable LivingEntity entity) {
+		int foodLevel = this.getQualityValue(stack);
+		return foodLevel <= 0 ? super.getFoodProperties(stack, entity) : this.foodBuild(stack, this.healAmount, this.saturation);
+	}
 
 	/**
 	 * 0 = 通常
@@ -85,51 +88,55 @@ public class SMFood  extends SMItem implements IFood {
 
 	// 食べた際にポーション効果を付加
 	protected void onFoodEaten(Level world, Player player, ItemStack stack) {
+		this.onFoodEat(world, player, stack);
+	}
+
+	public void onFoodEat(Level world, LivingEntity entity, ItemStack stack) {
 		switch (this.data) {
 		case 1:
-			player.curePotionEffects(new ItemStack(Items.MILK_BUCKET));
+			entity.curePotionEffects(new ItemStack(Items.MILK_BUCKET));
 			break;
 		case 2:
-			player.clearFire();
+			entity.clearFire();
 			break;
 		case 3:
-			player.heal(2F);
+			entity.heal(2F);
 			break;
 		case 4:
-			this.addPotion(player, MobEffects.FIRE_RESISTANCE, 1800, 0);
+			this.addPotion(entity, MobEffects.FIRE_RESISTANCE, 1800, 0);
 			break;
 		case 5:
-			this.addPotion(player, PotionInit.mfcostdown, 2400, 0);
+			this.addPotion(entity, PotionInit.mfcostdown, 2400, 0);
 			break;
 		case 6:
-			this.addPotion(player, MobEffects.CONFUSION, 100, 0);
+			this.addPotion(entity, MobEffects.CONFUSION, 100, 0);
 			break;
 		case 7:
-			player.heal(player.getMaxHealth() * 0.2F);
+			entity.heal(entity.getMaxHealth() * 0.2F);
 			break;
 		case 8:
 
 			RandomSource rand = world.random;
-			List<LivingEntity> entityList = this.getEntityList(LivingEntity.class, player, e -> e.isAlive() && ( !(e instanceof Enemy) || e instanceof Zombie), 5D);
+			List<LivingEntity> entityList = this.getEntityList(LivingEntity.class, entity, e -> e.isAlive() && ( !(e instanceof Enemy) || e instanceof Zombie), 5D);
 
-			for (LivingEntity entity : entityList) {
+			for (LivingEntity e : entityList) {
 
 				ParticleOptions par = ParticleTypes.HAPPY_VILLAGER;
 
-				if (entity instanceof Enemy) {
-					entity.addEffect(new MobEffectInstance(MobEffects.HEAL, 1, 1, true, false));
+				if (e instanceof Enemy) {
+					e.addEffect(new MobEffectInstance(MobEffects.HEAL, 1, 1, true, false));
 					par = ParticleTypes.TOTEM_OF_UNDYING;
 				}
 
 				else {
-					entity.heal(4F);
+					e.heal(4F);
 				}
 
 				if (world instanceof ServerLevel sever) {
 					for (int i = 0; i < 4; i++) {
-						float x = (float) (entity.getX() + rand.nextFloat() * 1.5F - 0.5F);
-						float y = (float) (entity.getY() + rand.nextFloat() - rand.nextFloat() + 1F);
-						float z = (float) (entity.getZ() + rand.nextFloat() * 1.5F - 0.75F);
+						float x = (float) (e.getX() + rand.nextFloat() * 1.5F - 0.5F);
+						float y = (float) (e.getY() + rand.nextFloat() - rand.nextFloat() + 1F);
+						float z = (float) (e.getZ() + rand.nextFloat() * 1.5F - 0.75F);
 						sever.sendParticles(par, x, y, z, 4, 0F, 0F, 0F, 0.1F);
 					}
 				}
@@ -137,11 +144,17 @@ public class SMFood  extends SMItem implements IFood {
 
 			break;
 		case 9:
-			this.addPotion(player, PotionInit.increased_experience, 2400, 0);
+			this.addPotion(entity, PotionInit.increased_experience, 2400, 0);
 			break;
 		case 10:
-			this.addPotion(player, PotionInit.increased_recovery, 900, 0);
+			this.addPotion(entity, PotionInit.increased_recovery, 900, 0);
 			break;
+		}
+
+		// 品質によるバフ効果
+		int level = this.getQualityValue(stack);
+		if (level >= 2) {
+			this.addPotion(entity, stack, level);
 		}
 	}
 
@@ -175,8 +188,7 @@ public class SMFood  extends SMItem implements IFood {
 	}
 
 	// ツールチップの表示
-	public void appendHoverText(ItemStack stack, @Nullable Level world, List<Component> toolTip, TooltipFlag flag) {
-
+	public void addTip(ItemStack stack, List<Component> toolTip) {
 		if (this.data == 0) { return; }
 
 		String text = "";
@@ -202,7 +214,7 @@ public class SMFood  extends SMItem implements IFood {
 		if (this.data == 4 || this.data == 5 || this.data == 9 || this.data == 10) {
 
 			int time = 90;
-			MutableComponent effect = null;;
+			MutableComponent effect = null;
 
 			switch (this.data) {
 			case 4:
@@ -237,7 +249,7 @@ public class SMFood  extends SMItem implements IFood {
 	}
 
 	// 料理難易度のレベル設定
-	public void setFoodLevel (int level) {
+	public void setFoodLevel(int level) {
 		this.foodLevel = level;
 	}
 
@@ -246,7 +258,7 @@ public class SMFood  extends SMItem implements IFood {
 		return this.foodLevel;
 	}
 
-	public PotionInfo getPotionInfo() {
-		return new PotionInfo(PotionInit.increased_recovery, 900, 0);
+	public FoodType getFoodType() {
+		return this.foodType;
 	}
 }

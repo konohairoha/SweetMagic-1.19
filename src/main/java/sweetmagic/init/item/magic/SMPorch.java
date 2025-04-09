@@ -74,7 +74,7 @@ public class SMPorch extends ArmorItem implements IPorch {
 	}
 
 	@Override
-	public int getTier () {
+	public int getTier() {
 		return this.data + 1;
 	}
 

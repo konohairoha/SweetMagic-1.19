@@ -68,7 +68,7 @@ public class SMSeed extends ItemNameBlockItem implements ISMTip {
 		ItemInit.itemMap.put(this, this.name);
 	}
 
-	public String getRegistryName () {
+	public String getRegistryName() {
 		return this.name;
 	}
 

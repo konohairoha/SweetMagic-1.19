@@ -4,9 +4,12 @@ import java.util.List;
 import java.util.Random;
 import java.util.function.Predicate;
 
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
@@ -16,6 +19,7 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import sweetmagic.SweetMagicCore;
@@ -25,8 +29,8 @@ import sweetmagic.init.ItemInit;
 public class SMItem extends Item implements ISMTip {
 
 	public final String name;
-    public static float SPEED = 6F;
-    public final Random rand = new Random();
+	public static float SPEED = 6F;
+	public final Random rand = new Random();
 
 	public SMItem(String name) {
 		super(setItem(SweetMagicCore.smTab));
@@ -52,7 +56,7 @@ public class SMItem extends Item implements ISMTip {
 		ItemInit.itemMap.put(this, this.name);
 	}
 
-	public String getRegistryName () {
+	public String getRegistryName() {
 		return this.name;
 	}
 
@@ -65,20 +69,20 @@ public class SMItem extends Item implements ISMTip {
 	}
 
 	// 範囲の取得
-	public AABB getAABB (BlockPos pos, double range) {
+	public AABB getAABB(BlockPos pos, double range) {
 		return this.getAABB(pos, range, range, range);
 	}
 
 	// 範囲の取得
-	public AABB getAABB (BlockPos pos, double x, double  y, double  z) {
+	public AABB getAABB(BlockPos pos, double x, double y, double z) {
 		return new AABB(pos.offset(-x, -y, -z), pos.offset(x, y, z));
 	}
 
-	public static Properties setItem (CreativeModeTab tab) {
+	public static Properties setItem(CreativeModeTab tab) {
 		return new Item.Properties().tab(tab);
 	}
 
-	public static Properties setItem (int value, CreativeModeTab tab) {
+	public static Properties setItem(int value, CreativeModeTab tab) {
 		return setItem(tab).durability(value);
 	}
 
@@ -90,13 +94,13 @@ public class SMItem extends Item implements ISMTip {
 		world.addFreshEntity(entity);
 	}
 
-	public void playSound (Entity entity, SoundEvent sound, float vol, float pitch) {
+	public void playSound(Entity entity, SoundEvent sound, float vol, float pitch) {
 		entity.level.playSound(null, entity, sound, SoundSource.PLAYERS, vol, pitch);
 	}
 
 	// パーティクルスポーンリング
 	protected void spawnParticleRing(Level world, ParticleOptions particle, double range, double x, double y, double z, double addY, double ySpeed, double moveValue) {
-		if ( !( world instanceof ServerLevel server ) ) { return; }
+		if (!(world instanceof ServerLevel server)) { return; }
 
 		y += addY;
 		RandomSource rand = world.random;
@@ -114,16 +118,22 @@ public class SMItem extends Item implements ISMTip {
 	}
 
 	// パーティクルスポーンサイクル
-	protected void spawnParticleCycle (ServerLevel server, ParticleOptions particle, double x, double y, double z, Direction face, double range, double angle, boolean isRevese) {
+	protected void spawnParticleCycle(ServerLevel server, ParticleOptions particle, double x, double y, double z, Direction face, double range, double angle, boolean isRevese) {
 		int way = isRevese ? -1 : 1;
 		server.sendParticles(particle, x, y, z, 0, face.get3DDataValue() * way, range, angle + way * 1 * SPEED, 1);
 	}
 
-	public float getRandFloat () {
+	public float getRandFloat() {
 		return this.rand.nextFloat() - this.rand.nextFloat();
 	}
 
-	public float getRandFloat (float rate) {
+	public float getRandFloat(float rate) {
 		return this.getRandFloat() * rate;
 	}
+
+	public void appendHoverText(ItemStack stack, @Nullable Level world, List<Component> toolTip, TooltipFlag flag) {
+		this.addTip(stack, toolTip);
+	}
+
+	public void addTip(ItemStack stack, List<Component> toolTip) { }
 }

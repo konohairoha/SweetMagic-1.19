@@ -74,13 +74,13 @@ public class SMWand extends DiggerItem implements IWand {
 
 	// tierの取得
 	@Override
-	public int getWandTier () {
+	public int getWandTier() {
 		return this.tier;
 	}
 
 	// tierの設定
 	@Override
-	public void setWandTier (int tier) {
+	public void setWandTier(int tier) {
 		this.tier = tier;
 	}
 
@@ -90,19 +90,19 @@ public class SMWand extends DiggerItem implements IWand {
 		this.level = level;
 	}
 
-  	// 最大MFを取得
+	// 最大MFを取得
 	@Override
-  	public int getMaxMF (ItemStack stack) {
+	public int getMaxMF(ItemStack stack) {
 		int addMaxMF = (this.getEnchantLevel(EnchantInit.maxMFUP, stack) * 10) * (this.maxMF / 100);
-  		return this.maxMF + addMaxMF;
-  	}
+		return this.maxMF + addMaxMF;
+	}
 
-  	// 最大MFを設定
-  	public void setMaxMF (int maxMF) {
-  		this.maxMF = maxMF;
-  	}
+	// 最大MFを設定
+	public void setMaxMF(int maxMF) {
+		this.maxMF = maxMF;
+	}
 
-  	// スロット数の取得
+	// スロット数の取得
 	@Override
 	public int getSlot() {
 		return this.slot;
@@ -145,7 +145,7 @@ public class SMWand extends DiggerItem implements IWand {
 
 	// 属性一致時の効果値設定
 	@Override
-	public void setElementBonus (WandInfo wInfo, MagicInfo mInfo) { }
+	public void setElementBonus(WandInfo wInfo, MagicInfo mInfo) { }
 
 	public int getUseDuration(ItemStack stack) {
 		return this.getMaxItemUseDuration(stack);
@@ -156,7 +156,7 @@ public class SMWand extends DiggerItem implements IWand {
 	}
 
 	@Override
-	public BlockPos getWandPos () {
+	public BlockPos getWandPos() {
 		return null;//this.wandPos;
 	}
 
@@ -185,11 +185,6 @@ public class SMWand extends DiggerItem implements IWand {
 	public boolean shouldCauseBlockBreakReset(ItemStack oldStack, ItemStack newStack) {
 		return false;
 	}
-
-//	@Override
-//	public int getItemEnchantability() {
-//		return 5;
-//	}
 
 	// インベントリ常時更新
 	public void inventoryTick(ItemStack stack, Level world, Entity entity, int slot, boolean main) {

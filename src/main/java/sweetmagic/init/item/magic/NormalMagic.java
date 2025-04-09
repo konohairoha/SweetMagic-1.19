@@ -38,16 +38,16 @@ public class NormalMagic extends BaseMagicItem {
 	}
 
 	/**
-	 *  0 = 即時回復魔法
-	 *  1 = 即時大回復魔法
-	 *  2 = エーテルアーマー
-	 *  3 = エーテルバリア
-	 *  4 = エフェクトリムーバー
-	 *  5 = リフレッシュエフェクト
+	 * 0 = 即時回復魔法
+	 * 1 = 即時大回復魔法
+	 * 2 = エーテルアーマー
+	 * 3 = エーテルバリア
+	 * 4 = エフェクトリムーバー
+	 * 5 = リフレッシュエフェクト
 	 */
 
 	// ツールチップ
-	public List<MutableComponent> magicToolTip (List<MutableComponent> toolTip) {
+	public List<MutableComponent> magicToolTip(List<MutableComponent> toolTip) {
 
 		switch(this.data) {
 		case 0:
@@ -79,7 +79,22 @@ public class NormalMagic extends BaseMagicItem {
 			toolTip.add(this.getText(this.name + "_recast"));
 			toolTip.add(this.getText("magic_aether_shield_wand"));
 			break;
-		default :
+		case 16:
+			String buf = this.getMCText("absorption").getString() + this.getEnchaText(4).getString();
+			toolTip.add(this.getText("magic_quickheal.2", String.format("%.0f%%", 100F), buf));
+			toolTip.add(this.getText("magic_reflasheffect"));
+			break;
+		case 17:
+			String barrier = this.getMCText("absorption").getString();
+			String regeneration = this.getEffectText("regeneration").getString();
+			toolTip.add(this.getText(this.name, barrier, regeneration));
+			break;
+		case 18:
+			toolTip.add(this.getText(this.name));
+			toolTip.add(this.getText("magic_aether_shield2_recast"));
+			toolTip.add(this.getText("magic_aether_shield_wand"));
+			break;
+		default:
 			toolTip.add(this.getText(this.name));
 			break;
 		}
@@ -111,13 +126,17 @@ public class NormalMagic extends BaseMagicItem {
 		case 13: return this.invisibleAction(world, player, stack, wandInfo);
 		case 14: return this.aetherShiledAction(world, player, stack, wandInfo);
 		case 15: return this.aetherShiledAction(world, player, stack, wandInfo);
+		case 16: return this.roundHealAction(world, player, stack, wandInfo);
+		case 17: return this.barrierAction(world, player, stack, wandInfo);
+		case 18: return this.aetherShiledAction(world, player, stack, wandInfo);
+		case 19: return this.potionAction(world, player, stack, wandInfo);
 		}
 
 		return true;
 	}
 
 	// 防御魔法
-	public boolean armorAction (Level world, Player player, ItemStack stack, WandInfo wandInfo) {
+	public boolean armorAction(Level world, Player player, ItemStack stack, WandInfo wandInfo) {
 
 		int level = (wandInfo.getLevel() - 1) / 10;
 		int time = (int) this.getHealValue(player, 2400 + wandInfo.getLevel() * 120);
@@ -129,24 +148,39 @@ public class NormalMagic extends BaseMagicItem {
 	}
 
 	// バリア魔法
-	public boolean barrierAction (Level world, Player player, ItemStack stack, WandInfo wandInfo) {
+	public boolean barrierAction(Level world, Player player, ItemStack stack, WandInfo wandInfo) {
 
 		int level = wandInfo.getLevel();
 		int time = (int) this.getHealValue(player, this.effectTime(wandInfo));
 
-		if (this.data == 12) {
-			this.addPotion(player, PotionInit.regeneration, 0, time);
-			time *= 1.25F;
+		if (this.data == 17) {
+
+			double range = 7.5D * ( 1D + this.getExtensionRingCount(player) * 0.25D);
+			List<LivingEntity> entityList = this.getEntityList(LivingEntity.class, player, e -> e.isAlive() && !(e instanceof Enemy), range);
+
+			for (LivingEntity entity : entityList) {
+				this.addPotion(entity, PotionInit.regeneration, 0, time);
+				this.addPotion(entity, PotionInit.aether_barrier, level, time);
+				this.playSound(world, entity, SoundEvents.ENCHANTMENT_TABLE_USE, 0.5F, 1.175F);
+			}
 		}
 
-		this.addPotion(player, PotionInit.aether_barrier, level, time);
-		this.playSound(world, player, SoundEvents.ENCHANTMENT_TABLE_USE, 0.5F, 1.175F);
+		else {
+
+			if (this.data == 12) {
+				this.addPotion(player, PotionInit.regeneration, 0, time);
+				time *= 1.25F;
+			}
+
+			this.addPotion(player, PotionInit.aether_barrier, level, time);
+			this.playSound(world, player, SoundEvents.ENCHANTMENT_TABLE_USE, 0.5F, 1.175F);
+		}
 
 		return true;
 	}
 
 	// リフレッシュエフェクト
-	public boolean reflashEffectAction (Level world, Player player, ItemStack stack, WandInfo wandInfo) {
+	public boolean reflashEffectAction(Level world, Player player, ItemStack stack, WandInfo wandInfo) {
 
 		int time = this.data == 4 ? 2 : (int) this.getHealValue(player, this.effectTime(wandInfo));
 		double range = 7.5D * ( 1D + this.getExtensionRingCount(player) * 0.25D);
@@ -162,7 +196,7 @@ public class NormalMagic extends BaseMagicItem {
 
 		if (world instanceof ServerLevel server) {
 			for (int i = 0; i < 20; i++) {
-				this.spawnParticleCycle(server, ParticleInit.CYCLE_REFLASH.get(), x, y + 0.25D, z, Direction.UP, range, (i * 18), false);
+				this.spawnParticleCycle(server, ParticleInit.CYCLE_REFLASH, x, y + 0.25D, z, Direction.UP, range, (i * 18), false);
 			}
 		}
 
@@ -182,7 +216,7 @@ public class NormalMagic extends BaseMagicItem {
 			double pZ = entity.getZ();
 
 			for (int i = 0; i < 3; i++) {
-				this.spawnParticleRing(world, ParticleInit.REFLASH.get(), 1D, pX, pY, pZ, 0.5D + i * 0.5D, 0.025D, 1D);
+				this.spawnParticleRing(world, ParticleInit.REFLASH, 1D, pX, pY, pZ, 0.5D + i * 0.5D, 0.025D, 1D);
 			}
 		}
 
@@ -191,7 +225,7 @@ public class NormalMagic extends BaseMagicItem {
 	}
 
 	// バニラバフ
-	public boolean potionAction (Level world, Player player, ItemStack stack, WandInfo wandInfo) {
+	public boolean potionAction(Level world, Player player, ItemStack stack, WandInfo wandInfo) {
 
 		int time = (int) this.getHealValue(player, this.effectTime(wandInfo));
 		MobEffect effect = null;
@@ -209,15 +243,18 @@ public class NormalMagic extends BaseMagicItem {
 		case 9:
 			effect = MobEffects.DAMAGE_BOOST;
 			break;
+		case 19:
+			effect = MobEffects.REGENERATION;
+			break;
 		}
 
-		this.addPotion(player, effect, 1, time);
+		this.addPotion(player, effect, 1,this.data == 19 ? time / 10 : time);
 		this.playSound(world, player, SoundEvents.BREWING_STAND_BREW, 0.5F, 1.175F);
 		return true;
 	}
 
 	// 回復魔法
-	public boolean roundHealAction (Level world, Player player, ItemStack stack, WandInfo wandInfo) {
+	public boolean roundHealAction(Level world, Player player, ItemStack stack, WandInfo wandInfo) {
 
 		double x = player.getX();
 		double y = player.getY();
@@ -227,13 +264,26 @@ public class NormalMagic extends BaseMagicItem {
 
 		if (world instanceof ServerLevel server) {
 			for (int i = 0; i < 20; i++) {
-				this.spawnParticleCycle(server, ParticleInit.CYCLE_HEAL.get(), x, y + 0.25D, z, Direction.UP, range, (i * 18), false);
+				this.spawnParticleCycle(server, ParticleInit.CYCLE_HEAL, x, y + 0.25D, z, Direction.UP, range, (i * 18), false);
 			}
+		}
+
+		float healRate = 1F;
+		int level = wandInfo.getLevel();
+		int time = (int) this.getHealValue(player, this.effectTime(wandInfo));
+
+		switch (this.data) {
+		case 0:
+			healRate = 0.25F + level * 0.01F;
+			break;
+		case 1:
+			healRate = 0.5F + level * 0.01F;
+			break;
 		}
 
 		for (LivingEntity entity : entityList) {
 
-			entity.heal(entity.getMaxHealth());
+			entity.heal(entity.getMaxHealth() * healRate);
 
 			// デバフ解除
 			entity.removeEffect(MobEffects.HUNGER);
@@ -247,6 +297,12 @@ public class NormalMagic extends BaseMagicItem {
 			double pY = entity.getY();
 			double pZ = entity.getZ();
 
+			if (this.data == 16) {
+				this.addPotion(entity, MobEffects.ABSORPTION, 3, time);
+				this.addPotion(entity, PotionInit.resurrection, 0, time);
+				this.addPotion(entity, PotionInit.reflash_effect, 0, time);
+			}
+
 			for (int i = 0; i < 3; i++) {
 				this.spawnParticleRing(world, ParticleTypes.HAPPY_VILLAGER, 1D, pX, pY, pZ, 0.75D + i * 0.5D, 1D, 1D);
 			}
@@ -256,7 +312,7 @@ public class NormalMagic extends BaseMagicItem {
 	}
 
 	// 透明化
-	public boolean invisibleAction (Level world, Player player, ItemStack stack, WandInfo wandInfo) {
+	public boolean invisibleAction(Level world, Player player, ItemStack stack, WandInfo wandInfo) {
 		int time = (int) this.getHealValue(player, this.effectTime(wandInfo));
 		this.addPotion(player, MobEffects.INVISIBILITY, 0, time);
 		this.playSound(world, player, SoundEvents.ENCHANTMENT_TABLE_USE, 0.5F, 1.175F);
@@ -267,9 +323,32 @@ public class NormalMagic extends BaseMagicItem {
 	}
 
 	// エーテルシールド
-	public boolean aetherShiledAction (Level world, Player player, ItemStack stack, WandInfo wandInfo) {
-		int time = (int) this.getHealValue(player, this.data == 14 ? 300 : 500);
-		this.addPotion(player, PotionInit.aether_shield, this.data - 14, time);
+	public boolean aetherShiledAction(Level world, Player player, ItemStack stack, WandInfo wandInfo) {
+
+		int timeValue = 300;
+
+		switch (this.data) {
+		case 15:
+			timeValue = 500;
+			break;
+		case 18:
+			timeValue = 800;
+			break;
+		}
+
+		int level = 0;
+
+		switch (this.data) {
+		case 15:
+			level = 1;
+			break;
+		case 18:
+			level = 2;
+			break;
+		}
+
+		int time = (int) this.getHealValue(player, timeValue);
+		this.addPotion(player, PotionInit.aether_shield, level, time);
 		this.playSound(world, player, SoundEvents.ENCHANTMENT_TABLE_USE, 0.5F, 1.175F);
 
 		if (!wandInfo.getWand().isCreativeWand()) {

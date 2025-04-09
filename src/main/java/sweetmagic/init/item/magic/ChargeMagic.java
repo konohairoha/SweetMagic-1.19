@@ -24,9 +24,7 @@ import sweetmagic.api.emagic.SMMagicType;
 import sweetmagic.api.iitem.info.MagicInfo;
 import sweetmagic.api.iitem.info.WandInfo;
 import sweetmagic.init.SoundInit;
-import sweetmagic.init.entity.projectile.AbstractMagicShot;
 import sweetmagic.init.entity.projectile.ElectricMagicShot;
-import sweetmagic.init.entity.projectile.RainMagicShot;
 import sweetmagic.init.item.sm.SMItem;
 
 public class ChargeMagic extends BaseMagicItem {
@@ -44,7 +42,7 @@ public class ChargeMagic extends BaseMagicItem {
 	}
 
 	// ツールチップ
-	public List<MutableComponent> magicToolTip (List<MutableComponent> toolTip) {
+	public List<MutableComponent> magicToolTip(List<MutableComponent> toolTip) {
 
 		switch(this.data) {
 		case 0:
@@ -56,13 +54,15 @@ public class ChargeMagic extends BaseMagicItem {
 			toolTip.add(this.getText("magic_thunder_common"));
 			break;
 		case 6:
-			toolTip.add(this.getText(this.name));
+		case 8:
+			toolTip.add(this.getText("magic_thunderrain"));
 			toolTip.add(this.getText("magic_thunder_common"));
-			toolTip.add(this.getText(this.name + "_vulnerable"));
+			toolTip.add(this.getText("magic_thunderrain_vulnerable"));
 			break;
 		case 2:
 		case 3:
 		case 7:
+		case 9:
 			String range;
 			switch (this.getTier()) {
 			case 2:
@@ -71,13 +71,16 @@ public class ChargeMagic extends BaseMagicItem {
 			case 3:
 				range = "" + 15;
 				break;
+			case 4:
+				range = "" + 25;
+				break;
 			default:
 				range = "" + 2;
 				break;
 			}
 			toolTip.add(this.getText("magic_growth_effect", range));
 			break;
-		default :
+		default:
 			toolTip.add(this.getText(this.name));
 			break;
 		}
@@ -96,24 +99,27 @@ public class ChargeMagic extends BaseMagicItem {
 		case 1: return this.elecAction(world, player, stack, wandInfo);
 		case 2: return this.glowRangeAction(world, player, stack, wandInfo);
 		case 3: return this.glowRangeAction(world, player, stack, wandInfo);
-//		case 4: return this.rainMagicAction(world, player, stack, wandInfo);
-//		case 5: return this.rainMagicAction(world, player, stack, wandInfo);
-//		case 6: return this.rainMagicAction(world, player, stack, wandInfo);
 		case 6: return this.elecAction(world, player, stack, wandInfo);
 		case 7: return this.glowRangeAction(world, player, stack, wandInfo);
+		case 8: return this.elecAction(world, player, stack, wandInfo);
+		case 9: return this.glowRangeAction(world, player, stack, wandInfo);
 		}
 
 		return true;
 	}
 
-	public boolean elecAction (Level world, Player player, ItemStack stack, WandInfo wandInfo) {
-
+	public boolean elecAction(Level world, Player player, ItemStack stack, WandInfo wandInfo) {
 		if (world.isClientSide) { return true; }
 
 		int data = this.data;
 
-		if (data == 6) {
+		switch (data) {
+		case 6:
 			data = 2;
+			break;
+		case 8:
+			data = 3;
+			break;
 		}
 
 		double rangetRate = 5D;
@@ -124,6 +130,9 @@ public class ChargeMagic extends BaseMagicItem {
 			break;
 		case 2:
 			rangetRate = 10D;
+			break;
+		case 3:
+			rangetRate = 13.5D;
 			break;
 		}
 
@@ -152,6 +161,9 @@ public class ChargeMagic extends BaseMagicItem {
 		case 2:
 			powerRate = 6F;
 			break;
+		case 3:
+			powerRate = 9F;
+			break;
 		}
 
 		// (レベル × 補正値) + (レベル + 追加ダメージ) ÷ (レベル ÷ 2) + 追加ダメージ
@@ -165,6 +177,9 @@ public class ChargeMagic extends BaseMagicItem {
 			break;
 		case 2:
 			effectRange = 5D;
+			break;
+		case 3:
+			effectRange = 7.5D;
 			break;
 		}
 
@@ -188,7 +203,7 @@ public class ChargeMagic extends BaseMagicItem {
 		return true;
 	}
 
-	public boolean glowRangeAction (Level world, Player player, ItemStack stack, WandInfo wandInfo) {
+	public boolean glowRangeAction(Level world, Player player, ItemStack stack, WandInfo wandInfo) {
 
 		boolean isGlow = false;
 		int range = 0;
@@ -203,10 +218,12 @@ public class ChargeMagic extends BaseMagicItem {
 		case 7:
 			range = 15;
 			break;
+		case 9:
+			range = 25;
+			break;
 		}
 
-		range *= ( 1F + this.getExtensionRingCount(player) * 0.25F);
-
+		range *= (1F + this.getExtensionRingCount(player) * 0.25F);
 		Iterable<BlockPos> posList = this.getRangePos(player.blockPosition(), range);
 		if (!(world instanceof ServerLevel server)) { return false; }
 
@@ -250,58 +267,8 @@ public class ChargeMagic extends BaseMagicItem {
 		return isGlow;
 	}
 
-	public boolean rainMagicAction (Level world, Player player, ItemStack stack, WandInfo wandInfo) {
-
-		double range = this.data == 6 ? 12D : 7.5D;
-
-		// 攻撃者の座標取得
-		Vec3 attackerPos = new Vec3(player.getX(), player.getY(), player.getZ());
-		Vec3 src = attackerPos.add(0, player.getEyeHeight(), 0);
-		Vec3 look = player.getViewVector(1.0F);
-
-		// 向き先に座標を設定
-		Vec3 dest = src.add(look.x * 20, look.y * 20, look.z * 20);
-
-		BlockPos pos = new BlockPos(dest.x, player.getY(), dest.z);
-		float y = 0;
-
-		while(true) {
-
-			if (!world.getBlockState(pos.below()).isAir() || pos.getY() <= -64) { break; }
-
-			pos = pos.below();
-			y--;
-		}
-
-		while(true) {
-
-			if (world.getBlockState(pos).isAir() || pos.getY() >= 255) { break; }
-
-			pos = pos.above();
-			y++;
-		}
-
-		BlockPos p = new BlockPos(pos.getX(), pos.getY() + y, pos.getZ());
-
-		AbstractMagicShot entity = new RainMagicShot(world, player, wandInfo);
-		entity.shootFromRotation(player, player.getXRot(), player.getYRot(), 0, 1F, 0);
-		entity.shoot(0D, -0.65D, 0D, 1.35F, 0F);
-		entity.setPos(p.getX(), p.getY(), p.getZ());
-		entity.setHitDead(false);
-		entity.setNotDamage(true);
-		entity.setRange(range);
-		entity.setData(this.data - 4);
-		entity.acceEffect();
-
-		if (!world.isClientSide) {
-			world.addFreshEntity(entity);
-		}
-
-		return true;
-	}
-
 	// パーティクルスポーンサイクル
-	protected void spawnParticleCycle (ServerLevel server, ParticleOptions particle, double x, double y, double z, Direction face, double range, double angle, boolean isRevese) {
+	protected void spawnParticleCycle(ServerLevel server, ParticleOptions particle, double x, double y, double z, Direction face, double range, double angle, boolean isRevese) {
 		int way = isRevese ? -1 : 1;
 		server.sendParticles(particle, x, y, z, 0, face.get3DDataValue() * way, range, angle + way * 1 * SMItem.SPEED, 1F);
 	}

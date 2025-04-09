@@ -2,12 +2,8 @@ package sweetmagic.init.item.sm;
 
 import java.util.List;
 
-import org.jetbrains.annotations.Nullable;
-
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.Level;
 import sweetmagic.init.item.magic.SMMagicItem;
 
 public class SMDropItem extends SMMagicItem {
@@ -20,7 +16,7 @@ public class SMDropItem extends SMMagicItem {
 	}
 
 	// ツールチップの表示
-	public void appendHoverText(ItemStack stack, @Nullable Level world, List<Component> toolTip, TooltipFlag flag) {
+	public void addTip(ItemStack stack, List<Component> toolTip) {
 
 		String mobName = "";
 
@@ -49,7 +45,6 @@ public class SMDropItem extends SMMagicItem {
 		}
 
 		mobName = "entity.sweetmagic." + mobName;
-
 		toolTip.add(this.getTipArray(this.getText("dropmob"), ": ", this.getTip(mobName).withStyle(WHITE)).withStyle(GREEN));
 	}
 }

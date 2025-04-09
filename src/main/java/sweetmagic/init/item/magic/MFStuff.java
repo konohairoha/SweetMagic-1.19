@@ -31,12 +31,11 @@ public class MFStuff extends SMItem {
 	}
 
 	@Override
-	public InteractionResult useOn(UseOnContext context) {
+	public InteractionResult useOn(UseOnContext con) {
+		Player player = con.getPlayer();
+		if (player.isShiftKeyDown()) { return InteractionResult.PASS; }
 
-		Player player = context.getPlayer();
-	    if (player.isShiftKeyDown()) { return InteractionResult.PASS; }
-
-		ItemStack stack = context.getItemInHand();
+		ItemStack stack = con.getItemInHand();
 		CompoundTag tag = stack.getTag();
 		if (tag == null || !tag.contains("X")) { return InteractionResult.PASS; }
 

@@ -43,7 +43,11 @@ public class SMShovel extends ShovelItem implements ISMTip, IRangeTool {
 	}
 
 	public boolean isAllBlock () {
-		return this.data == 1;
+		return this.data >= 1;
+	}
+
+	public boolean isDepth() {
+		return this.data >= 2;
 	}
 
 	// ツールチップの表示

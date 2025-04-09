@@ -53,7 +53,7 @@ public class SMRobe extends ArmorItem implements IRobe, IAmorUtil {
 	public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlot slot) {
 		ImmutableMultimap.Builder<Attribute, AttributeModifier> map = ImmutableMultimap.builder();
 		map.putAll(super.getDefaultAttributeModifiers(slot));
-		map.put(ForgeMod.ATTACK_RANGE.get(), new AttributeModifier(IAmorUtil.SMATTACKREACH, "SM Reach", 2.5F * (this.data), AttributeModifier.Operation.ADDITION));
+		map.put(ForgeMod.ATTACK_RANGE.get(), new AttributeModifier(IAmorUtil.SMATTACKREACH, "SM Reach", 2.5F * this.data, AttributeModifier.Operation.ADDITION));
 		return slot == EquipmentSlot.CHEST ? map.build() : super.getDefaultAttributeModifiers(slot);
 	}
 
@@ -68,12 +68,12 @@ public class SMRobe extends ArmorItem implements IRobe, IAmorUtil {
 	}
 
 	// SMモブのダメージカット率（1だとダメージカット無し）
-	public float getSMMobDamageCut () {
+	public float getSMMobDamageCut() {
 		return this.getTier() == 1 ? 0.67F : 0.5F;
 	}
 
 	// 魔法ダメージカット率（1だとダメージカット無し）
-	public float getMagicDamageCut () {
+	public float getMagicDamageCut() {
 		return this.getTier() == 1 ? 0.67F : 0.35F;
 	}
 
@@ -86,8 +86,8 @@ public class SMRobe extends ArmorItem implements IRobe, IAmorUtil {
 	}
 
 	@Override
-	public void initializeClient(Consumer<IClientItemExtensions> consumer) {
-		consumer.accept(IAmorUtil.ArmorRobeRender.INSTANCE);
+	public void initializeClient(Consumer<IClientItemExtensions> con) {
+		con.accept(IAmorUtil.ArmorRobeRender.INSTANCE);
 	}
 
 	@Override
@@ -99,7 +99,7 @@ public class SMRobe extends ArmorItem implements IRobe, IAmorUtil {
 	@Override
 	public int getMaxMF(ItemStack stack) {
 		int addMaxMF = (this.getEnchantLevel(EnchantInit.maxMFUP, stack) * 10) * (this.maxMF / 100);
-  		return this.maxMF + addMaxMF;
+		return this.maxMF + addMaxMF;
 	}
 
 	@Override
@@ -108,7 +108,7 @@ public class SMRobe extends ArmorItem implements IRobe, IAmorUtil {
 	}
 
 	@Override
-	public int getTier () {
+	public int getTier() {
 		return this.data + 1;
 	}
 

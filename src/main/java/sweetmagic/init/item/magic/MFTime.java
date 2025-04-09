@@ -22,7 +22,7 @@ public class MFTime extends BaseMagicItem {
 	}
 
 	// ツールチップ
-	public List<MutableComponent> magicToolTip (List<MutableComponent> toolTip) {
+	public List<MutableComponent> magicToolTip(List<MutableComponent> toolTip) {
 		toolTip.add(this.getText(this.name));
 		return toolTip;
 	}

@@ -38,7 +38,7 @@ public abstract class BaseMagicItem extends SMItem implements IMagicItem, ISMTip
 		this.icon = SweetMagicCore.getSRC("textures/item/" + name + ".png");
 	}
 
-	public BaseMagicItem (String name, SMMagicType type, SMElement ele, int tier, int coolTime, int useMF, boolean isShirink, String iconName) {
+	public BaseMagicItem(String name, SMMagicType type, SMElement ele, int tier, int coolTime, int useMF, boolean isShirink, String iconName) {
 		super(name, setItem(SweetMagicCore.smMagicTab).setNoRepair());
 		this.setMagicType(type);
 		this.setElement(ele);
@@ -95,7 +95,7 @@ public abstract class BaseMagicItem extends SMItem implements IMagicItem, ISMTip
 
 	// 消費MFの取得
 	@Override
-	public int getUseMF () {
+	public int getUseMF() {
 		return this.mf;
 	}
 
@@ -111,7 +111,7 @@ public abstract class BaseMagicItem extends SMItem implements IMagicItem, ISMTip
 	}
 
 	// テクスチャのリソースを取得
-	public ResourceLocation getResource () {
+	public ResourceLocation getResource() {
 		return this.icon;
 	}
 
@@ -120,17 +120,17 @@ public abstract class BaseMagicItem extends SMItem implements IMagicItem, ISMTip
 	public abstract boolean onItemAction(Level world, Player player, WandInfo wandInfo, MagicInfo magicInfo);
 
 	// ツールチップ
-	public List<MutableComponent> magicToolTip (List<MutableComponent> toolTip) {
+	public List<MutableComponent> magicToolTip(List<MutableComponent> toolTip) {
 		return toolTip;
 	}
 
-	public ResourceLocation getIcon () {
+	public ResourceLocation getIcon() {
 		return this.icon;
 	}
 
 	// インベントリ常時更新
 	public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean main) {
-    	if (!(entity instanceof Player player)) { return; }
+		if (!(entity instanceof Player player)) { return; }
 		this.onUpdate(level, player, stack);
 	}
 }

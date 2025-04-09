@@ -56,43 +56,42 @@ public class SMAxe extends AxeItem implements ISMTip {
 			//リストに入れたアイテムをドロップさせる
 			WorldHelper.createLootDrop(dropList, world, player.xo, player.yo, player.zo);
 			player.getPersistentData().remove("isCancelAxe");
-	        MinecraftForge.EVENT_BUS.register(new TreeChopTask(pos, player, EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_EFFICIENCY, stack) + 1));
+			MinecraftForge.EVENT_BUS.register(new TreeChopTask(pos, player, EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_EFFICIENCY, stack) + 1));
 		}
 
 		return super.mineBlock(stack, world, state, pos, living);
 	}
 
-    public class TreeChopTask extends AbstractChopTaskEvent {
+	public class TreeChopTask extends AbstractChopTaskEvent {
 
-        public TreeChopTask(BlockPos start, Player player, int blockTick) {
-            super(start, player, blockTick);
-        }
+		public TreeChopTask(BlockPos start, Player player, int blockTick) {
+			super(start, player, blockTick);
+		}
 
 		@SubscribeEvent
 		public void chopChop(TickEvent.ServerTickEvent event) {
 
 			// クライアントなら終了
-        	if(event.side.isClient() || this.player == null || player.getPersistentData().getBoolean("isCancelAxe")) {
-        		player.getPersistentData().remove("isCancelAxe");
-                this.finish();
-                return;
-            }
+			if (event.side.isClient() || this.player == null || player.getPersistentData().getBoolean("isCancelAxe")) {
+				player.getPersistentData().remove("isCancelAxe");
+				this.finish();
+				return;
+			}
 
-            BlockPos pos;
-            int left = this.blockTick;
+			BlockPos pos;
+			int left = this.blockTick;
 			List<ItemStack> dropList = new ArrayList<>();
-            Direction[] allFace = new Direction[] { Direction.UP, Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST };
+			Direction[] allFace = new Direction[] { Direction.UP, Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST };
+			boolean isFirst = this.posSet.isEmpty();
 
-            boolean isFirst = posSet.isEmpty();
+			// 見つかるまで回す
+			while (left > 0) {
 
-            // 見つかるまで回す
-            while(left > 0) {
-
-            	// 空なら終了
-                if(this.targetblockList.isEmpty()) {
-                	this.finish();
-                    return;
-                }
+				// 空なら終了
+				if (this.targetblockList.isEmpty()) {
+					this.finish();
+					return;
+				}
 
 				pos = this.targetblockList.get(0);
 				this.targetblockList.remove(0);
@@ -117,13 +116,15 @@ public class SMAxe extends AxeItem implements ISMTip {
 					continue;
 				}
 
-                if (!this.checkBlock(this.world, pos)) { continue; }
+				if (!this.checkBlock(this.world, pos)) {
+					continue;
+				}
 
-				BlockState state = world.getBlockState(pos);
+				BlockState state = this.world.getBlockState(pos);
 
 				// クリエイティブ以外ならアイテムドロップ
 				if (!this.isCreative) {
-					dropList.addAll(Block.getDrops(state, (ServerLevel) world, pos, world.getBlockEntity(pos), player, player.getMainHandItem()));
+					dropList.addAll(Block.getDrops(state, (ServerLevel) this.world, pos, this.world.getBlockEntity(pos), this.player, this.player.getMainHandItem()));
 				}
 
 				this.world.destroyBlock(pos, false);
@@ -131,27 +132,26 @@ public class SMAxe extends AxeItem implements ISMTip {
 				// 4方向確認
 				for (Direction face : allFace) {
 
-                    BlockPos posFace = pos.relative(face);
-
 					// 未チェック領域なら追加
-                    this.checkPos(posFace);
+					BlockPos posFace = pos.relative(face);
+					this.checkPos(posFace);
 
-                    if (face != Direction.UP) {
-                        this.checkPos(posFace.offset(1, 0, 0));
-                        this.checkPos(posFace.offset(0, 0, 1));
-                        this.checkPos(posFace.offset(-1, 0, 0));
-                        this.checkPos(posFace.offset(0, 0, -1));
-                    }
-                }
+					if (face != Direction.UP) {
+						this.checkPos(posFace.offset(1, 0, 0));
+						this.checkPos(posFace.offset(0, 0, 1));
+						this.checkPos(posFace.offset(-1, 0, 0));
+						this.checkPos(posFace.offset(0, 0, -1));
+					}
+				}
 
 				left--;
-            }
+			}
 
 			//リストに入れたアイテムをドロップさせる
 			WorldHelper.createLootDrop(dropList, this.world, this.player.xo, this.player.yo, this.player.zo);
-        }
+		}
 
-		public void checkLog (BlockPos pos) {
+		public void checkLog(BlockPos pos) {
 
 			// 原木なら
 			if (this.checkBlock(this.world, pos)) {
@@ -160,18 +160,18 @@ public class SMAxe extends AxeItem implements ISMTip {
 			}
 		}
 
-	    // ブロックチェック
-	    public boolean checkBlock(Level world, BlockPos pos) {
-	    	BlockState state = world.getBlockState(pos);
-	    	return state.is(BlockTags.LOGS) || state.is(BlockTags.LEAVES);
-	    }
-    }
+		// ブロックチェック
+		public boolean checkBlock(Level world, BlockPos pos) {
+			BlockState state = world.getBlockState(pos);
+			return state.is(BlockTags.LOGS) || state.is(BlockTags.LEAVES);
+		}
+	}
 
-    // ブロックチェック
-    public boolean checkBlock(Level world, BlockPos pos) {
-    	BlockState state = world.getBlockState(pos);
-    	return state.is(BlockTags.LOGS) || state.is(BlockTags.LEAVES);
-    }
+	// ブロックチェック
+	public boolean checkBlock(Level world, BlockPos pos) {
+		BlockState state = world.getBlockState(pos);
+		return state.is(BlockTags.LOGS) || state.is(BlockTags.LEAVES);
+	}
 
 	// ツールチップの表示
 	@Override
@@ -183,7 +183,7 @@ public class SMAxe extends AxeItem implements ISMTip {
 		toolTip.add(this.getTipArray(key.copy(), this.getText("key"), this.getText(this.name + "_cancel").withStyle(WHITE)).withStyle(GOLD));
 	}
 
-	public void cancelAction (Player player) {
+	public void cancelAction(Player player) {
 		player.getPersistentData().putBoolean("isCancelAxe", true);
 		player.sendSystemMessage(this.getText("axe_cancel").withStyle(GREEN));
 		player.level.playSound(null, player.blockPosition(), SoundEvents.UI_BUTTON_CLICK, SoundSource.PLAYERS, 0.33F, player.level.random.nextFloat() * 0.1F + 0.9F);

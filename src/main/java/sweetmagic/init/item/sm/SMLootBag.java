@@ -4,8 +4,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.jetbrains.annotations.Nullable;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.TagKey;
@@ -15,7 +13,6 @@ import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistries;
 import sweetmagic.SweetMagicCore;
@@ -70,7 +67,7 @@ public class SMLootBag extends SMItem {
 	}
 
 	// 鉱石辞書からランダムにアイテムを引っ張る
-	public void getOreLoot (Level world, BlockPos pos, Player player, RandomSource rand, TagKey<Item> name, int value) {
+	public void getOreLoot(Level world, BlockPos pos, Player player, RandomSource rand, TagKey<Item> name, int value) {
 		// ルートテーブルをリストに入れる
 		List<ItemStack> seedList = this.getList(ForgeRegistries.ITEMS.tags().getTag(name).stream());
 
@@ -85,7 +82,7 @@ public class SMLootBag extends SMItem {
 	}
 
 	// ツールチップの表示
-	public void appendHoverText(ItemStack stack, @Nullable Level world, List<Component> toolTip, TooltipFlag flag) {
+	public void addTip(ItemStack stack, List<Component> toolTip) {
 		toolTip.add(this.getText(this.name).withStyle(GREEN));
 	}
 }

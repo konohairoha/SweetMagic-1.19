@@ -32,7 +32,7 @@ public class RankUpMagic extends BaseMagicItem {
 	 */
 
 	// ツールチップ
-	public List<MutableComponent> magicToolTip (List<MutableComponent> toolTip) {
+	public List<MutableComponent> magicToolTip(List<MutableComponent> toolTip) {
 		toolTip.add(this.getText("magic_aether_force", String.format("%,d", this.addExp())));
 		return toolTip;
 	}
@@ -55,7 +55,7 @@ public class RankUpMagic extends BaseMagicItem {
 	}
 
 	// 回復魔法
-	public boolean ruckUpMagic (Level world, Player player, ItemStack stack, WandInfo wandInfo) {
+	public boolean ruckUpMagic(Level world, Player player, ItemStack stack, WandInfo wandInfo) {
 
 		// 杖の取得
 		IWand wand = wandInfo.getWand();
@@ -70,7 +70,7 @@ public class RankUpMagic extends BaseMagicItem {
 	}
 
 	// 追加経験値
-	public int addExp () {
+	public int addExp() {
 		switch(this.data) {
 		case 1: return 1000;
 		case 2: return 3000;
@@ -82,7 +82,7 @@ public class RankUpMagic extends BaseMagicItem {
 	}
 
 	@Override
-	public boolean canItemMagic (Level world, Player player, WandInfo info) {
+	public boolean canItemMagic(Level world, Player player, WandInfo info) {
 		IWand wand = info.getWand();
 		int level = info.getLevel();
 		return !wand.isCreativeWand() && level < wand.getMaxLevel();

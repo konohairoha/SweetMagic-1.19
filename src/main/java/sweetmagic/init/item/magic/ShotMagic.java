@@ -43,17 +43,17 @@ public class ShotMagic extends BaseMagicItem {
 	}
 
 	/**
-	 *  0 = 光魔法
-	 *  1 = 炎魔法
-	 *  2 = 炎魔法tire2
-	 *  3 = 氷魔法
-	 *  4 = 氷魔法tire2
-	 *  5 = ディグ魔法
-	 *  6 = 通常魔法
+	 * 0 = 光魔法
+	 * 1 = 炎魔法
+	 * 2 = 炎魔法tire2
+	 * 3 = 氷魔法
+	 * 4 = 氷魔法tire2
+	 * 5 = ディグ魔法
+	 * 6 = 通常魔法
 	 */
 
 	// ツールチップ
-	public List<MutableComponent> magicToolTip (List<MutableComponent> toolTip) {
+	public List<MutableComponent> magicToolTip(List<MutableComponent> toolTip) {
 
 		switch(this.data) {
 		case 4:
@@ -79,15 +79,17 @@ public class ShotMagic extends BaseMagicItem {
 			toolTip.add(this.getText(this.name));
 			break;
 		case 23:
+			toolTip.add(this.getText("magic_illuminate", "" + 1));
 			toolTip.add(this.getText(this.name));
 			break;
 		case 24:
+			toolTip.add(this.getText("magic_illuminate", "" + 3));
 			toolTip.add(this.getText("magic_holy_light"));
-			toolTip.add(this.getText(this.name));
 			break;
 		case 25:
 			toolTip.add(this.getText("magic_storm"));
 			toolTip.add(this.getText(this.name));
+			toolTip.add(this.getText("magic_tempest_storm", this.getEffectText("bleeding").getString(), "" + 1));
 			break;
 		case 28:
 			toolTip.add(this.getText("magic_bubleprison"));
@@ -116,7 +118,60 @@ public class ShotMagic extends BaseMagicItem {
 			toolTip.add(this.getText("magic_cherry"));
 			toolTip.add(this.getText("magic_cherry_vulnerable", this.getEnchaText(Math.max(1, this.data - 36)).getString()));
 			break;
-		default :
+		case 39:
+			toolTip.add(this.getText("magic_illuminate", "" + 5));
+			toolTip.add(this.getText(this.name, this.getEffectText("flame").getString(), this.getMCText("glowing").getString()));
+			break;
+		case 40:
+			toolTip.add(this.getText("magic_meteor"));
+			toolTip.add(this.getText("magic_meteor_vulnerable"));
+			break;
+		case 41:
+			toolTip.add(this.getText("magic_frostrain"));
+			toolTip.add(this.getText("magic_frostrain_vulnerable"));
+			break;
+		case 42:
+			String bleed = this.getEffectText("bleeding").getString();
+			toolTip.add(this.getText("magic_storm"));
+			toolTip.add(this.getText("magic_gale", this.getEnchaText(2).getString()));
+			toolTip.add(this.getText("magic_tempest_storm", bleed, "" + 2));
+			toolTip.add(this.getText("magic_tempest_storm_damage", bleed));
+			break;
+		case 43:
+			toolTip.add(this.getText("magic_magia_destroy"));
+			toolTip.add(this.getText(this.name));
+			break;
+		case 45:
+			toolTip.add(this.getText(this.name, this.getEffectText("deadly_poison").getString(), this.getEffectText("magic_damage_receive").getString()));
+			toolTip.add(this.getText(this.name + "_dame", this.getEffectText("reflash_effect").getString()));
+			break;
+		case 46:
+			toolTip.add(this.getText("magic_range_dig"));
+			break;
+		case 47:
+			toolTip.add(this.getText("magic_rockblast", 5 + "-" + 8));
+			break;
+		case 48:
+			toolTip.add(this.getText("magic_cherry"));
+			toolTip.add(this.getText("magic_cherry_vulnerable", this.getEnchaText(3).getString()));
+			break;
+		case 49:
+			toolTip.add(this.getText("magic_advance"));
+			toolTip.add(this.getText(this.name));
+			break;
+		case 50:
+			toolTip.add(this.getText("magic_bubleprison"));
+			toolTip.add(this.getText("magic_scumefang"));
+			toolTip.add(this.getText(this.name));
+			break;
+		case 51:
+			toolTip.add(this.getText(this.name));
+			toolTip.add(this.getText(this.name + 1));
+			toolTip.add(this.getText("magic_bloodwave2"));
+			toolTip.add(this.getText(this.name + 2));
+			toolTip.add(this.getText(this.name + 3));
+			break;
+		default:
 			toolTip.add(this.getText(this.name));
 			break;
 		}
@@ -131,7 +186,7 @@ public class ShotMagic extends BaseMagicItem {
 		RandomSource rand = world.random;
 		float level = wandInfo.getLevel();
 
-		// ( レベル × 0.2 ) + 最小( (レベル - 1) × 0.175, 5)  + 最小( 最大(5 × (1 - (レベル - 1) × 0.02), 0), 4)
+		// ( レベル × 0.2 ) + 最小( (レベル - 1) × 0.175, 5) + 最小( 最大(5 × (1 - (レベル - 1) × 0.02), 0), 4)
 		float power = this.getPower(wandInfo);
 		float shotSpeed = 2F + level * 0.05F;
 		boolean hasBlood = this.hasBloodSuckingRing(player);
@@ -340,7 +395,6 @@ public class ShotMagic extends BaseMagicItem {
 			}
 
 			this.addPotion(player, PotionInit.blood_curse, 0, 600);
-
 			break;
 		case 33:
 			entity = new DigMagicShot(world, player, wandInfo);
@@ -378,6 +432,107 @@ public class ShotMagic extends BaseMagicItem {
 			entity.setAddDamage(entity.getAddDamage() + power * 1.67F);
 			entity.setRange(10D);
 			entity.setData(2);
+			break;
+		case 39:
+			entity = new LightMagicShot(world, player, wandInfo);
+			entity.setAddDamage(entity.getAddDamage() + power * 2.25F);
+			entity.setRange(12D);
+			entity.setData(3);
+			break;
+		case 40:
+			entity = new FireMagicShot(world, player, wandInfo);
+			entity.setAddDamage(entity.getAddDamage() + power * 2F);
+			entity.setRange(12D);
+			entity.setData(3);
+			break;
+		case 41:
+			entity = new FrostMagicShot(world, player, wandInfo);
+			entity.setAddDamage(entity.getAddDamage() + power * 2F);
+			entity.setRange(12D);
+			entity.setData(3);
+			break;
+		case 42:
+			entity = new CycloneMagicShot(world, player, wandInfo);
+			entity.setAddDamage(entity.getAddDamage() + power * 1.75F);
+			entity.setRange(18.5D);
+			entity.setData(3);
+			break;
+		case 43:
+			entity = new ExplosionMagicShot(world, player, wandInfo);
+			entity.setAddDamage(entity.getAddDamage() + power * 2F);
+			entity.setRange(14D);
+			entity.setData(3);
+			entity.setAddAttack(3);
+			break;
+		case 44:
+			entity = new GravityMagicShot(world, player, wandInfo);
+			entity.setAddDamage(entity.getAddDamage() + power * 2.25F);
+			entity.setRange(15D);
+			entity.setData(3);
+			entity.setHitDead(false);
+			break;
+		case 45:
+			entity = new PoisonMagicShot(world, player, wandInfo);
+			entity.setAddDamage(entity.getAddDamage() + power * 2F);
+			entity.setRange(15D);
+			entity.setData(3);
+			break;
+		case 46:
+			entity = new DigMagicShot(world, player, wandInfo);
+			entity.setAddDamage(entity.getAddDamage() + power * 1.5F);
+			entity.setData(3);
+			entity.setBlockPenetration(true);
+			entity.setMaxBreak(7);
+			break;
+		case 47:
+			entity = new RockBlastMagicShot(world, player, wandInfo);
+			entity.setAddDamage(entity.getAddDamage() + power * 2F);
+			entity.setData(3);
+			entity.setAddAttack(entity.getAddAttack() + rand.nextInt(4) + 5);
+			break;
+		case 48:
+			entity = new CherryMagicShot(world, player, wandInfo);
+			entity.setAddDamage(entity.getAddDamage() + power * 2F);
+			entity.setRange(15D);
+			entity.setData(3);
+			break;
+		case 49:
+			entity = new BulletMagicShot(world, player, wandInfo);
+			entity.setAddDamage(entity.getAddDamage() + power * 1.67F);
+			entity.setRange(20D);
+			entity.setMaxLifeTime(100);
+			entity.setData(3);
+			entity.setBlockPenetration(true);
+			entity.setHitDead(false);
+			break;
+		case 50:
+			entity = new BubbleMagicShot(world, player, wandInfo);
+			entity.setAddDamage(entity.getAddDamage() + power * 2.67F);
+			entity.setData(3);
+			entity.setAddAttack(entity.getAddAttack() + 3);
+			break;
+		case 51:
+			entity = new BloodMagicShot(world, player, wandInfo);
+			float rate4 = player.getHealth() >= player.getMaxHealth() * 0.5F ? 3.25F : 0.15F;
+			entity.setAddDamage(entity.getAddDamage() + power * rate4);
+			entity.setData(3);
+
+			FoodData foodData2 = player.getFoodData();
+			int foodLevel2 = foodData2.getFoodLevel();
+			entity.setRange(foodLevel2 > 10 ? 20D : 2.5D);
+
+			if (!player.isCreative()) {
+
+				if (player.getHealth() > 1F && !hasBlood) {
+					player.setHealth(player.getHealth() - 1F);
+				}
+
+				if (foodLevel2 > 1) {
+					foodData2.setFoodLevel(foodLevel2 - 1);
+				}
+			}
+
+			this.addPotion(player, PotionInit.blood_curse, 0, 600);
 			break;
 		}
 

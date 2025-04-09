@@ -10,7 +10,7 @@ public class SMBurnItem extends SMItem {
 
 	private final int burnTime;
 
-	public SMBurnItem (String name, int burnTime, CreativeModeTab tab) {
+	public SMBurnItem(String name, int burnTime, CreativeModeTab tab) {
 		super(name, setItem(tab));
 		this.burnTime = burnTime;
 	}

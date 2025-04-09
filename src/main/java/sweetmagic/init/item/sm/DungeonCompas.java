@@ -2,8 +2,6 @@ package sweetmagic.init.item.sm;
 
 import java.util.List;
 
-import org.jetbrains.annotations.Nullable;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -14,7 +12,6 @@ import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
@@ -26,7 +23,7 @@ public class DungeonCompas extends SMMagicItem {
 
 	public static final String ACTIVE = "Active";
 
-	public DungeonCompas (String name) {
+	public DungeonCompas(String name) {
 		super(name);
 	}
 
@@ -57,10 +54,10 @@ public class DungeonCompas extends SMMagicItem {
 	}
 
 	private double getRot(Entity entity) {
-		return Mth.positiveModulo((double) (entity.getVisualRotationYInDegrees() / 360.0F), 1.0D);
+		return Mth.positiveModulo((double) (entity.getVisualRotationYInDegrees() / 360F), 1D);
 	}
 
-	public String getDungeonName (ItemStack stack) {
+	public String getDungeonName(ItemStack stack) {
 		CompoundTag tags = stack.getOrCreateTag();
 		if (!tags.getBoolean("foundStructure") || !tags.contains("selectId")) { return "select_dungen"; }
 		return StructureInit.strucMap.get(tags.getInt("selectId")).getName();
@@ -68,7 +65,7 @@ public class DungeonCompas extends SMMagicItem {
 
 	// ツールチップの表示
 	@Override
-	public void appendHoverText(ItemStack stack, @Nullable Level world, List<Component> toolTip, TooltipFlag flag) {
+	public void addTip(ItemStack stack, List<Component> toolTip) {
 		toolTip.add(this.getText(this.name).withStyle(GOLD));
 	}
 }
