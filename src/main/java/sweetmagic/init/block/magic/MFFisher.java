@@ -41,11 +41,11 @@ public class MFFisher extends BaseMFBlock {
 	 */
 
 	// 最大MFの取得
-	public int getMaxMF () {
+	public int getMaxMF() {
 		switch(this.data) {
 		case 3: return 40000;
 		case 4: return 400000;
-		default : return 10000;
+		default: return 10000;
 		}
 	}
 
@@ -53,7 +53,7 @@ public class MFFisher extends BaseMFBlock {
 	public int getTier() {
 		switch(this.data) {
 		case 4: return 2;
-		default : return 1;
+		default: return 1;
 		}
 	}
 
@@ -63,9 +63,10 @@ public class MFFisher extends BaseMFBlock {
 	}
 
 	// ブロックでのアクション
-	public void actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
-		if (world.isClientSide) { return; }
+	public boolean actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
+		if (world.isClientSide) { return true; }
 		this.openGUI(world, pos, player, (TileMFFisher) world.getBlockEntity(pos));
+		return true;
 	}
 
 	@Override
@@ -73,37 +74,36 @@ public class MFFisher extends BaseMFBlock {
 		return new TileMFFisher(pos, state);
 	}
 
-	public BlockEntityType<? extends TileAbstractSM> getTileType () {
+	public BlockEntityType<? extends TileAbstractSM> getTileType() {
 		return TileInit.mfFisher;
 	}
 
 	@Nullable
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
-		BlockEntityType<? extends TileAbstractSM> tileType = this.getTileType();
-		return tileType != null ? this.createMailBoxTicker(world, type, tileType) : null;
+		return this.createMailBoxTicker(world, type, this.getTileType());
 	}
 
-	public int getData () {
+	public int getData() {
 		return this.data;
 	}
 
-	public void addTip (List<Component> toolTip, ItemStack stack, CompoundTag tags) {
+	public void addTip(List<Component> toolTip, ItemStack stack, CompoundTag tags) {
 
 		if (this.data == 3 || this.data == 4) {
-			toolTip.add(this.getTipArray(this.getText("aehter_furnace"), GREEN));
+			toolTip.add(this.getText("aehter_furnace").withStyle(GREEN));
 			toolTip.add(this.data == 3 ? new ItemStack(ItemInit.aether_crystal).getDisplayName() : new ItemStack(ItemInit.divine_crystal).getDisplayName());
 			return;
 		}
 
-		toolTip.add(this.getTipArray(this.getText(this.name), GREEN));
+		toolTip.add(this.getText(this.name).withStyle(GREEN));
 
-		if (this.data == 2) {
-			toolTip.add(this.getTipArray(this.getText(this.name + "_mf"), GREEN));
+		if (this.data == 2 || this.data == 6) {
+			toolTip.add(this.getText("mf_squeezer_mf").withStyle(GREEN));
 		}
 	}
 
 	// RS信号で停止するかどうか
-	public boolean isRSStop () {
+	public boolean isRSStop() {
 		return true;
 	}
 }

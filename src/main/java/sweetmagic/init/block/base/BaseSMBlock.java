@@ -49,7 +49,7 @@ public class BaseSMBlock extends Block implements ISMTip {
 		this.name = name;
 	}
 
-	public String getRegistryName () {
+	public String getRegistryName() {
 		return this.name;
 	}
 
@@ -61,21 +61,20 @@ public class BaseSMBlock extends Block implements ISMTip {
 
 	// ブロックでのアクション
 	public InteractionResult onUse(Level world, BlockPos pos, Player player, InteractionHand hand) {
-
 		ItemStack stack = player.getItemInHand(hand);
 		if (!this.canRightClick(player, stack)) { return InteractionResult.PASS; }
 
-		this.actionBlock(world, pos, player, stack);
-		return InteractionResult.sidedSuccess(world.isClientSide);
+		boolean actionFlag = this.actionBlock(world, pos, player, stack);
+		return actionFlag ? InteractionResult.sidedSuccess(world.isClientSide) : InteractionResult.PASS;
 	}
 
 	// 右クリックしない
-	public boolean canRightClick (Player player, ItemStack stack) {
+	public boolean canRightClick(Player player, ItemStack stack) {
 		return false;
 	}
 
 	// ブロックでのアクション
-	public void actionBlock (Level world, BlockPos pos, Player player, ItemStack stack) { }
+	public boolean actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) { return false; }
 
 	@Override
 	public List<ItemStack> getDrops(BlockState state, LootContext.Builder build) {
@@ -84,44 +83,44 @@ public class BaseSMBlock extends Block implements ISMTip {
 	}
 
 	// ドロップするかどうか
-	protected boolean isDrop () {
+	protected boolean isDrop() {
 		return true;
 	}
 
 	// アイテムリストをまとめてドロップ
-	public void spawnItemList (Level world, BlockPos pos, List<ItemStack> stackList) {
+	public void spawnItemList(Level world, BlockPos pos, List<ItemStack> stackList) {
 		if (world.isClientSide) { return; }
 		ItemHelper.compactItemListNoStacksize(stackList);
 		stackList.forEach(s -> this.spawnItem(world, pos, s));
 	}
 
-	public void spawnItem (Level world, BlockPos pos, ItemStack stack) {
+	public void spawnItem(Level world, BlockPos pos, ItemStack stack) {
 		ItemEntity entity = new ItemEntity(world, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, stack.copy());
 		entity.setNoPickUpDelay();
 		entity.setUnlimitedLifetime();
 		world.addFreshEntity(entity);
 	}
 
-	public void playerSound (Level world, BlockPos pos, SoundEvent sound, float vol, float pitch) {
+	public void playerSound(Level world, BlockPos pos, SoundEvent sound, float vol, float pitch) {
 		world.playSound(null, pos, sound, SoundSource.BLOCKS, vol, pitch);
 	}
 
 	// ブロックの取得
-	public Block getBlock (Level world, BlockPos pos) {
+	public Block getBlock(Level world, BlockPos pos) {
 		return world.getBlockState(pos).getBlock();
 	}
 
 	// ブロックえんちちーの取得
-	public BlockEntity getTile (Level world, BlockPos pos) {
+	public BlockEntity getTile(Level world, BlockPos pos) {
 		return world.getBlockEntity(pos);
 	}
 
 	// RS信号で停止するかどうか
-	public boolean isRSStop () {
+	public boolean isRSStop() {
 		return false;
 	}
 
-	public BlockEntityType<? extends TileAbstractSM> getTileType () {
+	public BlockEntityType<? extends TileAbstractSM> getTileType() {
 		return null;
 	}
 
@@ -141,7 +140,7 @@ public class BaseSMBlock extends Block implements ISMTip {
 		return createTickerHelper(tileType, grill, world.isClientSide() ? TileAbstractSM::clientTick : TileAbstractSM::serverTick);
 	}
 
-	public void openGUI (Level world, BlockPos pos, Player player, MenuProvider menu) {
+	public void openGUI(Level world, BlockPos pos, Player player, MenuProvider menu) {
 		NetworkHooks.openScreen((ServerPlayer) player, menu, pos);
 	}
 
@@ -157,17 +156,17 @@ public class BaseSMBlock extends Block implements ISMTip {
 		return setState(material, sound, destroyTime, explosionResist).lightLevel((l) -> lightLevel);
 	}
 
-	public Block getBlock (ItemStack stack) {
+	public Block getBlock(ItemStack stack) {
 		return ((BlockItem) stack.getItem()).getBlock();
 	}
 
-	public Block getBlock (LevelAccessor world, BlockPos pos) {
+	public Block getBlock(LevelAccessor world, BlockPos pos) {
 		return world.getBlockState(pos).getBlock();
 	}
 
-	public void blockSound (Level world, Block block, BlockPos pos, Player player) {
-        SoundType sound = this.getSoundType(block.defaultBlockState(), world, pos, player);
-        this.playerSound(world, pos, sound.getPlaceSound(), (sound.getVolume() + 1F) / 2F, sound.getPitch() * 0.8F);
+	public void blockSound(Level world, Block block, BlockPos pos, Player player) {
+		SoundType sound = this.getSoundType(block.defaultBlockState(), world, pos, player);
+		this.playerSound(world, pos, sound.getPlaceSound(), (sound.getVolume() + 1F) / 2F, sound.getPitch() * 0.8F);
 	}
 
 	@Override
@@ -186,7 +185,7 @@ public class BaseSMBlock extends Block implements ISMTip {
 		super.onRemove(state, world, pos, newState, isMoving);
 	}
 
-	public boolean isKeepTile () {
+	public boolean isKeepTile() {
 		return false;
 	}
 
@@ -200,7 +199,7 @@ public class BaseSMBlock extends Block implements ISMTip {
 		return this.getEnchantPower();
 	}
 
-	public float getEnchantPower () {
+	public float getEnchantPower() {
 		return 0F;
 	}
 
@@ -209,7 +208,7 @@ public class BaseSMBlock extends Block implements ISMTip {
 		this.addBlockTip(toolTip);
 	}
 
-	public void addBlockTip (List<Component> toolTip) {
+	public void addBlockTip(List<Component> toolTip) {
 		if (this.getEnchantPower() > 0F) {
 			toolTip.add(this.getTipArray(this.getText("enchant_power"), ": ", this.getLabel("" + this.getEnchantPower()).withStyle(WHITE) , GOLD));
 		}

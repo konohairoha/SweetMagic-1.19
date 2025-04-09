@@ -29,8 +29,8 @@ import sweetmagic.init.tile.sm.TileMFChangerMaster;
 
 public class MFChager extends BaseMFBlock {
 
-	private static final VoxelShape AABB = Block.box(0D, 0D, 0D, 16D, 8D, 16D);
 	private final int data;
+	private static final VoxelShape AABB = Block.box(0D, 0D, 0D, 16D, 8D, 16D);
 
 	public MFChager(String name, int data) {
 		super(name);
@@ -38,26 +38,26 @@ public class MFChager extends BaseMFBlock {
 	}
 
 	// 当たり判定
-	public VoxelShape getShape(BlockState state, BlockGetter get, BlockPos pos, CollisionContext col) {
+	public VoxelShape getShape(BlockState state, BlockGetter get, BlockPos pos, CollisionContext con) {
 		return AABB;
 	}
 
 	// 最大MFの取得
-	public int getMaxMF () {
+	public int getMaxMF() {
 		switch (this.data) {
 		case 1  : return 800000;
 		case 2  : return 4000000;
-		default : return 30000;
+		default:  return 30000;
 		}
 	}
 
-	public int getTier () {
+	public int getTier() {
 		return this.data + 1;
 	}
 
 	// ブロックでのアクション
-	public void actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
-		if (world.isClientSide) { return; }
+	public boolean actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
+		if (world.isClientSide) { return false; }
 
 		MenuProvider tile = null;
 
@@ -74,6 +74,7 @@ public class MFChager extends BaseMFBlock {
 		}
 
 		this.openGUI(world, pos, player, tile);
+		return true;
 	}
 
 	public boolean keepTileInfo() {
@@ -119,11 +120,11 @@ public class MFChager extends BaseMFBlock {
 		switch (this.data) {
 		case 1  : return new TileMFChangerAdvanced(pos, state);
 		case 2  : return new TileMFChangerMaster(pos, state);
-		default : return new TileMFChanger(pos, state);
+		default:  return new TileMFChanger(pos, state);
 		}
 	}
 
-	public BlockEntityType<? extends TileAbstractSM> getTileType () {
+	public BlockEntityType<? extends TileAbstractSM> getTileType() {
 		switch (this.data) {
 		case 1: return TileInit.changerAdavance;
 		case 2: return TileInit.changerMaster;
@@ -133,16 +134,15 @@ public class MFChager extends BaseMFBlock {
 
 	@Nullable
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
-		BlockEntityType<? extends TileAbstractSM> tileType = this.getTileType();
-		return tileType != null ? this.createMailBoxTicker(world, type, tileType) : null;
+		return this.createMailBoxTicker(world, type, this.getTileType());
 	}
 
 	// RS信号で停止するかどうか
-	public boolean isRSStop () {
+	public boolean isRSStop() {
 		return true;
 	}
 
-	public void addTip (List<Component> toolTip, ItemStack stack, CompoundTag tags) {
+	public void addTip(List<Component> toolTip, ItemStack stack, CompoundTag tags) {
 		toolTip.add(this.getTipArray(this.getText("mfchanger"), GREEN));
 	}
 }

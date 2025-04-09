@@ -33,9 +33,8 @@ public class MFTable extends BaseMFBlock {
 	}
 
 	// ブロックでのアクション
-	public void actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
-
-		if (world.isClientSide) { return; }
+	public boolean actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
+		if (world.isClientSide) { return false; }
 
 		MenuProvider tile = null;
 
@@ -52,18 +51,19 @@ public class MFTable extends BaseMFBlock {
 		}
 
 		this.openGUI(world, pos, player, tile);
+		return true;
 	}
 
 	// 最大MFの取得
-	public int getMaxMF () {
+	public int getMaxMF() {
 		switch (this.data) {
 		case 1  : return 400000;
 		case 2  : return 8000000;
-		default : return 20000;
+		default:  return 20000;
 		}
 	}
 
-	public int getTier () {
+	public int getTier() {
 		return this.data + 1;
 	}
 
@@ -108,13 +108,13 @@ public class MFTable extends BaseMFBlock {
 	@Override
 	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
 		switch (this.data) {
-		case 1  : return new TileMFTableAdvanced(pos, state);
-		case 2  : return new TileMFTableMaster(pos, state);
-		default : return new TileMFTable(pos, state);
+		case 1:  return new TileMFTableAdvanced(pos, state);
+		case 2:  return new TileMFTableMaster(pos, state);
+		default: return new TileMFTable(pos, state);
 		}
 	}
 
-	public BlockEntityType<? extends TileAbstractSM> getTileType () {
+	public BlockEntityType<? extends TileAbstractSM> getTileType() {
 		switch (this.data) {
 		case 1: return TileInit.tableAdavance;
 		case 2: return TileInit.tableMaster;
@@ -124,8 +124,7 @@ public class MFTable extends BaseMFBlock {
 
 	@Nullable
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
-		BlockEntityType<? extends TileAbstractSM> tileType = this.getTileType();
-		return tileType != null ? this.createMailBoxTicker(world, type, tileType) : null;
+		return this.createMailBoxTicker(world, type, this.getTileType());
 	}
 
 	public void addTip (List<Component> toolTip, ItemStack stack, CompoundTag tags) {

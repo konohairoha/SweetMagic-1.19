@@ -51,19 +51,20 @@ public class SturdustCrystal extends BaseFaceBlock implements EntityBlock {
 		BlockInfo.create(this, SweetMagicCore.smMagicTab, name);
 	}
 
-    @Override
-    public RenderShape getRenderShape(BlockState pState) {
-        return RenderShape.ENTITYBLOCK_ANIMATED;
-    }
+	@Override
+	public RenderShape getRenderShape(BlockState pState) {
+		return RenderShape.ENTITYBLOCK_ANIMATED;
+	}
 
 	// 右クリック出来るか
-	public boolean canRightClick (Player player, ItemStack stack) {
+	public boolean canRightClick(Player player, ItemStack stack) {
 		return true;
 	}
 
 	// ブロックでのアクション
-	public void actionBlock (Level world, BlockPos pos, Player player, ItemStack stack) {
-		if (world.isClientSide || pos.getY() <= world.getMinBuildHeight() + 1) { return; }
+	public boolean actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
+		if (world.isClientSide) { return true; }
+		if (pos.getY() <= world.getMinBuildHeight() + 1) { return false; }
 
 		if (world.getBlockState(pos).getValue(ISTOP)) {
 			pos = pos.below();
@@ -76,7 +77,7 @@ public class SturdustCrystal extends BaseFaceBlock implements EntityBlock {
 			tile.sendPKT();
 			player.sendSystemMessage(this.getText("place_gate").withStyle(GREEN));
 			player.sendSystemMessage(this.getText("break_gate").withStyle(RED));
-			return;
+			return false;
 		}
 
 		Direction face = world.getBlockState(pos).getValue(FACING);
@@ -110,6 +111,7 @@ public class SturdustCrystal extends BaseFaceBlock implements EntityBlock {
 
 		Map<BlockPos, BlockState> posMap = isZ ? SturdustCrystal.getZPosMap(pos) : SturdustCrystal.getXPosMap(pos);
 		posMap.forEach((p, s) -> world.setBlock(p, s, 3));
+		return true;
 	}
 
 	@Override
@@ -145,7 +147,7 @@ public class SturdustCrystal extends BaseFaceBlock implements EntityBlock {
 	}
 
 	// ドロップするかどうか
-	protected boolean isDrop () {
+	protected boolean isDrop() {
 		return false;
 	}
 
@@ -163,12 +165,12 @@ public class SturdustCrystal extends BaseFaceBlock implements EntityBlock {
 		return new ItemStack(BlockInit.sturdust_crystal);
 	}
 
-	public float getEnchantPower () {
+	public float getEnchantPower() {
 		return 2.5F;
 	}
 
 	@Override
-	public void addBlockTip (List<Component> toolTip) {
+	public void addBlockTip(List<Component> toolTip) {
 		toolTip.add(this.getText(this.name).withStyle(GREEN));
 		toolTip.add(this.getText(this.name + "_boss").withStyle(GOLD));
 	}
@@ -177,7 +179,7 @@ public class SturdustCrystal extends BaseFaceBlock implements EntityBlock {
 		build.add(FACING, ISTOP);
 	}
 
-	public static Map<BlockPos, BlockState> getXPosMap (BlockPos pos) {
+	public static Map<BlockPos, BlockState> getXPosMap(BlockPos pos) {
 		Map<BlockPos, BlockState> map = new LinkedHashMap<>();
 
 		pos = pos.below();
@@ -190,43 +192,43 @@ public class SturdustCrystal extends BaseFaceBlock implements EntityBlock {
 
 		for (int addX = -2; addX < 3; addX++) {
 			map.put(pos.offset(addX, 1, -3), railings);
-			map.put(pos.offset(addX, 1, 2), railings);
+			map.put(pos.offset(addX, 1, 3), railings);
 		}
 
 		map.put(pos.offset(-2, 1, -2), railings);
 		map.put(pos.offset(2, 1, -2), railings);
-		map.put(pos.offset(-2, 1, 1), railings);
-		map.put(pos.offset(2, 1, 1), railings);
+		map.put(pos.offset(-2, 1, 2), railings);
+		map.put(pos.offset(2, 1, 2), railings);
 
-		for (int addY = 1; addY < 6; addY++)
-			for (int addZ = -3; addZ < 3; addZ++)
+		for (int addY = 1; addY < 7; addY++)
+			for (int addZ = -3; addZ < 4; addZ++)
 				map.put(pos.offset(0, addY, addZ), flame_l);
 
-		for (int addY = 0; addY < 5; addY++)
-			for (int addZ = -2; addZ < 2; addZ++)
+		for (int addY = 0; addY < 6; addY++)
+			for (int addZ = -2; addZ < 3; addZ++)
 				map.put(pos.offset(0, addY, addZ), flame);
 
 		for (int addX = -2; addX < 3; addX++)
-			for (int addZ = -3; addZ < 3; addZ++)
+			for (int addZ = -3; addZ < 4; addZ++)
 				map.put(pos.offset(addX, 0, addZ), flame_b);
 
 		for (int addX = -1; addX < 2; addX++)
-			for (int addZ = -2; addZ < 2; addZ++)
+			for (int addZ = -2; addZ < 3; addZ++)
 				map.put(pos.offset(addX, 0, addZ), flame);
 
-		for (int addY = 1; addY < 4; addY++)
-			for (int addZ = -1; addZ < 1; addZ++)
+		for (int addY = 1; addY < 5; addY++)
+			for (int addZ = -1; addZ < 2; addZ++)
 				map.put(pos.offset(0, addY, addZ), portal);
 
 		map.put(pos.offset(-2, 0, -3), light);
 		map.put(pos.offset(2, 0, -3), light);
-		map.put(pos.offset(-2, 0, 2), light);
-		map.put(pos.offset(2, 0, 2), light);
+		map.put(pos.offset(-2, 0, 3), light);
+		map.put(pos.offset(2, 0, 3), light);
 
 		return map;
 	}
 
-	public static Map<BlockPos, BlockState> getZPosMap (BlockPos pos) {
+	public static Map<BlockPos, BlockState> getZPosMap(BlockPos pos) {
 		Map<BlockPos, BlockState> map = new LinkedHashMap<>();
 
 		pos = pos.below();
@@ -239,39 +241,38 @@ public class SturdustCrystal extends BaseFaceBlock implements EntityBlock {
 
 		for (int addX = -2; addX < 3; addX++) {
 			map.put(pos.offset(-3, 1, addX), railings);
-			map.put(pos.offset(2, 1, addX), railings);
+			map.put(pos.offset(3, 1, addX), railings);
 		}
 
 		map.put(pos.offset(-2, 1, -2), railings);
 		map.put(pos.offset(-2, 1, 2), railings);
-		map.put(pos.offset(1, 1, -2), railings);
-		map.put(pos.offset(1, 1, 2), railings);
+		map.put(pos.offset(2, 1, -2), railings);
+		map.put(pos.offset(2, 1, 2), railings);
 
-		for (int addY = 1; addY < 6; addY++)
-			for (int addZ = -3; addZ < 3; addZ++)
+		for (int addY = 1; addY < 7; addY++)
+			for (int addZ = -3; addZ < 4; addZ++)
 				map.put(pos.offset(addZ, addY, 0), flame_l);
 
-		for (int addY = 0; addY < 5; addY++)
-			for (int addZ = -2; addZ < 2; addZ++)
+		for (int addY = 0; addY < 6; addY++)
+			for (int addZ = -2; addZ < 3; addZ++)
 				map.put(pos.offset(addZ, addY, 0), flame);
 
 		for (int addX = -2; addX < 3; addX++)
-			for (int addZ = -3; addZ < 3; addZ++)
+			for (int addZ = -3; addZ < 4; addZ++)
 				map.put(pos.offset(addZ, 0, addX), flame_b);
 
 		for (int addX = -1; addX < 2; addX++)
-			for (int addZ = -2; addZ < 2; addZ++)
+			for (int addZ = -2; addZ < 3; addZ++)
 				map.put(pos.offset(addZ, 0, addX), flame);
 
-		for (int addY = 1; addY < 4; addY++)
-			for (int addZ = -1; addZ < 1; addZ++)
+		for (int addY = 1; addY < 5; addY++)
+			for (int addZ = -1; addZ < 2; addZ++)
 				map.put(pos.offset(addZ, addY, 0), portal);
 
 		map.put(pos.offset(-3, 0, -2), light);
 		map.put(pos.offset(-3, 0, 2), light);
 		map.put(pos.offset(2, 0, -2), light);
 		map.put(pos.offset(2, 0, 2), light);
-
 		return map;
 	}
 }

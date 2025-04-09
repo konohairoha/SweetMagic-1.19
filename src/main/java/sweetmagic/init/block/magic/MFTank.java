@@ -34,8 +34,8 @@ public class MFTank extends BaseMFBlock {
 	}
 
 	// ブロックでのアクション
-	public void actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
-		if (world.isClientSide) { return; }
+	public boolean actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
+		if (world.isClientSide) { return true; }
 
 		MenuProvider tile = null;
 
@@ -55,15 +55,16 @@ public class MFTank extends BaseMFBlock {
 		}
 
 		this.openGUI(world, pos, player, tile);
+		return true;
 	}
 
 	// tierの取得
-	public int getTier () {
+	public int getTier() {
 		return this.data + 1;
 	}
 
 	// 最大MFの取得
-	public int getMaxMF () {
+	public int getMaxMF() {
 		switch (this.data) {
 		case 1: return 1000000;
 		case 2: return 10000000;
@@ -137,7 +138,8 @@ public class MFTank extends BaseMFBlock {
 		default: return new TileMFTank(pos, state);
 		}
 	}
-	public BlockEntityType<? extends TileAbstractSM> getTileType () {
+
+	public BlockEntityType<? extends TileAbstractSM> getTileType() {
 		switch (this.data) {
 		case 1: return TileInit.tankAdavance;
 		case 2: return TileInit.tankMaster;
@@ -148,11 +150,10 @@ public class MFTank extends BaseMFBlock {
 
 	@Nullable
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
-		BlockEntityType<? extends TileAbstractSM> tileType = this.getTileType();
-		return tileType != null ? this.createMailBoxTicker(world, type, tileType) : null;
+		return this.createMailBoxTicker(world, type, this.getTileType());
 	}
 
-	public void addTip (List<Component> toolTip, ItemStack stack, CompoundTag tags) {
+	public void addTip(List<Component> toolTip, ItemStack stack, CompoundTag tags) {
 		toolTip.add(this.getTipArray(this.getText("mftank"), GREEN));
 		toolTip.add(this.getTipArray(this.getText("mftank_pili"), GOLD));
 	}

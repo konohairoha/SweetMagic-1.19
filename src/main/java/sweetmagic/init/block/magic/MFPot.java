@@ -33,7 +33,7 @@ public class MFPot extends BaseMFBlock {
 	}
 
 	// 当たり判定
-	public VoxelShape getShape(BlockState state, BlockGetter get, BlockPos pos, CollisionContext col) {
+	public VoxelShape getShape(BlockState state, BlockGetter get, BlockPos pos, CollisionContext con) {
 		return AABB;
 	}
 
@@ -52,8 +52,8 @@ public class MFPot extends BaseMFBlock {
 	 */
 
 	// ブロックでのアクション
-	public void actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
-		if (world.isClientSide) { return; }
+	public boolean actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
+		if (world.isClientSide) { return false; }
 
 		TileMFPot tile = (TileMFPot) this.getTile(world, pos);
 
@@ -72,14 +72,15 @@ public class MFPot extends BaseMFBlock {
 		else {
 			player.sendSystemMessage(this.getTipArray(String.format("%,d", tile.getMF()) + "MF").withStyle(GREEN));
 		}
+		return true;
 	}
 
-	public int getData () {
+	public int getData() {
 		return this.data;
 	}
 
 	// 最大MFの取得
-	public int getMaxMF () {
+	public int getMaxMF() {
 		return 200000;
 	}
 
@@ -93,13 +94,12 @@ public class MFPot extends BaseMFBlock {
 		return new TileMFPot(pos, state);
 	}
 
-	public BlockEntityType<? extends TileAbstractSM> getTileType () {
+	public BlockEntityType<? extends TileAbstractSM> getTileType() {
 		return TileInit.mfpot;
 	}
 
 	@Nullable
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
-		BlockEntityType<? extends TileAbstractSM> tileType = this.getTileType();
-		return tileType != null ? this.createMailBoxTicker(world, type, tileType) : null;
+		return this.createMailBoxTicker(world, type, this.getTileType());
 	}
 }

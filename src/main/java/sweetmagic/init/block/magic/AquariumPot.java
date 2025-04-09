@@ -7,6 +7,7 @@ import javax.annotation.Nullable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
@@ -18,9 +19,9 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.fluids.FluidUtil;
 import sweetmagic.init.TileInit;
 import sweetmagic.init.block.base.BaseMFBlock;
-import sweetmagic.init.tile.sm.TileAbstractSM;
 import sweetmagic.init.tile.sm.TileAquariumPot;
 import sweetmagic.init.tile.sm.TileSMMagic;
 
@@ -39,7 +40,7 @@ public class AquariumPot extends BaseMFBlock {
 	}
 
 	// 当たり判定
-	public VoxelShape getShape(BlockState state, BlockGetter get, BlockPos pos, CollisionContext col) {
+	public VoxelShape getShape(BlockState state, BlockGetter get, BlockPos pos, CollisionContext con) {
 		return AABB;
 	}
 
@@ -58,17 +59,28 @@ public class AquariumPot extends BaseMFBlock {
 	 */
 
 	// ブロックでのアクション
-	public void actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
-		if (world.isClientSide) { return; }
-		this.openGUI(world, pos, player, (TileAquariumPot) this.getTile(world, pos));
+	public boolean actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
+		if (world.isClientSide) { return true; }
+
+		TileAquariumPot tile = (TileAquariumPot) this.getTile(world, pos);
+		if(this.data == 10 && FluidUtil.getFluidHandler(player.getItemInHand(InteractionHand.MAIN_HAND)).isPresent()){
+			FluidUtil.interactWithFluidHandler(player, player.getUsedItemHand(), world, pos, null);
+			tile.sendPKT();
+		}
+
+		else {
+			this.openGUI(world, pos, player, (TileAquariumPot) this.getTile(world, pos));
+		}
+
+		return true;
 	}
 
-	public int getData () {
+	public int getData() {
 		return this.data;
 	}
 
 	// 最大MFの取得
-	public int getMaxMF () {
+	public int getMaxMF() {
 		return 500000;
 	}
 
@@ -77,11 +89,11 @@ public class AquariumPot extends BaseMFBlock {
 		return this.tier;
 	}
 
-	public ItemStack getStack () {
+	public ItemStack getStack() {
 		return new ItemStack(this.block);
 	}
 
-	public void addTip (List<Component> toolTip, ItemStack stack, CompoundTag tags) {
+	public void addTip(List<Component> toolTip, ItemStack stack, CompoundTag tags) {
 
 		switch (this.data) {
 		case 0:
@@ -96,7 +108,17 @@ public class AquariumPot extends BaseMFBlock {
 			toolTip.add(this.getTipArray(this.getText(this.name), GREEN));
 			toolTip.add(this.getTipArray(this.getText(this.name + "_mf"), GREEN));
 			break;
-		default :
+		case 5:
+			toolTip.add(this.getTipArray(this.getText("solid_star_pot"), GREEN));
+			break;
+		case 6:
+			toolTip.add(this.getTipArray(this.getText("zinnia_pot"), GREEN));
+			break;
+		case 10:
+			toolTip.add(this.getTipArray(this.getText(this.name), GREEN));
+			toolTip.add(this.getTipArray(this.getText(this.name + "_lava"), GREEN));
+			break;
+		default:
 			toolTip.add(this.getTipArray(this.getText(this.name), GREEN));
 			break;
 		}
@@ -109,13 +131,12 @@ public class AquariumPot extends BaseMFBlock {
 		return new TileAquariumPot(pos, state);
 	}
 
-	public BlockEntityType<? extends TileSMMagic> getTileType () {
+	public BlockEntityType<? extends TileSMMagic> getTileType() {
 		return TileInit.aquariumpot;
 	}
 
 	@Nullable
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
-		BlockEntityType<? extends TileAbstractSM> tileType = this.getTileType();
-		return tileType != null ? this.createMailBoxTicker(world, type, tileType) : null;
+		return this.createMailBoxTicker(world, type, this.getTileType());
 	}
 }

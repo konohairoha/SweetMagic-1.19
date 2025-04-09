@@ -79,29 +79,27 @@ public class SweetCrops_STAGE5 extends BushBlock implements ISMCrop, Bonemealabl
 	@Override
 	public ItemLike getCrop() {
 		switch (this.data) {
-		case 0: return Items.QUARTZ;
 		case 1: return ItemInit.raspberry;
 		case 2: return ItemInit.soybean;
 		case 3: return ItemInit.rice_plants;
 		case 4: return ItemInit.azuki_seed;
 		case 5: return Items.LAPIS_LAZULI;
 		case 6: return Items.REDSTONE;
-		default: return null;
+		default: return Items.QUARTZ;
 		}
 	}
 
 	// 種の取得
 	@Override
-	public ItemLike getSeed () {
+	public ItemLike getSeed() {
 		switch (this.data) {
-		case 0: return ItemInit.quartz_seed;
 		case 1: return ItemInit.raspberry;
 		case 2: return ItemInit.soybean;
 		case 3: return ItemInit.rice_seed;
 		case 4: return ItemInit.azuki_seed;
 		case 5: return ItemInit.lapislazuli_seed;
 		case 6: return ItemInit.redstone_seed;
-		default: return null;
+		default: return ItemInit.quartz_seed;
 		}
 	}
 
@@ -119,7 +117,7 @@ public class SweetCrops_STAGE5 extends BushBlock implements ISMCrop, Bonemealabl
 
 	// 成長チャンスの設定
 	@Override
-	public void setGlowChance (int chance) {
+	public void setGlowChance(int chance) {
 		this.chance = chance;
 	}
 
@@ -131,19 +129,19 @@ public class SweetCrops_STAGE5 extends BushBlock implements ISMCrop, Bonemealabl
 
 	// 右クリック回収時に戻る成長段階
 	@Override
-	public int RCSetState () {
+	public int RCSetState() {
 		return 2;
 	}
 
 	// デフォルトステータス取得
 	@Override
-	public BlockState getDefault () {
+	public BlockState getDefault() {
 		return this.defaultBlockState();
 	}
 
 	// ドロップ数
 	@Override
-	public int getDropValue (RandomSource rand, int fortune) {
+	public int getDropValue(RandomSource rand, int fortune) {
 		return Math.max(1, rand.nextInt(3) + 1);
 	}
 
@@ -152,7 +150,7 @@ public class SweetCrops_STAGE5 extends BushBlock implements ISMCrop, Bonemealabl
 	}
 
 	// 当たり判定
-	public VoxelShape getShape(BlockState state, BlockGetter get, BlockPos pos, CollisionContext col) {
+	public VoxelShape getShape(BlockState state, BlockGetter get, BlockPos pos, CollisionContext con) {
 		return CROP_VEXE[this.getNowState(state)];
 	}
 
@@ -161,15 +159,15 @@ public class SweetCrops_STAGE5 extends BushBlock implements ISMCrop, Bonemealabl
 		return !this.isMaxAge(state);
 	}
 
-	public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource rand) {
+	public void randomTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource rand) {
 
 		// 最大まで成長しているなら終了
-		if (!this.isMaxAge(state) && ForgeHooks.onCropsGrowPre(level, pos, state, this.isGlowChange(rand))) {
+		if (!this.isMaxAge(state) && ForgeHooks.onCropsGrowPre(world, pos, state, this.isGlowChange(rand))) {
 			int nowAge = this.getNowState(state);
 			BlockState glowState = state.setValue(this.getSMMaxAge(), Integer.valueOf(nowAge + 1));
-			level.setBlock(pos, glowState, 2);
-			level.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(glowState));
-			ForgeHooks.onCropsGrowPost(level, pos, state);
+			world.setBlock(pos, glowState, 2);
+			world.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(glowState));
+			ForgeHooks.onCropsGrowPost(world, pos, state);
 		}
 	}
 
@@ -178,10 +176,10 @@ public class SweetCrops_STAGE5 extends BushBlock implements ISMCrop, Bonemealabl
 
 		ItemStack stack = player.getItemInHand(hand);
 
-	    if (stack.getItem() instanceof SMSickle sickle) {
-	    	sickle.getPickPlant(world, player, pos, stack);
-	    	return InteractionResult.SUCCESS;
-	    }
+		if (stack.getItem() instanceof SMSickle sickle) {
+			sickle.getPickPlant(world, player, pos, stack);
+			return InteractionResult.SUCCESS;
+		}
 
 		// 最大成長していないなら終了
 		if (!this.isMaxAge(state)) {
@@ -190,12 +188,13 @@ public class SweetCrops_STAGE5 extends BushBlock implements ISMCrop, Bonemealabl
 				return InteractionResult.PASS;
 			}
 
-			if (this.data == 2 && this.getNowState(state) >= ( this.getMaxBlockState() - 1 ) ) {
+			if (this.data == 2 && this.getNowState(state) >= (this.getMaxBlockState() - 1)) {
 
-			    RandomSource rand = world.random;
-				ItemEntity drop = this.getDropItem(world, player, player.getItemInHand(hand), ItemInit.edamame, this.getDropValue(rand, 0));
-		        world.addFreshEntity(drop);
-		        world.setBlock(pos, state.setValue(this.getSMMaxAge(), this.RCSetState()), 2); //作物の成長段階を2下げる
+				RandomSource rand = world.random;
+				ItemEntity drop = this.getDropItem(world, player, player.getItemInHand(hand), ItemInit.edamame,
+						this.getDropValue(rand, 0));
+				world.addFreshEntity(drop);
+				world.setBlock(pos, state.setValue(this.getSMMaxAge(), this.RCSetState()), 2); //作物の成長段階を2下げる
 				this.playCropSound(world, rand, pos);
 			}
 
@@ -207,28 +206,28 @@ public class SweetCrops_STAGE5 extends BushBlock implements ISMCrop, Bonemealabl
 	}
 
 	// 右クリック
-	public void onRicghtClick (Level world, Player player, BlockState state, BlockPos pos, ItemStack stack) {
+	public void onRicghtClick(Level world, Player player, BlockState state, BlockPos pos, ItemStack stack) {
 
-	    RandomSource rand = world.random;
+		RandomSource rand = world.random;
 		ItemEntity drop = this.getDropItem(world, player, stack, this.getCrop(), this.getDropValue(rand, 0));
-        world.addFreshEntity(drop);
-        world.setBlock(pos, state.setValue(this.getSMMaxAge(), this.RCSetState()), 2); //作物の成長段階を2下げる
+		world.addFreshEntity(drop);
+		world.setBlock(pos, state.setValue(this.getSMMaxAge(), this.RCSetState()), 2); //作物の成長段階を2下げる
 		this.playCropSound(world, rand, pos);
 	}
 
 	// 右クリック時アイテムを取得
-	public List<ItemStack> rightClickStack (Level level, BlockState state, BlockPos pos) {
+	public List<ItemStack> rightClickStack(Level level, BlockState state, BlockPos pos) {
 
 		// アイテムの取得
 		List<ItemStack> stackList = new ArrayList<>();
 		stackList.add(this.getDropStack(level.random));
 
-        if (this.data == 2) {
-        	stackList.add(new ItemStack(ItemInit.edamame, this.getDropValue(level.random, 0)));
-        }
+		if (this.data == 2) {
+			stackList.add(new ItemStack(ItemInit.edamame, this.getDropValue(level.random, 0)));
+		}
 
 		// 作物の成長段階を下げる
-        level.setBlock(pos, state.setValue(this.getSMMaxAge(), this.RCSetState()), 2);
+		level.setBlock(pos, state.setValue(this.getSMMaxAge(), this.RCSetState()), 2);
 
 		return stackList;
 	}
@@ -253,15 +252,15 @@ public class SweetCrops_STAGE5 extends BushBlock implements ISMCrop, Bonemealabl
 	}
 
 	@Override
-	public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
-		return this.getDropList(state, builder);
+	public List<ItemStack> getDrops(BlockState state, LootContext.Builder build) {
+		return this.getDropList(state, build);
 	}
 
 	@Override
-	public List<ItemStack> getDropList(BlockState state, LootContext.Builder builder) {
+	public List<ItemStack> getDropList(BlockState state, LootContext.Builder build) {
 
 		List<ItemStack> stackList = Lists.newArrayList();
-		RandomSource rand = builder.getLevel().random;
+		RandomSource rand = build.getLevel().random;
 
 		// 最大成長しているなら
 		if (this.isMaxAge(state)) {
@@ -274,8 +273,8 @@ public class SweetCrops_STAGE5 extends BushBlock implements ISMCrop, Bonemealabl
 
 			if (this.data == 2) {
 
-				Player player = builder.getOptionalParameter(LootContextParams.LAST_DAMAGE_PLAYER);
-				ItemStack stack = builder.getOptionalParameter(LootContextParams.TOOL);
+				Player player = build.getOptionalParameter(LootContextParams.LAST_DAMAGE_PLAYER);
+				ItemStack stack = build.getOptionalParameter(LootContextParams.TOOL);
 
 				int level = this.getLuck(player, stack);
 
@@ -293,7 +292,7 @@ public class SweetCrops_STAGE5 extends BushBlock implements ISMCrop, Bonemealabl
 		return stackList;
 	}
 
-	public int getLuck (Player player, ItemStack stack) {
+	public int getLuck(Player player, ItemStack stack) {
 
 		int level = stack.isEmpty() ? 0 : stack.getEnchantmentLevel(Enchantments.BLOCK_FORTUNE);
 
@@ -306,9 +305,9 @@ public class SweetCrops_STAGE5 extends BushBlock implements ISMCrop, Bonemealabl
 	}
 
 	@Override
-	public boolean canSurvive(BlockState state, LevelReader render, BlockPos pos) {
+	public boolean canSurvive(BlockState state, LevelReader world, BlockPos pos) {
 		BlockPos underpos = pos.below();
-		return this.mayPlaceOn(render.getBlockState(underpos), render, underpos);
+		return this.mayPlaceOn(world.getBlockState(underpos), world, underpos);
 	}
 
 	@Override

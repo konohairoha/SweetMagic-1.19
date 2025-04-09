@@ -13,7 +13,7 @@ public class MFLiquidBlock extends BaseModelBlock {
 	}
 
 	@Override
-	public float getEnchantPower () {
+	public float getEnchantPower() {
 		return 1F;
 	}
 }

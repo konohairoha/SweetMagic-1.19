@@ -72,14 +72,13 @@ public class SweetCrops_STAGE2 extends BushBlock implements ISMCrop, Bonemealabl
 	@Override
 	public ItemLike getCrop() {
 		switch (this.data) {
-		case 0: return ItemInit.chestnut;
 		case 1: return ItemInit.coconut;
 		case 2: return ItemInit.banana;
-		default: return null;
+		default: return ItemInit.chestnut;
 		}
 	}
 
-	public ItemLike getSeed () {
+	public ItemLike getSeed() {
 		return null;
 	}
 
@@ -103,7 +102,7 @@ public class SweetCrops_STAGE2 extends BushBlock implements ISMCrop, Bonemealabl
 
 	// 成長チャンスの設定
 	@Override
-	public void setGlowChance (int chance) {
+	public void setGlowChance(int chance) {
 		this.chance = chance;
 	}
 
@@ -115,19 +114,19 @@ public class SweetCrops_STAGE2 extends BushBlock implements ISMCrop, Bonemealabl
 
 	// 右クリック回収時に戻る成長段階
 	@Override
-	public int RCSetState () {
+	public int RCSetState() {
 		return 0;
 	}
 
 	// デフォルトステータス取得
 	@Override
-	public BlockState getDefault () {
+	public BlockState getDefault() {
 		return this.defaultBlockState();
 	}
 
 	// ドロップ数
 	@Override
-	public int getDropValue (RandomSource rand, int fortune) {
+	public int getDropValue(RandomSource rand, int fortune) {
 		return Math.max(1, rand.nextInt(4) + 1);
 	}
 
@@ -157,10 +156,10 @@ public class SweetCrops_STAGE2 extends BushBlock implements ISMCrop, Bonemealabl
 
 		ItemStack stack = player.getItemInHand(hand);
 
-	    if (stack.getItem() instanceof SMSickle sickle) {
-	    	sickle.getPickPlant(world, player, pos, stack);
-	    	return InteractionResult.SUCCESS;
-	    }
+		if (stack.getItem() instanceof SMSickle sickle) {
+			sickle.getPickPlant(world, player, pos, stack);
+			return InteractionResult.SUCCESS;
+		}
 
 		// 最大成長していないなら終了
 		if (!this.isMaxAge(state)) {
@@ -172,12 +171,12 @@ public class SweetCrops_STAGE2 extends BushBlock implements ISMCrop, Bonemealabl
 	}
 
 	// 右クリック
-	public void onRicghtClick (Level world, Player player, BlockState state, BlockPos pos, ItemStack stack) {
+	public void onRicghtClick(Level world, Player player, BlockState state, BlockPos pos, ItemStack stack) {
 
-	    RandomSource rand = world.random;
+		RandomSource rand = world.random;
 		ItemEntity drop = this.getDropItem(world, player, stack, this.getCrop(), this.getDropValue(rand, 0));
 		world.addFreshEntity(drop);
-        world.setBlock(pos, state.setValue(this.getSMMaxAge(), this.RCSetState()), 2); //作物の成長段階を2下げる
+		world.setBlock(pos, state.setValue(this.getSMMaxAge(), this.RCSetState()), 2); //作物の成長段階を2下げる
 		this.playCropSound(world, rand, pos);
 	}
 

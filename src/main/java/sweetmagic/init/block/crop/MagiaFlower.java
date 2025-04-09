@@ -41,10 +41,10 @@ public class MagiaFlower extends BushBlock implements ISMCrop {
 	private final int data;
 	private int chance;
 	private static final VoxelShape[] CROP_VEXE = new VoxelShape[] {
-			Block.box(1.6D, 0D, 1.6D, 14.4D, 1D, 14.4D),
-			Block.box(1.6D, 0D, 1.6D, 14.4D, 5D, 14.4D),
-			Block.box(1.6D, 0D, 1.6D, 14.4D, 7D, 14.4D),
-			Block.box(1.6D, 0D, 1.6D, 14.4D, 10D, 14.4D)
+		Block.box(1.6D, 0D, 1.6D, 14.4D, 1D, 14.4D),
+		Block.box(1.6D, 0D, 1.6D, 14.4D, 5D, 14.4D),
+		Block.box(1.6D, 0D, 1.6D, 14.4D, 7D, 14.4D),
+		Block.box(1.6D, 0D, 1.6D, 14.4D, 10D, 14.4D)
 	};
 
 	public MagiaFlower(String name, int data, int chance) {
@@ -65,10 +65,9 @@ public class MagiaFlower extends BushBlock implements ISMCrop {
 	@Override
 	public ItemLike getCrop() {
 		switch (this.data) {
-		case 0: return ItemInit.sannyflower_petal;
 		case 1: return ItemInit.moonblossom_petal;
 		case 2: return ItemInit.dm_flower;
-		default: return null;
+		default: return ItemInit.sannyflower_petal;
 		}
 	}
 
@@ -76,10 +75,9 @@ public class MagiaFlower extends BushBlock implements ISMCrop {
 	@Override
 	public ItemLike getSeed() {
 		switch (this.data) {
-		case 0: return ItemInit.sannyflower_seed;
 		case 1: return ItemInit.moonblossom_seed;
 		case 2: return ItemInit.drizzly_mysotis_seed;
-		default: return null;
+		default: return ItemInit.sannyflower_seed;
 		}
 	}
 
@@ -97,7 +95,7 @@ public class MagiaFlower extends BushBlock implements ISMCrop {
 
 	// 成長チャンスの設定
 	@Override
-	public void setGlowChance (int chance) {
+	public void setGlowChance(int chance) {
 		this.chance = chance;
 	}
 
@@ -109,19 +107,19 @@ public class MagiaFlower extends BushBlock implements ISMCrop {
 
 	// 右クリック回収時に戻る成長段階
 	@Override
-	public int RCSetState () {
+	public int RCSetState() {
 		return 1;
 	}
 
 	// デフォルトステータス取得
 	@Override
-	public BlockState getDefault () {
+	public BlockState getDefault() {
 		return this.defaultBlockState();
 	}
 
 	// ドロップ数
 	@Override
-	public int getDropValue (RandomSource rand, int fortune) {
+	public int getDropValue(RandomSource rand, int fortune) {
 		return Math.max(1, rand.nextInt(3) + 1);
 	}
 
@@ -166,17 +164,17 @@ public class MagiaFlower extends BushBlock implements ISMCrop {
 	}
 
 	// 成長できるかどうかチェック
-	public boolean canGlow (Level world, boolean isDayTime) {
-		return ( (isDayTime && this.data == 0) || ( !isDayTime && this.data == 1)) || (world.isRaining() && this.data == 2);
+	public boolean canGlow(Level world, boolean isDayTime) {
+		return ((isDayTime && this.data == 0) || (!isDayTime && this.data == 1)) || (world.isRaining() && this.data == 2);
 	}
 
 	// 成長度ダウン
-	public void glowDown (Level world, BlockState state, BlockPos pos) {
+	public void glowDown(Level world, BlockState state, BlockPos pos) {
 		world.setBlock(pos, state.setValue(this.getSMMaxAge(), this.getMaxBlockState() - 1), 2);
 	}
 
 	// 成長度ダウン
-	public void glowUp (Level world, BlockState state, BlockPos pos) {
+	public void glowUp(Level world, BlockState state, BlockPos pos) {
 		int nowAge = this.getNowState(state);
 		BlockState glowState = state.setValue(this.getSMMaxAge(), Integer.valueOf(nowAge + 1));
 		world.setBlock(pos, glowState, 2);
@@ -185,7 +183,7 @@ public class MagiaFlower extends BushBlock implements ISMCrop {
 	}
 
 	// 成長できるかどうか
-	public boolean isGlowChange (RandomSource rand, int addChance) {
+	public boolean isGlowChange(RandomSource rand, int addChance) {
 		return rand.nextInt(this.getGlowChange() + addChance) == 0;
 	}
 
@@ -194,10 +192,10 @@ public class MagiaFlower extends BushBlock implements ISMCrop {
 
 		ItemStack stack = player.getItemInHand(hand);
 
-	    if (stack.getItem() instanceof SMSickle sickle) {
-	    	sickle.getPickPlant(world, player, pos, stack);
-	    	return InteractionResult.SUCCESS;
-	    }
+		 if (stack.getItem() instanceof SMSickle sickle) {
+			sickle.getPickPlant(world, player, pos, stack);
+			return InteractionResult.SUCCESS;
+		}
 
 		// 最大成長していないなら終了
 		if (!this.isMaxAge(state)) { return InteractionResult.SUCCESS; }
@@ -207,11 +205,11 @@ public class MagiaFlower extends BushBlock implements ISMCrop {
 	}
 
 	// 右クリック
-	public void onRicghtClick (Level world, Player player, BlockState state, BlockPos pos, ItemStack stack) {
-	    RandomSource rand = world.random;
+	public void onRicghtClick(Level world, Player player, BlockState state, BlockPos pos, ItemStack stack) {
+		RandomSource rand = world.random;
 		ItemEntity drop = this.getDropItem(world, player, stack, this.getCrop(), this.getDropValue(rand, 0));
-        world.addFreshEntity(drop);
-        world.setBlock(pos, state.setValue(this.getSMMaxAge(), this.RCSetState()), 2); //作物の成長段階を2下げる
+		world.addFreshEntity(drop);
+		world.setBlock(pos, state.setValue(this.getSMMaxAge(), this.RCSetState()), 2); //作物の成長段階を2下げる
 		this.playCropSound(world, rand, pos);
 	}
 
@@ -224,7 +222,7 @@ public class MagiaFlower extends BushBlock implements ISMCrop {
 
 		boolean isDayTime = level.getDayTime() % 24000 < 12000;
 
-		if ( (this.data == 0 && isDayTime) || (this.data == 1 && !isDayTime) || (level.isRaining() && this.data == 2) ) {
+		if ((this.data == 0 && isDayTime) || (this.data == 1 && !isDayTime) || (level.isRaining() && this.data == 2)) {
 			this.addParticlesAroundSelf(level, rand, pos, ParticleTypes.HAPPY_VILLAGER);
 		}
 	}
@@ -251,8 +249,8 @@ public class MagiaFlower extends BushBlock implements ISMCrop {
 	}
 
 	@Override
-	public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
-		return this.getDropList(state, builder);
+	public List<ItemStack> getDrops(BlockState state, LootContext.Builder build) {
+		return this.getDropList(state, build);
 	}
 
 	@Override

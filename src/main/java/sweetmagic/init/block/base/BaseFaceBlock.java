@@ -17,8 +17,8 @@ public abstract class BaseFaceBlock extends BaseModelBlock {
 
 	public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
 
-	public BaseFaceBlock(String name, BlockBehaviour.Properties props) {
-		super(name, props);
+	public BaseFaceBlock(String name, BlockBehaviour.Properties pro) {
+		super(name, pro);
 	}
 
 	public BlockState setState() {
@@ -30,15 +30,15 @@ public abstract class BaseFaceBlock extends BaseModelBlock {
 	}
 
 	@Override
-	protected void createBlockStateDefinition(@NotNull StateDefinition.Builder<Block, BlockState> props) {
-		super.createBlockStateDefinition(props);
-		props.add(FACING);
+	protected void createBlockStateDefinition(@NotNull StateDefinition.Builder<Block, BlockState> buil) {
+		super.createBlockStateDefinition(buil);
+		buil.add(FACING);
 	}
 
 	@NotNull
 	@Override
-	public BlockState getStateForPlacement(BlockPlaceContext ctx) {
-		return ctx.getPlayer() != null ? this.setState(ctx.getPlayer().getDirection().getOpposite()) : this.defaultBlockState();
+	public BlockState getStateForPlacement(BlockPlaceContext con) {
+		return con.getPlayer() != null ? this.setState(con.getPlayer().getDirection().getOpposite()) : this.defaultBlockState();
 	}
 
 	@NotNull

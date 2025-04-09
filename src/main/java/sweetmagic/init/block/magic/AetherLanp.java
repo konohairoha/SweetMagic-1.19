@@ -33,7 +33,7 @@ public class AetherLanp extends BaseMFBlock {
 	}
 
 	// 当たり判定
-	public VoxelShape getShape(BlockState state, BlockGetter get, BlockPos pos, CollisionContext col) {
+	public VoxelShape getShape(BlockState state, BlockGetter get, BlockPos pos, CollisionContext con) {
 		return AABB;
 	}
 
@@ -43,8 +43,8 @@ public class AetherLanp extends BaseMFBlock {
 	 * 2 = エーテルランプライト
 	 */
 	// ブロックでのアクション
-	public void actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
-		if (world.isClientSide) { return; }
+	public boolean actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
+		if (world.isClientSide) { return false; }
 
 		MenuProvider tile;
 
@@ -61,17 +61,18 @@ public class AetherLanp extends BaseMFBlock {
 		}
 
 		this.openGUI(world, pos, player, tile);
+		return true;
 	}
 
-	public int getData () {
+	public int getData() {
 		return this.data;
 	}
 
 	// 最大MFの取得
-	public int getMaxMF () {
+	public int getMaxMF() {
 		switch (this.data) {
 		case 1:  return 200000;
-		case 2:  return 50000;
+		case 2:  return 70000;
 		default: return 20000;
 		}
 	}
@@ -90,7 +91,7 @@ public class AetherLanp extends BaseMFBlock {
 		}
 	}
 
-	public BlockEntityType<? extends TileAbstractSM> getTileType () {
+	public BlockEntityType<? extends TileAbstractSM> getTileType() {
 		switch (this.data) {
 		case 1: return TileInit.hightAetheLamplight;
 		case 2: return TileInit.aetheLamplight;
@@ -100,12 +101,11 @@ public class AetherLanp extends BaseMFBlock {
 
 	@Nullable
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
-		BlockEntityType<? extends TileAbstractSM> tileType = this.getTileType();
-		return tileType != null ? this.createMailBoxTicker(world, type, tileType) : null;
+		return this.createMailBoxTicker(world, type, this.getTileType());
 	}
 
 	// RS信号で停止するかどうか
-	public boolean isRSStop () {
+	public boolean isRSStop() {
 		return true;
 	}
 }

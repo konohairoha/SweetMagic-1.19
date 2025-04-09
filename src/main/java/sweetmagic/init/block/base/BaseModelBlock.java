@@ -60,7 +60,7 @@ public class BaseModelBlock extends BaseSMBlock {
 	}
 
 	// ブロック破壊
-	public void breakBlock (LevelAccessor world, BlockPos pos) {
+	public void breakBlock(LevelAccessor world, BlockPos pos) {
 		world.destroyBlock(pos, false);
 		world.removeBlock(pos, false);
 	}

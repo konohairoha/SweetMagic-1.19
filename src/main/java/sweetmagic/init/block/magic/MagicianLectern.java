@@ -54,33 +54,34 @@ public class MagicianLectern extends BaseFaceBlock implements EntityBlock, ISMNe
 	}
 
 	// 当たり判定
-	public VoxelShape getShape(BlockState state, BlockGetter get, BlockPos pos, CollisionContext col) {
+	public VoxelShape getShape(BlockState state, BlockGetter get, BlockPos pos, CollisionContext con) {
 		return AABB;
 	}
 
 	// 右クリック処理
 	@Override
-	public boolean canRightClick (Player player, ItemStack stack) {
+	public boolean canRightClick(Player player, ItemStack stack) {
 		return true;
 	}
 
 	// ブロックでのアクション
-	public void actionBlock (Level world, BlockPos pos, Player player, ItemStack stack) {
-		if (world.isClientSide || !this.hasNeedItem(player)) { return; }
+	public boolean actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
+		if (!this.hasNeedItem(player, stack)) { return false; }
 
 		TileAbstractMagicianLectern tile = (TileAbstractMagicianLectern) this.getTile(world, pos);
-		if (tile.summonType.is(SummonType.CHARGE) || tile.summonType.is(SummonType.SUMMON)) { return; }
+		if (tile.summonType.is(SummonType.CHARGE) || tile.summonType.is(SummonType.SUMMON)) { return false; }
 
+		if (world.isClientSide) { return true; }
 		if (world.getDifficulty() == Difficulty.PEACEFUL) {
 			if (!world.isClientSide) {
 				player.sendSystemMessage(this.getText("magician_lectern_peaceful").withStyle(RED));
 			}
 
-			return;
+			return true;
 		}
 
 		// プレイヤーのインベントリを取得
-		List<ItemStack> stackList = RecipeHelper.getPlayerInv(player, ItemStack.EMPTY);
+		List<ItemStack> stackList = RecipeHelper.getPlayerInv(player, stack);
 		boolean hasHardItem = this.isHard(player);
 
 		List<ItemStack> wandList = stackList.stream().filter(s -> s.getItem() instanceof IWand wand && this.checkWand(hasHardItem, s, wand)).toList();
@@ -90,7 +91,7 @@ public class MagicianLectern extends BaseFaceBlock implements EntityBlock, ISMNe
 				player.sendSystemMessage(this.getText(hasHardItem ? "magician_lectern_wand_hard" : "magician_lectern_wand").withStyle(RED));
 			}
 
-			return;
+			return true;
 		}
 
 		tile.summonType = SummonType.CHARGE;
@@ -125,9 +126,10 @@ public class MagicianLectern extends BaseFaceBlock implements EntityBlock, ISMNe
 				}
 			}
 		}
+		return true;
 	}
 
-	public boolean checkWand (boolean hasHardItem, ItemStack stack, IWand wand) {
+	public boolean checkWand(boolean hasHardItem, ItemStack stack, IWand wand) {
 
 		if (hasHardItem) {
 			return wand.getWandTier() >= 3 && (wand.getLevel(stack) >= 12 || wand.isCreativeWand());
@@ -154,7 +156,7 @@ public class MagicianLectern extends BaseFaceBlock implements EntityBlock, ISMNe
 		}
 	}
 
-	public BlockEntityType<? extends TileAbstractSM> getTileType () {
+	public BlockEntityType<? extends TileAbstractSM> getTileType() {
 		switch (this.data) {
 		case 1: return TileInit.magicianLecternLight;
 		case 2: return TileInit.magicianLecternFire;
@@ -165,19 +167,18 @@ public class MagicianLectern extends BaseFaceBlock implements EntityBlock, ISMNe
 
 	@Nullable
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
-		BlockEntityType<? extends TileAbstractSM> tileType = this.getTileType();
-		return tileType != null ? this.createMailBoxTicker(world, type, tileType) : null;
+		return this.createMailBoxTicker(world, type, this.getTileType());
 	}
 
 	@Override
-	public void addBlockTip (List<Component> toolTip) {
+	public void addBlockTip(List<Component> toolTip) {
 		ItemStack magic = new ItemStack(this.getNeedHardItem());
 		toolTip.add(this.getText("magician_lectern").withStyle(GREEN));
 		toolTip.add(this.getText("magician_lectern_hard").withStyle(GREEN));
 		toolTip.add(this.getTipArray(this.getText("magician_lectern_item"), magic.getHoverName()).withStyle(GREEN));
 	}
 
-	public List<ItemStack> getNeedItemList () {
+	public List<ItemStack> getNeedItemList() {
 		List<ItemStack> stackList = new ArrayList<>();
 		stackList.add(new ItemStack(ItemInit.mf_bottle, 3));
 		stackList.add(new ItemStack(ItemInit.divine_crystal, 1));
@@ -185,7 +186,7 @@ public class MagicianLectern extends BaseFaceBlock implements EntityBlock, ISMNe
 		return stackList;
 	}
 
-	public List<ItemStack> getNeedHardItemList () {
+	public List<ItemStack> getNeedHardItemList() {
 		List<ItemStack> stackList = new ArrayList<>();
 		stackList.add(new ItemStack(this.getNeedHardItem()));
 		stackList.add(new ItemStack(ItemInit.mf_bottle, 5));
@@ -194,7 +195,7 @@ public class MagicianLectern extends BaseFaceBlock implements EntityBlock, ISMNe
 		return stackList;
 	}
 
-	public Item getNeedHardItem () {
+	public Item getNeedHardItem() {
 		switch (this.data) {
 		case 1: return ItemInit.magic_holybuster;
 		case 2: return ItemInit.magic_ignisblast;

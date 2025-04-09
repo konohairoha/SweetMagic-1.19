@@ -51,7 +51,7 @@ public abstract class BaseMFBlock extends BaseFaceBlock implements EntityBlock {
 	}
 
 	// 右クリックしない
-	public boolean canRightClick (Level world, BlockPos pos, Player player, ItemStack stack) {
+	public boolean canRightClick(Level world, BlockPos pos, Player player, ItemStack stack) {
 		return true;
 	}
 
@@ -92,12 +92,8 @@ public abstract class BaseMFBlock extends BaseFaceBlock implements EntityBlock {
 			if (tilePos.getX() == pos.getX() && tilePos.getY() == pos.getY() && tilePos.getZ() == pos.getZ()) { return InteractionResult.PASS; }
 
 			// 送信側のブロックえんちちーを取得
-			if (world.getBlockEntity(tilePos) instanceof ITileMF sendMFBlock) {
-
-				// 送信側に受信元の座標が登録されているなら登録せず終了
-				if (sendMFBlock.getPosList().contains(pos)) {
-					return InteractionResult.PASS;
-				}
+			if (world.getBlockEntity(tilePos) instanceof ITileMF sendMFBlock && sendMFBlock.getPosList().contains(pos)) {
+				return InteractionResult.PASS;
 			}
 
 			mfBlock.addPosList(tilePos);
@@ -126,7 +122,7 @@ public abstract class BaseMFBlock extends BaseFaceBlock implements EntityBlock {
 	}
 
 	// 座標を登録
-	public InteractionResult setBlockPos (Level world, CompoundTag tags, ItemStack stack, Player player, BlockPos pos) {
+	public InteractionResult setBlockPos(Level world, CompoundTag tags, ItemStack stack, Player player, BlockPos pos) {
 
 		// NBTが保存したなかったら初期化
 		if (tags == null) {
@@ -153,7 +149,7 @@ public abstract class BaseMFBlock extends BaseFaceBlock implements EntityBlock {
 	}
 
 	// パーティクルスポーン
-	public void spawnParticl (Level world, BlockPos pos, RandomSource rand) {
+	public void spawnParticl(Level world, BlockPos pos, RandomSource rand) {
 
 		for (int i = 0; i < 16; i++) {
 
@@ -162,12 +158,12 @@ public abstract class BaseMFBlock extends BaseFaceBlock implements EntityBlock {
 			float f3 = pos.getZ() + 0.5F;
 			float x = (rand.nextFloat() - rand.nextFloat()) * 0.15F;
 			float z = (rand.nextFloat() - rand.nextFloat()) * 0.15F;
-			world.addParticle(ParticleInit.NORMAL.get(), f1, f2, f3, x, 0, z);
+			world.addParticle(ParticleInit.NORMAL, f1, f2, f3, x, 0, z);
 		}
 	}
 
 	// ドロップするかどうか
-	protected boolean isDrop () {
+	protected boolean isDrop() {
 		return false;
 	}
 
@@ -180,7 +176,7 @@ public abstract class BaseMFBlock extends BaseFaceBlock implements EntityBlock {
 	}
 
 	// ドロップアイテムにNBT付与
-	public ItemStack setTagStack (TileSMMagic tile, ItemStack stack) {
+	public ItemStack setTagStack(TileSMMagic tile, ItemStack stack) {
 		if (tile.isInfoEmpty()) { return stack; }
 		CompoundTag tileTags = tile.saveWithoutMetadata();
 		if (tileTags.contains(tile.POST)) { tileTags.remove(tile.POST); }
@@ -190,12 +186,12 @@ public abstract class BaseMFBlock extends BaseFaceBlock implements EntityBlock {
 	}
 
 	// tierの取得
-	public int getTier () {
+	public int getTier() {
 		return 1;
 	}
 
 	// 最大MFの取得
-	public int getMaxMF () {
+	public int getMaxMF() {
 		return 10000;
 	}
 
@@ -213,7 +209,7 @@ public abstract class BaseMFBlock extends BaseFaceBlock implements EntityBlock {
 		toolTip.add(this.getTipArray(String.format("%,d", mf), getTip("MF").withStyle(GREEN), WHITE));
 	}
 
-	public void addTip (List<Component> toolTip, ItemStack stack, CompoundTag tags) {
+	public void addTip(List<Component> toolTip, ItemStack stack, CompoundTag tags) {
 		toolTip.add(this.getTipArray(this.getText(this.name), GREEN));
 	}
 
@@ -223,7 +219,7 @@ public abstract class BaseMFBlock extends BaseFaceBlock implements EntityBlock {
 		return tile == null ? false : tile.triggerEvent(par1, par2);
 	}
 
-	public float getEnchantPower () {
+	public float getEnchantPower() {
 		switch (this.getTier()) {
 		case 2: return 2.5F;
 		case 3: return 5F;

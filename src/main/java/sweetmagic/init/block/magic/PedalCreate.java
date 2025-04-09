@@ -59,9 +59,10 @@ public class PedalCreate extends BaseMFBlock implements ISMCraftBlock {
 	}
 
 	// ブロックでのアクション
-	public void actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
-		if (world.isClientSide) { return; }
+	public boolean actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
+		if (world.isClientSide) { return true; }
 		this.pedalCraft(world, pos, player, stack, false);
+		return true;
 	}
 
 	public void pedalCraft(Level world, BlockPos pos, Player player, ItemStack stack, boolean isSneak) {
@@ -109,8 +110,8 @@ public class PedalCreate extends BaseMFBlock implements ISMCraftBlock {
 		}
 	}
 
-	public void haveBlock (Level world, BlockPos pos) {
-		if ( !(world instanceof ServerLevel sever) ) { return; }
+	public void haveBlock(Level world, BlockPos pos) {
+		if (!(world instanceof ServerLevel sever)) { return; }
 
 		float posX = pos.getX() + 0.5F;
 		float posY = pos.getY() - 0.5F;
@@ -121,12 +122,12 @@ public class PedalCreate extends BaseMFBlock implements ISMCraftBlock {
 			float f1 = (float) posX - 0.75F + rand.nextFloat() * 1.5F;
 			float f2 = (float) posY + 0.5F + rand.nextFloat() * 0.5F;
 			float f3 = (float) posZ - 0.75F + rand.nextFloat() * 1.5F;
-			sever.sendParticles(ParticleInit.TWILIGHTLIGHT.get(), f1, f2, f3, 2, 0F, 0F, 0F, 0.01F);
+			sever.sendParticles(ParticleInit.TWILIGHTLIGHT, f1, f2, f3, 2, 0F, 0F, 0F, 0.01F);
 		}
 	}
 
 	// 最大MFの取得
-	public int getMaxMF () {
+	public int getMaxMF() {
 		switch (this.data) {
 		case 1:  return 200000;
 		case 2:  return 2000000;
@@ -159,7 +160,7 @@ public class PedalCreate extends BaseMFBlock implements ISMCraftBlock {
 		}
 	}
 
-	public BlockEntityType<? extends TileAbstractSM> getTileType () {
+	public BlockEntityType<? extends TileAbstractSM> getTileType() {
 		switch(this.data) {
 		case 1: return TileInit.altarCreat;
 		case 2: return TileInit.altarCreatStar;
@@ -169,24 +170,23 @@ public class PedalCreate extends BaseMFBlock implements ISMCraftBlock {
 
 	@Nullable
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
-		BlockEntityType<? extends TileAbstractSM> tileType = this.getTileType();
-		return tileType != null ? this.createMailBoxTicker(world, type, tileType) : null;
+		return this.createMailBoxTicker(world, type, this.getTileType());
 	}
 
-	public void addTip (List<Component> toolTip, ItemStack stack, CompoundTag tags) {
+	public void addTip(List<Component> toolTip, ItemStack stack, CompoundTag tags) {
 		toolTip.add(this.getTipArray(this.getText("pedestal_creat"), GREEN));
 		toolTip.add(this.getTipArray(this.getText("pedestal_creat_allcraft"), GREEN));
 	}
 
-	public boolean notNullRecipe (Level world, List<ItemStack> stackList) {
+	public boolean notNullRecipe(Level world, List<ItemStack> stackList) {
 		return !PedalRecipe.getRecipe(world, stackList).isEmpty();
 	}
 
-	public AbstractRecipe getRecipe (Level world, List<ItemStack> stackList) {
+	public AbstractRecipe getRecipe(Level world, List<ItemStack> stackList) {
 		return PedalRecipe.getRecipe(world, stackList).get();
 	}
 
-	public boolean canShiftCraft () {
+	public boolean canShiftCraft() {
 		return true;
 	}
 }

@@ -20,14 +20,16 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.material.Material;
 import sweetmagic.SweetMagicCore;
+import sweetmagic.api.iblock.ISMCookBlock;
 import sweetmagic.api.iitem.IPorch;
 import sweetmagic.init.BlockInit.BlockInfo;
 import sweetmagic.init.ItemInit;
 import sweetmagic.init.block.sm.Stove;
+import sweetmagic.init.capability.ICookingStatus;
 import sweetmagic.init.tile.sm.TileAbstractSM;
 import sweetmagic.init.tile.sm.TileAbstractSMCook;
 
-public abstract class BaseCookBlock extends BaseFaceBlock implements EntityBlock {
+public abstract class BaseCookBlock extends BaseFaceBlock implements EntityBlock, ISMCookBlock {
 
 	public static final IntegerProperty COOK = IntegerProperty.create("cook", 0, 2);
 
@@ -44,23 +46,23 @@ public abstract class BaseCookBlock extends BaseFaceBlock implements EntityBlock
 	}
 
 	// ステータスの変更
-    public void setState(Level world, BlockPos pos, int data) {
-    	BlockState state = world.getBlockState(pos);
+	public void setState(Level world, BlockPos pos, int data) {
+		BlockState state = world.getBlockState(pos);
 		world.setBlock(pos, state.setValue(COOK, data), 3);
-    }
+	}
 
-    // ステータスの取得
-    public int getState (BlockState state) {
-    	return state.getValue(COOK);
-    }
+	// ステータスの取得
+	public int getState(BlockState state) {
+		return state.getValue(COOK);
+	}
 
 	// 右クリック出来るか
-	public boolean canRightClick (Player player, ItemStack stack) {
+	public boolean canRightClick(Player player, ItemStack stack) {
 		return true;
 	}
 
 	public void onRemove(Level world, BlockPos pos, BlockState state, TileAbstractSM tile) {
-		if(tile instanceof TileAbstractSMCook cook) {
+		if (tile instanceof TileAbstractSMCook cook) {
 			this.spawnItemList(world, pos, cook.getDropList());
 		}
 	}
@@ -70,44 +72,49 @@ public abstract class BaseCookBlock extends BaseFaceBlock implements EntityBlock
 	}
 
 	// 下のブロックがコンロならtureを返す
-	public boolean isUnderStove (Level world, BlockPos pos) {
+	public boolean isUnderStove(Level world, BlockPos pos) {
 		return this.getBlock(world, pos.below()) instanceof Stove;
 	}
 
-    // 不思議なフォークを持っているかどうか
-    public boolean hasFork (Player player) {
+	// 不思議なフォークを持っているかどうか
+	public boolean hasFork(Player player) {
 
 		ItemStack leg = player.getItemBySlot(EquipmentSlot.LEGS);
 
 		if (!leg.isEmpty() && leg.getItem() instanceof IPorch porch) {
 			return porch.hasAcce(leg, ItemInit.mysterious_fork);
 		}
-        return false;
-    }
+		return false;
+	}
 
-    // 経験値スポーン
-    public void spawnXp (Player player, List<ItemStack> outList, boolean hasFok) {
-    	if (!hasFok) { return; }
+	// 経験値スポーン
+	public void spawnXp(Player player, List<ItemStack> outList, boolean hasFok) {
+		if (!hasFok) { return; }
 
-    	int xp = 0;
-    	Level world = player.level;
+		int xp = 0;
+		Level world = player.level;
 
-    	for (ItemStack stack : outList) {
+		for (ItemStack stack : outList) {
 
-    		Item item = stack.getItem();
-    		if ( !item.isEdible() ) { continue; }
+			Item item = stack.getItem();
+			if (!item.isEdible()) { continue; }
 
-    		FoodProperties food = item.getFoodProperties();
-    		float amount = Math.max(food.getNutrition(), 1F) * Math.max(food.getSaturationModifier(), 0.1F) * stack.getCount() * 0.2F;
-    		xp += (int) (Math.max(1, amount));
-    	}
+			FoodProperties food = item.getFoodProperties();
+			float amount = Math.max(food.getNutrition(), 1F) * Math.max(food.getSaturationModifier(), 0.1F) * stack.getCount() * 0.2F;
+			xp += (int) (Math.max(1, amount));
+		}
 
-    	ExperienceOrb entity = new ExperienceOrb(world, player.getX(), player.getY(), player.getZ(), xp);
-    	world.addFreshEntity(entity);
-    }
+		if(xp <= 0) { return; }
+
+		int cookLevel = ICookingStatus.getState(player).getLevel();
+		float rate = 1F + cookLevel * 0.05F;
+
+		ExperienceOrb entity = new ExperienceOrb(world, player.getX(), player.getY(), player.getZ(), (int) (xp * rate));
+		world.addFreshEntity(entity);
+	}
 
 	@Override
-	public void addBlockTip (List<Component> toolTip) {
+	public void addBlockTip(List<Component> toolTip) {
 		toolTip.add(this.getText("cook_block").withStyle(GREEN));
 	}
 }

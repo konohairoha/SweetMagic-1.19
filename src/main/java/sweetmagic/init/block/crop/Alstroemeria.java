@@ -60,7 +60,7 @@ import sweetmagic.init.item.magic.MFWeather;
 import sweetmagic.init.tile.sm.TileAbstractSM;
 import sweetmagic.init.tile.sm.TileAlstroemeria;
 import sweetmagic.recipe.RecipeHelper;
-import sweetmagic.recipe.RecipeUtil;
+import sweetmagic.recipe.RecipeHelper.RecipeUtil;
 import sweetmagic.recipe.alstrameria.AlstroemeriaRecipe;
 import sweetmagic.recipe.base.AbstractRecipe;
 import sweetmagic.util.SMUtil;
@@ -95,7 +95,7 @@ public class Alstroemeria extends BushBlock implements ISMCrop, EntityBlock, ISM
 
 	// 成長チャンスの設定
 	@Override
-	public void setGlowChance (int chance) { }
+	public void setGlowChance(int chance) {}
 
 	// 成長チャンスの取得
 	@Override
@@ -105,7 +105,7 @@ public class Alstroemeria extends BushBlock implements ISMCrop, EntityBlock, ISM
 
 	// 右クリック回収時に戻る成長段階
 	@Override
-	public int RCSetState () {
+	public int RCSetState() {
 		return 1;
 	}
 
@@ -123,13 +123,13 @@ public class Alstroemeria extends BushBlock implements ISMCrop, EntityBlock, ISM
 
 	// デフォルトステータス取得
 	@Override
-	public BlockState getDefault () {
+	public BlockState getDefault() {
 		return this.defaultBlockState();
 	}
 
 	// ドロップ数
 	@Override
-	public int getDropValue (RandomSource rand, int fortune) {
+	public int getDropValue(RandomSource rand, int fortune) {
 		return 0;
 	}
 
@@ -176,15 +176,14 @@ public class Alstroemeria extends BushBlock implements ISMCrop, EntityBlock, ISM
 	}
 
 	// 時間、天気操作
-	public boolean timeSet (Level world, NonNullList<ItemStack> pInv, Player player) {
+	public boolean timeSet(Level world, NonNullList<ItemStack> pInv, Player player) {
 
 		Boolean tmFlg = false;
 
 		Object[] objSun = SMUtil.getStackFromPInv(pInv, ItemInit.sannyflower_petal, (byte) 1),
 				objMoon = SMUtil.getStackFromPInv(pInv, ItemInit.moonblossom_petal, (byte) 1),
 				objDM = SMUtil.getStackFromPInv(pInv, ItemInit.dm_flower, (byte) 1),
-				obFire = SMUtil.getStackFromPInv(pInv, ItemInit.fire_nasturtium_petal, (byte) 1
-		);
+				obFire = SMUtil.getStackFromPInv(pInv, ItemInit.fire_nasturtium_petal, (byte) 1);
 
 		// ドリズリィ・ミオソチスのお花を持っている状態だったら1日雨にする
 		if (objDM != null) {
@@ -235,15 +234,14 @@ public class Alstroemeria extends BushBlock implements ISMCrop, EntityBlock, ISM
 	}
 
 	// 変更する天気と時間を取得
-	public TimeWeatherType getTimeWeather (Level world, NonNullList<ItemStack> pInv, Player player) {
+	public TimeWeatherType getTimeWeather(Level world, NonNullList<ItemStack> pInv, Player player) {
 
 		TimeWeatherType timeWeather = null;
 
 		Object[] objSun = SMUtil.getStackFromPInv(pInv, ItemInit.sannyflower_petal, (byte) 1),
 				objMoon = SMUtil.getStackFromPInv(pInv, ItemInit.moonblossom_petal, (byte) 1),
 				objDM = SMUtil.getStackFromPInv(pInv, ItemInit.dm_flower, (byte) 1),
-				obFire = SMUtil.getStackFromPInv(pInv, ItemInit.fire_nasturtium_petal, (byte) 1
-		);
+				obFire = SMUtil.getStackFromPInv(pInv, ItemInit.fire_nasturtium_petal, (byte) 1);
 
 		// ドリズリィ・ミオソチスのお花を持っている状態だったら1日雨にする
 		if (objDM != null) {
@@ -269,10 +267,10 @@ public class Alstroemeria extends BushBlock implements ISMCrop, EntityBlock, ISM
 	}
 
 	// 時間設定
-	public void setTime (Level world, int time) {
-		if ( !( world instanceof ServerLevel sever ) ) { return; }
+	public void setTime(Level world, int time) {
+		if (!(world instanceof ServerLevel sever)) { return; }
 		int dayTime = 24000;
-        long day = (sever.getDayTime() / dayTime) + 1;
+		long day = (sever.getDayTime() / dayTime) + 1;
 		sever.setDayTime(time + (day * dayTime));
 	}
 
@@ -281,24 +279,22 @@ public class Alstroemeria extends BushBlock implements ISMCrop, EntityBlock, ISM
 		return (MFTime) item;
 	}
 
-	public void setTwilightlight (Level world, BlockPos pos, Player player, ItemStack stack, Block block) {
+	public void setTwilightlight(Level world, BlockPos pos, Player player, ItemStack stack, Block block) {
 		if (!world.getBlockState(pos.above()).isAir()) { return; }
 
 		world.setBlock(pos.above(), block.defaultBlockState(), 3);
 		world.setBlock(pos, world.getBlockState(pos).setValue(this.getSMMaxAge(), 1), 3);
 
-        SoundType sound = this.getSoundType(block.defaultBlockState(), world, pos.above(), player);
-        this.playerSound(world, pos.above(), sound.getPlaceSound(),(sound.getVolume() + 1F) / 2F, sound.getPitch() * 0.8F);
-        this.bloomAlstoemeria(world, pos.below());
+		SoundType sound = this.getSoundType(block.defaultBlockState(), world, pos.above(), player);
+		this.playerSound(world, pos.above(), sound.getPlaceSound(), (sound.getVolume() + 1F) / 2F, sound.getPitch() * 0.8F);
+		this.bloomAlstoemeria(world, pos.below());
 
-        if (!player.isCreative()) { stack.shrink(1); }
+		if (!player.isCreative()) { stack.shrink(1); }
 	}
 
 
 	// アルストロメリアレシピの取得
-	public boolean getRecipeAlstroemeria (Level world, BlockPos pos, Player player, ItemStack stack, boolean isAllCraft) {
-
-		// レシピを取得して見つからなければ終了
+	public boolean getRecipeAlstroemeria(Level world, BlockPos pos, Player player, ItemStack stack, boolean isAllCraft) {
 		List<ItemStack> stackList = RecipeHelper.getPlayerInv(player, stack);
 		Optional<AlstroemeriaRecipe> recipe = AlstroemeriaRecipe.getRecipe(world, stackList);
 		if (recipe.isEmpty()) { return true; }
@@ -332,12 +328,12 @@ public class Alstroemeria extends BushBlock implements ISMCrop, EntityBlock, ISM
 
 	}
 
-	public void playerSound (Level world, BlockPos pos, SoundEvent sound, float vol, float pitch) {
+	public void playerSound(Level world, BlockPos pos, SoundEvent sound, float vol, float pitch) {
 		world.playSound(null, pos, sound, SoundSource.BLOCKS, vol, pitch);
 	}
 
-	public void bloomAlstoemeria (Level world, BlockPos pos) {
-		if ( !(world instanceof ServerLevel sever) ) { return; }
+	public void bloomAlstoemeria(Level world, BlockPos pos) {
+		if (!(world instanceof ServerLevel sever)) { return; }
 
 		float posX = pos.getX() + 0.5F;
 		float posY = pos.getY() + 1.1F;
@@ -348,8 +344,7 @@ public class Alstroemeria extends BushBlock implements ISMCrop, EntityBlock, ISM
 			float f1 = (float) posX - 0.625F + rand.nextFloat() * 1.25F;
 			float f2 = (float) posY + 0.5F + rand.nextFloat() * 0.5F;
 			float f3 = (float) posZ - 0.625F + rand.nextFloat() * 1.25F;
-
-			sever.sendParticles(ParticleInit.TWILIGHTLIGHT.get(), f1, f2, f3, 2, 0F, 0F, 0F, 0.01F);
+			sever.sendParticles(ParticleInit.TWILIGHTLIGHT, f1, f2, f3, 2, 0F, 0F, 0F, 0.01F);
 		}
 	}
 
@@ -373,7 +368,7 @@ public class Alstroemeria extends BushBlock implements ISMCrop, EntityBlock, ISM
 	}
 
 	@Nullable
-	protected static <E extends BlockEntity, A extends BlockEntity> BlockEntityTicker<A> createTickerHelper( BlockEntityType<A> type1, BlockEntityType<E> type2, BlockEntityTicker<? super E> ticker) {
+	protected static <E extends BlockEntity, A extends BlockEntity> BlockEntityTicker<A> createTickerHelper(BlockEntityType<A> type1, BlockEntityType<E> type2, BlockEntityTicker<? super E> ticker) {
 		return type2 == type1 ? (BlockEntityTicker<A>) ticker : null;
 	}
 
@@ -387,25 +382,25 @@ public class Alstroemeria extends BushBlock implements ISMCrop, EntityBlock, ISM
 		return PlantType.CROP;
 	}
 
-	public boolean notNullRecipe (Level world, List<ItemStack> stackList) {
+	public boolean notNullRecipe(Level world, List<ItemStack> stackList) {
 		return !AlstroemeriaRecipe.getRecipe(world, stackList).isEmpty();
 	}
 
-	public AbstractRecipe getRecipe (Level world, List<ItemStack> stackList) {
+	public AbstractRecipe getRecipe(Level world, List<ItemStack> stackList) {
 		return AlstroemeriaRecipe.getRecipe(world, stackList).get();
 	}
 
-	public boolean canShiftCraft () {
+	public boolean canShiftCraft() {
 		return true;
 	}
 
 	@Override
 	public void appendHoverText(ItemStack stack, @Nullable BlockGetter get, List<Component> toolTip, TooltipFlag flag) {
-		toolTip.add(this.getTipArray(this.getText(this.name + "_open"), GOLD));
-		toolTip.add(this.getTipArray(this.getText(this.name), GREEN));
+		toolTip.add(this.getText(this.name + "_open").withStyle(GOLD));
+		toolTip.add(this.getText(this.name).withStyle(GREEN));
 	}
 
-	public static enum TimeWeatherType {
+	public enum TimeWeatherType {
 		SUN,
 		RAIN,
 		DAYTIME,

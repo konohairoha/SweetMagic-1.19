@@ -21,7 +21,7 @@ public class Whitenet extends SweetCrops_STAGE3 {
 	}
 
 	@Override
-	public ItemLike getSeed () {
+	public ItemLike getSeed() {
 		return ItemInit.whitenet_seed;
 	}
 

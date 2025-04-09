@@ -28,6 +28,7 @@ import sweetmagic.init.BlockInit;
 import sweetmagic.init.BlockInit.BlockInfo;
 import sweetmagic.init.TileInit;
 import sweetmagic.init.block.base.BaseFaceBlock;
+import sweetmagic.init.block.base.BaseSMBlock;
 import sweetmagic.init.tile.sm.TileAbstractSM;
 import sweetmagic.init.tile.sm.TileObMagia;
 import sweetmagic.init.tile.sm.TileStove;
@@ -35,7 +36,6 @@ import sweetmagic.init.tile.sm.TileStove;
 public class ObMagia extends BaseFaceBlock implements EntityBlock {
 
 	private final boolean isTop;
-
 	private static final VoxelShape BOT = Block.box(0D, 0D, 0D, 16D, 16D, 16D);
 	private static final VoxelShape TOP = Block.box(0D, 0D, 0D, 16D, 4D, 16D);
 
@@ -52,13 +52,13 @@ public class ObMagia extends BaseFaceBlock implements EntityBlock {
 	}
 
 	// 右クリック出来るか
-	public boolean canRightClick (Player player, ItemStack stack) {
+	public boolean canRightClick(Player player, ItemStack stack) {
 		return true;
 	}
 
 	// ブロックでのアクション
-	public void actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
-		if (world.isClientSide) { return; }
+	public boolean actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
+		if (world.isClientSide) { return true; }
 
 		pos = this.isTop ? pos.below() : pos;
 		BlockEntity tile = this.getTile(world, pos);
@@ -66,10 +66,15 @@ public class ObMagia extends BaseFaceBlock implements EntityBlock {
 		if (tile != null && tile instanceof TileObMagia ob) {
 			this.openGUI(world, pos, player, ob);
 		}
+
+		else if (this.getBlock(world, pos) instanceof BaseSMBlock sm) {
+			sm.actionBlock(world, pos, player, stack);
+		}
+		return true;
 	}
 
 	// tileの中身を保持するか
-	public boolean isKeepTile () {
+	public boolean isKeepTile() {
 		return !this.isTop;
 	}
 
@@ -103,7 +108,7 @@ public class ObMagia extends BaseFaceBlock implements EntityBlock {
 	}
 
 	// ドロップするかどうか
-	protected boolean isDrop () {
+	protected boolean isDrop() {
 		return false;
 	}
 
@@ -122,7 +127,7 @@ public class ObMagia extends BaseFaceBlock implements EntityBlock {
 	}
 
 	@Override
-	public void addBlockTip (List<Component> toolTip) {
+	public void addBlockTip(List<Component> toolTip) {
 		if (!this.isTop) {
 			toolTip.add(this.tierTip(1));
 			toolTip.add(this.getText(this.name).withStyle(GREEN));

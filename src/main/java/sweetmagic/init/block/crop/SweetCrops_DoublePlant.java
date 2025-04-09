@@ -25,11 +25,11 @@ import sweetmagic.init.block.sm.PottingSoil;
 public class SweetCrops_DoublePlant extends SweetCrops_STAGE4 {
 
 	private static final VoxelShape[] CROP_VEXE = new VoxelShape[] {
-			Block.box(1.6D, 0D, 1.6D, 14.4D, 4D, 14.4D),
-			Block.box(1.6D, 0D, 1.6D, 14.4D, 8D, 14.4D),
-			Block.box(1.6D, 0D, 1.6D, 14.4D, 16D, 14.4D),
-			Block.box(1.6D, 0D, 1.6D, 14.4D, 16D, 14.4D),
-			Block.box(1.6D, 0D, 1.6D, 14.4D, 16D, 14.4D)
+		Block.box(1.6D, 0D, 1.6D, 14.4D, 4D, 14.4D),
+		Block.box(1.6D, 0D, 1.6D, 14.4D, 8D, 14.4D),
+		Block.box(1.6D, 0D, 1.6D, 14.4D, 16D, 14.4D),
+		Block.box(1.6D, 0D, 1.6D, 14.4D, 16D, 14.4D),
+		Block.box(1.6D, 0D, 1.6D, 14.4D, 16D, 14.4D)
 	};
 
 	public SweetCrops_DoublePlant(String name, int data, int chance) {
@@ -46,26 +46,24 @@ public class SweetCrops_DoublePlant extends SweetCrops_STAGE4 {
 	@Override
 	public ItemLike getCrop() {
 		switch (this.data) {
-		case 0: return ItemInit.corn;
 		case 1: return ItemInit.eggplant;
 		case 2: return ItemInit.tomato_seed;
-		default: return null;
+		default: return ItemInit.corn;
 		}
 	}
 
 	// 種の取得
 	@Override
-	public ItemLike getSeed () {
+	public ItemLike getSeed() {
 		switch (this.data) {
-		case 0: return ItemInit.corn_seed;
 		case 1: return ItemInit.eggplant_seed;
 		case 2: return ItemInit.tomato_seed;
-		default: return null;
+		default: return ItemInit.corn_seed;
 		}
 	}
 
 	// 当たり判定
-	public VoxelShape getShape(BlockState state, BlockGetter get, BlockPos pos, CollisionContext col) {
+	public VoxelShape getShape(BlockState state, BlockGetter get, BlockPos pos, CollisionContext con) {
 		return CROP_VEXE[this.getNowState(state)];
 	}
 
@@ -98,7 +96,7 @@ public class SweetCrops_DoublePlant extends SweetCrops_STAGE4 {
 	}
 
 	// 右クリック
-	public void onRicghtClick (Level world, Player player, BlockState state, BlockPos pos, ItemStack stack) {
+	public void onRicghtClick(Level world, Player player, BlockState state, BlockPos pos, ItemStack stack) {
 
 		// アイテムドロップ
 		this.dropItem(world, state, pos, player, stack);
@@ -115,11 +113,11 @@ public class SweetCrops_DoublePlant extends SweetCrops_STAGE4 {
 	}
 
 	// アイテムドロップ
-	public void dropItem (Level world, BlockState state, BlockPos pos, Player player, ItemStack stack) {
-	    RandomSource rand = world.random;
+	public void dropItem(Level world, BlockState state, BlockPos pos, Player player, ItemStack stack) {
+		RandomSource rand = world.random;
 		ItemEntity drop = this.getDropItem(world, player, stack, this.getCrop(), this.getDropValue(rand, 0));
-        world.addFreshEntity(drop);
-        world.setBlock(pos, state.setValue(this.getSMMaxAge(), this.RCSetState()), 2); //作物の成長段階を2下げる
+		world.addFreshEntity(drop);
+		world.setBlock(pos, state.setValue(this.getSMMaxAge(), this.RCSetState()), 2); //作物の成長段階を2下げる
 		this.playCropSound(world, rand, pos);
 	}
 

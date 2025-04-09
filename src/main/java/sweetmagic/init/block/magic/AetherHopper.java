@@ -39,13 +39,14 @@ public class AetherHopper extends BaseMFBlock {
 	}
 
 	// ブロックでのアクション
-	public void actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
-		if (world.isClientSide) { return; }
+	public boolean actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
+		if (world.isClientSide) { return false; }
 		this.openGUI(world, pos, player, (TileAetherHopper) this.getTile(world, pos));
+		return true;
 	}
 
 	// 最大MFの取得
-	public int getMaxMF () {
+	public int getMaxMF() {
 		return 20000;
 	}
 
@@ -54,14 +55,13 @@ public class AetherHopper extends BaseMFBlock {
 		return new TileAetherHopper(pos, state);
 	}
 
-	public BlockEntityType<? extends TileAbstractSM> getTileType () {
+	public BlockEntityType<? extends TileAbstractSM> getTileType() {
 		return TileInit.aetherHopper;
 	}
 
 	@Nullable
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
-		BlockEntityType<? extends TileAbstractSM> tileType = this.getTileType();
-		return tileType != null ? this.createMailBoxTicker(world, type, tileType) : null;
+		return this.createMailBoxTicker(world, type, this.getTileType());
 	}
 
 	@Override
@@ -71,8 +71,8 @@ public class AetherHopper extends BaseMFBlock {
 
 	@NotNull
 	@Override
-	public BlockState getStateForPlacement(BlockPlaceContext ctx) {
-		return ctx.getPlayer() != null ? this.defaultBlockState().setValue(FACING, ctx.getClickedFace().getOpposite()) : this.defaultBlockState();
+	public BlockState getStateForPlacement(BlockPlaceContext con) {
+		return con.getPlayer() != null ? this.defaultBlockState().setValue(FACING, con.getClickedFace().getOpposite()) : this.defaultBlockState();
 	}
 
 	@NotNull
@@ -89,13 +89,13 @@ public class AetherHopper extends BaseMFBlock {
 		return state.rotate(mirror.getRotation(state.getValue(FACING)));
 	}
 
-	public void addTip (List<Component> toolTip, ItemStack stack, CompoundTag tags) {
+	public void addTip(List<Component> toolTip, ItemStack stack, CompoundTag tags) {
 		super.addTip(toolTip, stack, tags);
 		toolTip.add(this.getTipArray(this.getText(this.name + "_send"), GREEN));
 	}
 
 	// RS信号で停止するかどうか
-	public boolean isRSStop () {
+	public boolean isRSStop() {
 		return true;
 	}
 }

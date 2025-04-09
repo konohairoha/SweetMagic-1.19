@@ -43,10 +43,10 @@ public class MFFurnace extends BaseMFBlock {
 	}
 
 	// 最大MFの取得
-	public int getMaxMF () {
+	public int getMaxMF() {
 		switch(this.data) {
 		case 1: return 200000;
-		default : return 20000;
+		default: return 20000;
 		}
 	}
 
@@ -56,8 +56,8 @@ public class MFFurnace extends BaseMFBlock {
 	}
 
 	// ブロックでのアクション
-	public void actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
-		if (world.isClientSide) { return; }
+	public boolean actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
+		if (world.isClientSide) { return false; }
 
 		MenuProvider tile = null;
 
@@ -71,6 +71,7 @@ public class MFFurnace extends BaseMFBlock {
 		}
 
 		this.openGUI(world, pos, player, tile);
+		return true;
 	}
 
 	@Override
@@ -81,7 +82,7 @@ public class MFFurnace extends BaseMFBlock {
 		}
 	}
 
-	public BlockEntityType<? extends TileAbstractSM> getTileType () {
+	public BlockEntityType<? extends TileAbstractSM> getTileType() {
 		switch (this.data) {
 		case 1: return TileInit.mffurnaceAdavance;
 		default: return TileInit.mffurnace;
@@ -90,16 +91,15 @@ public class MFFurnace extends BaseMFBlock {
 
 	@Nullable
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
-		BlockEntityType<? extends TileAbstractSM> tileType = this.getTileType();
-		return tileType != null ? this.createMailBoxTicker(world, type, tileType) : null;
+		return this.createMailBoxTicker(world, type, this.getTileType());
 	}
 
 	// RS信号で停止するかどうか
-	public boolean isRSStop () {
+	public boolean isRSStop() {
 		return true;
 	}
 
-	public void addTip (List<Component> toolTip, ItemStack stack, CompoundTag tags) {
+	public void addTip(List<Component> toolTip, ItemStack stack, CompoundTag tags) {
 		toolTip.add(this.getText(this.name).withStyle(GREEN));
 		toolTip.add(this.getText("mffurnace_top").withStyle(GOLD));
 		toolTip.add(this.getText("mffurnace_bot").withStyle(GOLD));
