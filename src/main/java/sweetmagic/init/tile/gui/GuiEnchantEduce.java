@@ -2,7 +2,6 @@ package sweetmagic.init.tile.gui;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -15,14 +14,11 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
-import net.minecraftforge.registries.ForgeRegistries;
 import sweetmagic.SweetMagicCore;
 import sweetmagic.init.ItemInit;
 import sweetmagic.init.TagInit;
@@ -38,7 +34,6 @@ public class GuiEnchantEduce extends GuiSMBase<EnchantEduceMenu> {
 	private static final ResourceLocation MISC = SweetMagicCore.getSRC("textures/gui/gui_misc.png");
 	private final EnchantEduceMenu menu;
 	private final TileEnchantEduce tile;
-
 	private int tickTime = 0;
 	private int counter = 0;
 	private float scrollOffset = 0F;
@@ -47,22 +42,19 @@ public class GuiEnchantEduce extends GuiSMBase<EnchantEduceMenu> {
 	private boolean enchaView[] = new boolean[4];
 	private boolean addLevelView = false;
 	private boolean subLevelView = false;
-	private Player player;
-
 	private final static ItemStack BOOK = new ItemStack(Items.BOOK);
 	private final static ItemStack PAGE = new ItemStack(ItemInit.mysterious_page);
-	private final static List<ItemStack> MAGICBOOK_LIST = ForgeRegistries.ITEMS.tags().getTag(TagInit.MAGIC_BOOK).stream().map(Item::getDefaultInstance).collect(Collectors.toList());
+	private final static List<ItemStack> MAGICBOOK_LIST = GuiSMBase.getTagStack(TagInit.MAGIC_BOOK);
 
 	public GuiEnchantEduce(EnchantEduceMenu menu, Inventory pInv, Component title) {
 		super(menu, pInv, title);
-		this.setGuiWidth(193 + 24);
-		this.setGuiHeight(190);
+		this.setGuiSize(217, 190);
 		this.menu = menu;
 		this.tile = menu.tile;
 		this.scrolling = false;
 		this.startIndex = 0;
 		this.scrollOffset = 0F;
-		this.getRenderTexList().add(new SMRenderTex(TEX, 35, 29, 0, 0, 11, 77, new MFRenderGage(menu.tile, 194, 29, 11, 76, 76, true)));
+		this.addRenderTexList(new SMRenderTex(TEX, 35, 29, 0, 0, 11, 77, new MFRenderGage(menu.tile, true)));
 	}
 
 	protected void renderBGBase (PoseStack pose, float parTick, int mouseX, int mouseY) {
@@ -92,21 +84,25 @@ public class GuiEnchantEduce extends GuiSMBase<EnchantEduceMenu> {
 		}
 
 		// 作成時間の表示
-		if (tile.craftTime > 0) {
-			int progress =tile.getCraftProgressScaled(30);
+		if (this.tile.craftTime > 0) {
+			int progress = this.tile.getCraftProgress(30);
 			this.blit(pose, x + 39, y + 45, 210, 45, 25, progress);
 		}
 
 		// スクロールバーの表示
 		int h = (int) (60F * this.scrollOffset);
 		boolean isActive = this.scrollbarActive();
-		this.blit(pose, x + 178, y + 30 + h, 194 + (isActive ? 0 : 8), 0, 8, 15);
+		RenderSystem.setShaderTexture(0, MISC);
+		this.blit(pose, x + 178, y + 30 + h, 83 + (isActive ? 0 : 8), 93, 8, 15);
 
 		// スクロール出来ないなら初期位置に戻す
 		if (!isActive && !this.tile.isCraft) {
 			this.startIndex = 0;
 			this.scrollOffset = 0F;
 		}
+
+		for (int id = 0; id < 4; id++)
+			this.blit(pose, x + 76, y + 26 + id * 21, 99, 93, 101, 20);
 
 		ItemStack stack = this.tile.getBookItem();
 
@@ -123,7 +119,7 @@ public class GuiEnchantEduce extends GuiSMBase<EnchantEduceMenu> {
 
 				int cost = this.tile.getEnchantCost(id + this.startIndex, (SMBook) stack.getItem());
 				if (cost > 0) {
-					this.blit(pose, x + 76, y + 26 + id * 21, 0, 194 + (this.enchaView[id] ? 20 : 0), 101, 20);
+					this.blit(pose, x + 76, y + 26 + id * 21, 99, 113 + (this.enchaView[id] ? 20 : 0), 101, 20);
 				}
 			}
 		}
@@ -134,6 +130,7 @@ public class GuiEnchantEduce extends GuiSMBase<EnchantEduceMenu> {
 			int nowLevel = this.tile.getNowLevel();
 			boolean canSub = nowLevel > this.tile.getMinLevel();
 			boolean canAdd = this.tile.getMaxLevel(tier) > nowLevel;
+			RenderSystem.setShaderTexture(0, TEX);
 
 			if (canSub) {
 				this.blit(pose, x + 182, y + 14, 210 + (this.subLevelView ? 7 : 0), 11, 7, 10);
@@ -179,8 +176,8 @@ public class GuiEnchantEduce extends GuiSMBase<EnchantEduceMenu> {
 		int xAxis = mouseX - this.getWidth();
 		int yAxis = mouseY - this.getHeight();
 
-		if (this.isRendeer(tipX, tipY, mouseX, mouseY, 65, 15)) {
-            this.renderTooltip(pose, this.getText("range_level").withStyle(GOLD), xAxis, yAxis);
+		if (this.isRender(tipX, tipY, mouseX, mouseY, 65, 15)) {
+			this.renderTooltip(pose, this.getText("range_level").withStyle(GOLD), xAxis, yAxis);
 		}
 
 		//描画位置を計算
@@ -195,13 +192,13 @@ public class GuiEnchantEduce extends GuiSMBase<EnchantEduceMenu> {
 		this.addLevelView = false;
 		this.subLevelView = false;
 
-		if (this.isRendeer(tipX, tipY, mouseX, mouseY, 7, 10)) {
+		if (this.isRender(tipX, tipY, mouseX, mouseY, 7, 10)) {
 			this.addLevelView = true;
 		}
 
 		tipY += 11;
 
-		if (this.isRendeer(tipX, tipY, mouseX, mouseY, 7, 10)) {
+		if (this.isRender(tipX, tipY, mouseX, mouseY, 7, 10)) {
 			this.subLevelView = true;
 		}
 
@@ -213,17 +210,17 @@ public class GuiEnchantEduce extends GuiSMBase<EnchantEduceMenu> {
 
 			this.enchaView[id] = false;
 
-			if (this.isRendeer(tipX, tipY, mouseX, mouseY, 98, 18)) {
+			if (this.isRender(tipX, tipY, mouseX, mouseY, 98, 18)) {
 
 				int cost = this.tile.getEnchantCost(id + this.startIndex, (SMBook) magicBook.getItem());
 				if (cost <= 0) { break; }
 
 				String tip = String.format("%,d", cost);
-	            this.renderTooltip(pose, this.getTipArray(this.getText("needmf"), this.getLabel(tip).withStyle(WHITE)).withStyle(GOLD), xAxis - 80, yAxis - 6);
-	            this.enchaView[id] = true;
+				this.renderTooltip(pose, this.getTipArray(this.getText("needmf"), this.getLabel(tip).withStyle(WHITE)).withStyle(GOLD), xAxis - 80, yAxis - 6);
+				this.enchaView[id] = true;
 			}
 
-            tipY += 19;
+			tipY += 19;
 		}
 	}
 
@@ -248,14 +245,12 @@ public class GuiEnchantEduce extends GuiSMBase<EnchantEduceMenu> {
 
 		// 各エンチャントの当たり判定チェック
 		if (dX >= 0D && dX <= 7 && dY >= 0D && dY < 10) {
-			this.menu.clickMenuButton(this.player, 0);
-			this.minecraft.gameMode.handleInventoryButtonClick((this.menu).containerId, 0);
+			this.clickButton(0);
 		}
 
 		// 各エンチャントの当たり判定チェック
 		else if (dX >= 0D && dX <= 7 && dY >= 10 && dY < 20) {
-			this.menu.clickMenuButton(this.player, 1);
-			this.minecraft.gameMode.handleInventoryButtonClick((this.menu).containerId, 1);
+			this.clickButton(1);
 		}
 
 		dX = guiX - (double) (x + 101) + addX;
@@ -265,8 +260,7 @@ public class GuiEnchantEduce extends GuiSMBase<EnchantEduceMenu> {
 
 			// 各エンチャントの当たり判定チェック
 			if (dX >= 0D && dX <= 95 && dY >= 0D && dY < 18D) {
-				this.menu.clickMenuButton(this.player, id + this.startIndex + 2);
-				this.minecraft.gameMode.handleInventoryButtonClick((this.menu).containerId, id + this.startIndex + 2);
+				this.clickButton(id + this.startIndex + 2);
 			}
 		}
 
@@ -275,7 +269,6 @@ public class GuiEnchantEduce extends GuiSMBase<EnchantEduceMenu> {
 
 	@Override
 	public boolean mouseDragged(double mouseX, double mouseY, int mouseButton, double dragX, double dragY) {
-
 		List<Enchantment> enchaList = this.menu.tile.getEnchaList();
 		int size = enchaList.size();
 		if (!this.scrolling || !this.scrollbarActive()) { return super.mouseDragged(mouseX, mouseY, mouseButton, dragX, dragY); }
@@ -291,7 +284,6 @@ public class GuiEnchantEduce extends GuiSMBase<EnchantEduceMenu> {
 
 	@Override
 	public boolean mouseScrolled(double mouseX, double mouseY, double scrollDelta) {
-
 		if (!this.scrollbarActive()) { return super.mouseScrolled(mouseX, mouseY, scrollDelta); }
 
 		List<Enchantment> enchaList = this.menu.tile.getEnchaList();
@@ -338,8 +330,7 @@ public class GuiEnchantEduce extends GuiSMBase<EnchantEduceMenu> {
 	}
 
 	private boolean scrollbarActive() {
-		TileEnchantEduce tile = this.menu.tile;
-		return tile.getEnchaList().size() > 4 && !tile.isCraft && !tile.getBookItem().isEmpty();
+		return this.tile.getEnchaList().size() > 4 && !this.tile.isCraft && !this.tile.getBookItem().isEmpty();
 	}
 
 	@Override

@@ -32,32 +32,31 @@ public class GuiAccessoryTable extends GuiSMBase<AccessoryTableMenu> {
 
 	public GuiAccessoryTable(AccessoryTableMenu menu, Inventory pInv, Component title) {
 		super(menu, pInv, title);
-		this.setGuiWidth(176);
-		this.setGuiHeight(172);
+		this.setGuiSize(176, 172);
 		this.tile = menu.tile;
 		this.atMenu = (AccessoryTableMenu) this.menu;
 
 		SMButtonTip buttonTip = new SMButtonTip("", -18, 14, this.tile) {
 
-			public boolean isFlagText (TileAccessoryTable tile) {
+			public boolean isFlagText(TileAccessoryTable tile) {
 				return tile.canCraft();
 			}
 
-			public String getTip () {
+			public String getTip() {
 				return this.isFlagText(tile) ? "addstack_start" : tile.getTip();
 			}
 		};
 
 		SMButton button = new SMButton(MISC, 128, 38, 114, 15, 32, 12, buttonTip) {
 
-			public boolean isButtonRender () {
+			public boolean isButtonRender() {
 				TileAccessoryTable tile = (TileAccessoryTable) this.getButtonTip().getTile();
 				return tile.canCraft();
 			}
 		};
 
-		this.getButtonMap().put(0, button);
-		this.getRenderTexList().add(new SMRenderTex(TEX, 7, 7, 0, 0, 11, 77, new MFRenderGage(this.tile, 179, 7, 11, 76, 76, true)));
+		this.addButtonMap(0, button);
+		this.addRenderTexList(new SMRenderTex(TEX, 7, 7, 0, 0, 11, 77, new MFRenderGage(this.tile, true)));
 	}
 
 	@Override
@@ -77,7 +76,7 @@ public class GuiAccessoryTable extends GuiSMBase<AccessoryTableMenu> {
 
 		// ゲージを表示
 		if (this.tile.craftTime > 0) {
-			int progress = this.tile.getProgressScale(52);
+			int progress = this.tile.getProgress(52);
 			this.blit(pose, x + 73, y + 17, 197, 17, progress, 57);
 		}
 
@@ -91,13 +90,13 @@ public class GuiAccessoryTable extends GuiSMBase<AccessoryTableMenu> {
 	}
 
 	// アイテム描画
-	public void renderSlotItem (Slot slot, ItemStack stack, PoseStack pose) {
+	public void renderSlotItem(Slot slot, ItemStack stack, PoseStack pose) {
 		this.renderSlotItem(slot, stack, pose, false);
 	}
 
 	// アイテム描画
-	public void renderSlotItem (Slot slot, ItemStack stack, PoseStack pose, boolean flag) {
-		if ( !slot.getItem().isEmpty()) { return; }
+	public void renderSlotItem(Slot slot, ItemStack stack, PoseStack pose, boolean flag) {
+		if (!slot.getItem().isEmpty()) { return; }
 
 		int x = this.leftPos + slot.x;
 		int y = this.topPos + slot.y;
@@ -119,26 +118,26 @@ public class GuiAccessoryTable extends GuiSMBase<AccessoryTableMenu> {
 	}
 
 	// スロットの説明
-	public void renderItemLabel (Slot slot, ItemStack stack, PoseStack pose, int mouseX, int mouseY) {
+	public void renderItemLabel(Slot slot, ItemStack stack, PoseStack pose, int mouseX, int mouseY) {
 		this.renderItemLabel(slot, stack, pose, mouseX, mouseY, false);
 	}
 
 	// スロットの説明
-	public void renderItemLabel (Slot slot, ItemStack stack, PoseStack pose, int mouseX, int mouseY, boolean flag) {
-		if ( !slot.getItem().isEmpty()) { return; }
+	public void renderItemLabel(Slot slot, ItemStack stack, PoseStack pose, int mouseX, int mouseY, boolean flag) {
+		if (!slot.getItem().isEmpty()) { return; }
 
 		int tipX = this.getWidth() + slot.x;
 		int tipY = this.getHeight() + slot.y;
-		if (!this.isRendeer(tipX, tipY, mouseX, mouseY, 16, 16)) { return; }
+		if (!this.isRender(tipX, tipY, mouseX, mouseY, 16, 16)) { return; }
 
 		int xAxis = (mouseX - this.getWidth());
 		int yAxis = (mouseY - this.getHeight());
 		String name = flag ? "craft_out" : "slot_need";
 		List<Component> tipList = Arrays.<Component> asList(this.getText(name).withStyle(GREEN), stack.getDisplayName());
-        this.renderComponentTooltip(pose, tipList, xAxis, yAxis);
+		this.renderComponentTooltip(pose, tipList, xAxis, yAxis);
 	}
 
-	protected ResourceLocation getTEX () {
+	protected ResourceLocation getTEX() {
 		return TEX;
 	}
 }

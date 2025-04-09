@@ -18,10 +18,9 @@ public class GuiAetherRecycler extends GuiSMBase<AetherRecyclerMenu> {
 
 	public GuiAetherRecycler(AetherRecyclerMenu menu, Inventory pInv, Component title) {
 		super(menu, pInv, title);
-		this.setGuiWidth(176);
-		this.setGuiHeight(230);
+		this.setGuiSize(176, 230);
 		this.tile = menu.tile;
-		this.getRenderTexList().add(new SMRenderTex(TEX, 7, 7, 0, 0, 11, 77, new MFRenderGage(menu.tile, 179, 7, 11, 76, 76, true)));
+		this.addRenderTexList(new SMRenderTex(TEX, 7, 7, 0, 0, 11, 77, new MFRenderGage(menu.tile, true)));
 	}
 
 	@Override
@@ -32,12 +31,12 @@ public class GuiAetherRecycler extends GuiSMBase<AetherRecyclerMenu> {
 		if (this.tile.craftTime > 0) {
 			int x = this.getWidth();
 			int y = this.getHeight();
-			int progress = this.tile.getCraftProgressScaled(22);
+			int progress = this.tile.getCraftProgress(22);
 			this.blit(pose, x + 143, y + 60, 194, 60, 15, progress);
 		}
 	}
 
-	protected ResourceLocation getTEX () {
+	protected ResourceLocation getTEX() {
 		return TEX;
 	}
 }

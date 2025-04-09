@@ -21,26 +21,25 @@ public class GuiRobe extends GuiSMBase<SMRoveMenu> {
 
 	public GuiRobe(SMRoveMenu menu, Inventory pInv, Component title) {
 		super(menu, pInv, title);
-		this.setGuiWidth(176);
-		this.setGuiHeight(202);
+		this.setGuiSize(176, 202);
 
 		this.hasPorch = this.hasPorch();
 		this.hasWand = this.hasWand();
 		int x = 140;
 
 		if (this.hasPorch) {
-			this.getButtonMap().put(0, new SMButton(MISC, x, -16, 200, 0, 16, 27, new SMButtonTip("open_porch", -18, 14)));
+			this.addButtonMap(0, new SMButton(MISC, x, -16, 200, 0, 16, 27, new SMButtonTip("open_porch", -18, 14)));
 			x -= 18;
 		}
 
 		if (this.hasWand) {
-			this.getButtonMap().put(1, new SMButton(MISC, x, -16, 200, 0, 16, 27, new SMButtonTip("open_wand", -18, 14)));
+			this.addButtonMap(1, new SMButton(MISC, x, -16, 200, 0, 16, 27, new SMButtonTip("open_wand", -18, 14)));
 		}
 
-		this.getButtonMap().put(2, new SMButton(MISC, 160, -2, 114, 0, 10, 9, new SMButtonTip("sort", -18, 14)));
+		this.addButtonMap(2, new SMButton(MISC, 160, -2, 114, 0, 10, 9, new SMButtonTip("sort", -18, 14)));
 	}
 
-	protected void renderBGBase (PoseStack pose, float parTick, int mouseX, int mouseY) {
+	protected void renderBGBase(PoseStack pose, float parTick, int mouseX, int mouseY) {
 		RenderSystem.setShader(GameRenderer::getPositionColorTexShader);
 		RenderSystem.setShaderTexture(0, this.getTEX());
 		RenderSystem.setShaderColor(1F, 1F, 1F, 1F);
@@ -73,7 +72,7 @@ public class GuiRobe extends GuiSMBase<SMRoveMenu> {
 	}
 
 	@Override
-	protected ResourceLocation getTEX () {
+	protected ResourceLocation getTEX() {
 		return TEX;
 	}
 }

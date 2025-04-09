@@ -2,6 +2,7 @@ package sweetmagic.init.tile.gui;
 
 import java.util.List;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 
 import net.minecraft.client.Minecraft;
@@ -23,7 +24,6 @@ public class GuiWoodChestLoot extends GuiSMBase<WoodChestLootMenu> implements IS
 
 	private static final ResourceLocation TEX = SweetMagicCore.getSRC("textures/gui/gui_woodchest_loot.png");
 	public final TileWoodChest tile;
-
 	private EditBox count;
 	private EditBox chance;
 	private boolean lootView[] = new boolean[4];
@@ -35,8 +35,7 @@ public class GuiWoodChestLoot extends GuiSMBase<WoodChestLootMenu> implements IS
 
 	public GuiWoodChestLoot(WoodChestLootMenu menu, Inventory pInv, Component title) {
 		super(menu, pInv, title);
-		this.setGuiWidth(176);
-		this.setGuiHeight(174);
+		this.setGuiSize(176, 174);
 		this.tile = menu.tile;
 		ResourceLocation loot = this.tile.lootTable;
 		if (loot == null) { return; }
@@ -57,7 +56,8 @@ public class GuiWoodChestLoot extends GuiSMBase<WoodChestLootMenu> implements IS
 
 		// スクロールバーの表示
 		int h = (int) (60F * this.scrollOffset);
-		this.blit(pose, x + 160, y + 9 + h, 180, 0, 8, 15);
+		RenderSystem.setShaderTexture(0, MISC);
+		this.blit(pose, x + 160, y + 9 + h, 83, 93, 8, 15);
 
 		if (this.isView) {
 			this.blit(pose, x + 20, y + 70, 180, 18, 27, 12);
@@ -66,12 +66,13 @@ public class GuiWoodChestLoot extends GuiSMBase<WoodChestLootMenu> implements IS
 		int size = LootInit.lootList.size();
 		for (int id = 0; id < 4; id++) {
 
+			this.blit(pose, x + 57, y + 7 + id * 20, 99, 93, 101, 20);
 			if (id + this.startIndex >= size) { break; }
 
-			this.blit(pose, x + 57, y + 7 + id * 20, 0, 178 + (this.lootView[id] ? 20 : 0), 101, 20);
+			this.blit(pose, x + 57, y + 7 + id * 20, 99, 113 + (this.lootView[id] ? 20 : 0), 101, 20);
 
 			if (id + this.startIndex == this.selectID) {
-				this.blit(pose, x + 57, y + 7 + id * 20, 0, 218, 101, 20);
+				this.blit(pose, x + 57, y + 7 + id * 20, 99, 153, 101, 20);
 			}
 		}
 
@@ -96,12 +97,7 @@ public class GuiWoodChestLoot extends GuiSMBase<WoodChestLootMenu> implements IS
 		int tipY = this.getHeight() + 70;
 		int xAxis = mouseX - this.getWidth();
 		int yAxis = mouseY - this.getHeight();
-		this.isView = false;
-
-		if (this.isRendeer(tipX, tipY, mouseX, mouseY, 27, 12)) {
-			this.isView = true;
-		}
-
+		this.isView = this.isRender(tipX, tipY, mouseX, mouseY, 27, 12);
 		tipX = this.getWidth() + 57;
 		tipY = this.getWidth() - 104;
 
@@ -109,16 +105,15 @@ public class GuiWoodChestLoot extends GuiSMBase<WoodChestLootMenu> implements IS
 
 			this.lootView[id] = false;
 
-			if (this.isRendeer(tipX, tipY, mouseX, mouseY, 98, 19)) {
-
+			if (this.isRender(tipX, tipY, mouseX, mouseY, 98, 19)) {
 				if (id + this.startIndex >= LootInit.lootList.size()) { break; }
 
 				ResourceLocation loot = LootInit.lootList.get(id + this.startIndex);
-	            this.renderTooltip(pose, this.getTip(loot.toString()).withStyle(GOLD), xAxis - 80, yAxis - 6);
-	            this.lootView[id] = true;
+				this.renderTooltip(pose, this.getTip(loot.toString()).withStyle(GOLD), xAxis - 80, yAxis - 6);
+				this.lootView[id] = true;
 			}
 
-            tipY += 20;
+			tipY += 20;
 		}
 	}
 
@@ -163,7 +158,6 @@ public class GuiWoodChestLoot extends GuiSMBase<WoodChestLootMenu> implements IS
 
 	@Override
 	public boolean mouseDragged(double mouseX, double mouseY, int mouseButton, double dragX, double dragY) {
-
 		List<ResourceLocation> enchaList = LootInit.lootList;
 		int size = enchaList.size();
 		if (!this.scrolling) { return super.mouseDragged(mouseX, mouseY, mouseButton, dragX, dragY); }
@@ -204,10 +198,10 @@ public class GuiWoodChestLoot extends GuiSMBase<WoodChestLootMenu> implements IS
 	protected void subInit() {
 
 		this.minecraft.keyboardHandler.setSendRepeatsToGui(true);
-		int x = (this.width - this.imageWidth) / 2;
-		int y = (this.height - this.imageHeight) / 2;
+		int x = this.getWidth();
+		int y = this.getHeight();
 
-		this.count = new EditBox(this.font, x + 9, y + 19, 116, 12, Component.translatable("container.repair1"));
+		this.count = new EditBox(this.font, x + 9, y + 19, 116, 12, this.getTip("container.repair1"));
 		this.count.setCanLoseFocus(false);
 		this.count.setTextColor(-1);
 		this.count.setTextColorUneditable(-1);
@@ -216,7 +210,7 @@ public class GuiWoodChestLoot extends GuiSMBase<WoodChestLootMenu> implements IS
 		this.count.setResponder(this::onNameChanged);
 		this.count.setValue("" + this.tile.count);
 
-		this.chance = new EditBox(this.font, x + 9, y + 46, 116, 12, Component.translatable("container.repair"));
+		this.chance = new EditBox(this.font, x + 9, y + 46, 116, 12, this.getTip("container.repair"));
 		this.chance.setCanLoseFocus(false);
 		this.chance.setTextColor(-1);
 		this.chance.setTextColorUneditable(-1);
@@ -262,7 +256,7 @@ public class GuiWoodChestLoot extends GuiSMBase<WoodChestLootMenu> implements IS
 		this.chance.render(pose, mouseX, mouseY, parTick);
 	}
 
-	protected ResourceLocation getTEX () {
+	protected ResourceLocation getTEX() {
 		return TEX;
 	}
 }

@@ -21,19 +21,18 @@ public class GuiPorch extends GuiSMBase<SMPorchMenu> {
 
 	public GuiPorch(SMPorchMenu menu, Inventory pInv, Component title) {
 		super(menu, pInv, title);
-		this.setGuiWidth(176);
-		this.setGuiHeight(142);
+		this.setGuiSize(176, 142);
 		this.hasRobe = this.hasRobe();
 		this.hasWand = this.hasWand();
 		int x = 130;
 
 		if (this.hasRobe) {
-			this.getButtonMap().put(0, new SMButton(MISC, x, -27, 200, 0, 16, 27, new SMButtonTip("open_robe", -18, 14)));
+			this.addButtonMap(0, new SMButton(MISC, x, -27, 200, 0, 16, 27, new SMButtonTip("open_robe", -18, 14)));
 			x -= 18;
 		}
 
 		if (this.hasWand) {
-			this.getButtonMap().put(1, new SMButton(MISC, x, -27, 200, 0, 16, 27, new SMButtonTip("open_wand", -18, 14)));
+			this.addButtonMap(1, new SMButton(MISC, x, -27, 200, 0, 16, 27, new SMButtonTip("open_wand", -18, 14)));
 		}
 
 		this.slotSize = menu.slotSize;
@@ -74,7 +73,7 @@ public class GuiPorch extends GuiSMBase<SMPorchMenu> {
 	}
 
 	@Override
-	protected ResourceLocation getTEX () {
+	protected ResourceLocation getTEX() {
 		return TEX;
 	}
 }

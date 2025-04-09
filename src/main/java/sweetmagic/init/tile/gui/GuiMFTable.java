@@ -21,9 +21,8 @@ public class GuiMFTable extends GuiSMBase<MFTableMenu> {
 	public GuiMFTable(MFTableMenu menu, Inventory pInv, Component title) {
 		super(menu, pInv, title);
 		this.tile = menu.tile;
-		this.setGuiWidth(234);
-		this.setGuiHeight(243);
-		this.getRenderTexList().add(new SMRenderTex(TEX, 172, 49, 0, 0, 3, 50, new MFRenderGage(this.tile, 240, 0, 3, 50, 50, true)));
+		this.setGuiSize(234, 243);
+		this.addRenderTexList(new SMRenderTex(TEX, 171, 36, 0, 0, 3, 50, new MFRenderGage(this.tile, true)));
 	}
 
 	@Override
@@ -97,7 +96,7 @@ public class GuiMFTable extends GuiSMBase<MFTableMenu> {
 			int tipX = x + 38;
 			int tipY = y + 67;
 
-			if (this.isRendeer(tipX, tipY, mouseX, mouseY, 15, 2)) {
+			if (this.isRender(tipX, tipY, mouseX, mouseY, 15, 2)) {
 
 				ItemStack stack = this.tile.getInputItem(0);
 				IMFTool wand = (IMFTool) stack.getItem();
@@ -105,7 +104,7 @@ public class GuiMFTable extends GuiSMBase<MFTableMenu> {
 				int wabdMax = wand.getMaxMF(stack);
 
 				String tip = String.format("%,d", wandMF) + "mf / " + String.format("%,d", wabdMax) + "mf";
-	            this.renderTooltip(pose, this.getTip(tip), xAxis, yAxis);
+				this.renderTooltip(pose, this.getTip(tip), xAxis, yAxis);
 			}
 		}
 
@@ -144,20 +143,20 @@ public class GuiMFTable extends GuiSMBase<MFTableMenu> {
 				break;
 			}
 
-			if (this.isRendeer(tipX, tipY, mouseX, mouseY, 15, 2)) {
+			if (this.isRender(tipX, tipY, mouseX, mouseY, 15, 2)) {
 
 				IMFTool wand = (IMFTool) stack.getItem();
 				int wandMF = wand.getMF(stack);
 				int wabdMax = wand.getMaxMF(stack);
 
 				String tip = String.format("%,d", wandMF) + "mf / " + String.format("%,d", wabdMax) + "mf";
-	            this.renderTooltip(pose, this.getTip(tip), xAxis, yAxis);
+				this.renderTooltip(pose, this.getTip(tip), xAxis, yAxis);
 			}
 		}
 	}
 
 	@Override
-	protected ResourceLocation getTEX () {
+	protected ResourceLocation getTEX() {
 		return TEX;
 	}
 }

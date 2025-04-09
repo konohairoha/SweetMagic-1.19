@@ -25,18 +25,17 @@ public class GuiWoodChest extends GuiSMBase<WoodChestMenu> {
 		super(menu, pInv, title);
 		this.tile = menu.tile;
 		this.data = menu.tile.getData();
-		this.setGuiWidth(256);
-		this.setGuiHeight(231);
-		this.getButtonMap().put(0, new SMButton(MISC, 231, -11, 114, 0, 10, 9, new SMButtonTip("sort", -18, 14)));
-		this.getButtonMap().put(1, new SMButton(MISC, 219, -11, 137, 0, 11, 9, new SMButtonTip("quick_stack", -18, 14)));
-		this.getButtonMap().put(2, new SMButton(MISC, 207, -11, 161, 0, 11, 9, new SMButtonTip("restock", -18, 14)));
+		this.setGuiSize(256, 231);
+		this.addButtonMap(0, new SMButton(MISC, 231, -11, 114, 0, 10, 9, new SMButtonTip("sort", -18, 14)));
+		this.addButtonMap(1, new SMButton(MISC, 219, -11, 137, 0, 11, 9, new SMButtonTip("quick_stack", -18, 14)));
+		this.addButtonMap(2, new SMButton(MISC, 207, -11, 161, 0, 11, 9, new SMButtonTip("restock", -18, 14)));
 
 		if (this.data == 4) {
-			this.getButtonMap().put(3, new SMButton(DRAWER, 219, 167, 112, 237, 15, 15, new SMButtonTip("trash_can_del", 0, 0)));
+			this.addButtonMap(3, new SMButton(DRAWER, 219, 167, 112, 237, 15, 15, new SMButtonTip("trash_can_del", 0, 0)));
 		}
 	}
 
-	protected void renderBGBase (PoseStack pose, float parTick, int mouseX, int mouseY) {
+	protected void renderBGBase(PoseStack pose, float parTick, int mouseX, int mouseY) {
 		RenderSystem.setShader(GameRenderer::getPositionColorTexShader);
 		RenderSystem.setShaderTexture(0, this.getTEX());
 		RenderSystem.setShaderColor(1F, 1F, 1F, 1F);
@@ -49,7 +48,7 @@ public class GuiWoodChest extends GuiSMBase<WoodChestMenu> {
 		this.renderStock(this.tile.getInvList(), pose, 1, 2, 0, 0);
 	}
 
-	protected ResourceLocation getTEX () {
+	protected ResourceLocation getTEX() {
 		return this.data == 3 ? FREEZER_TEX : TEX;
 	}
 }

@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 
 import net.minecraft.nbt.CompoundTag;
@@ -14,7 +15,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.entity.player.Player;
 import sweetmagic.SweetMagicCore;
 import sweetmagic.api.util.ISMTip;
 import sweetmagic.handler.PacketHandler;
@@ -27,8 +27,6 @@ import sweetmagic.packet.CompasPKT;
 public class GuiCompas extends GuiSMBase<CompasMenu> implements ISMTip {
 
 	private static final ResourceLocation TEX = SweetMagicCore.getSRC("textures/gui/gui_dungeon_compas.png");
-
-	private Player player;			// プレイヤー
 	private boolean lootView[] = new boolean[4];
 	private float scrollOffset = 0F;
 	private int startIndex = 0;
@@ -37,9 +35,7 @@ public class GuiCompas extends GuiSMBase<CompasMenu> implements ISMTip {
 
 	public GuiCompas(CompasMenu menu, Inventory pInv, Component title) {
 		super(menu, pInv, title);
-		this.setGuiWidth(126);
-		this.setGuiHeight(111);
-		this.player = pInv.player;
+		this.setGuiSize(126, 111);
 
 		CompoundTag tags = this.player.getMainHandItem().getOrCreateTag();
 
@@ -47,8 +43,8 @@ public class GuiCompas extends GuiSMBase<CompasMenu> implements ISMTip {
 			this.selectID = tags.getInt("selectId");
 		}
 
-		this.getButtonMap().put(0, new SMButton(TEX, 25, 91, 127, 20, 29, 12));
-		this.getButtonMap().put(1, new SMButton(TEX, 58, 91, 127, 20, 29, 12));
+		this.addButtonMap(0, new SMButton(TEX, 25, 91, 127, 20, 29, 12));
+		this.addButtonMap(1, new SMButton(TEX, 58, 91, 127, 20, 29, 12));
 	}
 
 	@Override
@@ -58,20 +54,22 @@ public class GuiCompas extends GuiSMBase<CompasMenu> implements ISMTip {
 		// 座標の取得
 		int x = this.getWidth();
 		int y = this.getHeight();
+		RenderSystem.setShaderTexture(0, MISC);
 
 		// スクロールバーの表示
 		int h = (int) (60F * this.scrollOffset);
-		this.blit(pose, x + 110, y + 9 + h, 127, 0, 8, 15);
+		this.blit(pose, x + 110, y + 9 + h, 83, 93, 8, 15);
 
 		int size = StructureInit.strucMap.size();
 		for (int id = 0; id < 4; id++) {
 
+			this.blit(pose, x + 7, y + 7 + id * 20, 99, 93, 101, 20);
 			if (id + this.startIndex >= size) { break; }
 
-			this.blit(pose, x + 7, y + 7 + id * 20, 0, 113 + (this.lootView[id] ? 20 : 0), 101, 20);
+			this.blit(pose, x + 7, y + 7 + id * 20, 99, 113 + (this.lootView[id] ? 20 : 0), 101, 20);
 
 			if (id + this.startIndex == this.selectID) {
-				this.blit(pose, x + 7, y + 7 + id * 20, 0, 153, 101, 20);
+				this.blit(pose, x + 7, y + 7 + id * 20, 99, 153, 101, 20);
 			}
 		}
 
@@ -101,7 +99,7 @@ public class GuiCompas extends GuiSMBase<CompasMenu> implements ISMTip {
 
 			this.lootView[id] = false;
 
-			if (this.isRendeer(tipX, tipY, mouseX, mouseY, 98, 19)) {
+			if (this.isRender(tipX, tipY, mouseX, mouseY, 98, 19)) {
 
 				if (id + this.startIndex >= strucMap.size()) { break; }
 
@@ -110,11 +108,11 @@ public class GuiCompas extends GuiSMBase<CompasMenu> implements ISMTip {
 				MutableComponent dim = this.getTipArray(this.getText("dimension"), ": ", this.getText(info.getDim())).withStyle(GREEN);
 				MutableComponent dif = this.getTipArray(this.getText("difficulty"), ": ★", "" + info.getLevel()).withStyle(GREEN);
 				List<Component> comList = Arrays.<Component> asList(struc, dim, dif);
-	            this.renderComponentTooltip(pose, comList, xAxis + 0, yAxis - 20);
-	            this.lootView[id] = true;
+				this.renderComponentTooltip(pose, comList, xAxis + 0, yAxis - 20);
+				this.lootView[id] = true;
 			}
 
-            tipY += 20;
+			tipY += 20;
 		}
 	}
 
@@ -128,6 +126,10 @@ public class GuiCompas extends GuiSMBase<CompasMenu> implements ISMTip {
 		// スクロールバーの当たり判定チェック
 		if (guiX >= aX && guiX < aX + w && guiY >= aY && guiY < aY + h) {
 			this.scrolling = true;
+		}
+
+		else {
+			this.scrolling = false;
 		}
 
 		aX = this.leftPos + 25;
@@ -144,7 +146,7 @@ public class GuiCompas extends GuiSMBase<CompasMenu> implements ISMTip {
 		aX = this.leftPos + 58;
 
 		if (guiX >= aX && guiX < aX + w && guiY >= aY && guiY < aY + h) {
-			player.level.playSound(null, player.blockPosition(), SoundEvents.UI_BUTTON_CLICK, SoundSource.PLAYERS, 0.25F, 1F);
+			this.player.level.playSound(null, this.player.blockPosition(), SoundEvents.UI_BUTTON_CLICK, SoundSource.PLAYERS, 0.25F, 1F);
 			this.minecraft.player.closeContainer();
 			return super.mouseClicked(guiX, guiY, mouseButton);
 		}
@@ -161,7 +163,7 @@ public class GuiCompas extends GuiSMBase<CompasMenu> implements ISMTip {
 			if (dX >= 0D && dX <= 98D && dY >= 0D && dY < 20D) {
 				int newSelectID = id + this.startIndex;
 				this.selectID = (newSelectID != this.selectID) ? newSelectID : -1;
-				player.level.playSound(null, player.blockPosition(), SoundEvents.UI_BUTTON_CLICK, SoundSource.PLAYERS, 0.25F, 1F);
+				this.player.level.playSound(null, this.player.blockPosition(), SoundEvents.UI_BUTTON_CLICK, SoundSource.PLAYERS, 0.25F, 1F);
 			}
 		}
 
@@ -170,7 +172,6 @@ public class GuiCompas extends GuiSMBase<CompasMenu> implements ISMTip {
 
 	@Override
 	public boolean mouseDragged(double mouseX, double mouseY, int mouseButton, double dragX, double dragY) {
-
 		int size = StructureInit.strucMap.size();
 		if (!this.scrolling) { return super.mouseDragged(mouseX, mouseY, mouseButton, dragX, dragY); }
 
@@ -193,7 +194,7 @@ public class GuiCompas extends GuiSMBase<CompasMenu> implements ISMTip {
 		return true;
 	}
 
-	protected ResourceLocation getTEX () {
+	protected ResourceLocation getTEX() {
 		return TEX;
 	}
 }

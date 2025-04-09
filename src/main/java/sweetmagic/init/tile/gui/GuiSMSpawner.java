@@ -18,18 +18,16 @@ public class GuiSMSpawner extends GuiSMBase<SMSpawnerMenu> {
 	public GuiSMSpawner(SMSpawnerMenu menu, Inventory pInv, Component title) {
 		super(menu, pInv, title);
 		this.tile = menu.tile;
-		this.setGuiWidth(173);
-		this.setGuiHeight(133);
-
-		this.getButtonMap().put(0, new SMButton(TEX, 136, 7, 176, 7, 11, 9));
-		this.getButtonMap().put(1, new SMButton(TEX, 148, 7, 176, 16, 11, 9));
-		this.getButtonMap().put(2, new SMButton(TEX, 136, 22, 176, 7, 11, 9));
-		this.getButtonMap().put(3, new SMButton(TEX, 148, 22, 176, 16, 11, 9));
-		this.getButtonMap().put(4, new SMButton(TEX, 136, 37, 176, 7, 11, 9));
-		this.getButtonMap().put(5, new SMButton(TEX, 148, 37, 176, 16, 11, 9));
+		this.setGuiSize(173, 133);
+		this.addButtonMap(0, new SMButton(TEX, 136, 7, 176, 7, 11, 9));
+		this.addButtonMap(1, new SMButton(TEX, 148, 7, 176, 16, 11, 9));
+		this.addButtonMap(2, new SMButton(TEX, 136, 22, 176, 7, 11, 9));
+		this.addButtonMap(3, new SMButton(TEX, 148, 22, 176, 16, 11, 9));
+		this.addButtonMap(4, new SMButton(TEX, 136, 37, 176, 7, 11, 9));
+		this.addButtonMap(5, new SMButton(TEX, 148, 37, 176, 16, 11, 9));
 	}
 
-	protected void renderBGBase (PoseStack pose, float parTick, int mouseX, int mouseY) {
+	protected void renderBGBase(PoseStack pose, float parTick, int mouseX, int mouseY) {
 		super.renderBGBase(pose, parTick, mouseX, mouseY);
 		this.blit(pose, this.getWidth() + 18, this.getHeight() + 25, 175, 35, 49, 16);
 	}
@@ -47,7 +45,7 @@ public class GuiSMSpawner extends GuiSMBase<SMSpawnerMenu> {
 	}
 
 	@Override
-	protected ResourceLocation getTEX () {
+	protected ResourceLocation getTEX() {
 		return TEX;
 	}
 }

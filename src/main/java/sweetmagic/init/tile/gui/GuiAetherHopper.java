@@ -30,13 +30,11 @@ public class GuiAetherHopper extends GuiSMBase<AetherHopperMenu> {
 
 	public GuiAetherHopper(AetherHopperMenu menu, Inventory pInv, Component title) {
 		super(menu, pInv, title);
-		this.setGuiWidth(176);
-		this.setGuiHeight(175);
+		this.setGuiSize(176, 175);
 		this.tile = (TileAetherHopper) menu.tile;
 		this.menu = menu;
-
-		this.getButtonMap().put(0, new SMButton(MISC, 150, -11, 114, 0, 10, 9, new SMButtonTip("sort", -18, 14)));
-		this.getRenderTexList().add(new SMRenderTex(TEX, 7, 10, 0, 0, 11, 77, new MFRenderGage(this.tile, 179, 10, 11, 76, 76, true)));
+		this.addButtonMap(0, new SMButton(MISC, 150, -11, 114, 0, 10, 9, new SMButtonTip("sort", -18, 14)));
+		this.addRenderTexList(new SMRenderTex(TEX, 7, 10, 0, 0, 11, 77, new MFRenderGage(this.tile, true)));
 	}
 
 	@Override
@@ -70,7 +68,7 @@ public class GuiAetherHopper extends GuiSMBase<AetherHopperMenu> {
 		this.renderItemLabel(this.menu.wandSlot, WAND, pose, mouseX, mouseY, Arrays.<Component> asList(this.getText("send_stuff_0").withStyle(GOLD), this.getText("send_stuff_1").withStyle(GOLD), this.getTip(""), this.getText("can_stuff").withStyle(GREEN), WAND.getDisplayName()));
 	}
 
-	protected ResourceLocation getTEX () {
+	protected ResourceLocation getTEX() {
 		return TEX;
 	}
 }

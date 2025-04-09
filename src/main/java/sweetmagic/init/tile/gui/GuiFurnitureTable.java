@@ -24,7 +24,6 @@ public class GuiFurnitureTable extends GuiSMBase<FurnitureTableMenu> {
 	private static final ResourceLocation TEX = SweetMagicCore.getSRC("textures/gui/gui_furniture_processing_table.png");
 	private final TileFurnitureTable tile;
 	private final FurnitureTableMenu menu;
-
 	private float scrollOffset = 0F;
 	private int startIndex = 0;
 	private boolean scrolling = false;
@@ -32,44 +31,42 @@ public class GuiFurnitureTable extends GuiSMBase<FurnitureTableMenu> {
 
 	public GuiFurnitureTable(FurnitureTableMenu menu, Inventory pInv, Component title) {
 		super(menu, pInv, title);
-
 		this.tile = menu.tile;
-		this.menu = (FurnitureTableMenu) menu;
-		this.setGuiWidth(176);
-		this.setGuiHeight(252);
+		this.menu = menu;
+		this.setGuiSize(176, 252);
 
 		SMButtonTip buttonTip = new SMButtonTip("", 40, -3, this.tile) {
 
-			public boolean isFlagText (TileFurnitureTable tile) {
+			public boolean isFlagText(TileFurnitureTable tile) {
 				return tile.isSelect;
 			}
 
-			public String getTip () {
+			public String getTip() {
 				return this.isFlagText(tile) ? "caraft_start" : "select_recipe";
 			}
 		};
 
 		SMButton button = new SMButton(MISC, 9, 90, 114, 15, 32, 12, buttonTip) {
 
-			public boolean isButtonRender () {
+			public boolean isButtonRender() {
 				return tile.isSelect;
 			}
 		};
 
-		this.getButtonMap().put(0, button);
+		this.addButtonMap(0, button);
 
 		SMButtonTip buttonTip2 = new SMButtonTip("", 30, -3, this.tile) {
 
-			public boolean isFlagText (TileFurnitureTable tile) {
+			public boolean isFlagText(TileFurnitureTable tile) {
 				return tile.isSelect;
 			}
 
-			public String getTip () {
+			public String getTip() {
 				return this.isFlagText(tile) ? "select_count" : "select_recipe";
 			}
 		};
 
-		this.getButtonMap().put(1, new SMButton(TEX, 36, 71, 178, 77, 18, 11, buttonTip2));
+		this.addButtonMap(1, new SMButton(TEX, 36, 71, 178, 77, 18, 11, buttonTip2));
 	}
 
 	@Override
@@ -252,7 +249,7 @@ public class GuiFurnitureTable extends GuiSMBase<FurnitureTableMenu> {
 		int x = this.getWidth() + 33;
 		int y = this.getHeight() + 25;
 
-		if (this.isRendeer(x, y, (int) mouseX, (int) mouseY, 142, 86) || Screen.hasShiftDown()) {
+		if (this.isRender(x, y, (int) mouseX, (int) mouseY, 142, 86) || Screen.hasShiftDown()) {
 
 			List<Recipe<?>> recipeList = this.getRecipeList();
 			int size = recipeList.size();
@@ -267,7 +264,7 @@ public class GuiFurnitureTable extends GuiSMBase<FurnitureTableMenu> {
 		return super.mouseScrolled(mouseX, mouseY, scrollDelta);
 	}
 
-	protected ResourceLocation getTEX () {
+	protected ResourceLocation getTEX() {
 		return TEX;
 	}
 
@@ -275,7 +272,7 @@ public class GuiFurnitureTable extends GuiSMBase<FurnitureTableMenu> {
 		return this.getRecipeList().size() > 24;
 	}
 
-	public List<Recipe<?>> getRecipeList () {
+	public List<Recipe<?>> getRecipeList() {
 		return this.menu.recipeList;
 	}
 }

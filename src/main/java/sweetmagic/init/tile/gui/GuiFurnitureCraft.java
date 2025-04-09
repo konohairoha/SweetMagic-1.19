@@ -28,21 +28,17 @@ public class GuiFurnitureCraft extends GuiSMBase<FurnitureCraftMenu> {
 
 	public GuiFurnitureCraft(FurnitureCraftMenu menu, Inventory pInv, Component title) {
 		super(menu, pInv, title);
-
 		this.tile = menu.tile;
-		this.menu = (FurnitureCraftMenu) menu;
-		this.setGuiWidth(80);
-		this.setGuiHeight(81);
-
-		this.getButtonMap().put(0, new SMButton(TEX, 9, 9, 83, 9, 20, 11));
-		this.getButtonMap().put(1, new SMButton(TEX, 9, 43, 83, 9, 20, 11));
-		this.getButtonMap().put(2, new SMButton(TEX, 30, 9, 83, 9, 20, 11));
-		this.getButtonMap().put(3, new SMButton(TEX, 30, 43, 83, 9, 20, 11));
-		this.getButtonMap().put(4, new SMButton(TEX, 51, 9, 83, 9, 20, 11));
-		this.getButtonMap().put(5, new SMButton(TEX, 51, 43, 83, 9, 20, 11));
-
-		this.getButtonMap().put(6, new SMButton(TEX, 9, 59, 83, 23, 29, 12));
-		this.getButtonMap().put(7, new SMButton(TEX, 42, 59, 83, 23, 29, 12));
+		this.menu = menu;
+		this.setGuiSize(80, 81);
+		this.addButtonMap(0, new SMButton(TEX, 9, 9, 83, 9, 20, 11));
+		this.addButtonMap(1, new SMButton(TEX, 9, 43, 83, 9, 20, 11));
+		this.addButtonMap(2, new SMButton(TEX, 30, 9, 83, 9, 20, 11));
+		this.addButtonMap(3, new SMButton(TEX, 30, 43, 83, 9, 20, 11));
+		this.addButtonMap(4, new SMButton(TEX, 51, 9, 83, 9, 20, 11));
+		this.addButtonMap(5, new SMButton(TEX, 51, 43, 83, 9, 20, 11));
+		this.addButtonMap(6, new SMButton(TEX, 9, 59, 83, 23, 29, 12));
+		this.addButtonMap(7, new SMButton(TEX, 42, 59, 83, 23, 29, 12));
 	}
 
 	public void render(PoseStack pose, int mouseX, int mouseY, float parTick) {
@@ -63,7 +59,6 @@ public class GuiFurnitureCraft extends GuiSMBase<FurnitureCraftMenu> {
 		this.font.drawShadow(pose, this.getLabel("-10"), x + 31, y + 45, 0xEEEEEE);
 		this.font.drawShadow(pose, this.getLabel("+64"), x + 52, y + 11, 0xEEEEEE);
 		this.font.drawShadow(pose, this.getLabel("-64"), x + 52, y + 45, 0xEEEEEE);
-
 		this.font.drawShadow(pose, this.getText("decision"), x + 14, y + 61, 0xEEEEEE);
 		this.font.drawShadow(pose, this.getText("cancel"), x + 46, y + 61, 0xEEEEEE);
 		this.renderSlotItem(this.menu.resultSlot, this.tile.outStack, pose);
@@ -144,14 +139,14 @@ public class GuiFurnitureCraft extends GuiSMBase<FurnitureCraftMenu> {
 	}
 
 	private boolean isInt(String str) {
-        return str != null && str.matches("[0-9]+");
-    }
+		return str != null && str.matches("[0-9]+");
+	}
 
-    private Integer getValue (String str) {
-    	return Math.min(1024, Math.max(1, Integer.valueOf(str)));
-    }
+	private Integer getValue(String str) {
+		return Math.min(1024, Math.max(1, Integer.valueOf(str)));
+	}
 
-	protected ResourceLocation getTEX () {
+	protected ResourceLocation getTEX() {
 		return TEX;
 	}
 }

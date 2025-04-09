@@ -18,18 +18,16 @@ public class GuiAetherRepair extends GuiSMBase<AetherRepairMenu> implements ISMT
 
 	private static final ResourceLocation TEX = SweetMagicCore.getSRC("textures/gui/gui_toolrepair.png");
 	private static final ResourceLocation MISC = SweetMagicCore.getSRC("textures/gui/gui_misc.png");
-
-	public final TileAetherRepair tile;
+	private final TileAetherRepair tile;
 
 	public GuiAetherRepair(AetherRepairMenu menu, Inventory pInv, Component title) {
 		super(menu, pInv, title);
-		this.setGuiWidth(200);
-		this.setGuiHeight(178);
+		this.setGuiSize(200, 178);
 		this.tile = menu.tile;
-		this.getRenderTexList().add(new SMRenderTex(TEX, 36, 10, 0, 0, 11, 77, new MFRenderGage(this.tile, 179, 0, 11, 76, 76, true)));
+		this.addRenderTexList(new SMRenderTex(TEX, 36, 10, 0, 0, 11, 77, new MFRenderGage(this.tile, true)));
 	}
 
-	protected void renderBGBase (PoseStack pose, float parTick, int mouseX, int mouseY) {
+	protected void renderBGBase(PoseStack pose, float parTick, int mouseX, int mouseY) {
 		RenderSystem.setShader(GameRenderer::getPositionColorTexShader);
 		RenderSystem.setShaderTexture(0, this.getTEX());
 		RenderSystem.setShaderColor(1F, 1F, 1F, 1F);
@@ -43,7 +41,7 @@ public class GuiAetherRepair extends GuiSMBase<AetherRepairMenu> implements ISMT
 		this.blit(pose, this.getWidth(), this.getHeight() + 92, 70, 0, 24, 78);
 	}
 
-	protected ResourceLocation getTEX () {
+	protected ResourceLocation getTEX() {
 		return TEX;
 	}
 }

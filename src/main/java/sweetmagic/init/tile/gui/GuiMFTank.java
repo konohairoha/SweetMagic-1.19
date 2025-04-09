@@ -22,12 +22,12 @@ public class GuiMFTank extends GuiSMBase<MFTankMenu> {
 		this.imageWidth = 176;
 		this.imageHeight = 181;
 		this.tile = menu.tile;
-		this.getRenderTexList().add(new SMRenderTex(TEX, 7, 7, 0, 200, 67, 13, new SMButtonTip("mf_insert", 70, -2)));
-		this.getRenderTexList().add(new SMRenderTex(TEX, 101, 7, 0, 200, 67, 13, new SMButtonTip("mf_extract", 70, -2)));
-		this.getRenderTexList().add(new SMRenderTex(TEX, 35, 49, 0, 0, 106, 10, new MFRenderGage(this.tile, 0, 185, 106, 10, 106, false)));
+		this.addRenderTexList(new SMRenderTex(TEX, 7, 7, 0, 200, 67, 13, new SMButtonTip("mf_insert", 70, -2)));
+		this.addRenderTexList(new SMRenderTex(TEX, 101, 7, 0, 200, 67, 13, new SMButtonTip("mf_extract", 70, -2)));
+		this.addRenderTexList(new SMRenderTex(TEX, 49, 47, 0, 0, 77, 11, new MFRenderGage(this.tile, false)));
 	}
 
-	protected void renderBGBase (PoseStack pose, float parTick, int mouseX, int mouseY) {
+	protected void renderBGBase(PoseStack pose, float parTick, int mouseX, int mouseY) {
 		super.renderBGBase(pose, parTick, mouseX, mouseY);
 
 		int x = this.getWidth();
@@ -61,7 +61,7 @@ public class GuiMFTank extends GuiSMBase<MFTankMenu> {
 	}
 
 	@Override
-	protected ResourceLocation getTEX () {
+	protected ResourceLocation getTEX() {
 		return TEX;
 	}
 }

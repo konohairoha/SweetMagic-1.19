@@ -2,7 +2,6 @@ package sweetmagic.init.tile.gui;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -15,13 +14,10 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
-import net.minecraftforge.registries.ForgeRegistries;
 import sweetmagic.SweetMagicCore;
 import sweetmagic.init.TagInit;
 import sweetmagic.init.tile.gui.util.SMRenderTex;
@@ -35,8 +31,6 @@ public class GuiMagiaRewrite extends GuiSMBase<MagiaRewriteMenu> {
 	private static final ResourceLocation MISC = SweetMagicCore.getSRC("textures/gui/gui_misc.png");
 	private final MagiaRewriteMenu menu;
 	public final TileMagiaRewrite tile;
-
-	private Player player;
 	private int tickTime = 0;
 	private int counter = 0;
 	private float scrollOffset = 0F;
@@ -45,20 +39,17 @@ public class GuiMagiaRewrite extends GuiSMBase<MagiaRewriteMenu> {
 	private boolean enchaView[] = new boolean[4];
 	private boolean addLevelView = false;
 	private boolean subLevelView = false;
-
-	private final static List<ItemStack> MAGICBOOK_LIST = ForgeRegistries.ITEMS.tags().getTag(TagInit.WISH_CRYSTAL).stream().map(Item::getDefaultInstance).collect(Collectors.toList());
+	private final static List<ItemStack> MAGICBOOK_LIST = GuiSMBase.getTagStack(TagInit.WISH_CRYSTAL);
 
 	public GuiMagiaRewrite(MagiaRewriteMenu menu, Inventory pInv, Component title) {
 		super(menu, pInv, title);
-		this.setGuiWidth(193 + 24);
-		this.setGuiHeight(190);
+		this.setGuiSize(217, 190);
 		this.menu = menu;
 		this.tile = menu.tile;
-		this.player = pInv.player;
 		this.scrolling = false;
 		this.startIndex = 0;
 		this.scrollOffset = 0F;
-		this.getRenderTexList().add(new SMRenderTex(TEX, 35, 29, 0, 0, 11, 77, new MFRenderGage(menu.tile, 194, 29, 11, 76, 76, true)));
+		this.addRenderTexList(new SMRenderTex(TEX, 35, 29, 0, 0, 11, 77, new MFRenderGage(menu.tile, true)));
 	}
 
 	protected void renderBGBase (PoseStack pose, float parTick, int mouseX, int mouseY) {
@@ -91,20 +82,24 @@ public class GuiMagiaRewrite extends GuiSMBase<MagiaRewriteMenu> {
 
 		// 作成時間の表示
 		if (tile.craftTime > 0) {
-			int progress = tile.getCraftProgressScaled(30);
+			int progress = tile.getCraftProgress(30);
 			this.blit(pose, x + 44, y + 45, 224, 29, 15, progress);
 		}
 
 		// スクロールバーの表示
 		int h = (int) (60F * this.scrollOffset);
 		boolean isActive = this.scrollbarActive();
-		this.blit(pose, x + 178, y + 30 + h, 194 + (isActive ? 0 : 8), 0, 8, 15);
+		RenderSystem.setShaderTexture(0, MISC);
+		this.blit(pose, x + 178, y + 30 + h, 83 + (isActive ? 0 : 8), 93, 8, 15);
 
 		// スクロール出来ないなら初期位置に戻す
 		if (!isActive && !tile.isCraft) {
 			this.startIndex = 0;
 			this.scrollOffset = 0F;
 		}
+
+		for (int id = 0; id < 4; id++)
+			this.blit(pose, x + 76, y + 26 + id * 21, 99, 93, 101, 20);
 
 		// エンチャリストがあるならボタンの表示
 		ItemStack stack = tile.getBookItem();
@@ -121,7 +116,7 @@ public class GuiMagiaRewrite extends GuiSMBase<MagiaRewriteMenu> {
 				int cost = tile.getEnchantCost(id + this.startIndex);
 				if (cost <= 0) { continue; }
 
-				this.blit(pose, x + 76, y + 26 + id * 21, 0, 194 + (this.enchaView[id] ? 20 : 0), 101, 20);
+				this.blit(pose, x + 76, y + 26 + id * 21, 99, 113 + (this.enchaView[id] ? 20 : 0), 101, 20);
 			}
 		}
 
@@ -130,6 +125,7 @@ public class GuiMagiaRewrite extends GuiSMBase<MagiaRewriteMenu> {
 			int nowLevel = tile.getNowLevel();
 			boolean canSub = nowLevel > 1;
 			boolean canAdd = (tile.getAddMaxEnchantLevel() - 1) > nowLevel;
+			RenderSystem.setShaderTexture(0, TEX);
 
 			if (canSub) {
 				this.blit(pose, x + 177, y + 17, 212 + (this.subLevelView ? 7 : 0), 11, 7, 10);
@@ -176,35 +172,37 @@ public class GuiMagiaRewrite extends GuiSMBase<MagiaRewriteMenu> {
 		this.renderItemLabel(this.menu.bookSlot, ItemStack.EMPTY, pose, mouseX, mouseY);
 
 		int addX = 24;
-		int tipX = this.getWidth() + 106 + addX;
-		int tipY = this.getHeight() / 2 + 8;
-		int xAxis = mouseX - this.getWidth();
-		int yAxis = mouseY - this.getHeight();
+		int x = this.getWidth();
+		int y = this.getHeight();
+		int tipX = x + 106 + addX;
+		int tipY = y / 2 + 8;
+		int xAxis = mouseX - x;
+		int yAxis = mouseY - y;
 
-		if (this.isRendeer(tipX, tipY, mouseX, mouseY, 65, 15)) {
-            this.renderTooltip(pose, this.getText("add_level").withStyle(GOLD), xAxis, yAxis);
+		if (this.isRender(tipX, tipY, mouseX, mouseY, 65, 15)) {
+			this.renderTooltip(pose, this.getText("add_level").withStyle(GOLD), xAxis, yAxis);
 		}
 
 		//描画位置を計算
-		tipX = this.getWidth() + 11 + addX;
-		tipY = this.getHeight() + 29;
+		tipX = x + 11 + addX;
+		tipY = y + 29;
 		TileMagiaRewrite tile = this.tile;
 		ItemStack magicBook = tile.getBookItem();
 		if (tile.getInputItem().isEmpty() || magicBook.isEmpty() || tile.isCraft) { return; }
 
 		//描画位置を計算
-		tipX = this.getWidth() + 177 + addX;
-		tipY = this.getHeight() + 6;
+		tipX = x + 177 + addX;
+		tipY = y + 6;
 		this.addLevelView = false;
 		this.subLevelView = false;
 
-		if (this.isRendeer(tipX, tipY, mouseX, mouseY, 7, 10)) {
+		if (this.isRender(tipX, tipY, mouseX, mouseY, 7, 10)) {
 			this.addLevelView = true;
 		}
 
 		tipY += 11;
 
-		if (this.isRendeer(tipX, tipY, mouseX, mouseY, 7, 10)) {
+		if (this.isRender(tipX, tipY, mouseX, mouseY, 7, 10)) {
 			this.subLevelView = true;
 		}
 
@@ -216,38 +214,40 @@ public class GuiMagiaRewrite extends GuiSMBase<MagiaRewriteMenu> {
 
 			this.enchaView[id] = false;
 
-			if (this.isRendeer(tipX, tipY, mouseX, mouseY, 98, 18)) {
-
-				int buttonId = id + this.startIndex;
-				int cost = tile.getEnchantCost(buttonId);
-
-				if (cost <= 0) {
-					int changedLevel = tile.getChanedLevel(buttonId);
-					int nowLevel = tile.getNowEnchantLevel(buttonId);
-
-					if (changedLevel > nowLevel) {
-						List<Component> tipList = new ArrayList<>();
-						tipList.add(this.getText("needmaxlevel").withStyle(GOLD));
-			            this.renderComponentTooltip(pose, tipList, xAxis - 80, yAxis - 7);
-					}
-					break;
-				}
-
-				String level = "" + tile.getEnchaLevel(buttonId);
-				int maxLevel = tile.getEnchant(buttonId).getMaxLevel();
-				String addLevel = "" + tile.getChanedLevel(buttonId);
-				String canMaxLevel = "" + tile.getMaxRwiteLevel(maxLevel);
-
-				String tip = String.format("%,d", cost);
-				List<Component> tipList = new ArrayList<>();
-				tipList.add(this.getTipArray(this.getText("needmf"), this.getLabel(tip).withStyle(WHITE)).withStyle(GOLD));
-				tipList.add(this.getTipArray(this.getText("nowlevel"), ": ", this.getLabel(level).withStyle(WHITE), " → ", this.getLabel(addLevel).withStyle(RED)).withStyle(GREEN));
-				tipList.add(this.getTipArray(this.getText("maxlevel"), ": ", this.getLabel("" + maxLevel).withStyle(WHITE), " (", this.getLabel(canMaxLevel).withStyle(RED), ")").withStyle(GREEN));
-	            this.renderComponentTooltip(pose, tipList, xAxis - 80, yAxis - 24);
-				this.enchaView[id] = true;
+			if (!this.isRender(tipX, tipY, mouseX, mouseY, 98, 18)) {
+				tipY += 19;
+				continue;
 			}
 
-            tipY += 19;
+			int buttonId = id + this.startIndex;
+			int cost = tile.getEnchantCost(buttonId);
+
+			if (cost <= 0) {
+				int changedLevel = tile.getChanedLevel(buttonId);
+				int nowLevel = tile.getNowEnchantLevel(buttonId);
+
+				if (changedLevel > nowLevel) {
+					String tip = cost == -1 ? "needwish_count" : "needmaxlevel";
+					List<Component> tipList = new ArrayList<>();
+					tipList.add(this.getText(tip).withStyle(GOLD));
+					this.renderComponentTooltip(pose, tipList, xAxis - 80, yAxis - 7);
+				}
+				break;
+			}
+
+			String level = "" + tile.getEnchaLevel(buttonId);
+			int maxLevel = tile.getEnchant(buttonId).getMaxLevel();
+			String addLevel = "" + tile.getChanedLevel(buttonId);
+			String canMaxLevel = "" + tile.getMaxRwiteLevel(maxLevel);
+
+			String tip = String.format("%,d", cost);
+			List<Component> tipList = new ArrayList<>();
+			tipList.add(this.getTipArray(this.getText("needmf"), this.getLabel(tip).withStyle(WHITE)).withStyle(GOLD));
+			tipList.add(this.getTipArray(this.getText("nowlevel"), ": ", this.getLabel(level).withStyle(WHITE), " → ", this.getLabel(addLevel).withStyle(RED)).withStyle(GREEN));
+			tipList.add(this.getTipArray(this.getText("maxlevel"), ": ", this.getLabel("" + maxLevel).withStyle(WHITE), " (", this.getLabel(canMaxLevel).withStyle(RED), ")").withStyle(GREEN));
+			this.renderComponentTooltip(pose, tipList, xAxis - 80, yAxis - 24);
+			this.enchaView[id] = true;
+			tipY += 19;
 		}
 	}
 
@@ -272,14 +272,12 @@ public class GuiMagiaRewrite extends GuiSMBase<MagiaRewriteMenu> {
 
 		// 各エンチャントの当たり判定チェック
 		if (dX >= 0D && dX <= 7 && dY >= 0D && dY < 10) {
-			this.menu.clickMenuButton(this.player, 0);
-			this.minecraft.gameMode.handleInventoryButtonClick((this.menu).containerId, 0);
+			this.clickButton(0);
 		}
 
 		// 各エンチャントの当たり判定チェック
 		else if (dX >= 0D && dX <= 7 && dY >= 10 && dY < 20) {
-			this.menu.clickMenuButton(this.player, 1);
-			this.minecraft.gameMode.handleInventoryButtonClick((this.menu).containerId, 1);
+			this.clickButton(1);
 		}
 
 		dX = guiX - (double) (x + 76);
@@ -289,8 +287,7 @@ public class GuiMagiaRewrite extends GuiSMBase<MagiaRewriteMenu> {
 
 			// 各エンチャントの当たり判定チェック
 			if (dX >= 0D && dX <= 95 && dY >= 0D && dY < 18D) {
-				this.menu.clickMenuButton(this.player, id + this.startIndex + 2);
-				this.minecraft.gameMode.handleInventoryButtonClick((this.menu).containerId, id + this.startIndex + 2);
+				this.clickButton(id + this.startIndex + 2);
 			}
 		}
 
@@ -301,7 +298,7 @@ public class GuiMagiaRewrite extends GuiSMBase<MagiaRewriteMenu> {
 	public boolean mouseDragged(double mouseX, double mouseY, int mouseButton, double dragX, double dragY) {
 		if (!this.scrolling || !this.scrollbarActive()) { return super.mouseDragged(mouseX, mouseY, mouseButton, dragX, dragY); }
 
-		int i = topPos + 44;
+		int i = this.topPos + 44;
 		int j = i + 73;
 		List<Enchantment> enchaList = this.tile.getEnchaList();
 		int size = enchaList.size();
@@ -349,8 +346,7 @@ public class GuiMagiaRewrite extends GuiSMBase<MagiaRewriteMenu> {
 	}
 
 	private boolean scrollbarActive() {
-		TileMagiaRewrite tile = this.menu.tile;
-		return tile.getEnchaList().size() > 4 && !tile.isCraft && !tile.getBookItem().isEmpty();
+		return this.tile.getEnchaList().size() > 4 && !this.tile.isCraft && !this.tile.getBookItem().isEmpty();
 	}
 
 	@Override

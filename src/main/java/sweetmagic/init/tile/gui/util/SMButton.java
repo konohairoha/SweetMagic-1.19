@@ -15,7 +15,7 @@ public class SMButton {
 	private final SMButtonTip buttonTip;
 	private List<Boolean> isView = new ArrayList<>();
 
-	public SMButton (ResourceLocation tex, int x, int y, int texX, int texY, int sizeX, int sizeY) {
+	public SMButton(ResourceLocation tex, int x, int y, int texX, int texY, int sizeX, int sizeY) {
 		this.tex = tex;
 		this.x = x;
 		this.y = y;
@@ -27,7 +27,7 @@ public class SMButton {
 		this.setIsView(false);
 	}
 
-	public SMButton (ResourceLocation tex, int x, int y, int texX, int texY, int sizeX, int sizeY, SMButtonTip buttonTip) {
+	public SMButton(ResourceLocation tex, int x, int y, int texX, int texY, int sizeX, int sizeY, SMButtonTip buttonTip) {
 		this.tex = tex;
 		this.x = x;
 		this.y = y;
@@ -39,48 +39,48 @@ public class SMButton {
 		this.setIsView(false);
 	}
 
-	public ResourceLocation getTex () {
+	public ResourceLocation getTex() {
 		return this.tex;
 	}
 
-	public int getX () {
+	public int getX() {
 		return this.x;
 	}
 
-	public int getY () {
+	public int getY() {
 		return this.y;
 	}
 
-	public int getTexX () {
+	public int getTexX() {
 		return this.texX;
 	}
 
-	public int getTexY () {
+	public int getTexY() {
 		return this.texY;
 	}
 
-	public int getSizeX () {
+	public int getSizeX() {
 		return this.sizeX;
 	}
 
-	public int getSizeY () {
+	public int getSizeY() {
 		return this.sizeY;
 	}
 
-	public void setIsView (boolean isView) {
+	public void setIsView(boolean isView) {
 		this.isView.clear();
 		this.isView.add(isView);
 	}
 
-	public boolean isView () {
+	public boolean isView() {
 		return this.isView.get(0);
 	}
 
-	public SMButtonTip getButtonTip () {
+	public SMButtonTip getButtonTip() {
 		return this.buttonTip;
 	}
 
-	public boolean isButtonRender () {
+	public boolean isButtonRender() {
 		return true;
 	}
 
@@ -90,29 +90,29 @@ public class SMButton {
 		private final int tipX, tipY;
 		private final TileAbstractSM tile;
 
-		public SMButtonTip (String tip, int tipX, int tipY) {
+		public SMButtonTip(String tip, int tipX, int tipY) {
 			this.tip = tip;
 			this.tipX = tipX;
 			this.tipY = tipY;
 			this.tile = null;
 		}
 
-		public SMButtonTip (String tip, int tipX, int tipY, TileAbstractSM tile) {
+		public SMButtonTip(String tip, int tipX, int tipY, TileAbstractSM tile) {
 			this.tip = tip;
 			this.tipX = tipX;
 			this.tipY = tipY;
 			this.tile = tile;
 		}
 
-		public String getTip () {
+		public String getTip() {
 			return this.tip;
 		}
 
-		public int getTipX () {
+		public int getTipX() {
 			return this.tipX;
 		}
 
-		public int getTipY () {
+		public int getTipY() {
 			return this.tipY;
 		}
 
@@ -120,7 +120,7 @@ public class SMButton {
 			return this.tile;
 		}
 
-		public boolean isFlagText (TileAbstractSM tile) {
+		public boolean isFlagText(TileAbstractSM tile) {
 			return false;
 		}
 	}

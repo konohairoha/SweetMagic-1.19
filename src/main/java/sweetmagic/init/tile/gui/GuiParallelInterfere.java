@@ -17,9 +17,8 @@ import sweetmagic.init.tile.sm.TileParallelInterfere;
 public class GuiParallelInterfere extends GuiSMBase<ParallelInterfereMenu> {
 
 	private static final ResourceLocation TEX = SweetMagicCore.getSRC("textures/gui/gui_parallel_book.png");
-	public final TileParallelInterfere tile;
-	public final ParallelInterfereMenu piMenu;
-
+	private final TileParallelInterfere tile;
+	private final ParallelInterfereMenu piMenu;
 	private float scrollOffset = 0F;
 	private int startIndex = 0;
 	private boolean scrolling = false;
@@ -29,13 +28,11 @@ public class GuiParallelInterfere extends GuiSMBase<ParallelInterfereMenu> {
 
 	public GuiParallelInterfere(ParallelInterfereMenu menu, Inventory pInv, Component title) {
 		super(menu, pInv, title);
-		this.setGuiWidth(192);
-		this.setGuiHeight(202);
+		this.setGuiSize(192, 202);
 		this.piMenu = menu;
 		this.tile = menu.tile;
-
-		this.getButtonMap().put(0, new SMButton(MISC, 150, -11, 114, 0, 10, 9, new SMButtonTip("sort", -18, 14)));
-		this.getButtonMap().put(1, new SMButton(MISC, 163, -11, 114, 33, 9, 9, new SMButtonTip("parallel_interfere_info", -18, 14)));
+		this.addButtonMap(0, new SMButton(MISC, 150, -11, 114, 0, 10, 9, new SMButtonTip("sort", -18, 14)));
+		this.addButtonMap(1, new SMButton(MISC, 163, -11, 114, 33, 9, 9, new SMButtonTip("parallel_interfere_info", -18, 14)));
 	}
 
 	@Override
@@ -47,7 +44,7 @@ public class GuiParallelInterfere extends GuiSMBase<ParallelInterfereMenu> {
 		int y = (int) (this.getHeight() + 8 + (91F * this.scrollOffset));
 		RenderSystem.setShaderTexture(0, this.getTEX());
 
-		if (this.isRendeer(x, y, mouseX, mouseY, 12, 15)) {
+		if (this.isRender(x, y, mouseX, mouseY, 12, 15)) {
 			this.scrollingView = true;
 		}
 
@@ -71,16 +68,16 @@ public class GuiParallelInterfere extends GuiSMBase<ParallelInterfereMenu> {
 		int xAxis = mouseX - this.getWidth();
 		int yAxis = mouseY - this.getHeight();
 
-		if (this.isRendeer(x, y, mouseX, mouseY, 10, 9)) {
+		if (this.isRender(x, y, mouseX, mouseY, 10, 9)) {
 			this.upPageView = true;
-            this.renderTooltip(pose, this.getText("page_up"), xAxis - 72, yAxis + 12);
+			this.renderTooltip(pose, this.getText("page_up"), xAxis - 72, yAxis + 12);
 		}
 
 		x = this.getWidth() + 136;
 
-		if (this.isRendeer(x, y, mouseX, mouseY, 10, 9)) {
+		if (this.isRender(x, y, mouseX, mouseY, 10, 9)) {
 			this.downPageView = true;
-            this.renderTooltip(pose, this.getText("page_down"), xAxis - 72, yAxis + 12);
+			this.renderTooltip(pose, this.getText("page_down"), xAxis - 72, yAxis + 12);
 		}
 	}
 
@@ -121,7 +118,6 @@ public class GuiParallelInterfere extends GuiSMBase<ParallelInterfereMenu> {
 
 	@Override
 	public boolean mouseDragged(double mouseX, double mouseY, int mouseButton, double dragX, double dragY) {
-
 		if (!this.scrolling) { return super.mouseDragged(mouseX, mouseY, mouseButton, dragX, dragY); }
 
 		int i = this.topPos + 23;
@@ -140,7 +136,7 @@ public class GuiParallelInterfere extends GuiSMBase<ParallelInterfereMenu> {
 		int x = this.getWidth() + 174;
 		int y = this.getHeight() + 8;
 
-		if ( Screen.hasShiftDown() || this.isRendeer(x, y, (int) mouseX, (int) mouseY, 12, 105)) {
+		if ( Screen.hasShiftDown() || this.isRender(x, y, (int) mouseX, (int) mouseY, 12, 105)) {
 			int offscreenRows = this.tile.getInvSize() / 9 - 6;
 			this.scrollOffset = (float) ((double) this.scrollOffset - scrollDelta / (double) offscreenRows);
 			this.scrollOffset = Mth.clamp(this.scrollOffset, 0F, 1F);
@@ -152,7 +148,7 @@ public class GuiParallelInterfere extends GuiSMBase<ParallelInterfereMenu> {
 		return super.mouseScrolled(mouseX, mouseY, scrollDelta);
 	}
 
-	public void addPage (double scrollDelta) {
+	public void addPage(double scrollDelta) {
 		int offscreenRows = this.tile.getInvSize() / 9 - 6;
 		this.scrollOffset = (float) ((double) this.scrollOffset - scrollDelta / (double) offscreenRows);
 		this.scrollOffset = Mth.clamp(this.scrollOffset, 0F, 1F);
@@ -160,7 +156,7 @@ public class GuiParallelInterfere extends GuiSMBase<ParallelInterfereMenu> {
 		this.piMenu.updateSlotPositions(this.startIndex);
 	}
 
-	protected ResourceLocation getTEX () {
+	protected ResourceLocation getTEX() {
 		return TEX;
 	}
 }

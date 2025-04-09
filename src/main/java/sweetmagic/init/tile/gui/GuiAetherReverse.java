@@ -1,6 +1,5 @@
 package sweetmagic.init.tile.gui;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -21,20 +20,17 @@ public class GuiAetherReverse extends GuiSMBase<AetherReverseMenu> {
 
 	private static final ResourceLocation TEX = SweetMagicCore.getSRC("textures/gui/gui_aether_reverse.png");
 	private static final ResourceLocation MISC = SweetMagicCore.getSRC("textures/gui/gui_misc.png");
-
 	public final TileAetherReverse tile;
 	private boolean caraftView = false;
-	private final List<SMRenderTex> renderList = new ArrayList<>();
 
 	public GuiAetherReverse(AetherReverseMenu menu, Inventory pInv, Component title) {
 		super(menu, pInv, title);
 		this.tile = menu.tile;
-		this.setGuiWidth(176);
-		this.setGuiHeight(230);
-		this.renderList.add(new SMRenderTex(TEX, 7, 7, 0, 0, 11, 77, new MFRenderGage(this.tile, 179, 7, 11, 76, 76, true)));
+		this.setGuiSize(176, 230);
+		this.addRenderTexList(new SMRenderTex(TEX, 7, 7, 0, 0, 11, 77, new MFRenderGage(this.tile, true)));
 	}
 
-	protected void renderBGBase (PoseStack pose, float parTick, int mouseX, int mouseY) {
+	protected void renderBGBase(PoseStack pose, float parTick, int mouseX, int mouseY) {
 		super.renderBGBase(pose, parTick, mouseX, mouseY);
 		RenderSystem.setShaderTexture(0, MISC);
 		this.blit(pose, this.getWidth() + 29, this.getHeight() + 51, 20, 0, 32, 14);
@@ -49,7 +45,7 @@ public class GuiAetherReverse extends GuiSMBase<AetherReverseMenu> {
 
 		// MFの表示
 		if (this.tile.isCraft) {
-			int progress = this.tile.getCraftProgressScaled(22);
+			int progress = this.tile.getCraftProgress(22);
 			this.blit(pose, x + 116, y + 64, 198, 62, 15, progress);
 		}
 
@@ -69,15 +65,12 @@ public class GuiAetherReverse extends GuiSMBase<AetherReverseMenu> {
 
 	public boolean mouseClicked(double guiX, double guiY, int mouseButton) {
 
-		int x = this.getWidth();
-		int y = this.getHeight();
-		double dX = guiX - (double) (x + 29);
-		double dY = guiY - (double) (y + 51);
+		double dX = guiX - (double) (this.getWidth() + 29);
+		double dY = guiY - (double) (this.getHeight() + 51);
 
 		// 各エンチャントの当たり判定チェック
 		if (dX >= 0D && dX <= 31 && dY >= 0D && dY < 11) {
-			this.menu.clickMenuButton(this.player, 0);
-			this.minecraft.gameMode.handleInventoryButtonClick((this.menu).containerId, 0);
+			this.clickButton(0);
 		}
 
 		return super.mouseClicked(guiX, guiY, mouseButton);
@@ -91,19 +84,19 @@ public class GuiAetherReverse extends GuiSMBase<AetherReverseMenu> {
 		int tipY = this.getHeight() + 51;
 		this.caraftView = false;
 
-		if (this.isRendeer(tipX, tipY, mouseX, mouseY, 31, 11)) {
+		if (this.isRender(tipX, tipY, mouseX, mouseY, 31, 11)) {
 
 			this.caraftView = true;
-			int xAxis = (mouseX - this.getWidth());
-			int yAxis = (mouseY - this.getHeight());
+			int xAxis = mouseX - this.getWidth();
+			int yAxis = mouseY - this.getHeight();
 
 			if (!this.tile.craftList.isEmpty()) {
 				List<Component> tipList = Arrays.<Component> asList(this.getText("reverse_start").withStyle(GREEN), this.getTipArray(this.getText("needmf"), String.format("%,d", this.tile.getReverseCost())).withStyle(GOLD));
-	            this.renderComponentTooltip(pose, tipList, xAxis, yAxis);
+				this.renderComponentTooltip(pose, tipList, xAxis, yAxis);
 			}
 
 			else {
-	            this.renderTooltip(pose, this.getText("no_reverse").withStyle(GOLD), xAxis, yAxis);
+				this.renderTooltip(pose, this.getText("no_reverse").withStyle(GOLD), xAxis, yAxis);
 			}
 		}
 
@@ -116,12 +109,7 @@ public class GuiAetherReverse extends GuiSMBase<AetherReverseMenu> {
 	}
 
 	@Override
-	protected ResourceLocation getTEX () {
+	protected ResourceLocation getTEX() {
 		return TEX;
-	}
-
-	@Override
-	protected List<SMRenderTex> getRenderTexList () {
-		return this.renderList;
 	}
 }

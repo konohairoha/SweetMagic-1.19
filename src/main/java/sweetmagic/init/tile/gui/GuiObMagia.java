@@ -30,7 +30,6 @@ public class GuiObMagia extends GuiSMBase<ObMagiaMenu> {
 	private static final ResourceLocation TEX = SweetMagicCore.getSRC("textures/gui/gui_obmagia.png");
 	private final TileObMagia tile;
 	private final ObMagiaMenu menu;
-
 	private int tickTime = 0;
 	private int pageCounter = 0;
 	private int baseCounter = 0;
@@ -39,32 +38,31 @@ public class GuiObMagia extends GuiSMBase<ObMagiaMenu> {
 
 	public GuiObMagia(ObMagiaMenu menu, Inventory pInv, Component title) {
 		super(menu, pInv, title);
-		this.setGuiWidth(219);
-		this.setGuiHeight(189);
+		this.setGuiSize(219, 189);
 		this.tile = menu.tile;
 		this.menu = menu;
 
 		SMButtonTip buttonTip = new SMButtonTip("", 30, 0, this.tile) {
 
-			public boolean isFlagText (TileObMagia tile) {
+			public boolean isFlagText(TileObMagia tile) {
 				return tile.canCraft;
 			}
 
-			public String getTip () {
+			public String getTip() {
 				return this.isFlagText(tile) ? "caraft_start" : "no_recipe";
 			}
 		};
 
 		SMButton button = new SMButton(MISC, 137, 81, 114, 15, 32, 12, buttonTip) {
 
-			public boolean isButtonRender () {
+			public boolean isButtonRender() {
 				return tile.canCraft;
 			}
 		};
-		this.getButtonMap().put(0, button);
+		this.addButtonMap(0, button);
 	}
 
-	protected void renderBGBase (PoseStack pose, float parTick, int mouseX, int mouseY) {
+	protected void renderBGBase(PoseStack pose, float parTick, int mouseX, int mouseY) {
 		RenderSystem.setShader(GameRenderer::getPositionColorTexShader);
 		RenderSystem.setShaderTexture(0, this.getTEX());
 		RenderSystem.setShaderColor(1F, 1F, 1F, 1F);
@@ -102,7 +100,7 @@ public class GuiObMagia extends GuiSMBase<ObMagiaMenu> {
 
 		// こっちではゲージ量を計算する
 		if (this.tile.craftTime > 0) {
-			int progress =this.tile.getMfProgressScaled(33);
+			int progress =this.tile.getProgress(33);
 			this.blit(pose, x + 132, y + 49, 193, 1, progress, 14);
 		}
 
@@ -127,13 +125,13 @@ public class GuiObMagia extends GuiSMBase<ObMagiaMenu> {
 	}
 
 	// アイテム描画
-	public void renderSlotItem (Slot slot, ItemStack stack, PoseStack pose) {
+	public void renderSlotItem(Slot slot, ItemStack stack, PoseStack pose) {
 		this.renderSlotItem(slot, stack, pose, false);
 	}
 
 	// アイテム描画
-	public void renderSlotItem (Slot slot, ItemStack stack, PoseStack pose, boolean flag) {
-		if ( !slot.getItem().isEmpty()) { return; }
+	public void renderSlotItem(Slot slot, ItemStack stack, PoseStack pose, boolean flag) {
+		if (!slot.getItem().isEmpty()) { return; }
 
 		int x = this.leftPos + slot.x;
 		int y = this.topPos + slot.y;
@@ -155,28 +153,28 @@ public class GuiObMagia extends GuiSMBase<ObMagiaMenu> {
 	}
 
 	// スロットの説明
-	public void renderItemLabel (Slot slot, ItemStack stack, PoseStack pose, int mouseX, int mouseY) {
+	public void renderItemLabel(Slot slot, ItemStack stack, PoseStack pose, int mouseX, int mouseY) {
 		this.renderItemLabel(slot, stack, pose, mouseX, mouseY, false);
 	}
 
 	// スロットの説明
-	public void renderItemLabel (Slot slot, ItemStack stack, PoseStack pose, int mouseX, int mouseY, boolean flag) {
-		if ( !slot.getItem().isEmpty()) { return; }
+	public void renderItemLabel(Slot slot, ItemStack stack, PoseStack pose, int mouseX, int mouseY, boolean flag) {
+		if (!slot.getItem().isEmpty()) { return; }
 
 		int tipX = this.getWidth() + slot.x;
 		int tipY = this.getHeight() + slot.y;
 
-		if (this.isRendeer(tipX, tipY, mouseX, mouseY, 16, 16)) {
+		if (this.isRender(tipX, tipY, mouseX, mouseY, 16, 16)) {
 
 			int xAxis = (mouseX - this.getWidth());
 			int yAxis = (mouseY - this.getHeight());
 			String name = flag ? "craft_out" : "slot_need";
 			List<Component> tipList = Arrays.<Component> asList(this.getText(name).withStyle(GREEN), stack.getDisplayName());
-            this.renderComponentTooltip(pose, tipList, xAxis, yAxis);
+			this.renderComponentTooltip(pose, tipList, xAxis, yAxis);
 		}
 	}
 
-	protected ResourceLocation getTEX () {
+	protected ResourceLocation getTEX() {
 		return TEX;
 	}
 }

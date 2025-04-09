@@ -20,23 +20,20 @@ public class GuiMagiaDrawer extends GuiSMBase<MagiaDrawerMenu> {
 
 	public GuiMagiaDrawer(MagiaDrawerMenu menu, Inventory pInv, Component title) {
 		super(menu, pInv, title);
-		this.setGuiWidth(242);
-		this.setGuiHeight(237);
+		this.setGuiSize(242, 237);
 		this.tile = menu.tile;
-
-		this.getButtonMap().put(0, new SMButton(TEX, 7, 159, 6, 237, 11, 9));
-		this.getButtonMap().put(1, new SMButton(TEX, 19, 159, 6, 246, 15, 9));
-		this.getButtonMap().put(2, new SMButton(TEX, 7, 170, 36, 237, 11, 9));
-		this.getButtonMap().put(3, new SMButton(TEX, 19, 170, 36, 246, 15, 9));
-		this.getButtonMap().put(4, new SMButton(MISC, 222, -4, 114, 0, 10, 9, new SMButtonTip("sort", -18, 14)));
-		this.getButtonMap().put(5, new SMButton(MISC, 210, -4, 137, 0, 11, 9, new SMButtonTip("quick_stack", -18, 14)));
-		this.getButtonMap().put(6, new SMButton(MISC, 198, -4, 161, 0, 11, 9, new SMButtonTip("restock", -18, 14)));
-
-		this.getRenderTexList().add(new SMRenderTex(TEX, 7, 182, 74, 237, 27, 13, new SMButtonTip("item_range", 80, -4)));
-		this.getRenderTexList().add(new SMRenderTex(TEX, 214, 158, 243, 93, 11, 77, new MFRenderGage(this.tile, 243, 171, 11, 17, 76, true)));
+		this.addButtonMap(0, new SMButton(TEX, 7, 159, 6, 237, 11, 9));
+		this.addButtonMap(1, new SMButton(TEX, 19, 159, 6, 246, 15, 9));
+		this.addButtonMap(2, new SMButton(TEX, 7, 170, 36, 237, 11, 9));
+		this.addButtonMap(3, new SMButton(TEX, 19, 170, 36, 246, 15, 9));
+		this.addButtonMap(4, new SMButton(MISC, 222, -4, 114, 0, 10, 9, new SMButtonTip("sort", -18, 14)));
+		this.addButtonMap(5, new SMButton(MISC, 210, -4, 137, 0, 11, 9, new SMButtonTip("quick_stack", -18, 14)));
+		this.addButtonMap(6, new SMButton(MISC, 198, -4, 161, 0, 11, 9, new SMButtonTip("restock", -18, 14)));
+		this.addRenderTexList(new SMRenderTex(TEX, 7, 182, 74, 237, 27, 13, new SMButtonTip("item_range", 80, -4)));
+		this.addRenderTexList(new SMRenderTex(TEX, 214, 158, 243, 93, 11, 77, new MFRenderGage(this.tile, true)));
 	}
 
-	protected void renderBGBase (PoseStack pose, float parTick, int mouseX, int mouseY) {
+	protected void renderBGBase(PoseStack pose, float parTick, int mouseX, int mouseY) {
 		super.renderBGBase(pose, parTick, mouseX, mouseY);
 		this.blit(pose, this.getWidth() + 214, this.getHeight() + 158, 243, 93, 11, 77);
 	}
@@ -49,7 +46,7 @@ public class GuiMagiaDrawer extends GuiSMBase<MagiaDrawerMenu> {
 	}
 
 	@Override
-	protected ResourceLocation getTEX () {
+	protected ResourceLocation getTEX() {
 		return TEX;
 	}
 }

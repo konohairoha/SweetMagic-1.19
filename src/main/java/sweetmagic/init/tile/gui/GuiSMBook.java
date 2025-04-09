@@ -15,32 +15,29 @@ import sweetmagic.init.tile.menu.SMBookMenu;
 public class GuiSMBook extends GuiSMBase<SMBookMenu> {
 
 	private static final ResourceLocation TEX = SweetMagicCore.getSRC("textures/gui/gui_smbook.png");
-
 	private ItemStack stack;	// 本のアイテムスタック
 
 	public GuiSMBook(SMBookMenu menu, Inventory inv, Component com) {
 		super(menu, inv, com);
-		this.setGuiWidth(194);
-		this.setGuiHeight(222);
+		this.setGuiSize(194, 222);
 
 		this.stack = this.player.getMainHandItem();
-
 		this.hasRobe = this.hasRobe();
 		this.hasPorch = this.hasPorch();
 		int x = 150;
 		int y = -18;
 
 		if (this.hasRobe) {
-			this.getButtonMap().put(0, new SMButton(MISC, x, y, 200, 0, 16, 31, new SMButtonTip("open_robe", -18, 14)));
+			this.addButtonMap(0, new SMButton(MISC, x, y, 200, 0, 16, 31, new SMButtonTip("open_robe", -18, 14)));
 			x -= 18;
 		}
 
 		if (this.hasPorch) {
-			this.getButtonMap().put(1, new SMButton(MISC, x, y, 200, 0, 16, 30, new SMButtonTip("open_porch", -18, 14)));
+			this.addButtonMap(1, new SMButton(MISC, x, y, 200, 0, 16, 30, new SMButtonTip("open_porch", -18, 14)));
 			x -= 18;
 		}
 
-		this.getButtonMap().put(2, new SMButton(MISC, x, y, 200, 0, 16, 30, new SMButtonTip("open_book", -18, 14)));
+		this.addButtonMap(2, new SMButton(MISC, x, y, 200, 0, 16, 30, new SMButtonTip("open_book", -18, 14)));
 	}
 
 	@Override
@@ -71,7 +68,7 @@ public class GuiSMBook extends GuiSMBase<SMBookMenu> {
 	}
 
 	@Override
-	protected ResourceLocation getTEX () {
+	protected ResourceLocation getTEX() {
 		return TEX;
 	}
 }

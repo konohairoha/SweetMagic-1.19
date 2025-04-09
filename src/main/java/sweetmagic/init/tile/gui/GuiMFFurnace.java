@@ -19,10 +19,9 @@ public class GuiMFFurnace extends GuiSMBase<MFFurnaceMenu> {
 
 	public GuiMFFurnace(MFFurnaceMenu menu, Inventory pInv, Component title) {
 		super(menu, pInv, title);
-		this.setGuiWidth(176);
-		this.setGuiHeight(212);
+		this.setGuiSize(176, 212);
 		this.tile = menu.tile;
-		this.getRenderTexList().add(new SMRenderTex(TEX, 7, 7, 0, 0, 11, 77, new MFRenderGage(this.tile, 179, 7, 11, 76, 76, true)));
+		this.addRenderTexList(new SMRenderTex(TEX, 7, 7, 0, 0, 11, 77, new MFRenderGage(this.tile, true)));
 	}
 
 	@Override
@@ -32,12 +31,12 @@ public class GuiMFFurnace extends GuiSMBase<MFFurnaceMenu> {
 		// MFの表示
 		if (this.tile.isCraft) {
 			RenderSystem.setShaderTexture(0, TEX);
-			int progress = this.tile.getCraftProgressScaled(22);
+			int progress = this.tile.getCraftProgress(22);
 			this.blit(pose, this.getWidth() + 144, this.getHeight() + 59, 194, 59, 15, progress);
 		}
 	}
 
-	protected ResourceLocation getTEX () {
+	protected ResourceLocation getTEX() {
 		return TEX;
 	}
 }

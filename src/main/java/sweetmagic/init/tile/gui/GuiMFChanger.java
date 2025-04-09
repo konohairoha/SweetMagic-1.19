@@ -18,15 +18,13 @@ public class GuiMFChanger extends GuiSMBase<MFChangerMenu> {
 
 	public GuiMFChanger(MFChangerMenu menu, Inventory pInv, Component title) {
 		super(menu, pInv, title);
-		this.setGuiWidth(176);
-		this.setGuiHeight(152);
+		this.setGuiSize(176, 152);
 		this.tile = menu.tile;
-		this.getRenderTexList().add(new SMRenderTex(TEX, 35, 53, 0, 0, 106, 10, new MFRenderGage(this.tile, 0, 166, 166, 10, 106, false)));
+		this.addRenderTexList(new SMRenderTex(TEX, 35, 53, 0, 0, 106, 10, new MFRenderGage(this.tile, false)));
 	}
 
 	@Override
-	protected void renderBGBase (PoseStack pose, float parTick, int mouseX, int mouseY) {
-
+	protected void renderBGBase(PoseStack pose, float parTick, int mouseX, int mouseY) {
 		super.renderBGBase(pose, parTick, mouseX, mouseY);
 
 		switch (this.tile.getInvSize()) {
@@ -44,7 +42,7 @@ public class GuiMFChanger extends GuiSMBase<MFChangerMenu> {
 	}
 
 	@Override
-	protected ResourceLocation getTEX () {
+	protected ResourceLocation getTEX() {
 		return TEX;
 	}
 }

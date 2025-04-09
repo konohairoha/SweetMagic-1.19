@@ -11,12 +11,11 @@ import sweetmagic.init.tile.menu.ModenRackMenu;
 public class GuiModenRack extends GuiSMBase<ModenRackMenu> {
 
 	private static final ResourceLocation TEX = SweetMagicCore.getSRC("textures/gui/gui_moden_rack.png");
-	public int data = 0;
+	private int data = 0;
 
 	public GuiModenRack(ModenRackMenu menu, Inventory pInv, Component title) {
 		super(menu, pInv, title);
-		this.setGuiWidth(173);
-		this.setGuiHeight(132);
+		this.setGuiSize(173, 132);
 		this.data = menu.data;
 	}
 
@@ -54,7 +53,7 @@ public class GuiModenRack extends GuiSMBase<ModenRackMenu> {
 		}
 	}
 
-	protected ResourceLocation getTEX () {
+	protected ResourceLocation getTEX() {
 		return TEX;
 	}
 }

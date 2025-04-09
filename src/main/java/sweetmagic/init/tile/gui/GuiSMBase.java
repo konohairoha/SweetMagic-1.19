@@ -6,17 +6,25 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.Tesselator;
+import com.mojang.blaze3d.vertex.VertexFormat;
+import com.mojang.math.Matrix4f;
 
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -25,6 +33,7 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
+import net.minecraftforge.registries.ForgeRegistries;
 import sweetmagic.SweetMagicCore;
 import sweetmagic.api.iitem.IPorch;
 import sweetmagic.api.iitem.IRobe;
@@ -33,6 +42,7 @@ import sweetmagic.api.util.ISMTip;
 import sweetmagic.init.tile.gui.util.SMButton;
 import sweetmagic.init.tile.gui.util.SMRenderTex;
 import sweetmagic.init.tile.gui.util.SMRenderTex.MFRenderGage;
+import sweetmagic.init.tile.sm.TileMFChanger;
 import sweetmagic.init.tile.sm.TileSMMagic;
 
 public abstract class GuiSMBase <T extends AbstractContainerMenu> extends AbstractContainerScreen<T> implements ISMTip {
@@ -40,12 +50,13 @@ public abstract class GuiSMBase <T extends AbstractContainerMenu> extends Abstra
 	protected final Player player;
 	protected final AbstractContainerMenu menu;
 	protected static final ResourceLocation MISC = SweetMagicCore.getSRC("textures/gui/gui_misc.png");
-	boolean hasRobe = false;
-	boolean hasPorch = false;
-	boolean hasWand = false;
-	boolean hasBook = false;
+	protected boolean hasRobe = false;
+	protected boolean hasPorch = false;
+	protected boolean hasWand = false;
+	protected boolean hasBook = false;
 	private final Map<Integer, SMButton> buttonMap = new HashMap<>();
 	private final List<SMRenderTex> renderList = new ArrayList<>();
+	protected static final String[] ENCODED_SUFFIXES = {"K", "M", "G"};
 
 	public GuiSMBase(T menu, Inventory pInv, Component title) {
 		super(menu, pInv, title);
@@ -59,7 +70,7 @@ public abstract class GuiSMBase <T extends AbstractContainerMenu> extends Abstra
 		this.renderTooltip(pose, mouseX, mouseY);
 	}
 
-	protected void renderBGBase (PoseStack pose, float parTick, int mouseX, int mouseY) {
+	protected void renderBGBase(PoseStack pose, float parTick, int mouseX, int mouseY) {
 		RenderSystem.setShader(GameRenderer::getPositionColorTexShader);
 		RenderSystem.setShaderTexture(0, this.getTEX());
 		RenderSystem.setShaderColor(1F, 1F, 1F, 1F);
@@ -71,64 +82,84 @@ public abstract class GuiSMBase <T extends AbstractContainerMenu> extends Abstra
 		this.renderBGBase(pose, parTick, mouseX, mouseY);
 
 		if (!this.getButtonMap().isEmpty()) {
-
-			Map<Integer, SMButton> buttonMap = this.getButtonMap();
-			for (Entry<Integer, SMButton> map : buttonMap.entrySet()) {
-
-				SMButton button = map.getValue();
-				if (!button.isButtonRender()) { continue; }
-
-				int x = button.getX();
-				int y = button.getY();
-				int texX = button.getTexX();
-				int texY = button.getTexY();
-				int sizeX = button.getSizeX();
-				int sizeY = button.getSizeY();
-				RenderSystem.setShaderTexture(0, button.getTex());
-				this.blit(pose, this.leftPos + x, this.topPos + y, texX + (button.isView() ? sizeX : 0), texY, sizeX, sizeY);
-			}
+			this.buttonMapRender(pose);
 		}
 
 		if (!this.getRenderTexList().isEmpty()) {
+			this.renderTexRender(pose);
+		}
+	}
 
-			for (SMRenderTex render : this.getRenderTexList()) {
+	public void buttonMapRender(PoseStack pose) {
 
-				int x = render.getX();
-				int y = render.getY();
-				int texX = render.getTexX();
-				int texY = render.getTexY();
-				int sizeX = render.getSizeX();
-				int sizeY = render.getSizeY();
-				RenderSystem.setShaderTexture(0, render.getTex());
+		Map<Integer, SMButton> buttonMap = this.getButtonMap();
+		for (Entry<Integer, SMButton> map : buttonMap.entrySet()) {
 
-				if (render.getMFRender() != null) {
+			SMButton button = map.getValue();
+			if (!button.isButtonRender()) { continue; }
 
-					MFRenderGage mfRender = render.getMFRender();
-					TileSMMagic tile = mfRender.getTile();
+			int x = button.getX();
+			int y = button.getY();
+			int texX = button.getTexX();
+			int texY = button.getTexY();
+			int sizeX = button.getSizeX();
+			int sizeY = button.getSizeY();
+			RenderSystem.setShaderTexture(0, button.getTex());
+			this.blit(pose, this.leftPos + x, this.topPos + y, texX + (button.isView() ? sizeX : 0), texY, sizeX, sizeY);
+		}
+	}
 
-					// こっちではゲージ量を計算する
-					if (!tile.isMFEmpty()) {
+	public void renderTexRender(PoseStack pose) {
 
-						int progress = tile.getMFProgressScaled(mfRender.getScale());
-						int scale = mfRender.getScale();
-						int texRenderX = mfRender.getTexX();
-						int texRenderY = mfRender.getTexY();
-						int sizeRenderX = mfRender.getSizeX();
-						int sizeRenderY = mfRender.getSizeY();
+		for (SMRenderTex render : this.getRenderTexList()) {
 
-						if (mfRender.isVertical()) {
-							this.blit(pose, this.leftPos + x, this.topPos + y + scale - progress, texRenderX, texRenderY + scale - progress, sizeRenderX, progress);
-						}
+			int x = render.getX();
+			int y = render.getY();
+			int texX = render.getTexX();
+			int texY = render.getTexY();
+			int sizeX = render.getSizeX();
+			int sizeY = render.getSizeY();
+			RenderSystem.setShaderTexture(0, render.getTex());
 
-						else {
-							this.blit(pose, this.leftPos + x, this.topPos + y, texRenderX, texRenderY, progress, sizeRenderY);
-						}
+			if (render.getMFRender() != null) {
+
+				MFRenderGage mfRender = render.getMFRender();
+				TileSMMagic tile = mfRender.tile();
+				RenderSystem.setShaderTexture(0, MISC);
+
+				if (mfRender.isVertical()) {
+					this.blit(pose, this.leftPos + x, this.topPos + y, 0, 93, 11, 77);
+				}
+
+				else if(!(tile instanceof TileMFChanger)) {
+					this.blit(pose, this.leftPos + x, this.topPos + y, 22, 148, 77, 11);
+				}
+
+				// こっちではゲージ量を計算する
+				if (!tile.isMFEmpty()) {
+
+					int progress = tile.getMFProgressScaled(76);
+
+					if (mfRender.isVertical()) {
+						this.blit(pose, this.leftPos + x, this.topPos + y + 76 - progress, 11, 93 + 76 - progress, 11, progress);
+					}
+
+					else if(!(tile instanceof TileMFChanger)) {
+						this.blit(pose, this.leftPos + x, this.topPos + y, 22, 159, progress, 11);
+					}
+
+					else {
+						RenderSystem.setShaderTexture(0, this.getTEX());
+						progress = tile.getMFProgressScaled(106);
+						this.blit(pose, this.leftPos + x, this.topPos + y, 0, 166, progress, 10);
 					}
 				}
 
-				else {
-					this.blit(pose, this.leftPos + x, this.topPos + y, texX, texY, sizeX, sizeY);
-				}
+				RenderSystem.setShaderTexture(0, this.getTEX());
+			}
+
+			else {
+				this.blit(pose, this.leftPos + x, this.topPos + y, texX, texY, sizeX, sizeY);
 			}
 		}
 	}
@@ -140,79 +171,80 @@ public abstract class GuiSMBase <T extends AbstractContainerMenu> extends Abstra
 		int texSizeY = this.getHeight();
 
 		if (!this.getButtonMap().isEmpty()) {
-
-			Map<Integer, SMButton> buttonMap = this.getButtonMap();
-			for (Entry<Integer, SMButton> map : buttonMap.entrySet()) {
-
-				SMButton button = map.getValue();
-				int x = button.getX();
-				int y = button.getY();
-				int sizeX = button.getSizeX();
-				int sizeY = button.getSizeY();
-
-				int tipX = texSizeX + x;
-				int tipY = texSizeY + y;
-				button.setIsView(false);
-
-				if (this.isRendeer(tipX, tipY, mouseX, mouseY, sizeX, sizeY)) {
-
-					button.setIsView(true);
-					SMButton.SMButtonTip buttonTip = button.getButtonTip();
-
-					if (buttonTip != null) {
-						MutableComponent tip = this.getText(buttonTip.getTip());
-						int lenght = this.font.width(tip.getString());
-
-						// GUIの左上からの位置
-						int xAxis = mouseX - texSizeX - lenght + buttonTip.getTipX();
-						int yAxis = mouseY - texSizeY + buttonTip.getTipY();
-			            this.renderTooltip(pose, tip, xAxis, yAxis);
-					}
-				}
-			}
+			this.buttonMapLabel(pose, mouseX, mouseY, texSizeX, texSizeY);
 		}
 
 		if (!this.getRenderTexList().isEmpty()) {
+			this.renderTexLabel(pose, mouseX, mouseY, texSizeX, texSizeY);
+		}
+	}
 
-			for (SMRenderTex render : this.getRenderTexList()) {
+	public void buttonMapLabel(PoseStack pose, int mouseX, int mouseY, int texSizeX, int texSizeY) {
 
-				int x = render.getX();
-				int y = render.getY();
-				int sizeX = render.getSizeX();
-				int sizeY = render.getSizeY();
+		Map<Integer, SMButton> buttonMap = this.getButtonMap();
+		for (Entry<Integer, SMButton> map : buttonMap.entrySet()) {
 
-				int tipX = texSizeX + x;
-				int tipY = texSizeY + y;
+			SMButton button = map.getValue();
+			int x = button.getX();
+			int y = button.getY();
+			int sizeX = button.getSizeX();
+			int sizeY = button.getSizeY();
+			int tipX = texSizeX + x;
+			int tipY = texSizeY + y;
+			button.setIsView(false);
+			if (!this.isRender(tipX, tipY, mouseX, mouseY, sizeX, sizeY)) { continue; }
 
-				if (this.isRendeer(tipX, tipY, mouseX, mouseY, sizeX, sizeY)) {
+			button.setIsView(true);
+			SMButton.SMButtonTip buttonTip = button.getButtonTip();
+			if (buttonTip == null) { continue; }
 
-					SMButton.SMButtonTip buttonTip = render.getButtonTip();
+			MutableComponent tip = this.getText(buttonTip.getTip());
+			int lenght = this.font.width(tip.getString());
 
-					if (buttonTip != null) {
-						MutableComponent tip = this.getText(buttonTip.getTip());
-						int lenght = this.font.width(tip.getString());
+			// GUIの左上からの位置
+			int xAxis = mouseX - texSizeX - lenght + buttonTip.getTipX();
+			int yAxis = mouseY - texSizeY + buttonTip.getTipY();
+			this.renderTooltip(pose, tip, xAxis, yAxis);
+		}
+	}
 
-						// GUIの左上からの位置
-						int xAxis = mouseX - texSizeX - lenght + buttonTip.getTipX();
-						int yAxis = mouseY - texSizeY + buttonTip.getTipY();
-			            this.renderTooltip(pose, tip, xAxis, yAxis);
-					}
+	public void renderTexLabel(PoseStack pose, int mouseX, int mouseY, int texSizeX, int texSizeY) {
 
-					else if (render.getMFRender() != null) {
+		for (SMRenderTex render : this.getRenderTexList()) {
 
-						MFRenderGage mfRender = render.getMFRender();
-						TileSMMagic tile = mfRender.getTile();
+			int x = render.getX();
+			int y = render.getY();
+			int sizeX = render.getSizeX();
+			int sizeY = render.getSizeY();
+			int tipX = texSizeX + x;
+			int tipY = texSizeY + y;
+			if (!this.isRender(tipX, tipY, mouseX, mouseY, sizeX, sizeY)) { continue; }
 
-						int mf = tile.getMF();
-						int max = tile.getMaxMF();
-						String par = " (" + tile.getMFPercent() + ")";
-						int xAxis = (mouseX - this.getWidth());
-						int yAxis = (mouseY - this.getHeight());
+			SMButton.SMButtonTip buttonTip = render.getButtonTip();
 
-						String tip = String.format("%,d", mf) + "mf / " + String.format("%,d", max) + "mf" + par;
-			            this.renderTooltip(pose, this.getTip(tip), xAxis, yAxis);
-					}
-				}
+			if (buttonTip != null) {
+				MutableComponent tip = this.getText(buttonTip.getTip());
+				int lenght = this.font.width(tip.getString());
+
+				// GUIの左上からの位置
+				int xAxis = mouseX - texSizeX - lenght + buttonTip.getTipX();
+				int yAxis = mouseY - texSizeY + buttonTip.getTipY();
+				this.renderTooltip(pose, tip, xAxis, yAxis);
+			}
+
+			else if (render.getMFRender() != null) {
+
+				MFRenderGage mfRender = render.getMFRender();
+				TileSMMagic tile = mfRender.tile();
+
+				int mf = tile.getMF();
+				int max = tile.getMaxMF();
+				String par = " (" + tile.getMFPercent() + ")";
+				int xAxis = mouseX - this.getWidth();
+				int yAxis = mouseY - this.getHeight();
+
+				String tip = String.format("%,d", mf) + "mf / " + String.format("%,d", max) + "mf" + par;
+				this.renderTooltip(pose, this.getTip(tip), xAxis, yAxis);
 			}
 		}
 	}
@@ -230,56 +262,67 @@ public abstract class GuiSMBase <T extends AbstractContainerMenu> extends Abstra
 
 			// スクロールバーの当たり判定チェック
 			if (guiX >= aX && guiX < aX + width && guiY >= aY && guiY < aY + height) {
-				this.clickButton(map.getKey());
+				this.clickSMButton(map.getKey());
 			}
 		}
 
 		return super.mouseClicked(guiX, guiY, mouseButton);
 	}
 
-	protected abstract ResourceLocation getTEX ();
+	public void clickSMButton(int id) {
+		this.clickButton(id);
+	}
 
-	protected int getWidth () {
+	protected abstract ResourceLocation getTEX();
+
+	protected int getWidth() {
 		return (this.width - this.getGuiWidth()) / 2;
 	}
 
-	protected int getHeight () {
+	protected int getHeight() {
 		return (this.height - this.getGuiHeight()) / 2;
 	}
 
-	public void setGuiWidth (int imageWidth) {
+	public void setGuiSize(int imageWidth, int imageHeight) {
 		this.imageWidth = imageWidth;
-	}
-
-	public int getGuiWidth () {
-		return this.imageWidth;
-	}
-
-	public void setGuiHeight (int imageHeight) {
 		this.imageHeight = imageHeight;
 	}
 
-	public int getGuiHeight () {
+	public int getGuiWidth() {
+		return this.imageWidth;
+	}
+
+	public int getGuiHeight() {
 		return this.imageHeight;
 	}
 
-	protected void clickButton (int id) {
+	protected void clickButton(int id) {
 		this.menu.clickMenuButton(this.player, id);
-		this.minecraft.gameMode.handleInventoryButtonClick((this.menu).containerId, id);
+		this.minecraft.gameMode.handleInventoryButtonClick(this.menu.containerId, id);
 	}
 
 	// ボタンリスト
-	protected Map<Integer, SMButton> getButtonMap () {
+	private Map<Integer, SMButton> getButtonMap() {
 		return this.buttonMap;
 	}
 
 	// レンダーリスト
-	protected List<SMRenderTex> getRenderTexList () {
+	private List<SMRenderTex> getRenderTexList() {
 		return this.renderList;
 	}
 
+	// ボタンリスト
+	protected void addButtonMap(Integer key, SMButton val) {
+		this.buttonMap.put(key, val);
+	}
+
+	// レンダーリスト
+	protected void addRenderTexList(SMRenderTex val) {
+		this.renderList.add(val);
+	}
+
 	// アイテム描画
-	public void renderSlotItem (Slot slot, ItemStack stack, PoseStack pose) {
+	public void renderSlotItem(Slot slot, ItemStack stack, PoseStack pose) {
 		if (!slot.getItem().isEmpty()) { return; }
 
 		int x = this.leftPos + slot.x;
@@ -302,26 +345,26 @@ public abstract class GuiSMBase <T extends AbstractContainerMenu> extends Abstra
 	}
 
 	// アイテム描画
-	public void renderSlotItem (Slot slot, ItemStack stack, int count, PoseStack pose) {
+	public void renderSlotItem(Slot slot, ItemStack stack, int count, PoseStack pose) {
 		ItemStack copy = stack.copy();
 		copy.setCount(count);
 		this.renderSlotItem(slot, copy, pose);
 	}
 
 	// カーソルがあった時に描画するか
-	public boolean isRendeer (int tipX, int tipY, int mouseX, int mouseY, int maxX, int maxY) {
+	public boolean isRender(int tipX, int tipY, int mouseX, int mouseY, int maxX, int maxY) {
 		return tipX <= mouseX && mouseX <= tipX + maxX && tipY <= mouseY && mouseY <= tipY + maxY;
 	}
 
 	// スロットの説明
-	public void renderItemLabel (Slot slot, ItemStack stack, PoseStack pose, int mouseX, int mouseY, List<Component> tipList) {
+	public void renderItemLabel(Slot slot, ItemStack stack, PoseStack pose, int mouseX, int mouseY, List<Component> tipList) {
 		if (!slot.getItem().isEmpty()) { return; }
 
 		int tipX = this.getWidth() + slot.x;
 		int tipY = this.getHeight() + slot.y;
 
 		//GUIの左上からの位置
-		if (this.isRendeer(tipX, tipY, mouseX, mouseY, 16, 16)) {
+		if (this.isRender(tipX, tipY, mouseX, mouseY, 16, 16)) {
 			int xAxis = (mouseX - this.getWidth());
 			int yAxis = (mouseY - this.getHeight());
 			this.renderComponentTooltip(pose, tipList, xAxis, yAxis);
@@ -329,24 +372,24 @@ public abstract class GuiSMBase <T extends AbstractContainerMenu> extends Abstra
 	}
 
 	// スロットの説明
-	public void renderItemLabel (Slot slot, ItemStack stack, PoseStack pose, int mouseX, int mouseY) {
+	public void renderItemLabel(Slot slot, ItemStack stack, PoseStack pose, int mouseX, int mouseY) {
 		if (!slot.getItem().isEmpty()) { return; }
 
 		int tipX = this.getWidth() + slot.x;
 		int tipY = this.getHeight() + slot.y;
 
 		//GUIの左上からの位置
-		if (this.isRendeer(tipX, tipY, mouseX, mouseY, 16, 16)) {
+		if (this.isRender(tipX, tipY, mouseX, mouseY, 16, 16)) {
 			int xAxis = mouseX - this.getWidth();
 			int yAxis = mouseY - this.getHeight();
 
 			List<Component> tipList = new ArrayList<>();
 			this.setTip(tipList, stack);
-            this.renderComponentTooltip(pose, tipList, xAxis, yAxis);
+			this.renderComponentTooltip(pose, tipList, xAxis, yAxis);
 		}
 	}
 
-	public void renderStock (List<ItemStack> tileStackList, PoseStack pose, int stockId, int restockId, int addX, int addY) {
+	public void renderStock(List<ItemStack> tileStackList, PoseStack pose, int stockId, int restockId, int addX, int addY) {
 		SMButton quick = this.getButtonMap().get(stockId);
 		SMButton restock = this.getButtonMap().get(restockId);
 		if (!quick.isView() && !restock.isView()) { return; }
@@ -398,7 +441,7 @@ public abstract class GuiSMBase <T extends AbstractContainerMenu> extends Abstra
 		}
 	}
 
-	public void setTip (List<Component> tipList, ItemStack stack) {
+	public void setTip(List<Component> tipList, ItemStack stack) {
 		if (stack.isEmpty()) {
 			tipList.add(this.getText("enchated").withStyle(GREEN));
 		}
@@ -408,15 +451,37 @@ public abstract class GuiSMBase <T extends AbstractContainerMenu> extends Abstra
 		}
 	}
 
-	public boolean hasWand () {
+	public static List<ItemStack> getTagStack(TagKey<Item> tags) {
+		return ForgeRegistries.ITEMS.tags().getTag(tags).stream().map(Item::getDefaultInstance).collect(Collectors.toList());
+	}
+
+	public boolean hasWand() {
 		return this.player.getMainHandItem().getItem() instanceof IWand;
 	}
 
-	public boolean hasPorch () {
+	public boolean hasPorch() {
 		return this.player.getItemBySlot(EquipmentSlot.LEGS).getItem() instanceof IPorch;
 	}
 
-	public boolean hasRobe () {
+	public boolean hasRobe() {
 		return this.player.getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof IRobe;
+	}
+
+	public void drawFluid(Matrix4f mat, float x, float y, int width, int height, TextureAtlasSprite sprite, int top) {
+		float uMin = sprite.getU0();
+		float uMax = sprite.getU1();
+		float vMin = sprite.getV0();
+		float vMax = sprite.getV1();
+		vMax = vMax - (top / 16F * (vMax - vMin));
+
+		RenderSystem.setShader(GameRenderer::getPositionTexShader);
+		Tesselator tes = Tesselator.getInstance();
+		BufferBuilder buf = tes.getBuilder();
+		buf.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+		buf.vertex(mat, x, y + height, 100F).uv(uMin, vMax).endVertex();
+		buf.vertex(mat, x + width, y + height, 100F).uv(uMax, vMax).endVertex();
+		buf.vertex(mat, x + width, y, 100F).uv(uMax, vMin).endVertex();
+		buf.vertex(mat, x, y, 100F).uv(uMin, vMin).endVertex();
+		tes.end();
 	}
 }

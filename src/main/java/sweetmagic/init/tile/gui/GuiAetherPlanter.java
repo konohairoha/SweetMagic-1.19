@@ -16,13 +16,12 @@ public class GuiAetherPlanter extends GuiSMBase<AetherPlanterMenu> {
 
 	public GuiAetherPlanter(AetherPlanterMenu menu, Inventory pInv, Component title) {
 		super(menu, pInv, title);
-		this.setGuiWidth(176);
-		this.setGuiHeight(199);
+		this.setGuiSize(176, 194);
 		this.tile = menu.tile;
-		this.getRenderTexList().add(new SMRenderTex(TEX, 48, 9, 0, 0, 76, 10, new MFRenderGage(this.tile, 178, 9, 76, 10, 76, false)));
+		this.addRenderTexList(new SMRenderTex(TEX, 48, 9, 0, 0, 76, 10, new MFRenderGage(this.tile, false)));
 	}
 
-	protected ResourceLocation getTEX () {
+	protected ResourceLocation getTEX() {
 		return TEX;
 	}
 }

@@ -21,17 +21,14 @@ public class GuiAetherLantern extends GuiSMBase<AetherLanternMenu> {
 	public GuiAetherLantern(AetherLanternMenu menu, Inventory pInv, Component title) {
 		super(menu, pInv, title);
 		this.tile = menu.tile;
-		this.setGuiWidth(173);
-		this.setGuiHeight(132);
-
-		this.getButtonMap().put(0, new SMButton(TEX, 87, 24, 0, 133, 11, 9));
-		this.getButtonMap().put(1, new SMButton(TEX, 99, 24, 0, 142, 15, 9));
-		this.getButtonMap().put(2, new SMButton(TEX, 87, 36, 30, 133, 11, 9));
-		this.getButtonMap().put(3, new SMButton(TEX, 99, 36, 30, 142, 15, 9));
-
-		this.getRenderTexList().add(new SMRenderTex(TEX, 18, 28, 0, 153, 48, 13, new SMButtonTip("mf_average", 80, -4)));
-		this.getRenderTexList().add(new SMRenderTex(TEX, 118, 28, 0, 153, 27, 13, new SMButtonTip("mf_range", 0, -4)));
-		this.getRenderTexList().add(new SMRenderTex(TEX, 48, 9, 0, 0, 77, 10, new MFRenderGage(this.tile, 175, 9, 77, 10, 76, false)));
+		this.setGuiSize(173, 132);
+		this.addButtonMap(0, new SMButton(TEX, 87, 24, 0, 133, 11, 9));
+		this.addButtonMap(1, new SMButton(TEX, 99, 24, 0, 142, 15, 9));
+		this.addButtonMap(2, new SMButton(TEX, 87, 36, 30, 133, 11, 9));
+		this.addButtonMap(3, new SMButton(TEX, 99, 36, 30, 142, 15, 9));
+		this.addRenderTexList(new SMRenderTex(TEX, 18, 28, 0, 153, 48, 13, new SMButtonTip("mf_average", 80, -4)));
+		this.addRenderTexList(new SMRenderTex(TEX, 118, 28, 0, 153, 27, 13, new SMButtonTip("mf_range", 0, -4)));
+		this.addRenderTexList(new SMRenderTex(TEX, 48, 9, 0, 0, 77, 10, new MFRenderGage(this.tile, false)));
 	}
 
 	@Override
@@ -46,7 +43,7 @@ public class GuiAetherLantern extends GuiSMBase<AetherLanternMenu> {
 	}
 
 	@Override
-	protected ResourceLocation getTEX () {
+	protected ResourceLocation getTEX() {
 		return TEX;
 	}
 }

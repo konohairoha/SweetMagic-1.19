@@ -20,18 +20,16 @@ public class GuiMagiaAccelerator extends GuiSMBase<MagiaAcceleratorMenu> {
 	public GuiMagiaAccelerator(MagiaAcceleratorMenu menu, Inventory pInv, Component title) {
 		super(menu, pInv, title);
 		this.tile = menu.tile;
-		this.setGuiWidth(173);
-		this.setGuiHeight(132);
-
-		this.getButtonMap().put(0, new SMButton(TEX, 87, 24, 0, 133, 11, 9));
-		this.getButtonMap().put(1, new SMButton(TEX, 99, 24, 0, 142, 15, 9));
-		this.getButtonMap().put(2, new SMButton(TEX, 87, 36, 30, 133, 11, 9));
-		this.getButtonMap().put(3, new SMButton(TEX, 99, 36, 30, 142, 15, 9));
-		this.getButtonMap().put(4, new SMButton(TEX, 65, 27, 175, 21, 14, 14));
-		this.getRenderTexList().add(new SMRenderTex(TEX, 48, 9, 0, 0, 77, 10, new MFRenderGage(this.tile, 175, 9, 77, 10, 76, false)));
+		this.setGuiSize(173, 132);
+		this.addButtonMap(0, new SMButton(TEX, 87, 24, 0, 133, 11, 9));
+		this.addButtonMap(1, new SMButton(TEX, 99, 24, 0, 142, 15, 9));
+		this.addButtonMap(2, new SMButton(TEX, 87, 36, 30, 133, 11, 9));
+		this.addButtonMap(3, new SMButton(TEX, 99, 36, 30, 142, 15, 9));
+		this.addButtonMap(4, new SMButton(TEX, 65, 27, 175, 21, 14, 14));
+		this.addRenderTexList(new SMRenderTex(TEX, 48, 9, 0, 0, 77, 10, new MFRenderGage(this.tile, false)));
 	}
 
-	protected void renderBGBase (PoseStack pose, float parTick, int mouseX, int mouseY) {
+	protected void renderBGBase(PoseStack pose, float parTick, int mouseX, int mouseY) {
 		super.renderBGBase(pose, parTick, mouseX, mouseY);
 		this.blit(pose, this.getWidth() + 18, this.getHeight() + 25, 175, 35, 49, 16);
 	}
@@ -48,15 +46,15 @@ public class GuiMagiaAccelerator extends GuiSMBase<MagiaAcceleratorMenu> {
 		int tipX = this.getWidth() + 65;
 		int tipY = this.getHeight() + 27;
 
-		if (this.isRendeer(tipX, tipY, mouseX, mouseY, 14, 14)) {
+		if (this.isRender(tipX, tipY, mouseX, mouseY, 14, 14)) {
 			int xAxis = (mouseX - this.getWidth());
 			int yAxis = (mouseY - this.getHeight());
-            this.renderTooltip(pose, this.getTipArray(this.getText("isrange"), this.getTip("" + this.tile.isRangeView)).withStyle(GOLD), xAxis, yAxis);
+			this.renderTooltip(pose, this.getTipArray(this.getText("isrange"), this.getTip("" + this.tile.isRangeView)).withStyle(GOLD), xAxis, yAxis);
 		}
 	}
 
 	@Override
-	protected ResourceLocation getTEX () {
+	protected ResourceLocation getTEX() {
 		return TEX;
 	}
 }

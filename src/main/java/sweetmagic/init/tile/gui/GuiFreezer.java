@@ -16,8 +16,7 @@ public class GuiFreezer extends GuiSMBase<FreezerMenu> {
 
 	public GuiFreezer(FreezerMenu menu, Inventory pInv, Component title) {
 		super(menu, pInv, title);
-		this.setGuiWidth(176);
-		this.setGuiHeight(185);
+		this.setGuiSize(176, 185);
 		this.tile = menu.tile;
 	}
 
@@ -31,13 +30,13 @@ public class GuiFreezer extends GuiSMBase<FreezerMenu> {
 
 		// クラフトゲージの値を設定
 		if (this.tile.craftTime > 0) {
-			int progress =this.tile.getCraftProgressScaled(22);
+			int progress =this.tile.getCraftProgress(22);
 			this.blit(pose, x + 99, y + 36, 211, 14, progress, 15);
 		}
 
 		// 水のゲージの値を設定
-		if (this.tile.getWaterValue() > 0) {
-			int progress = this.tile.getWaterProgressScaled(75);
+		if (this.tile.getFluidValue() > 0) {
+			int progress = this.tile.getWaterProgress(75);
 			this.blit(pose, x + 29, y + 94 - progress, 191, 76 - progress, 9, progress);
 		}
 	}
@@ -48,17 +47,17 @@ public class GuiFreezer extends GuiSMBase<FreezerMenu> {
 
 		int tipX = this.getWidth() + 28;
 		int tipY = this.getHeight() + 18;
-		if (!this.isRendeer(tipX, tipY, mouseX, mouseY, 10, 76)) { return; }
+		if (!this.isRender(tipX, tipY, mouseX, mouseY, 10, 76)) { return; }
 
-		int mf = this.tile.getWaterValue();
-		int max = this.tile.getMaxWaterValue();
+		int mf = this.tile.getFluidValue();
+		int max = this.tile.getMaxFuildValue();
 		int xAxis = mouseX - this.getWidth();
 		int yAxis = mouseY - this.getHeight();
 		String tip = String.format("%,d", mf) + "mb / " + String.format("%,d", max) + "mb";
-        this.renderTooltip(pose, this.getLabel(tip), xAxis, yAxis);
+		this.renderTooltip(pose, this.getLabel(tip), xAxis, yAxis);
 	}
 
-	protected ResourceLocation getTEX () {
+	protected ResourceLocation getTEX() {
 		return TEX;
 	}
 }

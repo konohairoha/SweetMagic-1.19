@@ -13,7 +13,7 @@ public class SMRenderTex {
 	private final SMButtonTip buttonTip;
 	private final MFRenderGage mfRender;
 
-	public SMRenderTex (ResourceLocation tex, int x, int y, int texX, int texY, int sizeX, int sizeY) {
+	public SMRenderTex(ResourceLocation tex, int x, int y, int texX, int texY, int sizeX, int sizeY) {
 		this.tex = tex;
 		this.x = x;
 		this.y = y;
@@ -25,7 +25,7 @@ public class SMRenderTex {
 		this.mfRender = null;
 	}
 
-	public SMRenderTex (ResourceLocation tex, int x, int y, int texX, int texY, int sizeX, int sizeY, SMButtonTip buttonTip) {
+	public SMRenderTex(ResourceLocation tex, int x, int y, int texX, int texY, int sizeX, int sizeY, SMButtonTip buttonTip) {
 		this.tex = tex;
 		this.x = x;
 		this.y = y;
@@ -37,7 +37,7 @@ public class SMRenderTex {
 		this.mfRender = null;
 	}
 
-	public SMRenderTex (ResourceLocation tex, int x, int y, int texX, int texY, int sizeX, int sizeY, MFRenderGage mfRender) {
+	public SMRenderTex(ResourceLocation tex, int x, int y, int texX, int texY, int sizeX, int sizeY, MFRenderGage mfRender) {
 		this.tex = tex;
 		this.x = x;
 		this.y = y;
@@ -49,70 +49,47 @@ public class SMRenderTex {
 		this.mfRender = mfRender;
 	}
 
-	public ResourceLocation getTex () {
+	public ResourceLocation getTex() {
 		return this.tex;
 	}
 
-	public int getX () {
+	public int getX() {
 		return this.x;
 	}
 
-	public int getY () {
+	public int getY() {
 		return this.y;
 	}
 
-	public int getTexX () {
+	public int getTexX() {
 		return this.texX;
 	}
 
-	public int getTexY () {
+	public int getTexY() {
 		return this.texY;
 	}
 
-	public int getSizeX () {
+	public int getSizeX() {
 		return this.sizeX;
 	}
 
-	public int getSizeY () {
+	public int getSizeY() {
 		return this.sizeY;
 	}
 
-	public SMButtonTip getButtonTip () {
+	public SMButtonTip getButtonTip() {
 		return this.buttonTip;
 	}
 
-	public MFRenderGage getMFRender () {
+	public MFRenderGage getMFRender() {
 		return this.mfRender;
 	}
 
-	public static record MFRenderGage(TileSMMagic tile, int texX, int texY, int sizeX, int sizeY, int scale, boolean isVertical) {
+	public record MFRenderGage(TileSMMagic tile, boolean isVertical) {
 
-		public int getTexX () {
-			return this.texX;
-		}
-
-		public int getTexY () {
-			return this.texY;
-		}
-
-		public int getSizeX () {
-			return this.sizeX;
-		}
-
-		public int getSizeY () {
-			return this.sizeY;
-		}
-
-		public int getScale () {
-			return this.scale;
-		}
-
-		public boolean isVertical () {
-			return this.isVertical;
-		}
-
-		public TileSMMagic getTile() {
-			return this.tile;
+		public static MFRenderGage createChanger(TileSMMagic tile) {
+			MFRenderGage render = new MFRenderGage(tile, false);
+			return render;
 		}
 	}
 }

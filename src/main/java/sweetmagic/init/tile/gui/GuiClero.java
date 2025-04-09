@@ -8,7 +8,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ServerboundRenameItemPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import sweetmagic.SweetMagicCore;
 import sweetmagic.api.util.ISMTip;
@@ -20,18 +19,14 @@ import sweetmagic.packet.CleroPKT;
 public class GuiClero extends GuiSMBase<CleroMenu> implements ISMTip {
 
 	private static final ResourceLocation TEX = SweetMagicCore.getSRC("textures/gui/gui_clerodendrum_petal.png");
-
-	private Player player;			// プレイヤー
 	private ItemStack stack; 		// 杖のアイテムスタック
 	private EditBox name;
 
 	public GuiClero(CleroMenu menu, Inventory pInv, Component title) {
 		super(menu, pInv, title);
-		this.setGuiWidth(173);
-		this.setGuiHeight(107);
-		this.player = pInv.player;
-		this.stack = this.player.getMainHandItem();
-		this.getButtonMap().put(0, new SMButton(TEX, 136, 6, 175, 6, 28, 13));
+		this.setGuiSize(173, 107);
+		this.stack = pInv.player.getMainHandItem();
+		this.addButtonMap(0, new SMButton(TEX, 136, 6, 175, 6, 28, 14));
 	}
 
 	public boolean mouseClicked(double guiX, double guiY, int mouseButton) {

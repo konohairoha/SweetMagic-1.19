@@ -14,12 +14,11 @@ public class GuiAlstroemeriaAquarium extends GuiSMBase<AlstroemeriaAquariumMenu>
 
 	public GuiAlstroemeriaAquarium(AlstroemeriaAquariumMenu menu, Inventory pInv, Component title) {
 		super(menu, pInv, title);
-		this.setGuiWidth(176);
-		this.setGuiHeight(230);
-		this.getRenderTexList().add(new SMRenderTex(TEX, 7, 7, 0, 0, 11, 77, new MFRenderGage(menu.tile, 179, 7, 11, 76, 76, true)));
+		this.setGuiSize(176, 230);
+		this.addRenderTexList(new SMRenderTex(TEX, 7, 7, 0, 0, 11, 77, new MFRenderGage(menu.tile, true)));
 	}
 
-	protected ResourceLocation getTEX () {
+	protected ResourceLocation getTEX() {
 		return TEX;
 	}
 }

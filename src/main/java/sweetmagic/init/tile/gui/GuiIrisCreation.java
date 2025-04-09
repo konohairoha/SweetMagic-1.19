@@ -16,8 +16,7 @@ public class GuiIrisCreation extends GuiSMBase<IrisCreationMenu> {
 
 	public GuiIrisCreation(IrisCreationMenu menu, Inventory pInv, Component title) {
 		super(menu, pInv, title);
-		this.setGuiWidth(176);
-		this.setGuiHeight(176);
+		this.setGuiSize(176, 176);
 		this.tile = menu.tile;
 	}
 
@@ -26,11 +25,11 @@ public class GuiIrisCreation extends GuiSMBase<IrisCreationMenu> {
 		super.renderBg(pose, parTick, mouseX, mouseY);
 		if (this.tile.craftTime <= 0) { return; }
 
-		int progress = this.tile.getMfProgressScaled(60);
+		int progress = this.tile.getProgress(60);
 		this.blit(pose, this.getWidth() + 55, this.getHeight() + 12, 55, 176, progress, 32);
 	}
 
-	protected ResourceLocation getTEX () {
+	protected ResourceLocation getTEX() {
 		return TEX;
 	}
 }
