@@ -25,7 +25,7 @@ public class PillarStone extends BaseModelBlock {
 
 	public static final EnumProperty<EnumVertical> VERTICAL = EnumProperty.create("vertical", EnumVertical.class);
 
-	public PillarStone (String name) {
+	public PillarStone(String name) {
 		super(name, setState(Material.STONE, SoundType.STONE, 1F, 8192F));
 		this.registerDefaultState(this.defaultBlockState().setValue(VERTICAL, EnumVertical.NOR));
 		BlockInfo.create(this, SweetMagicCore.smTab, name);
@@ -40,7 +40,7 @@ public class PillarStone extends BaseModelBlock {
 		return this.setVertical(con.getLevel(), con.getClickedPos());
 	}
 
-	public BlockState setVertical (LevelAccessor world, BlockPos pos) {
+	public BlockState setVertical(LevelAccessor world, BlockPos pos) {
 		boolean bot = this.getBlock(world, pos.below()) == this;
 		boolean top = this.getBlock(world, pos.above()) == this;
 		return this.defaultBlockState().setValue(VERTICAL, EnumVertical.getVertical(bot, top));
@@ -52,7 +52,7 @@ public class PillarStone extends BaseModelBlock {
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public boolean skipRendering(@Nonnull BlockState state, BlockState state2, @Nonnull Direction side) {
-		return state2.is(this) || super.skipRendering(state, state2, side);
+	public boolean skipRendering(@Nonnull BlockState state, BlockState state2, @Nonnull Direction face) {
+		return state2.is(this) || super.skipRendering(state, state2, face);
 	}
 }

@@ -28,7 +28,7 @@ public class VerticalGlass extends SMGlass {
 		return this.setVertical(con.getLevel(), con.getClickedPos());
 	}
 
-	public BlockState setVertical (LevelAccessor world, BlockPos pos) {
+	public BlockState setVertical(LevelAccessor world, BlockPos pos) {
 		boolean bot = this.getBlock(world, pos.below()) == this;
 		boolean top = this.getBlock(world, pos.above()) == this;
 		return this.defaultBlockState().setValue(VERTICAL, EnumVertical.getVertical(bot, top));
@@ -43,7 +43,7 @@ public class VerticalGlass extends SMGlass {
 	}
 
 	@Override
-	public void addBlockTip (List<Component> toolTip) {
+	public void addBlockTip(List<Component> toolTip) {
 		toolTip.add(this.getText("is_vertical").withStyle(GOLD));
 	}
 }

@@ -16,11 +16,12 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.storage.loot.LootContext;
 import sweetmagic.SweetMagicCore;
+import sweetmagic.api.iblock.IFoodExpBlock;
 import sweetmagic.init.BlockInit;
 import sweetmagic.init.BlockInit.BlockInfo;
 import sweetmagic.init.block.base.BaseFaceBlock;
 
-public class RangeFood extends BaseFaceBlock {
+public class RangeFood extends BaseFaceBlock implements IFoodExpBlock {
 
 	private final int data;
 
@@ -31,12 +32,12 @@ public class RangeFood extends BaseFaceBlock {
 	}
 
 	// 右クリック出来るか
-	public boolean canRightClick (Player player, ItemStack stack) {
+	public boolean canRightClick(Player player, ItemStack stack) {
 		return player != null;
 	}
 
 	// ブロックでのアクション
-	public void actionBlock (Level world, BlockPos pos, Player player, ItemStack stack) {
+	public boolean actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
 
 		Block block = null;
 		switch (this.data) {
@@ -50,10 +51,11 @@ public class RangeFood extends BaseFaceBlock {
 
 		world.setBlock(pos, block.defaultBlockState().setValue(FACING, world.getBlockState(pos).getValue(FACING)), 3);
 		this.playerSound(world, pos, SoundEvents.UI_BUTTON_CLICK, 0.25F, world.random.nextFloat() * 0.1F + 1.2F);
+		return true;
 	}
 
 	@Override
-	public void addBlockTip (List<Component> toolTip) {
+	public void addBlockTip(List<Component> toolTip) {
 		toolTip.add(this.getText("right_change").withStyle(GREEN));
 	}
 

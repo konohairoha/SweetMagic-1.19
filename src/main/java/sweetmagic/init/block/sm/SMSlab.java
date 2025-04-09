@@ -15,7 +15,7 @@ import sweetmagic.init.BlockInit.BlockInfo;
 
 public class SMSlab extends SlabBlock {
 
-	public SMSlab (String name, Block block) {
+	public SMSlab(String name, Block block) {
 		super(BlockBehaviour.Properties.copy(block));
 		BlockInfo.create(this, SweetMagicCore.smTab, name);
 	}

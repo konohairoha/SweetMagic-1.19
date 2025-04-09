@@ -23,6 +23,7 @@ public class SMChair extends BaseFaceBlock {
 
 	private static final VoxelShape AABB = Block.box(2D, 0D, 2D, 14D, 11D, 14D);
 	private static final VoxelShape DINING = Block.box(2D, 0D, 2D, 14D, 10D, 14D);
+	private static final VoxelShape DRESSER = Block.box(2D, 0D, 2D, 14D, 9D, 14D);
 	protected final int data;
 
 	public SMChair(String name, int data) {
@@ -38,12 +39,12 @@ public class SMChair extends BaseFaceBlock {
 	}
 
 	// 右クリックしない
-	public boolean canRightClick (Player player, ItemStack stack) {
+	public boolean canRightClick(Player player, ItemStack stack) {
 		return true;
 	}
 
 	// ブロックでのアクション
-	public void actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
+	public boolean actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
 
 		double y = 0.5D;
 		switch (this.data) {
@@ -53,21 +54,26 @@ public class SMChair extends BaseFaceBlock {
 		case 3:
 			y = 0.35D;
 			break;
+		case 4:
+			y = 0.325D;
+			break;
 		}
 
 		ChairEntity.create(world, pos, y, player, world.getBlockState(pos).getValue(FACING));
+		return true;
 	}
 
 	// 当たり判定
-	public VoxelShape getShape(BlockState state, BlockGetter get, BlockPos pos, CollisionContext col) {
+	public VoxelShape getShape(BlockState state, BlockGetter get, BlockPos pos, CollisionContext con) {
 		switch (this.data) {
 		case 1: return DINING;
+		case 4: return DRESSER;
 		default: return AABB;
 		}
 	}
 
 	@Override
-	public void addBlockTip (List<Component> toolTip) {
+	public void addBlockTip(List<Component> toolTip) {
 		toolTip.add(this.getText("smchair").withStyle(GOLD));
 	}
 }

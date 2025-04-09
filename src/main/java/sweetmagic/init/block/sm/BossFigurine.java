@@ -39,12 +39,12 @@ public class BossFigurine extends BaseFaceBlock implements EntityBlock {
 		return new TileBossFigurine(pos, state);
 	}
 
-	public int getData () {
+	public int getData() {
 		return this.data;
 	}
 
 	@Override
-	public void addBlockTip (List<Component> toolTip) {
+	public void addBlockTip(List<Component> toolTip) {
 		toolTip.add(this.getText("boss_figurine").withStyle(GREEN));
 	}
 }

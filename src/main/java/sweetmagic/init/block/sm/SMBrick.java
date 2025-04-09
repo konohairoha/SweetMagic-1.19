@@ -26,7 +26,7 @@ public class SMBrick extends BaseSMBlock {
 	}
 
 	@Override
-	public void addBlockTip (List<Component> toolTip) {
+	public void addBlockTip(List<Component> toolTip) {
 		if (this.block == null) { return; }
 		toolTip.add(this.getText("originatorblock", this.block.getName().getString()).withStyle(GOLD));
 	}

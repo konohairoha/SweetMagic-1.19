@@ -26,29 +26,30 @@ public class ChoppingBoard extends BaseFaceBlock {
 
 	private static final VoxelShape[] AABB = FaceAABB.create(1D, 0D, 4D, 12D, 1D, 12D);
 
-	public ChoppingBoard (String name) {
+	public ChoppingBoard(String name) {
 		super(name, setState(Material.WOOD, SoundType.METAL, 0.5F, 8192F));
 		BlockInfo.create(this, SweetMagicCore.smTab, name);
 	}
 
 	// 右クリック出来るか
-	public boolean canRightClick (Player player, ItemStack stack) {
+	public boolean canRightClick(Player player, ItemStack stack) {
 		return true;
 	}
 
 	// ブロックでのアクション
-	public void actionBlock (Level world, BlockPos pos, Player player, ItemStack stack) {
-		if (world.isClientSide) { return; }
+	public boolean actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
+		if (world.isClientSide) { return true; }
 		this.openGUI(world, pos, player, this.getMenuProvider(world.getBlockState(pos), world, pos));
+		return true;
 	}
 
 	// 当たり判定
-	public VoxelShape getShape(BlockState state, BlockGetter get, BlockPos pos, CollisionContext col) {
+	public VoxelShape getShape(BlockState state, BlockGetter get, BlockPos pos, CollisionContext con) {
 		return FaceAABB.getAABB(AABB, state);
 	}
 
 	@Override
-	public void addBlockTip (List<Component> toolTip) {
+	public void addBlockTip(List<Component> toolTip) {
 		toolTip.add(this.getText("chopping_board").withStyle(GREEN));
 	}
 

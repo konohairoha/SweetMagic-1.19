@@ -37,7 +37,7 @@ public class WallLantern extends BaseFaceBlock {
 	}
 
 	// 当たり判定
-	public VoxelShape getShape(BlockState state, BlockGetter get, BlockPos pos, CollisionContext col) {
+	public VoxelShape getShape(BlockState state, BlockGetter get, BlockPos pos, CollisionContext con) {
 		return FaceAABB.getAABB(AABB, state);
 	}
 

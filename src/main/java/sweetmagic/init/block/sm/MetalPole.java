@@ -34,43 +34,42 @@ public class MetalPole extends BaseModelBlock {
 	private static final VoxelShape AABB = Block.box(5D, 0D, 5D, 11D, 16D, 11D);
 	public static final EnumProperty<EnumVertical> VERTICAL = EnumProperty.create("vertical", EnumVertical.class);
 
-	public MetalPole (String name, int data) {
+	public MetalPole(String name, int data) {
 		super(name, setState(Material.WOOD, data == 1 ? SoundType.METAL : SoundType.WOOD, 0.35F, 8192F));
 		this.registerDefaultState(this.defaultBlockState().setValue(VERTICAL, EnumVertical.NOR));
 		BlockInfo.create(this, SweetMagicCore.smTab, name);
 	}
 
 	// 右クリック出来るか
-	public boolean canRightClick (Player player, ItemStack stack) {
+	public boolean canRightClick(Player player, ItemStack stack) {
 		return !stack.isEmpty();
 	}
 
 	// ブロックでのアクション
-	public void actionBlock (Level world, BlockPos pos, Player player, ItemStack stack) {
-		if (world.isClientSide) { return; }
+	public boolean actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
+		if (!(stack.getItem() instanceof BlockItem blockItem) || !this.canSetBlock(blockItem.getBlock())) { return false; }
 
-		if (stack.getItem() instanceof BlockItem blockItem && this.canSetBlock(blockItem.getBlock())) {
+		if (world.isClientSide) { return true; }
+		Block block = blockItem.getBlock();
 
-			Block block = blockItem.getBlock();
+		for (int i = 1; i < 11; i++) {
 
-			for (int i = 1; i < 11; i++) {
+			BlockPos targetPos = pos.above(i);
+			BlockState state = world.getBlockState(targetPos);
+			Block targetBlock = state.getBlock();
+			if ( !state.isAir() && !this.canSetBlock(targetBlock) ) { return false; }
+			if (!state.isAir()) { continue; }
 
-				BlockPos targetPos = pos.above(i);
-				BlockState state = world.getBlockState(targetPos);
-				Block targetBlock = state.getBlock();
-				if ( !state.isAir() && !this.canSetBlock(targetBlock) ) { return; }
-				if (!state.isAir()) { continue; }
-
-				world.setBlock(targetPos, this.setVertical(block.defaultBlockState(), world, targetPos), 3);
-		        this.blockSound(world, block, targetPos, player);
-		        if (!player.isCreative()) { stack.shrink(1); }
-		        return;
-			}
+			world.setBlock(targetPos, this.setVertical(block.defaultBlockState(), world, targetPos), 3);
+			this.blockSound(world, block, targetPos, player);
+			if (!player.isCreative()) { stack.shrink(1); }
+			break;
 		}
+		return true;
 	}
 
 	// 当たり判定
-	public VoxelShape getShape(BlockState state, BlockGetter get, BlockPos pos, CollisionContext col) {
+	public VoxelShape getShape(BlockState state, BlockGetter get, BlockPos pos, CollisionContext con) {
 		return state.getValue(VERTICAL).is(EnumVertical.CEN) ? CEN : AABB;
 	}
 
@@ -83,7 +82,7 @@ public class MetalPole extends BaseModelBlock {
 		return this.setVertical(super.updateShape(state, face, state2, world, pos1, pos2) ,world, pos1);
 	}
 
-	public BlockState setVertical (BlockState state, LevelAccessor world, BlockPos pos) {
+	public BlockState setVertical(BlockState state, LevelAccessor world, BlockPos pos) {
 		boolean bot = this.getBlock(world, pos.below()) == this;
 		boolean top = this.getBlock(world, pos.above()) == this;
 		return this.defaultBlockState().setValue(VERTICAL, EnumVertical.getVertical(bot, top));
@@ -98,7 +97,7 @@ public class MetalPole extends BaseModelBlock {
 	}
 
 	@Override
-	public void addBlockTip (List<Component> toolTip) {
+	public void addBlockTip(List<Component> toolTip) {
 		toolTip.add(this.getText("is_vertical").withStyle(GOLD));
 	}
 }

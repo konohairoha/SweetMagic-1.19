@@ -16,13 +16,13 @@ public class TableLanp extends BaseModelBlock {
 
 	private static final VoxelShape AABB = Block.box(5D, 0D, 5D, 11D, 16D, 11D);
 
-	public TableLanp (String name) {
+	public TableLanp(String name) {
 		super(name, setState(Material.WOOD, SoundType.METAL, 0.5F, 8192F, 15));
 		BlockInfo.create(this, SweetMagicCore.smTab, name);
 	}
 
 	// 当たり判定
-	public VoxelShape getShape(BlockState state, BlockGetter get, BlockPos pos, CollisionContext col) {
+	public VoxelShape getShape(BlockState state, BlockGetter get, BlockPos pos, CollisionContext con) {
 		return AABB;
 	}
 }

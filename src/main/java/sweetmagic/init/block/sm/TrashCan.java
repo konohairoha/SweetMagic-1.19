@@ -30,18 +30,19 @@ public class TrashCan extends WoodChest {
 	}
 
 	// ブロックでのアクション
-	public void actionBlock (Level world, BlockPos pos, Player player, ItemStack stack) {
-		if (world.isClientSide) { return; }
+	public boolean actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
+		if (world.isClientSide) { return true; }
 		this.openGUI(world, pos, player, (TileTrashCan) this.getTile(world, pos));
+		return true;
 	}
 
 	// 当たり判定
-	public VoxelShape getShape(BlockState state, BlockGetter get, BlockPos pos, CollisionContext col) {
+	public VoxelShape getShape(BlockState state, BlockGetter get, BlockPos pos, CollisionContext con) {
 		return FaceAABB.getAABB(AABB, state);
 	}
 
 	@Override
-	public void addBlockTip (List<Component> toolTip) {
+	public void addBlockTip(List<Component> toolTip) {
 		super.addBlockTip(toolTip);
 		toolTip.add(this.getText("trash_can").withStyle(GREEN));
 	}
@@ -51,7 +52,7 @@ public class TrashCan extends WoodChest {
 		return new TileTrashCan(pos, state);
 	}
 
-	public BlockEntityType<? extends TileAbstractSM> getTileType () {
+	public BlockEntityType<? extends TileAbstractSM> getTileType() {
 		return TileInit.trashCan;
 	}
 

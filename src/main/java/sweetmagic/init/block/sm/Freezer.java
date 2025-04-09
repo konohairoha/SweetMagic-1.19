@@ -17,6 +17,7 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
+import sweetmagic.api.iblock.ISMCookBlock;
 import sweetmagic.init.BlockInit;
 import sweetmagic.init.BlockInit.BlockInfo;
 import sweetmagic.init.SoundInit;
@@ -25,7 +26,7 @@ import sweetmagic.init.block.base.BaseFaceBlock;
 import sweetmagic.init.tile.sm.TileAbstractSM;
 import sweetmagic.init.tile.sm.TileFreezer;
 
-public class Freezer extends BaseFaceBlock implements EntityBlock {
+public class Freezer extends BaseFaceBlock implements EntityBlock, ISMCookBlock {
 
 	private Block botBlock;
 
@@ -37,15 +38,18 @@ public class Freezer extends BaseFaceBlock implements EntityBlock {
 	}
 
 	// 右クリック出来るか
-	public boolean canRightClick (Player player, ItemStack stack) {
+	public boolean canRightClick(Player player, ItemStack stack) {
 		return true;
 	}
 
 	// ブロックでのアクション
-	public void actionBlock (Level world, BlockPos pos, Player player, ItemStack stack) {
-		if (world.isClientSide) { return; }
-		this.openGUI(world, pos, player, (TileFreezer) world.getBlockEntity(pos));
+	public boolean actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
+		if (world.isClientSide) { return true; }
+		TileFreezer tile = (TileFreezer) this.getTile(world, pos);
+		tile.player = player;
+		this.openGUI(world, pos, player, tile);
 		this.playerSound(world, pos, SoundInit.FREEZER_OPEN, 0.2F, world.random.nextFloat() * 0.1F + 1.4F);
+		return true;
 	}
 
 	@Override
@@ -78,18 +82,17 @@ public class Freezer extends BaseFaceBlock implements EntityBlock {
 		return new TileFreezer(pos, state);
 	}
 
-	public BlockEntityType<? extends TileAbstractSM> getTileType () {
+	public BlockEntityType<? extends TileAbstractSM> getTileType() {
 		return TileInit.freezer;
 	}
 
 	@Nullable
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
-		BlockEntityType<? extends TileAbstractSM> tileType = this.getTileType();
-		return tileType != null ? this.createMailBoxTicker(world, type, tileType) : null;
+		return this.createMailBoxTicker(world, type, this.getTileType());
 	}
 
 	// ドロップするかどうか
-	protected boolean isDrop () {
+	protected boolean isDrop() {
 		return false;
 	}
 }

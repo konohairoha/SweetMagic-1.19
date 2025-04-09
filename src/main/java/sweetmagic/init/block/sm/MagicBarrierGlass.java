@@ -17,19 +17,19 @@ public class MagicBarrierGlass extends SMGlass {
 	@Override
 	public void playerWillDestroy(Level world, BlockPos pos, BlockState state, Player player) {
 		if (world instanceof ServerLevel && !player.isShiftKeyDown()) {
-	        MinecraftForge.EVENT_BUS.register(new GlassChopTask(pos, player, 1));
+			MinecraftForge.EVENT_BUS.register(new GlassChopTask(pos, player, 1));
 		}
 	}
 
-    public class GlassChopTask extends AbstractChopTaskEvent {
+	public class GlassChopTask extends AbstractChopTaskEvent {
 
-        public GlassChopTask(BlockPos start, Player player, int blockTick) {
-            super(start, player, blockTick);
-        }
+		public GlassChopTask(BlockPos start, Player player, int blockTick) {
+			super(start, player, blockTick);
+		}
 
-	    // ブロックチェック
-	    public boolean checkBlock(Level world, BlockPos pos) {
-	    	return world.getBlockState(pos).getBlock() instanceof MagicBarrierGlass;
-	    }
-    }
+		// ブロックチェック
+		public boolean checkBlock(Level world, BlockPos pos) {
+			return world.getBlockState(pos).getBlock() instanceof MagicBarrierGlass;
+		}
+	}
 }

@@ -32,18 +32,18 @@ public class MagicBarrierGlassLock extends MagicBarrierGlass implements EntityBl
 	}
 
 	// 右クリック出来るか
-	public boolean canRightClick (Player player, ItemStack stack) {
+	public boolean canRightClick(Player player, ItemStack stack) {
 		return player != null && !stack.isEmpty() && !(stack.getItem() instanceof BlockItem);
 	}
 
 	// ブロックでのアクション
-	public void actionBlock (Level world, BlockPos pos, Player player, ItemStack stack) {
+	public boolean actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
 
 		if (stack.is(ItemInit.creative_wand) && !world.isClientSide) {
 			this.openGUI(world, pos, player, (TileMagicBarrier) this.getTile(world, pos));
 		}
 
-		if (!stack.is(ItemInit.magickey)) { return; }
+		if (!stack.is(ItemInit.magickey)) { return false; }
 
 		if (!player.isCreative()) {
 			stack.shrink(1);
@@ -52,8 +52,9 @@ public class MagicBarrierGlassLock extends MagicBarrierGlass implements EntityBl
 		((TileMagicBarrier) this.getTile(world, pos)).removeDestructive(world);
 
 		if (world instanceof ServerLevel) {
-	        MinecraftForge.EVENT_BUS.register(new GlassChopTask(pos, player, 1));
+			MinecraftForge.EVENT_BUS.register(new GlassChopTask(pos, player, 1));
 		}
+		return true;
 	}
 
 	@Override
@@ -61,18 +62,17 @@ public class MagicBarrierGlassLock extends MagicBarrierGlass implements EntityBl
 		return new TileMagicBarrier(pos, state);
 	}
 
-	public BlockEntityType<? extends TileAbstractSM> getTileType () {
+	public BlockEntityType<? extends TileAbstractSM> getTileType() {
 		return TileInit.barrierGlass;
 	}
 
 	@Nullable
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
-		BlockEntityType<? extends TileAbstractSM> tileType = this.getTileType();
-		return tileType != null ? this.createMailBoxTicker(world, type, tileType) : null;
+		return this.createMailBoxTicker(world, type, this.getTileType());
 	}
 
 	@Override
-	public void addBlockTip (List<Component> toolTip) {
+	public void addBlockTip(List<Component> toolTip) {
 		toolTip.add(this.getText("dungen_only").withStyle(GREEN));
 	}
 

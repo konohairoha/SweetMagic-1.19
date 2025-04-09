@@ -43,13 +43,13 @@ public class FurnitureTable extends BaseFaceBlock implements EntityBlock {
 	}
 
 	// 右クリック出来るか
-	public boolean canRightClick (Player player, ItemStack stack) {
+	public boolean canRightClick(Player player, ItemStack stack) {
 		return true;
 	}
 
 	// ブロックでのアクション
-	public void actionBlock (Level world, BlockPos pos, Player player, ItemStack stack) {
-		if (world.isClientSide) { return; }
+	public boolean actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
+		if (world.isClientSide) { return true; }
 
 		BlockState state = world.getBlockState(pos);
 
@@ -58,6 +58,7 @@ public class FurnitureTable extends BaseFaceBlock implements EntityBlock {
 		}
 
 		this.openGUI(world, pos, player, (TileFurnitureTable) world.getBlockEntity(pos));
+		return true;
 	}
 
 	@Override
@@ -101,7 +102,7 @@ public class FurnitureTable extends BaseFaceBlock implements EntityBlock {
 	}
 
 	@Override
-	public void addBlockTip (List<Component> toolTip) {
+	public void addBlockTip(List<Component> toolTip) {
 		toolTip.add(this.getText(this.name).withStyle(GREEN));
 		toolTip.add(this.getText(this.name + "_cut").withStyle(GOLD));
 	}
@@ -118,7 +119,7 @@ public class FurnitureTable extends BaseFaceBlock implements EntityBlock {
 	}
 
 	// ドロップするかどうか
-	protected boolean isDrop () {
+	protected boolean isDrop() {
 		return false;
 	}
 

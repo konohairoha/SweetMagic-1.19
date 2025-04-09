@@ -3,6 +3,8 @@ package sweetmagic.init.block.sm;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
@@ -14,6 +16,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -22,6 +26,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.items.ItemHandlerHelper;
 import sweetmagic.SweetMagicCore;
 import sweetmagic.init.BlockInit.BlockInfo;
+import sweetmagic.init.TileInit;
 import sweetmagic.init.block.base.BaseFaceBlock;
 import sweetmagic.init.tile.sm.TileWandPedastal;
 import sweetmagic.util.FaceAABB;
@@ -42,7 +47,7 @@ public class WandPedastal extends BaseFaceBlock implements EntityBlock {
 	}
 
 	// 当たり判定
-	public VoxelShape getShape(BlockState state, BlockGetter get, BlockPos pos, CollisionContext col) {
+	public VoxelShape getShape(BlockState state, BlockGetter get, BlockPos pos, CollisionContext con) {
 		switch (this.data) {
 		case 0: return AABB;
 		case 1: return FaceAABB.getAABB(WALL, state);
@@ -54,13 +59,14 @@ public class WandPedastal extends BaseFaceBlock implements EntityBlock {
 	}
 
 	// 右クリック出来るか
-	public boolean canRightClick (Player player, ItemStack stack) {
+	public boolean canRightClick(Player player, ItemStack stack) {
 		return true;
 	}
 
 	// ブロックでのアクション
-	public void actionBlock (Level world, BlockPos pos, Player player, ItemStack stack) {
-		if (world.isClientSide || !(this.getTile(world, pos) instanceof TileWandPedastal tile) ) { return; }
+	public boolean actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
+		if (world.isClientSide) { return true; }
+		if (!(this.getTile(world, pos) instanceof TileWandPedastal tile) ) { return false; }
 
 		ItemStack inputStack = tile.getInputItem(0);
 
@@ -81,15 +87,16 @@ public class WandPedastal extends BaseFaceBlock implements EntityBlock {
 
 		this.playerSound(world, pos, SoundEvents.ITEM_PICKUP, 1F, 1F);
 		tile.sendPKT();
+		return true;
 	}
 
 	// tileの中身を保持するか
-	public boolean isKeepTile () {
+	public boolean isKeepTile() {
 		return true;
 	}
 
 	@Override
-	public void addBlockTip (List<Component> toolTip) {
+	public void addBlockTip(List<Component> toolTip) {
 		toolTip.add(this.getText("wand_pedastal").withStyle(GREEN));
 	}
 
@@ -98,8 +105,13 @@ public class WandPedastal extends BaseFaceBlock implements EntityBlock {
 		return new TileWandPedastal(pos, state);
 	}
 
+	@Nullable
+	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
+		return this.createMailBoxTicker(world, type, TileInit.wandPedastal);
+	}
+
 	// ドロップするかどうか
-	protected boolean isDrop () {
+	protected boolean isDrop() {
 		return false;
 	}
 }

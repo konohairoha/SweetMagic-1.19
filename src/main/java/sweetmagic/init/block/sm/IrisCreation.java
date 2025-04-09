@@ -40,19 +40,20 @@ public class IrisCreation extends BaseModelBlock implements EntityBlock {
 
 	public IrisCreation(String name) {
 		super(name, setState(Material.METAL,SoundType.METAL, 1.0F, 8192.0F));
-		this.registerDefaultState(this.defaultBlockState().setValue(UNDER, Boolean.valueOf(false)));
+		this.registerDefaultState(this.defaultBlockState().setValue(UNDER, false));
 		BlockInfo.create(this, SweetMagicCore.smMagicTab, name);
 	}
 
 	// 右クリック出来るか
-	public boolean canRightClick (Player player, ItemStack stack) {
+	public boolean canRightClick(Player player, ItemStack stack) {
 		return true;
 	}
 
 	// ブロックでのアクション
-	public void actionBlock (Level world, BlockPos pos, Player player, ItemStack stack) {
-		if (world.isClientSide) { return; }
+	public boolean actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
+		if (world.isClientSide) { return true; }
 		this.openGUI(world, pos, player, (TileIrisCreation) world.getBlockEntity(pos));
+		return true;
 	}
 
 	public void onRemove(Level world, BlockPos pos, BlockState state, TileAbstractSM tile) {
@@ -71,7 +72,7 @@ public class IrisCreation extends BaseModelBlock implements EntityBlock {
 		build.add(UNDER);
 	}
 
-	public VoxelShape getShape(BlockState state, BlockGetter get, BlockPos pos, CollisionContext cont) {
+	public VoxelShape getShape(BlockState state, BlockGetter get, BlockPos pos, CollisionContext con) {
 		Vec3 vec3 = state.getOffset(get, pos);
 		return !state.getValue(UNDER) ? AABB_UNDER.move(vec3.x, vec3.y - 0.5D, vec3.z) : AABB;
 	}
@@ -81,18 +82,17 @@ public class IrisCreation extends BaseModelBlock implements EntityBlock {
 		return new TileIrisCreation(pos, state);
 	}
 
-	public BlockEntityType<? extends TileAbstractSM> getTileType () {
+	public BlockEntityType<? extends TileAbstractSM> getTileType() {
 		return TileInit.iris;
 	}
 
 	@Nullable
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
-		BlockEntityType<? extends TileAbstractSM> tileType = this.getTileType();
-		return tileType != null ? this.createMailBoxTicker(world, type, tileType) : null;
+		return this.createMailBoxTicker(world, type, this.getTileType());
 	}
 
 	@Override
-	public void addBlockTip (List<Component> toolTip) {
+	public void addBlockTip(List<Component> toolTip) {
 		toolTip.add(this.getText(this.name).withStyle(GREEN));
 		toolTip.add(this.getText(this.name + "_quick").withStyle(GOLD));
 	}

@@ -47,12 +47,12 @@ public class AwningTent extends BaseFaceBlock {
 		return this.setVertical(super.updateShape(state, face, state2, world, pos1, pos2) ,world, pos1);
 	}
 
-	public BlockState setVertical (BlockState state, LevelAccessor world, BlockPos pos) {
+	public BlockState setVertical(BlockState state, LevelAccessor world, BlockPos pos) {
 		return state.setValue(CENTER, this.checkCenter(world, state, pos));
 	}
 
 	// 両サイドにブロックがあるかどうか
-	public int checkCenter (LevelAccessor world, BlockState state, BlockPos pos) {
+	public int checkCenter(LevelAccessor world, BlockState state, BlockPos pos) {
 
 		Direction face = state.getValue(FACING);
 		BlockState north = world.getBlockState(pos.north());
@@ -73,7 +73,7 @@ public class AwningTent extends BaseFaceBlock {
 		return 0;
 	}
 
-	public int getConnect (BlockState block1, BlockState block2, Direction face) {
+	public int getConnect(BlockState block1, BlockState block2, Direction face) {
 		if (this.canConnectBlock(block2, face.getClockWise())) { return 3; }
 		if (this.canConnectBlock(block2, face.getCounterClockWise())) { return 4; }
 		if (this.canConnectBlock(block1, face.getClockWise())) { return 1; }
@@ -81,7 +81,7 @@ public class AwningTent extends BaseFaceBlock {
 		return 0;
 	}
 
-	public boolean isCenter (BlockState... stateArray) {
+	public boolean isCenter(BlockState... stateArray) {
 		int awningValue = 0;
 		int fullValue = 0;
 		for (BlockState state : stateArray) {
@@ -96,11 +96,11 @@ public class AwningTent extends BaseFaceBlock {
 		return this.isAwning(state) && face == state.getValue(FACING);
 	}
 
-	public boolean isAwning (BlockState state) {
+	public boolean isAwning(BlockState state) {
 		return state.getBlock() instanceof AwningTent;
 	}
 
-	public boolean isAwning (BlockState... stateArray) {
+	public boolean isAwning(BlockState... stateArray) {
 
 		int awningValue = 0;
 		int fullValue = 0;
@@ -117,7 +117,7 @@ public class AwningTent extends BaseFaceBlock {
 	}
 
 	@Override
-	public void addBlockTip (List<Component> toolTip) {
+	public void addBlockTip(List<Component> toolTip) {
 		toolTip.add(this.getText("awning_tent").withStyle(GREEN));
 	}
 }

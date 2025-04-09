@@ -30,14 +30,14 @@ public class CeilingLight extends BaseModelBlock {
 	private static final BooleanProperty RIGHT = BooleanProperty.create("right");
 	private static final VoxelShape AABB = Block.box(0D, 15D, 0D, 16D, 16D, 16D);
 
-	public CeilingLight (String name) {
+	public CeilingLight(String name) {
 		super(name, setState(Material.GLASS, SoundType.GLASS, 0F, 8192F, 15));
 		this.registerDefaultState(this.defaultBlockState().setValue(BACK, false).setValue(FORWARD, false).setValue(LEFT, false).setValue(RIGHT, false));
 		BlockInfo.create(this, SweetMagicCore.smTab, name);
 	}
 
 	// 当たり判定
-	public VoxelShape getShape(BlockState state, BlockGetter get, BlockPos pos, CollisionContext col) {
+	public VoxelShape getShape(BlockState state, BlockGetter get, BlockPos pos, CollisionContext con) {
 		return AABB;
 	}
 
@@ -50,7 +50,7 @@ public class CeilingLight extends BaseModelBlock {
 		return this.setVertical(super.updateShape(state, face, state2, world, pos1, pos2) ,world, pos1);
 	}
 
-	public BlockState setVertical (BlockState state, LevelAccessor world, BlockPos pos) {
+	public BlockState setVertical(BlockState state, LevelAccessor world, BlockPos pos) {
 		boolean forward = this.getBlock(world, pos.relative(Direction.NORTH)) == this;
 		boolean back = this.getBlock(world, pos.relative(Direction.SOUTH)) == this;
 		boolean left = this.getBlock(world, pos.relative(Direction.EAST)) == this;
@@ -63,7 +63,7 @@ public class CeilingLight extends BaseModelBlock {
 	}
 
 	@Override
-	public void addBlockTip (List<Component> toolTip) {
+	public void addBlockTip(List<Component> toolTip) {
 		toolTip.add(this.getText("conect").withStyle(GREEN));
 	}
 }

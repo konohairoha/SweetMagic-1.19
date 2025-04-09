@@ -27,14 +27,14 @@ public class WallHungCafeSign extends BaseFaceBlock {
 	public static final BooleanProperty ISTOP = BooleanProperty.create("istop");
 	private static final VoxelShape[] WALL = FaceAABB.create(1D, 0D, 15D, 15D, 16D, 16D);
 
-	public WallHungCafeSign (String name) {
+	public WallHungCafeSign(String name) {
 		super(name, setState(Material.WOOD, SoundType.WOOD, 0.1F, 8192F));
 		this.registerDefaultState(this.setState().setValue(ISTOP, false));
 		BlockInfo.create(this, SweetMagicCore.smTab, name);
 	}
 
 	// 当たり判定
-	public VoxelShape getShape(BlockState state, BlockGetter get, BlockPos pos, CollisionContext col) {
+	public VoxelShape getShape(BlockState state, BlockGetter get, BlockPos pos, CollisionContext con) {
 		return FaceAABB.getAABB(WALL, state);
 	}
 

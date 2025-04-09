@@ -45,7 +45,6 @@ public class SMFlowerDiff extends SMFlower implements ISMTip {
 
 	// ブロックでのアクション
 	public InteractionResult onUse(Level world, BlockPos pos, Player player, InteractionHand hand) {
-
 		ItemStack stack = player.getItemInHand(hand);
 		if (player == null || stack.is(ItemInit.magic_meal)) { return InteractionResult.PASS; }
 
@@ -54,7 +53,7 @@ public class SMFlowerDiff extends SMFlower implements ISMTip {
 	}
 
 	// ブロックでのアクション
-	public void actionBlock (Level world, BlockPos pos, Player player, ItemStack stack) {
+	public void actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
 		if (!stack.isEmpty()) { return; }
 
 		BlockState state = world.getBlockState(pos);
@@ -73,11 +72,11 @@ public class SMFlowerDiff extends SMFlower implements ISMTip {
 		}
 
 		world.setBlock(pos, state.setValue(SIZE, data), 3);
-        SoundType sound = this.getSoundType(state, world, pos, player);
-        this.playerSound(world, pos, sound.getPlaceSound(),(sound.getVolume() + 1F) / 2F, sound.getPitch() * 0.8F);
+		SoundType sound = this.getSoundType(state, world, pos, player);
+		this.playerSound(world, pos, sound.getPlaceSound(), (sound.getVolume() + 1F) / 2F, sound.getPitch() * 0.8F);
 	}
 
-	public void playerSound (Level world, BlockPos pos, SoundEvent sound, float vol, float pitch) {
+	public void playerSound(Level world, BlockPos pos, SoundEvent sound, float vol, float pitch) {
 		world.playSound(null, pos, sound, SoundSource.BLOCKS, vol, pitch);
 	}
 

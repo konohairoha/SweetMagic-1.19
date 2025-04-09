@@ -84,7 +84,7 @@ public class SMGlass extends BaseModelBlock {
 	}
 
 	@Override
-	public void addBlockTip (List<Component> toolTip) {
+	public void addBlockTip(List<Component> toolTip) {
 
 		if (this.shading) {
 			toolTip.add(this.getText("glass_shading").withStyle(GOLD));

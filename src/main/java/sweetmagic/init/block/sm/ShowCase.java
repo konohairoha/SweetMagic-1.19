@@ -30,18 +30,19 @@ public class ShowCase extends Plate {
 	private final static VoxelShape[] SHOWCASE = FaceAABB.create(0D, 0D, 2D, 16D, 16D, 16D);
 	public static final EnumProperty<EnumHorizontal> HORIZONTAL = EnumProperty.create("horizontal", EnumHorizontal.class);
 
-	public ShowCase (String name, int data) {
+	public ShowCase(String name, int data) {
 		super(name, 3);
 		this.registerDefaultState(this.setState().setValue(HORIZONTAL, EnumHorizontal.NOR));
 	}
 
 	// ブロックでのアクション
-	public void actionBlock (Level world, BlockPos pos, Player player, ItemStack stack) {
-		if (world.isClientSide) { return; }
+	public boolean actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
+		if (world.isClientSide) { return true; }
 
 		if (this.getTile(world, pos) instanceof TilePlate tile) {
 			this.openGUI(world, pos, player, tile);
 		}
+		return true;
 	}
 
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> build) {
@@ -49,7 +50,7 @@ public class ShowCase extends Plate {
 	}
 
 	// 当たり判定
-	public VoxelShape getShape(BlockState state, BlockGetter get, BlockPos pos, CollisionContext col) {
+	public VoxelShape getShape(BlockState state, BlockGetter get, BlockPos pos, CollisionContext con) {
 		return FaceAABB.getAABB(SHOWCASE, state);
 	}
 
@@ -63,7 +64,7 @@ public class ShowCase extends Plate {
 		return this.setVertical(world, pos1, state.getValue(FACING));
 	}
 
-	public BlockState setVertical (LevelAccessor world, BlockPos pos, Direction face) {
+	public BlockState setVertical(LevelAccessor world, BlockPos pos, Direction face) {
 		boolean right = this.getBlock(world, pos.relative(face.getCounterClockWise())) == this;
 		boolean left = this.getBlock(world, pos.relative(face.getClockWise())) == this;
 		return this.setState(face).setValue(HORIZONTAL, EnumHorizontal.getHorizontal(left, right));
@@ -75,7 +76,7 @@ public class ShowCase extends Plate {
 	}
 
 	@Override
-	public void addBlockTip (List<Component> toolTip) {
+	public void addBlockTip(List<Component> toolTip) {
 		super.addBlockTip(toolTip);
 		toolTip.add(this.getText("smhorizontal").withStyle(GOLD));
 	}

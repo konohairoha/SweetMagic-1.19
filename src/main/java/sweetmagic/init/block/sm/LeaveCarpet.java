@@ -16,13 +16,13 @@ public class LeaveCarpet extends BaseModelBlock {
 
 	private static final VoxelShape AABB = Block.box(0D, 0D, 0D, 16D, 1D, 16D);
 
-	public LeaveCarpet (String name, int data) {
+	public LeaveCarpet(String name, int data) {
 		super(name, setState(Material.WOOD, SoundType.GRASS, 0.05F, 8192F, data == 0 ? 7 : 0));
 		BlockInfo.create(this, SweetMagicCore.smTab, name);
 	}
 
 	// 当たり判定
-	public VoxelShape getShape(BlockState state, BlockGetter get, BlockPos pos, CollisionContext col) {
+	public VoxelShape getShape(BlockState state, BlockGetter get, BlockPos pos, CollisionContext con) {
 		return AABB;
 	}
 }

@@ -59,7 +59,7 @@ public class BookShelf extends BaseFaceBlock {
 	}
 
 	@Override
-	public float getEnchantPower () {
+	public float getEnchantPower() {
 		return 1F;
 	}
 }

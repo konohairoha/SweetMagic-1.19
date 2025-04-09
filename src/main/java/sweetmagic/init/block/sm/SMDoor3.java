@@ -52,7 +52,6 @@ import sweetmagic.init.block.base.BaseSMBlock;
 public class SMDoor3 extends BaseSMBlock {
 
 	private final int data;
-
 	public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
 	public static final BooleanProperty OPEN = BlockStateProperties.OPEN;
 	public static final EnumProperty<DoorHingeSide> HINGE = BlockStateProperties.DOOR_HINGE;
@@ -64,7 +63,7 @@ public class SMDoor3 extends BaseSMBlock {
 	protected static final VoxelShape WEST_AABB = Block.box(13D, 0D, 0D, 16D, 16D, 16D);
 	protected static final VoxelShape EAST_AABB = Block.box(0D, 0D, 0D, 3D, 16D, 16D);
 
-	public SMDoor3 (String name, int data) {
+	public SMDoor3(String name, int data) {
 		super(name, setState(Material.WOOD, SoundType.WOOD, 0.35F, 8192F));
 		this.data = data;
 		BlockInfo.create(this, null, name);
@@ -73,7 +72,7 @@ public class SMDoor3 extends BaseSMBlock {
 				.setValue(POWERED, Boolean.valueOf(false)).setValue(HALF, EnumConect.BOT));
 	}
 
-	public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext col) {
+	public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext con) {
 		boolean flag = !state.getValue(OPEN);
 		boolean flag1 = state.getValue(HINGE) == DoorHingeSide.RIGHT;
 		switch (state.getValue(FACING)) {
@@ -115,7 +114,7 @@ public class SMDoor3 extends BaseSMBlock {
 		}
 	}
 
-	public void breakDoor (Level world, BlockPos pos) {
+	public void breakDoor(Level world, BlockPos pos) {
 		if (world.getBlockState(pos).getBlock() == this) {
 			world.destroyBlock(pos, false);
 			world.removeBlock(pos, false);
@@ -249,11 +248,11 @@ public class SMDoor3 extends BaseSMBlock {
 				break;
 			}
 
-			world.setBlock(pos, state.setValue(POWERED, Boolean.valueOf(flag)).setValue(OPEN, Boolean.valueOf(flag)), 2);
+			world.setBlock(pos, state.setValue(POWERED, flag).setValue(OPEN, flag), 2);
 		}
 	}
 
-	public void setDoor (Level world, BlockPos pos, Direction face, boolean flag) {
+	public void setDoor(Level world, BlockPos pos, Direction face, boolean flag) {
 		world.setBlock(pos.below(1), world.getBlockState(pos.below(1)).setValue(POWERED, flag).setValue(OPEN, flag).setValue(FACING, face), 3);
 	}
 
@@ -295,7 +294,7 @@ public class SMDoor3 extends BaseSMBlock {
 		return state.getBlock() instanceof DoorBlock && (state.getMaterial() == Material.WOOD || state.getMaterial() == Material.NETHER_WOOD);
 	}
 
-	public ItemLike getItem () {
+	public ItemLike getItem() {
 		switch (this.data) {
 		case 1: return ItemInit.gorgeous_door_w_i;
 		default: return ItemInit.gorgeous_door_b_i;

@@ -43,15 +43,16 @@ public class FreezerChest extends BaseFaceBlock implements EntityBlock {
 	}
 
 	// 右クリック出来るか
-	public boolean canRightClick (Player player, ItemStack stack) {
+	public boolean canRightClick(Player player, ItemStack stack) {
 		return true;
 	}
 
 	// ブロックでのアクション
-	public void actionBlock (Level world, BlockPos pos, Player player, ItemStack stack) {
-		if (world.isClientSide) { return; }
+	public boolean actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
+		if (world.isClientSide) { return true; }
 		this.openGUI(world, pos, player, (TileFreezerChest) world.getBlockEntity(pos));
 		this.playerSound(world, pos, SoundEvents.BARREL_OPEN, 0.5F, world.random.nextFloat() * 0.1F + 1.4F);
+		return true;
 	}
 
 	@Override
@@ -74,12 +75,12 @@ public class FreezerChest extends BaseFaceBlock implements EntityBlock {
 	}
 
 	@Override
-	public boolean canSurvive(BlockState state, LevelReader reader, BlockPos pos) {
-		return reader.getBlockState(pos.above()).isAir();
+	public boolean canSurvive(BlockState state, LevelReader world, BlockPos pos) {
+		return world.getBlockState(pos.above()).isAir();
 	}
 
 	// tileの中身を保持するか
-	public boolean isKeepTile () {
+	public boolean isKeepTile() {
 		return true;
 	}
 
@@ -94,7 +95,7 @@ public class FreezerChest extends BaseFaceBlock implements EntityBlock {
 	}
 
 	// ドロップするかどうか
-	protected boolean isDrop () {
+	protected boolean isDrop() {
 		return false;
 	}
 }

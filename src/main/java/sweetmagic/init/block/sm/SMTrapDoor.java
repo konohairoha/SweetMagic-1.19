@@ -21,7 +21,7 @@ import sweetmagic.init.block.base.BaseSMBlock;
 
 public class SMTrapDoor extends TrapDoorBlock {
 
-	public SMTrapDoor (String name, int data) {
+	public SMTrapDoor(String name, int data) {
 		super(BaseSMBlock.setState(data == 1 ? Material.STONE : Material.WOOD, data == 1 ? SoundType.STONE: SoundType.WOOD, 0.35F, 8192F));
 		BlockInfo.create(this, SweetMagicCore.smTab, name);
 	}

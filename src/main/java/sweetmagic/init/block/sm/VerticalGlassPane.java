@@ -31,7 +31,7 @@ public class VerticalGlassPane extends SMGlassPane {
 		return this.setVertical(super.getStateForPlacement(con), con.getLevel(), con.getClickedPos());
 	}
 
-	public BlockState setVertical (BlockState state, LevelAccessor world, BlockPos pos) {
+	public BlockState setVertical(BlockState state, LevelAccessor world, BlockPos pos) {
 		boolean bot = world.getBlockState(pos.below()).getBlock() == this;
 		boolean top = world.getBlockState(pos.above()).getBlock() == this;
 		return state.setValue(VERTICAL, EnumVertical.getVertical(bot, top));

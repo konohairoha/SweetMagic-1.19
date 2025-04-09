@@ -38,9 +38,9 @@ import sweetmagic.util.FaceAABB;
 
 public class TrunkCase extends WoodChest {
 
+	public static final BooleanProperty ISUNDER = BooleanProperty.create("isunder");
 	private final static VoxelShape[] AABB = FaceAABB.create(1D, 0D, 12D, 15D, 10D, 16D);
 	private final static VoxelShape[] UNDER = FaceAABB.create(1D, 0D, 6D, 15D, 4D, 16D);
-	public static final BooleanProperty ISUNDER = BooleanProperty.create("isunder");
 
 	public TrunkCase(String name) {
 		super(name, BlockBehaviour.Properties.of(Material.WOOD).sound(SoundType.WOOD).strength(0.5F, 8192F).noOcclusion(), 6);
@@ -49,7 +49,7 @@ public class TrunkCase extends WoodChest {
 	}
 
 	// ブロックでのアクション
-	public void actionBlock (Level world, BlockPos pos, Player player, ItemStack stack) {
+	public boolean actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
 
 		if (player.isShiftKeyDown()) {
 
@@ -57,7 +57,7 @@ public class TrunkCase extends WoodChest {
 			ItemStack drop = this.getDropStack(tile);
 
 			if (stack.isEmpty()) {
-					player.setItemInHand(InteractionHand.MAIN_HAND, drop);
+				player.setItemInHand(InteractionHand.MAIN_HAND, drop);
 			}
 
 			else {
@@ -75,10 +75,11 @@ public class TrunkCase extends WoodChest {
 		else {
 			super.actionBlock(world, pos, player, stack);
 		}
+		return true;
 	}
 
 	// 当たり判定
-	public VoxelShape getShape(BlockState state, BlockGetter get, BlockPos pos, CollisionContext col) {
+	public VoxelShape getShape(BlockState state, BlockGetter get, BlockPos pos, CollisionContext con) {
 		int meta = state.getValue(FACING).get3DDataValue() - 2;
 		return state.getValue(ISUNDER) ? UNDER[meta] : AABB[meta];
 	}
@@ -94,7 +95,7 @@ public class TrunkCase extends WoodChest {
 	}
 
 	@Override
-	public void addBlockTip (List<Component> toolTip) {
+	public void addBlockTip(List<Component> toolTip) {
 		super.addBlockTip(toolTip);
 		toolTip.add(this.getText("trunkcase").withStyle(GREEN));
 	}
@@ -113,7 +114,7 @@ public class TrunkCase extends WoodChest {
 		}
 
 		public Component getDisplayName() {
-			return stack.getHoverName();
+			return this.stack.getHoverName();
 		}
 	}
 }

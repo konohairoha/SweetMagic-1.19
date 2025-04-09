@@ -35,7 +35,7 @@ public class SMLeave extends LeavesBlock {
 	private final static BlockBehaviour.StatePredicate never = (a, b, c) -> false;
 	private final static BlockBehaviour.StateArgumentPredicate<EntityType<?>> checkMob = (s, g, p, e) -> e == EntityType.OCELOT || e == EntityType.PARROT;
 
-	public SMLeave (String name, int data) {
+	public SMLeave(String name, int data) {
 		super(BaseSMBlock.setState(Material.LEAVES, SoundType.GRASS, 0.2F, 8192F, (data == 2 || data == 5) ? 7 : 0).randomTicks().isValidSpawn(checkMob).isSuffocating(never).isViewBlocking(never));
 		this.data = data;
 		BlockInfo.create(this, SweetMagicCore.smTab, name);
@@ -58,6 +58,7 @@ public class SMLeave extends LeavesBlock {
 		case 3: return BlockInit.banana_sapling;
 		case 4: return BlockInit.magiawood_sapling;
 		case 5: return BlockInit.cherry_blossoms_sapling;
+		case 6: return BlockInit.maple_sapling;
 		default: return BlockInit.chestnut_sapling;
 		}
 	}
@@ -97,7 +98,7 @@ public class SMLeave extends LeavesBlock {
 		double d0 = rand.nextDouble() * 0.05D;
 		double d1 = rand.nextDouble() * 0.02D;
 		double d2 = rand.nextDouble() * 0.05D;
-		world.addParticle(ParticleInit.CHERRY_BLOSSOMS.get(), this.getRand(pos.getX(), rand, 1.25D), this.getRandY(pos, rand), this.getRand(pos.getZ(), rand, 1.25D), d0, d1, d2);
+		world.addParticle(ParticleInit.CHERRY_BLOSSOMS, this.getRand(pos.getX(), rand, 1.25D), this.getRandY(pos, rand), this.getRand(pos.getZ(), rand, 1.25D), d0, d1, d2);
 	}
 
 	public double getRand(int pos, RandomSource rand, double scale) {

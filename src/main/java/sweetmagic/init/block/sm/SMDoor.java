@@ -25,15 +25,15 @@ public class SMDoor extends DoorBlock {
 
 	private final int data;
 
-	public SMDoor (String name, int data) {
+	public SMDoor(String name, int data) {
 		super(BaseSMBlock.setState(Material.WOOD, SoundType.WOOD, 0.35F, 8192F));
 		this.data = data;
 		BlockInfo.create(this, null, name);
 	}
 
-	public ItemLike getItem () {
+	public ItemLike getItem() {
 		switch (this.data) {
-		case 1: return  ItemInit.pane4_door_i;
+		case 1: return ItemInit.pane4_door_i;
 		case 2: return ItemInit.elegant_door_i;
 		case 3: return ItemInit.arch_door_i;
 		case 4: return ItemInit.arch_plant_door_i;

@@ -20,8 +20,8 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import sweetmagic.SweetMagicCore;
 import sweetmagic.init.BlockInit.BlockInfo;
 import sweetmagic.init.block.base.BaseFaceBlock;
-import sweetmagic.init.tile.sm.TilCeilingShelf;
 import sweetmagic.init.tile.sm.TileBottleRack;
+import sweetmagic.init.tile.sm.TileCeilingShelf;
 import sweetmagic.init.tile.sm.TileModenRack;
 import sweetmagic.init.tile.sm.TileWallPartition;
 import sweetmagic.init.tile.sm.TileWallRack;
@@ -44,7 +44,7 @@ public class ModenRack extends BaseFaceBlock implements EntityBlock {
 	}
 
 	// 当たり判定
-	public VoxelShape getShape(BlockState state, BlockGetter get, BlockPos pos, CollisionContext col) {
+	public VoxelShape getShape(BlockState state, BlockGetter get, BlockPos pos, CollisionContext con) {
 		switch (this.data) {
 		case 1: return FaceAABB.getAABB(WALL_RACK, state);
 		case 2: return FaceAABB.getAABB(WALL_SHELF, state);
@@ -55,13 +55,13 @@ public class ModenRack extends BaseFaceBlock implements EntityBlock {
 	}
 
 	// 右クリック出来るか
-	public boolean canRightClick (Player player, ItemStack stack) {
+	public boolean canRightClick(Player player, ItemStack stack) {
 		return true;
 	}
 
 	// ブロックでのアクション
-	public void actionBlock (Level world, BlockPos pos, Player player, ItemStack stack) {
-		if (world.isClientSide) { return; }
+	public boolean actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
+		if (world.isClientSide) { return true; }
 
 		MenuProvider tile = null;
 
@@ -82,7 +82,7 @@ public class ModenRack extends BaseFaceBlock implements EntityBlock {
 			tile = (TileBottleRack) this.getTile(world, pos);
 			break;
 		case 5:
-			tile = (TilCeilingShelf) this.getTile(world, pos);
+			tile = (TileCeilingShelf) this.getTile(world, pos);
 			break;
 		default:
 			tile = (TileWallShelf) this.getTile(world, pos);
@@ -90,15 +90,16 @@ public class ModenRack extends BaseFaceBlock implements EntityBlock {
 		}
 
 		this.openGUI(world, pos, player, tile);
+		return true;
 	}
 
 	// tileの中身を保持するか
-	public boolean isKeepTile () {
+	public boolean isKeepTile() {
 		return true;
 	}
 
 	@Override
-	public void addBlockTip (List<Component> toolTip) {
+	public void addBlockTip(List<Component> toolTip) {
 		toolTip.add(this.getText("sm_chest").withStyle(GREEN));
 
 		if (this.data == 5) {
@@ -114,13 +115,13 @@ public class ModenRack extends BaseFaceBlock implements EntityBlock {
 		case 2:  return new TileWallShelf(pos, state);
 		case 3:  return new TileWallPartition(pos, state);
 		case 4:  return new TileBottleRack(pos, state);
-		case 5:  return new TilCeilingShelf(pos, state);
+		case 5:  return new TileCeilingShelf(pos, state);
 		default: return new TileModenRack(pos, state);
 		}
 	}
 
 	// ドロップするかどうか
-	protected boolean isDrop () {
+	protected boolean isDrop() {
 		return false;
 	}
 }

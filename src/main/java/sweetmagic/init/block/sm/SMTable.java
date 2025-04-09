@@ -24,21 +24,24 @@ import sweetmagic.init.block.base.BaseModelBlock;
 
 public class SMTable extends BaseModelBlock {
 
+	private final int data;
 	private static final BooleanProperty BACK = BooleanProperty.create("back");
 	private static final BooleanProperty FORWARD = BooleanProperty.create("forward");
 	private static final BooleanProperty LEFT = BooleanProperty.create("left");
 	private static final BooleanProperty RIGHT = BooleanProperty.create("right");
 	private static final VoxelShape AABB = Block.box(0D, 8D, 0D, 16D, 16D, 16D);
+	private static final VoxelShape SIMPLE = Block.box(0D, 14D, 0D, 16D, 16D, 16D);
 
-	public SMTable (String name, int data) {
+	public SMTable(String name, int data) {
 		super(name, setState(Material.WOOD, data == 1 ? SoundType.METAL : SoundType.WOOD, 0.35F, 8192F));
 		this.registerDefaultState(getStateDefinition().any().setValue(BACK, false).setValue(FORWARD, false).setValue(LEFT, false).setValue(RIGHT, false));
 		BlockInfo.create(this, SweetMagicCore.smTab, name);
+		this.data = data;
 	}
 
 	// 当たり判定
 	public VoxelShape getShape(BlockState state, BlockGetter get, BlockPos pos, CollisionContext col) {
-		return AABB;
+		return this.data == 2 ? SIMPLE : AABB;
 	}
 
 	@Nullable
@@ -50,11 +53,11 @@ public class SMTable extends BaseModelBlock {
 		return this.setVertical(super.updateShape(state, face, state2, world, pos1, pos2) ,world, pos1);
 	}
 
-	public BlockState setVertical (BlockState state, LevelAccessor world, BlockPos pos) {
-		boolean forward = world.getBlockState(pos.relative(Direction.NORTH)).getBlock() == this;
-		boolean back = world.getBlockState(pos.relative(Direction.SOUTH)).getBlock() == this;
-		boolean left = world.getBlockState(pos.relative(Direction.EAST)).getBlock() == this;
-		boolean right = world.getBlockState(pos.relative(Direction.WEST)).getBlock() == this;
+	public BlockState setVertical(BlockState state, LevelAccessor world, BlockPos pos) {
+		boolean forward = this.getBlock(world, pos.relative(Direction.NORTH)) == this;
+		boolean back = this.getBlock(world, pos.relative(Direction.SOUTH)) == this;
+		boolean left = this.getBlock(world, pos.relative(Direction.EAST)) == this;
+		boolean right = this.getBlock(world, pos.relative(Direction.WEST)) == this;
 		return state.setValue(FORWARD, forward).setValue(BACK, back).setValue(LEFT, left).setValue(RIGHT, right);
 	}
 
@@ -64,6 +67,7 @@ public class SMTable extends BaseModelBlock {
 
 	@Override
 	public void addBlockTip (List<Component> toolTip) {
+		if (this.data != 0) { return; }
 		toolTip.add(this.getText("conect").withStyle(GREEN));
 	}
 }

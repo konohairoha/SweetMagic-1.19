@@ -30,28 +30,28 @@ public class SMLog extends RotatedPillarBlock {
 	public void playerWillDestroy(Level world, BlockPos pos, BlockState state, Player player) {
 
 		if (this.isLog(world, pos.above()) && world instanceof ServerLevel && !player.isShiftKeyDown()) {
-	        MinecraftForge.EVENT_BUS.register(new TreeChopTask(pos.above(), player, 1));
+			MinecraftForge.EVENT_BUS.register(new TreeChopTask(pos.above(), player, 1));
 		}
 
 		super.playerWillDestroy(world, pos, state, player);
 	}
 
-    public class TreeChopTask extends AbstractChopTaskEvent {
+	public class TreeChopTask extends AbstractChopTaskEvent {
 
-        public TreeChopTask(BlockPos start, Player player, int blockTick) {
-            super(start, player, blockTick);
-        }
+		public TreeChopTask(BlockPos start, Player player, int blockTick) {
+			super(start, player, blockTick);
+		}
 
-	    // ブロックチェック
-	    public boolean checkBlock(Level world, BlockPos pos) {
-	    	return world.getBlockState(pos).getBlock() instanceof FruitLeaves;
-	    }
-    }
+		// ブロックチェック
+		public boolean checkBlock(Level world, BlockPos pos) {
+			return world.getBlockState(pos).getBlock() instanceof FruitLeaves;
+		}
+	}
 
-    // 原木チェック
-    public boolean isLog(Level world, BlockPos pos) {
-    	return world.getBlockState(pos).getBlock() instanceof FruitLeaves;
-    }
+	// 原木チェック
+	public boolean isLog(Level world, BlockPos pos) {
+		return world.getBlockState(pos).getBlock() instanceof FruitLeaves;
+	}
 
 	@Override
 	public List<ItemStack> getDrops(BlockState state, LootContext.Builder build) {

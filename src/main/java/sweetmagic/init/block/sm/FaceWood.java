@@ -15,6 +15,7 @@ import sweetmagic.util.FaceAABB;
 
 public class FaceWood extends BaseFaceBlock {
 
+	private final int data;
 	private final static VoxelShape BASE = Block.box(0.5D, 0D, 0.25D, 15.25D, 14.5D, 15.25D);
 	private final static VoxelShape BUCKET = Block.box(3D, 0D, 3D, 13D, 10D, 13D);
 	private final static VoxelShape BREAD = Block.box(3D, 0D, 3D, 13D, 10D, 13D);
@@ -22,8 +23,6 @@ public class FaceWood extends BaseFaceBlock {
 	private static final VoxelShape[] BOOKS = FaceAABB.create(0.5D, 0D, 1D, 14.5D, 12D, 9D);
 	private static final VoxelShape[] STICK = FaceAABB.create(6D, 5D, 5D, 10D, 16D, 16D);
 	private final static VoxelShape[] STAND = FaceAABB.create(0D, 0D, 2D, 16D, 16D, 16D);
-
-	private final int data;
 
 	public FaceWood(String name, int data) {
 		super(name, setState(Material.WOOD, SoundType.WOOD, 0.25F, 8192F));
@@ -40,7 +39,7 @@ public class FaceWood extends BaseFaceBlock {
 	}
 
 	// 当たり判定
-	public VoxelShape getShape(BlockState state, BlockGetter get, BlockPos pos, CollisionContext col) {
+	public VoxelShape getShape(BlockState state, BlockGetter get, BlockPos pos, CollisionContext con) {
 		switch (this.data) {
 		case 0: return BASE;
 		case 1: return BUCKET;

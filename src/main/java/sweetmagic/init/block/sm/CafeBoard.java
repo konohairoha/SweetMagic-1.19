@@ -15,10 +15,10 @@ import sweetmagic.util.FaceAABB;
 
 public class CafeBoard extends BaseFaceBlock {
 
+	private final int data;
 	private final static VoxelShape BASE = Block.box(0.25D, 0D, 0.25D, 0.75D, 0.65D, 0.75D);
 	private static final VoxelShape[] AABB = FaceAABB.create(2D, 0D, 1D, 14D, 13.5D, 15D);
 	private static final VoxelShape[] WALL = FaceAABB.create(1D, 1D, 15D, 15D, 15D, 16D);
-	private final int data;
 
 	public CafeBoard(String name, int data) {
 		super(name, setState(Material.WOOD, SoundType.WOOD, 0.1F, 8192F));

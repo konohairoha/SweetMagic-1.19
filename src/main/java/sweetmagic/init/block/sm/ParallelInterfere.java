@@ -43,13 +43,13 @@ public class ParallelInterfere extends BaseFaceBlock implements EntityBlock {
 	}
 
 	// 右クリック出来るか
-	public boolean canRightClick (Player player, ItemStack stack) {
+	public boolean canRightClick(Player player, ItemStack stack) {
 		return true;
 	}
 
 	// ブロックでのアクション
-	public void actionBlock (Level world, BlockPos pos, Player player, ItemStack stack) {
-		if (world.isClientSide) { return; }
+	public boolean actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
+		if (world.isClientSide) { return true; }
 
 		MenuProvider tile = null;
 
@@ -63,6 +63,7 @@ public class ParallelInterfere extends BaseFaceBlock implements EntityBlock {
 		}
 
 		this.openGUI(world, pos, player, tile);
+		return true;
 	}
 
 	public ItemStack inheritingNBT(ItemStack oldStack, ItemStack newStack) {
@@ -85,22 +86,22 @@ public class ParallelInterfere extends BaseFaceBlock implements EntityBlock {
 	}
 
 	// 当たり判定
-	public VoxelShape getShape(BlockState state, BlockGetter get, BlockPos pos, CollisionContext col) {
+	public VoxelShape getShape(BlockState state, BlockGetter get, BlockPos pos, CollisionContext con) {
 		return AABB;
 	}
 
 	// ドロップするかどうか
-	protected boolean isDrop () {
+	protected boolean isDrop() {
 		return false;
 	}
 
 	// tileの中身を保持するか
-	public boolean isKeepTile () {
+	public boolean isKeepTile() {
 		return true;
 	}
 
 	@Override
-	public void addBlockTip (List<Component> toolTip) {
+	public void addBlockTip(List<Component> toolTip) {
 		toolTip.add(this.getText("parallel_interfere", "" + (this.data + 1) * 20).withStyle(GREEN));
 		toolTip.add(this.getText("sm_chest").withStyle(GREEN));
 		super.addBlockTip(toolTip);
@@ -114,7 +115,7 @@ public class ParallelInterfere extends BaseFaceBlock implements EntityBlock {
 		}
 	}
 
-	public BlockEntityType<? extends TileAbstractSM> getTileType () {
+	public BlockEntityType<? extends TileAbstractSM> getTileType() {
 		switch (this.data) {
 		case 1: return TileInit.stardustWish;
 		default: return TileInit.parallelInterfere;
@@ -123,11 +124,10 @@ public class ParallelInterfere extends BaseFaceBlock implements EntityBlock {
 
 	@Nullable
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
-		BlockEntityType<? extends TileAbstractSM> tileType = this.getTileType();
-		return tileType != null ? this.createMailBoxTicker(world, type, tileType) : null;
+		return this.createMailBoxTicker(world, type, this.getTileType());
 	}
 
-	public float getEnchantPower () {
+	public float getEnchantPower() {
 		return (this.data + 1) * 15F;
 	}
 }

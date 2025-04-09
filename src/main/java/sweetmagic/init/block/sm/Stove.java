@@ -41,15 +41,17 @@ public class Stove extends BaseCookBlock {
 	}
 
 	// ブロックでのアクション
-	public void actionBlock (Level world, BlockPos pos, Player player, ItemStack stack) {
-		if (world.isClientSide || stack.isEmpty() || !( stack.getItem() instanceof BlockItem blockItem ) || !world.getBlockState(pos.above()).isAir()) { return; }
+	public boolean actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
+		if (stack.isEmpty() || !( stack.getItem() instanceof BlockItem blockItem ) || !world.getBlockState(pos.above()).isAir()) { return false; }
 
 		Block block = blockItem.getBlock();
-		if ( !( block instanceof Pot ) && !( block instanceof Frypan ) ) { return; }
+		if (!(block instanceof Pot) && !(block instanceof Frypan)) { return false; }
+		if (world.isClientSide) { return true; }
 
 		world.setBlock(pos.above(), block.defaultBlockState().setValue(FACING, world.getBlockState(pos).getValue(FACING)), 3);
-        this.blockSound(world, block, pos, player);
-        if (!player.isCreative()) { stack.shrink(1); }
+		this.blockSound(world, block, pos, player);
+		if (!player.isCreative()) { stack.shrink(1); }
+		return true;
 	}
 
 	@Override
@@ -58,7 +60,7 @@ public class Stove extends BaseCookBlock {
 	}
 
 	@Override
-	public void addBlockTip (List<Component> toolTip) {
+	public void addBlockTip(List<Component> toolTip) {
 		toolTip.add(this.getText("stove").withStyle(GREEN));
 
 		if (!this.isOriginal) {

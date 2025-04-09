@@ -36,6 +36,7 @@ public class PoleLight extends BaseFaceBlock {
 	private static final VoxelShape AABB = Block.box(5D, 0D, 5D, 11D, 16D, 11D);
 	public static final IntegerProperty VERTICAL = IntegerProperty.create("vertical", 0, 4);
 	public static final BooleanProperty ISDROP = BooleanProperty.create("isdrop");
+	private final static Direction[] ALLFACE = new Direction[] {Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
 
 	public PoleLight (String name, int data) {
 		super(name, setState(Material.WOOD, SoundType.METAL, 0.5F, 8192F, 15));
@@ -45,12 +46,12 @@ public class PoleLight extends BaseFaceBlock {
 	}
 
 	// 当たり判定
-	public VoxelShape getShape(BlockState state, BlockGetter get, BlockPos pos, CollisionContext col) {
+	public VoxelShape getShape(BlockState state, BlockGetter get, BlockPos pos, CollisionContext con) {
 		return AABB;
 	}
 
 	// 右クリック出来るか
-	public boolean canRightClick (Player player, ItemStack stack) {
+	public boolean canRightClick(Player player, ItemStack stack) {
 		return !stack.isEmpty();
 	}
 
@@ -97,7 +98,7 @@ public class PoleLight extends BaseFaceBlock {
 			case 3:
 				data = 2;
 				break;
-			default :
+			default:
 				data = 1;
 				break;
 			}
@@ -105,17 +106,21 @@ public class PoleLight extends BaseFaceBlock {
 			world.setBlockAndUpdate(pos.above(i + 1), this.defaultBlockState().setValue(VERTICAL, data).setValue(FACING, face));
 		}
 
+		Direction face1 = face.getClockWise();
+		Direction face2 = face.getCounterClockWise();
+		BlockState sta = this.defaultBlockState();
+
 		if (this.data == 1) {
 
-			world.setBlockAndUpdate(pos.above(4).relative(face.getClockWise()), this.defaultBlockState().setValue(VERTICAL, 3).setValue(FACING, face.getCounterClockWise()));
-			world.setBlockAndUpdate(pos.above(3).relative(face.getClockWise()), this.defaultBlockState().setValue(VERTICAL, 4).setValue(FACING, face.getCounterClockWise()));
-			world.setBlockAndUpdate(pos.above(4).relative(face.getCounterClockWise()), this.defaultBlockState().setValue(VERTICAL, 3).setValue(FACING, face.getClockWise()));
-			world.setBlockAndUpdate(pos.above(3).relative(face.getCounterClockWise()), this.defaultBlockState().setValue(VERTICAL, 4).setValue(FACING, face.getClockWise()));
+			world.setBlockAndUpdate(pos.above(4).relative(face1), sta.setValue(VERTICAL, 3).setValue(FACING, face2));
+			world.setBlockAndUpdate(pos.above(3).relative(face1), sta.setValue(VERTICAL, 4).setValue(FACING, face2));
+			world.setBlockAndUpdate(pos.above(4).relative(face2), sta.setValue(VERTICAL, 3).setValue(FACING, face1));
+			world.setBlockAndUpdate(pos.above(3).relative(face2), sta.setValue(VERTICAL, 4).setValue(FACING, face1));
 		}
 
 		else {
-			world.setBlockAndUpdate(pos.above(4).relative(face), this.defaultBlockState().setValue(VERTICAL, 2).setValue(FACING, face.getClockWise().getClockWise()));
-			world.setBlockAndUpdate(pos.above(3).relative(face), this.defaultBlockState().setValue(VERTICAL, 4).setValue(FACING, face.getClockWise().getClockWise()));
+			world.setBlockAndUpdate(pos.above(4).relative(face), sta.setValue(VERTICAL, 2).setValue(FACING, face1.getClockWise()));
+			world.setBlockAndUpdate(pos.above(3).relative(face), sta.setValue(VERTICAL, 4).setValue(FACING, face1.getClockWise()));
 		}
 	}
 
@@ -145,7 +150,7 @@ public class PoleLight extends BaseFaceBlock {
 				this.breakBlock(world, downPos);
 			}
 
-			for (Direction face : BuildGlass.faceList) {
+			for (Direction face : ALLFACE) {
 				BlockPos facePos = pos.relative(face);
 				if (world.getBlockState(facePos).getBlock() == this) {
 					this.breakBlock(world, facePos);
@@ -164,7 +169,7 @@ public class PoleLight extends BaseFaceBlock {
 	}
 
 	// ドロップするかどうか
-	protected boolean isDrop () {
+	protected boolean isDrop() {
 		return false;
 	}
 }

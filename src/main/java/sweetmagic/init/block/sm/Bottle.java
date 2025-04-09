@@ -24,7 +24,7 @@ import sweetmagic.init.block.base.BaseCookBlock;
 import sweetmagic.init.tile.sm.TileAbstractSM;
 import sweetmagic.init.tile.sm.TileBottle;
 import sweetmagic.recipe.RecipeHelper;
-import sweetmagic.recipe.RecipeUtil;
+import sweetmagic.recipe.RecipeHelper.RecipeUtil;
 import sweetmagic.recipe.base.AbstractRecipe;
 import sweetmagic.recipe.bottle.BottleRecipe;
 
@@ -42,8 +42,8 @@ public class Bottle extends BaseCookBlock implements ISMCraftBlock {
 	}
 
 	// ブロックでのアクション
-	public void actionBlock (Level world, BlockPos pos, Player player, ItemStack stack) {
-		if (world.isClientSide) { return; }
+	public boolean actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
+		if (world.isClientSide) { return true; }
 
 		BlockState state = world.getBlockState(pos);
 		int cookState = this.getState(state);
@@ -59,18 +59,19 @@ public class Bottle extends BaseCookBlock implements ISMCraftBlock {
 			// クラフト後アイテムのドロップ
 			TileBottle tile = (TileBottle) this.getTile(world, pos);
 			this.spawnItemList(world, player.blockPosition(), tile.resultList);
+			tile.player = player;
+			tile.getExpValue();
 
 			// 初期化
 			this.setState(world, pos, 0);
 			tile.clearInfo();
 			tile.sendPKT();
 		}
+		return true;
 	}
 
 	// 製粉レシピの取得
-	public void recipeCraft (Level world, BlockPos pos, Player player, ItemStack stack) {
-
-		// レシピを取得して見つからなければ終了
+	public void recipeCraft(Level world, BlockPos pos, Player player, ItemStack stack) {
 		List<ItemStack> stackList = RecipeHelper.getPlayerInv(player, stack);
 		Optional<BottleRecipe> recipe = BottleRecipe.getRecipe(world, stackList);
 		if (recipe.isEmpty()) { return; }
@@ -82,6 +83,7 @@ public class Bottle extends BaseCookBlock implements ISMCraftBlock {
 		TileBottle tile = (TileBottle) this.getTile(world, pos);
 		tile.craftList = recipeUtil.getInputList();
 		tile.resultList = recipeUtil.getResultList();
+		tile.player = player;
 		tile.craftStart();
 	}
 
@@ -90,26 +92,29 @@ public class Bottle extends BaseCookBlock implements ISMCraftBlock {
 		return new TileBottle(pos, state);
 	}
 
-	public BlockEntityType<? extends TileAbstractSM> getTileType () {
+	public BlockEntityType<? extends TileAbstractSM> getTileType() {
 		return TileInit.bottle;
 	}
 
 	@Nullable
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
-		BlockEntityType<? extends TileAbstractSM> tileType = this.getTileType();
-		return tileType != null ? this.createMailBoxTicker(world, type, tileType) : null;
+		return this.createMailBoxTicker(world, type, this.getTileType());
 	}
 
 	@Override
-	public void addBlockTip (List<Component> toolTip) {
+	public void addBlockTip(List<Component> toolTip) {
 		toolTip.add(this.getText(this.name).withStyle(GREEN));
 	}
 
-	public boolean notNullRecipe (Level world, List<ItemStack> stackList) {
+	public boolean notNullRecipe(Level world, List<ItemStack> stackList) {
 		return !BottleRecipe.getRecipe(world, stackList).isEmpty();
 	}
 
-	public AbstractRecipe getRecipe (Level world, List<ItemStack> stackList) {
+	public AbstractRecipe getRecipe(Level world, List<ItemStack> stackList) {
 		return BottleRecipe.getRecipe(world, stackList).get();
+	}
+
+	public boolean isView() {
+		return false;
 	}
 }

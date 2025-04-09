@@ -30,16 +30,16 @@ public class GroundLight extends SMLight {
 	}
 
 	@Override
-	protected void createBlockStateDefinition(@NotNull StateDefinition.Builder<Block, BlockState> props) {
-		super.createBlockStateDefinition(props);
-		props.add(FACING);
+	protected void createBlockStateDefinition(@NotNull StateDefinition.Builder<Block, BlockState> build) {
+		super.createBlockStateDefinition(build);
+		build.add(FACING);
 	}
 
 	@NotNull
 	@Override
-	public BlockState getStateForPlacement(BlockPlaceContext ctx) {
-		if (ctx.getPlayer() != null) {
-			boolean flag = ctx.getClickLocation().y - (double) ctx.getClickedPos().getY() > 0.5D;
+	public BlockState getStateForPlacement(BlockPlaceContext con) {
+		if (con.getPlayer() != null) {
+			boolean flag = con.getClickLocation().y - (double) con.getClickedPos().getY() > 0.5D;
 			return this.defaultBlockState().setValue(FACING, flag ? Direction.UP : Direction.DOWN);
 		}
 		return this.defaultBlockState();

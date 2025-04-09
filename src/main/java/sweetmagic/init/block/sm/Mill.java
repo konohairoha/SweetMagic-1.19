@@ -21,6 +21,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.items.ItemHandlerHelper;
 import sweetmagic.SweetMagicCore;
+import sweetmagic.api.iblock.ISMCookBlock;
 import sweetmagic.api.iblock.ISMCraftBlock;
 import sweetmagic.init.TileInit;
 import sweetmagic.init.block.base.BaseCookBlock;
@@ -29,7 +30,7 @@ import sweetmagic.init.tile.sm.TileMill;
 import sweetmagic.recipe.base.AbstractRecipe;
 import sweetmagic.recipe.mill.MillRecipe;
 
-public class Mill extends BaseCookBlock implements ISMCraftBlock {
+public class Mill extends BaseCookBlock implements ISMCraftBlock, ISMCookBlock {
 
 	private final int data;
 	private static final VoxelShape AABB = Block.box(0D, 0D, 0D, 16D, 14D, 16D);
@@ -46,7 +47,7 @@ public class Mill extends BaseCookBlock implements ISMCraftBlock {
 	}
 
 	// 当たり判定
-	public VoxelShape getShape(BlockState state, BlockGetter get, BlockPos pos, CollisionContext col) {
+	public VoxelShape getShape(BlockState state, BlockGetter get, BlockPos pos, CollisionContext con) {
 		switch (this.data) {
 		case 1:  return MIXER;
 		default: return AABB;
@@ -54,8 +55,8 @@ public class Mill extends BaseCookBlock implements ISMCraftBlock {
 	}
 
 	// ブロックでのアクション
-	public void actionBlock (Level world, BlockPos pos, Player player, ItemStack stack) {
-		if (world.isClientSide) { return; }
+	public boolean actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
+		if (world.isClientSide) { return true; }
 
 		BlockState state = world.getBlockState(pos);
 		int cookState = this.getState(state);
@@ -70,12 +71,11 @@ public class Mill extends BaseCookBlock implements ISMCraftBlock {
 			this.setState(world, pos, 0);
 			tile.outPutClear();
 		}
+		return true;
 	}
 
 	// 製粉レシピの取得
-	public void getRecipeMill (Level world, BlockPos pos, Player player, ItemStack stack) {
-
-		// レシピを取得して見つからなければ終了
+	public void getRecipeMill(Level world, BlockPos pos, Player player, ItemStack stack) {
 		List<ItemStack> stackList = Arrays.<ItemStack> asList(stack);
 		Optional<MillRecipe> recipe = MillRecipe.getRecipe(world, stackList);
 		if (recipe.isEmpty()) { return; }
@@ -102,18 +102,17 @@ public class Mill extends BaseCookBlock implements ISMCraftBlock {
 		return new TileMill(pos, state);
 	}
 
-	public BlockEntityType<? extends TileAbstractSM> getTileType () {
+	public BlockEntityType<? extends TileAbstractSM> getTileType() {
 		return TileInit.mill;
 	}
 
 	@Nullable
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
-		BlockEntityType<? extends TileAbstractSM> tileType = this.getTileType();
-		return tileType != null ? this.createMailBoxTicker(world, type, tileType) : null;
+		return this.createMailBoxTicker(world, type, this.getTileType());
 	}
 
 	@Override
-	public void addBlockTip (List<Component> toolTip) {
+	public void addBlockTip(List<Component> toolTip) {
 		toolTip.add(this.getText("mill").withStyle(GREEN));
 
 		if (this.data != 0) {
@@ -121,11 +120,15 @@ public class Mill extends BaseCookBlock implements ISMCraftBlock {
 		}
 	}
 
-	public boolean notNullRecipe (Level world, List<ItemStack> stackList) {
+	public boolean notNullRecipe(Level world, List<ItemStack> stackList) {
 		return !MillRecipe.getRecipe(world, stackList).isEmpty();
 	}
 
-	public AbstractRecipe getRecipe (Level world, List<ItemStack> stackList) {
+	public AbstractRecipe getRecipe(Level world, List<ItemStack> stackList) {
 		return MillRecipe.getRecipe(world, stackList).get();
+	}
+
+	public boolean isView() {
+		return false;
 	}
 }

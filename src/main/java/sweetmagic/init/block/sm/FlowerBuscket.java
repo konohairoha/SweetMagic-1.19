@@ -32,44 +32,44 @@ public class FlowerBuscket extends BaseModelBlock {
 	private static final VoxelShape AABB = Block.box(5D, 0D, 5D, 11D, 16D, 11D);
 	public static final EnumProperty<EnumVertical> VERTICAL = EnumProperty.create("vertical", EnumVertical.class);
 
-	public FlowerBuscket (String name) {
+	public FlowerBuscket(String name) {
 		super(name, setState(Material.WOOD, SoundType.GRASS, 0.05F, 8192F));
 		this.registerDefaultState(this.defaultBlockState().setValue(VERTICAL, EnumVertical.NOR));
 		BlockInfo.create(this, SweetMagicCore.smTab, name);
 	}
 
 	// 当たり判定
-	public VoxelShape getShape(BlockState state, BlockGetter get, BlockPos pos, CollisionContext col) {
+	public VoxelShape getShape(BlockState state, BlockGetter get, BlockPos pos, CollisionContext con) {
 		return AABB;
 	}
 
 	// 右クリック出来るか
-	public boolean canRightClick (Player player, ItemStack stack) {
+	public boolean canRightClick(Player player, ItemStack stack) {
 		return player != null && !stack.isEmpty();
 	}
 
 	// ブロックでのアクション
-	public void actionBlock (Level world, BlockPos pos, Player player, ItemStack stack) {
-		if (world.isClientSide || !(stack.getItem() instanceof BlockItem blockItem) || !(blockItem.getBlock() instanceof FlowerBuscket) ) { return; }
+	public boolean actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
+		if (world.isClientSide) { return true; }
+		if (!(stack.getItem() instanceof BlockItem blockItem) || !(blockItem.getBlock() instanceof FlowerBuscket) ) { return false; }
 
 		Block block = this.getBlock(stack);
-		if ( block != this ) { return; }
+		if (block != this) { return false; }
 
 		for (int i = 1; i < 11; i++) {
 
 			BlockPos targetPos = pos.below(i);
 			BlockState state = world.getBlockState(targetPos);
 			Block targetBlock = state.getBlock();
-			if ( !state.isAir() && !(targetBlock instanceof FlowerBuscket) ) { return; }
+			if ( !state.isAir() && !(targetBlock instanceof FlowerBuscket) ) { return false; }
 			if (!state.isAir()) { continue; }
 
 			world.setBlock(targetPos, block.defaultBlockState(), 3);
-	        this.blockSound(world, block, targetPos, player);
-
-	        if (!player.isCreative()) { stack.shrink(1); }
-
-	        return;
+			this.blockSound(world, block, targetPos, player);
+			if (!player.isCreative()) { stack.shrink(1); }
+			break;
 		}
+		return true;
 	}
 
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> build) {
@@ -81,7 +81,7 @@ public class FlowerBuscket extends BaseModelBlock {
 		return this.setVertical(con.getLevel(), con.getClickedPos());
 	}
 
-	public BlockState setVertical (LevelAccessor world, BlockPos pos) {
+	public BlockState setVertical(LevelAccessor world, BlockPos pos) {
 		boolean bot = this.getBlock(world, pos.below()) instanceof FlowerBuscket;
 		boolean top = this.getBlock(world, pos.above()) instanceof FlowerBuscket;
 		return this.defaultBlockState().setValue(VERTICAL, EnumVertical.getVertical(bot, top));
@@ -92,7 +92,7 @@ public class FlowerBuscket extends BaseModelBlock {
 	}
 
 	@Override
-	public void addBlockTip (List<Component> toolTip) {
+	public void addBlockTip(List<Component> toolTip) {
 		toolTip.add(this.getText("is_vertical").withStyle(GOLD));
 	}
 }

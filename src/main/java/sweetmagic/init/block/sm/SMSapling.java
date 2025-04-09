@@ -2,6 +2,7 @@ package sweetmagic.init.block.sm;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -16,6 +17,7 @@ import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraftforge.common.ForgeHooks;
 import sweetmagic.SweetMagicCore;
+import sweetmagic.api.iblock.ISMCrop;
 import sweetmagic.init.BlockInit;
 import sweetmagic.init.BlockInit.BlockInfo;
 import sweetmagic.init.block.base.BaseSMBlock;
@@ -30,14 +32,14 @@ public class SMSapling extends SaplingBlock {
 
 	private final int data;
 
-	public SMSapling (String name, int data) {
+	public SMSapling(String name, int data) {
 		super(null, BaseSMBlock.setState(Material.PLANT, SoundType.GRASS, 0F, 8192F).noCollission().randomTicks());
 		BlockInfo.create(this, SweetMagicCore.smTab, name);
 		this.data = data;
 		BlockInit.saplingList.add(this);
 	}
 
-	public Block getLog () {
+	public Block getLog() {
 		switch(this.data) {
 		case 1: return BlockInit.lemon_log;
 		case 2: return BlockInit.orange_log;
@@ -48,11 +50,12 @@ public class SMSapling extends SaplingBlock {
 		case 7: return BlockInit.peach_log;
 		case 8: return BlockInit.magiawood_log;
 		case 9: return BlockInit.cherry_blossoms_log;
+		case 10: return BlockInit.peach_log;
 		default: return BlockInit.chestnut_log;
 		}
 	}
 
-	public BlockState getLeaves () {
+	public BlockState getLeaves() {
 		switch(this.data) {
 		case 1: return BlockInit.lemon_leaves.defaultBlockState();
 		case 2: return BlockInit.orange_leaves.defaultBlockState();
@@ -63,6 +66,7 @@ public class SMSapling extends SaplingBlock {
 		case 7: return BlockInit.peach_leaves.defaultBlockState();
 		case 8: return BlockInit.magiawood_leaves.defaultBlockState();
 		case 9: return BlockInit.cherry_blossoms_leaves.defaultBlockState();
+		case 10: return BlockInit.maple_leaves.defaultBlockState().setValue(ISMCrop.AGE5, new Random().nextInt(6));
 		default: return BlockInit.chestnut_leaves.defaultBlockState();
 		}
 	}
@@ -78,7 +82,7 @@ public class SMSapling extends SaplingBlock {
 		return rand.nextInt(2) == 0;
 	}
 
-	public AbstractTreeGen getTreeGen () {
+	public AbstractTreeGen getTreeGen() {
 		switch(this.data) {
 		case 3: return new CoconutTreeGen(this.getLog().defaultBlockState(), this.getLeaves(), BlockInit.coconut_plant.defaultBlockState(), 0);
 		case 4: return new PrismTreeGen(this.getLog().defaultBlockState(), this.getLeaves(), 0);

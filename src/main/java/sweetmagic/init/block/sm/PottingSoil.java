@@ -46,7 +46,7 @@ public class PottingSoil extends BaseModelBlock {
 	}
 
 	// 成長できるかどうか
-	public boolean isGlowChange (RandomSource rand) {
+	public boolean isGlowChange(RandomSource rand) {
 		return rand.nextInt(this.chance) == 0;
 	}
 
@@ -57,7 +57,7 @@ public class PottingSoil extends BaseModelBlock {
 	}
 
 	@Override
-	public void addBlockTip (List<Component> toolTip) {
+	public void addBlockTip(List<Component> toolTip) {
 		toolTip.add(this.getText("potting_soil").withStyle(GOLD));
 	}
 }

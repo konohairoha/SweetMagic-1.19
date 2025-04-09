@@ -4,7 +4,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -22,8 +21,6 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import sweetmagic.init.BlockInit.BlockInfo;
 import sweetmagic.init.DimentionInit;
 import sweetmagic.init.block.base.BaseModelBlock;
@@ -32,56 +29,54 @@ import sweetmagic.util.FaceAABB;
 
 public class MagiaPortal extends BaseModelBlock {
 
+	private final Block frame;
 	public static final EnumProperty<Direction.Axis> AXIS = BlockStateProperties.AXIS;
-    protected static final VoxelShape[] AABB = FaceAABB.create(0D, 0D, 6D, 16D, 16D, 10D);
 	private static final VoxelShape BOT = Block.box(0D, 6D, 0D, 16D, 10D, 16D);
-    private final Block frame;
-    private final Direction[] faceArrayX = { Direction.NORTH, Direction.SOUTH, Direction.UP, Direction.DOWN };
-    private final Direction[] faceArrayZ = { Direction.WEST, Direction.EAST, Direction.UP, Direction.DOWN };
-    private final Direction[] faceArrayY = { Direction.NORTH, Direction.SOUTH, Direction.WEST, Direction.EAST };
+	protected static final VoxelShape[] AABB = FaceAABB.create(0D, 0D, 6D, 16D, 16D, 10D);
+	private final Direction[] faceArrayX = { Direction.NORTH, Direction.SOUTH, Direction.UP, Direction.DOWN };
+	private final Direction[] faceArrayZ = { Direction.WEST, Direction.EAST, Direction.UP, Direction.DOWN };
+	private final Direction[] faceArrayY = { Direction.NORTH, Direction.SOUTH, Direction.WEST, Direction.EAST };
 
-	public MagiaPortal (String name, Block frame) {
+	public MagiaPortal(String name, Block frame) {
 		super(name, setState(Material.PORTAL, SoundType.GLASS, -1F, 8192F, 15).noCollission());
 		this.frame = frame;
 		this.registerDefaultState(this.defaultBlockState().setValue(AXIS, Direction.Axis.X));
 		BlockInfo.create(this, null, name);
 	}
 
-    @Override
-    public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext con) {
+	@Override
+	public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext con) {
 		return FaceAABB.getAABB(AABB, BOT, state);
 	}
 
-    @Override
-    public BlockState updateShape(BlockState state, Direction face, BlockState state2, LevelAccessor world, BlockPos pos, BlockPos pos2) {
+	@Override
+	public BlockState updateShape(BlockState state, Direction face, BlockState state2, LevelAccessor world, BlockPos pos, BlockPos pos2) {
+		if (state2.getBlock() == this || !state2.isAir()) { return super.updateShape(state, face, state2, world, pos, pos2); }
 
-    	if (state2.getBlock() != this && state2.isAir()) {
+		Direction[] faceArray = null;
 
-        	Direction[] faceArray = null;
+		switch (state.getValue(AXIS)) {
+		case X:
+			faceArray = this.faceArrayX;
+			break;
+		case Z:
+			faceArray = this.faceArrayZ;
+			break;
+		case Y:
+			faceArray = this.faceArrayY;
+			break;
+		}
 
-        	switch (state.getValue(AXIS)) {
-        	case X:
-        		faceArray = this.faceArrayX;
-        		break;
-        	case Z:
-        		faceArray = this.faceArrayZ;
-        		break;
-        	case Y:
-        		faceArray = this.faceArrayY;
-        		break;
-        	}
+		for (Direction fa : faceArray) {
+			if (!world.getBlockState(pos.relative(fa)).isAir()) { continue; }
+			this.breakBlock(world, pos);
+		}
 
-        	for (Direction fa : faceArray) {
-        		if (!world.getBlockState(pos.relative(fa)).isAir()) { continue; }
-        		this.breakBlock(world, pos);
-        	}
-    	}
-
-    	return super.updateShape(state, face, state2, world, pos, pos2);
-    }
+		return super.updateShape(state, face, state2, world, pos, pos2);
+	}
 
 	// ドロップするかどうか
-	protected boolean isDrop () {
+	protected boolean isDrop() {
 		return false;
 	}
 
@@ -93,21 +88,17 @@ public class MagiaPortal extends BaseModelBlock {
 			entity.setPortalCooldown();
 		}
 
-		if (entity.isOnPortalCooldown() ||  !(entity instanceof LivingEntity) ) { return; }
+		if (entity.isOnPortalCooldown() || !(entity instanceof LivingEntity liv)) { return; }
 
 		entity.level.getProfiler().push(world.dimension().location().getPath());
-        ResourceKey<Level> smDim = DimentionInit.SweetMagicWorld;
-        ResourceKey<Level> key = world.dimension() == smDim ? Level.OVERWORLD : smDim;
-        ServerLevel dim = world.getServer().getLevel(key);
+		ResourceKey<Level> smDim = DimentionInit.SweetMagicWorld;
+		ResourceKey<Level> key = world.dimension() == smDim ? Level.OVERWORLD : smDim;
+		ServerLevel dim = world.getServer().getLevel(key);
 
-        if(dim != null) {
-            entity.changeDimension(dim, new DimentionTeleporter(this, this.frame, state.getValue(AXIS), state.getValue(AXIS) == Direction.Axis.Z));
-        }
+		if (dim != null) {
+			entity.changeDimension(dim, new DimentionTeleporter(this, this.frame, state.getValue(AXIS), state.getValue(AXIS) == Direction.Axis.Z));
+		}
 	}
-
-	@OnlyIn(Dist.CLIENT)
-	@Override
-	public void animateTick(BlockState stateIn, Level worldIn, BlockPos pos, RandomSource rand) { }
 
 	@Override
 	public ItemStack getCloneItemStack(BlockGetter world, BlockPos pos, BlockState state) {

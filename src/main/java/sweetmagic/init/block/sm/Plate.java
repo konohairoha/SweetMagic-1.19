@@ -22,17 +22,18 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.items.ItemHandlerHelper;
 import sweetmagic.SweetMagicCore;
+import sweetmagic.api.iblock.IFoodExpBlock;
 import sweetmagic.init.BlockInit.BlockInfo;
 import sweetmagic.init.block.base.BaseFaceBlock;
 import sweetmagic.init.tile.sm.TilePlate;
 
-public class Plate extends BaseFaceBlock implements EntityBlock {
+public class Plate extends BaseFaceBlock implements EntityBlock, IFoodExpBlock {
 
 	public final int data;
 	private static final VoxelShape PLATE = Block.box(2D, 0D, 2D, 14D, 1.5D, 14D);
 	private static final VoxelShape TRAY = Block.box(0D, 0D, 0D, 16D, 2D, 16D);
 
-	public Plate (String name, int data) {
+	public Plate(String name, int data) {
 		super(name, setState(Material.STONE, SoundType.STONE, 0.5F, 8192F));
 		this.data = data;
 		this.registerDefaultState(this.setState());
@@ -49,19 +50,20 @@ public class Plate extends BaseFaceBlock implements EntityBlock {
 		}
 	}
 
-    @Override
-    public RenderShape getRenderShape(BlockState state) {
-        return this.data == 0 ? RenderShape.ENTITYBLOCK_ANIMATED : super.getRenderShape(state);
-    }
+	@Override
+	public RenderShape getRenderShape(BlockState state) {
+		return this.data == 0 ? RenderShape.ENTITYBLOCK_ANIMATED : super.getRenderShape(state);
+	}
 
 	// 右クリック出来るか
-	public boolean canRightClick (Player player, ItemStack stack) {
+	public boolean canRightClick(Player player, ItemStack stack) {
 		return true;
 	}
 
 	// ブロックでのアクション
-	public void actionBlock (Level world, BlockPos pos, Player player, ItemStack stack) {
-		if (world.isClientSide || !(this.getTile(world, pos) instanceof TilePlate tile)) { return; }
+	public boolean actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
+		if (world.isClientSide) { return true; }
+		if (!(this.getTile(world, pos) instanceof TilePlate tile)) { return false; }
 
 		ItemStack inputStack = tile.getInputItem(0);
 		boolean isSneak = player.isShiftKeyDown();
@@ -88,21 +90,21 @@ public class Plate extends BaseFaceBlock implements EntityBlock {
 		}
 
 		tile.sendPKT();
+		return true;
 	}
 
 	// ドロップするかどうか
-	protected boolean isDrop () {
+	protected boolean isDrop() {
 		return false;
 	}
 
 	// tileの中身を保持するか
-	public boolean isKeepTile () {
+	public boolean isKeepTile() {
 		return true;
 	}
 
 	@Override
-	public void addBlockTip (List<Component> toolTip) {
-
+	public void addBlockTip(List<Component> toolTip) {
 		toolTip.add(this.getText("plate").withStyle(GREEN));
 
 		switch (this.data) {
@@ -117,7 +119,11 @@ public class Plate extends BaseFaceBlock implements EntityBlock {
 		return new TilePlate(pos, state);
 	}
 
-	public int getData () {
+	public int getData() {
 		return this.data;
+	}
+
+	public boolean isChanceUp() {
+		return this.data == 0;
 	}
 }

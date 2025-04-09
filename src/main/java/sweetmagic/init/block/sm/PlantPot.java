@@ -34,7 +34,7 @@ public class PlantPot extends PottingSoil {
 		return this.setVertical(super.updateShape(state, face, state2, world, pos1, pos2) ,world, pos1);
 	}
 
-	public BlockState setVertical (BlockState state, LevelAccessor world, BlockPos pos) {
+	public BlockState setVertical(BlockState state, LevelAccessor world, BlockPos pos) {
 
 		boolean forward = this.isPot(world, pos, Direction.NORTH);
 		boolean back = this.isPot(world, pos, Direction.SOUTH);
@@ -44,7 +44,7 @@ public class PlantPot extends PottingSoil {
 		return state.setValue(FORWARD, forward).setValue(BACK, back).setValue(LEFT, left).setValue(RIGHT, right);
 	}
 
-	public boolean isPot (LevelAccessor world, BlockPos pos, Direction face) {
+	public boolean isPot(LevelAccessor world, BlockPos pos, Direction face) {
 		return this.getBlock(world, pos.relative(face)) instanceof PlantPot;
 	}
 
@@ -53,7 +53,7 @@ public class PlantPot extends PottingSoil {
 	}
 
 	@Override
-	public void addBlockTip (List<Component> toolTip) {
+	public void addBlockTip(List<Component> toolTip) {
 		toolTip.add(this.getText("plantpot").withStyle(GOLD));
 	}
 }

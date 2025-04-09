@@ -53,8 +53,8 @@ public class StendGlassLamp extends BaseSMBlock {
 		}
 	}
 
-    @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> build) {
-        build.add(LIT);
-    }
+	@Override
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> build) {
+		build.add(LIT);
+	}
 }

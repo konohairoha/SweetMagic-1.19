@@ -27,10 +27,10 @@ import sweetmagic.init.block.base.BaseModelBlock;
 
 public class BedSideLamp extends BaseModelBlock {
 
-	private static final VoxelShape AABB = Block.box(5D, 0D, 5D, 11D, 16D, 11D);
 	private final int data;
+	private static final VoxelShape AABB = Block.box(5D, 0D, 5D, 11D, 16D, 11D);
 
-	public BedSideLamp (String name, int data) {
+	public BedSideLamp(String name, int data) {
 		super(name, setState(Material.WOOD, SoundType.METAL, 0.25F, 8192F, data == 0 ? 0 : 15).noCollission());
 		this.data = data;
 		BlockInfo.create(this, data == 1 ? null : SweetMagicCore.smTab, name);
@@ -43,12 +43,12 @@ public class BedSideLamp extends BaseModelBlock {
 	}
 
 	// 右クリック出来るか
-	public boolean canRightClick (Player player, ItemStack stack) {
+	public boolean canRightClick(Player player, ItemStack stack) {
 		return player != null;
 	}
 
 	// ブロックでのアクション
-	public void actionBlock (Level world, BlockPos pos, Player player, ItemStack stack) {
+	public boolean actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
 		Block block = null;
 		switch (this.data) {
 		case 0:
@@ -61,6 +61,7 @@ public class BedSideLamp extends BaseModelBlock {
 
 		world.setBlock(pos, block.defaultBlockState(), 3);
 		this.playerSound(world, pos, SoundEvents.UI_BUTTON_CLICK, 0.25F, world.random.nextFloat() * 0.1F + 1.2F);
+		return true;
 	}
 
 	// 当たり判定
@@ -74,7 +75,7 @@ public class BedSideLamp extends BaseModelBlock {
 	}
 
 	@Override
-	public void addBlockTip (List<Component> toolTip) {
+	public void addBlockTip(List<Component> toolTip) {
 		toolTip.add(this.getText("right_change").withStyle(GREEN));
 	}
 

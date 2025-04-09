@@ -24,8 +24,8 @@ import sweetmagic.util.FaceAABB;
 
 public class WallTowel extends BaseFaceBlock {
 
-	private static final VoxelShape[] WALL = FaceAABB.create(0D, 1D, 15.999D, 16D, 14D, 16D);
 	private static final BooleanProperty HIDE = BooleanProperty.create("hide");
+	private static final VoxelShape[] WALL = FaceAABB.create(0D, 1D, 15.999D, 16D, 14D, 16D);
 
 	public WallTowel(String name) {
 		super(name, setState(Material.WOOL, SoundType.WOOL, 0F, 8192F));
@@ -34,15 +34,16 @@ public class WallTowel extends BaseFaceBlock {
 	}
 
 	// 右クリック出来るか
-	public boolean canRightClick (Player player, ItemStack stack) {
+	public boolean canRightClick(Player player, ItemStack stack) {
 		return player != null;
 	}
 
 	// ブロックでのアクション
-	public void actionBlock (Level world, BlockPos pos, Player player, ItemStack stack) {
+	public boolean actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
 		BlockState state = world.getBlockState(pos);
 		world.setBlock(pos, state.cycle(HIDE), 3);
 		this.playerSound(world, pos, SoundEvents.WOOL_BREAK, 0.25F, world.random.nextFloat() * 0.1F + 1.2F);
+		return true;
 	}
 
 	// 当たり判定
@@ -55,7 +56,7 @@ public class WallTowel extends BaseFaceBlock {
 	}
 
 	@Override
-	public void addBlockTip (List<Component> toolTip) {
+	public void addBlockTip(List<Component> toolTip) {
 		toolTip.add(this.getText(this.name).withStyle(GREEN));
 	}
 }

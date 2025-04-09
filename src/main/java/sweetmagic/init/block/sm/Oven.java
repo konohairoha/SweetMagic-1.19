@@ -25,7 +25,7 @@ import sweetmagic.init.block.base.BaseCookBlock;
 import sweetmagic.init.tile.sm.TileAbstractSM;
 import sweetmagic.init.tile.sm.TileOven;
 import sweetmagic.recipe.RecipeHelper;
-import sweetmagic.recipe.RecipeUtil;
+import sweetmagic.recipe.RecipeHelper.RecipeUtil;
 import sweetmagic.recipe.base.AbstractRecipe;
 import sweetmagic.recipe.oven.OvenRecipe;
 import sweetmagic.util.FaceAABB;
@@ -46,16 +46,16 @@ public class Oven extends BaseCookBlock implements ISMCraftBlock {
 	}
 
 	// 当たり判定
-	public VoxelShape getShape(BlockState state, BlockGetter get, BlockPos pos, CollisionContext col) {
+	public VoxelShape getShape(BlockState state, BlockGetter get, BlockPos pos, CollisionContext con) {
 		switch (this.data) {
-		case 2:  return FaceAABB.getAABB(AABB, state);
+		case 2: return FaceAABB.getAABB(AABB, state);
 		default: return Shapes.block();
 		}
 	}
 
 	// ブロックでのアクション
-	public void actionBlock (Level world, BlockPos pos, Player player, ItemStack stack) {
-		if (world.isClientSide) { return; }
+	public boolean actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
+		if (world.isClientSide) { return true; }
 
 		BlockState state = world.getBlockState(pos);
 		int cookState = this.getState(state);
@@ -72,18 +72,19 @@ public class Oven extends BaseCookBlock implements ISMCraftBlock {
 			TileOven tile = (TileOven) world.getBlockEntity(pos);
 			this.spawnXp(player, tile.resultList, tile.hasFork);
 			this.spawnItemList(world, player.blockPosition(), tile.resultList);
+			tile.player = player;
+			tile.getExpValue();
 
 			// 初期化
 			this.setState(world, pos, 0);
 			tile.clearInfo();
 			tile.sendPKT();
 		}
+		return true;
 	}
 
 	// 製粉レシピの取得
-	public void recipeCraft (Level world, BlockPos pos, Player player, ItemStack stack) {
-
-		// レシピを取得して見つからなければ終了
+	public void recipeCraft(Level world, BlockPos pos, Player player, ItemStack stack) {
 		List<ItemStack> stackList = RecipeHelper.getPlayerInv(player, stack);
 		Optional<OvenRecipe> recipe = OvenRecipe.getRecipe(world, stackList);
 		if (recipe.isEmpty()) { return; }
@@ -96,6 +97,8 @@ public class Oven extends BaseCookBlock implements ISMCraftBlock {
 		tile.craftList = recipeUtil.getInputList();
 		tile.resultList = recipeUtil.getResultList();
 		tile.hasFork = this.hasFork(player);
+		tile.amount = recipeUtil.getCount();
+		tile.player = player;
 		tile.craftStart();
 	}
 
@@ -104,26 +107,25 @@ public class Oven extends BaseCookBlock implements ISMCraftBlock {
 		return new TileOven(pos, state);
 	}
 
-	public BlockEntityType<? extends TileAbstractSM> getTileType () {
+	public BlockEntityType<? extends TileAbstractSM> getTileType() {
 		return TileInit.oven;
 	}
 
 	@Nullable
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
-		BlockEntityType<? extends TileAbstractSM> tileType = this.getTileType();
-		return tileType != null ? this.createMailBoxTicker(world, type, tileType) : null;
+		return this.createMailBoxTicker(world, type, this.getTileType());
 	}
 
-	public boolean notNullRecipe (Level world, List<ItemStack> stackList) {
+	public boolean notNullRecipe(Level world, List<ItemStack> stackList) {
 		return !OvenRecipe.getRecipe(world, stackList).isEmpty();
 	}
 
-	public AbstractRecipe getRecipe (Level world, List<ItemStack> stackList) {
+	public AbstractRecipe getRecipe(Level world, List<ItemStack> stackList) {
 		return OvenRecipe.getRecipe(world, stackList).get();
 	}
 
 	@Override
-	public void addBlockTip (List<Component> toolTip) {
+	public void addBlockTip(List<Component> toolTip) {
 		toolTip.add(this.getText("cook_block").withStyle(GREEN));
 
 		if (this.data != 0) {

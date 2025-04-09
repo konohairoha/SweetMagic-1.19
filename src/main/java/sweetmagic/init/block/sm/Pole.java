@@ -34,10 +34,10 @@ import sweetmagic.init.block.base.BaseModelBlock;
 public class Pole extends BaseModelBlock {
 
 	private static final VoxelShape AABB = Block.box(5D, 0D, 5D, 11D, 16D, 11D);
-	public static final EnumProperty<EnumVertical> VERTICAL = EnumProperty.create("vertical", EnumVertical.class);
 	public static final BooleanProperty ISDROP = BooleanProperty.create("isdrop");
+	public static final EnumProperty<EnumVertical> VERTICAL = EnumProperty.create("vertical", EnumVertical.class);
 
-	public Pole (String name) {
+	public Pole(String name) {
 		super(name, setState(Material.WOOD, SoundType.METAL, 0.5F, 8192F, 15));
 		this.registerDefaultState(this.defaultBlockState().setValue(VERTICAL, EnumVertical.BOT).setValue(ISDROP, false));
 		BlockInfo.create(this, SweetMagicCore.smTab, name);
@@ -49,7 +49,7 @@ public class Pole extends BaseModelBlock {
 	}
 
 	// 右クリック出来るか
-	public boolean canRightClick (Player player, ItemStack stack) {
+	public boolean canRightClick(Player player, ItemStack stack) {
 		return !stack.isEmpty();
 	}
 
@@ -67,12 +67,13 @@ public class Pole extends BaseModelBlock {
 	}
 
 	// ブロックでのアクション
-	public void actionBlock (Level world, BlockPos pos, Player player, ItemStack stack) {
-		if (world.isClientSide || !( stack.getItem() instanceof BlockItem blockItem ) ) { return; }
+	public boolean actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
+		if (!(stack.getItem() instanceof BlockItem blockItem)) { return false; }
 
 		Block block = blockItem.getBlock();
-		if ( !( block instanceof Pole ) ) { return; }
+		if (!(block instanceof Pole)) { return false; }
 
+		if (world.isClientSide) { return true; }
 		int addY = 0;
 
 		for (int i = 0; i < 64; i++) {
@@ -80,7 +81,7 @@ public class Pole extends BaseModelBlock {
 			if (!world.getBlockState(pos.above(i + 1)).isAir()) { continue; }
 
 			for (int y = 0; y < 5; y++) {
-				if (!world.getBlockState(pos.above(i + y + 1)).isAir()) { return; }
+				if (!world.getBlockState(pos.above(i + y + 1)).isAir()) { return false; }
 			}
 
 			addY = i;
@@ -100,18 +101,19 @@ public class Pole extends BaseModelBlock {
 			case 3:
 				data = 2;
 				break;
-			default :
+			default:
 				data = 1;
 				break;
 			}
 
 			BlockPos p = pos.above(addY + k + 1);
 			world.setBlockAndUpdate(p, BlockInit.pole.defaultBlockState().setValue(VERTICAL, EnumVertical.getLocalList().get(data)).setValue(ISDROP, isDrop));
-	        SoundType sound = this.getSoundType(block.defaultBlockState(), world, pos, player);
-	        this.playerSound(world, p, sound.getPlaceSound(),(sound.getVolume() + 1F) / 2F, sound.getPitch() * 0.8F);
+			SoundType sound = this.getSoundType(block.defaultBlockState(), world, pos, player);
+			this.playerSound(world, p, sound.getPlaceSound(), (sound.getVolume() + 1F) / 2F, sound.getPitch() * 0.8F);
 		}
 
-        if (!player.isCreative()) { stack.shrink(1); }
+		if (!player.isCreative()) { stack.shrink(1); }
+		return true;
 	}
 
 	@Override
@@ -125,7 +127,7 @@ public class Pole extends BaseModelBlock {
 			case 3:
 				data = 2;
 				break;
-			default :
+			default:
 				data = 1;
 				break;
 			}
@@ -171,11 +173,11 @@ public class Pole extends BaseModelBlock {
 		return this.setVertical(world, state, pos1);
 	}
 
-	public BlockState setVertical (LevelAccessor world, BlockPos pos) {
+	public BlockState setVertical(LevelAccessor world, BlockPos pos) {
 		return this.defaultBlockState().setValue(VERTICAL, EnumVertical.BOT).setValue(ISDROP, true);
 	}
 
-	public BlockState setVertical (LevelAccessor world, BlockState state, BlockPos pos) {
+	public BlockState setVertical(LevelAccessor world, BlockState state, BlockPos pos) {
 		boolean bot = this.getBlock(world, pos.below()) == this;
 		boolean top = this.getBlock(world, pos.above()) == this;
 		return state.setValue(VERTICAL, EnumVertical.getVertical(bot, top)).setValue(ISDROP, state.getValue(ISDROP));
@@ -186,7 +188,7 @@ public class Pole extends BaseModelBlock {
 	}
 
 	// ドロップするかどうか
-	protected boolean isDrop () {
+	protected boolean isDrop() {
 		return false;
 	}
 }

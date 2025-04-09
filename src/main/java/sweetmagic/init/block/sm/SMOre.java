@@ -69,7 +69,7 @@ public class SMOre extends DropExperienceBlock {
 
 		if (!stack.isEmpty()) {
 			int level = stack.getEnchantmentLevel(Enchantments.BLOCK_FORTUNE);
-            int addValue = Math.max(0, rand.nextInt(level + 2) - 1) + 1;
+			int addValue = Math.max(0, rand.nextInt(level + 2) - 1) + 1;
 			stackList.add(new ItemStack(this.getDrop(), this.quantityDropped(rand) * addValue));
 			return stackList;
 		}

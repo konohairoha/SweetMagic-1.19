@@ -22,12 +22,6 @@ public class SMIron extends BaseSMBlock {
 		BlockInfo.create(this, SweetMagicCore.smMagicTab, name);
 	}
 
-	public SMIron(String name, float enchaPower, boolean flag) {
-		super(name, setState(Material.METAL).sound(SoundType.METAL).strength(1F, 8192F));
-		this.enchaPower = enchaPower;
-		BlockInfo.create(this, null, name);
-	}
-
 	public float getEnchantPower () {
 		return this.enchaPower;
 	}

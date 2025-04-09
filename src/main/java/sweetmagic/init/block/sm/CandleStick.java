@@ -34,7 +34,7 @@ public class CandleStick extends BaseFaceBlock {
 	}
 
 	// 当たり判定
-	public VoxelShape getShape(BlockState state, BlockGetter get, BlockPos pos, CollisionContext col) {
+	public VoxelShape getShape(BlockState state, BlockGetter get, BlockPos pos, CollisionContext con) {
 		return FaceAABB.getAABB(state.getValue(ISUNDER) ? UNDER : STICK, state);
 	}
 

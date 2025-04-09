@@ -17,7 +17,7 @@ public class SMFlowerPot extends FlowerPotBlock {
 	private Block block = null;
 	private static final Block POT = Blocks.FLOWER_POT;
 
-	public SMFlowerPot (String name, Block block) {
+	public SMFlowerPot(String name, Block block) {
 		super(() -> (FlowerPotBlock) Blocks.FLOWER_POT, () -> block, Block.Properties.copy(Blocks.FLOWER_POT));
 		BlockInit.blockMap.put(new BlockInfo(this, null), name);
 		this.block = block;
@@ -28,7 +28,7 @@ public class SMFlowerPot extends FlowerPotBlock {
 		return Arrays.<ItemStack> asList(new ItemStack(this.block), new ItemStack(POT));
 	}
 
-	public String getFlowerName () {
+	public String getFlowerName() {
 		return ((SMFlower) this.block).name;
 	}
 }

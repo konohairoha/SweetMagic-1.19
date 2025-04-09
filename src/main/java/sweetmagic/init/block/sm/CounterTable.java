@@ -13,14 +13,15 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.material.Material;
 import sweetmagic.SweetMagicCore;
+import sweetmagic.api.iblock.IFoodExpBlock;
 import sweetmagic.init.BlockInit.BlockInfo;
 import sweetmagic.init.block.base.BaseFaceBlock;
 
-public class CounterTable extends BaseFaceBlock {
+public class CounterTable extends BaseFaceBlock implements IFoodExpBlock {
 
 	public static final IntegerProperty CENTER = IntegerProperty.create("center", 0, 4);
 
-	public CounterTable (String name) {
+	public CounterTable(String name) {
 		super(name, setState(Material.STONE, SoundType.STONE, 0.5F, 8192F));
 		this.registerDefaultState(this.setState().setValue(CENTER, 0));
 		BlockInfo.create(this, SweetMagicCore.smTab, name);
@@ -35,12 +36,12 @@ public class CounterTable extends BaseFaceBlock {
 		return this.setVertical(super.updateShape(state, face, state2, world, pos1, pos2) ,world, pos1);
 	}
 
-	public BlockState setVertical (BlockState state, LevelAccessor world, BlockPos pos) {
+	public BlockState setVertical(BlockState state, LevelAccessor world, BlockPos pos) {
 		return state.setValue(CENTER, this.checkCenter(world, state, pos));
 	}
 
 	// 両サイドにブロックがあるかどうか
-	public int checkCenter (LevelAccessor world, BlockState state, BlockPos pos) {
+	public int checkCenter(LevelAccessor world, BlockState state, BlockPos pos) {
 
 		Direction face = state.getValue(FACING);
 		BlockState north = world.getBlockState(pos.north());
@@ -58,7 +59,7 @@ public class CounterTable extends BaseFaceBlock {
 		return 0;
 	}
 
-	public int getConnect (BlockState block1, BlockState block2, Direction face) {
+	public int getConnect(BlockState block1, BlockState block2, Direction face) {
 		if (this.canConnectBlock(block2, face.getClockWise())) { return 3; }
 		if (this.canConnectBlock(block2, face.getCounterClockWise())) { return 4; }
 		if (this.canConnectBlock(block1, face.getClockWise())) { return 1; }
@@ -71,7 +72,7 @@ public class CounterTable extends BaseFaceBlock {
 		return this.isCounter(state) && face == state.getValue(FACING);
 	}
 
-	public boolean isCounter (BlockState state) {
+	public boolean isCounter(BlockState state) {
 		Block block = state.getBlock();
 		return block instanceof CounterTable || block instanceof CounterTableSink || block instanceof Oven || block instanceof Stove || block instanceof WoodChest;
 	}
