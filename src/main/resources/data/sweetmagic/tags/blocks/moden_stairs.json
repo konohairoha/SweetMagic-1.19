@@ -10,6 +10,10 @@
 		"sweetmagic:moden_stairs_orange_p",
 		"sweetmagic:moden_stairs_orange_m",
 		"sweetmagic:moden_stairs_coconut",
+		"sweetmagic:moden_stairs_cherry",
+		"sweetmagic:moden_stairs_cherry_r",
+		"sweetmagic:moden_stairs_maple",
+		"sweetmagic:moden_stairs_maple_w",
 		"sweetmagic:moden_stairs_magiawood",
 		"sweetmagic:moden_stairs_unsupport_t",
 		"sweetmagic:moden_stairs_unsupport_b",
@@ -20,6 +24,10 @@
 		"sweetmagic:moden_stairs_unsupport_orange_p",
 		"sweetmagic:moden_stairs_unsupport_orange_m",
 		"sweetmagic:moden_stairs_unsupport_coconut",
-		"sweetmagic:moden_stairs_unsupport_magiawood"
+		"sweetmagic:moden_stairs_unsupport_magiawood",
+		"sweetmagic:moden_stairs_unsupport_cherry",
+		"sweetmagic:moden_stairs_unsupport_cherry_r",
+		"sweetmagic:moden_stairs_unsupport_maple",
+		"sweetmagic:moden_stairs_unsupport_maple_w"
 	]
 }

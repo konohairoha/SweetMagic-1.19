@@ -1,0 +1,23 @@
+{
+	"replace": false,
+	"values": [
+		"sweetmagic:fruit_crate_chestnut",
+		"sweetmagic:fruit_crate_cherry",
+		"sweetmagic:fruit_crate_cherry_r",
+		"sweetmagic:fruit_crate_coconut",
+		"sweetmagic:fruit_crate_orange_w",
+		"sweetmagic:fruit_crate_orange_m",
+		"sweetmagic:fruit_crate_orange_pi",
+		"sweetmagic:fruit_crate_magia",
+		"sweetmagic:fruit_crate_black",
+		"sweetmagic:fruit_crate_box_chestnut",
+		"sweetmagic:fruit_crate_box_cherry",
+		"sweetmagic:fruit_crate_box_cherry_r",
+		"sweetmagic:fruit_crate_box_coconut",
+		"sweetmagic:fruit_crate_box_orange_w",
+		"sweetmagic:fruit_crate_box_orange_m",
+		"sweetmagic:fruit_crate_box_orange_pi",
+		"sweetmagic:fruit_crate_box_magia",
+		"sweetmagic:fruit_crate_box_black"
+	]
+}
