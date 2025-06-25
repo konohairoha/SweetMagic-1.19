@@ -1,17 +1,17 @@
 {
-	"pools": [ {
+	"pools": [{
 		"name": "mf_bottle", "rolls": 1, "entries": [
 			{
 				"type": "item", "weight": 100, "name": "sweetmagic:mf_bottle",
-				"functions": [ { "function": "set_count", "count": { "min": 2, "max": 6 } } ]
+				"functions": [{"function": "set_count", "count": {"min": 2, "max": 6}}]
 			},
 			{
 				"type": "item", "weight": 100, "name": "sweetmagic:mysterious_page",
-				"functions": [ { "function": "set_count", "count": { "min": 2, "max": 8 } } ]
+				"functions": [{"function": "set_count", "count": {"min": 2, "max": 8}}]
 			},
 			{
 				"type": "item", "weight": 100, "name": "sweetmagic:mystical_page",
-				"functions": [ { "function": "set_count", "count": { "min": 1, "max": 4 } } ]
+				"functions": [{"function": "set_count", "count": {"min": 1, "max": 4}}]
 			}
 		]
 	} ]

@@ -2,11 +2,11 @@
 	"pools": [{"name": "smbounus", "rolls": 8, "entries": [
 		{
 			"type": "item", "weight": 2, "name": "sweetmagic:aether_crystal",
-			"functions": [{"function": "set_count", "count": {"min": 4, "max": 10}}]
+			"functions": [{"function": "set_count", "count": {"min": 5, "max": 10}}]
 		},
 		{
 			"type": "item", "weight": 1, "name": "sweetmagic:divine_crystal",
-			"functions": [{"function": "set_count", "count": {"min": 1, "max": 6}}]
+			"functions": [{"function": "set_count", "count": {"min": 1, "max": 7}}]
 		},
 		{
 			"type": "item", "weight": 3, "name": "sweetmagic:mf_small_bottle",
@@ -29,7 +29,7 @@
 			"functions": [{"function": "set_count", "count": {"min": 1, "max": 6}}]
 		},
 		{
-			"type": "item", "weight": 1, "name": "sweetmagic:aether_recovery_book1",
+			"type": "item", "weight": 1, "name": "sweetmagic:aether_recovery_book2",
 			"functions": [{"function": "set_count", "count": {"min": 1, "max": 1}}]
 		},
 		{

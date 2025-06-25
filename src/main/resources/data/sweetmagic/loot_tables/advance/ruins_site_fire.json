@@ -1,5 +1,5 @@
 {
-	"pools": [ {
+	"pools": [{
 		"name": "ruins_site", "rolls": 1, "entries": [
 			{
 				"type": "item", "weight": 100, "name": "minecraft:map",

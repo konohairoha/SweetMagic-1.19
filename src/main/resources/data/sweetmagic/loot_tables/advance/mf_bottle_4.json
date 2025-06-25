@@ -1,13 +1,13 @@
 {
-	"pools": [ {
+	"pools": [{
 		"name": "mf_bottle", "rolls": 3, "entries": [
 			{
 				"type": "item", "weight": 100, "name": "sweetmagic:mf_bottle",
-				"functions": [ { "function": "set_count", "count": { "min": 3, "max": 8 } } ]
+				"functions": [{"function": "set_count", "count": {"min": 3, "max": 8}}]
 			},
 			{
 				"type": "item", "weight": 100, "name": "sweetmagic:divine_crystal",
-				"functions": [ { "function": "set_count", "count": { "min": 3, "max": 6 } } ]
+				"functions": [{"function": "set_count", "count": {"min": 3, "max": 6}}]
 			}
 		]
 	} ]

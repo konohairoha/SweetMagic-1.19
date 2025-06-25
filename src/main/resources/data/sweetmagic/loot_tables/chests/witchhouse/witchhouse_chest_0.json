@@ -1,60 +1,60 @@
 {
-	"pools": [ { "name": "smbounus", "rolls": 7, "entries": [
+	"pools": [{"name": "smbounus", "rolls": 7, "entries": [
 		{
 			"type": "item", "weight": 4, "name": "sweetmagic:blank_page",
-			"functions": [ { "function": "set_count", "count": { "min": 3, "max": 10 } } ]
+			"functions": [{"function": "set_count", "count": {"min": 3, "max": 10}}]
 		},
 		{
 			"type": "item", "weight": 3, "name": "sweetmagic:blank_magic",
-			"functions": [ { "function": "set_count", "count": { "min": 1, "max": 4 } } ]
+			"functions": [{"function": "set_count", "count": {"min": 1, "max": 4}}]
 		},
 		{
 			"type": "item", "weight": 2, "name": "sweetmagic:mysterious_page",
-			"functions": [ { "function": "set_count", "count": { "min": 1, "max": 2 } } ]
+			"functions": [{"function": "set_count", "count": {"min": 1, "max": 2}}]
 		},
 		{
 			"type": "item", "weight": 1, "name": "sweetmagic:mystical_page",
-			"functions": [ { "function": "set_count", "count": { "min": 0, "max": 1 } } ]
+			"functions": [{"function": "set_count", "count": {"min": 0, "max": 1}}]
 		},
 		{
 			"type": "item", "weight": 3, "name": "sweetmagic:magic_meal",
-			"functions": [ { "function": "set_count", "count": { "min": 2, "max": 8 } } ]
+			"functions": [{"function": "set_count", "count": {"min": 2, "max": 8}}]
 		},
 		{
 			"type": "item", "weight": 2, "name": "sweetmagic:mf_small_bottle",
-			"functions": [ { "function": "set_count", "count": { "min": 1, "max": 2 } } ]
+			"functions": [{"function": "set_count", "count": {"min": 1, "max": 2}}]
 		},
 		{
 			"type": "item", "weight": 3, "name": "sweetmagic:cotton_cloth",
-			"functions": [ { "function": "set_count", "count": { "min": 3, "max": 6 } } ]
+			"functions": [{"function": "set_count", "count": {"min": 3, "max": 6}}]
 		},
 		{
 			"type": "item", "weight": 2, "name": "sweetmagic:magic_aether_force",
-			"functions": [ { "function": "set_count", "count": { "min": 1, "max": 1 } } ]
+			"functions": [{"function": "set_count", "count": {"min": 1, "max": 1}}]
 		},
 		{
 			"type": "item", "weight": 3, "name": "sweetmagic:alternative_ingot",
-			"functions": [ { "function": "set_count", "count": { "min": 2, "max": 5 } } ]
+			"functions": [{"function": "set_count", "count": {"min": 2, "max": 5}}]
 		},
 		{
 			"type": "item", "weight": 1, "name": "sweetmagic:aether_recovery_book1",
-			"functions": [ { "function": "set_count", "count": { "min": -1, "max": 1 } } ]
+			"functions": [{"function": "set_count", "count": {"min": -1, "max": 1}}]
 		},
 		{
 			"type": "item", "weight": 2, "name": "minecraft:golden_apple",
-			"functions": [ { "function": "set_count", "count": { "min": 1, "max": 1 } } ]
+			"functions": [{"function": "set_count", "count": {"min": 1, "max": 1}}]
 		},
 		{
 			"type": "item", "weight": 4, "name": "minecraft:book",
-			"functions": [ { "function": "set_count", "count": { "min": 2, "max": 6 } } ]
+			"functions": [{"function": "set_count", "count": {"min": 2, "max": 6}}]
 		},
 		{
 			"type": "item", "weight": 2, "name": "minecraft:paper",
-			"functions": [ { "function": "set_count", "count": { "min":3, "max": 12 } } ]
+			"functions": [{"function": "set_count", "count": {"min":3, "max": 12}}]
 		},
 		{
 			"type": "item", "weight": 2, "name": "minecraft:leather",
-			"functions": [ { "function": "set_count", "count": { "min":2, "max": 5 } } ]
+			"functions": [{"function": "set_count", "count": {"min":2, "max": 5}}]
 		}
-	] } ]
+	] }]
 }

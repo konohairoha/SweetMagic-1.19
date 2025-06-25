@@ -1,100 +1,100 @@
 {
-	"pools": [{"name": "smbounus", "rolls": 16, "entries": [
-		{
-			"type": "item", "weight": 2, "name": "sweetmagic:sannyflower_petal",
-			"functions": [{"function": "set_count", "count": {"min": 2, "max": 4}}]
-		},
-		{
-			"type": "item", "weight": 2, "name": "sweetmagic:moonblossom_petal",
-			"functions": [{"function": "set_count", "count": {"min": 2, "max": 4}}]
-		},
+	"pools": [{"name": "smbounus", "rolls": 12, "entries": [
 		{
 			"type": "item", "weight": 3, "name": "sweetmagic:aether_crystal",
-			"functions": [{"function": "set_count", "count": {"min": 2, "max": 8}}]
+			"functions": [{"function": "set_count", "count": {"min": 6, "max": 16}}]
 		},
 		{
 			"type": "item", "weight": 2, "name": "sweetmagic:divine_crystal",
-			"functions": [{"function": "set_count", "count": {"min": 1, "max": 4}}]
+			"functions": [{"function": "set_count", "count": {"min": 2, "max": 8}}]
 		},
 		{
 			"type": "item", "weight": 1, "name": "sweetmagic:pure_crystal",
-			"functions": [{"function": "set_count", "count": {"min": 1, "max": 1}}]
+			"functions": [{"function": "set_count", "count": {"min": 1, "max": 3}}]
 		},
 		{
 			"type": "item", "weight": 3, "name": "sweetmagic:mf_bottle",
-			"functions": [{"function": "set_count", "count": {"min": 2, "max": 5}}]
+			"functions": [{"function": "set_count", "count": {"min": 2, "max": 12}}]
 		},
 		{
 			"type": "item", "weight": 2, "name": "sweetmagic:magia_bottle",
-			"functions": [{"function": "set_count", "count": {"min": 1, "max": 2}}]
+			"functions": [{"function": "set_count", "count": {"min": 1, "max": 6}}]
 		},
 		{
 			"type": "item", "weight": 3, "name": "sweetmagic:mysterious_page",
-			"functions": [{"function": "set_count", "count": {"min": 1, "max": 8}}]
+			"functions": [{"function": "set_count", "count": {"min": 3, "max": 12}}]
 		},
 		{
 			"type": "item", "weight": 2, "name": "sweetmagic:mystical_page",
-			"functions": [{"function": "set_count", "count": {"min": 1, "max": 3}}]
+			"functions": [{"function": "set_count", "count": {"min": 2, "max": 8}}]
 		},
 		{
 			"type": "item", "weight": 2, "name": "sweetmagic:mystical_book",
-			"functions": [{"function": "set_count", "count": {"min": 1, "max": 3}}]
-		},
-		{
-			"type": "item", "weight": 2, "name": "sweetmagic:prizmium",
-			"functions": [{"function": "set_count", "count": {"min": 3, "max": 8}}]
+			"functions": [{"function": "set_count", "count": {"min": 1, "max": 6}}]
 		},
 		{
 			"type": "item", "weight": 3, "name": "sweetmagic:magic_meal",
-			"functions": [{"function": "set_count", "count": {"min": 8, "max": 12}}]
+			"functions": [{"function": "set_count", "count": {"min": 8, "max": 16}}]
+		},
+		{
+			"type": "item", "weight": 2, "name": "sweetmagic:witch_tears",
+			"functions": [{"function": "set_count", "count": {"min": 1, "max": 6}}]
 		},
 		{
 			"type": "item", "weight": 3, "name": "sweetmagic:alternative_ingot",
-			"functions": [{"function": "set_count", "count": {"min": 2, "max": 7}}]
+			"functions": [{"function": "set_count", "count": {"min": 2, "max": 9}}]
 		},
 		{
 			"type": "item", "weight": 1, "name": "sweetmagic:cosmos_light_ingot",
-			"functions": [{"function": "set_count", "count": {"min": 1, "max": 3}}]
+			"functions": [{"function": "set_count", "count": {"min": 1, "max": 5}}]
 		},
 		{
 			"type": "item", "weight": 3, "name": "sweetmagic:magic_aether_force",
-			"functions": [{"function": "set_count", "count": {"min": 2, "max": 4}}]
+			"functions": [{"function": "set_count", "count": {"min": 2, "max": 9}}]
 		},
 		{
 			"type": "item", "weight": 2, "name": "sweetmagic:magic_divine_force",
-			"functions": [{"function": "set_count", "count": {"min": 1, "max": 3}}]
+			"functions": [{"function": "set_count", "count": {"min": 1, "max": 6}}]
 		},
 		{
 			"type": "item", "weight": 1, "name": "sweetmagic:magic_pure_force",
-			"functions": [{"function": "set_count", "count": {"min": 1, "max": 1}}]
+			"functions": [{"function": "set_count", "count": {"min": 1, "max": 2}}]
 		},
 		{
 			"type": "item", "weight": 2, "name": "sweetmagic:acce_bag",
 			"functions": [{"function": "set_count", "count": {"min": 1, "max": 1}}]
 		},
 		{
-			"type": "item", "weight": 1, "name": "sweetmagic:aether_recovery_book1",
+			"type": "item", "weight": 1, "name": "sweetmagic:summon_book",
 			"functions": [{"function": "set_count", "count": {"min": 1, "max": 1}}]
+		},
+		{
+			"type": "item", "weight": 1, "name": "sweetmagic:extension_ring",
+			"functions": [{"function": "set_count", "count": {"min": 1, "max": 1}}]
+		},
+		{
+			"type": "item", "weight": 1, "name": "sweetmagic:aether_recovery_book2",
+			"functions": [{"function": "set_count", "count": {"min": 1, "max": 2}}]
 		},
 		{
 			"type": "item", "weight": 2, "name": "minecraft:iron_ingot",
-			"functions": [{"function": "set_count", "count": {"min": 3, "max": 7}}]
+			"functions": [{"function": "set_count", "count": {"min": 5, "max": 16}}]
 		},
 		{
 			"type": "item", "weight": 2, "name": "minecraft:gold_ingot",
-			"functions": [{"function": "set_count", "count": {"min": 2, "max": 4}}]
+			"functions": [{"function": "set_count", "count": {"min": 3, "max": 12}}]
 		},
 		{
 			"type": "item", "weight": 1, "name": "minecraft:diamond",
+			"functions": [{"function": "set_count", "count": {"min": 1, "max": 3}}]
+		},
+		{
+			"type": "item", "weight": 2, "name": "minecraft:golden_apple",
 			"functions": [{"function": "set_count", "count": {"min": 1, "max": 1}}]
 		},
 		{
-			"type": "item", "weight": 1, "name": "minecraft:golden_apple",
-			"functions": [{"function": "set_count", "count": {"min": 1, "max": 1}}]
-		},
-		{
-			"type": "item", "weight": 2, "name": "minecraft:glow_ink_sac",
-			"functions": [{"function": "set_count", "count": {"min": 3, "max": 6}}]
+			"type": "item", "weight": 2, "name": "minecraft:amethyst_shard",
+			"functions": [{"function": "set_count", "count": {"min": 8, "max": 16}}]
 		},
 		{
 			"type": "item", "weight": 2, "name": "minecraft:book",
@@ -102,7 +102,7 @@
 		},
 		{
 			"type": "item", "weight": 2, "name": "sweetmagic:starlight",
-			"functions": [{"function": "set_count", "count": {"min": 1, "max": 2}}]
+			"functions": [{"function": "set_count", "count": {"min": 1, "max": 3}}]
 		},
 		{
 			"type": "item", "weight": 1, "name": "sweetmagic:magicpage_attack",

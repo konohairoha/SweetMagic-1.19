@@ -1,68 +1,68 @@
 {
-	"pools": [ { "name": "smbounus", "rolls": 8, "entries": [
+	"pools": [{"name": "smbounus", "rolls": 8, "entries": [
 		{
 			"type": "item", "weight": 4, "name": "sweetmagic:egg_bag",
-			"functions": [ { "function": "set_count", "count": { "min": 2, "max": 8 } } ]
+			"functions": [{"function": "set_count", "count": {"min": 2, "max": 8}}]
 		},
 		{
 			"type": "item", "weight": 2, "name": "sweetmagic:salt",
-			"functions": [ { "function": "set_count", "count": { "min": 1, "max": 6 } } ]
+			"functions": [{"function": "set_count", "count": {"min": 1, "max": 6}}]
 		},
 		{
 			"type": "item", "weight": 2, "name": "sweetmagic:flour",
-			"functions": [ { "function": "set_count", "count": { "min": 1, "max": 5 } } ]
+			"functions": [{"function": "set_count", "count": {"min": 1, "max": 5}}]
 		},
 		{
 			"type": "item", "weight": 2, "name": "sweetmagic:butter",
-			"functions": [ { "function": "set_count", "count": { "min":1, "max": 6 } } ]
+			"functions": [{"function": "set_count", "count": {"min":1, "max": 6}}]
 		},
 		{
 			"type": "item", "weight": 2, "name": "sweetmagic:custard",
-			"functions": [ { "function": "set_count", "count": { "min":1, "max": 6 } } ]
+			"functions": [{"function": "set_count", "count": {"min":1, "max": 6}}]
 		},
 		{
 			"type": "item", "weight": 2, "name": "sweetmagic:olive_oil",
-			"functions": [ { "function": "set_count", "count": { "min":1, "max": 6 } } ]
+			"functions": [{"function": "set_count", "count": {"min":1, "max": 6}}]
 		},
 		{
 			"type": "item", "weight": 2, "name": "sweetmagic:whipping_cream",
-			"functions": [ { "function": "set_count", "count": { "min":1, "max": 6 } } ]
+			"functions": [{"function": "set_count", "count": {"min":1, "max": 6}}]
 		},
 		{
 			"type": "item", "weight": 2, "name": "sweetmagic:cocoa_powder",
-			"functions": [ { "function": "set_count", "count": { "min":1, "max": 6 } } ]
+			"functions": [{"function": "set_count", "count": {"min":1, "max": 6}}]
 		},
 		{
 			"type": "item", "weight": 2, "name": "sweetmagic:gelatin",
-			"functions": [ { "function": "set_count", "count": { "min":1, "max": 6 } } ]
+			"functions": [{"function": "set_count", "count": {"min":1, "max": 6}}]
 		},
 		{
 			"type": "item", "weight": 2, "name": "sweetmagic:vannila_essence",
-			"functions": [ { "function": "set_count", "count": { "min":1, "max": 6 } } ]
+			"functions": [{"function": "set_count", "count": {"min":1, "max": 6}}]
 		},
 		{
 			"type": "item", "weight": 2, "name": "sweetmagic:vinegar",
-			"functions": [ { "function": "set_count", "count": { "min":1, "max": 6 } } ]
+			"functions": [{"function": "set_count", "count": {"min":1, "max": 6}}]
 		},
 		{
 			"type": "item", "weight": 2, "name": "sweetmagic:mayonnaise",
-			"functions": [ { "function": "set_count", "count": { "min":1, "max": 6 } } ]
+			"functions": [{"function": "set_count", "count": {"min":1, "max": 6}}]
 		},
 		{
 			"type": "item", "weight": 2, "name": "sweetmagic:salad_dressing",
-			"functions": [ { "function": "set_count", "count": { "min":1, "max": 6 } } ]
+			"functions": [{"function": "set_count", "count": {"min":1, "max": 6}}]
 		},
 		{
 			"type": "item", "weight": 2, "name": "sweetmagic:soy_sauce",
-			"functions": [ { "function": "set_count", "count": { "min":1, "max": 6 } } ]
+			"functions": [{"function": "set_count", "count": {"min":1, "max": 6}}]
 		},
 		{
 			"type": "item", "weight": 2, "name": "sweetmagic:breadcrumbs",
-			"functions": [ { "function": "set_count", "count": { "min":1, "max": 6 } } ]
+			"functions": [{"function": "set_count", "count": {"min":1, "max": 6}}]
 		},
 		{
 			"type": "item", "weight": 1, "name": "sweetmagic:mysterious_fork",
-			"functions": [ { "function": "set_count", "count": { "min":1, "max": 1 } } ]
+			"functions": [{"function": "set_count", "count": {"min":1, "max": 1}}]
 		}
-	] } ]
+	] }]
 }

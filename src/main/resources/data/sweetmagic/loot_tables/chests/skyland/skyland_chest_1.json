@@ -1,64 +1,64 @@
 {
-	"pools": [ { "name": "smbounus", "rolls": 4, "entries": [
+	"pools": [{"name": "smbounus", "rolls": 4, "entries": [
 		{
 			"type": "item", "weight": 4, "name": "sweetmagic:itigo_daihuku",
-			"functions": [ { "function": "set_count", "count": { "min": 1, "max": 4 } } ]
+			"functions": [{"function": "set_count", "count": {"min": 1, "max": 4}}]
 		},
 		{
 			"type": "item", "weight": 4, "name": "sweetmagic:kurikinton",
-			"functions": [ { "function": "set_count", "count": { "min": 1, "max": 4 } } ]
+			"functions": [{"function": "set_count", "count": {"min": 1, "max": 4}}]
 		},
 		{
 			"type": "item", "weight": 4, "name": "sweetmagic:ohagi",
-			"functions": [ { "function": "set_count", "count": { "min": 1, "max": 4 } } ]
+			"functions": [{"function": "set_count", "count": {"min": 1, "max": 4}}]
 		},
 		{
 			"type": "item", "weight": 4, "name": "sweetmagic:strawberry_tart",
-			"functions": [ { "function": "set_count", "count": { "min": 1, "max": 4 } } ]
+			"functions": [{"function": "set_count", "count": {"min": 1, "max": 4}}]
 		},
 		{
 			"type": "item", "weight": 4, "name": "sweetmagic:applepie",
-			"functions": [ { "function": "set_count", "count": { "min": 1, "max": 4 } } ]
+			"functions": [{"function": "set_count", "count": {"min": 1, "max": 4}}]
 		},
 		{
 			"type": "item", "weight": 4, "name": "sweetmagic:pudding",
-			"functions": [ { "function": "set_count", "count": { "min": 1, "max": 4 } } ]
+			"functions": [{"function": "set_count", "count": {"min": 1, "max": 4}}]
 		},
 		{
 			"type": "item", "weight": 4, "name": "sweetmagic:icing_cookies",
-			"functions": [ { "function": "set_count", "count": { "min": 1, "max": 4 } } ]
+			"functions": [{"function": "set_count", "count": {"min": 1, "max": 4}}]
 		},
 		{
 			"type": "item", "weight": 4, "name": "sweetmagic:icebox_cookie",
-			"functions": [ { "function": "set_count", "count": { "min": 1, "max": 4 } } ]
+			"functions": [{"function": "set_count", "count": {"min": 1, "max": 4}}]
 		},
 		{
 			"type": "item", "weight": 4, "name": "sweetmagic:short_cake",
-			"functions": [ { "function": "set_count", "count": { "min": 1, "max": 4 } } ]
+			"functions": [{"function": "set_count", "count": {"min": 1, "max": 4}}]
 		},
 		{
 			"type": "item", "weight": 4, "name": "sweetmagic:donut_strawberrychoco",
-			"functions": [ { "function": "set_count", "count": { "min": 1, "max": 4 } } ]
+			"functions": [{"function": "set_count", "count": {"min": 1, "max": 4}}]
 		},
 		{
 			"type": "item", "weight": 4, "name": "sweetmagic:cheese_cake",
-			"functions": [ { "function": "set_count", "count": { "min": 1, "max": 4 } } ]
+			"functions": [{"function": "set_count", "count": {"min": 1, "max": 4}}]
 		},
 		{
 			"type": "item", "weight": 4, "name": "sweetmagic:peach_tart",
-			"functions": [ { "function": "set_count", "count": { "min": 1, "max": 4 } } ]
+			"functions": [{"function": "set_count", "count": {"min": 1, "max": 4}}]
 		},
 		{
 			"type": "item", "weight": 4, "name": "sweetmagic:orange_tart",
-			"functions": [ { "function": "set_count", "count": { "min": 1, "max": 4 } } ]
+			"functions": [{"function": "set_count", "count": {"min": 1, "max": 4}}]
 		},
 		{
 			"type": "item", "weight": 4, "name": "sweetmagic:fruit_crepe",
-			"functions": [ { "function": "set_count", "count": { "min": 1, "max": 4 } } ]
+			"functions": [{"function": "set_count", "count": {"min": 1, "max": 4}}]
 		},
 		{
 			"type": "item", "weight": 4, "name": "sweetmagic:softcream_vannila",
-			"functions": [ { "function": "set_count", "count": { "min": 1, "max": 4 } } ]
+			"functions": [{"function": "set_count", "count": {"min": 1, "max": 4}}]
 		}
-	] } ]
+	] }]
 }
