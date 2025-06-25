@@ -4,15 +4,20 @@ import java.util.List;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
+import sweetmagic.api.iitem.ITier;
 import sweetmagic.init.item.magic.SMMagicItem;
 
-public class SMDropItem extends SMMagicItem {
+public class SMDropItem extends SMMagicItem implements ITier {
 
 	private final int data;
 
 	public SMDropItem(String name, int data) {
 		super(name);
 		this.data = data;
+	}
+
+	public int getTier() {
+		return this.data == 6 ? 2 : 1;
 	}
 
 	// ツールチップの表示

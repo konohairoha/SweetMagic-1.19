@@ -11,8 +11,12 @@ import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -32,6 +36,7 @@ import sweetmagic.api.iitem.IAmorUtil;
 import sweetmagic.api.iitem.IHarness;
 import sweetmagic.init.EnchantInit;
 import sweetmagic.init.ItemInit;
+import sweetmagic.init.SoundInit;
 
 public class SMHarness extends ArmorItem implements IHarness, IAmorUtil {
 
@@ -39,6 +44,8 @@ public class SMHarness extends ArmorItem implements IHarness, IAmorUtil {
 	public final int data;
 	private int tickTime = 0;
 	private final String name;
+	private static final String NOT_ACTIVE = "notActive";
+	private Multimap<Attribute, AttributeModifier> atMap = ImmutableMultimap.of();
 
 	public SMHarness(String name, int data, int maxMF) {
 		super(IAmorUtil.getArmorMaterial(data), EquipmentSlot.FEET, IAmorUtil.getArmorPro());
@@ -48,30 +55,61 @@ public class SMHarness extends ArmorItem implements IHarness, IAmorUtil {
 		ItemInit.itemMap.put(this, this.name);
 	}
 
-	public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlot slot) {
+	// 右クリック
+	@Override
+	public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
+		ItemStack stack = player.getItemInHand(hand);
+		if(!player.isShiftKeyDown()) { return super.use(world, player, hand); }
 
-		ImmutableMultimap.Builder<Attribute, AttributeModifier> map = ImmutableMultimap.builder();
-		map.putAll(super.getDefaultAttributeModifiers(slot));
-		map.put(Attributes.MOVEMENT_SPEED, new AttributeModifier(IAmorUtil.SMUPSPEED, "SM speedUP", 0.04F, AttributeModifier.Operation.ADDITION));
+		CompoundTag tags = stack.getOrCreateTag();
+		tags.putBoolean(NOT_ACTIVE, !tags.getBoolean(NOT_ACTIVE));
 
-		return slot == EquipmentSlot.FEET ? map.build() : super.getDefaultAttributeModifiers(slot);
+		if(world.isClientSide()) {
+			boolean notActive = tags.getBoolean(NOT_ACTIVE);
+			this.playSound(player.getLevel(), player, SoundInit.STOVE_OFF, 0.1F, !notActive ? 0.75F : 1.25F);
+			player.sendSystemMessage(this.getTipArray(((MutableComponent) stack.getDisplayName()).withStyle(GOLD), this.getText(notActive ? "acce_invalid" : "acce_active").withStyle(notActive ? RED : GREEN)));
+		}
+
+		return InteractionResultHolder.consume(stack);
 	}
 
 	@Override
 	public void onArmorTick(ItemStack stack, Level world, Player player) {
+
+		CompoundTag tags = stack.getOrCreateTag();
+		boolean notActive = tags.getBoolean(NOT_ACTIVE);
+
+		if(notActive) {
+			if(!this.atMap.isEmpty()) {
+				player.getAttributes().removeAttributeModifiers(this.atMap);
+				this.atMap = ImmutableMultimap.of();
+			}
+		}
+
+		else {
+			ImmutableMultimap.Builder<Attribute, AttributeModifier> map = ImmutableMultimap.builder();
+			map.put(Attributes.MOVEMENT_SPEED, new AttributeModifier(IAmorUtil.SMUPSPEED, "Move Speed", 0.04F, AttributeModifier.Operation.ADDITION));
+			Multimap<Attribute, AttributeModifier> mulMap = map.build();
+
+			if(!mulMap.isEmpty()) {
+				this.atMap = mulMap;
+				player.getAttributes().addTransientAttributeModifiers(mulMap);
+			}
+		}
+
 
 		if (this.data == 1) {
 			player.fallDistance = 0F;
 
 			if (!player.isCreative() && !player.isSpectator() && player.getAbilities().flying && !this.isMFEmpty(stack)) {
 
-				if (world.isClientSide) {
-					RandomSource rand = world.random;
+				if (world.isClientSide()) {
+					RandomSource rand = world.getRandom();
 					Vec3 vec = player.getDeltaMovement();
 
-					float x = (float) (player.xo - 0.5F + rand.nextFloat());
-					float y = (float) (player.yo - 0.4F + rand.nextFloat() * 0.5F);
-					float z = (float) (player.zo - 0.5F + rand.nextFloat());
+					float x = (float) player.xo - 0.5F + rand.nextFloat();
+					float y = (float) player.yo - 0.4F + rand.nextFloat() * 0.5F;
+					float z = (float) player.zo - 0.5F + rand.nextFloat();
 
 					float f1 = (float) (-vec.x * 0.5F);
 					float f2 = (float) (-0.025F + -vec.y * 0.5F);
@@ -172,6 +210,7 @@ public class SMHarness extends ArmorItem implements IHarness, IAmorUtil {
 	public void appendHoverText(ItemStack stack, @Nullable Level world, List<Component> toolTip, TooltipFlag flag) {
 		toolTip.add(this.getText("aether_boot").withStyle(GOLD));
 		toolTip.add(this.getText("aether_boot_move").withStyle(GOLD));
+		toolTip.add(this.getText("aether_boot_move_active").withStyle(RED));
 
 		if (this.data >= 1) {
 			toolTip.add(this.getText("angel_harness").withStyle(GOLD));

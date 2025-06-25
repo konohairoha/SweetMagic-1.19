@@ -26,7 +26,7 @@ public class SMShovel extends ShovelItem implements ISMTip, IRangeTool {
 	private final int data;
 
 	public SMShovel(String name, int data, int value) {
-		super(Tiers.DIAMOND, 1, -3F, SMItem.setItem(value, SweetMagicCore.smMagicTab));
+		super(data == 2 ? Tiers.NETHERITE :Tiers.DIAMOND, 1F + data * 0.25F, -3F + data, SMItem.setItem(value, SweetMagicCore.smMagicTab));
 		this.name = name;
 		this.data = data;
 		ItemInit.itemMap.put(this, name);
@@ -62,6 +62,6 @@ public class SMShovel extends ShovelItem implements ISMTip, IRangeTool {
 
 	// アイテム修理
 	public boolean isValidRepairItem(ItemStack stack, ItemStack ingot) {
-		return ingot.is(ItemInit.alt_ingot);
+		return ingot.is(ItemInit.alternative_ingot);
 	}
 }

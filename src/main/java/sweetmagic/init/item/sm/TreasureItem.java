@@ -4,17 +4,15 @@ import java.util.List;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
-import sweetmagic.init.item.magic.SMMagicItem;
+import sweetmagic.init.item.magic.SMTierItem;
 
-public class TreasureItem extends SMMagicItem {
+public class TreasureItem extends SMTierItem {
 
 	protected final int data;
-	protected final int tier;
 
 	public TreasureItem(String name, int tier, int data) {
-		super(name);
+		super(name, tier);
 		this.data = data;
-		this.tier = tier;
 	}
 
 	// ツールチップの表示

@@ -27,13 +27,9 @@ public class RankUpMagic extends BaseMagicItem {
 		this.data = data;
 	}
 
-	/**
-	 * 0 = 範囲回復魔法
-	 */
-
 	// ツールチップ
 	public List<MutableComponent> magicToolTip(List<MutableComponent> toolTip) {
-		toolTip.add(this.getText("magic_aether_force", String.format("%,d", this.addExp())));
+		toolTip.add(this.getText("magic_aether_force", this.format(this.addExp())));
 		return toolTip;
 	}
 
@@ -54,17 +50,10 @@ public class RankUpMagic extends BaseMagicItem {
 		return flag;
 	}
 
-	// 回復魔法
-	public boolean ruckUpMagic(Level world, Player player, ItemStack stack, WandInfo wandInfo) {
-
-		// 杖の取得
-		IWand wand = wandInfo.getWand();
-		int level = wandInfo.getLevel();
-
-		if (wand.isNotElement()) {
-			level -= 3;
-		}
-
+	// 経験値魔法
+	public boolean ruckUpMagic(Level world, Player player, ItemStack stack, WandInfo info) {
+		IWand wand = info.getWand();
+		int level = wand.getLevel(info.getStack());
 		this.needEXP = wand.needExp(wand.getMaxLevel(), level + 1, stack);
 		return true;
 	}
@@ -84,7 +73,16 @@ public class RankUpMagic extends BaseMagicItem {
 	@Override
 	public boolean canItemMagic(Level world, Player player, WandInfo info) {
 		IWand wand = info.getWand();
-		int level = info.getLevel();
-		return !wand.isCreativeWand() && level < wand.getMaxLevel();
+		return !wand.isCreativeWand() && info.getLevel() < wand.getMaxLevel();
+	}
+
+	// ユニーク魔法かどうか
+	public boolean isUniqueMagic() {
+		return true;
+	}
+
+	// 使用時に全て消費するか
+	public boolean isAllShrink() {
+		return this.data != 5;
 	}
 }

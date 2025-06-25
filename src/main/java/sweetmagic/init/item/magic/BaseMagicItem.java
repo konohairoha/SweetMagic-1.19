@@ -12,12 +12,13 @@ import sweetmagic.SweetMagicCore;
 import sweetmagic.api.emagic.SMElement;
 import sweetmagic.api.emagic.SMMagicType;
 import sweetmagic.api.iitem.IMagicItem;
+import sweetmagic.api.iitem.ITier;
 import sweetmagic.api.iitem.info.MagicInfo;
 import sweetmagic.api.iitem.info.WandInfo;
 import sweetmagic.api.util.ISMTip;
 import sweetmagic.init.item.sm.SMItem;
 
-public abstract class BaseMagicItem extends SMItem implements IMagicItem, ISMTip {
+public abstract class BaseMagicItem extends SMItem implements IMagicItem, ISMTip, ITier {
 
 	private SMElement ele;
 	private SMMagicType magicType;
@@ -27,7 +28,7 @@ public abstract class BaseMagicItem extends SMItem implements IMagicItem, ISMTip
 	private boolean isShirink;
 	private ResourceLocation icon;
 
-	public BaseMagicItem (String name, SMMagicType type, SMElement ele, int tier, int coolTime, int useMF, boolean isShirink) {
+	public BaseMagicItem(String name, SMMagicType type, SMElement ele, int tier, int coolTime, int useMF, boolean isShirink) {
 		super(name, setItem(SweetMagicCore.smMagicTab).setNoRepair());
 		this.setMagicType(type);
 		this.setElement(ele);
@@ -129,8 +130,8 @@ public abstract class BaseMagicItem extends SMItem implements IMagicItem, ISMTip
 	}
 
 	// インベントリ常時更新
-	public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean main) {
+	public void inventoryTick(ItemStack stack, Level world, Entity entity, int slot, boolean main) {
 		if (!(entity instanceof Player player)) { return; }
-		this.onUpdate(level, player, stack);
+		this.onUpdate(world, player, stack);
 	}
 }

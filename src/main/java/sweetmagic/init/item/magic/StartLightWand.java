@@ -2,7 +2,6 @@ package sweetmagic.init.item.magic;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import org.antlr.v4.runtime.misc.NotNull;
 
@@ -45,15 +44,17 @@ import sweetmagic.init.EnchantInit;
 import sweetmagic.init.PotionInit;
 import sweetmagic.init.item.sm.SMItem;
 import sweetmagic.key.SMKeybind;
+import sweetmagic.util.SchematicExport;
 
 public class StartLightWand extends SMItem implements IMFTool {
 
 	public int maxMF;
-	private static final UUID REACH_UUID = UUID.fromString("0A87A51E-A43F-4EEF-A770-07C2160D373D");
+	public final int data;
 
-	public StartLightWand(String name) {
+	public StartLightWand(String name, int data) {
 		super(name, setItem(SweetMagicCore.smMagicTab));
-		this.setMaxMF(50000);
+		this.setMaxMF(data == 0 ? 50000 : 0);
+		this.data = data;
 	}
 
 	public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack) {
@@ -61,7 +62,7 @@ public class StartLightWand extends SMItem implements IMFTool {
 		if (slot == EquipmentSlot.MAINHAND) {
 			ImmutableMultimap.Builder<Attribute, AttributeModifier> build = ImmutableMultimap.builder();
 			build.putAll(map);
-			build.put(ForgeMod.REACH_DISTANCE.get(), new AttributeModifier(REACH_UUID, "Reach distance modifier", 32D, AttributeModifier.Operation.ADDITION));
+			build.put(ForgeMod.REACH_DISTANCE.get(), new AttributeModifier(SMAcce.BLOCK_REACH, "Block Reach", 32D, AttributeModifier.Operation.ADDITION));
 			map = build.build();
 		}
 		return map;
@@ -142,20 +143,23 @@ public class StartLightWand extends SMItem implements IMFTool {
 			maxBlockCount += item.getCount();
 		}
 
-		for (BlockPos pos : posList) {
+		if(this.data == 1) {
+			if(SchematicExport.saveSchematic(SchematicExport.SCHEMATICS, staet.getBlock().getName().getString(), false, world, startPos, endPos)) {
+				player.sendSystemMessage(this.getText("register_struc").withStyle(GREEN));
+			}
 
+			return;
+		}
+
+		for (BlockPos pos : posList) {
 			BlockState targetState = world.getBlockState(pos);
 			Block targetBlock = targetState.getBlock();
 			if (targetBlock == block || targetState.hasBlockEntity()) { continue; }
 
-			if (!isExchange) {
-				if (!targetState.isAir()) { continue; }
-			}
+			if (!isExchange && !targetState.isAir()) { continue; }
 
-			if (isExchange && !targetState.isAir()) {
-				if (world instanceof ServerLevel server) {
-					dropList.addAll(Block.getDrops(targetState, server, pos, world.getBlockEntity(pos), player, stack));
-				}
+			if (isExchange && !targetState.isAir() && world instanceof ServerLevel server) {
+				dropList.addAll(Block.getDrops(targetState, server, pos, world.getBlockEntity(pos), player, stack));
 			}
 
 			world.setBlock(pos, staet, 3);
@@ -197,14 +201,14 @@ public class StartLightWand extends SMItem implements IMFTool {
 		tags.remove("endY");
 		tags.remove("endZ");
 		player.sendSystemMessage(this.getText("posremo").withStyle(RED));
-		this.playSound(player.level, player, SoundEvents.UI_BUTTON_CLICK, 0.25F, player.getRandom().nextFloat() * 0.1F + 1.2F);
+		this.playSound(player.getLevel(), player, SoundEvents.UI_BUTTON_CLICK, 0.25F, player.getRandom().nextFloat() * 0.1F + 1.2F);
 	}
 
 	public void changeExchange(Player player, ItemStack stack) {
 		CompoundTag tags = stack.getOrCreateTag();
 		tags.putBoolean("isExchange", !tags.getBoolean("isExchange"));
 		player.sendSystemMessage(this.getText(tags.getBoolean("isExchange") ? "exchange_mode" : "set_mode").withStyle(GREEN));
-		this.playSound(player.level, player, SoundEvents.UI_BUTTON_CLICK, 0.25F, player.getRandom().nextFloat() * 0.1F + 1.2F);
+		this.playSound(player.getLevel(), player, SoundEvents.UI_BUTTON_CLICK, 0.25F, player.getRandom().nextFloat() * 0.1F + 1.2F);
 	}
 
 	public BlockPos getPos(BlockPos pos, Vec3 vec, Direction face) {
@@ -245,22 +249,22 @@ public class StartLightWand extends SMItem implements IMFTool {
 
 		MutableComponent keyNext = KeyPressEvent.getKeyName(SMKeybind.NEXT);
 		MutableComponent keyBack = KeyPressEvent.getKeyName(SMKeybind.BACK);
-		toolTip.add(this.getTipArray(keyNext.copy(), this.getText("key"), this.getText(this.name + "_key1").withStyle(WHITE)).withStyle(RED));
-		toolTip.add(this.getTipArray(keyBack.copy(), this.getText("key"), this.getText(this.name + "_key2").withStyle(WHITE)).withStyle(RED));
+		toolTip.add(this.getTipArray(keyNext.copy(), this.getText("key"), this.getText("startlight_wand_key1").withStyle(WHITE)).withStyle(RED));
+		toolTip.add(this.getTipArray(keyBack.copy(), this.getText("key"), this.getText("startlight_wand_key2").withStyle(WHITE)).withStyle(RED));
 		toolTip.add(this.empty());
 
 		CompoundTag tag = stack.getOrCreateTag();
 
-		toolTip.add(this.getTipArray(this.getLabel("MF: "), this.getLabel(String.format("%,d", this.getMF(stack))).withStyle(WHITE) ).withStyle(GREEN));
+		toolTip.add(this.getTipArray(this.getLabel("MF: "), this.getLabel(this.format(this.getMF(stack)), WHITE)).withStyle(GREEN));
 
 		String startPos = tag.contains("startX") ? tag.getInt("startX") + ", " + tag.getInt("startY") + ", " + tag.getInt("startZ") : this.getText("unregistered").getString();
-		toolTip.add(this.getTipArray(this.getText("start_pos"), this.getLabel(startPos).withStyle(WHITE)).withStyle(GREEN));
+		toolTip.add(this.getTipArray(this.getText("start_pos"), this.getLabel(startPos, WHITE)).withStyle(GREEN));
 
 		String endPos = tag.contains("endX") ? tag.getInt("endX") + ", " + tag.getInt("endY") + ", " + tag.getInt("endZ") : this.getText("unregistered").getString();
-		toolTip.add(this.getTipArray(this.getText("end_pos"), this.getLabel(endPos).withStyle(WHITE)).withStyle(GREEN));
+		toolTip.add(this.getTipArray(this.getText("end_pos"), this.getLabel(endPos, WHITE)).withStyle(GREEN));
 
 		String block = tag.contains("blockId") ? this.getBlock(tag).getName().getString() : this.getText("unregistered").getString();
-		toolTip.add(this.getTipArray(this.getText("set_block"), this.getLabel(block).withStyle(WHITE)).withStyle(GREEN));
+		toolTip.add(this.getTipArray(this.getText("set_block"), this.getLabel(block, WHITE)).withStyle(GREEN));
 
 		toolTip.add(this.getTipArray(this.getText("star_mode"), this.getText(tag.getBoolean("isExchange") ? "exchange_mode" : "set_mode").withStyle(WHITE)).withStyle(GREEN));
 	}

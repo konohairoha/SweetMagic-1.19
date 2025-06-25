@@ -23,6 +23,7 @@ import sweetmagic.init.ItemInit;
 import sweetmagic.init.PotionInit;
 import sweetmagic.init.SoundInit;
 import sweetmagic.init.entity.animal.AbstractSummonMob;
+import sweetmagic.init.entity.animal.StellaWizard;
 import sweetmagic.init.entity.animal.WitchAllay;
 import sweetmagic.init.entity.animal.WitchCat;
 import sweetmagic.init.entity.animal.WitchFox;
@@ -132,6 +133,14 @@ public class SummonMagic extends BaseMagicItem {
 				entity.setRange(entity.getRange() + extensionCount * 0.5F);
 			}
 
+
+			int ribbonCount = porch.acceCount(leg, ItemInit.wizard_ribbon, 5);
+			if (ribbonCount > 0) {
+				entity.setAttribute(Attributes.MAX_HEALTH, 1F + ribbonCount * 0.05F);
+				entity.setHealth(entity.getMaxHealth());
+				entity.setHealthArmor(entity.getMaxHealth() * ribbonCount * 0.1F);
+			}
+
 			summonTime *= (1F + addRate);
 		}
 
@@ -139,7 +148,7 @@ public class SummonMagic extends BaseMagicItem {
 		entity.setMaxLifeTime(summonTime);
 		this.addPotion(entity, PotionInit.magic_array, 0, 100);
 
-		if (!world.isClientSide) {
+		if (!world.isClientSide()) {
 			world.addFreshEntity(entity);
 		}
 
@@ -155,13 +164,14 @@ public class SummonMagic extends BaseMagicItem {
 		case 5:  return new WitchIfrit(world);
 		case 6:  return new WitchFox(world);
 		case 7:  return new WitchCat(world);
+		case 8:  return new StellaWizard(world);
 		default: return new WitchWolf(world);
 		}
 	}
 
 	// ユニーク魔法かどうか
 	public boolean isUniqueMagic() {
-		return false;
+		return this.data == 8;
 	}
 
 	public int getSummonTime() {

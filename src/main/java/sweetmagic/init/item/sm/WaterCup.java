@@ -27,6 +27,6 @@ public class WaterCup extends SMFood {
 	public void addTip(ItemStack stack, List<Component> toolTip) {
 		super.addTip(stack, toolTip);
 		FluidStack fluid = new FluidStack(Fluids.WATER, 250);
-		toolTip.add(this.getTipArray(fluid.getDisplayName(), ": ", this.getLabel(fluid.getAmount() + "mB").withStyle(GREEN) ));
+		toolTip.add(this.getTipArray(fluid.getDisplayName(), ": ", this.getLabel(fluid.getAmount() + "mB", GREEN)));
 	}
 }

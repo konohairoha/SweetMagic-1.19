@@ -38,8 +38,8 @@ public class FieldMagic extends BaseMagicItem {
 		case 1:
 		case 2:
 		case 13:
-			toolTip.add(this.getText("magic_square_buff", "" + (60 + this.tier * 30)).withStyle(WHITE));
-			toolTip.add(this.getText("magic_gravityfield", String.format("%.1f%%", 10F + this.data * 7.5F )));
+			toolTip.add(this.getText("magic_square_buff", 60 + this.tier * 30).withStyle(WHITE));
+			toolTip.add(this.getText("magic_gravityfield", this.formatPar(10F + this.data * 7.5F)));
 
 			if (this.data == 13) {
 				toolTip.add(this.getText("magic_gravityfield2_enemy"));
@@ -50,29 +50,29 @@ public class FieldMagic extends BaseMagicItem {
 			}
 
 			toolTip.add(this.getText("magic_square").withStyle(WHITE));
-			toolTip.add(this.getText("magic_gravityfield_finish", this.getEffectText("gravity").getString()));
+			toolTip.add(this.getText("magic_gravityfield_finish", this.getEffectTip("gravity").getString()));
 
 			break;
 		case 3:
 		case 4:
 		case 5:
 		case 14:
-			toolTip.add(this.getText("magic_square_buff", "" + (60 + this.tier * 30)).withStyle(WHITE));
+			toolTip.add(this.getText("magic_square_buff", 60 + this.tier * 30).withStyle(WHITE));
 			toolTip.add(this.getText("magic_windfield"));
 			toolTip.add(this.getText("magic_square").withStyle(WHITE));
 			toolTip.add(this.getText("magic_windfield_regene"));
-			toolTip.add(this.getText("magic_windfield_finish", this.getEffectText("bleeding").getString()));
+			toolTip.add(this.getText("magic_windfield_finish", this.getEffectTip("bleeding").getString()));
 			break;
 		case 6:
 		case 7:
 		case 8:
 		case 15:
-			toolTip.add(this.getText("magic_square_buff", "" + (60 + this.tier * 30)).withStyle(WHITE));
-			String value = "" + (this.data - (this.data == 15 ? 11 : 5));
+			toolTip.add(this.getText("magic_square_buff", 60 + this.tier * 30).withStyle(WHITE));
+			int value = this.data - (this.data == 15 ? 11 : 5);
 			toolTip.add(this.getText("magic_rainfield", value));
 			toolTip.add(this.getText("magic_rainfield_enemy", value));
 			toolTip.add(this.getText("magic_square").withStyle(WHITE));
-			toolTip.add(this.getText("magic_rainfield_finish", "" + (12.5F * this.tier)));
+			toolTip.add(this.getText("magic_rainfield_finish", 12.5F * this.tier));
 			break;
 		case 9:
 		case 10:
@@ -81,10 +81,10 @@ public class FieldMagic extends BaseMagicItem {
 			toolTip.add(this.getText("magic_square").withStyle(WHITE));
 			toolTip.add(this.getText(this.name));
 			toolTip.add(this.getText("magic_future_visionfiled_enemy", String.format("%.1f", 2F + (this.data == 16 ? 3 : this.data - 9) * 1.5F)));
-			toolTip.add(this.getText("magic_future_visionfiled_finish", "" + this.tier));
+			toolTip.add(this.getText("magic_future_visionfiled_finish", this.tier));
 			break;
 		case 12:
-			toolTip.add(this.getText("magic_square_buff", "" + (60 + this.tier * 30)).withStyle(WHITE));
+			toolTip.add(this.getText("magic_square_buff", 60 + this.tier * 30).withStyle(WHITE));
 			toolTip.add(this.getText(this.name + "_enemy"));
 			toolTip.add(this.getText("magic_square").withStyle(WHITE));
 			toolTip.add(this.getText(this.name));
@@ -187,7 +187,7 @@ public class FieldMagic extends BaseMagicItem {
 
 		entity.acceEffect();
 
-		if (!world.isClientSide) {
+		if (!world.isClientSide()) {
 			world.addFreshEntity(entity);
 		}
 

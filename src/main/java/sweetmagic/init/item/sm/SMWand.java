@@ -157,7 +157,7 @@ public class SMWand extends DiggerItem implements IWand {
 
 	@Override
 	public BlockPos getWandPos() {
-		return null;//this.wandPos;
+		return null;
 	}
 
 	//アイテムにダメージを与える処理を無効

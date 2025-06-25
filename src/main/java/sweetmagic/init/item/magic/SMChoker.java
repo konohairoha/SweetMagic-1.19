@@ -48,7 +48,6 @@ public class SMChoker extends ArmorItem implements IChoker {
 		this.tickTime = 0;
 
 		for (EquipmentSlot slot : SLOT) {
-
 			ItemStack armor = player.getItemBySlot(slot);
 			if (armor.isEmpty() || !(armor.getItem() instanceof IMFTool mfTool) || mfTool.isMaxMF(armor)) { continue; }
 
@@ -57,16 +56,15 @@ public class SMChoker extends ArmorItem implements IChoker {
 			int useMF = Math.min(this.getHealValue(), mf);
 			int needMF = mfTool.insetMF(armor, useMF);
 			this.setMF(stack, mf - needMF);
-
 			if (this.isMFEmpty(stack)) { return; }
 		}
 	}
 
 	public int getHealValue() {
 		switch (this.data) {
-		case 1: return 2000;
-		case 2: return 5000;
-		default: return 500;
+		case 1: return 5000;
+		case 2: return 25000;
+		default: return 1000;
 		}
 	}
 

@@ -141,7 +141,7 @@ public class SummonBossMagic extends BaseMagicItem {
 			this.addBuff(player, summonTime);
 		}
 
-		if (!world.isClientSide) {
+		if (!world.isClientSide()) {
 			world.addFreshEntity(entity);
 		}
 

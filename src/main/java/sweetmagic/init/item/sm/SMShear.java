@@ -71,7 +71,7 @@ public class SMShear extends ShearsItem implements ISMTip {
 		if (!dropList.isEmpty()) {
 			dropList.forEach(s -> world.addFreshEntity(new ItemEntity(world, p.getX(), p.getY(), p.getZ(), s)));
 			stack.hurtAndBreak(1, player, e -> e.broadcastBreakEvent(hand));
-			world.playSound(player, p, SoundEvents.GROWING_PLANT_CROP, SoundSource.BLOCKS, 1.0F, 1.0F);
+			world.playSound(player, p, SoundEvents.GROWING_PLANT_CROP, SoundSource.BLOCKS, 1F, 1F);
 		}
 
 		return InteractionResultHolder.consume(stack);
@@ -89,14 +89,14 @@ public class SMShear extends ShearsItem implements ISMTip {
 
 		if (entity instanceof Chicken && !player.getCooldowns().isOnCooldown(stack.getItem())) {
 
-			if (entity.level.isClientSide) { return InteractionResult.SUCCESS; }
+			if (entity.getLevel().isClientSide()) { return InteractionResult.SUCCESS; }
 
 			stack.hurtAndBreak(1, player, e -> e.broadcastBreakEvent(hand));
 			Level world = player.getLevel();
 			BlockPos pos = player.blockPosition();
-			ItemEntity item = new ItemEntity(world, pos.getX() + 0.5F, pos.getY() + 0.75F, pos.getZ() + 0.5F, new ItemStack(Items.FEATHER, world.random.nextInt(3) + 1));
+			ItemEntity item = new ItemEntity(world, pos.getX() + 0.5F, pos.getY() + 0.75F, pos.getZ() + 0.5F, new ItemStack(Items.FEATHER, world.getRandom().nextInt(3) + 1));
 			world.addFreshEntity(item);
-			world.playSound(player, pos, SoundEvents.GROWING_PLANT_CROP, SoundSource.BLOCKS, 1.0F, 1.0F);
+			world.playSound(player, pos, SoundEvents.GROWING_PLANT_CROP, SoundSource.BLOCKS, 1F, 1F);
 			entity.hurt(SMDamage.magicDamage, 0.5F);
 			player.getCooldowns().addCooldown(stack.getItem(), 5);
 
@@ -114,6 +114,6 @@ public class SMShear extends ShearsItem implements ISMTip {
 
 	// アイテム修理
 	public boolean isValidRepairItem(ItemStack stack, ItemStack ingot) {
-		return ingot.is(ItemInit.alt_ingot);
+		return ingot.is(ItemInit.alternative_ingot);
 	}
 }

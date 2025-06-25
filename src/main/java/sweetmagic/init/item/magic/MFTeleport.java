@@ -24,7 +24,7 @@ import sweetmagic.api.emagic.SMMagicType;
 import sweetmagic.api.iitem.IWand;
 import sweetmagic.api.iitem.info.MagicInfo;
 import sweetmagic.api.iitem.info.WandInfo;
-import sweetmagic.init.tile.menu.container.ContainerClero;
+import sweetmagic.init.tile.menu.container.BaseContainer.ContainerClero;
 
 public class MFTeleport extends BaseMagicItem {
 
@@ -64,7 +64,7 @@ public class MFTeleport extends BaseMagicItem {
 	// テレポート
 	public void teleportTo(Player player, BlockPos basePos, ItemStack stack, CompoundTag tags) {
 
-		Level world = player.level;
+		Level world = player.getLevel();
 		this.playSound(world, player.blockPosition(), SoundEvents.ENDERMAN_TELEPORT, 0.25F, 1F);
 
 		// NBTから座標取得
@@ -75,7 +75,7 @@ public class MFTeleport extends BaseMagicItem {
 		if (world instanceof ServerLevel server) {
 
 			double range = 0.875D;
-			double ySpeed = -2.0D;
+			double ySpeed = -2D;
 
 			for (int i= -1; i < 5; i++) {
 				this.spawnParticleRing(server, ParticleTypes.PORTAL, range, basePos.above(1), i / 3D, ySpeed, 1D);
@@ -89,7 +89,7 @@ public class MFTeleport extends BaseMagicItem {
 			sp.teleportTo(server, pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, 0, 0F);
 
 			double range = 0.875D;
-			double ySpeed = 1.0D;
+			double ySpeed = 1D;
 
 			// テレポート後のパーティクル表示
 			for (int i = -1; i < 5; i++) {
@@ -99,7 +99,7 @@ public class MFTeleport extends BaseMagicItem {
 			this.playSound(server, pos, SoundEvents.ENDERMAN_TELEPORT, 0.25F, 1F);
 		}
 
-		player.fallDistance = 0.0F;
+		player.fallDistance = 0F;
 		player.giveExperiencePoints(0);
 	}
 
@@ -113,13 +113,13 @@ public class MFTeleport extends BaseMagicItem {
 
 		if (tags != null && player.isShiftKeyDown()) {
 
-			if (!world.isClientSide) {
+			if (!world.isClientSide()) {
 				NetworkHooks.openScreen((ServerPlayer) player, new ContainerClero(stack), b -> b.writeByte(player.getInventory().selected));
 				return InteractionResultHolder.consume(stack);
 			}
 		}
 
-		if (!world.isClientSide) {
+		if (!world.isClientSide()) {
 			BlockPos pos = player.blockPosition();
 			tags.putInt("pX", pos.getX());
 			tags.putInt("pY", pos.getY());
@@ -139,7 +139,7 @@ public class MFTeleport extends BaseMagicItem {
 
 		toolTip.add(this.getText("clerodendrum").withStyle(GREEN));
 		toolTip.add(this.getText("clero_rename").withStyle(GOLD));
-		toolTip.add(this.getTip(" "));
+		toolTip.add(this.empty());
 
 		CompoundTag tag = stack.getTag();
 
@@ -151,8 +151,8 @@ public class MFTeleport extends BaseMagicItem {
 			String dim = tag.getString("dim_view");
 
 			String pos = ": " + x + ", " + y + ", " + z;
-			toolTip.add(this.getTipArray( this.getText("regi_pos"), this.getLabel(pos).withStyle(WHITE)).withStyle(GREEN));
-			toolTip.add(this.getTipArray( this.getText("regi_dim"), ": ", this.getLabel(dim).withStyle(WHITE)).withStyle(GREEN));
+			toolTip.add(this.getTipArray( this.getText("regi_pos"), this.getLabel(pos, WHITE)).withStyle(GREEN));
+			toolTip.add(this.getTipArray( this.getText("regi_dim"), this.getLabel(": " + dim, WHITE)).withStyle(GREEN));
 		}
 	}
 }

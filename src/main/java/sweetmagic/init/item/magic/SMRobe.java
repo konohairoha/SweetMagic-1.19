@@ -33,7 +33,7 @@ import sweetmagic.event.KeyPressEvent;
 import sweetmagic.init.EnchantInit;
 import sweetmagic.init.ItemInit;
 import sweetmagic.init.SoundInit;
-import sweetmagic.init.tile.menu.container.ContainerRobe;
+import sweetmagic.init.tile.menu.container.BaseContainer.ContainerRobe;
 import sweetmagic.key.SMKeybind;
 
 public class SMRobe extends ArmorItem implements IRobe, IAmorUtil {
@@ -128,7 +128,7 @@ public class SMRobe extends ArmorItem implements IRobe, IAmorUtil {
 	}
 
 	public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchant) {
-		return ENCHACATELIST.contains(enchant.category) || ( enchant != Enchantments.UNBREAKING && enchant.category.canEnchant(stack.getItem()));
+		return ENCHACATELIST.contains(enchant.category) || (enchant != Enchantments.UNBREAKING && enchant.category.canEnchant(stack.getItem()));
 	}
 
 	// ツールチップの表示

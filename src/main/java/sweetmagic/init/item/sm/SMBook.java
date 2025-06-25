@@ -29,7 +29,7 @@ public class SMBook extends SMMagicItem implements IMagicBook {
 		// アイテムスタックを取得
 		ItemStack stack = player.getItemInHand(hand);
 
-		if (!world.isClientSide) {
+		if (!world.isClientSide()) {
 			this.openCraftGui(world, player, stack);
 		}
 

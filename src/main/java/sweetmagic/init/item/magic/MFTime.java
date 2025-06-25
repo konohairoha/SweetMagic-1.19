@@ -30,7 +30,7 @@ public class MFTime extends BaseMagicItem {
 	@Override
 	public boolean onItemAction(Level world, Player player, WandInfo wandInfo, MagicInfo magicInfo) {
 
-		if (!world.isClientSide) {
+		if (!world.isClientSide()) {
 			ServerLevel sever = world.getServer().getLevel(Level.OVERWORLD);
 			int dayTime = 24000;
 			long day = (sever.getDayTime() / dayTime) + 1;

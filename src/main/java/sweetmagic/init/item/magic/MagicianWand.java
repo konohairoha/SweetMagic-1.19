@@ -37,7 +37,7 @@ public class MagicianWand extends SMItem {
 
 		world.setBlock(pos, block.rotate(state, Rotation.CLOCKWISE_90), 3);
 
-		if (world.isClientSide) {
+		if (world.isClientSide()) {
 			for (int i = 0; i < 6; i++) {
 				this.spawnParticleCycle(world, ParticleInit.CYCLE_GRAY_ORB, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, Direction.UP, 0.85D, face.toYRot() + i * 10, false);
 			}
@@ -46,13 +46,13 @@ public class MagicianWand extends SMItem {
 		SoundType sound = block.getSoundType(state, world, pos, player);
 		world.playSound(null, pos, sound.getPlaceSound(), SoundSource.BLOCKS, (sound.getVolume() + 1F) / 2F, sound.getPitch() * 0.8F);
 
-		return InteractionResult.sidedSuccess(world.isClientSide);
+		return InteractionResult.sidedSuccess(world.isClientSide());
 	}
 
 	// パーティクルスポーンサイクル
-	protected void spawnParticleCycle(Level world, ParticleOptions particle, double x, double y, double z, Direction face, double range, double angle, boolean isRevese) {
+	protected void spawnParticleCycle(Level world, ParticleOptions par, double x, double y, double z, Direction face, double range, double angle, boolean isRevese) {
 		int way = isRevese ? -1 : 1;
-		world.addParticle(particle, x, y, z, face.get3DDataValue() * way, range, angle + way * 1 * SMItem.SPEED);
+		world.addParticle(par, x, y, z, face.get3DDataValue() * way, range, angle + way * 1 * SMItem.SPEED);
 	}
 
 	// ツールチップの表示

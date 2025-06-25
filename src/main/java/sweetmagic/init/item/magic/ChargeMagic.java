@@ -11,6 +11,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -21,9 +22,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import sweetmagic.api.emagic.SMElement;
 import sweetmagic.api.emagic.SMMagicType;
+import sweetmagic.api.iblock.ISMCrop;
 import sweetmagic.api.iitem.info.MagicInfo;
 import sweetmagic.api.iitem.info.WandInfo;
 import sweetmagic.init.SoundInit;
+import sweetmagic.init.TagInit;
 import sweetmagic.init.entity.projectile.ElectricMagicShot;
 import sweetmagic.init.item.sm.SMItem;
 
@@ -46,36 +49,33 @@ public class ChargeMagic extends BaseMagicItem {
 
 		switch(this.data) {
 		case 0:
-			toolTip.add(this.getText(this.name));
-			toolTip.add(this.getText("magic_thunder_common"));
-			break;
 		case 1:
-			toolTip.add(this.getText(this.name));
-			toolTip.add(this.getText("magic_thunder_common"));
+			toolTip.add(this.getText("magic_lightningbolt", this.format((int) this.getBaseRange()), this.getMaxThunder()));
+			toolTip.add(this.getText("magic_thunder_common", this.format((float) Math.sqrt(this.getBaseRange())), this.getMaxTarget()));
 			break;
 		case 6:
 		case 8:
-			toolTip.add(this.getText("magic_thunderrain"));
-			toolTip.add(this.getText("magic_thunder_common"));
+			toolTip.add(this.getText("magic_lightningbolt", this.format((int) this.getBaseRange()), this.getMaxThunder()));
+			toolTip.add(this.getText("magic_thunder_common", this.format((float) Math.sqrt(this.getBaseRange())), this.getMaxTarget()));
 			toolTip.add(this.getText("magic_thunderrain_vulnerable"));
 			break;
 		case 2:
 		case 3:
 		case 7:
 		case 9:
-			String range;
+			int range;
 			switch (this.getTier()) {
 			case 2:
-				range = "" + 7;
+				range = 7;
 				break;
 			case 3:
-				range = "" + 15;
+				range = 15;
 				break;
 			case 4:
-				range = "" + 25;
+				range = 25;
 				break;
 			default:
-				range = "" + 2;
+				range = 2;
 				break;
 			}
 			toolTip.add(this.getText("magic_growth_effect", range));
@@ -109,35 +109,14 @@ public class ChargeMagic extends BaseMagicItem {
 	}
 
 	public boolean elecAction(Level world, Player player, ItemStack stack, WandInfo wandInfo) {
-		if (world.isClientSide) { return true; }
+		if (world.isClientSide()) { return true; }
 
-		int data = this.data;
+		int data = this.getThunderData();
+		double baseRange = this.getBaseRange();	// 基本範囲
+		int maxThunder = this.getMaxThunder();	// 最大雷数
+		int maxTarget = this.getMaxTarget();	// 着弾後の範囲攻撃
 
-		switch (data) {
-		case 6:
-			data = 2;
-			break;
-		case 8:
-			data = 3;
-			break;
-		}
-
-		double rangetRate = 5D;
-
-		switch (data) {
-		case 1:
-			rangetRate = 7.5D;
-			break;
-		case 2:
-			rangetRate = 10D;
-			break;
-		case 3:
-			rangetRate = 13.5D;
-			break;
-		}
-
-		double range = rangetRate * ( 1F + this.getExtensionRingCount(player) * 0.25F);
-
+		double range = baseRange * (1F + this.getExtensionRingCount(player) * 0.25F);
 		float addDameRate = 1F;
 		int bloodCount = this.getBloodSuckingRing(player);
 		if (bloodCount > 0 && player.getHealth() > 1 + bloodCount) {
@@ -152,6 +131,7 @@ public class ChargeMagic extends BaseMagicItem {
 		List<LivingEntity> targetList = this.getEntityList(LivingEntity.class, player, e -> this.canTargetEffect(e, player), range);
 		if (targetList.isEmpty()) { return false; }
 
+		range = Math.sqrt(range);
 		float powerRate = 0F;
 
 		switch (data) {
@@ -169,37 +149,22 @@ public class ChargeMagic extends BaseMagicItem {
 		// (レベル × 補正値) + (レベル + 追加ダメージ) ÷ (レベル ÷ 2) + 追加ダメージ
 		float power = this.getPower(wandInfo) + powerRate;
 
-		double effectRange = 1.5D;
+		for(int i = 0; i < Math.min(maxThunder, targetList.size()); i++) {
 
-		switch (data) {
-		case 1:
-			effectRange = 3D;
-			break;
-		case 2:
-			effectRange = 5D;
-			break;
-		case 3:
-			effectRange = 7.5D;
-			break;
-		}
-
-		for (LivingEntity entity : targetList) {
-
+			LivingEntity entity = targetList.get(i);
 			ElectricMagicShot magic = new ElectricMagicShot(world, player, wandInfo);
 			magic.setAddDamage(magic.getAddDamage());
-			magic.setRange(effectRange);
+			magic.setRange(range);
+			magic.setMaxCount(maxTarget);
 			magic.setData(data);
 			magic.shootFromRotation(player, player.getXRot(), player.getYRot(), 0, 0, 0);
 			magic.setPos(entity.getX(), entity.getY() + 2D, entity.getZ());
-			magic.setAddDamage( (magic.getAddDamage() + power) * addDameRate);
-			Vec3 vec = entity.getDeltaMovement();
-			double y = vec.y - 0.5D;
-			magic.setDeltaMovement(new Vec3(vec.x, y, vec.z));
+			magic.setAddDamage((magic.getAddDamage() + power) * addDameRate);
+			magic.setDeltaMovement(new Vec3(0, -0.5D, 0));
 			world.addFreshEntity(magic);
 		}
 
 		this.playSound(world, player, SoundEvents.BLAZE_SHOOT, 0.5F, 0.67F);
-
 		return true;
 	}
 
@@ -223,11 +188,11 @@ public class ChargeMagic extends BaseMagicItem {
 			break;
 		}
 
+		if (!(world instanceof ServerLevel server)) { return true; }
+
+		RandomSource rand = server.getRandom();
 		range *= (1F + this.getExtensionRingCount(player) * 0.25F);
 		Iterable<BlockPos> posList = this.getRangePos(player.blockPosition(), range);
-		if (!(world instanceof ServerLevel server)) { return false; }
-
-		RandomSource rand = server.random;
 
 		for (BlockPos pos : posList) {
 
@@ -238,11 +203,12 @@ public class ChargeMagic extends BaseMagicItem {
 			if (block instanceof BonemealableBlock crop && !(state.is(BlockTags.DIRT))) {
 
 				boolean isBone = false;
+				boolean isSMCrop = block instanceof ISMCrop;
 
 				for (int i = 0; i < 8; i++) {
 
 					BlockState newState = world.getBlockState(pos);
-					if (!crop.isValidBonemealTarget(world, pos, newState, true)) { break; }
+					if (!crop.isValidBonemealTarget(world, pos, newState, true) && !isSMCrop) { break; }
 
 					crop.performBonemeal(server, rand, pos, newState);
 					isGlow = isBone = true;
@@ -264,12 +230,70 @@ public class ChargeMagic extends BaseMagicItem {
 			this.playSound(world, player, SoundInit.GROW, 0.1F, 1F);
 		}
 
-		return isGlow;
+		return true;
+	}
+
+	// えんちちーソート
+	public int sortEntity(Entity mob, Entity entity1, Entity entity2) {
+		if (entity1 == null || entity2 == null) { return 0; }
+
+		boolean isBoss1 = entity1.getType().is(TagInit.BOSS);
+		boolean isBoss2 = entity2.getType().is(TagInit.BOSS);
+		if (isBoss1 && isBoss2) { return 0; }
+		if (isBoss1) { return -1; }
+		if (isBoss2) { return 1; }
+
+		double distance1 = mob.distanceToSqr(entity1);
+		double distance2 = mob.distanceToSqr(entity2);
+
+		if (distance1 > distance2) { return 1; }
+		else if (distance1 < distance2) { return -1; }
+
+		return 0;
+	}
+
+	public int getThunderData() {
+		switch(this.data) {
+		case 1: return 1;
+		case 6: return 2;
+		case 8: return 3;
+		default: return 0;
+		}
+	}
+
+	// 基本範囲
+	public double getBaseRange() {
+		switch (this.getThunderData()) {
+		case 1: return 16D;
+		case 2: return 24D;
+		case 3: return 32D;
+		default: return 9D;
+		}
+	}
+
+	// 最大雷数
+	public int getMaxThunder() {
+		switch (this.getThunderData()) {
+		case 1: return 7;
+		case 2: return 10;
+		case 3: return 15;
+		default: return 5;
+		}
+	}
+
+	// 着弾後の範囲攻撃
+	public int getMaxTarget() {
+		switch (this.getThunderData()) {
+		case 1: return 5;
+		case 2: return 9;
+		case 3: return 12;
+		default: return 3;
+		}
 	}
 
 	// パーティクルスポーンサイクル
-	protected void spawnParticleCycle(ServerLevel server, ParticleOptions particle, double x, double y, double z, Direction face, double range, double angle, boolean isRevese) {
+	protected void spawnParticleCycle(ServerLevel server, ParticleOptions par, double x, double y, double z, Direction face, double range, double angle, boolean isRevese) {
 		int way = isRevese ? -1 : 1;
-		server.sendParticles(particle, x, y, z, 0, face.get3DDataValue() * way, range, angle + way * 1 * SMItem.SPEED, 1F);
+		server.sendParticles(par, x, y, z, 0, face.get3DDataValue() * way, range, angle + way * 1 * SMItem.SPEED, 1F);
 	}
 }

@@ -49,11 +49,11 @@ public class SMSickle extends SMItem {
 		Level world = con.getLevel();
 		BlockPos pos = con.getClickedPos();
 		Block block = world.getBlockState(pos).getBlock();
-		if (!(block instanceof IPlantable) || !(world instanceof ServerLevel server)) { return InteractionResult.PASS; }
+		if ((!(block instanceof IPlantable) && !(block instanceof ISMCrop)) || !(world instanceof ServerLevel server)) { return InteractionResult.PASS; }
 
 		if (this.data == 0) { return InteractionResult.SUCCESS; }
 
-		RandomSource rand = world.random;
+		RandomSource rand = world.getRandom();
 		Player player = con.getPlayer();
 		ItemStack stack = player.getMainHandItem();
 
@@ -70,7 +70,6 @@ public class SMSickle extends SMItem {
 
 			// まずはスイマジ作物なら右クリック処理を呼び出し
 			if (b instanceof ISMCrop smCrop) {
-
 				if (smCrop.isMaxAge(state)) {
 					stackList.addAll(smCrop.rightClickStack(world, state, p));
 					smCrop.playCropSound(world, rand, pos);
@@ -93,24 +92,20 @@ public class SMSickle extends SMItem {
 		}
 
 		if (!stackList.isEmpty()) {
-
 			world.playSound(null, pos, SoundEvents.GRASS_PLACE, SoundSource.BLOCKS, 0.5F, 0.8F + rand.nextFloat() * 0.4F);
-
-			// リスト分スポーン
-			for (ItemStack crop : stackList) {
-				world.addFreshEntity(new ItemEntity(world, player.xo, player.yo, player.zo, crop));
-			}
+			stackList.forEach(c -> world.addFreshEntity(new ItemEntity(world, player.xo, player.yo, player.zo, c)));
 		}
 
 		return InteractionResult.SUCCESS;
 	}
 
 	public void getPickPlant(Level world, Player player, BlockPos pos, ItemStack stack) {
-		if (!(world.getBlockState(pos).getBlock() instanceof IPlantable) || !(world instanceof ServerLevel server)) { return; }
+		Block block = world.getBlockState(pos).getBlock();
+		if ((!(block instanceof IPlantable) && !(block instanceof ISMCrop)) || !(world instanceof ServerLevel server)) { return; }
 
 		// 範囲とstackListの初期化
 		int area = this.getRange();
-		RandomSource rand = world.random;
+		RandomSource rand = world.getRandom();
 		List<ItemStack> stackList = new ArrayList<>();
 		Iterable<BlockPos> posList = WorldHelper.getRangePos(pos, area);
 
@@ -166,6 +161,6 @@ public class SMSickle extends SMItem {
 
 	// アイテム修理
 	public boolean isValidRepairItem(ItemStack stack, ItemStack ingot) {
-		return ingot.is(ItemInit.alt_ingot);
+		return ingot.is(ItemInit.alternative_ingot);
 	}
 }

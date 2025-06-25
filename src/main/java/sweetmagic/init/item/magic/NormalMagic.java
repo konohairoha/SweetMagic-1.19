@@ -80,13 +80,13 @@ public class NormalMagic extends BaseMagicItem {
 			toolTip.add(this.getText("magic_aether_shield_wand"));
 			break;
 		case 16:
-			String buf = this.getMCText("absorption").getString() + this.getEnchaText(4).getString();
+			String buf = this.getMCTip("absorption").getString() + this.getEnchaTip(4).getString();
 			toolTip.add(this.getText("magic_quickheal.2", String.format("%.0f%%", 100F), buf));
 			toolTip.add(this.getText("magic_reflasheffect"));
 			break;
 		case 17:
-			String barrier = this.getMCText("absorption").getString();
-			String regeneration = this.getEffectText("regeneration").getString();
+			String barrier = this.getMCTip("absorption").getString();
+			String regeneration = this.getEffectTip("regeneration").getString();
 			toolTip.add(this.getText(this.name, barrier, regeneration));
 			break;
 		case 18:
@@ -110,8 +110,8 @@ public class NormalMagic extends BaseMagicItem {
 		this.acceEffect(player, this.getPower(wandInfo));
 
 		switch(this.data) {
-		case 0: return this.roundHealAction(world, player, stack, wandInfo);
-		case 1: return this.roundHealAction(world, player, stack, wandInfo);
+		case 0: return this.healAction(world, player, stack, wandInfo);
+		case 1: return this.healAction(world, player, stack, wandInfo);
 		case 2: return this.armorAction(world, player, stack, wandInfo);
 		case 3: return this.barrierAction(world, player, stack, wandInfo);
 		case 4: return this.reflashEffectAction(world, player, stack, wandInfo);
@@ -120,16 +120,17 @@ public class NormalMagic extends BaseMagicItem {
 		case 7: return this.potionAction(world, player, stack, wandInfo);
 		case 8: return this.potionAction(world, player, stack, wandInfo);
 		case 9: return this.potionAction(world, player, stack, wandInfo);
-		case 10: return this.roundHealAction(world, player, stack, wandInfo);
+		case 10: return this.healAction(world, player, stack, wandInfo);
 		case 11: return this.reflashEffectAction(world, player, stack, wandInfo);
 		case 12: return this.barrierAction(world, player, stack, wandInfo);
 		case 13: return this.invisibleAction(world, player, stack, wandInfo);
 		case 14: return this.aetherShiledAction(world, player, stack, wandInfo);
 		case 15: return this.aetherShiledAction(world, player, stack, wandInfo);
-		case 16: return this.roundHealAction(world, player, stack, wandInfo);
+		case 16: return this.healAction(world, player, stack, wandInfo);
 		case 17: return this.barrierAction(world, player, stack, wandInfo);
 		case 18: return this.aetherShiledAction(world, player, stack, wandInfo);
 		case 19: return this.potionAction(world, player, stack, wandInfo);
+		case 20: return this.barrierOriginAction(world, player, stack, wandInfo);
 		}
 
 		return true;
@@ -254,7 +255,7 @@ public class NormalMagic extends BaseMagicItem {
 	}
 
 	// 回復魔法
-	public boolean roundHealAction(Level world, Player player, ItemStack stack, WandInfo wandInfo) {
+	public boolean healAction(Level world, Player player, ItemStack stack, WandInfo wandInfo) {
 
 		double x = player.getX();
 		double y = player.getY();
@@ -358,5 +359,19 @@ public class NormalMagic extends BaseMagicItem {
 		List<Mob> entityList = this.getEntityList(Mob.class, player, e -> e.isAlive() && e instanceof Enemy, 64D);
 		entityList.forEach(e -> e.setTarget(player));
 		return true;
+	}
+
+	// バリア魔法
+	public boolean barrierOriginAction(Level world, Player player, ItemStack stack, WandInfo wandInfo) {
+		int level = wandInfo.getLevel();
+		int time = (int) this.getHealValue(player, this.effectTime(wandInfo));
+		this.addPotion(player, PotionInit.aether_barrier_origin, level, time);
+		this.playSound(world, player, SoundEvents.ENCHANTMENT_TABLE_USE, 0.5F, 1.175F);
+		return true;
+	}
+
+	// ユニーク魔法かどうか
+	public boolean isUniqueMagic() {
+		return this.data == 20;
 	}
 }

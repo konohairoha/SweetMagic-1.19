@@ -39,7 +39,7 @@ public class MFStuff extends SMItem {
 		CompoundTag tag = stack.getTag();
 		if (tag == null || !tag.contains("X")) { return InteractionResult.PASS; }
 
-		if (!player.level.isClientSide) {
+		if (!player.getLevel().isClientSide()) {
 			player.sendSystemMessage(this.getText("posremo").withStyle(RED));
 		}
 
@@ -52,7 +52,7 @@ public class MFStuff extends SMItem {
 		tag.remove("Y");
 		tag.remove("Z");
 
-		return InteractionResult.sidedSuccess(player.level.isClientSide);
+		return InteractionResult.sidedSuccess(player.getLevel().isClientSide());
 	}
 
 	// ツールチップの表示
@@ -68,7 +68,7 @@ public class MFStuff extends SMItem {
 			int y = tag.getInt("Y");
 			int z = tag.getInt("Z");
 			String pos = ": " + x + ", " + y + ", " + z;
-			toolTip.add(this.getTipArray( this.getText("regi_pos"), this.getLabel(pos).withStyle(WHITE)).withStyle(GREEN));
+			toolTip.add(this.getTipArray( this.getText("regi_pos"), this.getLabel(pos, WHITE)).withStyle(GREEN));
 
 			MutableComponent block = world.getBlockState(new BlockPos(x, y, z)).getBlock().getName().withStyle(WHITE);
 			toolTip.add(this.getTipArray( this.getText("regi_block"), ": ", block).withStyle(GREEN));

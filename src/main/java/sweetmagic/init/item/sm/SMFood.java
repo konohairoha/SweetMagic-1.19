@@ -9,6 +9,8 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -57,7 +59,7 @@ public class SMFood extends SMItem implements IFood {
 	public SMFood(String name, int healAmount, float saturation, int data, FoodType foodType, int foodLevel, boolean isDrink) {
 		super(name, SMItem.setItem(SweetMagicCore.smFoodTab).food(foodBuild(healAmount, saturation)));
 		this.data = data;
-		this.isDrink = false;
+		this.isDrink = isDrink;
 		this.healAmount = healAmount;
 		this.saturation = saturation;
 		ItemInit.foodList.add(this);
@@ -116,7 +118,7 @@ public class SMFood extends SMItem implements IFood {
 			break;
 		case 8:
 
-			RandomSource rand = world.random;
+			RandomSource rand = world.getRandom();
 			List<LivingEntity> entityList = this.getEntityList(LivingEntity.class, entity, e -> e.isAlive() && ( !(e instanceof Enemy) || e instanceof Zombie), 5D);
 
 			for (LivingEntity e : entityList) {
@@ -160,7 +162,7 @@ public class SMFood extends SMItem implements IFood {
 
 	public ItemStack finishUsingItem(ItemStack stack, Level world, LivingEntity entity) {
 
-		if (!world.isClientSide && entity instanceof Player player) {
+		if (!world.isClientSide() && entity instanceof Player player) {
 			this.onFoodEaten(world, player, stack);
 		}
 
@@ -177,6 +179,10 @@ public class SMFood extends SMItem implements IFood {
 
 	public UseAnim getUseAnimation(ItemStack stack) {
 		return this.isDrink ? UseAnim.DRINK : UseAnim.EAT;
+	}
+
+	public SoundEvent getEatingSound() {
+		return this.isDrink ? SoundEvents.GENERIC_DRINK : super.getEatingSound();
 	}
 
 	public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
@@ -219,19 +225,19 @@ public class SMFood extends SMItem implements IFood {
 			switch (this.data) {
 			case 4:
 				time = 90;
-				effect = this.getMCText("fire_resistance");
+				effect = this.getMCTip("fire_resistance");
 				break;
 			case 5:
 				time = 120;
-				effect = this.getEffectText("mfcostdown");
+				effect = this.getEffectTip("mfcostdown");
 				break;
 			case 9:
 				time = 120;
-				effect = this.getEffectText("increased_experience");
+				effect = this.getEffectTip("increased_experience");
 				break;
 			case 10:
 				time = 45;
-				effect = this.getEffectText("increased_recovery");
+				effect = this.getEffectTip("increased_recovery");
 				break;
 			}
 

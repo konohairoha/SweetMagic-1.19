@@ -24,14 +24,15 @@ import sweetmagic.SweetMagicCore;
 import sweetmagic.api.util.ISMTip;
 import sweetmagic.init.ItemInit;
 import sweetmagic.util.SMDamage;
+import sweetmagic.util.WorldHelper;
 
 public class SMSword extends SwordItem implements ISMTip {
 
-	private final String name;
+	private final int data;
 
-	public SMSword(String name, Tiers tier, int speed, float swing, int value) {
-		super(tier, speed, swing, SMItem.setItem(value, SweetMagicCore.smMagicTab));
-		this.name = name;
+	public SMSword(String name, int data, int value) {
+		super(Tiers.DIAMOND, 2 + data, -2.5F + data * 0.5F, SMItem.setItem(value, data != -1 ? SweetMagicCore.smMagicTab : null));
+		this.data = data;
 		ItemInit.itemMap.put(this, name);
 	}
 
@@ -41,7 +42,7 @@ public class SMSword extends SwordItem implements ISMTip {
 		Vec3 look = attacker.getViewVector(1F);
 		Vec3 dest = new Vec3(attacker.getX(), attacker.getY(), attacker.getZ()).add(0, attacker.getEyeHeight(), 0).add(look.x * 2, look.y * 2, look.z * 2);
 		BlockPos pos = new BlockPos(dest.x, attacker.getY(), dest.z);
-		List<LivingEntity> entityList = this.getEntityList(LivingEntity.class, attacker, e -> e.isAlive() && e instanceof Enemy, pos, 3D);
+		List<LivingEntity> entityList = this.getEntityList(LivingEntity.class, attacker, e -> e.isAlive() && e instanceof Enemy, pos, 3D + this.data);
 
 		DamageSource src = SMDamage.getMagicDamage(attacker, attacker);
 		float baseDamae = (float) attacker.getAttributeValue(Attributes.ATTACK_DAMAGE);
@@ -56,7 +57,7 @@ public class SMSword extends SwordItem implements ISMTip {
 	}
 
 	public <T extends Entity> List<T> getEntityList(Class<T> enClass, Entity entity, Predicate<T> filter, BlockPos pos, double range) {
-		return entity.level.getEntitiesOfClass(enClass, this.getAABB(pos, range)).stream().filter(filter).toList();
+		return WorldHelper.getEntityList(entity, enClass, filter, this.getAABB(pos, range));
 	}
 
 	// 範囲の取得
@@ -67,6 +68,7 @@ public class SMSword extends SwordItem implements ISMTip {
 	// ツールチップの表示
 	@Override
 	public void appendHoverText(ItemStack stack, @Nullable Level world, List<Component> toolTip, TooltipFlag flag) {
-		toolTip.add(this.getText(this.name).withStyle(GREEN));
+		toolTip.add(this.getText("alternative_sword").withStyle(GREEN));
+		toolTip.add(this.getText("attack_range", 3 + this.data).withStyle(GREEN));
 	}
 }

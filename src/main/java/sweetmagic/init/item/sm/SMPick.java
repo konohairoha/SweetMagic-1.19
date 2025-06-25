@@ -25,7 +25,7 @@ public class SMPick extends PickaxeItem implements ISMTip, IRangeTool {
 	private final int data;
 
 	public SMPick(String name, int data, int value) {
-		super(Tiers.DIAMOND, 2, -2.8F, SMItem.setItem(value, data == 1 ? null : SweetMagicCore.smMagicTab));
+		super(data == 2 ? Tiers.NETHERITE :Tiers.DIAMOND, 2, -2.8F + data, SMItem.setItem(value, data == -1 ? null : SweetMagicCore.smMagicTab));
 		this.name = name;
 		this.data = data;
 		ItemInit.itemMap.put(this, name);
@@ -42,7 +42,7 @@ public class SMPick extends PickaxeItem implements ISMTip, IRangeTool {
 	}
 
 	public boolean isAllBlock() {
-		return this.data >= 2;
+		return this.data >= 1;
 	}
 
 	// ツールチップの表示
@@ -54,18 +54,18 @@ public class SMPick extends PickaxeItem implements ISMTip, IRangeTool {
 	public int getRange() {
 		switch (this.data) {
 		case 0: return 1;
+		case 1: return 1;
 		case 2: return 1;
-		case 3: return 1;
 		default: return 0;
 		}
 	}
 
 	public boolean isDepth() {
-		return this.data >= 3;
+		return this.data >= 2;
 	}
 
 	// アイテム修理
 	public boolean isValidRepairItem(ItemStack stack, ItemStack ingot) {
-		return ingot.is(ItemInit.alt_ingot);
+		return ingot.is(ItemInit.alternative_ingot);
 	}
 }

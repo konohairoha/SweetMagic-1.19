@@ -25,6 +25,7 @@ import net.minecraft.world.phys.AABB;
 import sweetmagic.SweetMagicCore;
 import sweetmagic.api.util.ISMTip;
 import sweetmagic.init.ItemInit;
+import sweetmagic.util.WorldHelper;
 
 public class SMItem extends Item implements ISMTip {
 
@@ -61,11 +62,11 @@ public class SMItem extends Item implements ISMTip {
 	}
 
 	public <T extends Entity> List<T> getEntityList(Class<T> enClass, Entity entity, double range) {
-		return entity.level.getEntitiesOfClass(enClass, this.getAABB(entity.blockPosition(), range));
+		return WorldHelper.getEntityList(entity, enClass, this.getAABB(entity.blockPosition(), range));
 	}
 
-	public <T extends Entity> List<T> getEntityList(Class<T> enClass, Entity entity, Predicate<T> flag, double range) {
-		return entity.level.getEntitiesOfClass(enClass, this.getAABB(entity.blockPosition(), range)).stream().filter(flag).toList();
+	public <T extends Entity> List<T> getEntityList(Class<T> enClass, Entity entity, Predicate<T> filter, double range) {
+		return WorldHelper.getEntityList(entity, enClass, filter, this.getAABB(entity.blockPosition(), range));
 	}
 
 	// 範囲の取得
@@ -95,15 +96,15 @@ public class SMItem extends Item implements ISMTip {
 	}
 
 	public void playSound(Entity entity, SoundEvent sound, float vol, float pitch) {
-		entity.level.playSound(null, entity, sound, SoundSource.PLAYERS, vol, pitch);
+		entity.getLevel().playSound(null, entity, sound, SoundSource.PLAYERS, vol, pitch);
 	}
 
 	// パーティクルスポーンリング
-	protected void spawnParticleRing(Level world, ParticleOptions particle, double range, double x, double y, double z, double addY, double ySpeed, double moveValue) {
+	protected void spawnParticleRing(Level world, ParticleOptions par, double range, double x, double y, double z, double addY, double ySpeed, double moveValue) {
 		if (!(world instanceof ServerLevel server)) { return; }
 
 		y += addY;
-		RandomSource rand = world.random;
+		RandomSource rand = world.getRandom();
 
 		for (double degree = -range * Math.PI; degree < range * Math.PI; degree += 1D) {
 
@@ -113,14 +114,14 @@ public class SMItem extends Item implements ISMTip {
 				yS += rand.nextFloat() * 0.025F;
 			}
 
-			server.sendParticles(particle, x + Math.cos(degree), y, z + Math.sin(degree), 0, 0D, yS, 0D, moveValue);
+			server.sendParticles(par, x + Math.cos(degree), y, z + Math.sin(degree), 0, 0D, yS, 0D, moveValue);
 		}
 	}
 
 	// パーティクルスポーンサイクル
-	protected void spawnParticleCycle(ServerLevel server, ParticleOptions particle, double x, double y, double z, Direction face, double range, double angle, boolean isRevese) {
+	protected void spawnParticleCycle(ServerLevel server, ParticleOptions par, double x, double y, double z, Direction face, double range, double angle, boolean isRevese) {
 		int way = isRevese ? -1 : 1;
-		server.sendParticles(particle, x, y, z, 0, face.get3DDataValue() * way, range, angle + way * 1 * SPEED, 1);
+		server.sendParticles(par, x, y, z, 0, face.get3DDataValue() * way, range, angle + way * 1 * SPEED, 1);
 	}
 
 	public float getRandFloat() {

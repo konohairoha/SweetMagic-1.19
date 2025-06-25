@@ -1,14 +1,20 @@
 package sweetmagic.init.item.magic;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.function.Consumer;
 
 import javax.annotation.Nullable;
+
+import com.google.common.collect.ImmutableMultimap;
+import com.google.common.collect.Multimap;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
@@ -24,11 +30,13 @@ import sweetmagic.api.iitem.IPorch;
 import sweetmagic.event.KeyPressEvent;
 import sweetmagic.init.ItemInit;
 import sweetmagic.init.SoundInit;
-import sweetmagic.init.tile.menu.container.ContainerPorch;
+import sweetmagic.init.tile.menu.container.BaseContainer.ContainerPorch;
 import sweetmagic.key.SMKeybind;
 
 public class SMPorch extends ArmorItem implements IPorch {
 
+	private Multimap<Attribute, AttributeModifier> atMap = ImmutableMultimap.of();
+	public static final UUID BLOCK_REACH = UUID.fromString("c85e7079-e9f1-40e8-970e-bf327c23251a");
 	private final String name;
 	private final int data;
 
@@ -37,6 +45,14 @@ public class SMPorch extends ArmorItem implements IPorch {
 		this.name = name;
 		this.data = data;
 		ItemInit.itemMap.put(this, this.name);
+	}
+
+	public Multimap<Attribute, AttributeModifier> getAttributeMap() {
+		return this.atMap;
+	}
+
+	public void setAttributeMap(Multimap<Attribute, AttributeModifier> map) {
+		this.atMap = map;
 	}
 
 	//アイテムにダメージを与える処理を無効
@@ -51,7 +67,7 @@ public class SMPorch extends ArmorItem implements IPorch {
 
 	@Override
 	public void openGui(Level world, Player player, ItemStack stack) {
-		if (!world.isClientSide) {
+		if (!world.isClientSide()) {
 			NetworkHooks.openScreen((ServerPlayer) player, new ContainerPorch(stack));
 			this.playSound(world, player, SoundInit.ROBE, 0.0625F, 1F);
 		}

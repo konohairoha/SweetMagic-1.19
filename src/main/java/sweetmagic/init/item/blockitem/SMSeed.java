@@ -16,13 +16,15 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import sweetmagic.SweetMagicCore;
+import sweetmagic.api.iitem.ITier;
 import sweetmagic.api.util.ISMTip;
 import sweetmagic.init.ItemInit;
 import sweetmagic.init.item.sm.SMItem;
 
-public class SMSeed extends ItemNameBlockItem implements ISMTip {
+public class SMSeed extends ItemNameBlockItem implements ISMTip, ITier {
 
 	public final String name;
+	public final int tier;
 	private final Block block;
 	private final boolean isBag;
 
@@ -31,6 +33,7 @@ public class SMSeed extends ItemNameBlockItem implements ISMTip {
 		this.name = name;
 		this.block = block;
 		this.isBag = false;
+		this.tier = 0;
 		ItemInit.itemMap.put(this, this.name);
 		ItemInit.seedList.add(this);
 	}
@@ -40,14 +43,16 @@ public class SMSeed extends ItemNameBlockItem implements ISMTip {
 		this.name = name;
 		this.block = block;
 		this.isBag = false;
+		this.tier = 0;
 		ItemInit.itemMap.put(this, this.name);
 	}
 
-	public SMSeed(String name, Block block, boolean flag, boolean isBag) {
+	public SMSeed(String name, Block block, int tier) {
 		super(block, SMItem.setItem(SweetMagicCore.smFoodTab));
 		this.name = name;
 		this.block = block;
-		this.isBag = isBag;
+		this.isBag = true;
+		this.tier = tier;
 		ItemInit.itemMap.put(this, this.name);
 	}
 
@@ -56,6 +61,7 @@ public class SMSeed extends ItemNameBlockItem implements ISMTip {
 		this.name = name;
 		this.block = block;
 		this.isBag = false;
+		this.tier = 0;
 		ItemInit.itemMap.put(this, this.name);
 		ItemInit.seedList.add(this);
 	}
@@ -65,6 +71,7 @@ public class SMSeed extends ItemNameBlockItem implements ISMTip {
 		this.name = name;
 		this.block = block;
 		this.isBag = false;
+		this.tier = 0;
 		ItemInit.itemMap.put(this, this.name);
 	}
 
@@ -93,11 +100,15 @@ public class SMSeed extends ItemNameBlockItem implements ISMTip {
 		return (new FoodProperties.Builder()).nutrition(healAmount).saturationMod(saturation).build();
 	}
 
+	public int getTier() {
+		return this.tier;
+	}
+
 	// ツールチップの表示
 	public void appendHoverText(ItemStack stack, @Nullable Level world, List<Component> toolTip, TooltipFlag flag) {
 
 		if (this.isBag) {
-			toolTip.add(this.getText("quartz_seed").withStyle(GREEN));
+			toolTip.add(this.getText(this.tier == 0 ? this.name : "quartz_seed").withStyle(GREEN));
 		}
 
 		if (this.name != "sweetpotato_seed" && this.name != "whitenet_seed") { return; }

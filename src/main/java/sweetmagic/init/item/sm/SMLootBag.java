@@ -35,7 +35,7 @@ public class SMLootBag extends SMItem {
 		// アイテムスタックを取得
 		ItemStack stack = player.getItemInHand(hand);
 
-		if (!world.isClientSide) {
+		if (!world.isClientSide()) {
 			TagKey<Item> tagKey = null;
 			int value = 1;
 
@@ -46,7 +46,7 @@ public class SMLootBag extends SMItem {
 				break;
 			case 1:
 				tagKey = TagInit.EGGS;
-				value = 5 + world.random.nextInt(8);
+				value = 5 + world.getRandom().nextInt(8);
 				break;
 			case 2:
 				tagKey = TagInit.MAGIC_ACCESSORY;
@@ -59,7 +59,7 @@ public class SMLootBag extends SMItem {
 			}
 
 			this.playSound(player, SoundInit.ROBE, 0.0625F, 1.075F);
-			this.getOreLoot(world, player.getOnPos(), player, world.random, tagKey, value);
+			this.getOreLoot(world, player.getOnPos(), player, world.getRandom(), tagKey, value);
 			stack.shrink(1);
 		}
 

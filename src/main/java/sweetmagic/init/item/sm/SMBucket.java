@@ -63,7 +63,6 @@ public class SMBucket extends SMItem {
 	}
 
 	public ItemStack shrinkWater (ItemStack stack, int shrink) {
-
 		FluidStack fluid = this.getFluidStack(stack);
 		if (fluid.isEmpty()) { new ItemStack(ItemInit.alt_bucket); }
 
@@ -78,7 +77,6 @@ public class SMBucket extends SMItem {
 	}
 
 	public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
-
 		ItemStack stack = player.getItemInHand(hand);
 		BlockHitResult result = getPlayerPOVHitResult(world, player, ClipContext.Fluid.SOURCE_ONLY);
 		InteractionResultHolder<ItemStack> ret = ForgeEventFactory.onBucketUse(player, world, stack, result);
@@ -178,7 +176,7 @@ public class SMBucket extends SMItem {
 			return true;
 		}
 
-		if (!world.isClientSide && flag && !material.isLiquid()) {
+		if (!world.isClientSide() && flag && !material.isLiquid()) {
 			world.destroyBlock(pos, true);
 		}
 
@@ -198,7 +196,7 @@ public class SMBucket extends SMItem {
 			sound = this.getFluid().is(FluidTags.LAVA) ? SoundEvents.BUCKET_EMPTY_LAVA : SoundEvents.BUCKET_EMPTY;
 		}
 
-		world.playSound(player, pos, sound, SoundSource.BLOCKS, 1.0F, 1.0F);
+		world.playSound(player, pos, sound, SoundSource.BLOCKS, 1F, 1F);
 	}
 
 	// バケツの液体消費
@@ -331,6 +329,6 @@ public class SMBucket extends SMItem {
 		FluidStack fluid = this.getFluidStack(stack);
 		if (fluid.isEmpty()) { return; }
 
-		toolTip.add(this.getTipArray(fluid.getDisplayName().getString(), ": ", this.getLabel(String.format("%,.1f", fluid.getAmount() * 0.001F) + "B").withStyle(GREEN) ));
+		toolTip.add(this.getTipArray(fluid.getDisplayName().getString(), ": ", this.getLabel(String.format("%,.1f", fluid.getAmount() * 0.001F) + "B", GREEN)));
 	}
 }

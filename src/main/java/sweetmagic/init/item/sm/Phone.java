@@ -1,20 +1,20 @@
-package sweetmagic.init.item.magic;
+package sweetmagic.init.item.sm;
 
 import java.util.List;
 
 import net.minecraft.network.chat.Component;
-import net.minecraft.sounds.SoundEvents;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import sweetmagic.init.entity.projectile.AbstractMagicShot;
-import sweetmagic.init.entity.projectile.EvilArrow;
+import net.minecraftforge.network.NetworkHooks;
+import sweetmagic.init.tile.menu.container.BaseContainer.ContainerPhone;
 
-public class EvilArrowItem extends SMMagicItem {
+public class Phone extends SMItem {
 
-	public EvilArrowItem(String name) {
+	public Phone(String name) {
 		super(name);
 	}
 
@@ -26,19 +26,16 @@ public class EvilArrowItem extends SMMagicItem {
 		ItemStack stack = player.getItemInHand(hand);
 
 		if (!world.isClientSide()) {
-			AbstractMagicShot entity = new EvilArrow(world, player);
-			entity.shootFromRotation(player, player.getXRot(), player.getYRot(), 0, 2F, 0);
-			entity.setAddDamage(8F);
-			world.addFreshEntity(entity);
-			this.playSound(player, SoundEvents.BLAZE_SHOOT, 0.25F, 0.67F);
-			stack.shrink(1);
+			NetworkHooks.openScreen((ServerPlayer) player, new ContainerPhone(stack));
 		}
 
 		return InteractionResultHolder.consume(stack);
 	}
 
 	// ツールチップの表示
+	@Override
 	public void addTip(ItemStack stack, List<Component> toolTip) {
-		toolTip.add(this.getText(this.name).withStyle(GREEN));
+		toolTip.add(this.getText("phone").withStyle(GOLD));
+		toolTip.add(this.getText("phone_multi").withStyle(GOLD));
 	}
 }

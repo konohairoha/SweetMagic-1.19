@@ -49,7 +49,7 @@ public class CosmicWand extends SMWand implements ISMTip {
 
 	public void shotSound(Player player) {
 		if (this.isScope()) {
-			this.playSound(player.level, player, SoundInit.RIFLE_SHOT, 0.2F, 1F);
+			this.playSound(player.getLevel(), player, SoundInit.RIFLE_SHOT, 0.2F, 1F);
 		}
 
 		else {

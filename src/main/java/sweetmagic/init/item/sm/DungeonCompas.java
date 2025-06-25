@@ -17,7 +17,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
 import sweetmagic.init.StructureInit;
 import sweetmagic.init.item.magic.SMMagicItem;
-import sweetmagic.init.tile.menu.container.ContainerCompas;
+import sweetmagic.init.tile.menu.container.BaseContainer.ContainerCompas;
 
 public class DungeonCompas extends SMMagicItem {
 
@@ -34,8 +34,8 @@ public class DungeonCompas extends SMMagicItem {
 		// アイテムスタックを取得
 		ItemStack stack = player.getItemInHand(hand);
 
-		if (!world.isClientSide) {
-			NetworkHooks.openScreen((ServerPlayer) player, new ContainerCompas(stack), b -> b.writeByte(player.getInventory().selected));
+		if (!world.isClientSide()) {
+			NetworkHooks.openScreen((ServerPlayer) player, new ContainerCompas(stack));
 		}
 
 		return InteractionResultHolder.consume(stack);
@@ -45,7 +45,7 @@ public class DungeonCompas extends SMMagicItem {
 		double d0 = getAngle(entity, pos);
 		double d1 = getRot(entity);
 		double d2 = 0.5D - (d1 - 0.25D - d0);
-		return Mth.positiveModulo((float) d2, 1.0F);
+		return Mth.positiveModulo((float) d2, 1F);
 	}
 
 	private double getAngle(Entity entity, BlockPos pos) {
@@ -60,7 +60,7 @@ public class DungeonCompas extends SMMagicItem {
 	public String getDungeonName(ItemStack stack) {
 		CompoundTag tags = stack.getOrCreateTag();
 		if (!tags.getBoolean("foundStructure") || !tags.contains("selectId")) { return "select_dungen"; }
-		return StructureInit.strucMap.get(tags.getInt("selectId")).getName();
+		return StructureInit.strucMap.get(tags.getInt("selectId")).name();
 	}
 
 	// ツールチップの表示
