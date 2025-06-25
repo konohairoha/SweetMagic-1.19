@@ -1,9 +1,9 @@
 {
 	"type": "sweetmagic:furniture_craft",
 	"ingredients": [
-		{ "tag": "sweetmagic:smlogs", "count": 1 }
+		{"tag": "sweetmagic:smlogs", "count": 1}
 	],
 	"result": [
-		{ "item": "sweetmagic:large_frosted_glass_moden_door_b_i", "count": 2 }
+		{"item": "sweetmagic:large_frosted_glass_moden_door_b_i", "count": 2}
 	]
 }

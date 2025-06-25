@@ -1,9 +1,9 @@
 {
 	"type": "sweetmagic:furniture_craft",
 	"ingredients": [
-		{ "tag": "sweetmagic:glowstone", "count": 1 }
+		{"tag": "sweetmagic:glowstone", "count": 1}
 	],
 	"result": [
-		{ "item": "sweetmagic:wall_lantern", "count": 1 }
+		{"item": "sweetmagic:wall_lantern", "count": 1}
 	]
 }

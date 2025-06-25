@@ -1,9 +1,9 @@
 {
 	"type": "sweetmagic:furniture_craft",
 	"ingredients": [
-		{ "tag": "sweetmagic:wall_shelf", "count": 1 }
+		{"tag": "sweetmagic:wall_shelf", "count": 1}
 	],
 	"result": [
-		{ "item": "sweetmagic:wall_shelf_i", "count": 1 }
+		{"item": "sweetmagic:wall_shelf_i", "count": 1}
 	]
 }

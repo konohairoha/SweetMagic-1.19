@@ -1,9 +1,9 @@
 {
 	"type": "sweetmagic:furniture_craft",
 	"ingredients": [
-		{ "tag": "forge:ingots/iron", "count": 1 }
+		{"tag": "forge:ingots/iron", "count": 1}
 	],
 	"result": [
-		{ "item": "sweetmagic:wall_rack_i", "count": 2 }
+		{"item": "sweetmagic:wall_rack_i", "count": 2}
 	]
 }
