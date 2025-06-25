@@ -1,11 +1,11 @@
 {
 	"type": "minecraft:crafting_shaped",
 	"key": {
-		"P": { "item": "sweetmagic:old_brick" }
+		"P": {"item": "sweetmagic:old_brick"}
 	},
 	"pattern": [
 		"PPP",
 		"PPP"
 	],
-	"result": { "item": "sweetmagic:old_brick_trapdoor", "count": 8 }
+	"result": {"item": "sweetmagic:old_brick_trapdoor", "count": 8}
 }

@@ -1,7 +1,7 @@
 {
 	"type": "minecraft:crafting_shapeless",
 	"ingredients": [
-		{ "item": "sweetmagic:magiawood_log" }
+		{"item": "sweetmagic:magiawood_log"}
 	],
-	"result": { "item": "sweetmagic:magiawood_planks", "count": 4 }
+	"result": {"item": "sweetmagic:magiawood_planks", "count": 4}
 }

@@ -1,14 +1,14 @@
 {
 	"type": "minecraft:crafting_shaped",
 	"key": {
-		"S": { "item": "sweetmagic:sugarbell" },
-		"C": { "tag": "forge:chests/wooden" },
-		"R": { "tag": "forge:recipe_book" }
+		"S": {"item": "sweetmagic:sugarbell"},
+		"C": {"tag": "forge:chests/wooden"},
+		"R": {"tag": "forge:recipe_book"}
 	},
 	"pattern": [
 		"SCS",
 		"CRC",
 		"SCS"
 	],
-	"result": { "item": "sweetmagic:moden_shelf_y" }
+	"result": {"item": "sweetmagic:moden_shelf_y"}
 }

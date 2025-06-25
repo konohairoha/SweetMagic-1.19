@@ -1,15 +1,15 @@
 {
 	"type": "minecraft:crafting_shaped",
 	"key": {
-		"S": { "item": "sweetmagic:sugarbell" },
-		"A": { "item": "sweetmagic:aether_crystal" },
-		"P": { "item": "sweetmagic:blank_page" },
-		"B": { "item": "minecraft:book" }
+		"S": {"item": "sweetmagic:sugarbell"},
+		"A": {"item": "sweetmagic:aether_crystal"},
+		"P": {"item": "sweetmagic:blank_page"},
+		"B": {"item": "minecraft:book"}
 	},
 	"pattern": [
 		"SAS",
 		"PBP",
 		"SAS"
 	],
-	"result": { "item": "sweetmagic:magic_book" }
+	"result": {"item": "sweetmagic:magic_book"}
 }

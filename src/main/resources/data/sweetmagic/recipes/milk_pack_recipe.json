@@ -1,8 +1,8 @@
 {
 	"type": "minecraft:crafting_shapeless",
 	"ingredients": [
-		{ "item": "minecraft:milk_bucket" },
-		{ "tag": "forge:recipe_book" }
+		{"item": "minecraft:milk_bucket"},
+		{"tag": "forge:recipe_book"}
 	],
-	"result": { "item": "sweetmagic:milk_pack", "count": 8 }
+	"result": {"item": "sweetmagic:milk_pack", "count": 8}
 }

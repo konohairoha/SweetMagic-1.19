@@ -1,0 +1,13 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"key": {
+		"P": {"tag": "sweetmagic:smplanks"},
+		"S": {"item": "minecraft:stick"}
+	},
+	"pattern": [
+		"PPP",
+		"PPP",
+		" S "
+	],
+	"result": {"item": "minecraft:oak_sign", "count": 6}
+}

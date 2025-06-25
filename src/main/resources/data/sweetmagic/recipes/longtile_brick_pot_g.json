@@ -1,14 +1,14 @@
 {
 	"type": "minecraft:crafting_shaped",
 	"key": {
-		"B": { "item": "sweetmagic:longtile_brick_g" },
-		"M": { "item": "sweetmagic:magic_meal" },
-		"D": { "item": "sweetmagic:potting_soil" }
+		"B": {"item": "sweetmagic:longtile_brick_g"},
+		"M": {"item": "sweetmagic:magic_meal"},
+		"D": {"item": "sweetmagic:potting_soil"}
 	},
 	"pattern": [
 		"MMM",
 		"DDD",
 		"BBB"
 	],
-	"result": { "item": "sweetmagic:longtile_brick_pot_g", "count": 4 }
+	"result": {"item": "sweetmagic:longtile_brick_pot_g", "count": 4}
 }

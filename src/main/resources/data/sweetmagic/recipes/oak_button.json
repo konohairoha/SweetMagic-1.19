@@ -1,0 +1,7 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		{"tag": "sweetmagic:smplanks"}
+	],
+	"result": {"item": "minecraft:oak_button", "count": 1}
+}

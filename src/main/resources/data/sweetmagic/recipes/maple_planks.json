@@ -1,0 +1,7 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		{"item": "sweetmagic:maple_log"}
+	],
+	"result": {"item": "sweetmagic:maple_planks", "count": 4}
+}

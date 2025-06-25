@@ -1,14 +1,14 @@
 {
 	"type": "minecraft:crafting_shaped",
 	"key": {
-		"W": { "tag": "minecraft:wooden_slabs" },
-		"S": { "item": "minecraft:stick" },
-		"R": { "tag": "forge:recipe_book" }
+		"W": {"tag": "minecraft:wooden_slabs"},
+		"S": {"item": "minecraft:stick"},
+		"R": {"tag": "forge:recipe_book"}
 	},
 	"pattern": [
 		"WWW",
 		"SWS",
 		"SRS"
 	],
-	"result": { "item": "sweetmagic:moden_rack" }
+	"result": {"item": "sweetmagic:moden_rack"}
 }
