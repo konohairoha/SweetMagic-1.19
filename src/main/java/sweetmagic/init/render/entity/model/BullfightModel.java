@@ -4,7 +4,6 @@ import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
-import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
@@ -14,7 +13,6 @@ import sweetmagic.init.entity.monster.boss.BullFight;
 
 public class BullfightModel extends HierarchicalModel<BullFight> {
 
-	// モデルの登録のために、他と被らない名前でResourceLocationを登録しておく
 	public static final ModelLayerLocation LAYER = getLayer("bullfight");
 	private final ModelPart root;
 	private final ModelPart head;
@@ -35,19 +33,18 @@ public class BullfightModel extends HierarchicalModel<BullFight> {
 	}
 
 	public static LayerDefinition createBodyLayer() {
-
 		MeshDefinition mesh = new MeshDefinition();
 		PartDefinition part = mesh.getRoot();
 
-		PartDefinition neckPart = part.addOrReplaceChild("neck", CubeListBuilder.create().texOffs(68, 73).addBox(-5F, -1F, -18F, 10F, 10F, 18F), PartPose.offset(0F, -7F, 5.5F));
-		PartDefinition headPart = neckPart.addOrReplaceChild("head", CubeListBuilder.create().texOffs(0, 0).addBox(-6F, -20F, -2F, 12F, 16F, 8F), PartPose.offset(0F, 16F, -17F));
-		headPart.addOrReplaceChild("right_horn", CubeListBuilder.create().texOffs(74, 55).addBox(2F, -6F, 4F, 2F, 14F, 4F), PartPose.offsetAndRotation(-10F, -14F, -8F, 1F, 0F, 0F));
-		headPart.addOrReplaceChild("left_horn", CubeListBuilder.create().texOffs(74, 55).mirror().addBox(-2F, -6F, 4F, 2F, 14F, 4F), PartPose.offsetAndRotation(8F, -14F, -8F, 1F, 0F, 0F));
-		part.addOrReplaceChild("body", CubeListBuilder.create().texOffs(0, 55).addBox(-7F, -10F, -7F, 14F, 16F, 20F).texOffs(0, 91).addBox(-6F, 6F, -5F, 12F, 19F, 16F), PartPose.offsetAndRotation(0F, 1F, 2F, ((float) Math.PI / 2F), 0F, 0F));
-		part.addOrReplaceChild("right_hind_leg", CubeListBuilder.create().texOffs(96, 0).addBox(-1F, 15F, 1F, 6F, 22F, 6F),PartPose.offset(-8F, -13F, 18F));
-		part.addOrReplaceChild("left_hind_leg", CubeListBuilder.create().texOffs(96, 0).mirror().addBox(-5F, 15F, 1F, 6F, 22F, 6F), PartPose.offset(8F, -13F, 18F));
-		part.addOrReplaceChild("right_front_leg", CubeListBuilder.create().texOffs(64, 0).addBox(-3F, 15F, -1F, 6F, 22F, 6F), PartPose.offset(-8F, -13F, -5F));
-		part.addOrReplaceChild("left_front_leg", CubeListBuilder.create().texOffs(64, 0).mirror().addBox(-3F, 15F, -1F,6F, 22F, 6F), PartPose.offset(8F, -13F, -5F));
+		PartDefinition neckPart = part.addOrReplaceChild("neck", SMBaseModel.getCubeList(68, 73).addBox(-5F, -1F, -18F, 10F, 10F, 18F), PartPose.offset(0F, -7F, 5.5F));
+		PartDefinition headPart = neckPart.addOrReplaceChild("head", SMBaseModel.getCubeList(0, 0).addBox(-6F, -20F, -2F, 12F, 16F, 8F), PartPose.offset(0F, 16F, -17F));
+		headPart.addOrReplaceChild("right_horn", SMBaseModel.getCubeList(74, 55).addBox(2F, -6F, 4F, 2F, 14F, 4F), PartPose.offsetAndRotation(-10F, -14F, -8F, 1F, 0F, 0F));
+		headPart.addOrReplaceChild("left_horn", SMBaseModel.getCubeList(74, 55).mirror().addBox(-2F, -6F, 4F, 2F, 14F, 4F), PartPose.offsetAndRotation(8F, -14F, -8F, 1F, 0F, 0F));
+		part.addOrReplaceChild("body", SMBaseModel.getCubeList(0, 55).addBox(-7F, -10F, -7F, 14F, 16F, 20F).texOffs(0, 91).addBox(-6F, 6F, -5F, 12F, 19F, 16F), PartPose.offsetAndRotation(0F, 1F, 2F, ((float) Math.PI / 2F), 0F, 0F));
+		part.addOrReplaceChild("right_hind_leg", SMBaseModel.getCubeList(96, 0).addBox(-1F, 15F, 1F, 6F, 22F, 6F),PartPose.offset(-8F, -13F, 18F));
+		part.addOrReplaceChild("left_hind_leg", SMBaseModel.getCubeList(96, 0).mirror().addBox(-5F, 15F, 1F, 6F, 22F, 6F), PartPose.offset(8F, -13F, 18F));
+		part.addOrReplaceChild("right_front_leg", SMBaseModel.getCubeList(64, 0).addBox(-3F, 15F, -1F, 6F, 22F, 6F), PartPose.offset(-8F, -13F, -5F));
+		part.addOrReplaceChild("left_front_leg", SMBaseModel.getCubeList(64, 0).mirror().addBox(-3F, 15F, -1F,6F, 22F, 6F), PartPose.offset(8F, -13F, -5F));
 		return LayerDefinition.create(mesh, 128, 128);
 	}
 

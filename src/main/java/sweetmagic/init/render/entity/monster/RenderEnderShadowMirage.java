@@ -27,7 +27,7 @@ public class RenderEnderShadowMirage<T extends EnderShadowMirage> extends MobRen
 		pose.scale(size, size, size);
 	}
 
-	public float getSize (Mob mob, float size) {
+	public float getSize(Mob mob, float size) {
 		return mob.hasEffect(PotionInit.leader_flag) ? size + 0.35F : size;
 	}
 

@@ -33,13 +33,13 @@ public class WitchCatModel<T extends WitchCat> extends OcelotModel<T> {
 		MeshDefinition mesh = new MeshDefinition();
 		PartDefinition part = mesh.getRoot();
 		part.addOrReplaceChild("head", CubeListBuilder.create().addBox("main", -2.5F, -2F, -3F, 5F, 4F, 5F, cube).addBox("nose", -1.5F, -0.001F, -4F, 3, 2, 2, cube, 0, 24).addBox("ear1", -2F, -3F, 0F, 1, 1, 2, cube, 0, 10).addBox("ear2", 1F, -3F, 0F, 1, 1, 2, cube, 6, 10), PartPose.offset(0F, 15F, -9F));
-		part.addOrReplaceChild("body", CubeListBuilder.create().texOffs(20, 0).addBox(-2F, 3F, -8F, 4F, 16F, 6F, cube), PartPose.offsetAndRotation(0F, 12F, -10F, ((float)Math.PI / 2F), 0F, 0F));
-		part.addOrReplaceChild("tail1", CubeListBuilder.create().texOffs(0, 15).addBox(-0.5F, 0F, 0F, 1F, 8F, 1F, cube), PartPose.offsetAndRotation(0F, 15F, 8F, 0.9F, 0F, 0F));
-		part.addOrReplaceChild("tail2", CubeListBuilder.create().texOffs(4, 15).addBox(-0.5F, 0F, 0F, 1F, 8F, 1F, cube), PartPose.offset(0F, 20F, 14F));
-		CubeListBuilder build = CubeListBuilder.create().texOffs(8, 13).addBox(-1F, 0F, 1F, 2F, 6F, 2F, cube);
+		part.addOrReplaceChild("body", SMBaseModel.getCubeList(20, 0).addBox(-2F, 3F, -8F, 4F, 16F, 6F, cube), PartPose.offsetAndRotation(0F, 12F, -10F, ((float)Math.PI / 2F), 0F, 0F));
+		part.addOrReplaceChild("tail1", SMBaseModel.getCubeList(0, 15).addBox(-0.5F, 0F, 0F, 1F, 8F, 1F, cube), PartPose.offsetAndRotation(0F, 15F, 8F, 0.9F, 0F, 0F));
+		part.addOrReplaceChild("tail2", SMBaseModel.getCubeList(4, 15).addBox(-0.5F, 0F, 0F, 1F, 8F, 1F, cube), PartPose.offset(0F, 20F, 14F));
+		CubeListBuilder build = SMBaseModel.getCubeList(8, 13).addBox(-1F, 0F, 1F, 2F, 6F, 2F, cube);
 		part.addOrReplaceChild("left_hind_leg", build, PartPose.offset(1.1F, 18F, 5F));
 		part.addOrReplaceChild("right_hind_leg", build, PartPose.offset(-1.1F, 18F, 5F));
-		CubeListBuilder build1 = CubeListBuilder.create().texOffs(40, 0).addBox(-1F, 0F, 0F, 2F, 10F, 2F, cube);
+		CubeListBuilder build1 = SMBaseModel.getCubeList(40, 0).addBox(-1F, 0F, 0F, 2F, 10F, 2F, cube);
 		part.addOrReplaceChild("left_front_leg", build1, PartPose.offset(1.2F, 14.1F, -5F));
 		part.addOrReplaceChild("right_front_leg", build1, PartPose.offset(-1.2F, 14.1F, -5F));
 		return LayerDefinition.create(mesh, 64, 32);

@@ -19,7 +19,6 @@ import net.minecraft.world.entity.monster.Monster;
 
 public class TempestModel<T extends Monster> extends EntityModel<T> {
 
-	// モデルの登録のために、他と被らない名前でResourceLocationを登録しておく
 	public static final ModelLayerLocation LAYER = SMBaseModel.getLayer("blaze_tempest");
 	private final ModelPart root;
 	private final ModelPart[] upperBodyParts;
@@ -42,8 +41,8 @@ public class TempestModel<T extends Monster> extends EntityModel<T> {
 		PartDefinition part = mesh.getRoot();
 		float f = 0F;
 
-		part.addOrReplaceChild("head", CubeListBuilder.create().texOffs(0, 0).addBox(-4F, -4F, -4F, 8F, 8F, 8F), PartPose.ZERO);
-		CubeListBuilder cube = CubeListBuilder.create().texOffs(0, 16).addBox(0F, 0F, 0F, 2F, 8F, 2F);
+		part.addOrReplaceChild("head", SMBaseModel.getCubeList(0, 0).addBox(-4F, -4F, -4F, 8F, 8F, 8F), PartPose.ZERO);
+		CubeListBuilder cube = SMBaseModel.getCubeList(0, 16).addBox(0F, 0F, 0F, 2F, 8F, 2F);
 
 		for (int i = 0; i < 6; i++) {
 			float f1 = Mth.cos(f) * 18F;

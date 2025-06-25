@@ -2,22 +2,15 @@ package sweetmagic.init.render.entity.projectile;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
-import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import sweetmagic.SweetMagicCore;
 import sweetmagic.init.BlockInit;
 import sweetmagic.init.entity.projectile.ExplosionThunderShot;
 
-public class RenderExplosionThunder<T extends ExplosionThunderShot> extends EntityRenderer<T> {
+public class RenderExplosionThunder<T extends ExplosionThunderShot> extends RenderMagicBase<T> {
 
 	private static final ItemStack BLOCK = new ItemStack(BlockInit.yellow_glass);
-	private static final ResourceLocation TEX = SweetMagicCore.getSRC("textures/block/empty.png");
 
 	public RenderExplosionThunder(EntityRendererProvider.Context con) {
 		super(con);
@@ -29,13 +22,7 @@ public class RenderExplosionThunder<T extends ExplosionThunderShot> extends Enti
 		float size = 1F;
 		pose.translate(0D, 0.5D, 0D);
 		pose.scale(size, size, size);
-		Minecraft mc = Minecraft.getInstance();
-		mc.getItemRenderer().renderStatic(BLOCK, ItemTransforms.TransformType.FIXED, light, OverlayTexture.NO_OVERLAY, pose, buf, 0);
+		this.renderItem(pose, buf, light, BLOCK);
 		pose.popPose();
-	}
-
-	@Override
-	public ResourceLocation getTextureLocation(T entity) {
-		return TEX;
 	}
 }

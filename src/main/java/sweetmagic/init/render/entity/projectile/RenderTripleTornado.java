@@ -4,18 +4,15 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
 
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.renderer.texture.TextureAtlas;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import sweetmagic.init.BlockInit;
 import sweetmagic.init.entity.projectile.TripleTornadoShot;
 import sweetmagic.util.RenderUtil;
 import sweetmagic.util.RenderUtil.RenderColor;
 
-public class RenderTripleTornado<T extends TripleTornadoShot> extends EntityRenderer<T> {
+public class RenderTripleTornado<T extends TripleTornadoShot> extends RenderMagicBase<T> {
 
 	private static final Block SQUARE_BLOCK_L = BlockInit.magic_square_l_blank;
 
@@ -23,13 +20,9 @@ public class RenderTripleTornado<T extends TripleTornadoShot> extends EntityRend
 		super(con);
 	}
 
-	public ResourceLocation getTextureLocation(T entity) {
-		return TextureAtlas.LOCATION_BLOCKS;
-	}
-
 	public void render(T entity, float parTick, float par2, PoseStack pose, MultiBufferSource buf, int light) {
 		long gameTime = entity.level.getGameTime();
-		float angle = -gameTime / 20.0F * (180F / (float) Math.PI);
+		float angle = -gameTime / 20F * (180F / (float) Math.PI);
 
 		float scaleRate = Math.min(1F, entity.tickCount * 0.05F);
 		float scale = (float) entity.getRange() * scaleRate;

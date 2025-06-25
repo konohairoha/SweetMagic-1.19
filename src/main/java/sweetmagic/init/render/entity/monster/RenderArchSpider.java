@@ -26,7 +26,7 @@ public class RenderArchSpider<T extends ArchSpider> extends SpiderRenderer<T> {
 		pose.scale(size, size, size);
 	}
 
-	public float getSize (Mob mob, float size) {
+	public float getSize(Mob mob, float size) {
 		return mob.hasEffect(PotionInit.leader_flag) ? size + 0.35F : size;
 	}
 

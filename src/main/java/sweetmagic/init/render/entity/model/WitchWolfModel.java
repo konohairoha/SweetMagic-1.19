@@ -50,16 +50,16 @@ public class WitchWolfModel<T extends LivingEntity> extends ColorableAgeableList
 		PartDefinition par = mesh.getRoot();
 
 		PartDefinition par1 = par.addOrReplaceChild("head", CubeListBuilder.create(), PartPose.offset(-1F, 13.5F, -7F));
-		par1.addOrReplaceChild("real_head", CubeListBuilder.create().texOffs(0, 0).addBox(-2F, -3F, -2F, 6F, 6F, 4F).texOffs(16, 14).addBox(-2F, -5F, 0F, 2F, 2F, 1F).texOffs(16, 14).addBox(2F, -5F, 0F, 2F, 2F, 1F).texOffs(0, 10).addBox(-0.5F, -0.001F, -5F, 3F, 3F, 4F), PartPose.ZERO);
-		par.addOrReplaceChild("body", CubeListBuilder.create().texOffs(18, 14).addBox(-3F, -2F, -3F, 6F, 9F, 6F), PartPose.offsetAndRotation(0F, 14F, 2F, ((float) Math.PI / 2F), 0F, 0F));
-		par.addOrReplaceChild("upper_body", CubeListBuilder.create().texOffs(21, 0).addBox(-3F, -3F, -3F, 8F, 6F, 7F), PartPose.offsetAndRotation(-1F, 14F, -3F, ((float) Math.PI / 2F), 0F, 0F));
-		CubeListBuilder cube = CubeListBuilder.create().texOffs(0, 18).addBox(0F, 0F, -1F, 2F, 8F, 2F);
+		par1.addOrReplaceChild("real_head", SMBaseModel.getCubeList(0, 0).addBox(-2F, -3F, -2F, 6F, 6F, 4F).texOffs(16, 14).addBox(-2F, -5F, 0F, 2F, 2F, 1F).texOffs(16, 14).addBox(2F, -5F, 0F, 2F, 2F, 1F).texOffs(0, 10).addBox(-0.5F, -0.001F, -5F, 3F, 3F, 4F), PartPose.ZERO);
+		par.addOrReplaceChild("body", SMBaseModel.getCubeList(18, 14).addBox(-3F, -2F, -3F, 6F, 9F, 6F), PartPose.offsetAndRotation(0F, 14F, 2F, ((float) Math.PI / 2F), 0F, 0F));
+		par.addOrReplaceChild("upper_body", SMBaseModel.getCubeList(21, 0).addBox(-3F, -3F, -3F, 8F, 6F, 7F), PartPose.offsetAndRotation(-1F, 14F, -3F, ((float) Math.PI / 2F), 0F, 0F));
+		CubeListBuilder cube = SMBaseModel.getCubeList(0, 18).addBox(0F, 0F, -1F, 2F, 8F, 2F);
 		par.addOrReplaceChild("right_hind_leg", cube, PartPose.offset(-2.5F, 16F, 7F));
 		par.addOrReplaceChild("left_hind_leg", cube, PartPose.offset(0.5F, 16F, 7F));
 		par.addOrReplaceChild("right_front_leg", cube, PartPose.offset(-2.5F, 16F, -4F));
 		par.addOrReplaceChild("left_front_leg", cube, PartPose.offset(0.5F, 16F, -4F));
 		PartDefinition par2 = par.addOrReplaceChild("tail", CubeListBuilder.create(), PartPose.offsetAndRotation(-1F, 12F, 8F, ((float) Math.PI / 5F), 0F, 0F));
-		par2.addOrReplaceChild("real_tail", CubeListBuilder.create().texOffs(9, 18).addBox(0F, 0F, -1F, 2F, 8F, 2F), PartPose.ZERO);
+		par2.addOrReplaceChild("real_tail", SMBaseModel.getCubeList(9, 18).addBox(0F, 0F, -1F, 2F, 8F, 2F), PartPose.ZERO);
 		return LayerDefinition.create(mesh, 64, 32);
 	}
 

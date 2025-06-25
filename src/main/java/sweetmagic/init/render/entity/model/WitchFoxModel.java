@@ -18,7 +18,6 @@ import sweetmagic.init.entity.animal.WitchFox;
 public class WitchFoxModel<T extends WitchFox> extends AgeableListModel<T> {
 
 	public static final ModelLayerLocation LAYER = getLayer("witchfox");
-
 	public final ModelPart head;
 	private final ModelPart body;
 	private final ModelPart rightHindLeg;
@@ -26,7 +25,6 @@ public class WitchFoxModel<T extends WitchFox> extends AgeableListModel<T> {
 	private final ModelPart rightFrontLeg;
 	private final ModelPart leftFrontLeg;
 	private final ModelPart tail;
-	private float legMotionPos;
 
 	public WitchFoxModel(ModelPart part) {
 		super(true, 8F, 3.35F);
@@ -42,19 +40,19 @@ public class WitchFoxModel<T extends WitchFox> extends AgeableListModel<T> {
 	public static LayerDefinition createBodyLayer() {
 		MeshDefinition mesh = new MeshDefinition();
 		PartDefinition par = mesh.getRoot();
-		PartDefinition par1 = par.addOrReplaceChild("head", CubeListBuilder.create().texOffs(1, 5).addBox(-3F, -2F, -5F, 8F, 6F, 6F), PartPose.offset(-1F, 16.5F, -3F));
-		par1.addOrReplaceChild("right_ear", CubeListBuilder.create().texOffs(8, 1).addBox(-3F, -4F, -4F, 2F, 2F, 1F), PartPose.ZERO);
-		par1.addOrReplaceChild("left_ear", CubeListBuilder.create().texOffs(15, 1).addBox(3F, -4F, -4F, 2F, 2F, 1F), PartPose.ZERO);
-		par1.addOrReplaceChild("nose", CubeListBuilder.create().texOffs(6, 18).addBox(-1F, 2.01F, -8F, 4F, 2F, 3F), PartPose.ZERO);
-		PartDefinition par2 = par.addOrReplaceChild("body", CubeListBuilder.create().texOffs(24, 15).addBox(-3F, 3.999F, -3.5F, 6F, 11F, 6F), PartPose.offsetAndRotation(0F, 16F, -6F, ((float) Math.PI / 2F), 0F, 0F));
+		PartDefinition par1 = par.addOrReplaceChild("head", SMBaseModel.getCubeList(1, 5).addBox(-3F, -2F, -5F, 8F, 6F, 6F), PartPose.offset(-1F, 16.5F, -3F));
+		par1.addOrReplaceChild("right_ear", SMBaseModel.getCubeList(8, 1).addBox(-3F, -4F, -4F, 2F, 2F, 1F), PartPose.ZERO);
+		par1.addOrReplaceChild("left_ear", SMBaseModel.getCubeList(15, 1).addBox(3F, -4F, -4F, 2F, 2F, 1F), PartPose.ZERO);
+		par1.addOrReplaceChild("nose", SMBaseModel.getCubeList(6, 18).addBox(-1F, 2.01F, -8F, 4F, 2F, 3F), PartPose.ZERO);
+		PartDefinition par2 = par.addOrReplaceChild("body", SMBaseModel.getCubeList(24, 15).addBox(-3F, 3.999F, -3.5F, 6F, 11F, 6F), PartPose.offsetAndRotation(0F, 16F, -6F, ((float) Math.PI / 2F), 0F, 0F));
 		CubeDeformation cube = new CubeDeformation(0.001F);
-		CubeListBuilder build = CubeListBuilder.create().texOffs(4, 24).addBox(2F, 0.5F, -1F, 2F, 6F, 2F, cube);
-		CubeListBuilder build1 = CubeListBuilder.create().texOffs(13, 24).addBox(2F, 0.5F, -1F, 2F, 6F, 2F, cube);
+		CubeListBuilder build = SMBaseModel.getCubeList(4, 24).addBox(2F, 0.5F, -1F, 2F, 6F, 2F, cube);
+		CubeListBuilder build1 = SMBaseModel.getCubeList(13, 24).addBox(2F, 0.5F, -1F, 2F, 6F, 2F, cube);
 		par.addOrReplaceChild("right_hind_leg", build1, PartPose.offset(-5F, 17.5F, 7F));
 		par.addOrReplaceChild("left_hind_leg", build, PartPose.offset(-1F, 17.5F, 7F));
 		par.addOrReplaceChild("right_front_leg", build1, PartPose.offset(-5F, 17.5F, 0F));
 		par.addOrReplaceChild("left_front_leg", build, PartPose.offset(-1F, 17.5F, 0F));
-		par2.addOrReplaceChild("tail", CubeListBuilder.create().texOffs(30, 0).addBox(2F, 0F, -1F, 4F, 9F, 5F), PartPose.offsetAndRotation(-4F, 15F, -1F, -0.05235988F, 0F, 0F));
+		par2.addOrReplaceChild("tail", SMBaseModel.getCubeList(30, 0).addBox(2F, 0F, -1F, 4F, 9F, 5F), PartPose.offsetAndRotation(-4F, 15F, -1F, -0.05235988F, 0F, 0F));
 		return LayerDefinition.create(mesh, 48, 32);
 	}
 
@@ -133,14 +131,6 @@ public class WitchFoxModel<T extends WitchFox> extends AgeableListModel<T> {
 			this.leftHindLeg.zRot = f;
 			this.rightFrontLeg.zRot = f / 2F;
 			this.leftFrontLeg.zRot = f / 2F;
-		}
-
-		if (entity.getFacePlant()) {
-			this.legMotionPos += 0.67F;
-			this.rightHindLeg.xRot = Mth.cos(this.legMotionPos * 0.4662F) * 0.1F;
-			this.leftHindLeg.xRot = Mth.cos(this.legMotionPos * 0.4662F + (float) Math.PI) * 0.1F;
-			this.rightFrontLeg.xRot = Mth.cos(this.legMotionPos * 0.4662F + (float) Math.PI) * 0.1F;
-			this.leftFrontLeg.xRot = Mth.cos(this.legMotionPos * 0.4662F) * 0.1F;
 		}
 	}
 

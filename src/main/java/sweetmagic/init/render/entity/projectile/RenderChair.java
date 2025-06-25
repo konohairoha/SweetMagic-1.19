@@ -7,9 +7,9 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import sweetmagic.init.entity.block.ChairEntity;
+import net.minecraft.world.entity.Entity;
 
-public class RenderChair<T extends ChairEntity> extends EntityRenderer<T> {
+public class RenderChair<T extends Entity> extends EntityRenderer<T> {
 
 	public RenderChair(EntityRendererProvider.Context con) {
 		super(con);

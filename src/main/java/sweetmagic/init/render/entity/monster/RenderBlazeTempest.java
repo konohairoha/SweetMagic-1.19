@@ -32,7 +32,7 @@ public class RenderBlazeTempest<T extends BlazeTempest> extends MobRenderer<T, B
 		pose.scale(size, size, size);
 	}
 
-	public float getSize (Mob mob, float size) {
+	public float getSize(Mob mob, float size) {
 		return mob.hasEffect(PotionInit.leader_flag) ? size + 0.35F : size;
 	}
 

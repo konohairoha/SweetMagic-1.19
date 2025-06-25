@@ -41,7 +41,7 @@ public class RenderMagicShot<T extends AbstractMagicShot> extends EntityRenderer
 
 		pose.mulPose(Vector3f.XP.rotationDegrees(45F));
 		pose.scale(0.075F, 0.075F, 0.075F);
-		pose.translate(-4.0D, 0D, 0.0D);
+		pose.translate(-4D, 0D, 0D);
 		VertexConsumer ver = buf.getBuffer(RenderType.entityCutout(this.getTextureLocation(entity)));
 		PoseStack.Pose pose3 = pose.last();
 		Matrix4f mat4 = pose3.pose();

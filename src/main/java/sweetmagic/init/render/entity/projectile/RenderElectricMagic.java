@@ -6,14 +6,11 @@ import com.mojang.math.Matrix4f;
 
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.texture.TextureAtlas;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import sweetmagic.init.entity.projectile.ElectricMagicShot;
 
-public class RenderElectricMagic<T extends ElectricMagicShot> extends EntityRenderer<T> {
+public class RenderElectricMagic<T extends ElectricMagicShot> extends RenderMagicBase<T> {
 
 	public RenderElectricMagic(EntityRendererProvider.Context con) {
 		super(con);
@@ -68,13 +65,13 @@ public class RenderElectricMagic<T extends ElectricMagicShot> extends EntityRend
 					float f10 = 0.1F + (float) j * 0.2F;
 
 					if (k == 0) {
-						f10 *= (float) j1 * 0.1F + 1.0F;
+						f10 *= (float) j1 * 0.1F + 1F;
 					}
 
 					float f11 = 0.1F + (float) j * 0.2F;
 
 					if (k == 0) {
-						f11 *= ((float) j1 - 1.0F) * 0.1F + 1.0F;
+						f11 *= ((float) j1 - 1F) * 0.1F + 1F;
 					}
 
 					quad(mat, ver, f2, f3, j1, f4, f5, 0.45F, 0.45F, 0.5F, f10, f11, false, false, true, false);
@@ -91,9 +88,5 @@ public class RenderElectricMagic<T extends ElectricMagicShot> extends EntityRend
 		ver.vertex(mat, par4 + (par11 ? par9 : -par9), (float) ((par3 + 1) * 16), par5 + (par12 ? par9 : -par9)).color(par6, par7, par8, 0.3F).endVertex();
 		ver.vertex(mat, par4 + (par13 ? par9 : -par9), (float) ((par3 + 1) * 16), par5 + (par14 ? par9 : -par9)).color(par6, par7, par8, 0.3F).endVertex();
 		ver.vertex(mat, par1 + (par13 ? par10 : -par10), (float) (par3 * 16), par2 + (par14 ? par10 : -par10)).color(par6, par7, par8, 0.3F).endVertex();
-	}
-
-	public ResourceLocation getTextureLocation(T entity) {
-		return TextureAtlas.LOCATION_BLOCKS;
 	}
 }

@@ -39,7 +39,7 @@ public class RenderCherryPlant<T extends CherryPlant> extends EntityRenderer<T> 
 		state = state.setValue(ISMCrop.AGE3, entity.getStage());
 
 		ModelBlockRenderer.enableCaching();
-		RenderUtil.renderBlock(entity.level, entity.blockPosition(), state, this.render, pose, buf, OverlayTexture.NO_OVERLAY);
+		RenderUtil.renderBlock(entity.getLevel(), entity.blockPosition(), state, this.render, pose, buf, OverlayTexture.NO_OVERLAY);
 		ModelBlockRenderer.clearCache();
 		pose.popPose();
 	}

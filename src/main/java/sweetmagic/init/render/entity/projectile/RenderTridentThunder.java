@@ -7,30 +7,23 @@ import com.mojang.math.Vector3f;
 
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
-import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.Block;
-import sweetmagic.SweetMagicCore;
 import sweetmagic.init.BlockInit;
 import sweetmagic.init.entity.projectile.TridentThunder;
 import sweetmagic.util.RenderUtil;
 import sweetmagic.util.RenderUtil.RenderColor;
 
-public class RenderTridentThunder<T extends TridentThunder> extends EntityRenderer<T> {
+public class RenderTridentThunder<T extends TridentThunder> extends RenderMagicBase<T> {
 
-	private static final ResourceLocation TEX = SweetMagicCore.getSRC("textures/block/empty.png");
-	private final EntityRenderDispatcher eRender;
 	private Entity entity = null;
 
 	public RenderTridentThunder(EntityRendererProvider.Context con) {
 		super(con);
-		this.eRender = con.getEntityRenderDispatcher();
 	}
 
 	@Override
@@ -61,7 +54,6 @@ public class RenderTridentThunder<T extends TridentThunder> extends EntityRender
 		}
 
 		pose.popPose();
-
 		if (!entity.getLighning()) { return; }
 
 		pose.translate(0D, -2D, 0D);
@@ -111,13 +103,13 @@ public class RenderTridentThunder<T extends TridentThunder> extends EntityRender
 					float f10 = 0.1F + (float) j * 0.2F;
 
 					if (k == 0) {
-						f10 *= (float) j1 * 0.1F + 1.0F;
+						f10 *= (float) j1 * 0.1F + 1F;
 					}
 
 					float f11 = 0.1F + (float) j * 0.2F;
 
 					if (k == 0) {
-						f11 *= ((float) j1 - 1.0F) * 0.1F + 1.0F;
+						f11 *= ((float) j1 - 1F) * 0.1F + 1F;
 					}
 
 					quad(mat, ver, f2, f3, j1, f4, f5, 0.45F, 0.45F, 0.5F, f10, f11, false, false, true, false);
@@ -134,10 +126,5 @@ public class RenderTridentThunder<T extends TridentThunder> extends EntityRender
 		ver.vertex(mat, par4 + (par11 ? par9 : -par9), (float) ((par3 + 1) * 16), par5 + (par12 ? par9 : -par9)).color(par6, par7, par8, 0.3F).endVertex();
 		ver.vertex(mat, par4 + (par13 ? par9 : -par9), (float) ((par3 + 1) * 16), par5 + (par14 ? par9 : -par9)).color(par6, par7, par8, 0.3F).endVertex();
 		ver.vertex(mat, par1 + (par13 ? par10 : -par10), (float) (par3 * 16), par2 + (par14 ? par10 : -par10)).color(par6, par7, par8, 0.3F).endVertex();
-	}
-
-	@Override
-	public ResourceLocation getTextureLocation(T entity) {
-		return TEX;
 	}
 }

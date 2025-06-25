@@ -6,7 +6,6 @@ import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeDeformation;
-import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
@@ -25,10 +24,10 @@ public class BraveSkeletonModel<T extends BraveSkeleton> extends HumanoidModel<T
 	public static LayerDefinition createBodyLayer() {
 		MeshDefinition mesh = HumanoidModel.createMesh(CubeDeformation.NONE, 0F);
 		PartDefinition part = mesh.getRoot();
-		part.addOrReplaceChild("right_arm", CubeListBuilder.create().texOffs(40, 16).addBox(-1F, -2F, -1F, 2F, 12F, 2F), PartPose.offset(-5F, 2F, 0F));
-		part.addOrReplaceChild("left_arm", CubeListBuilder.create().texOffs(40, 16).mirror().addBox(-1F, -2F, -1F, 2F, 12F, 2F), PartPose.offset(5F, 2F, 0F));
-		part.addOrReplaceChild("right_leg", CubeListBuilder.create().texOffs(0, 16).addBox(-1F, 0F, -1F, 2F, 12F, 2F), PartPose.offset(-2F, 12F, 0F));
-		part.addOrReplaceChild("left_leg", CubeListBuilder.create().texOffs(0, 16).mirror().addBox(-1F, 0F, -1F, 2F, 12F, 2F), PartPose.offset(2F, 12F, 0F));
+		part.addOrReplaceChild("right_arm", SMBaseModel.getCubeList(40, 16).addBox(-1F, -2F, -1F, 2F, 12F, 2F), PartPose.offset(-5F, 2F, 0F));
+		part.addOrReplaceChild("left_arm", SMBaseModel.getCubeList(40, 16).mirror().addBox(-1F, -2F, -1F, 2F, 12F, 2F), PartPose.offset(5F, 2F, 0F));
+		part.addOrReplaceChild("right_leg", SMBaseModel.getCubeList(0, 16).addBox(-1F, 0F, -1F, 2F, 12F, 2F), PartPose.offset(-2F, 12F, 0F));
+		part.addOrReplaceChild("left_leg", SMBaseModel.getCubeList(0, 16).mirror().addBox(-1F, 0F, -1F, 2F, 12F, 2F), PartPose.offset(2F, 12F, 0F));
 		return LayerDefinition.create(mesh, 64, 32);
 	}
 

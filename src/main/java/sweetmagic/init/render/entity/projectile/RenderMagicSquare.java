@@ -4,16 +4,13 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
 
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.texture.TextureAtlas;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import sweetmagic.init.BlockInit;
 import sweetmagic.init.entity.projectile.MagicSquareMagic;
 import sweetmagic.util.RenderUtil;
 
-public class RenderMagicSquare<T extends MagicSquareMagic> extends EntityRenderer<T> {
+public class RenderMagicSquare<T extends MagicSquareMagic> extends RenderMagicBase<T> {
 
 	private static final Block SQUARE_BLOCK_L = BlockInit.magic_square_l;
 
@@ -21,13 +18,9 @@ public class RenderMagicSquare<T extends MagicSquareMagic> extends EntityRendere
 		super(con);
 	}
 
-	public ResourceLocation getTextureLocation(T entity) {
-		return TextureAtlas.LOCATION_BLOCKS;
-	}
-
 	public void render(T entity, float parTick, float par2, PoseStack pose, MultiBufferSource buf, int light) {
 		long gameTime = entity.level.getGameTime();
-		float angle = -(gameTime + parTick) / 20.0F * (180F / (float) Math.PI);
+		float angle = -(gameTime + parTick) / 20F * (180F / (float) Math.PI);
 		float scale = (float) entity.getRange();
 		scale *= 1.1F;
 

@@ -42,9 +42,9 @@ public class RenderBlitzWizardMaster<T extends BlitzWizardMaster> extends MobRen
 	public void renderThunder(T entity, PoseStack pose, VertexConsumer ver, int tick, double dis, float angle) {
 
 		pose.pushPose();
-
-		float addX = (float) Math.sin(angle + entity.tickCount / 20F) * ((float) Math.cos(entity.tickCount / 20F) * 12.5F + 15F);
-		float addY = -(float) Math.cos(angle + entity.tickCount / 20F) * ((float) Math.cos(entity.tickCount / 20F) * 12.5F + 15F);
+		int tickCount = entity.tickCount;
+		float addX = (float) Math.sin(angle + tickCount / 20F) * ((float) Math.cos(tickCount / 20F) * 12.5F + 15F);
+		float addY = -(float) Math.cos(angle + tickCount / 20F) * ((float) Math.cos(tickCount / 20F) * 12.5F + 15F);
 		pose.translate(0D, dis, 0D);
 		pose.scale(0.1F, 1F, 0.1F);
 
@@ -53,7 +53,7 @@ public class RenderBlitzWizardMaster<T extends BlitzWizardMaster> extends MobRen
 		float f = 0F;
 		float f1 = 0F;
 		Matrix4f mat = pose.last().pose();
-		RandomSource rand1 = RandomSource.create(entity.getId() + entity.tickCount + tick);
+		RandomSource rand1 = RandomSource.create(entity.getId() + tickCount + tick);
 
 		for (int j = 0; j < 4; ++j) {
 

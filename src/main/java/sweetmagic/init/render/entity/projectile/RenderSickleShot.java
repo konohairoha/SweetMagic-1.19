@@ -4,26 +4,17 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
 
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
-import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.entity.ItemRenderer;
-import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import sweetmagic.SweetMagicCore;
 import sweetmagic.init.ItemInit;
 import sweetmagic.init.entity.projectile.AbstractMagicShot;
 
-public class RenderSickleShot<T extends AbstractMagicShot> extends EntityRenderer<T> {
+public class RenderSickleShot<T extends AbstractMagicShot> extends RenderMagicBase<T> {
 
-	private static final ResourceLocation TEX = SweetMagicCore.getSRC("textures/block/empty.png");
-	private final ItemRenderer render;
 	private static final ItemStack STACK = new ItemStack(ItemInit.alt_sickle);
 
 	public RenderSickleShot(EntityRendererProvider.Context con) {
 		super(con);
-		this.render = con.getItemRenderer();
 	}
 
 	@Override
@@ -35,12 +26,7 @@ public class RenderSickleShot<T extends AbstractMagicShot> extends EntityRendere
 		float angle = -entity.tickCount * 0.4F * (180F / (float) Math.PI);
 		pose.mulPose(Vector3f.XP.rotationDegrees(90F));
 		pose.mulPose(Vector3f.ZP.rotationDegrees(angle));
-		this.render.renderStatic(STACK, ItemTransforms.TransformType.FIXED, light, OverlayTexture.NO_OVERLAY, pose, buf, 0);
+		this.renderItem(pose, buf, light, STACK);
 		pose.popPose();
-	}
-
-	@Override
-	public ResourceLocation getTextureLocation(T entity) {
-		return TEX;
 	}
 }

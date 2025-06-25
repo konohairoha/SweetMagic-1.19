@@ -8,7 +8,6 @@ import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeDeformation;
-import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
@@ -19,7 +18,6 @@ import sweetmagic.SweetMagicCore;
 public class AncientFairyModel<T extends LivingEntity> extends HumanoidModel<T> {
 
 	public static final ModelLayerLocation LAYER = getLayer("ancientfairy");
-
 	private final ModelPart leftWing;
 	private final ModelPart rightWing;
 
@@ -34,9 +32,9 @@ public class AncientFairyModel<T extends LivingEntity> extends HumanoidModel<T> 
 	public static LayerDefinition createBodyLayer() {
 		MeshDefinition mesh = HumanoidModel.createMesh(CubeDeformation.NONE, 0F);
 		PartDefinition part = mesh.getRoot();
-		part.addOrReplaceChild("right_leg", CubeListBuilder.create().texOffs(32, 0).addBox(-1F, -1F, -2F, 6F, 10F, 4F), PartPose.offset(-1.9F, 12F, 0F));
-		part.addOrReplaceChild("right_wing", CubeListBuilder.create().texOffs(0, 32).addBox(-20F, 0F, 0F, 20F, 12F, 1F), PartPose.ZERO);
-		part.addOrReplaceChild("left_wing", CubeListBuilder.create().texOffs(0, 32).mirror().addBox(0F, 0F, 0F, 20F, 12F, 1F), PartPose.ZERO);
+		part.addOrReplaceChild("right_leg", SMBaseModel.getCubeList(32, 0).addBox(-1F, -1F, -2F, 6F, 10F, 4F), PartPose.offset(-1.9F, 12F, 0F));
+		part.addOrReplaceChild("right_wing", SMBaseModel.getCubeList(0, 32).addBox(-20F, 0F, 0F, 20F, 12F, 1F), PartPose.ZERO);
+		part.addOrReplaceChild("left_wing", SMBaseModel.getCubeList(0, 32).mirror().addBox(0F, 0F, 0F, 20F, 12F, 1F), PartPose.ZERO);
 		return LayerDefinition.create(mesh, 64, 64);
 	}
 

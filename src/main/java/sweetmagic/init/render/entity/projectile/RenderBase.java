@@ -26,17 +26,17 @@ public abstract class RenderBase<T extends AbstractMagicShot> extends EntityRend
 
 	public void render(T entity, float par1, float par2, PoseStack pose, MultiBufferSource buf, int par3) {
 		pose.pushPose();
-		pose.scale(2.0F, 2.0F, 2.0F);
+		pose.scale(2F, 2F, 2F);
 		pose.mulPose(this.entityRenderDispatcher.cameraOrientation());
-		pose.mulPose(Vector3f.YP.rotationDegrees(180.0F));
+		pose.mulPose(Vector3f.YP.rotationDegrees(180F));
 		PoseStack.Pose poseStack = pose.last();
 		Matrix4f mat4 = poseStack.pose();
 		Matrix3f mat3 = poseStack.normal();
 		VertexConsumer vert = buf.getBuffer(this.getRenderType());
-		vertex(vert, mat4, mat3, par3, 0.0F, 0, 0, 1);
-		vertex(vert, mat4, mat3, par3, 1.0F, 0, 1, 1);
-		vertex(vert, mat4, mat3, par3, 1.0F, 1, 1, 0);
-		vertex(vert, mat4, mat3, par3, 0.0F, 1, 0, 0);
+		vertex(vert, mat4, mat3, par3, 0F, 0, 0, 1);
+		vertex(vert, mat4, mat3, par3, 1F, 0, 1, 1);
+		vertex(vert, mat4, mat3, par3, 1F, 1, 1, 0);
+		vertex(vert, mat4, mat3, par3, 0F, 1, 0, 0);
 		pose.popPose();
 		super.render(entity, par1, par2, pose, buf, par3);
 	}

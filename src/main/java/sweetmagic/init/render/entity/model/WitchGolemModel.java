@@ -5,7 +5,6 @@ import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeDeformation;
-import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
@@ -36,12 +35,12 @@ public class WitchGolemModel<T extends LivingEntity & IGolem> extends Hierarchic
 	public static LayerDefinition createBodyLayer() {
 		MeshDefinition mesh = new MeshDefinition();
 		PartDefinition part = mesh.getRoot();
-		part.addOrReplaceChild("head", CubeListBuilder.create().texOffs(0, 0).addBox(-4F, -12F, -5.5F, 8F, 10F, 8F).texOffs(24, 0).addBox(-1F, -5F, -7.5F, 2F, 4F, 2F), PartPose.offset(0F, -7F, -2F));
-		part.addOrReplaceChild("body", CubeListBuilder.create().texOffs(0, 40).addBox(-9F, -2F, -6F, 18F, 12F, 11F).texOffs(0, 70).addBox(-4.5F, 10F, -3F, 9F, 5F, 6F, new CubeDeformation(0.5F)), PartPose.offset(0F, -7F, 0F));
-		part.addOrReplaceChild("right_arm", CubeListBuilder.create().texOffs(60, 21).addBox(-13F, -2.5F, -3F, 4F, 30F, 6F), PartPose.offset(0F, -7F, 0F));
-		part.addOrReplaceChild("left_arm", CubeListBuilder.create().texOffs(60, 58).addBox(9F, -2.5F, -3F, 4F, 30F, 6F), PartPose.offset(0F, -7F, 0F));
-		part.addOrReplaceChild("right_leg", CubeListBuilder.create().texOffs(37, 0).addBox(-3.5F, -3F, -3F, 6F, 16F, 5F), PartPose.offset(-4F, 11F, 0F));
-		part.addOrReplaceChild("left_leg", CubeListBuilder.create().texOffs(60, 0).mirror().addBox(-3.5F, -3F, -3F, 6F, 16F, 5F), PartPose.offset(5F, 11F, 0F));
+		part.addOrReplaceChild("head", SMBaseModel.getCubeList(0, 0).addBox(-4F, -12F, -5.5F, 8F, 10F, 8F).texOffs(24, 0).addBox(-1F, -5F, -7.5F, 2F, 4F, 2F), PartPose.offset(0F, -7F, -2F));
+		part.addOrReplaceChild("body", SMBaseModel.getCubeList(0, 40).addBox(-9F, -2F, -6F, 18F, 12F, 11F).texOffs(0, 70).addBox(-4.5F, 10F, -3F, 9F, 5F, 6F, new CubeDeformation(0.5F)), PartPose.offset(0F, -7F, 0F));
+		part.addOrReplaceChild("right_arm", SMBaseModel.getCubeList(60, 21).addBox(-13F, -2.5F, -3F, 4F, 30F, 6F), PartPose.offset(0F, -7F, 0F));
+		part.addOrReplaceChild("left_arm", SMBaseModel.getCubeList(60, 58).addBox(9F, -2.5F, -3F, 4F, 30F, 6F), PartPose.offset(0F, -7F, 0F));
+		part.addOrReplaceChild("right_leg", SMBaseModel.getCubeList(37, 0).addBox(-3.5F, -3F, -3F, 6F, 16F, 5F), PartPose.offset(-4F, 11F, 0F));
+		part.addOrReplaceChild("left_leg", SMBaseModel.getCubeList(60, 0).mirror().addBox(-3.5F, -3F, -3F, 6F, 16F, 5F), PartPose.offset(5F, 11F, 0F));
 		return LayerDefinition.create(mesh, 128, 128);
 	}
 
