@@ -1,0 +1,14 @@
+{
+	"replace": false,
+	"values": [
+		"sweetmagic:register_bu",
+		"sweetmagic:register_br",
+		"sweetmagic:register_bl",
+		"sweetmagic:register_l",
+		"sweetmagic:register_o",
+		"sweetmagic:register_pi",
+		"sweetmagic:register_pu",
+		"sweetmagic:register_r",
+		"sweetmagic:register_s"
+	]
+}

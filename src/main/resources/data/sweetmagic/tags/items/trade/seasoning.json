@@ -1,0 +1,30 @@
+{
+	"replace": false,
+	"values": [
+		"#forge:bread_crumbs",
+		"#forge:butter",
+		"#forge:cheese",
+		"#forge:cream",
+		"#forge:custard",
+		"#forge:dressing",
+		"#forge:dry_seaweed",
+		"#forge:flour",
+		"#forge:gelatin",
+		"#forge:honey",
+		"#forge:mayonnaise",
+		"#forge:milk",
+		"#forge:miso",
+		"#forge:mushroom",
+		"#forge:oil",
+		"#forge:salt",
+		"#forge:seaweed",
+		"#forge:soy_sauce",
+		"#forge:sugar",
+		"#forge:vannila_essence",
+		"#forge:vannila_pods",
+		"#forge:vinegar",
+		"#forge:wine",
+		"#forge:yogurt",
+		"#forge:honey"
+	]
+}

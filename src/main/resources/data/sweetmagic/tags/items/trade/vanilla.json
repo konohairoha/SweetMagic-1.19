@@ -1,0 +1,32 @@
+{
+	"replace": false,
+	"values": [
+		"minecraft:string",
+		"minecraft:redstone",
+		"minecraft:lapis_lazuli",
+		"minecraft:glowstone_dust",
+		"minecraft:honeycomb",
+		"minecraft:honey_bottle",
+		"minecraft:glowstone",
+		"minecraft:amethyst_shard",
+		"minecraft:experience_bottle",
+		"minecraft:ink_sac",
+		"minecraft:glow_ink_sac",
+		"minecraft:echo_shard",
+		"minecraft:ender_pearl",
+		"minecraft:quartz",
+		"minecraft:ender_pearl",
+		"minecraft:slime_ball",
+		"minecraft:nether_wart",
+		"minecraft:chorus_fruit",
+		"minecraft:glow_berries",
+		"minecraft:ghast_tear",
+		"minecraft:phantom_membrane",
+		"minecraft:cocoa_beans",
+		"minecraft:sugar_cane",
+		"minecraft:nautilus_shell",
+		"minecraft:blaze_rod",
+		"minecraft:magma_cream",
+		"#forge:sugar"
+	]
+}

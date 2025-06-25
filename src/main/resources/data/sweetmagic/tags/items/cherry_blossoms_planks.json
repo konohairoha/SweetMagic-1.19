@@ -2,6 +2,8 @@
 	"replace": false,
 	"values": [
 		"sweetmagic:cherry_blossoms_planks",
-		"sweetmagic:cherry_blossoms_stairs"
+		"sweetmagic:cherry_blossoms_stairs",
+		"sweetmagic:cherry_blossoms_planks_r",
+		"sweetmagic:cherry_blossoms_r_stairs"
 	]
 }
