@@ -1,20 +1,20 @@
 {
 	"type": "sweetmagic:obmagia_craft",
 	"ingredients": [
-		{ "item": "sweetmagic:magic_lightningbolt", "count": 1 },
-		{ "item": "sweetmagic:electronic_orb", "count": 8 },
-		{ "item": "sweetmagic:divine_crystal", "count": 3 }
+		{"item": "sweetmagic:magic_lightningbolt", "count": 1},
+		{"item": "sweetmagic:electronic_orb", "count": 8},
+		{"item": "sweetmagic:divine_crystal", "count": 3}
 	],
 	"base": [
-		{ "tag": "forge:magic_book", "count": 1 }
+		{"tag": "forge:magic_book", "count": 1}
 	],
 	"page": [
-		{ "item": "sweetmagic:mysterious_page", "count": 3 }
+		{"item": "sweetmagic:mysterious_page", "count": 3}
 	],
 	"result": [
-		{ "item": "sweetmagic:magic_thunder", "count": 1 }
+		{"item": "sweetmagic:magic_thunder", "count": 1}
 	],
 	"crafttime": [
-		{ "time": 8 }
+		{"time": 8}
 	]
 }

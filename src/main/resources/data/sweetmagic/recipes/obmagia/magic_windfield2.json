@@ -1,20 +1,20 @@
 {
 	"type": "sweetmagic:obmagia_craft",
 	"ingredients": [
-		{ "item": "sweetmagic:magic_windfield", "count": 1 },
-		{ "item": "sweetmagic:tiny_feather", "count": 4 },
-		{ "item": "sweetmagic:mf_bottle", "count": 1 }
+		{"item": "sweetmagic:magic_windfield", "count": 1},
+		{"item": "sweetmagic:tiny_feather", "count": 4},
+		{"item": "sweetmagic:mf_bottle", "count": 1}
 	],
 	"base": [
-		{ "tag": "forge:magic_book", "count": 1 }
+		{"tag": "forge:magic_book", "count": 1}
 	],
 	"page": [
-		{ "item": "sweetmagic:mysterious_page", "count": 2 }
+		{"item": "sweetmagic:mysterious_page", "count": 2}
 	],
 	"result": [
-		{ "item": "sweetmagic:magic_windfield2", "count": 1 }
+		{"item": "sweetmagic:magic_windfield2", "count": 1}
 	],
 	"crafttime": [
-		{ "time": 8 }
+		{"time": 8}
 	]
 }

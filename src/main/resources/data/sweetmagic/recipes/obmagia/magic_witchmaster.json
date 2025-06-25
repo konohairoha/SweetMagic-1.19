@@ -1,21 +1,21 @@
 {
 	"type": "sweetmagic:obmagia_craft",
 	"ingredients": [
-		{ "item": "sweetmagic:witch_tears", "count": 1 },
-		{ "item": "sweetmagic:clerodendrum_petal", "count": 8 },
-		{ "item": "sweetmagic:prizmium", "count": 4 },
-		{ "item": "sweetmagic:magia_bottle", "count": 1 }
+		{"item": "sweetmagic:witch_tears", "count": 1},
+		{"item": "sweetmagic:clerodendrum_petal", "count": 8},
+		{"item": "sweetmagic:prizmium", "count": 4},
+		{"item": "sweetmagic:magia_bottle", "count": 1}
 	],
 	"base": [
-		{ "tag": "forge:magic_book_cosmic", "count": 1 }
+		{"tag": "forge:magic_book_cosmic", "count": 1}
 	],
 	"page": [
-		{ "item": "sweetmagic:mystical_page", "count": 1 }
+		{"item": "sweetmagic:mystical_page", "count": 1}
 	],
 	"result": [
-		{ "item": "sweetmagic:magic_witchmaster", "count": 1 }
+		{"item": "sweetmagic:magic_witchmaster", "count": 1}
 	],
 	"crafttime": [
-		{ "time": 15 }
+		{"time": 15}
 	]
 }
