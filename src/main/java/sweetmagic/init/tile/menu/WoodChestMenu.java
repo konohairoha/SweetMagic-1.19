@@ -17,7 +17,7 @@ public class WoodChestMenu extends BaseSMMenu {
 	public final int data;
 
 	public WoodChestMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
-		this(windowId, pInv, (TileWoodChest) MenuInit.getTile(pInv, data));
+		this(windowId, pInv, MenuInit.getTile(TileWoodChest::new, pInv, data));
 	}
 
 	public WoodChestMenu(int windowId, Inventory pInv, TileWoodChest tile) {
@@ -59,7 +59,13 @@ public class WoodChestMenu extends BaseSMMenu {
 			sound = SoundEvents.BARREL_CLOSE;
 			break;
 		case 6:
+		case 9:
+		case 10:
+		case 11:
 			sound = SoundEvents.WOODEN_TRAPDOOR_CLOSE;
+			break;
+		case 8:
+			sound = SoundEvents.LEVER_CLICK;
 			break;
 		}
 

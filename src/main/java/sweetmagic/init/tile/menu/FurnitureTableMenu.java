@@ -3,18 +3,14 @@ package sweetmagic.init.tile.menu;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.antlr.v4.runtime.misc.NotNull;
-
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
-import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -23,8 +19,10 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.network.NetworkHooks;
 import sweetmagic.init.MenuInit;
 import sweetmagic.init.RecipeTypeInit;
+import sweetmagic.init.tile.menu.container.BaseContainer.ContainerWoodChest;
 import sweetmagic.init.tile.slot.SMSlot;
 import sweetmagic.init.tile.sm.TileFurnitureTable;
+import sweetmagic.util.ItemHelper;
 
 public class FurnitureTableMenu extends BaseSMMenu {
 
@@ -35,7 +33,7 @@ public class FurnitureTableMenu extends BaseSMMenu {
 	private Runnable slotUpdateListener = () -> {};
 
 	public FurnitureTableMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
-		this(windowId, pInv, (TileFurnitureTable) MenuInit.getTile(pInv, data));
+		this(windowId, pInv, MenuInit.getTile(TileFurnitureTable::new, pInv, data));
 	}
 
 	public FurnitureTableMenu(int windowId, Inventory pInv, TileFurnitureTable tile) {
@@ -47,6 +45,7 @@ public class FurnitureTableMenu extends BaseSMMenu {
 
 			public void setChanged() {
 				super.setChanged();
+				FurnitureTableMenu.this.slotsChangedSide(this.container);
 				FurnitureTableMenu.this.slotsChanged(this.container);
 				FurnitureTableMenu.this.slotUpdateListener.run();
 			}
@@ -120,19 +119,14 @@ public class FurnitureTableMenu extends BaseSMMenu {
 		this.recipeList.addAll(world.getRecipeManager().getRecipesFor(RecipeTypeInit.FURNITURE, con, world));
 
 		// レシピソート
-		this.recipeList = this.recipeList.stream().sorted( (s1, s2) -> sortRecipe(s1, s2) ).toList();
+		List<Item> itemList = new ArrayList<>();
+		this.recipeList = this.recipeList.stream().filter(s -> this.itemFilter(itemList, s.getResultItem().getItem())).sorted((s1, s2) -> ItemHelper.sortItemStack(s1.getResultItem(), s2.getResultItem())).toList();
 	}
 
-	// レシピソート
-	public static int sortRecipe (Recipe<?> recipe1, Recipe<?> recipe2) {
-		if (recipe1 == null || recipe2 == null) { return 0; }
-
-		// レシピID取得
-		String stackId1 = recipe1.getId().getPath() + ":" + recipe1.getId().getNamespace();
-		String stackId2 = recipe2.getId().getPath() + ":" + recipe2.getId().getNamespace();
-
-		// レシピ順でソート
-		return stackId1.compareTo(stackId2);
+	public boolean itemFilter(List<Item> list, Item item) {
+		if(list.contains(item)) { return false; }
+		list.add(item);
+		return true;
 	}
 
 	public void registerUpdateListener(Runnable run) {
@@ -163,7 +157,7 @@ public class FurnitureTableMenu extends BaseSMMenu {
 		Level world = this.tile.getLevel();
 
 		// サーバー側でレシピ取得
-		if (!world.isClientSide) {
+		if (!world.isClientSide()) {
 			this.slotsChanged(this.inputSlot.container);
 		}
 
@@ -171,7 +165,7 @@ public class FurnitureTableMenu extends BaseSMMenu {
 		if (id - 2 >= this.recipeList.size()) { return true; }
 
 		// サーバー側で処理
-		if (!world.isClientSide) {
+		if (!world.isClientSide()) {
 
 			// 既に選択しているレシピなら選択キャンセル
 			if (this.tile.selectId == id) {
@@ -200,20 +194,5 @@ public class FurnitureTableMenu extends BaseSMMenu {
 		}
 
 		return true;
-	}
-
-	public record ContainerWoodChest(TileFurnitureTable tile) implements MenuProvider {
-
-		@NotNull
-		@Override
-		public AbstractContainerMenu createMenu(int windowId, @NotNull Inventory pInv, @NotNull Player player) {
-			return new FurnitureCraftMenu(windowId, pInv, tile);
-		}
-
-		@NotNull
-		@Override
-		public Component getDisplayName() {
-			return Component.translatable("");
-		}
 	}
 }

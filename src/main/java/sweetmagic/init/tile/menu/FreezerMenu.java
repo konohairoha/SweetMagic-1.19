@@ -19,7 +19,7 @@ public class FreezerMenu extends BaseSMMenu {
 	public final TileFreezer tile;
 
 	public FreezerMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
-		this(windowId, pInv, (TileFreezer) MenuInit.getTile(pInv, data));
+		this(windowId, pInv, MenuInit.getTile(TileFreezer::new, pInv, data));
 	}
 
 	public FreezerMenu(int windowId, Inventory pInv, TileFreezer tile) {

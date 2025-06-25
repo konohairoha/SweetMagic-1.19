@@ -34,13 +34,13 @@ public class MagicBookMenu extends BaseItemMenu {
 				count++;
 				if (count > this.slotSize) { break; }
 
-				this.addSlot(new SMSlot(this.inventory, y * 5 + x, 37 + x * 22, 12 + y * 19, SlotInput.ISMAGICPAGE));
+				this.addSlot(new SMSlot(this.inventory, y * 5 + x, 37 + x * 22, 13 + y * 22, SlotInput.ISMAGICPAGE));
 			}
 
 			if (count > this.slotSize) { break; }
 		}
 
-		this.setPInv(pInv, 8, 60);
+		this.setPInv(pInv, 8, 66);
 	}
 
 	@Override
@@ -63,14 +63,14 @@ public class MagicBookMenu extends BaseItemMenu {
 		switch (id) {
 		case 0:
 			ItemStack robe = player.getItemBySlot(EquipmentSlot.CHEST);
-			((IRobe) robe.getItem()).openGui(player.level, player, robe);
+			((IRobe) robe.getItem()).openGui(player.getLevel(), player, robe);
 			break;
 		case 1:
 			ItemStack porch = player.getItemBySlot(EquipmentSlot.LEGS);
-			((IPorch) porch.getItem()).openGui(player.level, player, porch);
+			((IPorch) porch.getItem()).openGui(player.getLevel(), player, porch);
 			break;
 		case 2:
-			((IMagicBook) this.stack.getItem()).openCraftGui(player.level, player, this.stack);
+			((IMagicBook) this.stack.getItem()).openCraftGui(player.getLevel(), player, this.stack);
 			break;
 		}
 

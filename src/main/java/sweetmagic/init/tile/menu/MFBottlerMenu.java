@@ -12,7 +12,7 @@ public class MFBottlerMenu extends BaseSMMenu {
 	public final TileMFBottler tile;
 
 	public MFBottlerMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
-		this(windowId, pInv, (TileMFBottler) MenuInit.getTile(pInv, data));
+		this(windowId, pInv, MenuInit.getTile(TileMFBottler::new, pInv, data));
 	}
 
 	public MFBottlerMenu(int windowId, Inventory pInv, TileMFBottler tile) {
@@ -42,7 +42,7 @@ public class MFBottlerMenu extends BaseSMMenu {
 				secCount -= 1;
 				break;
 			case 2:
-				secCount += 10;
+				secCount += this.tile.setCount == 1 ? 9 : 10;
 				break;
 			case 3:
 				secCount -= 10;

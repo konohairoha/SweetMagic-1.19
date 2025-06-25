@@ -11,7 +11,7 @@ public class SpawnStoneMenu extends BaseSMMenu {
 	public final TileSpawnStone tile;
 
 	public SpawnStoneMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
-		this(windowId, pInv, (TileSpawnStone) MenuInit.getTile(pInv, data));
+		this(windowId, pInv, MenuInit.getTile(TileSpawnStone::new, pInv, data));
 	}
 
 	public SpawnStoneMenu(int windowId, Inventory pInv, TileSpawnStone tile) {

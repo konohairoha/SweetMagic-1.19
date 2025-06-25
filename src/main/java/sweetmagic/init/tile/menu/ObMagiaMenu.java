@@ -18,7 +18,7 @@ public class ObMagiaMenu extends BaseSMMenu {
 	public final Slot outSlot;
 
 	public ObMagiaMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
-		this(windowId, pInv, (TileObMagia) MenuInit.getTile(pInv, data));
+		this(windowId, pInv, MenuInit.getTile(TileObMagia::new, pInv, data));
 	}
 
 	public ObMagiaMenu(int windowId, Inventory pInv, TileObMagia tile) {

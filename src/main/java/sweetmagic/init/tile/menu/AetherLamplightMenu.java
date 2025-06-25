@@ -11,7 +11,7 @@ public class AetherLamplightMenu extends BaseSMMenu {
 	public final TileAetherLamplight tile;
 
 	public AetherLamplightMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
-		this(windowId, pInv, (TileAetherLamplight) MenuInit.getTile(pInv, data));
+		this(windowId, pInv, MenuInit.getTile(TileAetherLamplight::new, pInv, data));
 	}
 
 	public AetherLamplightMenu(int windowId, Inventory pInv, TileAetherLamplight tile) {

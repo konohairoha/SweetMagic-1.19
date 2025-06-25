@@ -11,7 +11,7 @@ public class AetherPlanterMenu extends BaseSMMenu {
 	public final TileAetherPlanter tile;
 
 	public AetherPlanterMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
-		this(windowId, pInv, (TileAetherPlanter) MenuInit.getTile(pInv, data));
+		this(windowId, pInv, MenuInit.getTile(TileAetherPlanter::new, pInv, data));
 	}
 
 	public AetherPlanterMenu(int windowId, Inventory pInv, TileAetherPlanter tile) {

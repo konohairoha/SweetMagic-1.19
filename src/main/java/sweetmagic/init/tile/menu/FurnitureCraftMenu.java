@@ -16,7 +16,7 @@ public class FurnitureCraftMenu extends BaseSMMenu {
 	public final Slot resultSlot;
 
 	public FurnitureCraftMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
-		this(windowId, pInv, (TileFurnitureTable) MenuInit.getTile(pInv, data));
+		this(windowId, pInv, MenuInit.getTile(TileFurnitureTable::new, pInv, data));
 	}
 
 	public FurnitureCraftMenu(int windowId, Inventory pInv, TileFurnitureTable tile) {
@@ -40,16 +40,16 @@ public class FurnitureCraftMenu extends BaseSMMenu {
 			addCount -= 1;
 			break;
 		case 2:
-			addCount += 10;
+			addCount += this.tile.setCount == 1 ? 9 : 10;
 			break;
 		case 3:
-			addCount -= 10;
+			addCount -= this.tile.setCount == 1 ? 9 : 10;
 			break;
 		case 4:
-			addCount += 64;
+			addCount += this.tile.setCount == 1 ? 63 : 64;
 			break;
 		case 5:
-			addCount -= 64;
+			addCount -= this.tile.setCount == 1 ? 63 : 64;
 			break;
 		case 6:
 			if (player instanceof ServerPlayer sePlayer) {

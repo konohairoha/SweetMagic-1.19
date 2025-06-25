@@ -20,7 +20,7 @@ public class MagiaRewriteMenu extends BaseSMMenu {
 	private Runnable slotUpdateListener = () -> { };
 
 	public MagiaRewriteMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
-		this(windowId, pInv, (TileMagiaRewrite) MenuInit.getTile(pInv, data));
+		this(windowId, pInv, MenuInit.getTile(TileMagiaRewrite::new, pInv, data));
 	}
 
 	public MagiaRewriteMenu(int windowId, Inventory pInv, TileMagiaRewrite tile) {

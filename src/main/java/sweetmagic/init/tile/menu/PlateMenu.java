@@ -13,7 +13,7 @@ public class PlateMenu extends BaseSMMenu {
 	public final int data;
 
 	public PlateMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
-		this(windowId, pInv, (TilePlate) MenuInit.getTile(pInv, data));
+		this(windowId, pInv, MenuInit.getTile(TilePlate::new, pInv, data));
 	}
 
 	public PlateMenu(int windowId, Inventory pInv, TilePlate tile) {

@@ -14,12 +14,15 @@ import sweetmagic.util.ItemHelper;
 
 public class TrunkCaseMenu extends BaseItemMenu {
 
+	private int data = 0;
+
 	public TrunkCaseMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
-		this(windowId, pInv, pInv.player.getMainHandItem());
+		this(windowId, pInv, pInv.player.getMainHandItem(), 0);
 	}
 
-	public TrunkCaseMenu(int windowId, Inventory pInv, ItemStack stack) {
+	public TrunkCaseMenu(int windowId, Inventory pInv, ItemStack stack, int data) {
 		super(MenuInit.trankCaseMenu, windowId, pInv, new SMTrunkCaseInventory(stack));
+		this.data = data;
 
 		for (int y = 0; y < 8; y++)
 			for (int x = 0; x < 13; x++)
@@ -30,8 +33,8 @@ public class TrunkCaseMenu extends BaseItemMenu {
 
 	public void removed(Player player) {
 		super.removed(player);
-		RandomSource rand = player.level.random;
-		player.playSound(SoundEvents.WOODEN_TRAPDOOR_CLOSE, 0.5F, rand.nextFloat() * 0.1F + 0.9F);
+		RandomSource rand = player.getLevel().getRandom();
+		player.playSound(this.data == 0 ? SoundEvents.UI_BUTTON_CLICK : SoundEvents.LEVER_CLICK, 0.5F, rand.nextFloat() * 0.1F + 0.9F);
 	}
 
 	@Override
@@ -63,8 +66,8 @@ public class TrunkCaseMenu extends BaseItemMenu {
 		}
 
 		this.inventory.writeBack();
-		RandomSource rand = player.level.random;
-		player.playSound(SoundEvents.UI_BUTTON_CLICK, 0.15F, rand.nextFloat() * 0.1F + 0.9F);
+		RandomSource rand = player.getLevel().getRandom();
+		player.playSound(this.data == 0 ? SoundEvents.UI_BUTTON_CLICK : SoundEvents.LEVER_CLICK, 0.15F, rand.nextFloat() * 0.1F + 0.9F);
 		return true;
 	}
 }

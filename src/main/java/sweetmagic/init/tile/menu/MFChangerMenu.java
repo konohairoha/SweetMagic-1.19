@@ -14,7 +14,7 @@ public class MFChangerMenu extends BaseSMMenu {
 	public final TileSMMagic tile;
 
 	public MFChangerMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
-		this(windowId, pInv, (TileMFChanger) MenuInit.getTile(pInv, data));
+		this(windowId, pInv, MenuInit.getTile(TileMFChanger::new, pInv, data));
 	}
 
 	public MFChangerMenu(int windowId, Inventory pInv, TileMFChanger tile) {

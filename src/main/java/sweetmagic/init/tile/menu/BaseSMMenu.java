@@ -9,10 +9,13 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import sweetmagic.init.tile.slot.MagiaSlot;
 import sweetmagic.init.tile.sm.TileAbstractSM;
 
 public abstract class BaseSMMenu extends AbstractContainerMenu {
 
+	public int tickCount = 0;
+	public int oldIndex = 0;
 	protected final Random rand = new Random();
 	public final TileAbstractSM tile;
 	public int slotSize = 0;
@@ -24,11 +27,11 @@ public abstract class BaseSMMenu extends AbstractContainerMenu {
 		this.player = pInv.player;
 	}
 
-	public void setPInv (Inventory pInv, int tX, int tY) {
+	public void setPInv(Inventory pInv, int tX, int tY) {
 		this.setPInv(pInv, tX, tY, 0);
 	}
 
-	public void setPInv (Inventory pInv, int tX, int tY, int addY) {
+	public void setPInv(Inventory pInv, int tX, int tY, int addY) {
 
 		//Player Inventorye
 		for (int y = 0; y < 3; y++)
@@ -41,9 +44,12 @@ public abstract class BaseSMMenu extends AbstractContainerMenu {
 	}
 
 	public ItemStack quickMoveStack(Player player, int index) {
-
 		ItemStack stack = ItemStack.EMPTY;
 		Slot slot = this.slots.get(index);
+		if(index <= this.getSlotSize() && this.oldIndex == index && this.tickCount == player.tickCount) { return stack; }
+
+		this.tickCount = player.tickCount;
+		this.oldIndex = index;
 
 		if (slot != null && slot.hasItem()) {
 
@@ -73,10 +79,88 @@ public abstract class BaseSMMenu extends AbstractContainerMenu {
 		return stack;
 	}
 
+	public boolean moveSlot(ItemStack stack, int slotStart, int slotEnd, boolean par1) {
+
+		boolean flag = false;
+		int i = par1 ? slotEnd - 1 : slotStart;
+
+		if (this.checkStack(stack)) {
+			while (!stack.isEmpty()) {
+
+				if (par1) {
+					if (i < slotStart) { break; }
+				}
+
+				else if (i >= slotEnd) { break; }
+
+				Slot slot = this.slots.get(i);
+				ItemStack stack1 = slot.getItem();
+
+				if (!stack1.isEmpty() && ItemStack.isSameItemSameTags(stack, stack1)) {
+					int count = stack1.getCount() + stack.getCount();
+					int maxSize = this.checkSlotValue(slot, stack) ? slot.getMaxStackSize(stack) : Math.min(slot.getMaxStackSize(stack), stack.getMaxStackSize());
+
+
+					if (count <= maxSize) {
+						stack.setCount(0);
+						stack1.setCount(count);
+						slot.setChanged();
+						flag = true;
+					}
+
+					else if (stack1.getCount() < maxSize) {
+						stack.shrink(maxSize - stack1.getCount());
+						stack1.setCount(maxSize);
+						slot.setChanged();
+						flag = true;
+					}
+				}
+
+				i = par1 ? i - 1 : i + 1;
+			}
+		}
+
+		if (!stack.isEmpty()) {
+
+			i = par1 ? slotEnd - 1 : slotStart;
+
+			while (true) {
+
+				if (par1) {
+					if (i < slotStart) { break; }
+				}
+
+				else if (i >= slotEnd) { break; }
+
+				Slot slot1 = this.slots.get(i);
+				ItemStack stack2 = slot1.getItem();
+
+				if (stack2.isEmpty() && slot1.mayPlace(stack)) {
+					slot1.set(stack.getCount() > slot1.getMaxStackSize(stack) ? stack.split(slot1.getMaxStackSize(stack)) : stack.split(stack.getCount()));
+					slot1.setChanged();
+					flag = true;
+					break;
+				}
+
+				i = par1 ? i - 1 : i + 1;
+			}
+		}
+
+		return flag;
+	}
+
+	public boolean checkStack(ItemStack stack) {
+		return stack.isStackable();
+	}
+
+	public boolean checkSlotValue(Slot slot, ItemStack stack) {
+		return slot instanceof MagiaSlot;
+	}
+
 	public void quickMoveStack(Player player, Slot slot, ItemStack oldStack, ItemStack newStack) { }
 
 	// ブロックエンティティの取得
-	public TileAbstractSM getTile () {
+	public TileAbstractSM getTile() {
 		return this.tile;
 	}
 

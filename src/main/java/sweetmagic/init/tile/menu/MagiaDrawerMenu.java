@@ -14,7 +14,7 @@ public class MagiaDrawerMenu extends BaseSMMenu {
 	public final TileMagiaDrawer tile;
 
 	public MagiaDrawerMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
-		this(windowId, pInv, (TileMagiaDrawer) MenuInit.getTile(pInv, data));
+		this(windowId, pInv, MenuInit.getTile(TileMagiaDrawer::new, pInv, data));
 	}
 
 	public MagiaDrawerMenu(int windowId, Inventory pInv, TileMagiaDrawer tile) {

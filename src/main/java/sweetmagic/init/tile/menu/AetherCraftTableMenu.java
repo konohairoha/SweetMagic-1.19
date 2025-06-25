@@ -44,17 +44,17 @@ import sweetmagic.util.ItemHelper;
 
 public class AetherCraftTableMenu extends BaseSMMenu {
 
-	public final TileAetherCraftTable tile;
 	public int maxSlots = 0;
+	private int offSet = 0;
+	public float scrollOffset = 0F;
+	public final TileAetherCraftTable tile;
 	private final ContainerLevelAccess access;
 	private final SMCraftingContainer craftSlots;
 	private final ResultContainer resultSlots = new ResultContainer();
-	private int offSet = 0;
-	public float scrollOffset = 0F;
 	public final NonNullList<Slot> slotList = NonNullList.create();
 
 	public AetherCraftTableMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
-		this(windowId, pInv, (TileAetherCraftTable) MenuInit.getTile(pInv, data));
+		this(windowId, pInv, MenuInit.getTile(TileAetherCraftTable::new, pInv, data));
 	}
 
 	public AetherCraftTableMenu(int windowId, Inventory pInv, TileAetherCraftTable tile) {
@@ -76,11 +76,11 @@ public class AetherCraftTableMenu extends BaseSMMenu {
 
 		this.setPInv(pInv, 8, 159);
 		this.setSlotSize(this.maxSlots + 10);
-		this.access.execute((par1, par2) -> this.slotChangedCraftingGrid(this, par1, this.player, this.craftSlots, this.resultSlots) );
+		this.access.execute((par1, par2) -> this.slotChangedCraftingGrid(this, par1, this.player, this.craftSlots, this.resultSlots));
 	}
 
 	// インベントリの初期設定
-	public void addSlotInv () {
+	public void addSlotInv() {
 		BlockPos targetPos = this.getTargetPos();
 		if (targetPos == null) { return; }
 
@@ -113,14 +113,14 @@ public class AetherCraftTableMenu extends BaseSMMenu {
 
 	// スロット登録時に描画用スロットにも登録
 	protected Slot addSlots(Slot slot, boolean flag) {
-		if (slot.getMaxStackSize() > 64) {
+//		if (slot.getMaxStackSize() > 64) {
 			this.slotList.add(slot);
-		}
+//		}
 		return flag ? slot : this.addSlot(slot);
 	}
 
 	// ターゲット座標の取得
-	public BlockPos getTargetPos () {
+	public BlockPos getTargetPos() {
 
 		// 周囲16ブロックの座標リストを取得
 		Iterable<BlockPos> posArray = this.tile.getRangePos(this.tile.getBlockPos(), 16);
@@ -129,7 +129,6 @@ public class AetherCraftTableMenu extends BaseSMMenu {
 		//　チェストリーダーが見つかったら終了
 		for (BlockPos pos : posArray) {
 			if (!this.tile.isReader(this.tile.getBlock(pos))) { continue; }
-
 			targetPos = pos;
 			break;
 		}
@@ -138,16 +137,13 @@ public class AetherCraftTableMenu extends BaseSMMenu {
 	}
 
 	// インベントリ・ブロックエンティティリストの取得
-	public List<TileHandler> getHandlerList (BlockPos targetPos, boolean addSlot) {
+	public List<TileHandler> getHandlerList(BlockPos pos, boolean addSlot) {
 
 		List<BlockEntity> tileList = new ArrayList<>();
 
 		// ターゲット座標に隣接されたインベントリを取得
 		for (Direction face : Direction.values()) {
-
-			// エーテルクラフトテーブルなら次へ
-			BlockPos pos = targetPos.relative(face);
-			BlockEntity tile = this.tile.getLevel().getBlockEntity(pos);
+			BlockEntity tile = this.tile.getLevel().getBlockEntity(pos.relative(face));
 			if (tile == null || tile instanceof TileAetherCraftTable) { continue; }
 
 			if (tile.getCapability(ForgeCapabilities.ITEM_HANDLER, face).filter(IItemHandlerModifiable.class::isInstance).isPresent()) {
@@ -165,10 +161,7 @@ public class AetherCraftTableMenu extends BaseSMMenu {
 		for (BlockEntity tile : tileList) {
 			tile.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(i -> {
 				int size = i.getSlots();
-
-				if (addSlot) {
-					this.maxSlots += size;
-				}
+				if (addSlot) { this.maxSlots += size; }
 				handlerList.add(new TileHandler(tile, i));
 			});
 
@@ -211,7 +204,7 @@ public class AetherCraftTableMenu extends BaseSMMenu {
 	}
 
 	// スロット順番ソート
-	public List<Slot> sortSlot (int id) {
+	public List<Slot> sortSlot(int id) {
 		switch (id) {
 		case 1:  return this.sortSlotName();
 		case 2:  return this.sortSlotChest();
@@ -220,7 +213,7 @@ public class AetherCraftTableMenu extends BaseSMMenu {
 	}
 
 	// アイテムIDソート
-	public List<Slot> sortSlotId () {
+	public List<Slot> sortSlotId() {
 
 		List<Slot> slotList = new ArrayList<>();
 		List<Slot> slotStackList = new ArrayList<>();
@@ -241,11 +234,11 @@ public class AetherCraftTableMenu extends BaseSMMenu {
 
 		slotList.addAll(slotStackList);
 		slotList.addAll(slotEmptyList);
-		return slotList.stream().sorted( (s1, s2) -> ItemHelper.sortSlot(s1, s2, this.tile.getAscending()) ).toList();
+		return slotList.stream().sorted((s1, s2) -> ItemHelper.sortSlot(s1, s2, this.tile.getAscending())).toList();
 	}
 
 	// アイテム名ソート
-	public List<Slot> sortSlotName () {
+	public List<Slot> sortSlotName() {
 
 		List<Slot> slotList = new ArrayList<>();
 		List<Slot> slotStackList = new ArrayList<>();
@@ -266,11 +259,11 @@ public class AetherCraftTableMenu extends BaseSMMenu {
 
 		slotList.addAll(slotStackList);
 		slotList.addAll(slotEmptyList);
-		return slotList.stream().sorted( (s1, s2) -> ItemHelper.sortName(s1, s2, this.tile.getAscending()) ).toList();
+		return slotList.stream().sorted((s1, s2) -> ItemHelper.sortName(s1, s2, this.tile.getAscending())).toList();
 	}
 
 	// スロットの取得
-	public List<Slot> sortSlotChest () {
+	public List<Slot> sortSlotChest() {
 
 		List<Slot> slotList = new ArrayList<>();
 
@@ -306,7 +299,7 @@ public class AetherCraftTableMenu extends BaseSMMenu {
 
 	// アイテムが変わった時
 	public void slotsChangInv(Container con) {
-		if (this.player.level.isClientSide) {
+		if (this.player.level.isClientSide()) {
 			this.updateSlotPos(this.offSet);
 		}
 	}
@@ -339,8 +332,8 @@ public class AetherCraftTableMenu extends BaseSMMenu {
 	}
 
 	// 各インベントリソート
-	public void compactInventory () {
-		if (this.tile.getLevel().isClientSide) { return; }
+	public void compactInventory() {
+		if (!this.tile.isSever()) { return; }
 
 		// 座標の取得
 		BlockPos targetPos = this.getTargetPos();
@@ -360,11 +353,10 @@ public class AetherCraftTableMenu extends BaseSMMenu {
 	}
 
 	// アイテムをソート
-	public int compactInventoryHandler (IItemHandler hand1, IItemHandler hand2) {
+	public int compactInventoryHandler(IItemHandler hand1, IItemHandler hand2) {
 
 		// 回収元のインベントリ分回す
 		for (int k = 0; k < hand2.getSlots(); k++) {
-
 			ItemStack input = hand2.getStackInSlot(k);
 			if (input.isEmpty()) { continue; }
 
@@ -380,7 +372,7 @@ public class AetherCraftTableMenu extends BaseSMMenu {
 
 	// クラフトアイテムの描画
 	protected void slotChangedCraftingGrid(AbstractContainerMenu menu, Level world, Player player, CraftingContainer con, ResultContainer result) {
-		if (world.isClientSide) { return; }
+		if (world.isClientSide()) { return; }
 
 		ServerPlayer sPlayer = (ServerPlayer) player;
 		ItemStack stack = ItemStack.EMPTY;
@@ -435,11 +427,12 @@ public class AetherCraftTableMenu extends BaseSMMenu {
 
 	// アイテム移動時
 	public ItemStack quickMoveStack(Player player, int index) {
-
 		ItemStack stack = ItemStack.EMPTY;
 		Slot slot = this.slots.get(index);
-		if (slot == null || !slot.hasItem()) { return stack; }
+		if (slot == null || !slot.hasItem() || (index <= this.maxSlots && this.oldIndex == index && this.tickCount == player.tickCount)) { return stack; }
 
+		this.tickCount = player.tickCount;
+		this.oldIndex = index;
 		ItemStack stack1 = slot.getItem();
 		stack = stack1.copy();
 		int maxSlots = this.maxSlots;
@@ -458,9 +451,7 @@ public class AetherCraftTableMenu extends BaseSMMenu {
 		int slotCount = this.getSlotSize();
 
 		if (index < slotCount) {
-			if (!this.moveItemStackTo(stack1, slotCount, this.slots.size(), true)) {
-				return ItemStack.EMPTY;
-			}
+			if (!this.moveItemStackTo(stack1, slotCount, this.slots.size(), true)) { return ItemStack.EMPTY; }
 		}
 
 		else if (!this.moveItemStackTo(stack1, 0, slotCount - 10, false)) {
@@ -513,7 +504,7 @@ public class AetherCraftTableMenu extends BaseSMMenu {
 		super.clicked(slotId, dragType, clickType, player);
 	}
 
-	public boolean insertItem (ItemStack input) {
+	public boolean insertItem(ItemStack input) {
 
 		List<Slot> slotList = this.sortSlot(this.tile.getSortType());
 
@@ -527,81 +518,18 @@ public class AetherCraftTableMenu extends BaseSMMenu {
 	}
 
 	protected boolean moveItemStackTo(ItemStack stack, int slotStart, int slotEnd, boolean par1) {
+		return this.moveSlot(stack, slotStart, slotEnd, par1);
+	}
 
-		boolean flag = false;
-		int i = par1 ? slotEnd - 1 : slotStart;
-
-		if (stack.isStackable()) {
-
-			while (!stack.isEmpty()) {
-
-				if (par1) {
-					if (i < slotStart) { break; }
-				}
-
-				else if (i >= slotEnd) { break; }
-
-				Slot slot = this.slots.get(i);
-				ItemStack stack1 = slot.getItem();
-
-				if (!stack1.isEmpty() && ItemStack.isSameItemSameTags(stack, stack1)) {
-
-					int count = stack1.getCount() + stack.getCount();
-					int maxSize = slot.getMaxStackSize(stack) > 64 ? slot.getMaxStackSize(stack) : Math.min(slot.getMaxStackSize(stack), stack.getMaxStackSize());
-
-					if (count <= maxSize) {
-						stack.setCount(0);
-						stack1.setCount(count);
-						slot.setChanged();
-						flag = true;
-					}
-
-					else if (stack1.getCount() < maxSize) {
-						stack.shrink(maxSize - stack1.getCount());
-						stack1.setCount(maxSize);
-						slot.setChanged();
-						flag = true;
-					}
-				}
-
-				i = par1 ? i - 1 : i + 1;
-			}
-		}
-
-		if (!stack.isEmpty()) {
-
-			i = par1 ? slotEnd - 1 : slotStart;
-
-			while (true) {
-
-				if (par1) {
-					if (i < slotStart) { break; }
-				}
-
-				else if (i >= slotEnd) { break; }
-
-				Slot slot1 = this.slots.get(i);
-				ItemStack stack2 = slot1.getItem();
-
-				if (stack2.isEmpty() && slot1.mayPlace(stack)) {
-					slot1.set(stack.getCount() > slot1.getMaxStackSize(stack) ? stack.split(slot1.getMaxStackSize(stack)) : stack.split(stack.getCount()));
-					slot1.setChanged();
-					flag = true;
-					break;
-				}
-
-				i = par1 ? i - 1 : i + 1;
-			}
-		}
-
-		return flag;
+	public boolean checkSlotValue(Slot slot, ItemStack stack) {
+		return slot.getMaxStackSize(stack) > 64;
 	}
 
 	// ブロックエンティティとアイテムハンドラーの取得クラス
-	public record TileHandler (BlockEntity tile, IItemHandler handler) {
+	public record TileHandler(BlockEntity tile, IItemHandler handler) {
 
 		// ブロック情報をクライアントに反映させる
-		public void sentPKT () {
+		public void sentPKT() {
 			Level world = this.tile.getLevel();
 			if (world == null) { return; }
 

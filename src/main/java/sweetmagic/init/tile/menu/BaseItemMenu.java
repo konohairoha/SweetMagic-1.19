@@ -25,11 +25,11 @@ public abstract class BaseItemMenu extends AbstractContainerMenu {
 		this.slotSize = 0;
 	}
 
-	public void setPInv (Inventory pInv, int tX, int tY) {
+	public void setPInv(Inventory pInv, int tX, int tY) {
 		this.setPInv(pInv, tX, tY, 0);
 	}
 
-	public void setPInv (Inventory pInv, int tX, int tY, int addY) {
+	public void setPInv(Inventory pInv, int tX, int tY, int addY) {
 
 		//Player Inventorye
 		for (int y = 0; y < 3; y++)

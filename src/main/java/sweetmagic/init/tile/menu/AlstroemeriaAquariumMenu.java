@@ -11,7 +11,7 @@ public class AlstroemeriaAquariumMenu extends BaseSMMenu {
 	public final TileAlstroemeriaAquarium tile;
 
 	public AlstroemeriaAquariumMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
-		this(windowId, pInv, (TileAlstroemeriaAquarium) MenuInit.getTile(pInv, data));
+		this(windowId, pInv, MenuInit.getTile(TileAlstroemeriaAquarium::new, pInv, data));
 	}
 
 	public AlstroemeriaAquariumMenu(int windowId, Inventory pInv, TileAlstroemeriaAquarium tile) {

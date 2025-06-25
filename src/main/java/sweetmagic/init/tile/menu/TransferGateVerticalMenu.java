@@ -10,7 +10,7 @@ import sweetmagic.init.tile.sm.TileTransferGateVertical;
 public class TransferGateVerticalMenu extends BaseSMMenu {
 
 	public TransferGateVerticalMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
-		this(windowId, pInv, (TileTransferGateVertical) MenuInit.getTile(pInv, data));
+		this(windowId, pInv, MenuInit.getTile(TileTransferGateVertical::new, pInv, data));
 	}
 
 	public TransferGateVerticalMenu(int windowId, Inventory pInv, TileTransferGateVertical tile) {

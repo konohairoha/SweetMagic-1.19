@@ -40,15 +40,15 @@ public class SMRoveMenu extends BaseItemMenu {
 			((IPorch) porch.getItem()).openGui(player.level, player, porch);
 			break;
 		case 1:
-			ItemStack stack = player.getMainHandItem();
-			if ( !(stack.getItem() instanceof IWand wand) ) { break; }
+			ItemStack stack = IWand.getWand(player);
+			if (stack.isEmpty() || !(stack.getItem() instanceof IWand wand)) { break; }
 
 			wand.openGui(player.level, player, stack);
 			break;
 		case 2:
 			ItemHelper.compactInventory(this.inventory.inv);
-			Level world = player.level;
-			player.playSound(SoundEvents.UI_BUTTON_CLICK, 0.15F, world.random.nextFloat() * 0.1F + 0.9F);
+			Level world = player.getLevel();
+			player.playSound(SoundEvents.UI_BUTTON_CLICK, 0.15F, world.getRandom().nextFloat() * 0.1F + 0.9F);
 			this.inventory.writeBack();
 			break;
 		}

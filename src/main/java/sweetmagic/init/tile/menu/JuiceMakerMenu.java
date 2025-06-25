@@ -18,7 +18,7 @@ public class JuiceMakerMenu extends BaseSMMenu {
 	public final TileJuiceMaker tile;
 
 	public JuiceMakerMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
-		this(windowId, pInv, (TileJuiceMaker) MenuInit.getTile(pInv, data));
+		this(windowId, pInv, MenuInit.getTile(TileJuiceMaker::new, pInv, data));
 	}
 
 	public JuiceMakerMenu(int windowId, Inventory pInv, TileJuiceMaker tile) {

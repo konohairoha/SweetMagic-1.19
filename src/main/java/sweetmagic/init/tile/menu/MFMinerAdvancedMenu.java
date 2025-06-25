@@ -16,7 +16,7 @@ public class MFMinerAdvancedMenu extends BaseSMMenu {
 	public final List<Slot> stoneSlotList = new ArrayList<>();;
 
 	public MFMinerAdvancedMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
-		this(windowId, pInv, (TileMFMinerAdvanced) MenuInit.getTile(pInv, data));
+		this(windowId, pInv, MenuInit.getTile(TileMFMinerAdvanced::new, pInv, data));
 	}
 
 	public MFMinerAdvancedMenu(int windowId, Inventory pInv, TileMFMinerAdvanced tile) {

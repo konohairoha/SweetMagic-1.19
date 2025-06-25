@@ -64,7 +64,7 @@ public class SMBookMenu extends RecipeBookMenu<CraftingContainer> {
 	}
 
 	protected static void slotChangedCraftingGrid(AbstractContainerMenu menu, Level world, Player player, CraftingContainer con, ResultContainer result) {
-		if (world.isClientSide) { return; }
+		if (world.isClientSide()) { return; }
 
 		ServerPlayer sPlayer = (ServerPlayer) player;
 		ItemStack stack = ItemStack.EMPTY;
@@ -96,7 +96,7 @@ public class SMBookMenu extends RecipeBookMenu<CraftingContainer> {
 	}
 
 	public boolean recipeMatches(Recipe<? super CraftingContainer> recipe) {
-		return recipe.matches(this.craftSlots, this.player.level);
+		return recipe.matches(this.craftSlots, this.player.getLevel());
 	}
 
 	public void removed(Player player) {
@@ -196,16 +196,16 @@ public class SMBookMenu extends RecipeBookMenu<CraftingContainer> {
 		switch (id) {
 		case 0:
 			ItemStack robe = player.getItemBySlot(EquipmentSlot.CHEST);
-			((IRobe) robe.getItem()).openGui(player.level, player, robe);
+			((IRobe) robe.getItem()).openGui(player.getLevel(), player, robe);
 			break;
 		case 1:
 			ItemStack porch = player.getItemBySlot(EquipmentSlot.LEGS);
-			((IPorch) porch.getItem()).openGui(player.level, player, porch);
+			((IPorch) porch.getItem()).openGui(player.getLevel(), player, porch);
 			break;
 		case 2:
 			ItemStack hand = player.getMainHandItem();
 			if (hand.isEmpty() || !(hand.getItem() instanceof IMagicBook) ) { break; }
-			((IMagicBook) this.stack.getItem()).openGui(player.level, player, this.stack);
+			((IMagicBook) this.stack.getItem()).openGui(player.getLevel(), player, this.stack);
 			break;
 		}
 

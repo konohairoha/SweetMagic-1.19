@@ -11,7 +11,7 @@ public class AetherRecyclerMenu extends BaseSMMenu {
 	public final TileAetherRecycler tile;
 
 	public AetherRecyclerMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
-		this(windowId, pInv, (TileAetherRecycler) MenuInit.getTile(pInv, data));
+		this(windowId, pInv, MenuInit.getTile(TileAetherRecycler::new, pInv, data));
 	}
 
 	public AetherRecyclerMenu(int windowId, Inventory pInv, TileAetherRecycler tile) {

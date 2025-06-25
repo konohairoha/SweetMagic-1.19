@@ -19,7 +19,7 @@ public class EnchantEduceMenu extends BaseSMMenu {
 	public final Slot magicBookSlot;
 
 	public EnchantEduceMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
-		this(windowId, pInv, (TileEnchantEduce) MenuInit.getTile(pInv, data));
+		this(windowId, pInv, MenuInit.getTile(TileEnchantEduce::new, pInv, data));
 	}
 
 	public EnchantEduceMenu(int windowId, Inventory pInv, TileEnchantEduce tile) {

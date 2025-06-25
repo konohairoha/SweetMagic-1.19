@@ -12,7 +12,7 @@ public class IrisCreationMenu extends BaseSMMenu {
 	public final TileIrisCreation tile;
 
 	public IrisCreationMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
-		this(windowId, pInv, (TileIrisCreation) MenuInit.getTile(pInv, data));
+		this(windowId, pInv, MenuInit.getTile(TileIrisCreation::new, pInv, data));
 	}
 
 	public IrisCreationMenu(int windowId, Inventory pInv, TileIrisCreation tile) {

@@ -11,7 +11,7 @@ public class MFTankMenu extends BaseSMMenu {
 	public final TileMFTank tile;
 
 	public MFTankMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
-		this(windowId, pInv, (TileMFTank) MenuInit.getTile(pInv, data));
+		this(windowId, pInv, MenuInit.getTile(TileMFTank::new, pInv, data));
 	}
 
 	public MFTankMenu(int windowId, Inventory pInv, TileMFTank tile) {

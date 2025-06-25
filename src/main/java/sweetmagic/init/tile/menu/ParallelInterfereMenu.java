@@ -18,7 +18,7 @@ public class ParallelInterfereMenu extends BaseSMMenu {
 	public final TileParallelInterfere tile;
 
 	public ParallelInterfereMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
-		this(windowId, pInv, (TileParallelInterfere) MenuInit.getTile(pInv, data));
+		this(windowId, pInv, MenuInit.getTile(TileParallelInterfere::new, pInv, data));
 	}
 
 	public ParallelInterfereMenu(int windowId, Inventory pInv, TileParallelInterfere tile) {
@@ -72,12 +72,17 @@ public class ParallelInterfereMenu extends BaseSMMenu {
 	@Override
 	public boolean clickMenuButton(Player player, int id) {
 
-		if (id == 0) {
-			ItemHelper.compactInventory(this.tile.getInputInv());
-		}
-
-		else if (id == 1) {
-			return true;
+		switch (id) {
+		case -1: return true;
+		case 0:
+			ItemHelper.compactInventory(this.tile.inputInv);
+			break;
+		case 1:
+			ItemHelper.inventoryInput(player, this.tile.inputInv);
+			break;
+		case 2:
+			ItemHelper.inventoryOutput(player, this.tile.inputInv);
+			break;
 		}
 
 		this.tile.clickButton();

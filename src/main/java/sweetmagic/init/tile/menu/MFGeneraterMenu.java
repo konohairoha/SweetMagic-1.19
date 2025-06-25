@@ -19,7 +19,7 @@ public class MFGeneraterMenu extends BaseSMMenu {
 	public final Slot bucketSlot;
 
 	public MFGeneraterMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
-		this(windowId, pInv, (TileMFGenerater) MenuInit.getTile(pInv, data));
+		this(windowId, pInv, MenuInit.getTile(TileMFGenerater::new, pInv, data));
 	}
 
 	public MFGeneraterMenu(int windowId, Inventory pInv, TileMFGenerater tile) {

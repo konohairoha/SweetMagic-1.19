@@ -15,7 +15,7 @@ public class AetherRepairMenu extends BaseSMMenu {
 	public final TileAetherRepair tile;
 
 	public AetherRepairMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
-		this(windowId, pInv, (TileAetherRepair) MenuInit.getTile(pInv, data));
+		this(windowId, pInv, MenuInit.getTile(TileAetherRepair::new, pInv, data));
 	}
 
 	public AetherRepairMenu(int windowId, Inventory pInv, TileAetherRepair tile) {

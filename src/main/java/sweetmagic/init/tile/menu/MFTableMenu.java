@@ -15,7 +15,7 @@ public class MFTableMenu extends BaseSMMenu {
 	public final TileMFTable tile;
 
 	public MFTableMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
-		this(windowId, pInv, (TileMFTable) MenuInit.getTile(pInv, data));
+		this(windowId, pInv, MenuInit.getTile(TileMFTable::new, pInv, data));
 	}
 
 	public MFTableMenu(int windowId, Inventory pInv, TileMFTable tile) {

@@ -11,7 +11,7 @@ public class MFFisherMenu extends BaseSMMenu {
 	public final TileMFFisher tile;
 
 	public MFFisherMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
-		this(windowId, pInv, (TileMFFisher) MenuInit.getTile(pInv, data));
+		this(windowId, pInv, MenuInit.getTile(TileMFFisher::new, pInv, data));
 	}
 
 	public MFFisherMenu(int windowId, Inventory pInv, TileMFFisher tile) {

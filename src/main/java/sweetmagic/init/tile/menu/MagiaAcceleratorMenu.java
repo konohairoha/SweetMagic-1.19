@@ -11,7 +11,7 @@ public class MagiaAcceleratorMenu extends BaseSMMenu {
 	public final TileMagiaAccelerator tile;
 
 	public MagiaAcceleratorMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
-		this(windowId, pInv, (TileMagiaAccelerator) MenuInit.getTile(pInv, data));
+		this(windowId, pInv, MenuInit.getTile(TileMagiaAccelerator::new, pInv, data));
 	}
 
 	public MagiaAcceleratorMenu(int windowId, Inventory pInv, TileMagiaAccelerator tile) {

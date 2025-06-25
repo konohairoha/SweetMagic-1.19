@@ -14,7 +14,7 @@ public class AquariumPotMenu extends BaseSMMenu {
 	public final TileAquariumPot tile;
 
 	public AquariumPotMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
-		this(windowId, pInv, (TileAquariumPot) MenuInit.getTile(pInv, data));
+		this(windowId, pInv, MenuInit.getTile(TileAquariumPot::new, pInv, data));
 	}
 
 	public AquariumPotMenu(int windowId, Inventory pInv, TileAquariumPot tile) {
@@ -35,8 +35,7 @@ public class AquariumPotMenu extends BaseSMMenu {
 		player.experienceLevel -= id == 1 ? Math.min(level, 10) : 1;
 		player.totalExperience = PlayerHelper.getExpValue(player);
 		int aftEXP = PlayerHelper.getExpValue(player);
-		this.tile.setMF(this.tile.getMF() + (befEXP + aftEXP) * (12 + this.tile.getStackCount()) );
-
+		this.tile.setMF(this.tile.getMF() + (befEXP + aftEXP) * (12 + this.tile.getStackCount()));
 		this.tile.clickButton();
 		this.tile.playSound(this.tile.getBlockPos(), SoundEvents.ITEM_PICKUP, 0.5F, 1F);
 

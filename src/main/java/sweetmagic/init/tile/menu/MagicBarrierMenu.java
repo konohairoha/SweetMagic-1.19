@@ -11,7 +11,7 @@ public class MagicBarrierMenu extends BaseSMMenu {
 	public final TileMagicBarrier tile;
 
 	public MagicBarrierMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
-		this(windowId, pInv, (TileMagicBarrier) MenuInit.getTile(pInv, data));
+		this(windowId, pInv, MenuInit.getTile(TileMagicBarrier::new, pInv, data));
 	}
 
 	public MagicBarrierMenu(int windowId, Inventory pInv, TileMagicBarrier tile) {

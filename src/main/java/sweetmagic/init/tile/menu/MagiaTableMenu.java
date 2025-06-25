@@ -13,7 +13,7 @@ public class MagiaTableMenu extends BaseSMMenu {
 	public final TileMagiaTable tile;
 
 	public MagiaTableMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
-		this(windowId, pInv, (TileMagiaTable) MenuInit.getTile(pInv, data));
+		this(windowId, pInv, MenuInit.getTile(TileMagiaTable::new, pInv, data));
 	}
 
 	public MagiaTableMenu(int windowId, Inventory pInv, TileMagiaTable tile) {

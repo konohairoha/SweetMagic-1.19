@@ -23,17 +23,17 @@ public class SMPorchMenu extends BaseItemMenu {
 
 		int count = 0;
 
-		for (int y = 0; y < 2; y++) {
+		for (int y = 0; y < 3; y++) {
 			for (int x = 0; x < 8; x++) {
 
 				count++;
 				if (count > this.slotSize) { break; }
 
-				this.addSlot(new SMSlot(this.inventory, x + y * 8, 15 + x * 18, 13 + y * 18, SlotInput.ISSM_ACC));
+				this.addSlot(new SMSlot(this.inventory, x + y * 8, 16 + x * 18, 8 + y * 18, SlotInput.ISSM_ACC));
 			}
 		}
 
-		this.setPInv(pInv, 8, 60);
+		this.setPInv(pInv, 8, 66);
 	}
 
 	@Override
@@ -41,13 +41,13 @@ public class SMPorchMenu extends BaseItemMenu {
 		switch (id) {
 		case 0:
 			ItemStack robe = player.getItemBySlot(EquipmentSlot.CHEST);
-			((IRobe) robe.getItem()).openGui(player.level, player, robe);
+			((IRobe) robe.getItem()).openGui(player.getLevel(), player, robe);
 			break;
 		case 1:
-			ItemStack stack = player.getMainHandItem();
-			if ( !(stack.getItem() instanceof IWand wand) ) { break; }
+			ItemStack stack = IWand.getWand(player);
+			if (stack.isEmpty() || !(stack.getItem() instanceof IWand wand)) { break; }
 
-			wand.openGui(player.level, player, stack);
+			wand.openGui(player.getLevel(), player, stack);
 			break;
 		}
 

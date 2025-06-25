@@ -16,7 +16,7 @@ public class WarpMenu extends BaseSMMenu {
 	public final Slot invSlot[] = new Slot[4];
 
 	public WarpMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
-		this(windowId, pInv, (TileWarp) MenuInit.getTile(pInv, data));
+		this(windowId, pInv, MenuInit.getTile(TileWarp::new, pInv, data));
 	}
 
 	public WarpMenu(int windowId, Inventory pInv, TileWarp tile) {

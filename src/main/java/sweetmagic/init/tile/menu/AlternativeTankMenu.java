@@ -12,7 +12,7 @@ public class AlternativeTankMenu extends BaseSMMenu {
 	public final TileAlternativeTank tile;
 
 	public AlternativeTankMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
-		this(windowId, pInv, (TileAlternativeTank) MenuInit.getTile(pInv, data));
+		this(windowId, pInv, MenuInit.getTile(TileAlternativeTank::new, pInv, data));
 	}
 
 	public AlternativeTankMenu(int windowId, Inventory pInv, TileAlternativeTank tile) {

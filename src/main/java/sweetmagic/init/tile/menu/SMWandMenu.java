@@ -9,6 +9,7 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import sweetmagic.api.iitem.IPorch;
 import sweetmagic.api.iitem.IRobe;
+import sweetmagic.api.iitem.IWand;
 import sweetmagic.api.iitem.info.WandInfo;
 import sweetmagic.init.MenuInit;
 import sweetmagic.init.tile.slot.SlotInput;
@@ -16,23 +17,26 @@ import sweetmagic.init.tile.slot.WandSlot;
 
 public class SMWandMenu extends BaseItemMenu {
 
+	public ItemStack stack;
+
 	public SMWandMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
-		this(windowId, pInv, pInv.player.getMainHandItem());
+		this(windowId, pInv, IWand.getWand(pInv.player));
 	}
 
 	public SMWandMenu(int windowId, Inventory pInv, ItemStack stack) {
 		super(MenuInit.wandMenu, windowId, pInv, new WandInfo(stack).getInv());
 
 		WandInfo info = new WandInfo(stack);
+		this.stack = stack;
 		int count = 0;
 
 		for (int y = 0; y < 5; y++) {
-			for (int x = 0; x < 6; x++) {
+			for (int x = 0; x < 7; x++) {
 
 				count++;
 				if (count > this.slotSize) { break; }
 
-				this.addSlot(new WandSlot(this.inventory, y * 6 + x, 39 + x * 22, 14 + y * 19, SlotInput.isMagicItem(info.getWand().getWandTier())));
+				this.addSlot(new WandSlot(this.inventory, y * 7 + x, 31 + x * 22, 14 + y * 19, SlotInput.isMagicItem(info.getWand().getWandTier())));
 			}
 
 			if (count > this.slotSize) { break; }
@@ -60,11 +64,11 @@ public class SMWandMenu extends BaseItemMenu {
 		switch (id) {
 		case 0:
 			ItemStack robe = player.getItemBySlot(EquipmentSlot.CHEST);
-			((IRobe) robe.getItem()).openGui(player.level, player, robe);
+			((IRobe) robe.getItem()).openGui(player.getLevel(), player, robe);
 			break;
 		case 1:
 			ItemStack porch = player.getItemBySlot(EquipmentSlot.LEGS);
-			((IPorch) porch.getItem()).openGui(player.level, player, porch);
+			((IPorch) porch.getItem()).openGui(player.getLevel(), player, porch);
 			break;
 		}
 

@@ -15,7 +15,7 @@ public class AetherHopperMenu extends BaseSMMenu {
 	public final Slot wandSlot;
 
 	public AetherHopperMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
-		this(windowId, pInv, (TileAetherHopper) MenuInit.getTile(pInv, data));
+		this(windowId, pInv, MenuInit.getTile(TileAetherHopper::new, pInv, data));
 	}
 
 	public AetherHopperMenu(int windowId, Inventory pInv, TileAetherHopper tile) {
@@ -33,7 +33,7 @@ public class AetherHopperMenu extends BaseSMMenu {
 
 	@Override
 	public boolean clickMenuButton(Player player, int id) {
-		ItemHelper.compactInventory(( (TileAetherHopper) this.getTile()).inputInv);
+		ItemHelper.compactInventory(((TileAetherHopper) this.getTile()).inputInv);
 		this.tile.clickButton();
 		return true;
 	}

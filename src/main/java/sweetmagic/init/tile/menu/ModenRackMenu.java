@@ -13,7 +13,7 @@ public class ModenRackMenu extends BaseSMMenu {
 	public final int data;
 
 	public ModenRackMenu(int windowId, Inventory pInv, FriendlyByteBuf data) {
-		this(windowId, pInv, (TileModenRack) MenuInit.getTile(pInv, data));
+		this(windowId, pInv, MenuInit.getTile(TileModenRack::new, pInv, data));
 	}
 
 	public ModenRackMenu(int windowId, Inventory pInv, TileModenRack tile) {
@@ -35,6 +35,7 @@ public class ModenRackMenu extends BaseSMMenu {
 					this.addSlot(new SMSlot(chest, x + y * 9, 7 + 18 * x, 8 + 18 * y));
 			break;
 		case 1:
+		case 9:
 			for (int x = 0; x < 3; x++)
 				this.addSlot(new SMSlot(chest, x, 61 + x * 18, 8));
 			break;
@@ -56,6 +57,16 @@ public class ModenRackMenu extends BaseSMMenu {
 		case 5:
 			for (int y = 0; y < 2; y++)
 				this.addSlot(new SMSlot(chest, y, 79, 8 + y * 18));
+			break;
+		case 6:
+		case 7:
+			for (int y = 0; y < 2; y++)
+				for (int x = 0; x < 4; x++)
+				this.addSlot(new SMSlot(chest, x + y * 4, 52 + x * 18, 8 + y * 18));
+			break;
+		case 8:
+			for (int x = 0; x < 4; x++)
+				this.addSlot(new SMSlot(chest, x, 52 + x * 18, 17));
 			break;
 		}
 	}
