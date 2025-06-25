@@ -1,9 +1,9 @@
 {
 	"type": "sweetmagic:furniture_craft",
 	"ingredients": [
-		{ "tag": "forge:stone", "count": 1 }
+		{"tag": "forge:stone", "count": 1}
 	],
 	"result": [
-		{ "item": "sweetmagic:wand_pedastal", "count": 1 }
+		{"item": "sweetmagic:wand_pedastal", "count": 1}
 	]
 }

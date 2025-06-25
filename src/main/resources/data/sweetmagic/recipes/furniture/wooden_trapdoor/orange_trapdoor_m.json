@@ -1,9 +1,9 @@
 {
 	"type": "sweetmagic:furniture_craft",
 	"ingredients": [
-		{ "tag": "sweetmagic:smplanks", "count": 1 }
+		{"tag": "sweetmagic:smplanks", "count": 1}
 	],
 	"result": [
-		{ "item": "sweetmagic:orange_trapdoor_m", "count": 1 }
+		{"item": "sweetmagic:orange_trapdoor_m", "count": 1}
 	]
 }
