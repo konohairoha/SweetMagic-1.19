@@ -1,7 +1,7 @@
 {
 	"type": "minecraft:crafting_shapeless",
 	"ingredients": [
-		{ "item": "sweetmagic:alternative_block" }
+		{"item": "sweetmagic:alternative_block"}
 	],
-	"result": { "item": "sweetmagic:alternative_ingot", "count": 4 }
+	"result": {"item": "sweetmagic:alternative_ingot", "count": 4}
 }

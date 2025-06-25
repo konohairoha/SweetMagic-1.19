@@ -1,7 +1,7 @@
 {
 	"type": "minecraft:crafting_shapeless",
 	"ingredients": [
-		{ "item": "sweetmagic:clerodendrum_petal" }
+		{"item": "sweetmagic:clerodendrum_petal"}
 	],
-	"result": { "item": "sweetmagic:clerodendrum_petal", "count": 1 }
+	"result": {"item": "sweetmagic:clerodendrum_petal", "count": 1}
 }

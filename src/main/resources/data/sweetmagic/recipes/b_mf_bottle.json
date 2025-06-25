@@ -1,13 +1,13 @@
 {
 	"type": "minecraft:crafting_shaped",
 	"key": {
-		"G": { "tag": "forge:glass/colorless" },
-		"B": { "tag": "forge:recipe_book" }
+		"G": {"tag": "forge:glass/colorless"},
+		"B": {"tag": "forge:recipe_book"}
 	},
 	"pattern": [
 		"G G",
 		"GBG",
 		" G "
 	],
-	"result": { "item": "sweetmagic:b_mf_bottle", "count": 2 }
+	"result": {"item": "sweetmagic:b_mf_bottle", "count": 2}
 }

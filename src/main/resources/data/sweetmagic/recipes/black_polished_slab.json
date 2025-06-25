@@ -1,7 +1,7 @@
 {
 	"type": "minecraft:crafting_shaped",
 	"key": {
-		"B": { "item": "sweetmagic:black_polished" }
+		"B": {"item": "sweetmagic:black_polished"}
 	},
 	"pattern": [
 		"BBB"

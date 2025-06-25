@@ -1,10 +1,10 @@
 {
 	"type": "minecraft:crafting_shaped",
 	"key": {
-		"B": { "tag": "sweetmagic:antique_brick/black" }
+		"B": {"tag": "sweetmagic:antique_brick/black"}
 	},
 	"pattern": [
 		"BB "
 	],
-	"result": { "item": "sweetmagic:antique_brick_0b_plate", "count": 2 }
+	"result": {"item": "sweetmagic:antique_brick_0b_plate", "count": 2}
 }

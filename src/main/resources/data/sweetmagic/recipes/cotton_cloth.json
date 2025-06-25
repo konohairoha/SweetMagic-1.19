@@ -1,8 +1,8 @@
 {
 	"type": "minecraft:crafting_shapeless",
 	"ingredients": [
-		{ "item": "sweetmagic:cotton" },
-		{ "item": "sweetmagic:cotton" }
+		{"item": "sweetmagic:cotton"},
+		{"item": "sweetmagic:cotton"}
 	],
-	"result": { "item": "sweetmagic:cotton_cloth" }
+	"result": {"item": "sweetmagic:cotton_cloth"}
 }

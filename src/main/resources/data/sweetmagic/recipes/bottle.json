@@ -1,14 +1,14 @@
 {
 	"type": "minecraft:crafting_shaped",
 	"key": {
-		"B": { "tag": "forge:recipe_book" },
-		"P": { "tag": "minecraft:planks" },
-		"G": { "tag": "forge:glass/colorless" }
+		"B": {"tag": "forge:recipe_book"},
+		"P": {"tag": "minecraft:planks"},
+		"G": {"tag": "forge:glass/colorless"}
 	},
 	"pattern": [
 		"GPG",
 		"GBG",
 		"GGG"
 	],
-	"result": { "item": "sweetmagic:bottle" }
+	"result": {"item": "sweetmagic:bottle"}
 }

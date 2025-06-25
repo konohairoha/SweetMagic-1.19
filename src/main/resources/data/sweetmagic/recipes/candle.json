@@ -1,11 +1,11 @@
 {
 	"type": "minecraft:crafting_shaped",
 	"key": {
-		"T": { "item": "minecraft:torch" },
-		"G": { "tag": "forge:nuggets/gold" }
+		"T": {"item": "minecraft:torch"},
+		"G": {"tag": "forge:nuggets/gold"}
 	},
 	"pattern": [
 		"GTG"
 	],
-	"result": { "item": "sweetmagic:candle" , "count": 8 }
+	"result": {"item": "sweetmagic:candle", "count": 8}
 }

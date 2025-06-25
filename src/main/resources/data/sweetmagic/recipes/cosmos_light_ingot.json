@@ -1,7 +1,7 @@
 {
 	"type": "minecraft:crafting_shapeless",
 	"ingredients": [
-		{ "item": "sweetmagic:cosmos_light_block" }
+		{"item": "sweetmagic:cosmos_light_block"}
 	],
-	"result": { "item": "sweetmagic:cosmos_light_ingot", "count": 4 }
+	"result": {"item": "sweetmagic:cosmos_light_ingot", "count": 4}
 }

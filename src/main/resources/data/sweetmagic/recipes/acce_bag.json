@@ -1,14 +1,14 @@
 {
 	"type": "minecraft:crafting_shapeless",
 	"ingredients": [
-		{ "tag": "sweetmagic:magicpage" },
-		{ "tag": "sweetmagic:magicpage" },
-		{ "tag": "sweetmagic:magicpage" },
-		{ "tag": "sweetmagic:magicpage" },
-		{ "item": "sweetmagic:cotton_cloth" },
-		{ "item": "sweetmagic:cotton_cloth" },
-		{ "item": "minecraft:string", "count": 1 },
-		{ "item": "minecraft:string", "count": 1 }
+		{"tag": "sweetmagic:magicpage"},
+		{"tag": "sweetmagic:magicpage"},
+		{"tag": "sweetmagic:magicpage"},
+		{"tag": "sweetmagic:magicpage"},
+		{"item": "sweetmagic:cotton_cloth"},
+		{"item": "sweetmagic:cotton_cloth"},
+		{"item": "minecraft:string", "count": 1},
+		{"item": "minecraft:string", "count": 1}
 	],
-	"result": { "item": "sweetmagic:acce_bag", "count": 1 }
+	"result": {"item": "sweetmagic:acce_bag", "count": 1}
 }

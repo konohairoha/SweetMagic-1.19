@@ -1,12 +1,12 @@
 {
 	"type": "minecraft:crafting_shaped",
 	"key": {
-		"F": { "item": "sweetmagic:fire_nasturtium_petal" },
-		"S": { "item": "minecraft:stick" }
+		"F": {"item": "sweetmagic:fire_nasturtium_petal"},
+		"S": {"item": "minecraft:stick"}
 	},
 	"pattern": [
 		" F ",
 		" S "
 	],
-	"result": { "item": "sweetmagic:bedside_lamp" , "count": 4 }
+	"result": {"item": "sweetmagic:bedside_lamp", "count": 4}
 }

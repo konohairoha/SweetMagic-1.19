@@ -1,15 +1,15 @@
 {
 	"type": "minecraft:crafting_shaped",
 	"key": {
-		"S": { "item": "minecraft:paper" },
-		"C": { "tag": "forge:chests/wooden" },
-		"L": { "tag": "sweetmagic:smlogs" },
-		"R": { "tag": "forge:recipe_book" }
+		"S": {"item": "minecraft:paper"},
+		"C": {"tag": "forge:chests/wooden"},
+		"L": {"tag": "sweetmagic:smlogs"},
+		"R": {"tag": "forge:recipe_book"}
 	},
 	"pattern": [
 		"SLS",
 		"CRC",
 		"SLS"
 	],
-	"result": { "item": "sweetmagic:cardboard_storage" }
+	"result": {"item": "sweetmagic:cardboard_storage"}
 }

@@ -1,7 +1,7 @@
 {
 	"type": "minecraft:crafting_shapeless",
 	"ingredients": [
-		{ "item": "sweetmagic:cabbage" }
+		{"item": "sweetmagic:cabbage"}
 	],
-	"result": { "item": "sweetmagic:cabbage_seed", "count": 2 }
+	"result": {"item": "sweetmagic:cabbage_seed", "count": 2}
 }

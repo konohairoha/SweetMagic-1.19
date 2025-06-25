@@ -1,8 +1,8 @@
 {
 	"type": "minecraft:crafting_shaped",
 	"key": {
-		"A": { "item": "sweetmagic:alternative_ingot" },
-		"S": { "item": "minecraft:stick" }
+		"A": {"item": "sweetmagic:alternative_ingot"},
+		"S": {"item": "minecraft:stick"}
 	},
 	"pattern": [
 		" A ",

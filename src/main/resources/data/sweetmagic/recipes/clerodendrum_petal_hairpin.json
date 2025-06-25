@@ -1,7 +1,7 @@
 {
 	"type": "minecraft:crafting_shapeless",
 	"ingredients": [
-		{ "item": "sweetmagic:clerodendrum_petal_hairpin" }
+		{"item": "sweetmagic:clerodendrum_petal_hairpin"}
 	],
-	"result": { "item": "sweetmagic:clerodendrum_petal_hairpin", "count": 1 }
+	"result": {"item": "sweetmagic:clerodendrum_petal_hairpin", "count": 1}
 }

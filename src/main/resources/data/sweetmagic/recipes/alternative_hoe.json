@@ -5,9 +5,9 @@
 		"S": {"item": "minecraft:stick"}
 	},
 	"pattern": [
-		"AAA",
-		"AS ",
-		"S  "
+		"AA ",
+		" S ",
+		" S "
 	],
-	"result": {"item": "sweetmagic:alternative_sickle"}
+	"result": {"item": "sweetmagic:alternative_hoe"}
 }

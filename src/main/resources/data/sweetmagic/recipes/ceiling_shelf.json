@@ -1,13 +1,13 @@
 {
 	"type": "minecraft:crafting_shaped",
 	"key": {
-		"W": { "tag": "minecraft:wooden_slabs" },
-		"I": { "tag": "sweetmagic:iron_fence" }
+		"W": {"tag": "minecraft:wooden_slabs"},
+		"I": {"tag": "sweetmagic:iron_fence"}
 	},
 	"pattern": [
 		"I I",
 		"IWI",
 		"IWI"
 	],
-	"result": { "item": "sweetmagic:ceiling_shelf", "count": 2 }
+	"result": {"item": "sweetmagic:ceiling_shelf", "count": 2}
 }

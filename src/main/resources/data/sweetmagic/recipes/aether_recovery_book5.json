@@ -1,0 +1,10 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		{"item": "sweetmagic:aether_recovery_book4"},
+		{"item": "sweetmagic:aether_recovery_book4"},
+		{"item": "sweetmagic:aether_recovery_book4"},
+		{"item": "sweetmagic:aether_recovery_book4"}
+	],
+	"result": {"item": "sweetmagic:aether_recovery_book5"}
+}

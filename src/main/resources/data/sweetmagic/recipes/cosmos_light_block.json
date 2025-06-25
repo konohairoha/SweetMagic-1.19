@@ -1,11 +1,11 @@
 {
 	"type": "minecraft:crafting_shaped",
 	"key": {
-		"C": { "item": "sweetmagic:cosmos_light_ingot" }
+		"C": {"item": "sweetmagic:cosmos_light_ingot"}
 	},
 	"pattern": [
 		"CC ",
 		"CC "
 	],
-	"result": { "item": "sweetmagic:cosmos_light_block" }
+	"result": {"item": "sweetmagic:cosmos_light_block"}
 }

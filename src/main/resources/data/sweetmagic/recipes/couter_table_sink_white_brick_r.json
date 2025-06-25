@@ -1,14 +1,14 @@
 {
 	"type": "minecraft:crafting_shaped",
 	"key": {
-		"P": { "tag": "sweetmagic:smplanks" },
-		"B": { "item": "sweetmagic:whiteline_brick_r" },
-		"I": { "tag": "forge:ingots/iron" }
+		"P": {"tag": "sweetmagic:smplanks"},
+		"B": {"item": "sweetmagic:whiteline_brick_r"},
+		"I": {"tag": "forge:ingots/iron"}
 	},
 	"pattern": [
 		"PPP",
 		"BBI",
 		"PPP"
 	],
-	"result": { "item": "sweetmagic:couter_table_sink_white_brick_r", "count": 2 }
+	"result": {"item": "sweetmagic:couter_table_sink_white_brick_r", "count": 2}
 }
