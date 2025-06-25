@@ -32,19 +32,19 @@ public class WitchMaster extends AbstractWitch {
 
 		switch (this.rand.nextInt(5)) {
 		case 0:
-			entity = new FireMagicShot(this.level, this);
+			entity = new FireMagicShot(this.getLevel(), this);
 			break;
 		case 1:
-			entity = new FrostMagicShot(this.level, this);
+			entity = new FrostMagicShot(this.getLevel(), this);
 			break;
 		case 2:
-			entity = new CycloneMagicShot(this.level, this);
+			entity = new CycloneMagicShot(this.getLevel(), this);
 			break;
 		case 3:
-			entity = new GravityMagicShot(this.level, this);
+			entity = new GravityMagicShot(this.getLevel(), this);
 			break;
 		case 4:
-			entity = new DigMagicShot(this.level, this);
+			entity = new DigMagicShot(this.getLevel(), this);
 			break;
 		}
 		return entity;

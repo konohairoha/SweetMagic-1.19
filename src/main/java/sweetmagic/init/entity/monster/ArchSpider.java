@@ -3,6 +3,7 @@ package sweetmagic.init.entity.monster;
 import javax.annotation.Nullable;
 
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -54,7 +55,7 @@ public class ArchSpider extends Spider implements ISMMob {
 		this.goalSelector.addGoal(3, new LeapAtTargetGoal(this, 0.4F));
 		this.goalSelector.addGoal(4, new SpiderAttackGoal(this));
 		this.goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 0.8D));
-		this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8.0F));
+		this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8F));
 		this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
 		this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
 		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Warden.class, true));
@@ -71,6 +72,10 @@ public class ArchSpider extends Spider implements ISMMob {
 				.add(Attributes.FOLLOW_RANGE, 24D);
 	}
 
+	public SynchedEntityData getData() {
+		return this.getEntityData();
+	}
+
 	public EntityDimensions getDimensions(Pose pose) {
 		float rate = 1F + 0.375F * this.getPotionLevel(this, PotionInit.leader_flag);
 		return super.getDimensions(pose).scale(rate);
@@ -79,10 +84,10 @@ public class ArchSpider extends Spider implements ISMMob {
 	// ダメージ処理
 	public boolean hurt(DamageSource src, float amount) {
 		Entity attacker = src.getEntity();
-		if ( attacker != null && attacker instanceof ISMMob) { return false; }
+		if (attacker != null && attacker instanceof ISMMob) { return false; }
 
 		// ダメージ倍処理
-		amount = this.getDamageAmount(this.level , src, amount, 1F);
+		amount = this.getDamageAmount(this.getLevel() , src, amount, 1F);
 		return super.hurt(src, amount);
 	}
 
@@ -104,7 +109,7 @@ public class ArchSpider extends Spider implements ISMMob {
 		}
 
 		else {
-			time *= ( (int) 20 * this.getDateRate(this.level, 0.1F) );
+			time *= ( (int) 20 * this.getDateRate(this.getLevel(), 0.1F) );
 		}
 
 		this.addPotion(living, PotionInit.deadly_poison, time, level);

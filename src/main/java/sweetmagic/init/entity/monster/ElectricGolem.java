@@ -47,7 +47,7 @@ public class ElectricGolem extends AbstractSMMob implements IGolem {
 
 	protected void defineSynchedData() {
 		super.defineSynchedData();
-		this.entityData.define(ATTACK_TICK, 0);
+		this.define(ATTACK_TICK, 0);
 	}
 
 	protected void registerGoals() {
@@ -64,10 +64,10 @@ public class ElectricGolem extends AbstractSMMob implements IGolem {
 
 	public static AttributeSupplier.Builder registerAttributes() {
 		return Monster.createMonsterAttributes()
-				.add(Attributes.MAX_HEALTH, 250D)
-				.add(Attributes.MOVEMENT_SPEED, 0.25D)
-				.add(Attributes.ATTACK_DAMAGE, 6D)
-				.add(Attributes.ARMOR, 16D)
+				.add(Attributes.MAX_HEALTH, 200D)
+				.add(Attributes.MOVEMENT_SPEED, 0.2D)
+				.add(Attributes.ATTACK_DAMAGE, 5D)
+				.add(Attributes.ARMOR, 12D)
 				.add(Attributes.FOLLOW_RANGE, 32D);
 	}
 
@@ -80,22 +80,28 @@ public class ElectricGolem extends AbstractSMMob implements IGolem {
 	}
 
 	public void setAttackTick(int attackTick) {
-		this.entityData.set(ATTACK_TICK, attackTick);
+		this.set(ATTACK_TICK, attackTick);
 	}
 
 	public int getAttackTick() {
-		return this.entityData.get(ATTACK_TICK);
+		return this.get(ATTACK_TICK);
 	}
 
 	// ダメージ処理
 	public boolean hurt(DamageSource src, float amount) {
 		Entity attacker = src.getEntity();
+		Entity attackEntity = src.getDirectEntity();
 		if (attacker != null && attacker instanceof ISMMob) { return false; }
+
+		// 魔法攻撃以外ならダメージ減少
+		if (this.notMagicDamage(attacker, attackEntity)) {
+			amount *= 0.25F;
+		}
 
 		// ダメージ倍処理
 		if (!this.isLeader(this)) {
-			amount = this.getBossDamageAmount(this.level, this.defTime , src, amount, 10F);
-			this.defTime = 2;
+			amount = this.getBossDamageAmount(this.getLevel(), this.defTime , src, amount, 12F);
+			this.defTime = 1;
 		}
 
 		return super.hurt(src, amount);
@@ -121,7 +127,7 @@ public class ElectricGolem extends AbstractSMMob implements IGolem {
 		this.recastTime = this.rand.nextInt(RAND_RECASTTIME) + RAND_RECASTTIME;
 
 		for (int i = 0; i < 5; i++) {
-			ElectricSphere entity = new ElectricSphere(this.level, this);
+			ElectricSphere entity = new ElectricSphere(this.getLevel(), this);
 			double d0 = target.getX() - this.getX();
 			double d1 = target.getZ() - this.getZ();
 			double d3 = target.getY(0.3333333333333333D) - this.getY() - 1D;
@@ -132,7 +138,7 @@ public class ElectricGolem extends AbstractSMMob implements IGolem {
 			entity.setNotDamage(true);
 			entity.setRange(3D);
 			entity.setCount(2);
-			this.level.addFreshEntity(entity);
+			this.addEntity(entity);
 		}
 
 		this.playSound(SoundEvents.BLAZE_SHOOT, 0.5F, 0.67F);

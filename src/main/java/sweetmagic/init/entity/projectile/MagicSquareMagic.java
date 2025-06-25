@@ -76,7 +76,7 @@ public class MagicSquareMagic extends AbstractMagicShot {
 
 	// 常時スポーンパーティクル
 	public void tickSpawnParticle() {
-		if (!(this.level instanceof ServerLevel server)) { return; }
+		if (!(this.getLevel() instanceof ServerLevel server)) { return; }
 
 		ParticleOptions par = null;
 		int data = this.getData();

@@ -64,24 +64,25 @@ public class BloodMagicShot extends AbstractMagicShot {
 		this.discard();
 	}
 
-	public void rangeAttack (BlockPos bPos, float dame, double range) {
+	public void rangeAttack(BlockPos bPos, float dame, double range) {
 
 		int data = this.getData();
 		double effectRange = range * range;
 		List<LivingEntity> entityList = this.getEntityList(LivingEntity.class, this.isBladTarget(effectRange), range);
 
-		if (data != 3) {
+		if (data <= 2) {
 			entityList.forEach(e -> this.attackDamage(e, dame, false));
 		}
 
 		else {
+			float baseAddAttack = (data - 3) * 25F;
 			entityList.forEach(e -> {
 				this.attackDamage(e, dame, false);
-				this.addAttack(e, dame, 4);
+				this.addAttack(e, dame, (int) (e.getMaxHealth() / (100F - baseAddAttack)));
 			});
 		}
 
-		if (!(this.level instanceof ServerLevel server)) { return; }
+		if (!(this.getLevel() instanceof ServerLevel server)) { return; }
 
 		if (data <= 1) {
 
@@ -107,20 +108,33 @@ public class BloodMagicShot extends AbstractMagicShot {
 
 		else {
 
-			boolean isZero = this.getMaxLifeTime() == 100;
-			double ySpeed = isZero ? 0D : -2D;
-			double inRate = isZero ? 1.5D : 0.5D;
+			BlockPos pos = this.blockPosition();
+			ParticleOptions par = ParticleInit.CYCLE_BLOOD_TORNADO;
 
-			for (int i = 0; i < 8; i++) {
-				this.spawnParticleRing(server, ParticleInit.BLOOD, range * (0.1D * i), bPos.above(i + 3), ySpeed, inRate);
+			for (int y = -40; y < 8; y++) {
+				for (int i = 0; i < 16; i++) {
+					this.spawnParticleCycle(server, par, pos.getX() + 0.5D, pos.getY() - 0.5D + this.rand.nextDouble() * 1.5D + y * 0.5D, pos.getZ() + 0.5D, Direction.UP, 2, i * 16F + y * 15, false);
+				}
+			}
+
+			double x = pos.getX() + 0.5D;
+			double z = pos.getZ() + 0.5D;
+			range = Math.sqrt(range);
+
+			for (int i = 0; i < 4; i++) {
+				double y = pos.getY() + 1D + i;
+				for (double degree = -range * Math.PI; degree < range * Math.PI; degree += 0.25D) {
+					double rate = range * 0.75D;
+					server.sendParticles(ParticleInit.BLOOD, x + Math.cos(degree) * rate, y, z + Math.sin(degree) * rate, 0, Math.cos(degree) * 0.85D, this.rand.nextFloat() * 0.15F, Math.sin(degree) * 0.85D, 1D);
+				}
 			}
 		}
 	}
 
 	protected void spawnParticleShort(ServerLevel sever, BlockPos pos) {
-		float x = (float) (pos.getX() + this.getRandFloat(0.5F));
-		float y = (float) (pos.getY() + this.getRandFloat(0.5F));
-		float z = (float) (pos.getZ() + this.getRandFloat(0.5F));
+		float x = (float) pos.getX() + this.getRandFloat(0.5F);
+		float y = (float) pos.getY() + this.getRandFloat(0.5F);
+		float z = (float) pos.getZ() + this.getRandFloat(0.5F);
 
 		for (int i = 0; i < 4; i++) {
 			sever.sendParticles(ParticleInit.BLOOD, x, y, z, 4, 0F, 0F, 0F, 0.15F);
@@ -135,9 +149,9 @@ public class BloodMagicShot extends AbstractMagicShot {
 	protected void spawnParticle() {
 
 		Vec3 vec = this.getDeltaMovement();
-		float addX = (float) (-vec.x / 20F);
-		float addY = (float) (-vec.y / 20F);
-		float addZ = (float) (-vec.z / 20F);
+		float addX = (float) -vec.x / 20F;
+		float addY = (float) -vec.y / 20F;
+		float addZ = (float) -vec.z / 20F;
 		Random rand = this.rand;
 
 		for (int i = 0; i < 6; i++) {
@@ -145,16 +159,16 @@ public class BloodMagicShot extends AbstractMagicShot {
 			float x = addX + this.getRandFloat(0.075F);
 			float y = addY + this.getRandFloat(0.075F);
 			float z = addZ + this.getRandFloat(0.075F);
-			float f1 = (float) (this.getX() - 0.5F + rand.nextFloat() + vec.x * i / 4.0F);
-			float f2 = (float) (this.getY() - 0.25F + rand.nextFloat() * 0.5 + vec.y * i / 4.0D);
-			float f3 = (float) (this.getZ() - 0.5F + rand.nextFloat() + vec.z * i / 4.0D);
+			float f1 = (float) (this.getX() - 0.5F + rand.nextFloat() + vec.x * i / 4F);
+			float f2 = (float) (this.getY() - 0.25F + rand.nextFloat() * 0.5F + vec.y * i / 4F);
+			float f3 = (float) (this.getZ() - 0.5F + rand.nextFloat() + vec.z * i / 4F);
 
-			this.level.addParticle(ParticleInit.BLOOD, f1, f2, f3, x, y, z);
+			this.addParticle(ParticleInit.BLOOD, f1, f2, f3, x, y, z);
 		}
 	}
 
 	// パーティクルスポーンサイクル
-	protected void spawnParticleCycle (ServerLevel server, ParticleOptions particle, double x, double y, double z, Direction face, double range, double angle, boolean isRevese) {
+	protected void spawnParticleCycle(ServerLevel server, ParticleOptions particle, double x, double y, double z, Direction face, double range, double angle, boolean isRevese) {
 		int way = isRevese ? -1 : 1;
 		server.sendParticles(particle, x, y, z, 0, face.get3DDataValue() * way, range, angle + way * 1 * 6F, 1F);
 	}

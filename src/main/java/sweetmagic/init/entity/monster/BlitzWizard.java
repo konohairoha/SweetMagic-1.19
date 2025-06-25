@@ -8,6 +8,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -26,6 +27,7 @@ import net.minecraft.world.entity.raid.Raider;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import sweetmagic.api.ientity.ISMMob;
+import sweetmagic.api.ientity.IWitch;
 import sweetmagic.init.EntityInit;
 import sweetmagic.init.entity.projectile.AbstractMagicShot;
 import sweetmagic.init.entity.projectile.BloodMagicShot;
@@ -33,11 +35,12 @@ import sweetmagic.init.entity.projectile.ElectricMagicShot;
 import sweetmagic.init.entity.projectile.ExplosionMagicShot;
 import sweetmagic.init.entity.projectile.GravityMagicShot;
 
-public class BlitzWizard extends AbstractSMMob {
+public class BlitzWizard extends AbstractSMMob implements IWitch {
 
 	private int recastTime = 0;
 	private static final int RAND_RECASTTIME = 60;
-	private static final EntityDataAccessor<Boolean> IS_TARGET = SynchedEntityData.defineId(BlitzWizard.class, BOOLEAN);
+	public AnimationState magicAttackAnim = new AnimationState();
+	private static final EntityDataAccessor<Boolean> TARGET = SynchedEntityData.defineId(BlitzWizard.class, BOOLEAN);
 
 	public BlitzWizard(Level world) {
 		super(EntityInit.blitzWizard, world);
@@ -50,7 +53,7 @@ public class BlitzWizard extends AbstractSMMob {
 
 	protected void defineSynchedData() {
 		super.defineSynchedData();
-		this.entityData.define(IS_TARGET, false);
+		this.define(TARGET, false);
 	}
 
 	protected void registerGoals() {
@@ -87,11 +90,19 @@ public class BlitzWizard extends AbstractSMMob {
 	}
 
 	public void setTarget(boolean isTarget) {
-		this.entityData.set(IS_TARGET, isTarget);
+		this.set(TARGET, isTarget);
 	}
 
 	public boolean isTarget() {
-		return this.entityData.get(IS_TARGET);
+		return this.get(TARGET);
+	}
+
+	public AnimationState getAnimaState() {
+		return this.magicAttackAnim;
+	}
+
+	public boolean isCharge() {
+		return false;
 	}
 
 	public void addAdditionalSaveData(CompoundTag tags) {
@@ -101,18 +112,24 @@ public class BlitzWizard extends AbstractSMMob {
 
 	public void readAdditionalSaveData(CompoundTag tags) {
 		super.readAdditionalSaveData(tags);
-		this.entityData.set(IS_TARGET, tags.getBoolean("is_target"));
+		this.set(TARGET, tags.getBoolean("is_target"));
 	}
 
 	// ダメージ処理
 	public boolean hurt(DamageSource src, float amount) {
 		Entity attacker = src.getEntity();
+		Entity attackEntity = src.getDirectEntity();
 		if (attacker != null && attacker instanceof ISMMob) { return false; }
+
+		// 魔法攻撃以外ならダメージ減少
+		if (this.notMagicDamage(attacker, attackEntity)) {
+			amount *= 0.25F;
+		}
 
 		// ダメージ倍処理
 		if (!this.isLeader(this)) {
-			amount = this.getBossDamageAmount(this.level, this.defTime , src, amount, 10F);
-			this.defTime = 2;
+			amount = this.getBossDamageAmount(this.getLevel(), this.defTime , src, amount, 12F);
+			this.defTime = 1;
 		}
 
 		return super.hurt(src, amount);
@@ -121,8 +138,8 @@ public class BlitzWizard extends AbstractSMMob {
 	public void tick() {
 		super.tick();
 
-		if (!this.level.isClientSide && this.tickCount % 10 == 0) {
-			this.entityData.set(IS_TARGET, this.getTarget() != null);
+		if (!this.isClient() && this.tickCount % 10 == 0) {
+			this.set(TARGET, this.getTarget() != null);
 		}
 	}
 
@@ -152,7 +169,7 @@ public class BlitzWizard extends AbstractSMMob {
 			entity.setWandLevel(level);
 			entity.setAddDamage(entity.getAddDamage() + dama);
 			entity.setRange(2.5F);
-			this.level.addFreshEntity(entity);
+			this.addEntity(entity);
 		}
 
 		this.playSound(SoundEvents.BLAZE_SHOOT, 0.5F, 0.67F);
@@ -164,18 +181,18 @@ public class BlitzWizard extends AbstractSMMob {
 
 		switch (randValue) {
 		case 1:
-			entity = new BloodMagicShot(this.level, this);
+			entity = new BloodMagicShot(this.getLevel(), this);
 			break;
 		case 2:
-			entity = new ElectricMagicShot(this.level, this);
+			entity = new ElectricMagicShot(this.getLevel(), this);
 			entity.setHitDead(false);
 			((ElectricMagicShot) entity).isRangeAttack = true;
 			break;
 		case 3:
-			entity = new ExplosionMagicShot(this.level, this);
+			entity = new ExplosionMagicShot(this.getLevel(), this);
 			break;
 		default:
-			entity = new GravityMagicShot(this.level, this);
+			entity = new GravityMagicShot(this.getLevel(), this);
 			break;
 		}
 

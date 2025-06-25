@@ -28,7 +28,6 @@ import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.entity.monster.Skeleton;
 import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.raid.Raider;
@@ -41,33 +40,24 @@ import sweetmagic.init.PotionInit;
 import sweetmagic.init.entity.projectile.AbstractMagicShot;
 import sweetmagic.init.entity.projectile.FireMagicShot;
 
-public class SkullFlame extends Skeleton implements ISMMob {
+public class SkullFlame extends AbstractSMSkull {
 
 	public SkullFlame(Level world) {
 		super(EntityInit.skullFlame, world);
 	}
 
-	public SkullFlame(EntityType<? extends Skeleton> enType, Level world) {
+	public SkullFlame(EntityType<? extends AbstractSMSkull> enType, Level world) {
 		super(enType, world);
 		this.xpReward = 35;
 	}
 
-	public void reassessWeaponGoal() { }
-
-	public boolean isFreezeConverting() { return false; }
-
-	public void refreshInfo() {
-		this.reapplyPosition();
-		this.refreshDimensions();
-	}
-
 	protected void registerGoals() {
 		this.goalSelector.addGoal(2, new RestrictSunGoal(this));
-		this.goalSelector.addGoal(3, new FleeSunGoal(this, 1.0D));
-		this.goalSelector.addGoal(3, new AvoidEntityGoal<>(this, Wolf.class, 6.0F, 1.0D, 1.2D));
+		this.goalSelector.addGoal(3, new FleeSunGoal(this, 1D));
+		this.goalSelector.addGoal(3, new AvoidEntityGoal<>(this, Wolf.class, 6F, 1D, 1.2D));
 		this.goalSelector.addGoal(4, new RangedBowAttackGoal<>(this, 1D, 120, 24F));
-		this.goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 1.0D));
-		this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8.0F));
+		this.goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 1D));
+		this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8F));
 		this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
 		this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
 		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Warden.class, true));
@@ -94,18 +84,18 @@ public class SkullFlame extends Skeleton implements ISMMob {
 		if (attacker != null && attacker instanceof ISMMob) { return false; }
 
 		// ダメージ倍処理
-		amount = this.getDamageAmount(this.level , src, amount, 1F);
+		amount = this.getDamageAmount(this.getLevel() , src, amount, 1F);
 		return super.hurt(src, amount);
 	}
 
 	public void tick() {
 		super.tick();
 
-		if (this.level.isClientSide) {
+		if (this.getLevel().isClientSide()) {
 
 			if (this.tickCount % 60 != 0) { return; }
 
-			RandomSource rand = this.random;
+			RandomSource rand = this.getRandom();
 			Vec3 vec = this.getDeltaMovement();
 
 			for (int i = 0; i < 6; i++) {
@@ -115,7 +105,7 @@ public class SkullFlame extends Skeleton implements ISMMob {
 				float f1 = (float) (vec.x + 0.5F - rand.nextFloat()) * 0.2F;
 				float f2 = (float) (vec.y + 0.5F - rand.nextFloat()) * 0.2F;
 				float f3 = (float) (vec.z + 0.5F - rand.nextFloat()) * 0.2F;
-				this.level.addParticle(ParticleTypes.FLAME, x, y, z, f1, f2, f3);
+				this.getLevel().addParticle(ParticleTypes.FLAME, x, y, z, f1, f2, f3);
 			}
 		}
 
@@ -127,7 +117,7 @@ public class SkullFlame extends Skeleton implements ISMMob {
 	public void performRangedAttack(LivingEntity target, float par1) {
 
 		boolean isWarden = target instanceof Warden;
-		boolean isHard = this.isHard(this.level);
+		boolean isHard = this.isHard(this.getLevel());
 		float damage = isWarden ? 13F : 2F;
 		float shotSpeed = isWarden ? 5F : 1.5F;
 		int shotRange = isWarden ? 50 : 40;
@@ -139,7 +129,7 @@ public class SkullFlame extends Skeleton implements ISMMob {
 
 		// ウォーデンかハードならブレなし、それ以外なら日数でブレが発生
 		float shake = (isWarden || isHard) ? 0F : 1F;
-		AbstractMagicShot entity = new FireMagicShot(this.level, this);
+		AbstractMagicShot entity = new FireMagicShot(this.getLevel(), this);
 		double d0 = target.getX() - this.getX();
 		double d1 = target.getY(0.3333333333333333D) - this.getY();
 		double d2 = target.getZ() - this.getZ();
@@ -150,7 +140,7 @@ public class SkullFlame extends Skeleton implements ISMMob {
 		entity.setArrow(true);
 		entity.setRange(2.5D);
 		this.playSound(SoundEvents.BLAZE_SHOOT, 0.5F, 0.67F);
-		this.level.addFreshEntity(entity);
+		this.getLevel().addFreshEntity(entity);
 	}
 
 	@Nullable

@@ -48,7 +48,7 @@ public class Arlaune extends AbstractSMBoss {
 	private int rainTime = 0;
 	private final static int MAX_RAINTIME = 220;
 	public double oldHealth = 450D;
-	private static final EntityDataAccessor<Boolean> IS_CLOSE = ISMMob.setData(Arlaune.class, BOOLEAN);
+	private static final EntityDataAccessor<Boolean> CLOSE = ISMMob.setData(Arlaune.class, BOOLEAN);
 	private static final EntityDataAccessor<Boolean> SUMMON = ISMMob.setData(Arlaune.class, BOOLEAN);
 	private static final EntityDataAccessor<Integer> CHERRY = ISMMob.setData(Arlaune.class, INT);
 	private static final EntityDataAccessor<Integer> PLANT = ISMMob.setData(Arlaune.class, INT);
@@ -74,47 +74,47 @@ public class Arlaune extends AbstractSMBoss {
 
 	protected void defineSynchedData() {
 		super.defineSynchedData();
-		this.entityData.define(SUMMON, false);
-		this.entityData.define(IS_CLOSE, false);
-		this.entityData.define(CHERRY, 0);
-		this.entityData.define(PLANT, 0);
+		this.define(SUMMON, false);
+		this.define(CLOSE, false);
+		this.define(CHERRY, 0);
+		this.define(PLANT, 0);
 	}
 
-	public boolean isClose() {
-		return this.entityData.get(IS_CLOSE);
+	public boolean getClose() {
+		return this.get(CLOSE);
 	}
 
 	public void setClose(boolean isClose) {
-		this.entityData.set(IS_CLOSE, isClose);
+		this.set(CLOSE, isClose);
 	}
 
-	public boolean isSummon() {
-		return this.entityData.get(SUMMON);
+	public boolean getSummon() {
+		return this.get(SUMMON);
 	}
 
 	public void setSummon(boolean summon) {
-		this.entityData.set(SUMMON, summon);
+		this.set(SUMMON, summon);
 	}
 
 	public int getCherry() {
-		return this.entityData.get(CHERRY);
+		return this.get(CHERRY);
 	}
 
 	public void setCherry(int cherry) {
-		this.entityData.set(CHERRY, cherry);
+		this.set(CHERRY, cherry);
 	}
 
 	public int getPlant() {
-		return this.entityData.get(PLANT);
+		return this.get(PLANT);
 	}
 
 	public void setPlant(int plant) {
-		this.entityData.set(PLANT, plant);
+		this.set(PLANT, plant);
 	}
 
 	public void addAdditionalSaveData(CompoundTag tags) {
 		super.addAdditionalSaveData(tags);
-		tags.putBoolean("isClose", this.isClose());
+		tags.putBoolean("isClose", this.getClose());
 		tags.putInt("cherry", this.getCherry());
 		tags.putInt("plant", this.getPlant());
 	}
@@ -133,7 +133,7 @@ public class Arlaune extends AbstractSMBoss {
 		if (attacker != null && attacker instanceof ISMMob) { return false; }
 
 		// ボスダメージ計算
-		amount = this.getBossDamageAmount(this.level, this.defTime , src, amount, 7F);
+		amount = this.getBossDamageAmount(this.getLevel(), this.defTime , src, amount, 7F);
 		this.defTime = amount > 0 ? 2 : this.defTime;
 
 		if (attacker instanceof Warden) {
@@ -146,15 +146,11 @@ public class Arlaune extends AbstractSMBoss {
 			amount *= 0.25F;
 		}
 
-		if (amount > 1F && !this.level.isClientSide) {
+		if (amount > 1F && !this.isClient()) {
 			this.setCherry(this.getCherry() + 1);
 		}
 
 		return super.hurt(src, amount);
-	}
-
-	public boolean causeFallDamage(float par1, float par2, DamageSource src) {
-		return false;
 	}
 
 	protected void customServerAiStep() {
@@ -165,7 +161,7 @@ public class Arlaune extends AbstractSMBoss {
 
 		super.customServerAiStep();
 
-		if (this.tickCount % 10 == 0 && this.getCherry() > 0 && this.level instanceof ServerLevel server) {
+		if (this.tickCount % 10 == 0 && this.getCherry() > 0 && this.getLevel() instanceof ServerLevel server) {
 
 			Random rand = this.rand;
 			Vec3 vec = this.getDeltaMovement();
@@ -189,7 +185,7 @@ public class Arlaune extends AbstractSMBoss {
 			return;
 		}
 
-		if (!this.isSummon() && this.summonTime++ >= MAX_SUMMONTIME) {
+		if (!this.getSummon() && this.summonTime++ >= MAX_SUMMONTIME) {
 			this.summonCherry(target);
 		}
 
@@ -216,7 +212,7 @@ public class Arlaune extends AbstractSMBoss {
 			this.shotAttack(target);
 		}
 
-		if (this.tickCount % 100 == 0 && this.isSummon()) {
+		if (this.tickCount % 100 == 0 && this.getSummon()) {
 			this.checkSummon(target);
 		}
 	}
@@ -231,18 +227,18 @@ public class Arlaune extends AbstractSMBoss {
 
 	public void summonCherry(LivingEntity target) {
 
-		List<LivingEntity> targetList = this.getEntityList(LivingEntity.class, this.getFilter(this.isPlayer(target)), 48D);
-		int count = Math.min(10, 3 + (targetList.size() - 1) * 2);
+		List<LivingEntity> targetList = this.getPlayerList(target);
+		int count = (int) Math.min(10, 3F + this.getPlayerCount(targetList) * 2F);
 		BlockPos pos = this.getSpawnPos();
 
 		for (int i = 0; i < count; i++) {
 
 			int setPosCount = 0;
 			BlockPos targetPos = new BlockPos(pos.getX() + this.getRand(this.rand, 16), pos.getY(), pos.getZ() + this.getRand(this.rand, 16));
-			CherryPlant crystal = new CherryPlant(this.level);
+			CherryPlant crystal = new CherryPlant(this.getLevel());
 
 			// 座標がブロックだった場合は再設定
-			while (!this.level.getBlockState(targetPos).isAir() && !this.level.getBlockState(targetPos).is(BlockInit.rune_character)) {
+			while (!this.getLevel().isEmptyBlock(targetPos) && !this.getLevel().getBlockState(targetPos).is(BlockInit.rune_character)) {
 				targetPos = new BlockPos(targetPos.getX() + this.getRand(this.rand, 3), targetPos.getY(), targetPos.getZ() + this.getRand(this.rand, 3));
 				if (setPosCount++ >= 16) { break; }
 			}
@@ -250,8 +246,8 @@ public class Arlaune extends AbstractSMBoss {
 			crystal.setPos(targetPos.getX() + 0.5D, targetPos.getY() + 0.5D, targetPos.getZ() + 0.5D);
 			crystal.setOwnerID(this);
 
-			if (!this.level.isClientSide) {
-				this.level.addFreshEntity(crystal);
+			if (!this.isClient()) {
+				this.addEntity(crystal);
 				crystal.playSound(SoundEvents.GRASS_PLACE, 1F, 0.8F + rand.nextFloat() * 0.4F);
 			}
 
@@ -270,7 +266,7 @@ public class Arlaune extends AbstractSMBoss {
 		int count = this.getCherry();
 		double range = 8D + count * 1.5D;
 		float amount = 20F + this.getBuffPower();
-		List<LivingEntity> targetList = this.getEntityList(LivingEntity.class, this.getFilter(this.isPlayer(target)), range);
+		List<LivingEntity> targetList = this.getPlayerList(target);
 
 		for (LivingEntity entity : targetList) {
 			this.attackDamage(entity, this.getSRC(), entity instanceof Enemy ? amount * 5F : amount);
@@ -279,7 +275,7 @@ public class Arlaune extends AbstractSMBoss {
 
 		this.cherryTime = 0;
 		this.setCherry(0);
-		if (!(this.level instanceof ServerLevel server)) { return; }
+		if (!(this.getLevel() instanceof ServerLevel server)) { return; }
 
 		BlockPos pos = this.blockPosition();
 		SimpleParticleType par = ParticleInit.CHERRY_BLOSSOMS_LARGE;
@@ -295,7 +291,7 @@ public class Arlaune extends AbstractSMBoss {
 
 		int count = this.getPlant();
 		float amount = 15F + count * 2F;
-		List<LivingEntity> targetList = this.getEntityList(LivingEntity.class, this.getFilter(this.isPlayer(target)), 48D);
+		List<LivingEntity> targetList = this.getPlayerList(target);
 
 		for (LivingEntity entity : targetList) {
 			this.attackDamage(entity, this.getSRC(), entity instanceof Enemy ? amount * 4F : amount);
@@ -315,11 +311,11 @@ public class Arlaune extends AbstractSMBoss {
 
 	public void shotAttack(LivingEntity target) {
 
-		List<LivingEntity> targetList = this.getEntityList(LivingEntity.class, this.getFilter(this.isPlayer(target)), 48D);
+		List<LivingEntity> targetList = this.getPlayerList(target);
 
 		for (LivingEntity entity : targetList) {
 
-			CherryMagicShot magic = new CherryMagicShot(this.level, this);
+			CherryMagicShot magic = new CherryMagicShot(this.getLevel(), this);
 			double x = entity.getX() - this.getX();
 			double y = entity.getY(0.3333333333333333D) - this.getY();
 			double z = entity.getZ() - this.getZ();
@@ -332,7 +328,7 @@ public class Arlaune extends AbstractSMBoss {
 			magic.setAddDamage(magic.getAddDamage() + dama);
 			magic.setRange(3D);
 			magic.setData(1);
-			this.level.addFreshEntity(magic);
+			this.addEntity(magic);
 		}
 
 		this.shotTime = 0;
@@ -360,7 +356,7 @@ public class Arlaune extends AbstractSMBoss {
 		List<LivingEntity> targetList = this.getEntityList(LivingEntity.class, this.getFilter(isPlayer), 48D);
 		double range = 15D + targetList.size() * 2D;
 
-		if (this.level instanceof ServerLevel server) {
+		if (this.getLevel() instanceof ServerLevel server) {
 
 			Iterable<BlockPos> posList = this.getPosRangeList(pos, range);
 			SimpleParticleType par = ParticleInit.CHERRY_BLOSSOMS_LARGE;

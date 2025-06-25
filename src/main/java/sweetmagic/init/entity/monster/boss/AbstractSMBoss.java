@@ -12,7 +12,9 @@ import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -52,18 +54,24 @@ import sweetmagic.init.ParticleInit;
 import sweetmagic.init.PotionInit;
 import sweetmagic.init.entity.animal.AbstractSummonMob;
 import sweetmagic.util.SMDamage;
+import sweetmagic.util.WorldHelper;
 
 public abstract class AbstractSMBoss extends Monster implements ISMMob, ISMTip {
 
-	protected int tickTime = 0;							// tickタイム
-	protected int defTime = 0;							// ダメージ無効化時間
+	protected int tickTime = 0;	// tickタイム
+	protected int defTime = 0;	// ダメージ無効化時間
+	protected float healthO = -1;
+	protected float healthArmorO = -1;
 	private BlockPos spawnPos = null;
 	public Random rand = new Random();
 	private ServerBossEvent bossEvent = null;
-	private static final EntityDataAccessor<Boolean> ISLECTERN = ISMMob.setData(AbstractSMBoss.class, BOOLEAN);
-	private static final EntityDataAccessor<Boolean> ISHARD = ISMMob.setData(AbstractSMBoss.class, BOOLEAN);
-	private static final EntityDataAccessor<Boolean> ISMAGIC = ISMMob.setData(AbstractSMBoss.class, BOOLEAN);
-	protected static final EntityDataAccessor<Boolean> HALFHEALTH = ISMMob.setData(AbstractSMBoss.class, BOOLEAN);
+	private static final EntityDataAccessor<Boolean> LECTERN = ISMMob.setData(AbstractSMBoss.class, BOOLEAN);
+	private static final EntityDataAccessor<Boolean> HARD = ISMMob.setData(AbstractSMBoss.class, BOOLEAN);
+	private static final EntityDataAccessor<Boolean> MAGIC = ISMMob.setData(AbstractSMBoss.class, BOOLEAN);
+	protected static final EntityDataAccessor<Boolean> HALF_HEALTH = ISMMob.setData(AbstractSMBoss.class, BOOLEAN);
+	private static final EntityDataAccessor<Integer> HEALTH_ARMOR_COUNT = ISMMob.setData(AbstractSMBoss.class, INT);
+	private static final EntityDataAccessor<Float> HEALTH_ARMOR = ISMMob.setData(AbstractSMBoss.class, FLOAT);
+	private static final EntityDataAccessor<Float> MAX_HEALTH_ARMOR = ISMMob.setData(AbstractSMBoss.class, FLOAT);
 
 	public AbstractSMBoss(EntityType<? extends AbstractSMBoss> enType, Level world) {
 		super(enType, world);
@@ -72,9 +80,13 @@ public abstract class AbstractSMBoss extends Monster implements ISMMob, ISMTip {
 	protected void defineSynchedData() {
 		super.defineSynchedData();
 		this.xpReward = 500;
-		this.entityData.define(ISLECTERN, false);
-		this.entityData.define(ISHARD, false);
-		this.entityData.define(ISMAGIC, false);
+		this.define(LECTERN, false);
+		this.define(HARD, false);
+		this.define(MAGIC, false);
+		this.define(HALF_HEALTH, false);
+		this.define(HEALTH_ARMOR_COUNT, 0);
+		this.define(HEALTH_ARMOR, 0F);
+		this.define(MAX_HEALTH_ARMOR, 0F);
 	}
 
 	public void refreshInfo() {
@@ -83,10 +95,10 @@ public abstract class AbstractSMBoss extends Monster implements ISMMob, ISMTip {
 	}
 
 	protected void registerGoals() {
-		this.goalSelector.addGoal(5, new MoveTowardsRestrictionGoal(this, 1.0D));
-		this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1.0D, 0.0F));
-		this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
-		this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Warden.class, 8.0F));
+		this.goalSelector.addGoal(5, new MoveTowardsRestrictionGoal(this, 1D));
+		this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1D, 0F));
+		this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8F));
+		this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Warden.class, 8F));
 		this.goalSelector.addGoal(10, new SMRandomLookGoal(this));
 		this.targetSelector.addGoal(1, (new HurtByTargetGoal(this)).setAlertOthers());
 		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
@@ -94,36 +106,64 @@ public abstract class AbstractSMBoss extends Monster implements ISMMob, ISMTip {
 		this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, Raider.class, true));
 	}
 
-	public boolean isLectern() {
-		return this.entityData.get(ISLECTERN);
+	public SynchedEntityData getData() {
+		return this.getEntityData();
+	}
+
+	public boolean getLectern() {
+		return this.get(LECTERN);
 	}
 
 	public void setLectern(boolean isLectern) {
-		this.entityData.set(ISLECTERN, isLectern);
+		this.set(LECTERN, isLectern);
 	}
 
-	public boolean isMagic() {
-		return this.entityData.get(ISMAGIC);
+	public boolean getMagic() {
+		return this.get(MAGIC);
 	}
 
 	public void setMagic(boolean isMagic) {
-		this.entityData.set(ISMAGIC, isMagic);
+		this.set(MAGIC, isMagic);
 	}
 
-	public boolean isHard() {
-		return this.entityData.get(ISHARD);
+	public boolean getHard() {
+		return this.get(HARD);
 	}
 
 	public void setHard(boolean isHard) {
-		this.entityData.set(ISHARD, isHard);
+		this.set(HARD, isHard);
 	}
 
 	public boolean getHalfHealth() {
-		return this.entityData.get(HALFHEALTH);
+		return this.get(HALF_HEALTH);
 	}
 
-	public void setHalfHealth(boolean isHalfHealth) {
-		this.entityData.set(HALFHEALTH, isHalfHealth);
+	public void setHalfHealth(boolean halfHealth) {
+		this.set(HALF_HEALTH, halfHealth);
+	}
+
+	public int getHealthArmorCount() {
+		return this.get(HEALTH_ARMOR_COUNT);
+	}
+
+	public void setHealthArmorCount(int armor) {
+		this.set(HEALTH_ARMOR_COUNT, armor);
+	}
+
+	public float getHealthArmor() {
+		return this.get(HEALTH_ARMOR);
+	}
+
+	public void setHealthArmor(float armor) {
+		this.set(HEALTH_ARMOR, armor);
+	}
+
+	public float getMaxHealthArmor() {
+		return this.get(MAX_HEALTH_ARMOR);
+	}
+
+	public void setMaxHealthArmor(float armor) {
+		this.set(MAX_HEALTH_ARMOR, armor);
 	}
 
 	public BlockPos getSpawnPos() {
@@ -135,7 +175,7 @@ public abstract class AbstractSMBoss extends Monster implements ISMMob, ISMTip {
 	}
 
 	public boolean isInvisible() {
-		return this.isMagic();
+		return this.getMagic();
 	}
 
 	// 周囲のプレイヤー取得
@@ -152,27 +192,31 @@ public abstract class AbstractSMBoss extends Monster implements ISMMob, ISMTip {
 	}
 
 	public <T extends Entity> List<T> getEntityList(Class<T> enClass, AABB aabb) {
-		return this.level.getEntitiesOfClass(enClass, aabb).stream().filter(p -> !p.isSpectator() && p.isAlive()).toList();
+		return WorldHelper.getEntityList(this, enClass, p -> !p.isSpectator() && p.isAlive(), aabb);
 	}
 
 	public <T extends Entity> List<T> getEntityList(Class<T> enClass, Predicate<T> filter, AABB aabb) {
-		return this.level.getEntitiesOfClass(enClass, aabb).stream().filter(filter).toList();
+		return WorldHelper.getEntityList(this, enClass, filter, aabb);
 	}
 
 	public <T extends Entity> List<T> getEntityList(Class<T> enClass, Vec3 vec, double range) {
-		return this.level.getEntitiesOfClass(enClass, this.getAABB(vec, range));
+		return WorldHelper.getEntityList(this, enClass, this.getAABB(vec, range));
 	}
 
 	public <T extends Entity> List<T> getEntityList(Class<T> enClass, Predicate<T> filter, Vec3 vec, double range) {
-		return this.level.getEntitiesOfClass(enClass, this.getAABB(vec, range)).stream().filter(filter).toList();
+		return WorldHelper.getEntityList(this, enClass, filter, this.getAABB(vec, range));
 	}
 
 	public <T extends Entity> List<T> getEntityList(Class<T> enClass, BlockPos pos, double range) {
-		return this.level.getEntitiesOfClass(enClass, this.getAABB(pos, range));
+		return WorldHelper.getEntityList(this, enClass, this.getAABB(pos, range));
 	}
 
 	public <T extends Entity> List<T> getEntityList(Class<T> enClass, Predicate<T> filter, BlockPos pos, double range) {
-		return this.level.getEntitiesOfClass(enClass, this.getAABB(pos, range)).stream().filter(filter).toList();
+		return WorldHelper.getEntityList(this, enClass, filter, this.getAABB(pos, range));
+	}
+
+	public void addEntity(Entity entity) {
+		this.getLevel().addFreshEntity(entity);
 	}
 
 	// 範囲の取得
@@ -191,6 +235,25 @@ public abstract class AbstractSMBoss extends Monster implements ISMMob, ISMTip {
 		return new AABB(vec.x - range, vec.y - range, vec.z - range, vec.x + range, vec.y + range, vec.z + range);
 	}
 
+	public List<LivingEntity> getPlayerList(LivingEntity target) {
+		return this.getEntityList(LivingEntity.class, this.getFilter(this.isPlayer(target)), 48D);
+	}
+
+	public float getPlayerCount(LivingEntity target) {
+		return this.getPlayerCount(this.getPlayerList(target));
+	}
+
+	public float getPlayerCount(List<LivingEntity> targetList) {
+
+		float count = 0F;
+
+		for (LivingEntity target : targetList) {
+			count += target instanceof Player ? 1F : 0.5F;
+		}
+
+		return count;
+	}
+
 	public void tick() {
 		super.tick();
 
@@ -198,7 +261,7 @@ public abstract class AbstractSMBoss extends Monster implements ISMMob, ISMTip {
 			this.defTime--;
 		}
 
-		if (this.tickCount % 20 == 0 && !this.level.isClientSide) {
+		if (this.tickCount % 20 == 0 && !this.isClient()) {
 			this.checkSpawnPos();
 		}
 	}
@@ -209,15 +272,20 @@ public abstract class AbstractSMBoss extends Monster implements ISMMob, ISMTip {
 
 		double dis = this.distanceToSqr(pos.getX(), pos.getY(), pos.getZ());
 
-		if (dis >= 1500) {
+		if (dis >= this.getDistance() || (this.getTarget() != null && !this.hasLineOfSight(this.getTarget()) && dis >= this.getDistance() * 0.5D)) {
 			this.teleportSpawnPos(pos);
 		}
+	}
+
+	public double getDistance() {
+		return 1500D;
 	}
 
 	@Nullable
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance dif, MobSpawnType spawn, @Nullable SpawnGroupData data, @Nullable CompoundTag tag) {
 		data = super.finalizeSpawn(world, dif, spawn, data, tag);
 		this.clearInfo();
+		this.spawnAction();
 		this.addPotion(this, PotionInit.resistance_blow, 99999, 10);
 		this.addPotion(this, PotionInit.reflash_effect, 99999, 0);
 		this.setSpawnPos(this.blockPosition().above());
@@ -265,11 +333,48 @@ public abstract class AbstractSMBoss extends Monster implements ISMMob, ISMTip {
 		if (!this.isBossBarView()) { return; }
 
 		ServerBossEvent event = this.getBossEvent();
-		event.setProgress(this.getHealth() / this.getMaxHealth());
+		float armor = this.getHealthArmor();
+
+		if(armor > 0F) {
+
+			if (this.healthArmorO == -1) {
+				this.healthArmorO = armor;
+			}
+
+			else if(this.healthArmorO != armor) {
+				this.healthArmorO = Math.max(armor, this.healthArmorO - this.getMaxHealthArmor() * 0.025F);
+			}
+
+			event.setProgress(this.healthArmorO / this.getMaxHealthArmor());
+			event.setColor(BossBarColor.YELLOW);
+			event.setName(this.getTipArray(this.getDisplayName(), " (", this.getArmorName(), ")"));
+			return;
+		}
+
+		float health = this.getHealth();
+
+		if (this.healthO == -1) {
+			this.healthO = health;
+		}
+
+		else if(this.healthO != health) {
+			this.healthO = Math.max(health, this.healthO - this.getMaxHealth() * 0.015F);
+		}
+
+		event.setProgress(this.healthO / this.getMaxHealth());
 
 		if (this.isHalfHealth(this)) {
 			event.setColor(BossBarColor.RED);
+			event.setName(this.getDisplayName());
 		}
+	}
+
+	public int getHealthArmorProgress(int value) {
+		return this.isHalfHealth(this) ? (int) (value * (this.getHealthArmor() / this.getMaxHealthArmor())) : 0;
+	}
+
+	public MutableComponent getArmorName() {
+		return this.getText("damage_armor");
 	}
 
 	public void checkPotion(MobEffect potion, int time, int level) {
@@ -281,9 +386,12 @@ public abstract class AbstractSMBoss extends Monster implements ISMMob, ISMTip {
 	public void addAdditionalSaveData(CompoundTag tags) {
 		super.addAdditionalSaveData(tags);
 		tags.putInt("tickTime", this.tickTime);
-		tags.putBoolean("isLectern", this.isLectern());
-		tags.putBoolean("isHard", this.isHard());
-		tags.putBoolean("isMagic", this.isMagic());
+		tags.putBoolean("isLectern", this.getLectern());
+		tags.putBoolean("isHard", this.getHard());
+		tags.putBoolean("isMagic", this.getMagic());
+		tags.putInt("health_armor_count", this.getHealthArmorCount());
+		tags.putFloat("health_armor", this.getHealthArmor());
+		tags.putFloat("max_health_armor", this.getMaxHealthArmor());
 
 		BlockPos spawnPos = this.getSpawnPos();
 
@@ -300,6 +408,9 @@ public abstract class AbstractSMBoss extends Monster implements ISMMob, ISMTip {
 		this.setLectern(tags.getBoolean("isLectern"));
 		this.setHard(tags.getBoolean("isHard"));
 		this.setMagic(tags.getBoolean("isMagic"));
+		this.setHealthArmorCount(tags.getInt("health_armor_count"));
+		this.setHealthArmor(tags.getFloat("health_armor"));
+		this.setMaxHealthArmor(tags.getFloat("max_health_armor"));
 
 		if (tags.contains("spawnPosX")) {
 			this.setSpawnPos(new BlockPos(tags.getInt("spawnPosX"), tags.getInt("spawnPosY"), tags.getInt("spawnPosZ")));
@@ -310,13 +421,53 @@ public abstract class AbstractSMBoss extends Monster implements ISMMob, ISMTip {
 		}
 	}
 
+	// ダメージ処理
+	public boolean hurt(DamageSource src, float amount) {
+
+		float armor = this.getHealthArmor();
+		if (armor > 0F) {
+			this.setHealthArmor(armor - amount);
+			amount = 0F;
+
+			if(this.getHealthArmor() > 0) {
+				this.playSound(SoundEvents.BLAZE_HURT, 0.67F, 1.25F);
+			}
+
+			else {
+				this.playSound(SoundEvents.ITEM_BREAK, 2F, 1F);
+			}
+		}
+
+		return super.hurt(src, amount);
+	}
+
 	protected void customServerAiStep() {
 		super.customServerAiStep();
 		this.initBossBar();
 
-		if(this.getTarget() != null) {
+		LivingEntity target = this.getTarget();
+		if(target != null) {
 			this.checkPotion(PotionInit.resistance_blow, 99999, 10);
+
+			if (this.isHalfHealth(this) && !this.getHalfHealth()) {
+				this.halfHealthAction(target);
+			}
 		}
+	}
+
+	protected void halfHealthAction(LivingEntity target) {
+		this.setHalfHealth(true);
+		int count = this.getHealthArmorCount();
+
+		if(count > 0) {
+			this.armorHealthSet(target, count);
+			this.setHealthArmorCount(0);
+		}
+	}
+
+	protected void armorHealthSet(LivingEntity target, int count) {
+		this.setMaxHealthArmor(this.getMaxHealth() * (0.2F + this.getPlayerCount(target) * 0.01F) * count);
+		this.setHealthArmor(this.getMaxHealthArmor());
 	}
 
 	protected void teleportSpawnPos(BlockPos pos) {
@@ -325,7 +476,7 @@ public abstract class AbstractSMBoss extends Monster implements ISMMob, ISMTip {
 			double d1 = pos.getY();
 			double d2 = pos.getZ() + (this.rand.nextDouble() - 0.5D) * 10D;
 
-			if (this.level.getBlockState(pos).isAir()) {
+			if (this.getLevel().isEmptyBlock(pos)) {
 				this.setPos(d0, d1, d2);
 			}
 		}
@@ -333,7 +484,7 @@ public abstract class AbstractSMBoss extends Monster implements ISMMob, ISMTip {
 
 	protected boolean teleport() {
 		BlockPos spawnPos = this.getSpawnPos();
-		if (!this.level.isClientSide() && this.isAlive() && spawnPos != null) {
+		if (!this.isClient() && this.isAlive() && spawnPos != null) {
 			double d0 = spawnPos.getX() + (this.rand.nextDouble() - 0.5D) * 20D;
 			double d1 = spawnPos.getY();
 			double d2 = spawnPos.getZ() + (this.rand.nextDouble() - 0.5D) * 20D;
@@ -344,7 +495,7 @@ public abstract class AbstractSMBoss extends Monster implements ISMMob, ISMTip {
 
 	protected boolean teleport(double x, double y, double z) {
 		BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(x, y, z);
-		boolean flag = this.level.getBlockState(pos).getMaterial().blocksMotion();
+		boolean flag = this.getLevel().getBlockState(pos).getMaterial().blocksMotion();
 		if (!flag) { return false; }
 
 		EntityTeleportEvent.EnderEntity event = ForgeEventFactory.onEnderTeleport(this, x, y, z);
@@ -354,19 +505,19 @@ public abstract class AbstractSMBoss extends Monster implements ISMMob, ISMTip {
 		boolean flag2 = this.randomTeleport(event.getTargetX(), event.getTargetY(), event.getTargetZ(), true);
 
 		if (flag2) {
-			this.level.gameEvent(GameEvent.TELEPORT, this.position(), GameEvent.Context.of(this));
+			this.getLevel().gameEvent(GameEvent.TELEPORT, this.position(), GameEvent.Context.of(this));
 			if (!this.isSilent()) {
 				this.playSound(SoundEvents.ENDERMAN_TELEPORT, 1F, 1F);
 			}
 
-			this.teleportParticle(ParticleTypes.PORTAL, this.level, beforePos, this.blockPosition());
+			this.teleportParticle(ParticleTypes.PORTAL, this.getLevel(), beforePos, this.blockPosition());
 		}
 
 		return flag2;
 	}
 
 	public void teleportParticle(ParticleOptions par, Level world, BlockPos beforePos, BlockPos afterPos) {
-		if (!(this.level instanceof ServerLevel sever)) { return; }
+		if (!(this.getLevel() instanceof ServerLevel sever)) { return; }
 
 		float pX = afterPos.getX() - beforePos.getX();
 		float pY = afterPos.getY() - beforePos.getY();
@@ -389,7 +540,7 @@ public abstract class AbstractSMBoss extends Monster implements ISMMob, ISMTip {
 	}
 
 	protected void spawnParticleCycle(BlockPos pos, double range) {
-		if (!(this.level instanceof ServerLevel server) || pos == null) { return; }
+		if (!(this.getLevel() instanceof ServerLevel server) || pos == null) { return; }
 
 		int count = 18;
 
@@ -399,13 +550,13 @@ public abstract class AbstractSMBoss extends Monster implements ISMMob, ISMTip {
 	}
 
 	// パーティクルスポーンサイクル
-	protected void spawnParticleCycle (ServerLevel server, ParticleOptions particle, double x, double y, double z, Direction face, double range, double angle, boolean isRevese) {
+	protected void spawnParticleCycle (ServerLevel server, ParticleOptions par, double x, double y, double z, Direction face, double range, double angle, boolean isRevese) {
 		int way = isRevese ? -1 : 1;
-		server.sendParticles(particle, x, y, z, 0, face.get3DDataValue() * way, range, angle + way * 1 * 6F, 1F);
+		server.sendParticles(par, x, y, z, 0, face.get3DDataValue() * way, range, angle + way * 1 * 6F, 1F);
 	}
 
 	// パーティクルスポーン
-	public void spawnParticleRing(ServerLevel server, ParticleOptions particle, double range, BlockPos pos, double addY, double ySpeed, double moveValue) {
+	public void spawnParticleRing(ServerLevel server, ParticleOptions par, double range, BlockPos pos, double addY, double ySpeed, double moveValue) {
 
 		double x = pos.getX() + 0.5D;
 		double y = pos.getY() + 1D + addY;
@@ -413,7 +564,7 @@ public abstract class AbstractSMBoss extends Monster implements ISMMob, ISMTip {
 
 		for (double degree = -range * Math.PI; degree < range * Math.PI; degree += 0.25D) {
 			double rate = range * 0.75D;
-			server.sendParticles(particle, x + Math.cos(degree) * rate, y, z + Math.sin(degree) * rate, 0, 0, ySpeed, 0, 1D);
+			server.sendParticles(par, x + Math.cos(degree) * rate, y, z + Math.sin(degree) * rate, 0, 0, ySpeed, 0, 1D);
 		}
 	}
 
@@ -454,7 +605,7 @@ public abstract class AbstractSMBoss extends Monster implements ISMMob, ISMTip {
 	// デスポーンしないように
 	public void checkDespawn() {
 
-		if (this.level.getDifficulty() == Difficulty.PEACEFUL && this.shouldDespawnInPeaceful()) {
+		if (this.getLevel().getDifficulty() == Difficulty.PEACEFUL && this.shouldDespawnInPeaceful()) {
 			this.discard();
 		}
 
@@ -466,18 +617,11 @@ public abstract class AbstractSMBoss extends Monster implements ISMMob, ISMTip {
 	protected void tickDeath() {
 
 		this.deathTime++;
+		this.deathEffect();
 
-		if (this.deathTime % 11 == 0 && this.deathTime < 66) {
-
-			this.playSound(SoundEvents.GENERIC_EXPLODE, 3F, 1F / (this.random.nextFloat() * 0.2F + 0.9F));
-
-			if (this.level instanceof ServerLevel sever) {
-				sever.sendParticles(ParticleTypes.EXPLOSION_EMITTER, this.getX(), this.getY() + 0.5D, this.getZ(), 2, 0D, 0D, 0D, 0D);
-			}
-		}
-
-		if (this.deathTime >= 66 && !this.level.isClientSide()) {
-			this.level.broadcastEntityEvent(this, (byte) 60);
+		if (this.deathTime >= this.getMaxDeathTime() && !this.isClient()) {
+			this.deathFinish();
+			this.getLevel().broadcastEntityEvent(this, (byte) 60);
 			this.remove(Entity.RemovalReason.KILLED);
 		}
 
@@ -485,6 +629,22 @@ public abstract class AbstractSMBoss extends Monster implements ISMMob, ISMTip {
 			this.getBossEvent().setProgress(0F);
 		}
 	}
+
+	public void deathEffect() {
+		if (this.deathTime % 11 == 0 && this.deathTime < this.getMaxDeathTime()) {
+			this.playSound(SoundEvents.GENERIC_EXPLODE, 3F, 1F / (this.rand.nextFloat() * 0.2F + 0.9F));
+
+			if (this.getLevel() instanceof ServerLevel sever) {
+				sever.sendParticles(ParticleTypes.EXPLOSION_EMITTER, this.getX(), this.getY() + 0.5D, this.getZ(), 2, 0D, 0D, 0D, 0D);
+			}
+		}
+	}
+
+	public int getMaxDeathTime() {
+		return 66;
+	}
+
+	protected void deathFinish() {}
 
 	// 落下ダメージ
 	public boolean causeFallDamage(float par1, float par2, DamageSource src) {
@@ -500,7 +660,7 @@ public abstract class AbstractSMBoss extends Monster implements ISMMob, ISMTip {
 		this.teleport();
 		this.playSound(SoundEvents.BLAZE_HURT, 2F, 0.85F);
 
-		if (!this.level.isClientSide && src.getEntity() instanceof Player player && !playerList.contains(player)) {
+		if (!this.isClient() && src.getEntity() instanceof Player player && !playerList.contains(player)) {
 			playerList.add(player);
 			player.sendSystemMessage(this.getText(text).withStyle(RED));
 		}
@@ -523,7 +683,7 @@ public abstract class AbstractSMBoss extends Monster implements ISMMob, ISMTip {
 	}
 
 	// バフによるダメージ増減
-	public float getBuffPower () {
+	public float getBuffPower() {
 
 		float damage = 0F;
 
@@ -551,8 +711,12 @@ public abstract class AbstractSMBoss extends Monster implements ISMMob, ISMTip {
 	}
 
 	public void attackDamage(Entity entity, DamageSource src, float damage) {
-		entity.hurt(src, damage);
+		entity.hurt(src, entity instanceof Warden ? damage * 5F : damage);
 		entity.invulnerableTime = 0;
+	}
+
+	public boolean isClient() {
+		return this.getLevel().isClientSide();
 	}
 
 	public void setOwnerID(LivingEntity entity) {}
@@ -566,6 +730,8 @@ public abstract class AbstractSMBoss extends Monster implements ISMMob, ISMTip {
 			this.setSpawnPos(this.blockPosition().above());
 		}
 	}
+
+	public void spawnAction() {}
 
 	public abstract void clearInfo();
 

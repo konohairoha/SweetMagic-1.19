@@ -6,6 +6,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -24,6 +25,7 @@ import net.minecraft.world.entity.raid.Raider;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import sweetmagic.api.ientity.ISMMob;
+import sweetmagic.api.ientity.IWitch;
 import sweetmagic.config.SMConfig;
 import sweetmagic.init.EntityInit;
 import sweetmagic.init.ItemInit;
@@ -33,11 +35,12 @@ import sweetmagic.init.entity.projectile.CycloneMagicShot;
 import sweetmagic.init.entity.projectile.FrostMagicShot;
 import sweetmagic.init.entity.projectile.LightMagicShot;
 
-public class WindWitch extends AbstractSMMob {
+public class WindWitch extends AbstractSMMob implements IWitch {
 
 	private int recastTime = 0;
 	private static final int RAND_RECASTTIME = 50;
-	private static final EntityDataAccessor<Boolean> IS_TARGET = SynchedEntityData.defineId(WindWitch.class, BOOLEAN);
+	public AnimationState magicAttackAnim = new AnimationState();
+	private static final EntityDataAccessor<Boolean> TARGET = SynchedEntityData.defineId(WindWitch.class, BOOLEAN);
 	private static final ItemStack WAND = new ItemStack(ItemInit.divine_wand_b);
 
 	public WindWitch(Level world) {
@@ -50,10 +53,10 @@ public class WindWitch extends AbstractSMMob {
 	}
 
 	protected void registerGoals() {
-		this.goalSelector.addGoal(5, new MoveTowardsRestrictionGoal(this, 1.0D));
-		this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1.0D, 0.0F));
-		this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
-		this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Warden.class, 8.0F));
+		this.goalSelector.addGoal(5, new MoveTowardsRestrictionGoal(this, 1D));
+		this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1D, 0F));
+		this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8F));
+		this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Warden.class, 8F));
 		this.goalSelector.addGoal(10, new RandomLookAroundGoal(this));
 		this.targetSelector.addGoal(1, (new HurtByTargetGoal(this)).setAlertOthers());
 		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Warden.class, true));
@@ -87,15 +90,23 @@ public class WindWitch extends AbstractSMMob {
 		return SoundEvents.WITCH_DEATH;
 	}
 
+	public AnimationState getAnimaState() {
+		return this.magicAttackAnim;
+	}
+
+	public boolean isCharge() {
+		return false;
+	}
+
 	// ダメージ処理
 	public boolean hurt(DamageSource src, float amount) {
 		Entity attacker = src.getEntity();
 		if (attacker != null && attacker instanceof ISMMob) { return false; }
 
 		// ダメージ倍処理
-		amount = this.getDamageAmount(this.level , src, amount, 0.25F);
+		amount = this.getDamageAmount(this.getLevel() , src, amount, 0.25F);
 
-		if (!this.level.isClientSide && !src.isMagic() && this.recastTime > 0) {
+		if (!this.getLevel().isClientSide() && !src.isMagic() && this.recastTime > 0) {
 			this.recastTime = (int) (this.recastTime * 0.75F);
 		}
 
@@ -104,7 +115,7 @@ public class WindWitch extends AbstractSMMob {
 
 	protected void defineSynchedData() {
 		super.defineSynchedData();
-		this.entityData.define(IS_TARGET, false);
+		this.define(TARGET, false);
 	}
 
 	public void addAdditionalSaveData(CompoundTag tags) {
@@ -114,18 +125,18 @@ public class WindWitch extends AbstractSMMob {
 
 	public void readAdditionalSaveData(CompoundTag tags) {
 		super.readAdditionalSaveData(tags);
-		this.entityData.set(IS_TARGET, tags.getBoolean("is_target"));
+		this.set(TARGET, tags.getBoolean("is_target"));
 	}
 
 	public boolean isTarget() {
-		return this.entityData.get(IS_TARGET);
+		return this.get(TARGET);
 	}
 
 	public void tick() {
 		super.tick();
 
-		if (!this.level.isClientSide && this.tickCount % 10 == 0) {
-			this.entityData.set(IS_TARGET, this.getTarget() != null);
+		if (!this.getLevel().isClientSide() && this.tickCount % 10 == 0) {
+			this.set(TARGET, this.getTarget() != null);
 		}
 	}
 
@@ -142,14 +153,14 @@ public class WindWitch extends AbstractSMMob {
 
 		AbstractMagicShot entity = this.getMagicShot(target, isWarden);
 		this.playSound(SoundEvents.BLAZE_SHOOT, 0.5F, 0.67F);
-		this.level.addFreshEntity(entity);
+		this.addEntity(entity);
 	}
 
 	public AbstractMagicShot getMagicShot(LivingEntity target, boolean isWarden) {
 
 		AbstractMagicShot entity = null;
 		float dama = isWarden ? 30F : 1.25F;
-		float dameRate = isWarden ? 1.25F : this.getDateRate(this.level, 0.1F);
+		float dameRate = isWarden ? 1.25F : this.getDateRate(this.getLevel(), 0.1F);
 		double x = target.getX() - this.getX();
 		double y = target.getY(0.3333333333333333D) - this.getY();
 		double z = target.getZ() - this.getZ();
@@ -158,17 +169,17 @@ public class WindWitch extends AbstractSMMob {
 
 		switch (this.rand.nextInt(4)) {
 		case 1:
-			entity = new FrostMagicShot(this.level, this);
+			entity = new FrostMagicShot(this.getLevel(), this);
 			break;
 		case 2:
-			entity = new LightMagicShot(this.level, this);
+			entity = new LightMagicShot(this.getLevel(), this);
 			break;
 		case 3:
-			entity = new BubbleMagicShot(this.level, this);
+			entity = new BubbleMagicShot(this.getLevel(), this);
 			level = 4;
 			break;
 		default:
-			entity = new CycloneMagicShot(this.level, this);
+			entity = new CycloneMagicShot(this.getLevel(), this);
 			break;
 		}
 

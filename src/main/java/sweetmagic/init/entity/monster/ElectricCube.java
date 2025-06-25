@@ -6,7 +6,6 @@ import com.google.common.annotations.VisibleForTesting;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.util.Mth;
 import net.minecraft.world.DifficultyInstance;
@@ -30,7 +29,8 @@ import sweetmagic.util.SMDamage;
 
 public class ElectricCube extends Slime implements ISMMob {
 
-	private static final EntityDataAccessor<Integer> ID_SIZE = SynchedEntityData.defineId(ElectricCube.class, EntityDataSerializers.INT);
+	private static final EntityDataAccessor<Integer> SIZE = ISMMob.setData(ElectricCube.class, INT);
+	private static final EntityDataAccessor<Boolean> FIXED = ISMMob.setData(ElectricCube.class, BOOLEAN);
 	public static final int MIN_SIZE = 1;
 	public static final int MAX_SIZE = 127;
 
@@ -65,13 +65,17 @@ public class ElectricCube extends Slime implements ISMMob {
 				.add(Attributes.FOLLOW_RANGE, 24D);
 	}
 
+	public SynchedEntityData getData() {
+		return this.getEntityData();
+	}
+
 	// ダメージ処理
 	public boolean hurt(DamageSource src, float amount) {
 		Entity attacker = src.getEntity();
 		if ( attacker != null && attacker instanceof ISMMob) { return false; }
 
 		// ダメージ倍処理
-		amount = this.getDamageAmount(this.level , src, amount, 1F);
+		amount = this.getDamageAmount(this.getLevel() , src, amount, 1F);
 		return super.hurt(src, amount);
 	}
 
@@ -82,7 +86,8 @@ public class ElectricCube extends Slime implements ISMMob {
 
 	protected void defineSynchedData() {
 		super.defineSynchedData();
-		this.entityData.define(ID_SIZE, 1);
+		this.define(SIZE, 1);
+		this.define(FIXED, false);
 	}
 
 	@VisibleForTesting
@@ -91,7 +96,7 @@ public class ElectricCube extends Slime implements ISMMob {
 		this.setSize(i);
 		this.getAttribute(Attributes.MAX_HEALTH).setBaseValue((double) (i * i));
 		this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.2D + 0.1D * (double) i);
-		this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue( this.getAttack(i) * ( this.isHard(this.level) ? 1.25D : 1D ) );
+		this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue( this.getAttack(i) * ( this.isHard(this.getLevel()) ? 1.25D : 1D ) );
 		if (y) {
 			this.setHealth(this.getMaxHealth());
 		}
@@ -99,37 +104,41 @@ public class ElectricCube extends Slime implements ISMMob {
 		this.xpReward = i;
 	}
 
-	public double getAttack (int i) {
+	public double getAttack(int i) {
 		switch (i) {
-		case 2:  return 2F;
-		case 4:  return 3F;
+		case 2: return 2F;
+		case 4: return 3F;
 		default: return 1F;
 		}
 	}
 
-	public void setSize (int size) {
-		this.entityData.set(ID_SIZE, size);
+	public void setSize(int size) {
+		this.set(SIZE, size);
 		this.refreshInfo();
+	}
+
+	public void setFixed() {
+		this.getEntityData().set(FIXED, true);
 	}
 
 	public void push(Entity entity) {
 		super.push(entity);
 		if (entity instanceof Warden living) {
-			entity.hurt(SMDamage.MAGIC, 13F * this.entityData.get(ID_SIZE));
+			entity.hurt(SMDamage.MAGIC, 13F * this.get(SIZE));
 			living.invulnerableTime = 0;
 		}
 	}
 
 	public int getSize() {
-		return this.entityData.get(ID_SIZE);
+		return this.get(SIZE);
 	}
 
 	public void onSyncedDataUpdated(EntityDataAccessor<?> data) {
-		if (ID_SIZE.equals(data)) {
+		if (SIZE.equals(data)) {
 			this.refreshDimensions();
 			this.setYRot(this.yHeadRot);
 			this.yBodyRot = this.yHeadRot;
-			if (this.isInWater() && this.random.nextInt(20) == 0) {
+			if (this.isInWater() && this.getRandom().nextInt(20) == 0) {
 				this.doWaterSplashEffect();
 			}
 		}
@@ -146,7 +155,7 @@ public class ElectricCube extends Slime implements ISMMob {
 
 	public void remove(Entity.RemovalReason remova) {
 
-		if (this.hasEffect(PotionInit.resistance_blow)) {
+		if (this.hasEffect(PotionInit.resistance_blow) || this.getEntityData().get(FIXED)) {
 			this.setRemoved(remova);
 			this.invalidateCaps();
 			return;

@@ -100,7 +100,7 @@ public class FireMagicShot extends AbstractMagicShot {
 		boolean isTier3 = this.getData() >= 2;
 		boolean isTier4 = this.getData() >= 3;
 
-		if (this.level instanceof ServerLevel server) {
+		if (this.getLevel() instanceof ServerLevel server) {
 			this.rangeParticle(server, bPos, range, effectRange, isTier3, isTier4);
 		}
 
@@ -144,7 +144,7 @@ public class FireMagicShot extends AbstractMagicShot {
 		if (!isTier3) { return; }
 
 		for (int i = 0; i < 16; i ++) {
-			server.sendParticles(this.getParticle(STATE), this.getX(), this.getY() + 0.0D, this.getZ(), 0, 0F, 0F, 0F, 1F);
+			server.sendParticles(this.getParticle(STATE), this.getX(), this.getY(), this.getZ(), 0, 0F, 0F, 0F, 1F);
 		}
 
 		if (isTier4) {
@@ -204,15 +204,15 @@ public class FireMagicShot extends AbstractMagicShot {
 		float z = (float) (-vec.z / 20F);
 
 		for (int i = 0; i < 6; i++) {
-			float f1 = (float) (this.getX() - 0.5F + this.rand.nextFloat() + vec.x * i / 4.0F);
-			float f2 = (float) (this.getY() - 0.25F + this.rand.nextFloat() * 0.5 + vec.y * i / 4.0D);
-			float f3 = (float) (this.getZ() - 0.5F + this.rand.nextFloat() + vec.z * i / 4.0D);
-			this.level.addParticle(ParticleTypes.FLAME, f1, f2, f3, x + this.getRandFloat(0.075F), y + this.getRandFloat(0.075F), z + this.getRandFloat(0.075F));
+			float f1 = (float) (this.getX() - 0.5F + this.rand.nextFloat() + vec.x * i / 4D);
+			float f2 = (float) (this.getY() - 0.25F + this.rand.nextFloat() * 0.5 + vec.y * i / 4D);
+			float f3 = (float) (this.getZ() - 0.5F + this.rand.nextFloat() + vec.z * i / 4D);
+			this.addParticle(ParticleTypes.FLAME, f1, f2, f3, x + this.getRandFloat(0.075F), y + this.getRandFloat(0.075F), z + this.getRandFloat(0.075F));
 		}
 	}
 
 	public void hitToSpawnParticle() {
-		if (!(this.level instanceof ServerLevel server)) { return; }
+		if (!(this.getLevel() instanceof ServerLevel server)) { return; }
 
 		BlockPos pos = this.blockPosition();
 

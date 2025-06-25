@@ -100,7 +100,7 @@ public class BubbleMagicShot extends AbstractMagicShot {
 			float f1 = (float) (this.getX() - 0.5F + rand.nextFloat() + vec.x * i * 0.25F);
 			float f2 = (float) (this.getY() - 0.25F + rand.nextFloat() * 0.5 + vec.y * i * 0.25F);
 			float f3 = (float) (this.getZ() - 0.5F + rand.nextFloat() + vec.z * i * 0.25F);
-			this.level.addParticle(ParticleInit.BUBBLE, f1, f2, f3, x, y, z);
+			this.addParticle(ParticleInit.BUBBLE, f1, f2, f3, x, y, z);
 		}
 	}
 

@@ -47,7 +47,7 @@ public class GravityMagicShot extends AbstractMagicShot {
 	// えんちちーに当たった時の処理
 	protected void entityHit(LivingEntity living) {
 
-		if (this.level instanceof ServerLevel sever) {
+		if (this.getLevel() instanceof ServerLevel sever) {
 
 			Random rand = this.rand;
 
@@ -108,7 +108,7 @@ public class GravityMagicShot extends AbstractMagicShot {
 		int tick = this.getLifeTime();
 		boolean isTier3 = !this.getHitDead();
 
-		if (this.level instanceof ServerLevel server && (!isTier3 || (tick % 10 == 0))) {
+		if (this.getLevel() instanceof ServerLevel server && (!isTier3 || (tick % 10 == 0))) {
 
 			boolean isZero = this.getMaxLifeTime() == 100;
 			double ySpeed = isZero ? 0D : -0.25D;
@@ -174,7 +174,7 @@ public class GravityMagicShot extends AbstractMagicShot {
 			float f1 = (float) (this.getX() - 0.5F + rand.nextFloat() + vec.x * i / 4F);
 			float f2 = (float) (this.getY() - 0.25F + rand.nextFloat() * 0.5F + vec.y * i / 4F);
 			float f3 = (float) (this.getZ() - 0.5F + rand.nextFloat() + vec.z * i / 4F);
-			this.level.addParticle(ParticleInit.GRAVITY, f1, f2, f3, x + this.getRandFloat(0.075F), y + this.getRandFloat(0.075F), z + this.getRandFloat(0.075F));
+			this.addParticle(ParticleInit.GRAVITY, f1, f2, f3, x + this.getRandFloat(0.075F), y + this.getRandFloat(0.075F), z + this.getRandFloat(0.075F));
 		}
 	}
 

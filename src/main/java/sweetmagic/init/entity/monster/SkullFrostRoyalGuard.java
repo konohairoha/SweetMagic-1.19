@@ -25,7 +25,6 @@ import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.entity.monster.Skeleton;
 import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.raid.Raider;
@@ -41,9 +40,8 @@ import sweetmagic.init.PotionInit;
 import sweetmagic.init.entity.projectile.AbstractMagicShot;
 import sweetmagic.init.entity.projectile.FrostMagicShot;
 import sweetmagic.util.PlayerHelper;
-import sweetmagic.util.SMDamage;
 
-public class SkullFrostRoyalGuard extends Skeleton implements ISMMob {
+public class SkullFrostRoyalGuard extends AbstractSMSkull {
 
 	private int tickTime = 0;
 	protected int defTime = 0;
@@ -57,32 +55,23 @@ public class SkullFrostRoyalGuard extends Skeleton implements ISMMob {
 		super(EntityInit.skullFrostRoyalGuard, world);
 	}
 
-	public SkullFrostRoyalGuard(EntityType<SkullFrostRoyalGuard> enType, Level world) {
+	public SkullFrostRoyalGuard(EntityType<? extends AbstractSMSkull> enType, Level world) {
 		super(enType, world);
 		this.xpReward = 200;
 	}
 
-	public void reassessWeaponGoal() { }
-
-	public boolean isFreezeConverting() { return false; }
-
-	public void refreshInfo() {
-		this.reapplyPosition();
-		this.refreshDimensions();
-	}
-
 	protected void defineSynchedData() {
 		super.defineSynchedData();
-		this.entityData.define(GUARD, false);
-		this.entityData.define(GUARD_POWER, 0);
+		this.define(GUARD, false);
+		this.define(GUARD_POWER, 0);
 	}
 
 	protected void registerGoals() {
 		this.goalSelector.addGoal(2, new RestrictSunGoal(this));
-		this.goalSelector.addGoal(3, new FleeSunGoal(this, 1.0D));
+		this.goalSelector.addGoal(3, new FleeSunGoal(this, 1D));
 		this.goalSelector.addGoal(4, new RangedBowAttackGoal<>(this, 1D, 40, 24F));
-		this.goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 1.0D));
-		this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8.0F));
+		this.goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 1D));
+		this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8F));
 		this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
 		this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
 		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Warden.class, true));
@@ -105,16 +94,15 @@ public class SkullFrostRoyalGuard extends Skeleton implements ISMMob {
 		Entity attackEntity = src.getDirectEntity();
 		if (attacker != null && attacker instanceof ISMMob) { return false; }
 
+		// 魔法攻撃以外ならダメージ減少
 		if (this.notMagicDamage(attacker, attackEntity)) {
-			attacker.hurt(SMDamage.magicDamage, amount);
-			attacker.invulnerableTime = 0;
-			return false;
+			amount *= 0.25F;
 		}
 
 		// ダメージ倍処理
 		if (!this.isLeader(this)) {
-			amount = this.getBossDamageAmount(this.level, this.defTime , src, amount, 10F);
-			this.defTime = 2;
+			amount = this.getBossDamageAmount(this.getLevel(), this.defTime , src, amount, 12F);
+			this.defTime = 1;
 		}
 
 		if (this.getGuard()) {
@@ -133,13 +121,13 @@ public class SkullFrostRoyalGuard extends Skeleton implements ISMMob {
 			this.defTime--;
 		}
 
-		if (this.level.isClientSide) {
+		if (this.getLevel().isClientSide()) {
 
 			this.tickTime++;
 			if (this.tickTime % 60 != 0) { return; }
 
 			this.tickTime = 0;
-			RandomSource rand = this.random;
+			RandomSource rand = this.getRandom();
 			Vec3 vec = this.getDeltaMovement();
 
 			for (int i = 0; i < 6; i++) {
@@ -149,7 +137,7 @@ public class SkullFrostRoyalGuard extends Skeleton implements ISMMob {
 				float f1 = (float) (vec.x + 0.5F - rand.nextFloat()) * 0.2F;
 				float f2 = (float) (vec.y + 0.5F - rand.nextFloat()) * 0.2F;
 				float f3 = (float) (vec.z + 0.5F - rand.nextFloat()) * 0.2F;
-				this.level.addParticle(ParticleInit.FROST, x, y, z, f1, f2, f3);
+				this.getLevel().addParticle(ParticleInit.FROST, x, y, z, f1, f2, f3);
 			}
 		}
 
@@ -168,7 +156,7 @@ public class SkullFrostRoyalGuard extends Skeleton implements ISMMob {
 		if (this.guardTime++ >= MAX_GUARDTIME && this.getGuard()) {
 			this.setGuard(false);
 			this.guardTime = 0;
-			this.recastTime = this.random.nextInt(150) + 250;
+			this.recastTime = this.getRandom().nextInt(150) + 250;
 		}
 
 		LivingEntity target = this.getTarget();
@@ -185,7 +173,7 @@ public class SkullFrostRoyalGuard extends Skeleton implements ISMMob {
 		if (this.getGuard()) { return; }
 
 		boolean isWarden = target instanceof Warden;
-		boolean isHard = this.isHard(this.level);
+		boolean isHard = this.isHard(this.getLevel());
 		float damage = isWarden ? 15F : 3F;
 		float shotSpeed = isWarden ? 3.5F : 2F;
 		float shake = 0F;
@@ -196,7 +184,7 @@ public class SkullFrostRoyalGuard extends Skeleton implements ISMMob {
 			damage += 1.5F;
 		}
 
-		AbstractMagicShot entity = new FrostMagicShot(this.level, this);
+		AbstractMagicShot entity = new FrostMagicShot(this.getLevel(), this);
 		double d0 = target.getX() - this.getX();
 		double d1 = target.getY(0.3333333333333333D) - this.getY();
 		double d2 = target.getZ() - this.getZ();
@@ -205,7 +193,7 @@ public class SkullFrostRoyalGuard extends Skeleton implements ISMMob {
 		entity.setAddDamage(entity.getAddDamage() + damage);
 		entity.setMaxLifeTime(shotRange);
 		this.playSound(SoundEvents.BLAZE_SHOOT, 0.5F, 0.67F);
-		this.level.addFreshEntity(entity);
+		this.getLevel().addFreshEntity(entity);
 	}
 
 	public void addAdditionalSaveData(CompoundTag tags) {
@@ -221,19 +209,19 @@ public class SkullFrostRoyalGuard extends Skeleton implements ISMMob {
 	}
 
 	public boolean getGuard() {
-		return this.entityData.get(GUARD);
+		return this.get(GUARD);
 	}
 
 	public void setGuard(boolean isGurd) {
-		this.entityData.set(GUARD, isGurd);
+		this.set(GUARD, isGurd);
 	}
 
 	public int getGuardPower() {
-		return this.entityData.get(GUARD_POWER);
+		return this.get(GUARD_POWER);
 	}
 
 	public void setGuardPower(int guardPower) {
-		this.entityData.set(GUARD_POWER, guardPower);
+		this.set(GUARD_POWER, guardPower);
 	}
 
 	// 低ランクかどうか

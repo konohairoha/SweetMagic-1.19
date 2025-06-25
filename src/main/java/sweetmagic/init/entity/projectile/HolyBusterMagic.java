@@ -73,7 +73,7 @@ public class HolyBusterMagic extends AbstractBossMagic {
 
 	// 攻撃時のパーティクル
 	public void attackParticle() {
-		if (!(this.level instanceof ServerLevel server)) { return; }
+		if (!(this.getLevel() instanceof ServerLevel server)) { return; }
 
 		int count = 18;
 		double range = this.getData() == 1 ? 16.75D : 10D;
@@ -174,7 +174,7 @@ public class HolyBusterMagic extends AbstractBossMagic {
 				this.posMap.clear();
 			}
 
-			if (this.level instanceof ServerLevel sever) {
+			if (this.getLevel() instanceof ServerLevel sever) {
 
 				// 範囲の座標取得
 				Random rand = this.rand;
@@ -191,7 +191,7 @@ public class HolyBusterMagic extends AbstractBossMagic {
 				}
 			}
 
-			this.level.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.GENERIC_EXPLODE, this.getSoundSource(), 2F, 1F);
+			this.getLevel().playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.GENERIC_EXPLODE, this.getSoundSource(), 2F, 1F);
 			return;
 		}
 	}
@@ -231,7 +231,7 @@ public class HolyBusterMagic extends AbstractBossMagic {
 
 		// えんちちーの初期化が出来ていないなら初期化
 		if (this.summon == null) {
-			HolyAngel queen = new HolyAngel(this.level);
+			HolyAngel queen = new HolyAngel(this.getLevel());
 			queen.setORU(4);
 			queen.setMagic(true);
 			this.summon = queen;

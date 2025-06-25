@@ -29,7 +29,6 @@ import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.entity.monster.Skeleton;
 import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.raid.Raider;
@@ -43,9 +42,8 @@ import sweetmagic.init.EntityInit;
 import sweetmagic.init.PotionInit;
 import sweetmagic.init.entity.projectile.AbstractMagicShot;
 import sweetmagic.init.entity.projectile.FireMagicShot;
-import sweetmagic.util.SMDamage;
 
-public class SkullFlameArcher extends Skeleton implements ISMMob {
+public class SkullFlameArcher extends AbstractSMSkull {
 
 	protected int defTime = 0;
 
@@ -53,27 +51,18 @@ public class SkullFlameArcher extends Skeleton implements ISMMob {
 		super(EntityInit.skullFlameArcher, world);
 	}
 
-	public SkullFlameArcher(EntityType<? extends Skeleton> enType, Level world) {
+	public SkullFlameArcher(EntityType<? extends AbstractSMSkull> enType, Level world) {
 		super(enType, world);
 		this.xpReward = 200;
 	}
 
-	public void reassessWeaponGoal() { }
-
-	public boolean isFreezeConverting() { return false; }
-
-	public void refreshInfo() {
-		this.reapplyPosition();
-		this.refreshDimensions();
-	}
-
 	protected void registerGoals() {
 		this.goalSelector.addGoal(2, new RestrictSunGoal(this));
-		this.goalSelector.addGoal(3, new FleeSunGoal(this, 1.0D));
-		this.goalSelector.addGoal(3, new AvoidEntityGoal<>(this, Wolf.class, 6.0F, 1.0D, 1.2D));
+		this.goalSelector.addGoal(3, new FleeSunGoal(this, 1D));
+		this.goalSelector.addGoal(3, new AvoidEntityGoal<>(this, Wolf.class, 6F, 1D, 1.2D));
 		this.goalSelector.addGoal(4, new RangedBowAttackGoal<>(this, 1D, 140, 24F));
-		this.goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 1.0D));
-		this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8.0F));
+		this.goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 1D));
+		this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8F));
 		this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
 		this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
 		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Warden.class, true));
@@ -95,16 +84,15 @@ public class SkullFlameArcher extends Skeleton implements ISMMob {
 		Entity attackEntity = src.getDirectEntity();
 		if (attacker != null && attacker instanceof ISMMob) { return false; }
 
+		// 魔法攻撃以外ならダメージ減少
 		if (this.notMagicDamage(attacker, attackEntity)) {
-			attacker.hurt(SMDamage.magicDamage, amount);
-			attacker.invulnerableTime = 0;
-			return false;
+			amount *= 0.25F;
 		}
 
 		// ダメージ倍処理
 		if (!this.isLeader(this)) {
-			amount = this.getBossDamageAmount(this.level, this.defTime, src, amount, 10F);
-			this.defTime = 2;
+			amount = this.getBossDamageAmount(this.getLevel(), this.defTime , src, amount, 12F);
+			this.defTime = 1;
 		}
 
 		return super.hurt(src, amount);
@@ -117,11 +105,11 @@ public class SkullFlameArcher extends Skeleton implements ISMMob {
 			this.defTime--;
 		}
 
-		if (this.level.isClientSide) {
+		if (this.getLevel().isClientSide()) {
 
 			if (this.tickCount % 60 != 0) { return; }
 
-			RandomSource rand = this.random;
+			RandomSource rand = this.getRandom();
 			Vec3 vec = this.getDeltaMovement();
 
 			for (int i = 0; i < 6; i++) {
@@ -131,7 +119,7 @@ public class SkullFlameArcher extends Skeleton implements ISMMob {
 				float f1 = (float) (vec.x + 0.5F - rand.nextFloat()) * 0.2F;
 				float f2 = (float) (vec.y + 0.5F - rand.nextFloat()) * 0.2F;
 				float f3 = (float) (vec.z + 0.5F - rand.nextFloat()) * 0.2F;
-				this.level.addParticle(ParticleTypes.FLAME, x, y, z, f1, f2, f3);
+				this.getLevel().addParticle(ParticleTypes.FLAME, x, y, z, f1, f2, f3);
 			}
 		}
 
@@ -143,7 +131,7 @@ public class SkullFlameArcher extends Skeleton implements ISMMob {
 	public void performRangedAttack(LivingEntity target, float par1) {
 
 		boolean isWarden = target instanceof Warden;
-		boolean isHard = this.isHard(this.level);
+		boolean isHard = this.isHard(this.getLevel());
 		float damage = isWarden ? 13F : 2F;
 		float shotSpeed = isWarden ? 7.5F : 1.75F;
 		int shotRange = isWarden ? 50 : 40;
@@ -154,7 +142,7 @@ public class SkullFlameArcher extends Skeleton implements ISMMob {
 		}
 
 		for (int i = 0; i < 5; i++) {
-			AbstractMagicShot entity = new FireMagicShot(this.level, this);
+			AbstractMagicShot entity = new FireMagicShot(this.getLevel(), this);
 			double d0 = target.getX() - this.getX();
 			double d1 = target.getZ() - this.getZ();
 			double d3 = target.getY(0.3333333333333333D) - this.getY();
@@ -164,7 +152,7 @@ public class SkullFlameArcher extends Skeleton implements ISMMob {
 			entity.setMaxLifeTime(shotRange);
 			entity.setArrow(true);
 			entity.setRange(3.5D);
-			this.level.addFreshEntity(entity);
+			this.getLevel().addFreshEntity(entity);
 		}
 
 		this.playSound(SoundEvents.BLAZE_SHOOT, 0.5F, 0.67F);

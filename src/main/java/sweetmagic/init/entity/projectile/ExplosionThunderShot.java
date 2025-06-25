@@ -53,7 +53,7 @@ public class ExplosionThunderShot extends AbstractMagicShot {
 	public void rangeAttack(BlockPos pos, float dame, double range) {
 		this.playSound(SoundEvents.GENERIC_EXPLODE, 3F, 1F / (this.rand.nextFloat() * 0.2F + 0.9F));
 
-		if (this.level instanceof ServerLevel sever) {
+		if (this.getLevel() instanceof ServerLevel sever) {
 			sever.sendParticles(ParticleTypes.EXPLOSION_EMITTER, pos.getX(), pos.getY() + 0.5D, pos.getZ(), 2, 0D, 0D, 0D, 0D);
 		}
 

@@ -33,7 +33,7 @@ public abstract class AbstractOwnerMob extends AbstractSMMob {
 
 		LivingEntity entity = this.owner;
 
-		if (entity == null && this.level instanceof ServerLevel server) {
+		if (entity == null && this.getLevel() instanceof ServerLevel server) {
 			entity = (LivingEntity) server.getEntity(this.getOwnerID());
 		}
 

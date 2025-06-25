@@ -11,6 +11,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -28,6 +29,7 @@ import net.minecraft.world.entity.raid.Raider;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import sweetmagic.api.ientity.ISMMob;
+import sweetmagic.api.ientity.IWitch;
 import sweetmagic.init.EntityInit;
 import sweetmagic.init.PotionInit;
 import sweetmagic.init.SoundInit;
@@ -42,7 +44,7 @@ import sweetmagic.init.entity.projectile.GravityMagicShot;
 import sweetmagic.util.PlayerHelper;
 import sweetmagic.util.SMDamage;
 
-public class WitchSandryon extends AbstractSMBoss {
+public class WitchSandryon extends AbstractSMBoss implements IWitch {
 
 	private int magicTime = 350;
 	private static final int MAX_MAGIC_TIME = 600;
@@ -54,9 +56,10 @@ public class WitchSandryon extends AbstractSMBoss {
 	private static final int MAX_INFINITE_TIME = 900;
 	private int magicCount = 0;
 	private int specialType= -1;
-	private static final EntityDataAccessor<Boolean> ISWANDCHARGE = ISMMob.setData(WitchSandryon.class, BOOLEAN);
-	private static final EntityDataAccessor<Boolean> ISINFINITEWAND = ISMMob.setData(WitchSandryon.class, BOOLEAN);
-	private static final EntityDataAccessor<Boolean> ISRESURRECTION = ISMMob.setData(WitchSandryon.class, BOOLEAN);
+	public AnimationState magicAttackAnim = new AnimationState();
+	private static final EntityDataAccessor<Boolean> WAND_CHARGE = ISMMob.setData(WitchSandryon.class, BOOLEAN);
+	private static final EntityDataAccessor<Boolean> INFINITE_WAND = ISMMob.setData(WitchSandryon.class, BOOLEAN);
+	private static final EntityDataAccessor<Boolean> RESURRECTION = ISMMob.setData(WitchSandryon.class, BOOLEAN);
 	private static final EntityDataAccessor<Integer> WAND_SIZE = ISMMob.setData(WitchSandryon.class, INT);
 
 	public WitchSandryon(Level world) {
@@ -71,17 +74,17 @@ public class WitchSandryon extends AbstractSMBoss {
 
 	protected void defineSynchedData() {
 		super.defineSynchedData();
-		this.registerData(this, ISWANDCHARGE, false);
-		this.registerData(this, ISINFINITEWAND, false);
-		this.registerData(this, ISRESURRECTION, false);
-		this.registerData(this, WAND_SIZE, 0);
+		this.define(WAND_CHARGE, false);
+		this.define(INFINITE_WAND, false);
+		this.define(RESURRECTION, false);
+		this.define(WAND_SIZE, 0);
 	}
 
 	protected void registerGoals() {
 		this.goalSelector.addGoal(0, new FloatGoal(this));
-		this.goalSelector.addGoal(1, new WaterAvoidingRandomStrollGoal(this, 1.0D, 0.0F));
-		this.goalSelector.addGoal(2, new LookAtPlayerGoal(this, Player.class, 8.0F));
-		this.goalSelector.addGoal(3, new LookAtPlayerGoal(this, Warden.class, 8.0F));
+		this.goalSelector.addGoal(1, new WaterAvoidingRandomStrollGoal(this, 1D, 0F));
+		this.goalSelector.addGoal(2, new LookAtPlayerGoal(this, Player.class, 8F));
+		this.goalSelector.addGoal(3, new LookAtPlayerGoal(this, Warden.class, 8F));
 		this.goalSelector.addGoal(4, new SMRandomLookGoal(this) {
 			public boolean canUse() {
 				return !getWandCharge() && !getInfiniteWand() && super.canUse();
@@ -104,35 +107,43 @@ public class WitchSandryon extends AbstractSMBoss {
 	}
 
 	public void setWandCharge(boolean isWandCharge) {
-		this.setData(this, ISWANDCHARGE, isWandCharge);
+		this.set(WAND_CHARGE, isWandCharge);
 	}
 
 	public boolean getWandCharge() {
-		return this.getData(this, ISWANDCHARGE);
+		return this.get(WAND_CHARGE);
 	}
 
 	public void setInfiniteWand(boolean isInfiniteWand) {
-		this.setData(this, ISINFINITEWAND, isInfiniteWand);
+		this.set(INFINITE_WAND, isInfiniteWand);
 	}
 
 	public boolean getInfiniteWand() {
-		return this.getData(this, ISINFINITEWAND);
+		return this.get(INFINITE_WAND);
 	}
 
 	public void setResurrection(boolean isResurrection) {
-		this.setData(this, ISRESURRECTION, isResurrection);
+		this.set(RESURRECTION, isResurrection);
 	}
 
 	public boolean getResurrection() {
-		return this.getData(this, ISRESURRECTION);
+		return this.get(RESURRECTION);
 	}
 
 	public void setWandSize(int wandSize) {
-		this.setData(this, WAND_SIZE, wandSize);
+		this.set(WAND_SIZE, wandSize);
 	}
 
 	public int getWandSize() {
-		return this.getData(this, WAND_SIZE);
+		return this.get(WAND_SIZE);
+	}
+
+	public boolean isCharge() {
+		return this.getWandCharge() || this.getInfiniteWand();
+	}
+
+	public AnimationState getAnimaState() {
+		return this.magicAttackAnim;
 	}
 
 	public void addAdditionalSaveData(CompoundTag tags) {
@@ -166,7 +177,7 @@ public class WitchSandryon extends AbstractSMBoss {
 		if (attacker != null && attacker instanceof ISMMob) { return false; }
 
 		// ボスダメージ計算
-		amount = this.getBossDamageAmount(this.level, this.defTime , src, amount, 7F);
+		amount = this.getBossDamageAmount(this.getLevel(), this.defTime , src, amount, 7F);
 		this.defTime = amount > 0 ? 2 : this.defTime;
 
 		if (attacker instanceof Warden) {
@@ -202,10 +213,6 @@ public class WitchSandryon extends AbstractSMBoss {
 		}
 	}
 
-	public boolean causeFallDamage(float par1, float par2, DamageSource src) {
-		return false;
-	}
-
 	protected void customServerAiStep() {
 		super.customServerAiStep();
 
@@ -225,7 +232,7 @@ public class WitchSandryon extends AbstractSMBoss {
 			this.checkPotion(PotionInit.reflash_effect, 9999, 0);
 		}
 
-		else if (!this.getResurrection() && !this.hasEffect(PotionInit.resurrection)) {
+		if (!this.getResurrection() && !this.hasEffect(PotionInit.resurrection)) {
 			this.clearInfo();
 		}
 	}
@@ -261,13 +268,13 @@ public class WitchSandryon extends AbstractSMBoss {
 
 	public void magicShot(LivingEntity target) {
 
-		List<LivingEntity> targetList = this.getEntityList(LivingEntity.class, this.getFilter(this.isPlayer(target)), 48D);
+		List<LivingEntity> targetList = this.getPlayerList(target);
 		this.playSound(SoundEvents.BLAZE_SHOOT, 0.5F, 0.67F);
 		boolean isResurrection = this.getResurrection();
 
 		for (LivingEntity entity : targetList) {
 			AbstractMagicShot magic = this.getMagicShot(entity, this.magicCount, entity instanceof Warden, isResurrection);
-			this.level.addFreshEntity(magic);
+			this.addEntity(magic);
 		}
 
 		this.setWandSize(this.getWandSize() - 1);
@@ -292,22 +299,22 @@ public class WitchSandryon extends AbstractSMBoss {
 
 		switch (count) {
 		case 1:
-			entity = new FireMagicShot(this.level, this);
+			entity = new FireMagicShot(this.getLevel(), this);
 			break;
 		case 2:
-			entity = new CycloneMagicShot(this.level, this);
+			entity = new CycloneMagicShot(this.getLevel(), this);
 			break;
 		case 3:
-			entity = new FrostMagicShot(this.level, this);
+			entity = new FrostMagicShot(this.getLevel(), this);
 			break;
 		case 4:
-			entity = new BubbleMagicShot(this.level, this);
+			entity = new BubbleMagicShot(this.getLevel(), this);
 			break;
 		case 5:
-			entity = new GravityMagicShot(this.level, this);
+			entity = new GravityMagicShot(this.getLevel(), this);
 			break;
 		default:
-			entity = new ExplosionMagicShot(this.level, this);
+			entity = new ExplosionMagicShot(this.getLevel(), this);
 			break;
 		}
 
@@ -338,7 +345,7 @@ public class WitchSandryon extends AbstractSMBoss {
 			case 3:
 				this.heal(this.getMaxHealth() * 0.0375F);
 				this.playSound(SoundInit.HEAL, 0.0625F, 1F);
-				if (this.level instanceof ServerLevel server) {
+				if (this.getLevel() instanceof ServerLevel server) {
 					this.spawnParticleRing(server, ParticleTypes.HAPPY_VILLAGER, 0.75D, this.blockPosition(), 1D, 0.1D, 0D);
 				}
 				break;
@@ -368,7 +375,7 @@ public class WitchSandryon extends AbstractSMBoss {
 			case 3:
 				this.heal(this.getMaxHealth() * 0.025F);
 				this.playSound(SoundInit.HEAL, 0.0625F, 1F);
-				if (this.level instanceof ServerLevel server) {
+				if (this.getLevel() instanceof ServerLevel server) {
 					this.spawnParticleRing(server, ParticleTypes.HAPPY_VILLAGER, 0.75D, this.blockPosition(), 1D, 0.1D, 0D);
 				}
 				break;
@@ -386,7 +393,7 @@ public class WitchSandryon extends AbstractSMBoss {
 		if (this.infiniteTime < MAX_INFINITE_TIME) { return; }
 
 		float damage = (float) this.getAttributeValue(Attributes.ATTACK_DAMAGE) + 35F + (this.getResurrection() ? 10F : 0F);
-		List<LivingEntity> targetList = this.getEntityList(LivingEntity.class, this.getFilter(this.isPlayer(target)), 48D);
+		List<LivingEntity> targetList = this.getPlayerList(target);
 
 		for (LivingEntity entity : targetList) {
 			List<MobEffectInstance> effecList = PlayerHelper.getEffectList(entity, PotionInit.BUFF);
@@ -424,7 +431,7 @@ public class WitchSandryon extends AbstractSMBoss {
 		magic.setDeltaMovement(new Vec3(0, -0.67D, 0));
 		magic.setHitDead(false);
 		magic.setChangeParticle(true);
-		this.level.addFreshEntity(magic);
+		this.addEntity(magic);
 
 		if (this.specialTime >= MAX_SPECIAL_TIME) {
 			this.specialTime = 0;
@@ -434,9 +441,9 @@ public class WitchSandryon extends AbstractSMBoss {
 
 	public AbstractMagicShot getSpecialMagic(LivingEntity target, int type) {
 		switch(type) {
-		case 1:  return new FireMagicShot(this.level, this);
-		case 2:  return new FrostMagicShot(this.level, this);
-		default: return new ElectricMagicShot(this.level, this);
+		case 1:  return new FireMagicShot(this.getLevel(), this);
+		case 2:  return new FrostMagicShot(this.getLevel(), this);
+		default: return new ElectricMagicShot(this.getLevel(), this);
 		}
 	}
 

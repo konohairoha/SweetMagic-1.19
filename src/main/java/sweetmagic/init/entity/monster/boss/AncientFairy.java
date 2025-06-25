@@ -42,7 +42,7 @@ public class AncientFairy extends AbstractSMBoss {
 	private final static int MAX_POISONSHOT = 300;
 	private int poisonFogTime = 0;
 	private final static int MAX_POISONFOG = 400;
-	private static final EntityDataAccessor<Boolean> ISSUMMON = ISMMob.setData(AncientFairy.class, BOOLEAN);
+	private static final EntityDataAccessor<Boolean> SUMMON = ISMMob.setData(AncientFairy.class, BOOLEAN);
 
 	public AncientFairy(Level world) {
 		super(EntityInit.ancientFairy, world);
@@ -58,9 +58,9 @@ public class AncientFairy extends AbstractSMBoss {
 	protected void registerGoals() {
 		this.goalSelector.addGoal(0, new FloatGoal(this));
 		this.goalSelector.addGoal(5, new RandomMoveGoal(this));
-		this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1.0D, 0.0F));
-		this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
-		this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Warden.class, 8.0F));
+		this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1D, 0F));
+		this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8F));
+		this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Warden.class, 8F));
 		this.goalSelector.addGoal(10, new SMRandomLookGoal(this));
 		this.targetSelector.addGoal(1, (new HurtByTargetGoal(this)).setAlertOthers());
 		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Warden.class, true));
@@ -80,20 +80,20 @@ public class AncientFairy extends AbstractSMBoss {
 
 	protected void defineSynchedData() {
 		super.defineSynchedData();
-		this.entityData.define(ISSUMMON, false);
+		this.define(SUMMON, false);
 	}
 
-	public boolean isSummon() {
-		return this.entityData.get(ISSUMMON);
+	public boolean getSummon() {
+		return this.get(SUMMON);
 	}
 
 	public void setSummon(boolean isSummon) {
-		this.entityData.set(ISSUMMON, isSummon);
+		this.set(SUMMON, isSummon);
 	}
 
 	public void addAdditionalSaveData(CompoundTag tags) {
 		super.addAdditionalSaveData(tags);
-		tags.putBoolean("isSummon", this.isSummon());
+		tags.putBoolean("isSummon", this.getSummon());
 	}
 
 	public void readAdditionalSaveData(CompoundTag tags) {
@@ -108,7 +108,7 @@ public class AncientFairy extends AbstractSMBoss {
 		if (attacker != null && attacker instanceof ISMMob) { return false; }
 
 		// ボスダメージ計算
-		amount = this.getBossDamageAmount(this.level, this.defTime , src, amount, 7F);
+		amount = this.getBossDamageAmount(this.getLevel(), this.defTime , src, amount, 7F);
 		this.defTime = amount > 0 ? 2 : this.defTime;
 
 		if (attacker instanceof Warden) {
@@ -122,10 +122,6 @@ public class AncientFairy extends AbstractSMBoss {
 		}
 
 		return super.hurt(src, amount);
-	}
-
-	public boolean causeFallDamage(float par1, float par2, DamageSource src) {
-		return false;
 	}
 
 	protected void customServerAiStep() {
@@ -143,7 +139,7 @@ public class AncientFairy extends AbstractSMBoss {
 
 	public void firstAttack(LivingEntity target) {
 
-		if (!this.isSummon()) {
+		if (!this.getSummon()) {
 
 			if (this.getHealth() >= this.getMaxHealth() * 0.2F && this.summonVexTime++ >= MAX_SUMMONVEXTIME) {
 				this.summonVex(target);
@@ -170,18 +166,17 @@ public class AncientFairy extends AbstractSMBoss {
 
 	public void summonVex(LivingEntity target) {
 
-		List<LivingEntity> targetList = this.getEntityList(LivingEntity.class, this.getFilter(this.isPlayer(target)), 48D);
-		int summonSize = Math.min(10, 1 + targetList.size() * 2);
+		int summonSize = (int) Math.min(10, 1 + this.getPlayerCount(target) * 2);
 
 		for (int i = 0; i < summonSize; i++) {
-			PixeVex entity = new PixeVex(this.level);
+			PixeVex entity = new PixeVex(this.getLevel());
 			entity.setPos(this.getX() + 0.5D, this.getY() + 0.5D + this.getRandFloat(4F), this.getZ() + 0.5D);
 			entity.spawnAnim();
 			entity.setOwnerID(this);
 			entity.setNoGravity(true);
 			entity.setMoveControl(new SMMoveControl(entity));
 			entity.setElementType(this.rand.nextInt(3));
-			this.level.addFreshEntity(entity);
+			this.addEntity(entity);
 		}
 
 		this.setSummon(true);
@@ -191,7 +186,7 @@ public class AncientFairy extends AbstractSMBoss {
 		List<PixeVex> targetList = this.getVexList();
 		if (targetList.isEmpty()) { return; }
 
-		if (this.level instanceof ServerLevel server) {
+		if (this.getLevel() instanceof ServerLevel server) {
 
 			int count = (int) ( ( (float) this.eatVexTime / (float) MAX_EATVEXTIME ) * 8 );
 			BlockPos pos = this.blockPosition();
@@ -242,11 +237,11 @@ public class AncientFairy extends AbstractSMBoss {
 	public void poisonShot(LivingEntity target) {
 
 		float dama = 3F;
-		List<LivingEntity> targetList = this.getEntityList(LivingEntity.class, this.getFilter(this.isPlayer(target)), 48D);
+		List<LivingEntity> targetList = this.getPlayerList(target);
 
 		for (LivingEntity entity : targetList) {
 
-			PoisonMagicShot magic = new PoisonMagicShot(this.level, this);
+			PoisonMagicShot magic = new PoisonMagicShot(this.getLevel(), this);
 			double x = entity.getX() - this.getX();
 			double y = entity.getY(0.3333333333333333D) - this.getY();
 			double z = entity.getZ() - this.getZ();
@@ -256,17 +251,17 @@ public class AncientFairy extends AbstractSMBoss {
 			magic.setWandLevel(level);
 			magic.shoot(x, y - xz * 0.035D, z, 3.35F, 0F);
 			magic.setAddDamage(magic.getAddDamage() + dama);
-			this.level.addFreshEntity(magic);
+			this.addEntity(magic);
 		}
 
 		this.playSound(SoundEvents.BLAZE_SHOOT, 0.5F, 0.67F);
 	}
 
 	public void poisonFog(LivingEntity target) {
-		if (!(this.level instanceof ServerLevel server)) { return; }
+		if (!(this.getLevel() instanceof ServerLevel server)) { return; }
 
-		List<LivingEntity> targetList = this.getEntityList(LivingEntity.class, this.getFilter(this.isPlayer(target)), 48D);
-		double range = 10D + Math.min(15D, targetList.size() * 2D);
+		List<LivingEntity> targetList = this.getPlayerList(target);
+		double range = 10D + Math.min(15D, this.getPlayerCount(targetList) * 2D);
 		BlockPos pos = this.blockPosition();
 		Iterable<BlockPos> posList = this.getPosList(pos, range);
 
@@ -285,7 +280,6 @@ public class AncientFairy extends AbstractSMBoss {
 		if (this.poisonFogTime >= MAX_POISONFOG) {
 
 			for (LivingEntity entity : targetList) {
-
 				if (!this.checkDistances(pos, entity.blockPosition(), range * range)) { continue; }
 
 				boolean hasEffect = entity.hasEffect(PotionInit.reflash_effect);

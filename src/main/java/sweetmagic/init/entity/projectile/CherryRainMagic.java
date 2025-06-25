@@ -66,7 +66,7 @@ public class CherryRainMagic extends AbstractBossMagic {
 
 	// 魔法攻撃
 	public void attackMagic(LivingEntity target) {
-		if (this.level.isClientSide) { return; }
+		if (this.isClient()) { return; }
 
 		if (this.rainTime >= 30D) {
 
@@ -80,7 +80,7 @@ public class CherryRainMagic extends AbstractBossMagic {
 				targetList.forEach(e -> this.attackDamage(e, damage, true));
 			}
 
-			if (this.level instanceof ServerLevel server) {
+			if (this.getLevel() instanceof ServerLevel server) {
 
 				Random rand = this.rand;
 				BlockPos pos = this.getPos(target);
@@ -121,7 +121,7 @@ public class CherryRainMagic extends AbstractBossMagic {
 				}
 			}
 
-			if (!(this.level instanceof ServerLevel sever)) { continue; }
+			if (!(this.getLevel() instanceof ServerLevel sever)) { continue; }
 
 			float x = (float) (entity.xo + this.rand.nextFloat() * 0.5F);
 			float y = (float) (entity.getY() + this.rand.nextFloat() * 0.5F + 1.5F);
@@ -176,7 +176,7 @@ public class CherryRainMagic extends AbstractBossMagic {
 
 		// えんちちーの初期化が出来ていないなら初期化
 		if (this.summon == null) {
-			Arlaune queen = new Arlaune(this.level);
+			Arlaune queen = new Arlaune(this.getLevel());
 			queen.setMagic(true);
 			this.summon = queen;
 		}

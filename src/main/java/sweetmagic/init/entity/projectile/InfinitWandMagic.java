@@ -70,7 +70,7 @@ public class InfinitWandMagic extends AbstractBossMagic {
 		float damage = 50F + this.getAddDamage();
 		int addAttack = 10 + this.getAddAttack();
 
-		if (this.level instanceof ServerLevel sever) {
+		if (this.getLevel() instanceof ServerLevel sever) {
 
 			ParticleOptions par = ParticleTypes.FIREWORK;
 			List<LivingEntity> targetList = this.getEntityList(LivingEntity.class, e -> e instanceof Enemy && e.isAlive(), this.getAABB(this.getPos(target), range));
@@ -137,7 +137,7 @@ public class InfinitWandMagic extends AbstractBossMagic {
 
 		// えんちちーの初期化が出来ていないなら初期化
 		if (this.summon == null) {
-			WitchSandryon sand = new WitchSandryon(this.level);
+			WitchSandryon sand = new WitchSandryon(this.getLevel());
 			sand.setMagic(true);
 			this.summon = sand;
 		}

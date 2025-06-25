@@ -95,7 +95,7 @@ public class WindStormShot extends AbstractMagicShot {
 				float x = (float) (vec.x / 10F) * this.getRandFloat(1.5F);
 				float y = (float) (vec.y / 10F) + 0.5F * this.getRandFloat(0.5F);
 				float z = (float) (vec.z / 10F) * this.getRandFloat(1.5F);
-				this.level.addParticle(par, this.getX() + this.getRandFloat(1F), this.getY() + 0.5F + k + this.getRandFloat(0.5F), this.getZ() + this.getRandFloat(1F), x, y, z);
+				this.addParticle(par, this.getX() + this.getRandFloat(1F), this.getY() + 0.5F + k + this.getRandFloat(0.5F), this.getZ() + this.getRandFloat(1F), x, y, z);
 			}
 		}
 	}
@@ -117,7 +117,7 @@ public class WindStormShot extends AbstractMagicShot {
 	}
 
 	protected void spawnParticleCycle(BlockPos pos, double range) {
-		if (!(this.level instanceof ServerLevel server)) { return; }
+		if (!(this.getLevel() instanceof ServerLevel server)) { return; }
 
 		ParticleOptions par = ParticleInit.CYCLE_TORNADO;
 

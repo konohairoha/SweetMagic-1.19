@@ -7,6 +7,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
@@ -26,7 +27,7 @@ import sweetmagic.init.EntityInit;
 
 public class EnderShadowMirage extends AbstractOwnerMob {
 
-	private static final EntityDataAccessor<Boolean> ISSUMMON = ISMMob.setData(EnderShadowMirage.class, EntityDataSerializers.BOOLEAN);
+	private static final EntityDataAccessor<Boolean> SUMMON = ISMMob.setData(EnderShadowMirage.class, EntityDataSerializers.BOOLEAN);
 
 	public EnderShadowMirage(Level world) {
 		super(EntityInit.enderShadowMirage, world);
@@ -39,7 +40,7 @@ public class EnderShadowMirage extends AbstractOwnerMob {
 
 	protected void defineSynchedData() {
 		super.defineSynchedData();
-		this.entityData.define(ISSUMMON, false);
+		this.define(SUMMON, false);
 	}
 
 	public static AttributeSupplier.Builder registerAttributes() {
@@ -53,10 +54,10 @@ public class EnderShadowMirage extends AbstractOwnerMob {
 
 	protected void registerGoals() {
 		this.goalSelector.addGoal(4, new MeleeAttackGoal(this, 1.5D, false));
-		this.goalSelector.addGoal(5, new MoveTowardsRestrictionGoal(this, 1.0D));
-		this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1.0D, 0.0F));
-		this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
-		this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Warden.class, 8.0F));
+		this.goalSelector.addGoal(5, new MoveTowardsRestrictionGoal(this, 1D));
+		this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1D, 0F));
+		this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8F));
+		this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Warden.class, 8F));
 		this.goalSelector.addGoal(10, new RandomLookAroundGoal(this));
 		this.targetSelector.addGoal(1, (new HurtByTargetGoal(this)).setAlertOthers());
 		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Warden.class, true));
@@ -66,7 +67,6 @@ public class EnderShadowMirage extends AbstractOwnerMob {
 
 	// ダメージ処理
 	public boolean hurt(DamageSource src, float amount) {
-
 		Entity attacker = src.getEntity();
 		if (attacker != null && attacker instanceof ISMMob) {
 			this.teleport();
@@ -74,7 +74,7 @@ public class EnderShadowMirage extends AbstractOwnerMob {
 		}
 
 		// ダメージ倍処理
-		amount = this.getBossDamageAmount(this.level, this.defTime , src, amount, 20F);
+		amount = this.getBossDamageAmount(this.getLevel(), this.defTime , src, amount, 20F);
 		this.defTime = 2;
 		return super.hurt(src, Math.min(amount, 25F));
 	}
@@ -100,6 +100,27 @@ public class EnderShadowMirage extends AbstractOwnerMob {
 
 		entity.invulnerableTime = 0;
 		return flag;
+	}
+
+	protected void customServerAiStep() {
+		super.customServerAiStep();
+		LivingEntity target = this.getTarget();
+		if (target == null) { return; }
+
+		if(this.tickCount % 20 == 0 && !this.hasLineOfSight(target)) {
+			this.teleport(target);
+		}
+	}
+
+	protected boolean teleport(LivingEntity target) {
+		if (!this.isClient() && this.isAlive()) {
+			double d0 = target.getX() + (this.rand.nextDouble() - 0.5D) * 5D;
+			double d1 = target.getY() + (double) (this.rand.nextInt(8) - 4);
+			double d2 = target.getZ() + (this.rand.nextDouble() - 0.5D) * 5D;
+			return this.teleport(d0, d1, d2);
+		}
+
+		return false;
 	}
 
 	// 低ランクかどうか

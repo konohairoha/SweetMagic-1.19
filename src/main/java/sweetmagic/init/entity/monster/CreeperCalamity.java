@@ -72,9 +72,9 @@ public class CreeperCalamity extends AbstractSMMob {
 		if (attacker != null && attacker instanceof ISMMob) { return false; }
 
 		// ダメージ倍処理
-		amount = this.getDamageAmount(this.level , src, amount, 0.25F);
+		amount = this.getDamageAmount(this.getLevel() , src, amount, 0.25F);
 
-		if (!this.level.isClientSide && !src.isMagic() && this.recastTime > 0) {
+		if (!this.isClient() && !src.isMagic() && this.recastTime > 0) {
 			this.recastTime = (int) (this.recastTime * 0.75F);
 		}
 
@@ -94,13 +94,13 @@ public class CreeperCalamity extends AbstractSMMob {
 
 		AbstractMagicShot entity = this.getMagicShot(target, isWarden);
 		this.playSound(SoundEvents.BLAZE_SHOOT, 0.5F, 0.67F);
-		this.level.addFreshEntity(entity);
+		this.addEntity(entity);
 	}
 
 	public AbstractMagicShot getMagicShot (LivingEntity target, boolean isWarden) {
 
-		CalamityBomb entity = new CalamityBomb(this.level, this);
-		float dameRate = isWarden ? 1.25F : this.getDateRate(this.level, 0.4F);
+		CalamityBomb entity = new CalamityBomb(this.getLevel(), this);
+		float dameRate = isWarden ? 1.25F : this.getDateRate(this.getLevel(), 0.4F);
 		double x = target.getX() - this.getX();
 		double y = target.getY(0.3333333333333333D) - this.getY();
 		double z = target.getZ() - this.getZ();

@@ -9,6 +9,7 @@ import javax.annotation.Nullable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.DifficultyInstance;
@@ -45,6 +46,10 @@ public abstract class AbstractSMMob extends Monster implements ISMMob {
 		this.refreshDimensions();
 	}
 
+	public SynchedEntityData getData() {
+		return this.getEntityData();
+	}
+
 	public <T extends Entity> List<T> getEntityList(Class<T> enClass, Predicate<T> filter, double range) {
 		return this.getEntityList(enClass, this, filter, range);
 	}
@@ -58,7 +63,7 @@ public abstract class AbstractSMMob extends Monster implements ISMMob {
 	}
 
 	protected boolean teleport() {
-		if (!this.level.isClientSide() && this.isAlive()) {
+		if (!this.isClient() && this.isAlive()) {
 			double d0 = this.getX() + (this.rand.nextDouble() - 0.5D) * 32D;
 			double d1 = this.getY() + (double) (this.rand.nextInt(32) - 16);
 			double d2 = this.getZ() + (this.rand.nextDouble() - 0.5D) * 32D;
@@ -72,11 +77,11 @@ public abstract class AbstractSMMob extends Monster implements ISMMob {
 
 		BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(x, y, z);
 
-		while (pos.getY() > this.level.getMinBuildHeight() && !this.level.getBlockState(pos).getMaterial().blocksMotion()) {
+		while (pos.getY() > this.getLevel().getMinBuildHeight() && !this.getLevel().getBlockState(pos).getMaterial().blocksMotion()) {
 			pos.move(Direction.DOWN);
 		}
 
-		BlockState state = this.level.getBlockState(pos);
+		BlockState state = this.getLevel().getBlockState(pos);
 		boolean flag = state.getMaterial().blocksMotion();
 		boolean flag1 = state.getFluidState().is(FluidTags.WATER);
 		if (flag && !flag1) {
@@ -88,9 +93,9 @@ public abstract class AbstractSMMob extends Monster implements ISMMob {
 			boolean flag2 = this.randomTeleport(event.getTargetX(), event.getTargetY(), event.getTargetZ(), true);
 
 			if (flag2) {
-				this.level.gameEvent(GameEvent.TELEPORT, vec3, GameEvent.Context.of(this));
+				this.getLevel().gameEvent(GameEvent.TELEPORT, vec3, GameEvent.Context.of(this));
 				if (!this.isSilent()) {
-					this.level.playSound((Player) null, this.xo, this.yo, this.zo, SoundEvents.ENDERMAN_TELEPORT, this.getSoundSource(), 1F, 1F);
+					this.getLevel().playSound((Player) null, this.xo, this.yo, this.zo, SoundEvents.ENDERMAN_TELEPORT, this.getSoundSource(), 1F, 1F);
 					this.playSound(SoundEvents.ENDERMAN_TELEPORT, 1F, 1F);
 				}
 			}
@@ -112,6 +117,14 @@ public abstract class AbstractSMMob extends Monster implements ISMMob {
 		if (this.defTime > 0) {
 			this.defTime--;
 		}
+	}
+
+	public void addEntity(Entity entity) {
+		this.getLevel().addFreshEntity(entity);
+	}
+
+	public boolean isClient() {
+		return this.getLevel().isClientSide();
 	}
 
 	@Nullable

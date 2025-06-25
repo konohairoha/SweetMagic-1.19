@@ -44,7 +44,7 @@ public class EnderBall extends AbstractMagicShot {
 
 	// えんちちーに当たった時の処理
 	protected void entityHit(LivingEntity target) {
-		if (target instanceof ISMMob || this.level.isClientSide || !this.isTeleport) { return; }
+		if (target instanceof ISMMob || this.isClient() || !this.isTeleport) { return; }
 
 		Random rand = this.rand;
 
@@ -58,7 +58,7 @@ public class EnderBall extends AbstractMagicShot {
 			}
 
 			Vec3 vec3 = this.position();
-			this.level.gameEvent(GameEvent.TELEPORT, vec3, GameEvent.Context.of(target));
+			this.getLevel().gameEvent(GameEvent.TELEPORT, vec3, GameEvent.Context.of(target));
 			EntityTeleportEvent.ChorusFruit event = ForgeEventFactory.onChorusFruitTeleport(target, d3, d4, d5);
 			if (event.isCanceled()) { return; }
 
@@ -82,7 +82,7 @@ public class EnderBall extends AbstractMagicShot {
 			float f1 = (float) (this.getX() - 0.5F + rand.nextFloat() + vec.x * i / 4F);
 			float f2 = (float) (this.getY() - 0.25F + rand.nextFloat() * 0.5 + vec.y * i / 4F);
 			float f3 = (float) (this.getZ() - 0.5F + rand.nextFloat() + vec.z * i / 4F);
-			this.level.addParticle(ParticleTypes.PORTAL, f1, f2, f3, x, y, z);
+			this.addParticle(ParticleTypes.PORTAL, f1, f2, f3, x, y, z);
 		}
 	}
 

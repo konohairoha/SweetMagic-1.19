@@ -31,7 +31,6 @@ import net.minecraftforge.event.entity.living.LivingKnockBackEvent;
 import sweetmagic.api.ientity.ISMMob;
 import sweetmagic.init.EntityInit;
 import sweetmagic.init.entity.ai.BlazeAttackGoal;
-import sweetmagic.util.SMDamage;
 
 public class BlazeTempestTornado extends AbstractSMMob {
 
@@ -53,7 +52,7 @@ public class BlazeTempestTornado extends AbstractSMMob {
 
 	protected void defineSynchedData() {
 		super.defineSynchedData();
-		this.entityData.define(CANDLE, 0);
+		this.define(CANDLE, 0);
 	}
 
 	public static AttributeSupplier.Builder registerAttributes() {
@@ -66,13 +65,13 @@ public class BlazeTempestTornado extends AbstractSMMob {
 	}
 
 	protected void registerGoals() {
-		this.goalSelector.addGoal(4, new BlazeAttackGoal(this, this.isHard(this.level), 1));
-		this.goalSelector.addGoal(5, new MoveTowardsRestrictionGoal(this, 1.0D));
-		this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1.0D, 0.0F));
-		this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
-		this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Warden.class, 8.0F));
+		this.goalSelector.addGoal(4, new BlazeAttackGoal(this, this.isHard(this.getLevel()), 1));
+		this.goalSelector.addGoal(5, new MoveTowardsRestrictionGoal(this, 1D));
+		this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1D, 0F));
+		this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8F));
+		this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Warden.class, 8F));
 		this.goalSelector.addGoal(10, new RandomLookAroundGoal(this));
-		this.targetSelector.addGoal(1, (new HurtByTargetGoal(this)).setAlertOthers());
+		this.targetSelector.addGoal(1, new HurtByTargetGoal(this).setAlertOthers());
 		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Warden.class, true));
 		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Raider.class, true));
 		this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, Player.class, true));
@@ -84,19 +83,18 @@ public class BlazeTempestTornado extends AbstractSMMob {
 		Entity attackEntity = src.getDirectEntity();
 		if (attacker != null && attacker instanceof ISMMob) { return false; }
 
+		// 魔法攻撃以外ならダメージ減少
 		if (this.notMagicDamage(attacker, attackEntity)) {
-			attacker.hurt(SMDamage.magicDamage, amount);
-			attacker.invulnerableTime = 0;
-			return false;
+			amount *= 0.25F;
 		}
 
 		// ダメージ倍処理
 		if (!this.isLeader(this)) {
-			amount = this.getBossDamageAmount(this.level, this.defTime , src, amount, 10F);
-			this.defTime = 2;
+			amount = this.getBossDamageAmount(this.getLevel(), this.defTime , src, amount, 12F);
+			this.defTime = 1;
 		}
 
-		if (!this.level.isClientSide && amount >= 2F && this.tickCount > this.tickTime) {
+		if (!this.isClient() && amount >= 2F && this.tickCount > this.tickTime) {
 			int count = this.getCandole();
 			if (count < 4) {
 				this.setCandole(count + 1);
@@ -126,18 +124,19 @@ public class BlazeTempestTornado extends AbstractSMMob {
 	public void tick() {
 		super.tick();
 
-		if (this.level.isClientSide && this.getTarget() != null) {
-			double x = + this.xo + (this.rand.nextDouble() - 0.5D);
-			double y = + this.yo + (this.rand.nextDouble() + 0.5D);
-			double z = + this.zo + (this.rand.nextDouble() - 0.5D);
-			this.level.addParticle(ParticleTypes.SWEEP_ATTACK, x, y, z, 0D, 0D, 0D);
+		if (this.isClient() && this.getTarget() != null) {
+			double x = + this.xo + this.rand.nextDouble() - 0.5D;
+			double y = + this.yo + this.rand.nextDouble() + 0.5D;
+			double z = + this.zo + this.rand.nextDouble() - 0.5D;
+			this.getLevel().addParticle(ParticleTypes.SWEEP_ATTACK, x, y, z, 0D, 0D, 0D);
 		}
 	}
 
 	public void aiStep() {
 
-		if (!this.onGround && this.getDeltaMovement().y < 0XD) {
-			this.setDeltaMovement(this.getDeltaMovement().multiply(1D, 0.6D, 1D));
+		Vec3 vec3 = this.getDeltaMovement();
+		if (!this.onGround && vec3.y < 0XD) {
+			this.setDeltaMovement(vec3.multiply(1D, 0.6D, 1D));
 		}
 
 		super.aiStep();
@@ -149,7 +148,7 @@ public class BlazeTempestTornado extends AbstractSMMob {
 		--this.nextTick;
 		if (this.nextTick <= 0) {
 			this.nextTick = 100;
-			this.allowHeight = (float) this.random.triangle(0.5D, 6.891D);
+			this.allowHeight = (float) this.getRandom().triangle(0.5D, 6.891D);
 		}
 
 		LivingEntity target = this.getTarget();
@@ -157,7 +156,7 @@ public class BlazeTempestTornado extends AbstractSMMob {
 
 		if (target.getEyeY() > this.getEyeY() + (double) this.allowHeight) {
 			Vec3 vec3 = this.getDeltaMovement();
-			this.setDeltaMovement(this.getDeltaMovement().add(0D, ((double) 0.3F - vec3.y) * (double) 0.4F, 0D));
+			this.setDeltaMovement(vec3.add(0D, ((double) 0.3F - vec3.y) * (double) 0.4F, 0D));
 			this.hasImpulse = true;
 		}
 
@@ -182,7 +181,7 @@ public class BlazeTempestTornado extends AbstractSMMob {
 
 		this.setCandole(0);
 		this.windTime = 0;
-		if ( !( this.level instanceof ServerLevel sever ) ) { return; }
+		if (!(this.getLevel() instanceof ServerLevel sever)) { return; }
 
 		float x = (float) (this.getX() + this.rand.nextFloat() - 0.5F);
 		float y = (float) (this.getY() + this.rand.nextFloat() - 0.5F);
@@ -204,11 +203,11 @@ public class BlazeTempestTornado extends AbstractSMMob {
 	}
 
 	public int getCandole() {
-		return this.entityData.get(CANDLE);
+		return this.get(CANDLE);
 	}
 
 	public void setCandole(int size) {
-		this.entityData.set(CANDLE, size);
+		this.set(CANDLE, size);
 	}
 
 	// 低ランクかどうか

@@ -5,7 +5,6 @@ import java.util.List;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.EntityType;
@@ -20,7 +19,7 @@ import sweetmagic.init.PotionInit;
 
 public class LightningRod extends AbstractMagicShot {
 
-	private static final EntityDataAccessor<Boolean> IS_LIGHNING = setEntityData(EntityDataSerializers.BOOLEAN);
+	private static final EntityDataAccessor<Boolean> LIGHNING = setEntityData(ISMMob.BOOLEAN);
 
 	public LightningRod(EntityType<? extends AbstractMagicShot> entityType, Level world) {
 		super(entityType, world);
@@ -45,20 +44,20 @@ public class LightningRod extends AbstractMagicShot {
 
 	protected void defineSynchedData() {
 		super.defineSynchedData();
-		this.entityData.define(IS_LIGHNING, false);
+		this.define(LIGHNING, false);
 	}
 
 	public boolean getLighning() {
-		return this.entityData.get(IS_LIGHNING);
+		return this.get(LIGHNING);
 	}
 
 	public void tick() {
 
 		int maxTime = this.getMaxLifeTime();
-		if (!this.level.isClientSide && this.tickCount + 200 > maxTime) {
+		if (!this.isClient() && this.tickCount + 200 > maxTime) {
 
 			if (this.tickCount + 5 > maxTime) {
-				this.entityData.set(IS_LIGHNING, true);
+				this.set(LIGHNING, true);
 			}
 
 			if (this.tickCount >= maxTime) {
@@ -66,7 +65,7 @@ public class LightningRod extends AbstractMagicShot {
 				this.discard();
 			}
 
-			if (this.tickCount % 2 == 0 && this.level instanceof ServerLevel server) {
+			if (this.tickCount % 2 == 0 && this.getLevel() instanceof ServerLevel server) {
 				BlockPos pos = this.blockPosition();
 				float range = (float) this.getRange();
 				for (int i = 0; i < 3; i++) {

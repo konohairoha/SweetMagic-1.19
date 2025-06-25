@@ -45,7 +45,7 @@ public class NormalMagicShot extends AbstractMagicShot {
 
 	// パーティクルスポーン
 	protected void spawnParticle() {
-		this.level.addParticle(ParticleInit.ORB, this.getX(), this.getY(), this.getZ(), 114F / 255F, 255F / 255F, 170F / 255F);
+		this.addParticle(ParticleInit.ORB, this.getX(), this.getY(), this.getZ(), 114F / 255F, 255F / 255F, 170F / 255F);
 	}
 
 	// 属性の取得

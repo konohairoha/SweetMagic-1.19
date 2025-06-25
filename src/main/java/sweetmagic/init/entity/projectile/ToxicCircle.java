@@ -50,7 +50,7 @@ public class ToxicCircle extends AbstractMagicShot {
 				this.rangeAttack(this.blockPosition(), this.getDamage(), this.getRange());
 			}
 
-			if (this.tickCount % 2 == 0 && this.level instanceof ServerLevel server) {
+			if (this.tickCount % 2 == 0 && this.getLevel() instanceof ServerLevel server) {
 				BlockPos pos = this.blockPosition();
 				float range = (float) this.getRange();
 				for (int i = 0; i < 3; i++) {
@@ -61,7 +61,7 @@ public class ToxicCircle extends AbstractMagicShot {
 			}
 		}
 
-		else if (this.level instanceof ServerLevel server) {
+		else if (this.getLevel() instanceof ServerLevel server) {
 			this.spawnParticle(server);
 		}
 	}

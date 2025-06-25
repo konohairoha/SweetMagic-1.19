@@ -27,6 +27,7 @@ import net.minecraft.world.entity.ai.goal.SitWhenOrderedToGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.monster.Slime;
 import net.minecraft.world.entity.monster.Witch;
 import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.entity.player.Player;
@@ -55,7 +56,7 @@ public class WitchGolem extends AbstractSummonMob implements IGolem {
 
 	protected void defineSynchedData() {
 		super.defineSynchedData();
-		this.entityData.define(ATTACK_TICK, 0);
+		this.define(ATTACK_TICK, 0);
 	}
 
 	public static AttributeSupplier.Builder registerAttributes() {
@@ -69,11 +70,11 @@ public class WitchGolem extends AbstractSummonMob implements IGolem {
 	}
 
 	protected void registerGoals() {
-		this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.0D, true));
+		this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1D, true));
 		this.goalSelector.addGoal(2, new SitWhenOrderedToGoal(this));
 		this.goalSelector.addGoal(3, new GolemRandomStrollInVillageGoal(this, 0.6D));
 		this.goalSelector.addGoal(4, new FollowOwnerGoal(this, 1D, 10F, 2F, false));
-		this.goalSelector.addGoal(5, new LookAtPlayerGoal(this, Player.class, 6.0F));
+		this.goalSelector.addGoal(5, new LookAtPlayerGoal(this, Player.class, 6F));
 		this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
 		this.targetSelector.addGoal(1, new SMOwnerHurtByTargetGoal(this));
 		this.targetSelector.addGoal(2, new SMOwnerHurtTargetGoal(this));
@@ -81,6 +82,7 @@ public class WitchGolem extends AbstractSummonMob implements IGolem {
 		this.targetSelector.addGoal(4, new NearestAttackSMMobGoal<>(this, Monster.class, false));
 		this.targetSelector.addGoal(5, new AttackTargetGoal<>(this, Raider.class, false));
 		this.targetSelector.addGoal(6, new AttackTargetGoal<>(this, Warden.class, false));
+		this.targetSelector.addGoal(7, new AttackTargetGoal<>(this, Slime.class, false));
 	}
 
 	protected SoundEvent getHurtSound(DamageSource src) {
@@ -92,11 +94,11 @@ public class WitchGolem extends AbstractSummonMob implements IGolem {
 	}
 
 	public void setAttackTick(int attackTick) {
-		this.entityData.set(ATTACK_TICK, attackTick);
+		this.set(ATTACK_TICK, attackTick);
 	}
 
 	public int getAttackTick() {
-		return this.entityData.get(ATTACK_TICK);
+		return this.get(ATTACK_TICK);
 	}
 
 	public boolean canAttackType(EntityType<?> eType) {
@@ -113,7 +115,7 @@ public class WitchGolem extends AbstractSummonMob implements IGolem {
 		}
 
 		int effecsize = PlayerHelper.getEffectList(this, PotionInit.BUFF).size();
-		attacker.hurt(src, amount * (0.1F + 0.15F * effecsize));
+		attacker.hurt(src, Math.min(40F, amount * (0.1F + 0.15F * effecsize)));
 		attacker.invulnerableTime = 0;
 
 		if (effecsize > 0) {
@@ -154,10 +156,10 @@ public class WitchGolem extends AbstractSummonMob implements IGolem {
 			}
 		}
 
-		if (this.level instanceof ServerLevel server) {
+		if (this.getLevel() instanceof ServerLevel server) {
 
 			BlockPos pos = this.blockPosition();
-			BlockState state = this.level.getBlockState(pos.below());
+			BlockState state = this.getLevel().getBlockState(pos.below());
 			ParticleOptions par = new BlockParticleOption(ParticleTypes.BLOCK, state);
 
 			for (int i = 0; i < 4; i++) {
@@ -198,7 +200,7 @@ public class WitchGolem extends AbstractSummonMob implements IGolem {
 			int k = Mth.floor(this.getZ());
 
 			BlockPos pos = new BlockPos(x, y, k);
-			BlockState state = this.level.getBlockState(pos);
+			BlockState state = this.getLevel().getBlockState(pos);
 
 			if (!state.isAir()) {
 				ParticleOptions par = new BlockParticleOption(ParticleTypes.BLOCK, state).setPos(pos);
@@ -208,7 +210,7 @@ public class WitchGolem extends AbstractSummonMob implements IGolem {
 
 				double xSpeed = 4D * ((double) this.getRand() - 0.5D);
 				double zSpeed = 4D * ((double) this.getRand() - 0.5D);
-				this.level.addParticle(par, xP, yP, zP, xSpeed, 0.5D, zSpeed);
+				this.getLevel().addParticle(par, xP, yP, zP, xSpeed, 0.5D, zSpeed);
 			}
 		}
 	}

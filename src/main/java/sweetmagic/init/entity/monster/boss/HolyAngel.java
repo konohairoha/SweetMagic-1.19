@@ -32,6 +32,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import sweetmagic.api.ientity.IAngel;
 import sweetmagic.api.ientity.ISMMob;
 import sweetmagic.init.EntityInit;
 import sweetmagic.init.SoundInit;
@@ -39,7 +40,7 @@ import sweetmagic.init.entity.animal.AbstractSummonMob;
 import sweetmagic.init.entity.projectile.EvilArrow;
 import sweetmagic.util.SMDamage;
 
-public class HolyAngel extends AbstractSMBoss {
+public class HolyAngel extends AbstractSMBoss implements IAngel {
 
 	private int holyLightTime = 0;						// ホーリーライト攻撃時間
 	private int oruChargeTime = 0;						// オーバーレイユニット
@@ -47,9 +48,8 @@ public class HolyAngel extends AbstractSMBoss {
 	private static final int ORUCHARGE_MAXTIME = 300;	// オーバーレイユニット最大チャージ時間
 	private Map<Integer, BlockPos> posMap = new LinkedHashMap<>();	// セイクリッドレイン
 	private List<Player> playerList = new ArrayList<>();
-	private double armorHealth = 0D;
-	private double maxArmorHealth = 0D;
 	private static final EntityDataAccessor<Integer> ORU = ISMMob.setData(HolyAngel.class, INT);
+	private static final EntityDataAccessor<Boolean> CHARGE = ISMMob.setData(HolyAngel.class, BOOLEAN);
 
 	public HolyAngel(Level world) {
 		super(EntityInit.holyAngel, world);
@@ -73,7 +73,8 @@ public class HolyAngel extends AbstractSMBoss {
 
 	protected void defineSynchedData() {
 		super.defineSynchedData();
-		this.entityData.define(ORU, 0);
+		this.define(ORU, 0);
+		this.define(CHARGE, false);
 	}
 
 	protected SoundEvent getAmbientSound() {
@@ -98,10 +99,10 @@ public class HolyAngel extends AbstractSMBoss {
 		Entity attackEntity = src.getDirectEntity();
 		if (attacker != null && attacker instanceof ISMMob) { return false; }
 
-		boolean isLectern = this.isLectern();
+		boolean isLectern = this.getLectern();
 
 		// ボスダメージ計算
-		amount = this.getBossDamageAmount(this.level, this.defTime , src, amount, isLectern ? 10F : 5.75F);
+		amount = this.getBossDamageAmount(this.getLevel(), this.defTime , src, amount, isLectern ? 10F : 5.75F);
 		this.defTime = amount > 0 ? 2 : this.defTime;
 
 		if (attacker instanceof Warden) {
@@ -117,11 +118,6 @@ public class HolyAngel extends AbstractSMBoss {
 		// 魔導士の召喚台座による召喚の場合
 		if (isLectern) {
 			amount = this.getLecternAction(src, amount, this.getORU());
-		}
-
-		else if (this.armorHealth > 0D) {
-			this.armorHealth -= amount;
-			this.setORU((int) ((this.maxArmorHealth - this.armorHealth) % 7.5D));
 		}
 
 		return super.hurt(src, amount);
@@ -171,11 +167,11 @@ public class HolyAngel extends AbstractSMBoss {
 			this.playSound(SoundEvents.LIGHTNING_BOLT_IMPACT, 1F, 1F);
 			BlockPos pos = this.blockPosition();
 
-			if (this.level instanceof ServerLevel sever) {
+			if (this.getLevel() instanceof ServerLevel sever) {
 				for (int i = 0; i < 16; i++) {
-					float x = (float) (pos.getX() + this.rand.nextFloat());
-					float y = (float) (pos.getY() + this.rand.nextFloat() + 0.5F);
-					float z = (float) (pos.getZ() + this.rand.nextFloat());
+					float x = (float) pos.getX() + this.rand.nextFloat();
+					float y = (float) pos.getY() + this.rand.nextFloat() + 0.5F;
+					float z = (float) pos.getZ() + this.rand.nextFloat();
 					sever.sendParticles(ParticleTypes.LAVA, x, y, z, 4, 0F, 0F, 0F, 0.15F);
 				}
 			}
@@ -187,30 +183,36 @@ public class HolyAngel extends AbstractSMBoss {
 	public void addAdditionalSaveData(CompoundTag tags) {
 		super.addAdditionalSaveData(tags);
 		tags.putInt("oru", this.getORU());
+		tags.putBoolean("isCharge", this.getCharge());
 		tags.putInt("oruChargeTime", this.oruChargeTime);
 		tags.putInt("holyLightTime", this.holyLightTime);
-		tags.putDouble("armorHealth", this.armorHealth);
-		tags.putDouble("maxArmorHealth", this.maxArmorHealth);
 	}
 
 	public void readAdditionalSaveData(CompoundTag tags) {
 		super.readAdditionalSaveData(tags);
 		this.setORU(tags.getInt("oru"));
+		this.setCharge(tags.getBoolean("isCharge"));
 		this.oruChargeTime = tags.getInt("oruChargeTime");
 		this.holyLightTime = tags.getInt("holyLightTime");
-		this.armorHealth = tags.getDouble("armorHealth");
-		this.maxArmorHealth = tags.getDouble("maxArmorHealth");
-		if (!this.isLectern()) {
+		if (!this.getLectern()) {
 			this.setBossEvent(BC_BLUE, NOTCHED_6);
 		}
 	}
 
 	public int getORU() {
-		return this.entityData.get(ORU);
+		return this.get(ORU);
 	}
 
 	public void setORU(int size) {
-		this.entityData.set(ORU, Math.min(24, size));
+		this.set(ORU, Math.min(24, size));
+	}
+
+	public boolean getCharge() {
+		return this.get(CHARGE);
+	}
+
+	public void setCharge(boolean isCharge) {
+		this.set(CHARGE, isCharge);
 	}
 
 	// アーマーがないなら
@@ -221,17 +223,17 @@ public class HolyAngel extends AbstractSMBoss {
 	public void tick() {
 		super.tick();
 
-		if (this.level.isClientSide) {
+		if (this.isClient()) {
 
 			Vec3 vec = this.getDeltaMovement();
 			float x = (float) (this.getX() - 0.5F + this.rand.nextFloat());
 			float y = (float) (this.getY() + 1F);
 			float z = (float) (this.getZ() - 0.5F + this.rand.nextFloat());
 
-			float f1 = (float) ( (vec.x + 0.5F - this.rand.nextFloat() ) * 0.2F);
+			float f1 = (float) ((vec.x + 0.5F - this.rand.nextFloat()) * 0.2F);
 			float f2 = 0F;
-			float f3 = (float) ( (vec.z + 0.5F - this.rand.nextFloat() ) * 0.2F);
-			this.level.addParticle(ParticleTypes.END_ROD, x, y, z, f1, f2, f3);
+			float f3 = (float) ((vec.z + 0.5F - this.rand.nextFloat()) * 0.2F);
+			this.getLevel().addParticle(ParticleTypes.END_ROD, x, y, z, f1, f2, f3);
 		}
 
 		BlockPos spawnPos = this.getSpawnPos();
@@ -247,7 +249,7 @@ public class HolyAngel extends AbstractSMBoss {
 
 	protected boolean teleport() {
 		BlockPos spawnPos = this.getSpawnPos();
-		if (!this.level.isClientSide() && this.isAlive() && spawnPos != null) {
+		if (!this.isClient() && this.isAlive() && spawnPos != null) {
 			double d0 = spawnPos.getX() + (this.rand.nextDouble() - 0.5D) * 12D;
 			double d1 = spawnPos.getY() + 0.5D;
 			double d2 = spawnPos.getZ() + (this.rand.nextDouble() - 0.5D) * 12D;
@@ -262,7 +264,7 @@ public class HolyAngel extends AbstractSMBoss {
 		if (target == null) { return; }
 
 		// オーバーレイユニットが0の場合
-		if (this.isLectern() && this.getORU() <= 0) {
+		if (this.getLectern() && this.getORU() <= 0) {
 
 			this.oruChargeTime++;
 			this.posMap.clear();
@@ -292,7 +294,7 @@ public class HolyAngel extends AbstractSMBoss {
 	public void firstPhaseSttack(LivingEntity target) {
 
 		this.holyLightTime++;
-		double range = this.isLectern() ? 16D : 24D;
+		double range = this.getLectern() ? 16D : 24D;
 
 		if (this.holyLightTime >= holyLightMaxTime - 120) {
 
@@ -302,6 +304,7 @@ public class HolyAngel extends AbstractSMBoss {
 				this.spawnParticleCycle(pos, range - 3.85D);
 				this.spawnParticleCycle(pos, range - 7.85D);
 			}
+			this.setCharge(true);
 		}
 
 		// ホーリーライトの攻撃チャージが終わったら
@@ -311,12 +314,13 @@ public class HolyAngel extends AbstractSMBoss {
 			boolean isPlayer = this.isPlayer(target);
 			BlockPos pos = this.blockPosition();
 			List<LivingEntity> entityList = this.getEntityList(LivingEntity.class, this.getFilter(isPlayer, pos, range * range), range);
-			float damage = (this.isHard() ? 10F : 6F) + this.getORU() * 2F + this.getBuffPower();
+			float damage = (this.getHard() ? 10F : 6F) + this.getORU() * 2F + this.getBuffPower();
 			this.attackDamage(entityList, SMDamage.magicDamage, damage);
+			this.setCharge(false);
 
 			this.holyLightTime = 0;
 			this.playSound(SoundEvents.DRAGON_FIREBALL_EXPLODE, 2F, 1F);
-			if ( !(this.level instanceof ServerLevel sever) ) { return; }
+			if (!(this.getLevel() instanceof ServerLevel sever)) { return; }
 
 			// 範囲の座標取得
 			Iterable<BlockPos> posList = this.getPosList(pos, range);
@@ -325,9 +329,9 @@ public class HolyAngel extends AbstractSMBoss {
 
 				if (this.rand.nextFloat() >= 0.2F || !this.checkDistances(pos, p, range * range)) { continue; }
 
-				float x = (float) (p.getX() + this.rand.nextFloat() - 0.5F);
-				float y = (float) (p.getY() + this.rand.nextFloat() - 0.5F);
-				float z = (float) (p.getZ() + this.rand.nextFloat() - 0.5F);
+				float x = (float) p.getX() + this.rand.nextFloat() - 0.5F;
+				float y = (float) p.getY() + this.rand.nextFloat() - 0.5F;
+				float z = (float) p.getZ() + this.rand.nextFloat() - 0.5F;
 				sever.sendParticles(ParticleTypes.END_ROD, x, y, z, 0, 0F, this.rand.nextFloat() * 0.5F, 0F, 1F);
 			}
 		}
@@ -337,7 +341,7 @@ public class HolyAngel extends AbstractSMBoss {
 	public void secondPhaseSttack(LivingEntity target) {
 
 		this.holyLightTime++;
-		double range = this.isLectern() ? 12D : 18D;
+		double range = this.getLectern() ? 12D : 18D;
 		boolean isPlayer = this.isPlayer(target);
 
 		// ホーリーライトの座標設定
@@ -347,6 +351,7 @@ public class HolyAngel extends AbstractSMBoss {
 
 		if (this.holyLightTime >= holyLightMaxTime - 120 && this.holyLightTime % 30 == 0) {
 			this.posMap.values().forEach(p -> this.spawnParticleCycle(p, range));
+			this.setCharge(true);
 		}
 
 		// ホーリーライトの攻撃チャージが終わったら攻撃
@@ -383,7 +388,8 @@ public class HolyAngel extends AbstractSMBoss {
 	// ホーリーライトの攻撃
 	public void holyLightAttack(boolean isPlayer, double range) {
 
-		float damage = (this.isHard() ? 20F : 12F) + this.getBuffPower();
+		float damage = (this.getHard() ? 20F : 12F) + this.getBuffPower();
+		this.setCharge(false);
 
 		for (Entry<Integer, BlockPos> map : this.posMap.entrySet()) {
 
@@ -401,29 +407,28 @@ public class HolyAngel extends AbstractSMBoss {
 				this.holyLightTime = 0;
 			}
 
-			if (this.level instanceof ServerLevel sever) {
+			if (this.getLevel() instanceof ServerLevel sever) {
 
 				// 範囲の座標取得
 				Iterable<BlockPos> posList = this.getPosList(pos, range);
 
 				for (BlockPos p : posList) {
-
 					if (this.rand.nextFloat() >= 0.15F || !this.checkDistances(pos, p, range * range)) { continue; }
 
-					float x = (float) (p.getX() + this.rand.nextFloat() - 0.5F);
-					float y = (float) (p.getY() + this.rand.nextFloat() - 0.5F);
-					float z = (float) (p.getZ() + this.rand.nextFloat() - 0.5F);
+					float x = (float) p.getX() + this.rand.nextFloat() - 0.5F;
+					float y = (float) p.getY() + this.rand.nextFloat() - 0.5F;
+					float z = (float) p.getZ() + this.rand.nextFloat() - 0.5F;
 					sever.sendParticles(ParticleTypes.END_ROD, x, y, z, 0, 0F, this.rand.nextFloat() * 0.75F, 0F, 1F);
 				}
 			}
 
-			this.level.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.GENERIC_EXPLODE, this.getSoundSource(), 2F, 1F);
+			this.getLevel().playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.GENERIC_EXPLODE, this.getSoundSource(), 2F, 1F);
 			return;
 		}
 	}
 
 	public void setORU() {
-		int rate = this.isHard() ? 6 : 4;
+		int rate = this.getHard() ? 6 : 4;
 		List<Player> playerList = this.getEntityList(Player.class, 80D);
 		this.setORU(rate * playerList.size());
 	}
@@ -437,8 +442,7 @@ public class HolyAngel extends AbstractSMBoss {
 
 	public void startInfo() {
 		super.startInfo();
-		this.armorHealth = 3 * this.getEntityList(Player.class, 80D).size() * 15D;
-		this.maxArmorHealth = this.armorHealth;
+		this.setHealthArmorCount(this.getHealthArmorCount() + 1);
 		this.holyLightMaxTime = 250;
 	}
 
@@ -446,13 +450,14 @@ public class HolyAngel extends AbstractSMBoss {
 		this.setORU();
 		this.oruChargeTime = 0;
 		this.holyLightTime = 0;
+		this.setCharge(false);
 	}
 
 	// バフによるダメージ増減
 	public float getBuffPower() {
 		float damage = super.getBuffPower();
 
-		if (!this.isLectern()) {
+		if (!this.getLectern()) {
 			damage += 10F;
 			damage *= 1.5F;
 		}

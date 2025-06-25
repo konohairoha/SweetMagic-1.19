@@ -7,6 +7,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -18,21 +19,24 @@ import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.SitWhenOrderedToGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.monster.Slime;
 import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.raid.Raider;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import sweetmagic.api.ientity.IWitch;
 import sweetmagic.init.EntityInit;
 import sweetmagic.init.PotionInit;
 import sweetmagic.init.SoundInit;
 import sweetmagic.init.entity.projectile.AbstractMagicShot;
 
-public abstract class AbstractWitch extends AbstractSummonMob {
+public abstract class AbstractWitch extends AbstractSummonMob implements IWitch {
 
 	protected int coolTime = 0;
 	protected int recastTime = 0;
 	protected int damageCoolTime = 0;
+	public AnimationState magicAttackAnim = new AnimationState();
 
 	public AbstractWitch(Level world) {
 		super(EntityInit.witchGolem, world);
@@ -57,13 +61,33 @@ public abstract class AbstractWitch extends AbstractSummonMob {
 		this.goalSelector.addGoal(4, new GolemRandomStrollInVillageGoal(this, 0.6D));
 		this.goalSelector.addGoal(6, new FollowOwnerGoal(this, 1D, 10F, 2F, false));
 		this.goalSelector.addGoal(7, new LookAtPlayerGoal(this, Monster.class, 8F));
-		this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 6.0F));
+		this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 6F) {
+
+			   public boolean canUse() {
+				   return super.canUse() && getTarget() == null;
+			   }
+		});
 		this.targetSelector.addGoal(1, new SMOwnerHurtByTargetGoal(this));
 		this.targetSelector.addGoal(2, new SMOwnerHurtTargetGoal(this));
 		this.targetSelector.addGoal(3, (new HurtByTargetGoal(this)).setAlertOthers());
 		this.targetSelector.addGoal(4, new NearestAttackSMMobGoal<>(this, Monster.class, false));
 		this.targetSelector.addGoal(5, new AttackTargetGoal<>(this, Raider.class, false));
 		this.targetSelector.addGoal(6, new AttackTargetGoal<>(this, Warden.class, false));
+		this.targetSelector.addGoal(7, new AttackTargetGoal<>(this, Slime.class, false));
+	}
+
+	public void handleEntityEvent(byte par1) {
+		switch(par1) {
+		case 4:
+			this.magicAttackAnim.stop();
+			break;
+		case 5:
+			this.magicAttackAnim.start(this.tickCount);
+			break;
+		default:
+			super.handleEntityEvent(par1);
+			break;
+		}
 	}
 
 	protected SoundEvent getAmbientSound() {
@@ -76,6 +100,14 @@ public abstract class AbstractWitch extends AbstractSummonMob {
 
 	protected float getSoundVolume() {
 		return 0.4F;
+	}
+
+	public AnimationState getAnimaState() {
+		return this.magicAttackAnim;
+	}
+
+	public boolean isCharge() {
+		return false;
 	}
 
 	public void addAdditionalSaveData(CompoundTag tags) {
@@ -118,16 +150,26 @@ public abstract class AbstractWitch extends AbstractSummonMob {
 		}
 
 		LivingEntity target = this.getTarget();
-		if (target == null || this.getShit()) { return; }
+		if (target == null || this.getShit()) {
+			this.getLevel().broadcastEntityEvent(this, (byte) 4);
+			return;
+		}
+
+		if(this.recastTime - 16 == 0) {
+			this.getLevel().broadcastEntityEvent(this, (byte) 5);
+		}
 
 		this.getLookControl().setLookAt(target, 10F, 10F);
 		if (this.recastTime > 0) { return; }
 
-		boolean isWarden = target instanceof Warden;
+		this.magicAttack(target, target instanceof Warden);
+	}
+
+	public void magicAttack(LivingEntity target, boolean isWarden) {
+
 		this.recastTime = this.getRecastTime();
 		float dama = this.getPower(this.getWandLevel()) + (float) this.getAttributeValue(Attributes.ATTACK_DAMAGE) * 0.33F;
 		float dameRate = isWarden ? 4F : this.getDamageRate();
-
 		double x = target.getX() - this.getX();
 		double y = target.getY(0.3333333333333333D) - this.getY();
 		double z = target.getZ() - this.getZ();
@@ -143,9 +185,9 @@ public abstract class AbstractWitch extends AbstractSummonMob {
 		entity.setRange(4.5D + this.getRange());
 		entity.setWandLevel(level);
 		entity.shoot(x, y - xz * 0.035D, z, 2.25F, 0F);
-		entity.setAddDamage( (entity.getAddDamage() + dama) * dameRate );
+		entity.setAddDamage((entity.getAddDamage() + dama) * dameRate);
 		this.playSound(SoundEvents.BLAZE_SHOOT, 0.5F, 0.67F);
-		this.level.addFreshEntity(entity);
+		this.getLevel().addFreshEntity(entity);
 	}
 
 	public int getRecastTime() {
@@ -161,7 +203,7 @@ public abstract class AbstractWitch extends AbstractSummonMob {
 	}
 
 	public void addPotion() {
-		if (this.level.isClientSide || this.getTarget() == null) { return; }
+		if (this.isClient() || this.getTarget() == null) { return; }
 
 		if (this.coolTime > 0) {
 			this.coolTime--;
@@ -186,7 +228,7 @@ public abstract class AbstractWitch extends AbstractSummonMob {
 			this.coolTime += 200;
 			this.playSound(SoundInit.HEAL, 0.0625F, 1F);
 
-			if (this.level instanceof ServerLevel server) {
+			if (this.getLevel() instanceof ServerLevel server) {
 				this.spawnParticleRing(server, ParticleTypes.HAPPY_VILLAGER, 0.75D, this.blockPosition(), 1D, 0.1D, 0D);
 			}
 

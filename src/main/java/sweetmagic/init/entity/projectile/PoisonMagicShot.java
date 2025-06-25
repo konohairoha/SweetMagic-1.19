@@ -7,7 +7,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -17,6 +16,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import sweetmagic.api.emagic.SMElement;
+import sweetmagic.api.ientity.ISMMob;
 import sweetmagic.api.iitem.info.WandInfo;
 import sweetmagic.init.EntityInit;
 import sweetmagic.init.ParticleInit;
@@ -26,7 +26,7 @@ import sweetmagic.init.entity.monster.PhantomWolf;
 public class PoisonMagicShot extends AbstractMagicShot {
 
 	private LivingEntity entity = null;
-	private static final EntityDataAccessor<Boolean> IS_WOLF = setEntityData(EntityDataSerializers.BOOLEAN);
+	private static final EntityDataAccessor<Boolean> WOLF = setEntityData(ISMMob.BOOLEAN);
 
 	public PoisonMagicShot(EntityType<? extends AbstractMagicShot> entityType, Level world) {
 		super(entityType, world);
@@ -52,15 +52,15 @@ public class PoisonMagicShot extends AbstractMagicShot {
 
 	protected void defineSynchedData() {
 		super.defineSynchedData();
-		this.entityData.define(IS_WOLF, false);
+		this.define(WOLF, false);
 	}
 
 	public void setWolf(boolean isWolf) {
-		this.entityData.set(IS_WOLF, isWolf);
+		this.set(WOLF, isWolf);
 	}
 
 	public boolean getWolf() {
-		return this.entityData.get(IS_WOLF);
+		return this.get(WOLF);
 	}
 
 	// えんちちーに当たった時の処理
@@ -106,7 +106,7 @@ public class PoisonMagicShot extends AbstractMagicShot {
 
 	public void rangeAttack(BlockPos bPos, float dame, double range) {
 
-		if (this.level instanceof ServerLevel server) {
+		if (this.getLevel() instanceof ServerLevel server) {
 
 			// 範囲の座標取得
 			Random rand = this.rand;
@@ -175,15 +175,15 @@ public class PoisonMagicShot extends AbstractMagicShot {
 			float x = addX + this.getRandFloat(0.075F);
 			float y = addY + this.getRandFloat(0.075F);
 			float z = addZ + this.getRandFloat(0.075F);
-			float f1 = (float) (this.getX() - 0.5F + rand.nextFloat() + vec.x * i / 4.0F);
-			float f2 = (float) (this.getY() - 0.25F + rand.nextFloat() * 0.5 + vec.y * i / 4.0D);
-			float f3 = (float) (this.getZ() - 0.5F + rand.nextFloat() + vec.z * i / 4.0D);
-			this.level.addParticle(ParticleInit.POISON, f1, f2, f3, x, y, z);
+			float f1 = (float) (this.getX() - 0.5F + rand.nextFloat() + vec.x * i / 4D);
+			float f2 = (float) (this.getY() - 0.25F + rand.nextFloat() * 0.5 + vec.y * i / 4D);
+			float f3 = (float) (this.getZ() - 0.5F + rand.nextFloat() + vec.z * i / 4D);
+			this.addParticle(ParticleInit.POISON, f1, f2, f3, x, y, z);
 		}
 	}
 
 	public void hitToSpawnParticle() {
-		if (!(this.level instanceof ServerLevel server)) { return; }
+		if (!(this.getLevel() instanceof ServerLevel server)) { return; }
 
 		Random rand = this.rand;
 		BlockPos pos = this.blockPosition();
@@ -212,7 +212,7 @@ public class PoisonMagicShot extends AbstractMagicShot {
 	public LivingEntity getRenderEntity() {
 
 		if (this.entity == null) {
-			this.entity = entity = new PhantomWolf(this.level);
+			this.entity = entity = new PhantomWolf(this.getLevel());
 		}
 
 		return this.entity;

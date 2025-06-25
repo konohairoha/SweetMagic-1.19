@@ -40,7 +40,7 @@ public class DwarfZombie extends AbstractOwnerMob {
 
 	private int recastTime = 100;
 	private static final int RAND_RECASTTIME = 80;
-	private static final EntityDataAccessor<Boolean> ISSUMMON = ISMMob.setData(DwarfZombie.class, BOOLEAN);
+	private static final EntityDataAccessor<Boolean> SUMMON = ISMMob.setData(DwarfZombie.class, BOOLEAN);
 
 	public DwarfZombie(Level world) {
 		super(EntityInit.dwarfZombie, world);
@@ -53,14 +53,14 @@ public class DwarfZombie extends AbstractOwnerMob {
 
 	protected void defineSynchedData() {
 		super.defineSynchedData();
-		this.entityData.define(ISSUMMON, false);
+		this.define(SUMMON, false);
 	}
 
 	protected void registerGoals() {
-		this.goalSelector.addGoal(5, new MoveTowardsRestrictionGoal(this, 1.0D));
-		this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1.0D, 0.0F));
-		this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
-		this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Warden.class, 8.0F));
+		this.goalSelector.addGoal(5, new MoveTowardsRestrictionGoal(this, 1D));
+		this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1D, 0F));
+		this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8F));
+		this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Warden.class, 8F));
 		this.goalSelector.addGoal(10, new RandomLookAroundGoal(this));
 		this.targetSelector.addGoal(1, (new HurtByTargetGoal(this)).setAlertOthers());
 		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Warden.class, true));
@@ -95,7 +95,7 @@ public class DwarfZombie extends AbstractOwnerMob {
 		if (attacker != null && attacker instanceof ISMMob) { return false; }
 
 		// ダメージ倍処理
-		amount = this.getDamageAmount(this.level , src, amount, 0.25F);
+		amount = this.getDamageAmount(this.getLevel() , src, amount, 0.25F);
 		return super.hurt(src, amount);
 	}
 
@@ -108,16 +108,16 @@ public class DwarfZombie extends AbstractOwnerMob {
 		if (this.recastTime-- > 0) { return; }
 
 		boolean isWarden = target instanceof Warden;
-		this.recastTime = (int) (( this.random.nextInt(RAND_RECASTTIME) * 0.5F + RAND_RECASTTIME ) * ( isWarden ? 0.25F : 1F ));
+		this.recastTime = (int) (( this.rand.nextInt(RAND_RECASTTIME) * 0.5F + RAND_RECASTTIME ) * ( isWarden ? 0.25F : 1F ));
 
 		AbstractMagicShot entity = this.getMagicShot(target, isWarden);
 		this.playSound(SoundEvents.BLAZE_SHOOT, 0.5F, 0.67F);
-		this.level.addFreshEntity(entity);
+		this.addEntity(entity);
 	}
 
 	public AbstractMagicShot getMagicShot (LivingEntity target, boolean isWarden) {
 
-		AbstractMagicShot entity = new RockBlastMagicShot(this.level, this);
+		AbstractMagicShot entity = new RockBlastMagicShot(this.getLevel(), this);
 		float damage = isWarden ? 13F : 2F;
 		float shotSpeed = isWarden ? 5F : 1.5F;
 		double x = target.getX() - this.getX();
@@ -136,7 +136,7 @@ public class DwarfZombie extends AbstractOwnerMob {
 		if (!this.getSummon()) { return; }
 
 		LivingEntity entity = this.getEntity();
-		if ( entity == null || !(entity instanceof DwarfZombieMaster zombie) ) { return; }
+		if (entity == null || !(entity instanceof DwarfZombieMaster zombie)) { return; }
 
 		zombie.getPosList().add(this.blockPosition());
 	}
@@ -168,11 +168,11 @@ public class DwarfZombie extends AbstractOwnerMob {
 	}
 
 	public boolean getSummon() {
-		return this.entityData.get(ISSUMMON);
+		return this.get(SUMMON);
 	}
 
 	public void setSummon(boolean summonCount) {
-		this.entityData.set(ISSUMMON, summonCount);
+		this.set(SUMMON, summonCount);
 	}
 
 	@Nullable

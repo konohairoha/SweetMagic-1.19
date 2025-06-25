@@ -74,7 +74,7 @@ public class DigMagicShot extends AbstractMagicShot {
 
 	// ブロック着弾
 	protected void onHitBlock(BlockHitResult result) {
-		if (this.level.isClientSide) { return; }
+		if (this.isClient()) { return; }
 
 		if (this.getOwner() == null || !(this.getOwner() instanceof Player player) || player.hasEffect(PotionInit.non_destructive)) {
 			this.discard();
@@ -97,10 +97,11 @@ public class DigMagicShot extends AbstractMagicShot {
 
 	public void normalBreak(BlockPos pos) {
 
-		BlockState state = this.level.getBlockState(pos);
+		Level world = this.getLevel();
+		BlockState state = world.getBlockState(pos);
 		Block block = state.getBlock();
 
-		if (this.level.getBlockEntity(pos) != null || block.defaultDestroyTime() < 0) {
+		if (world.getBlockEntity(pos) != null || block.defaultDestroyTime() < 0) {
 			this.discard();
 			return;
 		}
@@ -117,11 +118,11 @@ public class DigMagicShot extends AbstractMagicShot {
 		int data = this.getData();
 
 		if (data == 0 && !this.getSilk()) {
-			if (this.level instanceof ServerLevel server) {
-				dropList.addAll(Block.getDrops(state, server, pos, this.level.getBlockEntity(pos), (Player) this.getOwner(), new ItemStack(Items.DIAMOND_PICKAXE)));
+			if (world instanceof ServerLevel server) {
+				dropList.addAll(Block.getDrops(state, server, pos, world.getBlockEntity(pos), (Player) this.getOwner(), new ItemStack(Items.DIAMOND_PICKAXE)));
 
 				if (state.getBlock() instanceof DropExperienceBlock exp) {
-					sumXP += exp.getExpDrop(state, this.level, this.random, pos, 0, 0);
+					sumXP += exp.getExpDrop(state, world, this.getRandom(), pos, 0, 0);
 				}
 			}
 		}
@@ -135,10 +136,10 @@ public class DigMagicShot extends AbstractMagicShot {
 
 		if (!dropList.isEmpty()) {
 			BlockPos pPos = this.getOwner().blockPosition();
-			dropList.forEach(s -> this.level.addFreshEntity(new ItemEntity(this.level, pPos.getX(), pPos.getY(), pPos.getZ(), s)));
+			dropList.forEach(s -> world.addFreshEntity(new ItemEntity(world, pPos.getX(), pPos.getY(), pPos.getZ(), s)));
 
 			if (sumXP > 0) {
-				this.level.addFreshEntity(new ExperienceOrb(this.level, pPos.getX(), pPos.getY(), pPos.getZ(), sumXP));
+				world.addFreshEntity(new ExperienceOrb(world, pPos.getX(), pPos.getY(), pPos.getZ(), sumXP));
 			}
 		}
 
@@ -195,17 +196,17 @@ public class DigMagicShot extends AbstractMagicShot {
 
 		for (BlockPos p : posList) {
 
-			BlockState state = this.level.getBlockState(p);
+			BlockState state = this.getLevel().getBlockState(p);
 			Block block = state.getBlock();
-			if (this.canBreakBlock(block, state) || this.level.getBlockEntity(p) != null || block.defaultDestroyTime() < 0F) { continue; }
+			if (this.canBreakBlock(block, state) || this.getLevel().getBlockEntity(p) != null || block.defaultDestroyTime() < 0F) { continue; }
 
 			if (!this.getSilk()) {
 
-				if (this.level instanceof ServerLevel server) {
+				if (this.getLevel() instanceof ServerLevel server) {
 					dropList.addAll(Block.getDrops(state, server, p, null, player, PICK));
 
 					if (state.getBlock() instanceof DropExperienceBlock exp) {
-						sumXP += exp.getExpDrop(state, this.level, this.random, pos, 0, 0);
+						sumXP += exp.getExpDrop(state, this.getLevel(), this.getRandom(), pos, 0, 0);
 					}
 				}
 			}
@@ -221,10 +222,10 @@ public class DigMagicShot extends AbstractMagicShot {
 		if (!dropList.isEmpty()) {
 
 			BlockPos pPos = this.getOwner().blockPosition();
-			dropList.forEach(s -> this.level.addFreshEntity(new ItemEntity(this.level, pPos.getX(), pPos.getY(), pPos.getZ(), s)));
+			dropList.forEach(s -> this.getLevel().addFreshEntity(new ItemEntity(this.getLevel(), pPos.getX(), pPos.getY(), pPos.getZ(), s)));
 
 			if (sumXP > 0) {
-				this.level.addFreshEntity(new ExperienceOrb(this.level, pPos.getX(), pPos.getY(), pPos.getZ(), sumXP));
+				this.getLevel().addFreshEntity(new ExperienceOrb(this.getLevel(), pPos.getX(), pPos.getY(), pPos.getZ(), sumXP));
 			}
 		}
 	}
@@ -237,16 +238,16 @@ public class DigMagicShot extends AbstractMagicShot {
 
 	// ブロック破壊
 	public void breakBlock(Block block, BlockState state, BlockPos pos) {
-		this.level.destroyBlock(pos, false);
-		this.level.removeBlock(pos, false);
+		this.getLevel().destroyBlock(pos, false);
+		this.getLevel().removeBlock(pos, false);
 		this.gameEvent(GameEvent.BLOCK_DESTROY);
 	}
 
 	public LootContext.Builder getLoot(BlockPos pos) {
 		ItemStack tool = new ItemStack(ItemInit.alt_pick);
 		tool.enchant(Enchantments.SILK_TOUCH, 1);
-		return (new LootContext.Builder((ServerLevel) this.level)).withRandom(this.level.random)
-				.withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(pos)).withParameter(LootContextParams.TOOL, tool).withOptionalParameter(LootContextParams.BLOCK_ENTITY, this.level.getBlockEntity(pos));
+		return (new LootContext.Builder((ServerLevel) this.getLevel())).withRandom(this.getRandom())
+				.withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(pos)).withParameter(LootContextParams.TOOL, tool).withOptionalParameter(LootContextParams.BLOCK_ENTITY, this.getLevel().getBlockEntity(pos));
 	}
 
 	// パーティクルスポーン
@@ -255,7 +256,7 @@ public class DigMagicShot extends AbstractMagicShot {
 		float addX = (float) (-vec.x / 20F);
 		float addY = (float) (-vec.y / 20F);
 		float addZ = (float) (-vec.z / 20F);
-		this.level.addParticle(ParticleInit.DIG, this.getX(), this.getY(), this.getZ(), addX, addY, addZ);
+		this.addParticle(ParticleInit.DIG, this.getX(), this.getY(), this.getZ(), addX, addY, addZ);
 	}
 
 	// 属性の取得

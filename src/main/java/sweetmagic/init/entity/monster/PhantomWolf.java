@@ -46,10 +46,10 @@ public class PhantomWolf extends AbstractSMMob {
 
 	protected void registerGoals() {
 		this.goalSelector.addGoal(4, new MeleeAttackGoal(this, 1.5D, false));
-		this.goalSelector.addGoal(5, new MoveTowardsRestrictionGoal(this, 1.0D));
-		this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1.0D, 0.0F));
-		this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
-		this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Warden.class, 8.0F));
+		this.goalSelector.addGoal(5, new MoveTowardsRestrictionGoal(this, 1D));
+		this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1D, 0F));
+		this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8F));
+		this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Warden.class, 8F));
 		this.goalSelector.addGoal(10, new RandomLookAroundGoal(this));
 		this.targetSelector.addGoal(1, (new HurtByTargetGoal(this)).setAlertOthers());
 		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Warden.class, true));
@@ -59,9 +59,9 @@ public class PhantomWolf extends AbstractSMMob {
 
 	public static AttributeSupplier.Builder registerAttributes() {
 		return Monster.createMonsterAttributes()
-				.add(Attributes.MAX_HEALTH, 192D)
-				.add(Attributes.MOVEMENT_SPEED, 0.35D)
-				.add(Attributes.ATTACK_DAMAGE, 16D)
+				.add(Attributes.MAX_HEALTH, 125D)
+				.add(Attributes.MOVEMENT_SPEED, 0.3D)
+				.add(Attributes.ATTACK_DAMAGE, 8D)
 				.add(Attributes.FOLLOW_RANGE, 32D);
 	}
 
@@ -80,12 +80,18 @@ public class PhantomWolf extends AbstractSMMob {
 	// ダメージ処理
 	public boolean hurt(DamageSource src, float amount) {
 		Entity attacker = src.getEntity();
+		Entity attackEntity = src.getDirectEntity();
 		if (attacker != null && attacker instanceof ISMMob) { return false; }
+
+		// 魔法攻撃以外ならダメージ減少
+		if (this.notMagicDamage(attacker, attackEntity)) {
+			amount *= 0.25F;
+		}
 
 		// ダメージ倍処理
 		if (!this.isLeader(this)) {
-			amount = this.getBossDamageAmount(this.level, this.defTime , src, amount, 10F);
-			this.defTime = 2;
+			amount = this.getBossDamageAmount(this.getLevel(), this.defTime , src, amount, 12F);
+			this.defTime = 1;
 		}
 
 		return super.hurt(src, amount);
@@ -95,11 +101,9 @@ public class PhantomWolf extends AbstractSMMob {
 		if (!(entity instanceof LivingEntity target)) { return true; }
 
 		double range = 3F;
-		float damage = (float) this.getAttributeValue(Attributes.ATTACK_DAMAGE) + 6F;
-
+		float damage = (float) this.getAttributeValue(Attributes.ATTACK_DAMAGE) + 5F;
 		Vec3 vec3 = new Vec3(this.getX() - entity.getX(), 0.2D, this.getZ() - entity.getZ()).scale(2D);
 		this.setDeltaMovement(this.getDeltaMovement().add(vec3));
-
 		List<LivingEntity> targetList = this.getEntityList(LivingEntity.class, this.getFilter(this.isPlayer(target)), 48D);
 
 		for (LivingEntity living : targetList) {
@@ -122,7 +126,7 @@ public class PhantomWolf extends AbstractSMMob {
 			living.invulnerableTime = 0;
 		}
 
-		if (this.level instanceof ServerLevel server) {
+		if (this.getLevel() instanceof ServerLevel server) {
 
 			// 範囲の座標取得
 			Random rand = this.rand;
@@ -131,7 +135,6 @@ public class PhantomWolf extends AbstractSMMob {
 			Iterable<BlockPos> pList = WorldHelper.getRangePos(bPos, -range, 0, -range, range, 0, range);
 
 			for (BlockPos pos : pList) {
-
 				if(!this.checkDistance(pos, effectRange)) { continue; }
 
 				double x = pos.getX() + rand.nextDouble() * 1.5D - 0.75D;

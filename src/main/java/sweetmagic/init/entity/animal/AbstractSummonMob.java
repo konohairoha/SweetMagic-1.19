@@ -25,6 +25,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtByTargetGoal;
@@ -50,17 +51,20 @@ import sweetmagic.init.ParticleInit;
 import sweetmagic.init.PotionInit;
 import sweetmagic.init.TagInit;
 import sweetmagic.init.entity.monster.AbstractSMMob;
+import sweetmagic.init.item.magic.EvilArrowItem;
 import sweetmagic.init.item.sm.SMFood;
 import sweetmagic.init.item.sm.SummonerWand;
 import sweetmagic.util.PlayerHelper;
 import sweetmagic.util.SMDamage;
+import sweetmagic.util.WorldHelper;
 
 public abstract class AbstractSummonMob extends TamableAnimal {
 
 	protected Random rand = new Random();
+	private static final EntityDataAccessor<Float> RANGE = ISMMob.setData(AbstractSummonMob.class, ISMMob.FLOAT);
+	private static final EntityDataAccessor<Float> HEALTH_ARMOR = ISMMob.setData(AbstractSummonMob.class, ISMMob.FLOAT);
 	private static final EntityDataAccessor<Integer> SUMMON_TIME = ISMMob.setData(AbstractSummonMob.class, ISMMob.INT);
 	private static final EntityDataAccessor<Integer> WAND_LEVEL = ISMMob.setData(AbstractSummonMob.class, ISMMob.INT);
-	private static final EntityDataAccessor<Float> RANGE = ISMMob.setData(AbstractSummonMob.class, ISMMob.FLOAT);
 	private static final EntityDataAccessor<Boolean> IS_SHIT = ISMMob.setData(AbstractSummonMob.class, ISMMob.BOOLEAN);
 	private static final EntityDataAccessor<Boolean> ISALAY = ISMMob.setData(AbstractSummonMob.class, ISMMob.BOOLEAN);
 	private static final EntityDataAccessor<Boolean> ISGOLEM = ISMMob.setData(AbstractSummonMob.class, ISMMob.BOOLEAN);
@@ -75,96 +79,121 @@ public abstract class AbstractSummonMob extends TamableAnimal {
 
 	protected void defineSynchedData() {
 		super.defineSynchedData();
-		this.entityData.define(SUMMON_TIME, 1200);
-		this.entityData.define(WAND_LEVEL, 1);
-		this.entityData.define(RANGE, 0F);
-		this.entityData.define(IS_SHIT, false);
-		this.entityData.define(ISALAY, false);
-		this.entityData.define(ISGOLEM, false);
-		this.entityData.define(ISFOX, false);
-		this.entityData.define(ISMASTER, false);
-		this.entityData.define(ISIFRIT, false);
-		this.entityData.define(ISWINDINE, false);
+		this.define(SUMMON_TIME, 1200);
+		this.define(WAND_LEVEL, 1);
+		this.define(RANGE, 0F);
+		this.define(HEALTH_ARMOR, 0F);
+		this.define(IS_SHIT, false);
+		this.define(ISALAY, false);
+		this.define(ISGOLEM, false);
+		this.define(ISFOX, false);
+		this.define(ISMASTER, false);
+		this.define(ISIFRIT, false);
+		this.define(ISWINDINE, false);
+	}
+
+	public <T> T get(EntityDataAccessor<T> value) {
+		return this.getEntityData().get(value);
+	}
+
+	public <T> void set(EntityDataAccessor<T> value, T par) {
+		this.getEntityData().set(value, par);
+	}
+
+	public <T> void define(EntityDataAccessor<T> value, T par) {
+		this.getEntityData().define(value, par);
 	}
 
 	public void setMaxLifeTime(int maxLifeTime) {
-		this.entityData.set(SUMMON_TIME, maxLifeTime);
+		this.set(SUMMON_TIME, maxLifeTime);
 	}
 
 	public int getMaxLifeTime() {
-		return this.entityData.get(SUMMON_TIME);
+		return this.get(SUMMON_TIME);
 	}
 
 	public void setWandLevel(int wandLevel) {
-		this.entityData.set(WAND_LEVEL, wandLevel);
+		this.set(WAND_LEVEL, wandLevel);
 	}
 
 	public int getWandLevel() {
-		return this.entityData.get(WAND_LEVEL);
+		return this.get(WAND_LEVEL);
 	}
 
 	public void setShit(boolean isShit) {
-		this.entityData.set(IS_SHIT, isShit);
+		this.set(IS_SHIT, isShit);
 	}
 
 	public boolean getShit() {
-		return this.entityData.get(IS_SHIT);
+		return this.get(IS_SHIT);
 	}
 
 	public void setRange(float range) {
-		this.entityData.set(RANGE, range);
+		this.set(RANGE, range);
 	}
 
 	public float getRange() {
-		return this.entityData.get(RANGE);
+		return this.get(RANGE);
+	}
+
+	public void setHealthArmor(float healthArmor) {
+		this.set(HEALTH_ARMOR, healthArmor);
+	}
+
+	public float getHealthArmor() {
+		return this.get(HEALTH_ARMOR);
 	}
 
 	public void setAlay(boolean alay) {
-		this.entityData.set(ISALAY, alay);
+		this.set(ISALAY, alay);
 	}
 
 	public boolean getAlay() {
-		return this.entityData.get(ISALAY);
+		return this.get(ISALAY);
 	}
 
 	public void setGolem(boolean golem) {
-		this.entityData.set(ISGOLEM, golem);
+		this.set(ISGOLEM, golem);
 	}
 
 	public boolean getGolem() {
-		return this.entityData.get(ISGOLEM);
+		return this.get(ISGOLEM);
 	}
 
 	public void setFox(boolean fox) {
-		this.entityData.set(ISFOX, fox);
+		this.set(ISFOX, fox);
 	}
 
 	public boolean getFox() {
-		return this.entityData.get(ISFOX);
+		return this.get(ISFOX);
 	}
 
 	public void setMaster(boolean master) {
-		this.entityData.set(ISMASTER, master);
+		this.set(ISMASTER, master);
 	}
 
 	public boolean getMaster() {
-		return this.entityData.get(ISMASTER);
+		return this.get(ISMASTER);
 	}
 
 	public void setIfrit(boolean ifrit) {
-		this.entityData.set(ISIFRIT, ifrit);
+		this.set(ISIFRIT, ifrit);
 	}
 
 	public boolean getIfrit() {
-		return this.entityData.get(ISIFRIT);
+		return this.get(ISIFRIT);
 	}
 
 	public void setWindine(boolean windine) {
-		this.entityData.set(ISWINDINE, windine);
+		this.set(ISWINDINE, windine);
 	}
 
 	public boolean getWindine() {
-		return this.entityData.get(ISWINDINE);
+		return this.get(ISWINDINE);
+	}
+
+	public boolean canAttack() {
+		return false;
 	}
 
 	public void addAdditionalSaveData(CompoundTag tags) {
@@ -173,6 +202,7 @@ public abstract class AbstractSummonMob extends TamableAnimal {
 		tags.putInt("wandLevel", this.getWandLevel());
 		tags.putInt("wandLevel", this.getWandLevel());
 		tags.putFloat("range", this.getRange());
+		tags.putFloat("healthArmor", this.getHealthArmor());
 		tags.putBoolean("isShit", this.getShit());
 		tags.putBoolean("isAlay", this.getAlay());
 		tags.putBoolean("isGolem", this.getGolem());
@@ -187,6 +217,7 @@ public abstract class AbstractSummonMob extends TamableAnimal {
 		this.setMaxLifeTime(tags.getInt("summonTime"));
 		this.setWandLevel(tags.getInt("wandLevel"));
 		this.setRange(tags.getFloat("range"));
+		this.setHealthArmor(tags.getFloat("healthArmor"));
 		this.setShit(tags.getBoolean("isShit"));
 		this.setAlay(tags.getBoolean("isAlay"));
 		this.setGolem(tags.getBoolean("isGolem"));
@@ -205,6 +236,12 @@ public abstract class AbstractSummonMob extends TamableAnimal {
 			entity.hurt(SMDamage.MAGIC, amount);
 			entity.invulnerableTime = 0;
 			amount *= 0.1F;
+		}
+
+		float armor = this.getHealthArmor();
+		if (armor > 0F) {
+			this.setHealthArmor(armor - amount);
+			amount = 0F;
 		}
 
 		this.hurtAction(attacker, amount);
@@ -299,7 +336,7 @@ public abstract class AbstractSummonMob extends TamableAnimal {
 				food.onFoodEat(this.getLevel(), this, stack);
 				this.setMaxLifeTime(this.getMaxLifeTime() + foodValue * 50);
 
-				if (this.getLevel().isClientSide) {
+				if (this.isClient()) {
 					this.spawnParticles(this.getLevel(), this.blockPosition().above());
 				}
 			}
@@ -307,7 +344,7 @@ public abstract class AbstractSummonMob extends TamableAnimal {
 			return InteractionResult.SUCCESS;
 		}
 
-		else if (!(item instanceof IWand) && !(item instanceof SummonerWand)) {
+		else if (!(item instanceof IWand) && !(item instanceof SummonerWand) && !(item instanceof SummonerWand) && !(item instanceof EvilArrowItem)) {
 
 			if ((item.isEdible() || !this.getMainHandItem().isEmpty()) && this.foodAction(player, stack)) {
 				return InteractionResult.SUCCESS;
@@ -340,7 +377,7 @@ public abstract class AbstractSummonMob extends TamableAnimal {
 
 		if (this.tickCount >= maxLifeTime) {
 
-			if (this.level instanceof ServerLevel server) {
+			if (this.getLevel() instanceof ServerLevel server) {
 				this.discordParticle(server);
 			}
 
@@ -423,17 +460,17 @@ public abstract class AbstractSummonMob extends TamableAnimal {
 
 	// えんちちーリストの取得
 	public <T extends Entity> List<T> getEntityList(Class<T> enClass, double range) {
-		return this.level.getEntitiesOfClass(enClass, this.getAABB(range));
+		return WorldHelper.getEntityList(this, enClass, this.getAABB(range));
 	}
 
 	// えんちちーリストの取得
 	public <T extends Entity> List<T> getEntityList(Class<T> enClass, Predicate<T> filter, AABB aabb) {
-		return this.level.getEntitiesOfClass(enClass, aabb).stream().filter(filter).toList();
+		return WorldHelper.getEntityList(this, enClass, filter, aabb);
 	}
 
 	// フィルターえんちちーリストの取得
 	public <T extends Entity> List<T> getEntityList(Class<T> enClass, Predicate<T> filter, double range) {
-		return this.level.getEntitiesOfClass(enClass, this.getAABB(range)).stream().filter(filter).toList();
+		return WorldHelper.getEntityList(this, enClass, filter, this.getAABB(range));
 	}
 
 	// 範囲の取得
@@ -478,7 +515,7 @@ public abstract class AbstractSummonMob extends TamableAnimal {
 	protected void checkFallDamage(double par1, boolean par2, BlockState state, BlockPos pos) { }
 
 	// パーティクルスポーン
-	public void spawnParticleRing(ServerLevel server, ParticleOptions particle, double range, BlockPos pos, double addY, double ySpeed, double moveValue) {
+	public void spawnParticleRing(ServerLevel server, ParticleOptions par, double range, BlockPos pos, double addY, double ySpeed, double moveValue) {
 
 		double x = pos.getX() + 0.5D;
 		double y = pos.getY() + 1D + addY;
@@ -486,7 +523,7 @@ public abstract class AbstractSummonMob extends TamableAnimal {
 
 		for (double degree = -range * Math.PI; degree < range * Math.PI; degree += 0.25D) {
 			double rate = range * 0.75D;
-			server.sendParticles(particle, x + Math.cos(degree) * rate, y, z + Math.sin(degree) * rate, 0, 0, ySpeed, 0, 1D);
+			server.sendParticles(par, x + Math.cos(degree) * rate, y, z + Math.sin(degree) * rate, 0, 0, ySpeed, 0, 1D);
 		}
 	}
 
@@ -561,8 +598,8 @@ public abstract class AbstractSummonMob extends TamableAnimal {
 		}
 
 		protected void findTarget() {
-			List<T> entityList = this.mob.level.getEntitiesOfClass(this.targetType, this.getTargetSearchArea(this.getFollowDistance()), e -> e.getTarget() != null && e.getTarget() instanceof Player);
-			this.target = this.mob.level.getNearestEntity(entityList, this.targetConditions, this.mob, this.mob.getX(), this.mob.getEyeY(), this.mob.getZ());
+			List<T> entityList = this.mob.getLevel().getEntitiesOfClass(this.targetType, this.getTargetSearchArea(this.getFollowDistance()), e -> e.getTarget() != null && e.getTarget() instanceof Player);
+			this.target = this.mob.getLevel().getNearestEntity(entityList, this.targetConditions, this.mob, this.mob.getX(), this.mob.getEyeY(), this.mob.getZ());
 		}
 
 		public void start() {
@@ -642,6 +679,8 @@ public abstract class AbstractSummonMob extends TamableAnimal {
 		private final AbstractSummonMob mob;
 		private final double addY;
 		private int coolTime = 0;
+		private double targetOldX = 0D;
+		private double targetOldZ = 0D;
 
 		public RandomOwnerMoveGoal(AbstractSummonMob mob, double addY) {
 			this.setFlags(EnumSet.of(Goal.Flag.MOVE));
@@ -663,10 +702,13 @@ public abstract class AbstractSummonMob extends TamableAnimal {
 			LivingEntity owner = this.mob.getOwner();
 			double dis = this.mob.distanceTo(owner);
 			boolean flag = owner.isAlive() && dis > 4;
+			MoveControl move = this.mob.getMoveControl();
 
 			if (dis > 8) {
 				this.mob.teleportToOwner(owner);
-				this.mob.getMoveControl().setWantedPosition(0D, 0D, 0D, 0D);
+				move.setWantedPosition(0D, 0D, 0D, 0D);
+				this.targetOldX = move.getWantedX();
+				this.targetOldZ = move.getWantedZ();
 				this.coolTime = 3;
 				return;
 			}
@@ -676,12 +718,18 @@ public abstract class AbstractSummonMob extends TamableAnimal {
 			for (int i = 0; i < 3; ++i) {
 
 				BlockPos pos1 = flag ? owner.blockPosition().above(2) : pos.offset(this.mob.randInt(7, 15), this.mob.randInt(5, 11), this.mob.randInt(7, 15));
-				if (!this.mob.level.isEmptyBlock(pos1)) { continue; }
+				if (!this.mob.getLevel().isEmptyBlock(pos1)) { continue; }
 
-				this.mob.getMoveControl().setWantedPosition((double) pos1.getX() + 0.5D, (double) pos1.getY() + 0.5D + this.addY, (double) pos1.getZ() + 0.5D, this.mob.getAttributeBaseValue(Attributes.FLYING_SPEED));
+				move.setWantedPosition((double) pos1.getX() + 0.5D, (double) pos1.getY() + 0.5D + this.addY, (double) pos1.getZ() + 0.5D, this.mob.getAttributeBaseValue(Attributes.FLYING_SPEED));
 
 				if (this.mob.getTarget() == null) {
 					this.mob.getLookControl().setLookAt((double) pos1.getX() + 0.5D, (double) pos1.getY() + 0.5D, (double) pos1.getZ() + 0.5D, 180F, 20F);
+				}
+
+				if(this.targetOldX != 0 || this.targetOldZ != 0) {
+					move.setWantedPosition(this.mob.xo, this.mob.yo + 2D, this.mob.zo, this.mob.getAttributeBaseValue(Attributes.FLYING_SPEED));
+					this.targetOldX = 0D;
+					this.targetOldZ = 0D;
 				}
 
 				break;
@@ -708,5 +756,9 @@ public abstract class AbstractSummonMob extends TamableAnimal {
 
 	public int randInt(int min, int max) {
 		return this.rand.nextInt(max - min + 1) + min;
+	}
+
+	public boolean isClient() {
+		return this.getLevel().isClientSide();
 	}
 }

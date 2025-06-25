@@ -4,8 +4,6 @@ import java.util.List;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
-import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -14,11 +12,12 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import sweetmagic.api.emagic.SMElement;
+import sweetmagic.api.ientity.ISMMob;
 import sweetmagic.init.EntityInit;
 
 public class ElectricSphere extends AbstractMagicShot {
 
-	private static final EntityDataAccessor<Integer> COUNT = SynchedEntityData.defineId(CalamityBomb.class, EntityDataSerializers.INT);
+	private static final EntityDataAccessor<Integer> COUNT = setEntityData(ISMMob.INT);
 
 	public ElectricSphere(EntityType<? extends AbstractMagicShot> entityType, Level world) {
 		super(entityType, world);
@@ -37,15 +36,15 @@ public class ElectricSphere extends AbstractMagicShot {
 
 	protected void defineSynchedData() {
 		super.defineSynchedData();
-		this.entityData.define(COUNT, 0);
+		this.define(COUNT, 0);
 	}
 
 	public void setCount(int count) {
-		this.entityData.set(COUNT, count);
+		this.set(COUNT, count);
 	}
 
 	public int getCount() {
-		return this.entityData.get(COUNT);
+		return this.get(COUNT);
 	}
 
 	public void tick() {
@@ -68,7 +67,7 @@ public class ElectricSphere extends AbstractMagicShot {
 	// ブロック着弾
 	protected void onHitBlock(BlockHitResult result) {
 
-		if (this.level.isClientSide) {
+		if (this.isClient()) {
 			this.setHitDead(false);
 		}
 

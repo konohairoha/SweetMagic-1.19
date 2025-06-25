@@ -30,7 +30,7 @@ public class TripleTornadoShot extends AbstractMagicShot {
 
 	public boolean isPlayer = false;
 
-	public TripleTornadoShot(EntityType<TripleTornadoShot> entityType, Level world) {
+	public TripleTornadoShot(EntityType<? extends AbstractMagicShot> entityType, Level world) {
 		super(entityType, world);
 		this.setMaxLifeTime(80);
 	}
@@ -71,7 +71,7 @@ public class TripleTornadoShot extends AbstractMagicShot {
 		List<LivingEntity> entityList = this.getEntityList(LivingEntity.class, this.getFilter(this.isPlayer, pos, range), range);
 		entityList.forEach(e -> this.addPotion(e, MobEffects.MOVEMENT_SLOWDOWN, 60, 4));
 
-		if (this.tickCount % 5 == 0 && this.level instanceof ServerLevel sever) {
+		if (this.tickCount % 5 == 0 && this.getLevel() instanceof ServerLevel sever) {
 
 			double scaleRate = Math.min(1D, this.tickCount * 0.05D);
 			double scale = range * scaleRate;
@@ -94,7 +94,7 @@ public class TripleTornadoShot extends AbstractMagicShot {
 			List<LivingEntity> attackList = this.getEntityList(LivingEntity.class, this.getFilter(this.isPlayer, pos, range), range);
 			attackList.forEach(e -> this.attackDamage(e, e instanceof Enemy ? damage * 2F : damage, false));
 
-			if (this.level instanceof ServerLevel sever) {
+			if (this.getLevel() instanceof ServerLevel sever) {
 
 				// 範囲の座標取得
 				Iterable<BlockPos> posList = this.getPosList(pos, range);
@@ -141,7 +141,7 @@ public class TripleTornadoShot extends AbstractMagicShot {
 	}
 
 	protected void spawnParticleCycle(ParticleOptions par, BlockPos pos, double range) {
-		if (!(this.level instanceof ServerLevel server)) { return; }
+		if (!(this.getLevel() instanceof ServerLevel server)) { return; }
 
 		int count = 16;
 		Random rand = new Random();

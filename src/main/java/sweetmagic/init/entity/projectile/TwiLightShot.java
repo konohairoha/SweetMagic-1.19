@@ -63,7 +63,7 @@ public class TwiLightShot extends AbstractMagicShot {
 			float f1 = (float) (this.getX() - 0.5F + rand.nextFloat() + vec.x * i / 4F);
 			float f2 = (float) (this.getY() - 0.5F + rand.nextFloat() + vec.y * i / 4F);
 			float f3 = (float) (this.getZ() - 0.5F + rand.nextFloat() + vec.z * i / 4F);
-			this.level.addParticle(ParticleInit.TWILIGHTLIGHT, f1, f2, f3, x, y, z);
+			this.addParticle(ParticleInit.TWILIGHTLIGHT, f1, f2, f3, x, y, z);
 		}
 	}
 

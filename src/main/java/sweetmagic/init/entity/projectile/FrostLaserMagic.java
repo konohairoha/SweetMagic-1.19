@@ -58,7 +58,7 @@ public class FrostLaserMagic extends AbstractBossMagic {
 
 	// 攻撃時のパーティクル
 	public void attackParticle () {
-		if (!(this.level instanceof ServerLevel server)) { return; }
+		if (!(this.getLevel() instanceof ServerLevel server)) { return; }
 
 		// パーティクルを出す
 		Random rand = this.rand;
@@ -135,7 +135,7 @@ public class FrostLaserMagic extends AbstractBossMagic {
 
 		// えんちちーの初期化が出来ていないなら初期化
 		if (this.summon == null) {
-			QueenFrost queen = new QueenFrost(this.level);
+			QueenFrost queen = new QueenFrost(this.getLevel());
 			queen.setArmor(3);
 			queen.setMagic(true);
 			this.summon = queen;

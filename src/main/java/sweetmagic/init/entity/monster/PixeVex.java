@@ -58,9 +58,9 @@ public class PixeVex extends AbstractOwnerMob {
 	protected void registerGoals() {
 		this.goalSelector.addGoal(0, new FloatGoal(this));
 		this.goalSelector.addGoal(5, new RandomMoveGoal(this));
-		this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1.0D, 0.0F));
-		this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
-		this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Warden.class, 8.0F));
+		this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1D, 0F));
+		this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8F));
+		this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Warden.class, 8F));
 		this.goalSelector.addGoal(10, new RandomLookAroundGoal(this));
 		this.targetSelector.addGoal(1, (new HurtByTargetGoal(this)).setAlertOthers());
 		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Warden.class, true));
@@ -80,15 +80,15 @@ public class PixeVex extends AbstractOwnerMob {
 
 	protected void defineSynchedData() {
 		super.defineSynchedData();
-		this.entityData.define(ELEMENT_TYPE, 0);
+		this.define(ELEMENT_TYPE, 0);
 	}
 
 	public int getElementType() {
-		return this.entityData.get(ELEMENT_TYPE);
+		return this.get(ELEMENT_TYPE);
 	}
 
 	public void setElementType(int elementType) {
-		this.entityData.set(ELEMENT_TYPE, elementType);
+		this.set(ELEMENT_TYPE, elementType);
 	}
 
 	public void addAdditionalSaveData(CompoundTag tags) {
@@ -107,7 +107,7 @@ public class PixeVex extends AbstractOwnerMob {
 		if (attacker != null && attacker instanceof ISMMob) { return false; }
 
 		// ダメージ倍処理
-		amount = this.getDamageAmount(this.level , src, amount, 1F);
+		amount = this.getDamageAmount(this.getLevel() , src, amount, 1F);
 		return super.hurt(src, Math.min(20F, amount));
 	}
 
@@ -117,7 +117,7 @@ public class PixeVex extends AbstractOwnerMob {
 
 	public void tick() {
 		super.tick();
-		if (!this.level.isClientSide || this.tickCount % 30 != 0) { return; }
+		if (!this.isClient() || this.tickCount % 30 != 0) { return; }
 
 		Vec3 vec = this.getDeltaMovement();
 		SimpleParticleType par = null;
@@ -141,7 +141,7 @@ public class PixeVex extends AbstractOwnerMob {
 			float f1 = (float) (vec.x + 0.5F - this.rand.nextFloat()) * 0.2F;
 			float f2 = (float) (vec.y + 0.5F - this.rand.nextFloat()) * 0.2F;
 			float f3 = (float) (vec.z + 0.5F - this.rand.nextFloat()) * 0.2F;
-			this.level.addParticle(par, x, y, z, f1, f2, f3);
+			this.getLevel().addParticle(par, x, y, z, f1, f2, f3);
 		}
 	}
 
@@ -154,7 +154,7 @@ public class PixeVex extends AbstractOwnerMob {
 		this.recastTime = (int) ((this.rand.nextInt(RAND_RECASTTIME) + RAND_RECASTTIME) * (isWarden ? 0.25F : 1F));
 		AbstractMagicShot entity = this.getMagicShot(target, isWarden);
 		this.playSound(SoundEvents.BLAZE_SHOOT, 0.5F, 0.67F);
-		this.level.addFreshEntity(entity);
+		this.addEntity(entity);
 	}
 
 	public AbstractMagicShot getMagicShot(LivingEntity target, boolean isWarden) {
@@ -171,13 +171,13 @@ public class PixeVex extends AbstractOwnerMob {
 
 		switch (this.getElementType()) {
 		case 0:
-			entity = new FireMagicShot(this.level, this);
+			entity = new FireMagicShot(this.getLevel(), this);
 			break;
 		case 1:
-			entity = new FrostMagicShot(this.level, this);
+			entity = new FrostMagicShot(this.getLevel(), this);
 			break;
 		case 2:
-			entity = new LightMagicShot(this.level, this);
+			entity = new LightMagicShot(this.getLevel(), this);
 			break;
 		}
 

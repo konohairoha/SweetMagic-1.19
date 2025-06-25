@@ -3,7 +3,6 @@ package sweetmagic.init.entity.projectile;
 import java.util.List;
 
 import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -18,8 +17,8 @@ import sweetmagic.init.PotionInit;
 
 public class TridentThunder extends AbstractMagicShot {
 
-	private static final EntityDataAccessor<Boolean> IS_LIGHNING = setEntityData(EntityDataSerializers.BOOLEAN);
-	private static final EntityDataAccessor<Boolean> IS_CHARGE = setEntityData(EntityDataSerializers.BOOLEAN);
+	private static final EntityDataAccessor<Boolean> LIGHNING = setEntityData(ISMMob.BOOLEAN);
+	private static final EntityDataAccessor<Boolean> CHARGE = setEntityData(ISMMob.BOOLEAN);
 
 	public TridentThunder(EntityType<? extends AbstractMagicShot> entityType, Level world) {
 		super(entityType, world);
@@ -44,20 +43,20 @@ public class TridentThunder extends AbstractMagicShot {
 
 	protected void defineSynchedData() {
 		super.defineSynchedData();
-		this.entityData.define(IS_LIGHNING, false);
-		this.entityData.define(IS_CHARGE, false);
+		this.define(LIGHNING, false);
+		this.define(CHARGE, false);
 	}
 
 	public boolean getLighning() {
-		return this.entityData.get(IS_LIGHNING);
+		return this.get(LIGHNING);
 	}
 
 	public void setCharge(boolean isCharge) {
-		this.entityData.set(IS_CHARGE, isCharge);
+		this.set(CHARGE, isCharge);
 	}
 
 	public boolean getCharge() {
-		return this.entityData.get(IS_CHARGE);
+		return this.get(CHARGE);
 	}
 
 	public void tick() {
@@ -68,7 +67,7 @@ public class TridentThunder extends AbstractMagicShot {
 	protected void onHitBlock(BlockHitResult result) {
 
 		if (!this.getLighning()) {
-			this.entityData.set(IS_LIGHNING, true);
+			this.set(LIGHNING, true);
 			this.setMaxLifeTime(10);
 			this.rangeAttack((float) this.getDamage() * 0.5F, this.getRange());
 			this.playSound(SoundEvents.LIGHTNING_BOLT_THUNDER, 1F, 1F);

@@ -45,7 +45,7 @@ public class WitchCrystal extends AbstractOwnerMob {
 			return false;
 		}
 
-		if (amount > 4 && this.level instanceof ServerLevel server) {
+		if (amount > 4 && this.getLevel() instanceof ServerLevel server) {
 
 			BlockPos pos = this.blockPosition().above();
 
@@ -76,7 +76,7 @@ public class WitchCrystal extends AbstractOwnerMob {
 				}
 			}
 
-			if (this.level instanceof ServerLevel sever) {
+			if (this.getLevel() instanceof ServerLevel sever) {
 				BlockPos pos = this.blockPosition().above();
 				sever.sendParticles(ParticleTypes.EXPLOSION, pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, 2, 0D, 0D, 0D, 0D);
 			}

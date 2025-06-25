@@ -46,15 +46,15 @@ public class CherryPlant extends AbstractOwnerMob {
 
 	protected void defineSynchedData() {
 		super.defineSynchedData();
-		this.entityData.define(STAGE, 0);
+		this.define(STAGE, 0);
 	}
 
 	public int getStage () {
-		return this.entityData.get(STAGE);
+		return this.get(STAGE);
 	}
 
 	public void setStage (int stage) {
-		this.entityData.set(STAGE, stage);
+		this.set(STAGE, stage);
 	}
 
 	public void addAdditionalSaveData(CompoundTag tags) {
@@ -76,7 +76,7 @@ public class CherryPlant extends AbstractOwnerMob {
 			return false;
 		}
 
-		if (amount > 4 && this.level instanceof ServerLevel server) {
+		if (amount > 4 && this.getLevel() instanceof ServerLevel server) {
 
 			for (int i = 0; i < 8; i++) {
 				double x = this.getX() + this.rand.nextDouble();
@@ -108,7 +108,7 @@ public class CherryPlant extends AbstractOwnerMob {
 				this.heal(10F);
 				this.playSound(SoundEvents.GRASS_PLACE, 1F, 0.8F + rand.nextFloat() * 0.4F);
 
-				if (this.level instanceof ServerLevel server) {
+				if (this.getLevel() instanceof ServerLevel server) {
 					BlockPos pos = this.blockPosition().above();
 
 					for (int i = 0; i < 8; i++) {
@@ -142,7 +142,7 @@ public class CherryPlant extends AbstractOwnerMob {
 
 	protected void tickDeath() {
 
-		if (this.deathTime == 0 && this.level instanceof ServerLevel server) {
+		if (this.deathTime == 0 && this.getLevel() instanceof ServerLevel server) {
 			BlockPos pos = this.blockPosition().above();
 			ParticleOptions par = ParticleInit.CHERRY_BLOSSOMS_LARGE;
 

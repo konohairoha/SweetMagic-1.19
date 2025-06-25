@@ -6,8 +6,6 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
-import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -18,6 +16,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import sweetmagic.api.emagic.SMElement;
+import sweetmagic.api.ientity.ISMMob;
 import sweetmagic.api.iitem.info.WandInfo;
 import sweetmagic.init.EntityInit;
 import sweetmagic.init.ParticleInit;
@@ -26,7 +25,7 @@ public class BulletMagicShot extends AbstractMagicShot {
 
 	private int count = 0;
 	private List<LivingEntity> taregetList = new ArrayList<>();
-	private static final EntityDataAccessor<Integer> TARGET = SynchedEntityData.defineId(BulletMagicShot.class, EntityDataSerializers.INT);
+	private static final EntityDataAccessor<Integer> TARGET = setEntityData(ISMMob.INT);
 
 	public BulletMagicShot(EntityType<? extends AbstractMagicShot> entityType, Level world) {
 		super(entityType, world);
@@ -45,12 +44,12 @@ public class BulletMagicShot extends AbstractMagicShot {
 
 	protected void defineSynchedData() {
 		super.defineSynchedData();
-		this.entityData.define(TARGET, -1);
+		this.define(TARGET, -1);
 	}
 
 	public void tick() {
 
-		if (!this.level.isClientSide()) {
+		if (!this.isClient()) {
 			this.updateTarget();
 		}
 
@@ -148,17 +147,17 @@ public class BulletMagicShot extends AbstractMagicShot {
 
 	// パーティクルスポーン
 	protected void spawnParticleSever() {
-		if (this.tickCount < 3 || !(this.level instanceof ServerLevel sever)) { return; }
+		if (this.tickCount < 3 || !(this.getLevel() instanceof ServerLevel sever)) { return; }
 		sever.sendParticles(ParticleInit.ORB, this.getX(), this.getY(), this.getZ(), 0, 114F / 255F, 255F / 255F, 170F / 255F, 1F);
 	}
 
 	@Nullable
 	private Entity getTarget() {
-		return this.level.getEntity(this.getEntityData().get(TARGET));
+		return this.getLevel().getEntity(this.get(TARGET));
 	}
 
 	private void setTarget(Entity entity) {
-		this.getEntityData().set(TARGET, entity == null ? -1 : entity.getId());
+		this.set(TARGET, entity == null ? -1 : entity.getId());
 	}
 
 	// 属性の取得

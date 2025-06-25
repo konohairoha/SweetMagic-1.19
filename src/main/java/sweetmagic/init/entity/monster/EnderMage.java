@@ -60,10 +60,10 @@ public class EnderMage extends AbstractSMMob {
 	protected void registerGoals() {
 		this.goalSelector.addGoal(1, new EnderAttack(this));
 		this.goalSelector.addGoal(2, new RestrictSunGoal(this));
-		this.goalSelector.addGoal(3, new FleeSunGoal(this, 1.0D));
-		this.goalSelector.addGoal(3, new AvoidEntityGoal<>(this, Wolf.class, 6.0F, 1.0D, 1.2D));
-		this.goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 1.0D));
-		this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8.0F));
+		this.goalSelector.addGoal(3, new FleeSunGoal(this, 1D));
+		this.goalSelector.addGoal(3, new AvoidEntityGoal<>(this, Wolf.class, 6F, 1D, 1.2D));
+		this.goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 1D));
+		this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8F));
 		this.goalSelector.addGoal(7, new RandomLookAroundGoal(this));
 		this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
 		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Warden.class, true));
@@ -82,11 +82,11 @@ public class EnderMage extends AbstractSMMob {
 		if (attacker != null && attacker instanceof ISMMob) { return false; }
 
 		// ダメージ倍処理
-		amount = this.getDamageAmount(this.level, src, amount, 1F);
+		amount = this.getDamageAmount(this.getLevel(), src, amount, 1F);
 		Entity attackEntity = src.getDirectEntity();
 
 		if (!this.isSMDamage(src) || (attackEntity instanceof AbstractMagicShot magic && !(magic.getOwner() instanceof Player))) {
-			if (this.random.nextBoolean()) {
+			if (this.getRandom().nextBoolean()) {
 				this.teleport();
 			}
 		}
@@ -96,7 +96,7 @@ public class EnderMage extends AbstractSMMob {
 
 	public void aiStep() {
 		super.aiStep();
-		if (this.tickTime++ < 20 || this.level.isClientSide || this.getTarget() == null) { return; }
+		if (this.tickTime++ < 20 || this.isClient() || this.getTarget() == null) { return; }
 
 		this.tickTime = 0;
 
@@ -119,8 +119,6 @@ public class EnderMage extends AbstractSMMob {
 		}
 
 		for (Monster entity : entityList) {
-
-			entity.playSound(SoundEvents.ENCHANTMENT_TABLE_USE, 1F, 1.175F);
 			this.addPotion(entity, MobEffects.DAMAGE_BOOST, 400, 0);
 
 			try {
@@ -132,6 +130,28 @@ public class EnderMage extends AbstractSMMob {
 
 		// クールタイムの設定
 		this.coolTime = 30;
+		this.playSound(SoundEvents.ENCHANTMENT_TABLE_USE, 1F, 1.175F);
+	}
+
+	protected void customServerAiStep() {
+		super.customServerAiStep();
+		LivingEntity target = this.getTarget();
+		if (target == null) { return; }
+
+		if(this.tickCount % 20 == 0 && !this.hasLineOfSight(target)) {
+			this.teleport(target);
+		}
+	}
+
+	protected boolean teleport(LivingEntity target) {
+		if (!this.isClient() && this.isAlive()) {
+			double d0 = target.getX() + (this.rand.nextDouble() - 0.5D) * 5D;
+			double d1 = target.getY() + (double) (this.rand.nextInt(8) - 4);
+			double d2 = target.getZ() + (this.rand.nextDouble() - 0.5D) * 5D;
+			return this.teleport(d0, d1, d2);
+		}
+
+		return false;
 	}
 
 	private static class EnderAttack extends Goal {
@@ -186,7 +206,7 @@ public class EnderMage extends AbstractSMMob {
 
 			else if (d0 < this.getFollowDistance() * this.getFollowDistance() && flag) {
 
-				Level world = this.ender.level;
+				Level world = this.ender.getLevel();
 				double x = target.getX() - this.ender.getX();
 				double y = target.getY(0.3333333333333333D) - this.ender.getY();
 				double z = target.getZ() - this.ender.getZ();

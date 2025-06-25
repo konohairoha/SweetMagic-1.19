@@ -12,7 +12,6 @@ import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.BossEvent;
-import net.minecraft.world.BossEvent.BossBarColor;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffects;
@@ -53,7 +52,7 @@ public class BraveSkeleton extends AbstractSMBoss {
 	private int firstCount = 0;
 	private int arrowTick = 0;
 	private static final int MAX_ARROW_TICK = 600;
-	private static final EntityDataAccessor<Boolean> ISARROW = ISMMob.setData(BraveSkeleton.class, BOOLEAN);
+	private static final EntityDataAccessor<Boolean> ARROW = ISMMob.setData(BraveSkeleton.class, BOOLEAN);
 
 	public BraveSkeleton(Level world) {
 		super(EntityInit.braveSkeleton, world);
@@ -67,14 +66,14 @@ public class BraveSkeleton extends AbstractSMBoss {
 
 	protected void defineSynchedData() {
 		super.defineSynchedData();
-		this.entityData.define(ISARROW, false);
+		this.define(ARROW, false);
 	}
 
 	protected void registerGoals() {
 		this.goalSelector.addGoal(0, new FloatGoal(this));
-		this.goalSelector.addGoal(1, new WaterAvoidingRandomStrollGoal(this, 1.0D, 0.0F));
-		this.goalSelector.addGoal(2, new LookAtPlayerGoal(this, Player.class, 8.0F));
-		this.goalSelector.addGoal(3, new LookAtPlayerGoal(this, Warden.class, 8.0F));
+		this.goalSelector.addGoal(1, new WaterAvoidingRandomStrollGoal(this, 1D, 0F));
+		this.goalSelector.addGoal(2, new LookAtPlayerGoal(this, Player.class, 8F));
+		this.goalSelector.addGoal(3, new LookAtPlayerGoal(this, Warden.class, 8F));
 		this.goalSelector.addGoal(4, new SMRandomLookGoal(this));
 		this.targetSelector.addGoal(1, (new HurtByTargetGoal(this)).setAlertOthers());
 		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Warden.class, true));
@@ -93,11 +92,11 @@ public class BraveSkeleton extends AbstractSMBoss {
 	}
 
 	public boolean getArrow() {
-		return this.entityData.get(ISARROW);
+		return this.get(ARROW);
 	}
 
 	public void setArrow(boolean arrow) {
-		this.entityData.set(ISARROW, arrow);
+		this.set(ARROW, arrow);
 	}
 
 	public void addAdditionalSaveData(CompoundTag tags) {
@@ -123,7 +122,7 @@ public class BraveSkeleton extends AbstractSMBoss {
 		if ( attacker != null && attacker instanceof ISMMob) { return false; }
 
 		// ボスダメージ計算
-		amount = this.getBossDamageAmount(this.level, this.defTime , src, amount, 7F);
+		amount = this.getBossDamageAmount(this.getLevel(), this.defTime , src, amount, 7F);
 		this.defTime = amount > 0 ? 2 : this.defTime;
 
 		if (attacker instanceof Warden) {
@@ -145,10 +144,6 @@ public class BraveSkeleton extends AbstractSMBoss {
 		return super.hurt(src, amount);
 	}
 
-	public boolean causeFallDamage(float par1, float par2, DamageSource src) {
-		return false;
-	}
-
 	public void initBossBar() {
 		ServerBossEvent event = this.getBossEvent();
 		if (event == null) { return; }
@@ -161,12 +156,7 @@ public class BraveSkeleton extends AbstractSMBoss {
 		}
 
 		else {
-			event.setProgress(this.getHealth() / this.getMaxHealth());
-			event.setColor(BossEvent.BossBarColor.BLUE);
-		}
-
-		if (this.isHalfHealth(this)) {
-			event.setColor(BossBarColor.RED);
+			super.initBossBar();
 		}
 	}
 
@@ -194,7 +184,7 @@ public class BraveSkeleton extends AbstractSMBoss {
 		}
 	}
 
-	public void firstAttack (LivingEntity target) {
+	public void firstAttack(LivingEntity target) {
 		if (this.firstTick++ >= MAX_FIRST_TICK) {
 			if (this.getArrow()) {
 				this.arrowAttak(target);
@@ -220,40 +210,40 @@ public class BraveSkeleton extends AbstractSMBoss {
 	public void arrowAttak(LivingEntity target) {
 
 		float damage = (float) this.getAttributeValue(Attributes.ATTACK_DAMAGE);
-		List<LivingEntity> targetList = this.getEntityList(LivingEntity.class, this.getFilter(this.isPlayer(target)), 48D);
+		List<LivingEntity> targetList = this.getPlayerList(target);
 
 		for (LivingEntity entity : targetList) {
 
-			AbstractMagicShot magic = new FireMagicShot(this.level, this);
+			AbstractMagicShot magic = new FireMagicShot(this.getLevel(), this);
 			double d0 = entity.getX() - this.getX();
 			double d1 = entity.getY(0.3333333333333333D) - this.getY() - 1D;
 			double d2 = entity.getZ() - this.getZ();
 			double d3 = Math.sqrt(d0 * d0 + d2 * d2);
-			magic.shoot(d0, d1 - d3 * (double) 0.00F, d2, 2.0F, 0);
+			magic.shoot(d0, d1 - d3 * (double) 0.00F, d2, 2F, 0);
 			magic.setAddDamage(magic.getAddDamage() + damage);
 			magic.setMaxLifeTime(100 + this.rand.nextInt(30));
 			magic.setArrow(true);
 			magic.setRange(3.75D);
-			this.level.addFreshEntity(magic);
+			this.addEntity(magic);
 		}
 
 		this.playSound(SoundEvents.ARROW_SHOOT, 0.5F, 0.875F);
-		this.firstTick = Math.max(0, 100 - targetList.size() * 10);
+		this.firstTick = (int) Math.max(0, 100F - this.getPlayerCount(targetList) * 10F);
 	}
 
 	public void swordAttak(LivingEntity target) {
 
 		float damage = (float) this.getAttributeValue(Attributes.ATTACK_DAMAGE) * 1.5F;
-		AbstractMagicShot magic = new BraveShot(this.level, this);
+		AbstractMagicShot magic = new BraveShot(this.getLevel(), this);
 		double d0 = target.getX() - this.getX();
 		double d1 = target.getY(0.3333333333333333D) - this.getY() - 1.5D;
 		double d2 = target.getZ() - this.getZ();
 		double d3 = Math.sqrt(d0 * d0 + d2 * d2);
-		magic.shoot(d0, d1 - d3 * (double) 0.00F, d2, 1.875F, 0);
+		magic.shoot(d0, d1 - d3 * (double) 0F, d2, 1.875F, 0);
 		magic.setAddDamage(magic.getAddDamage() + damage);
 		magic.setMaxLifeTime(100 + this.rand.nextInt(30));
 		magic.setRange(7D);
-		this.level.addFreshEntity(magic);
+		this.addEntity(magic);
 
 		if (this.firstCount++ >= 5) {
 			this.firstCount = 0;
@@ -268,8 +258,7 @@ public class BraveSkeleton extends AbstractSMBoss {
 	public void blazeAttak(LivingEntity target) {
 
 		float damage = (float) this.getAttributeValue(Attributes.ATTACK_DAMAGE) * 2F;
-		List<LivingEntity> entityList = this.getEntityList(LivingEntity.class, this.getFilter(this.isPlayer(target)), 48D);
-		double range = 10D + Math.min(15D, entityList.size() * 2D);
+		double range = 10D + Math.min(15D, this.getPlayerCount(target) * 2D);
 		BlockPos pos = this.blockPosition();
 		List<LivingEntity> targetList = this.getEntityList(LivingEntity.class, this.getFilter(this.isPlayer(target)), range);
 
@@ -285,15 +274,13 @@ public class BraveSkeleton extends AbstractSMBoss {
 	}
 
 	public void blazeParticle(LivingEntity target) {
-		if (!(this.level instanceof ServerLevel server)) { return; }
+		if (!(this.getLevel() instanceof ServerLevel server)) { return; }
 
-		List<LivingEntity> entityList = this.getEntityList(LivingEntity.class, this.getFilter(this.isPlayer(target)), 48D);
-		double range = 10D + Math.min(15D, entityList.size() * 2D);
+		double range = 10D + Math.min(15D, this.getPlayerCount(target) * 2D);
 		BlockPos pos = this.blockPosition();
 		Iterable<BlockPos> posList = this.getPosList(pos, range);
 
 		for (BlockPos p : posList) {
-
 			if (this.rand.nextFloat() >= 0.067F || !this.checkDistances(pos, p, range * range)) { continue; }
 
 			double x = p.getX() + this.rand.nextDouble() * 1.5D - 0.75D;
@@ -314,7 +301,7 @@ public class BraveSkeleton extends AbstractSMBoss {
 			double d1 = pos.getY();
 			double d2 = pos.getZ() + (this.rand.nextDouble() - 0.5D) * 10D;
 
-			if (this.level.getBlockState(pos).isAir()) {
+			if (this.getLevel().isEmptyBlock(pos)) {
 				this.getVehicle().setPos(d0, d1, d2);
 			}
 		}
@@ -332,7 +319,7 @@ public class BraveSkeleton extends AbstractSMBoss {
 	}
 
 	public SkeletonHorse spawnHorse(LevelAccessor world, BlockPos pos) {
-		SkeletonHorse horse = EntityType.SKELETON_HORSE.create(this.level);
+		SkeletonHorse horse = EntityType.SKELETON_HORSE.create(this.getLevel());
 		horse.setOwnerUUID(this.getUUID());
 		horse.setTemper(100);
 		horse.setTamed(true);
@@ -342,7 +329,7 @@ public class BraveSkeleton extends AbstractSMBoss {
 		horse.getAttribute(Attributes.JUMP_STRENGTH).setBaseValue(10D);
 		horse.setHealth(horse.getMaxHealth());
 		horse.setAge(0);
-		this.level.addFreshEntity(horse);
+		this.addEntity(horse);
 		horse.setPos(pos.getX(), pos.getY(), pos.getZ());
 		this.startRiding(horse);
 		this.addPotion(horse, PotionInit.aether_barrier, 1200, 4);

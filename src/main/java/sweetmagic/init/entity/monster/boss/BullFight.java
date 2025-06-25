@@ -6,6 +6,7 @@ import java.util.function.Predicate;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -13,6 +14,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -60,10 +62,10 @@ public class BullFight extends AbstractSMBoss {
 	}
 
 	protected void registerGoals() {
-		this.goalSelector.addGoal(5, new MoveTowardsRestrictionGoal(this, 1.0D));
-		this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1.0D, 0.0F));
-		this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
-		this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Warden.class, 8.0F));
+		this.goalSelector.addGoal(5, new MoveTowardsRestrictionGoal(this, 1D));
+		this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1D, 0F));
+		this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8F));
+		this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Warden.class, 8F));
 		this.goalSelector.addGoal(10, new SMRandomLookGoal(this));
 		this.targetSelector.addGoal(1, (new HurtByTargetGoal(this)).setAlertOthers());
 		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Warden.class, true));
@@ -83,7 +85,7 @@ public class BullFight extends AbstractSMBoss {
 
 	protected void defineSynchedData() {
 		super.defineSynchedData();
-		this.entityData.define(ATTACK, 0);
+		this.define(ATTACK, 0);
 	}
 
 	protected SoundEvent getAmbientSound() {
@@ -107,11 +109,11 @@ public class BullFight extends AbstractSMBoss {
 	}
 
 	public int getAttackType() {
-		return this.entityData.get(ATTACK);
+		return this.get(ATTACK);
 	}
 
 	public void setAttackType(int attack) {
-		this.entityData.set(ATTACK, attack);
+		this.set(ATTACK, attack);
 	}
 
 	public void addAdditionalSaveData(CompoundTag tags) {
@@ -125,7 +127,7 @@ public class BullFight extends AbstractSMBoss {
 		if (attacker != null && attacker instanceof ISMMob) { return false; }
 
 		// ボスダメージ計算
-		amount = this.getBossDamageAmount(this.level, this.defTime , src, amount, 10F);
+		amount = this.getBossDamageAmount(this.getLevel(), this.defTime , src, amount, 10F);
 		this.defTime = amount > 0 ? 2 : this.defTime;
 
 		if (attacker instanceof Warden) {
@@ -169,21 +171,22 @@ public class BullFight extends AbstractSMBoss {
 
 		boolean isPlayer = this.isPlayer(target);
 		this.setDeltaMovement(new Vec3(0D, 0D, 0D));
+		Level world = this.getLevel();
 		BlockPos pos = this.blockPosition();
 		BlockPos targetPos = target.blockPosition();
 
-		int maxTickTime = 10;
+		int maxTickTime = Math.min(10, (int) this.distance(target));
 		float rate = ++this.tickTime / (float) maxTickTime;
-		double x = ( targetPos.getX() - pos.getX() ) * rate;
-		double y = ( targetPos.getY() - pos.getY() ) * rate;
-		double z = ( targetPos.getZ() - pos.getZ() ) * rate;
+		double x = (targetPos.getX() - pos.getX()) * rate;
+		double y = (targetPos.getY() - pos.getY()) * rate;
+		double z = (targetPos.getZ() - pos.getZ()) * rate;
 		BlockPos attackPos = new BlockPos(pos.getX() + x, pos.getY() + y, pos.getZ() + z);
-		BlockState state = this.level.getBlockState(attackPos);
-		SoundType sound = state.getBlock().getSoundType(state, this.level, pos, this);
-		this.level.playSound(null, attackPos, sound.getBreakSound(), SoundSource.HOSTILE, 2.5F, 0.9F + this.rand.nextFloat() * 0.2F);
+		BlockState state = world.getBlockState(attackPos);
+		SoundType sound = state.getBlock().getSoundType(state, world, pos, this);
+		world.playSound(null, attackPos, sound.getBreakSound(), SoundSource.HOSTILE, 2.5F, 0.9F + this.rand.nextFloat() * 0.2F);
 
 		// 攻撃した人をリストに含まれないプレイヤーリストを取得
-		List<LivingEntity> attackList = this.getEntityList(LivingEntity.class, attackPos, 3D).stream().filter(this.getFilterList(isPlayer)).toList();
+		List<LivingEntity> attackList = this.getEntityList(LivingEntity.class, this.getFilterList(isPlayer), attackPos, 3D);
 		this.targetList.addAll(attackList);
 		float amount = 15F;
 
@@ -193,9 +196,11 @@ public class BullFight extends AbstractSMBoss {
 			entity.setDeltaMovement(entity.getDeltaMovement().add(entity.getX() - this.getX(), 0.8D, entity.getZ() - this.getZ()));
 		}
 
-		if (this.level instanceof ServerLevel server) {
+		if (world instanceof ServerLevel server) {
+			ParticleOptions par = new BlockParticleOption(ParticleTypes.BLOCK, state);
 			for (int i = 0; i < 4; i++) {
-				this.spawnParticleRing(server, new BlockParticleOption(ParticleTypes.BLOCK, state), 2D, new BlockPos(attackPos.getX(), attackPos.getY() - 2D + 0.25D + i, attackPos.getZ()), 1, 0.25D, 0D);
+				BlockPos rangePos = new BlockPos(attackPos.getX(), attackPos.getY() - 2D + 0.25D + i, attackPos.getZ());
+				this.spawnParticleRing(server, par, 2D, rangePos, 1, 0.25D, 0D);
 			}
 		}
 
@@ -216,7 +221,7 @@ public class BullFight extends AbstractSMBoss {
 
 		// 攻撃者の座標取得
 		Vec3 src = new Vec3(this.getX(), this.getY(), this.getZ()).add(0, this.getEyeHeight(), 0);
-		Vec3 look = this.getViewVector(1.0F);
+		Vec3 look = this.getViewVector(1F);
 		Vec3 dest = src.add(look.x * 2D, this.getY(), look.z * 2D);
 
 		// 移動速度を設定
@@ -225,7 +230,7 @@ public class BullFight extends AbstractSMBoss {
 		this.setDeltaMovement(new Vec3(vX * 1.5D, vY, vZ * 1.5D));
 		boolean isHalf = ( this.isHalfHealth(this) || this.hasEffect(PotionInit.flame) ) && !this.hasEffect(PotionInit.frost);
 
-		if (isHalf && this.level instanceof ServerLevel sever) {
+		if (isHalf && this.getLevel() instanceof ServerLevel sever) {
 
 			BlockPos pos = this.blockPosition();
 			float aX = (float) (-vec.x / 6F);
@@ -274,7 +279,7 @@ public class BullFight extends AbstractSMBoss {
 			entity.setDeltaMovement(entity.getDeltaMovement().add(entity.getX() - this.getX(), 0.8D, entity.getZ() - this.getZ()));
 			this.targetList.add(entity);
 
-			if (this.level instanceof ServerLevel sever) {
+			if (this.getLevel() instanceof ServerLevel sever) {
 				sever.sendParticles(ParticleTypes.CRIT, entity.getX(), entity.getY() + 1D, entity.getZ(), 0, 0, 0, 0, 1F);
 			}
 		}
@@ -286,6 +291,12 @@ public class BullFight extends AbstractSMBoss {
 		this.playSound(SoundEvents.COW_AMBIENT, 1.5F, 1.2F);
 	}
 
+	public float distance(Entity entity) {
+		float f = (float) (this.getX() - entity.getX());
+		float f2 = (float) (this.getZ() - entity.getZ());
+		return Mth.sqrt(f * f + f2 * f2);
+	}
+
 	@Override
 	public boolean isArmorEmpty() {
 		return true;
@@ -294,7 +305,7 @@ public class BullFight extends AbstractSMBoss {
 	@Override
 	public void clearInfo() {
 		this.targetList.clear();
-		this.setAttackType(this.random.nextInt(3));
+		this.setAttackType(this.rand.nextInt(3));
 		this.tickTime = 0;
 		this.pressAttackChargeTime = 0;
 	}

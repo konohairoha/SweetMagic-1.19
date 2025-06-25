@@ -53,7 +53,7 @@ public class SoulBlazeShot extends AbstractMagicShot {
 
 		double effectRange = range * range;
 
-		if (this.level instanceof ServerLevel server) {
+		if (this.getLevel() instanceof ServerLevel server) {
 
 			BlockPos pos = this.blockPosition();
 
@@ -88,10 +88,10 @@ public class SoulBlazeShot extends AbstractMagicShot {
 		float z = (float) (-vec.z / 20F);
 
 		for (int i = 0; i < 6; i++) {
-			float f1 = (float) (this.getX() - 0.5F + this.rand.nextFloat() + vec.x * i / 4.0F);
-			float f2 = (float) (this.getY() - 0.25F + this.rand.nextFloat() * 0.5 + vec.y * i / 4.0D);
-			float f3 = (float) (this.getZ() - 0.5F + this.rand.nextFloat() + vec.z * i / 4.0D);
-			this.level.addParticle(ParticleTypes.FLAME, f1, f2, f3, x + this.getRandFloat(0.075F), y + this.getRandFloat(0.075F), z + this.getRandFloat(0.075F));
+			float f1 = (float) (this.getX() - 0.5F + this.rand.nextFloat() + vec.x * i / 4D);
+			float f2 = (float) (this.getY() - 0.25F + this.rand.nextFloat() * 0.5 + vec.y * i / 4D);
+			float f3 = (float) (this.getZ() - 0.5F + this.rand.nextFloat() + vec.z * i / 4D);
+			this.addParticle(ParticleTypes.FLAME, f1, f2, f3, x + this.getRandFloat(0.075F), y + this.getRandFloat(0.075F), z + this.getRandFloat(0.075F));
 		}
 	}
 

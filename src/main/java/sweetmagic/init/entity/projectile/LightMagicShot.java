@@ -84,12 +84,12 @@ public class LightMagicShot extends AbstractMagicShot {
 		}
 
 		BlockPos pos = result.getBlockPos().relative(result.getDirection());
-		BlockState state = this.level.getBlockState(pos);
+		BlockState state = this.getLevel().getBlockState(pos);
 		Block block = state.getBlock();
 
 		// 空気ブロックなら設置
 		if (block == Blocks.AIR || state.getMaterial().isReplaceable()) {
-			this.level.setBlock(pos, BlockInit.magiclight.defaultBlockState(), 2);
+			this.getLevel().setBlock(pos, BlockInit.magiclight.defaultBlockState(), 2);
 		}
 
 		this.discard();
@@ -102,7 +102,7 @@ public class LightMagicShot extends AbstractMagicShot {
 		int data = this.getData();
 		boolean isTier4 = data >= 3;
 
-		if (isTier4 && this.level instanceof ServerLevel sever) {
+		if (isTier4 && this.getLevel() instanceof ServerLevel sever) {
 			float x = (float) (bPos.getX() + this.getRandFloat(0.5F));
 			float y = (float) (bPos.getY() + this.getRandFloat(0.5F));
 			float z = (float) (bPos.getZ() + this.getRandFloat(0.5F));
@@ -176,7 +176,7 @@ public class LightMagicShot extends AbstractMagicShot {
 			float f2 = (float) (this.getY() - 0.5F + rand.nextFloat() + vec.y * i / 4F);
 			float f3 = (float) (this.getZ() - 0.5F + rand.nextFloat() + vec.z * i / 4F);
 
-			this.level.addParticle(ParticleInit.MAGICLIGHT, f1, f2, f3, x, y, z);
+			this.addParticle(ParticleInit.MAGICLIGHT, f1, f2, f3, x, y, z);
 		}
 	}
 

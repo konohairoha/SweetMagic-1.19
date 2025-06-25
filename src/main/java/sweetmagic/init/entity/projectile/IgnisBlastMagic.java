@@ -2,9 +2,9 @@ package sweetmagic.init.entity.projectile;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -87,7 +87,7 @@ public class IgnisBlastMagic extends AbstractBossMagic {
 		if (this.tickTime == 10) {
 			BlockPos beforePos = this.blockPosition();
 			this.targetTeleport(ignis, target);
-			this.teleportParticle(ParticleTypes.SOUL_FIRE_FLAME, this.level, beforePos, this.blockPosition());
+			this.teleportParticle(ParticleTypes.SOUL_FIRE_FLAME, this.getLevel(), beforePos, this.blockPosition());
 		}
 
 		// 空中浮遊
@@ -129,7 +129,7 @@ public class IgnisBlastMagic extends AbstractBossMagic {
 
 		// 空気ブロックでないなら位置を下に変更
 		while(true) {
-			if (this.level.getBlockState(targetPos).isAir()) { break; }
+			if (this.getLevel().isEmptyBlock(targetPos)) { break; }
 			targetPos = targetPos.below();
 		}
 
@@ -163,17 +163,14 @@ public class IgnisBlastMagic extends AbstractBossMagic {
 		}
 
 		// 以降パーティクル表示
-		if (!(this.level instanceof ServerLevel sever)) { return; }
-
-		Random rand = this.rand;
+		if (!(this.getLevel() instanceof ServerLevel sever)) { return; }
 
 		for (int i = 0; i < 4; i++) {
-			float x = (float) (this.getX() + rand.nextFloat() - 0.5F);
-			float y = (float) (this.getY() + rand.nextFloat() - 0.5F);
-			float z = (float) (this.getZ() + rand.nextFloat() - 0.5F);
-
+			float x = (float) this.getX() + this.getRandFloat(0.5F);
+			float y = (float) this.getY() + this.getRandFloat(0.5F);
+			float z = (float) this.getZ() + this.getRandFloat(0.5F);
 			float aX = this.getRandFloat(0.75F);
-			float aY = 0.1F + rand.nextFloat() * 0.2F;
+			float aY = 0.1F + this.rand.nextFloat() * 0.2F;
 			float aZ = this.getRandFloat(0.75F);
 			sever.sendParticles(ParticleTypes.SOUL_FIRE_FLAME, x, y, z, 0, aX, aY, aZ, 1F);
 		}
@@ -188,7 +185,7 @@ public class IgnisBlastMagic extends AbstractBossMagic {
 	// 地面着地時の爆発攻撃
 	public void groundBlastAttack(IgnisKnight ignis, LivingEntity target, int data) {
 
-		if (!this.level.getBlockState(this.blockPosition()).isAir()) {
+		if (!this.getLevel().isEmptyBlock(this.blockPosition())) {
 			this.teleportTo(this.getX(), this.getY() + 1.75D, this.getZ());
 		}
 
@@ -208,19 +205,15 @@ public class IgnisBlastMagic extends AbstractBossMagic {
 			}
 		}
 
-		// 初回着地フラグをtrue
 		this.isGround = true;
-		this.playSound(SoundEvents.GENERIC_EXPLODE, 3F, 1F / (this.random.nextFloat() * 0.2F + 0.9F));
-
-		// えんちちーリストのソート
+		this.playSound(SoundEvents.GENERIC_EXPLODE, 3F, 1F / (this.rand.nextFloat() * 0.2F + 0.9F));
 		this.sortEntityList(ignis);
-		if (!(this.level instanceof ServerLevel sever)) { return; }
+		if (!(this.getLevel() instanceof ServerLevel sever)) { return; }
 
 		sever.sendParticles(ParticleTypes.EXPLOSION_EMITTER, this.getX(), this.getY() + 1F, this.getZ(), 1, 0F, 0F, 0F, 1F);
-
-		float x = (float) (this.getX() + this.rand.nextFloat() - 0.5F);
-		float y = (float) (this.getY() + this.rand.nextFloat() - 0.5F);
-		float z = (float) (this.getZ() + this.rand.nextFloat() - 0.5F);
+		float x = (float) this.getX() + this.getRandFloat(0.5F);
+		float y = (float) this.getY() + this.getRandFloat(0.5F);
+		float z = (float) this.getZ() + this.getRandFloat(0.5F);
 
 		for (int i = 0; i < 16; i++) {
 			sever.sendParticles(ParticleTypes.SOUL_FIRE_FLAME, x, y, z, 4, 0F, 0F, 0F, 0.15F);
@@ -256,7 +249,7 @@ public class IgnisBlastMagic extends AbstractBossMagic {
 		}
 
 		// 以降パーティクル表示
-		if (!(this.level instanceof ServerLevel sever)) { return; }
+		if (!(this.getLevel() instanceof ServerLevel sever)) { return; }
 
 		BlockPos pos = this.blockPosition();
 
@@ -331,12 +324,25 @@ public class IgnisBlastMagic extends AbstractBossMagic {
 		ignis.setBlast(false);
 	}
 
+	// パーティクルスポーン
+	public void spawnParticleRing(ServerLevel server, ParticleOptions par, double range, BlockPos pos, double addY) {
+
+		double x = pos.getX() + 0.5D;
+		double y = pos.getY() + 1D + addY;
+		double z = pos.getZ() + 0.5D;
+
+		for (double degree = -range * Math.PI; degree < range * Math.PI; degree += 0.25D) {
+			double rate = range * 0.75D;
+			server.sendParticles(par, x + Math.cos(degree) * rate, y, z + Math.sin(degree) * rate, 0, Math.cos(degree) * 0.65D, 0, Math.sin(degree) * 0.65D, 1D);
+		}
+	}
+
 	// 召喚えんちちーに取得
 	public LivingEntity getEntity() {
 
 		// えんちちーの初期化が出来ていないなら初期化
 		if (this.summon == null) {
-			IgnisKnight queen = new IgnisKnight(this.level);
+			IgnisKnight queen = new IgnisKnight(this.getLevel());
 			queen.setMagic(true);
 			this.summon = queen;
 		}

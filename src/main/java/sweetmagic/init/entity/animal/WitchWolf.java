@@ -31,6 +31,7 @@ import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.monster.AbstractSkeleton;
 import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.monster.Slime;
 import net.minecraft.world.entity.monster.Witch;
 import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.entity.player.Player;
@@ -42,11 +43,12 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.entity.EntityTeleportEvent;
 import sweetmagic.api.ientity.ISMMob;
+import sweetmagic.api.ientity.IWolf;
 import sweetmagic.init.EntityInit;
 import sweetmagic.init.PotionInit;
 import sweetmagic.util.SMDamage;
 
-public class WitchWolf extends AbstractSummonMob {
+public class WitchWolf extends AbstractSummonMob implements IWolf {
 
 	private boolean isWet;
 	private boolean isShaking;
@@ -67,7 +69,7 @@ public class WitchWolf extends AbstractSummonMob {
 
 	protected void defineSynchedData() {
 		super.defineSynchedData();
-		this.entityData.define(ATTACK_TICK, 0);
+		this.define(ATTACK_TICK, 0);
 	}
 
 	public static AttributeSupplier.Builder registerAttributes() {
@@ -96,6 +98,7 @@ public class WitchWolf extends AbstractSummonMob {
 		this.targetSelector.addGoal(5, new AttackTargetGoal<>(this, Raider.class, false));
 		this.targetSelector.addGoal(6, new AttackTargetGoal<>(this, Warden.class, false));
 		this.targetSelector.addGoal(7, new AttackTargetGoal<>(this, AbstractSkeleton.class, false));
+		this.targetSelector.addGoal(8, new AttackTargetGoal<>(this, Slime.class, false));
 	}
 
 	protected SoundEvent getAmbientSound() {
@@ -117,11 +120,11 @@ public class WitchWolf extends AbstractSummonMob {
 	}
 
 	public void setAttackTick(int attackTick) {
-		this.entityData.set(ATTACK_TICK, attackTick);
+		this.set(ATTACK_TICK, attackTick);
 	}
 
 	public int getAttackTick() {
-		return this.entityData.get(ATTACK_TICK);
+		return this.get(ATTACK_TICK);
 	}
 
 	public void hurtAction(Entity attacker, float amount) {
@@ -133,7 +136,7 @@ public class WitchWolf extends AbstractSummonMob {
 				src = DamageSource.playerAttack((Player) this.getOwner());
 			}
 
-			attacker.hurt(src, amount * (0.1F));
+			attacker.hurt(src, Math.min(20F, amount * 0.1F));
 			attacker.invulnerableTime = 0;
 		}
 	}
@@ -170,14 +173,14 @@ public class WitchWolf extends AbstractSummonMob {
 
 	public void aiStep() {
 		super.aiStep();
-		if (!this.level.isClientSide && this.isWet && !this.isShaking && !this.isPathFinding() && this.onGround) {
+		if (!this.isClient() && this.isWet && !this.isShaking && !this.isPathFinding() && this.onGround) {
 			this.isShaking = true;
 			this.shakeAnim = 0F;
 			this.shakeAnimO = 0F;
-			this.level.broadcastEntityEvent(this, (byte) 8);
+			this.getLevel().broadcastEntityEvent(this, (byte) 8);
 		}
 
-		if (!this.level.isClientSide && this.isAlive() && this.tickCount % 20 == 0 && this.getAlay()) {
+		if (!this.isClient() && this.isAlive() && this.tickCount % 20 == 0 && this.getAlay()) {
 			this.heal(1F);
 		}
 
@@ -195,8 +198,8 @@ public class WitchWolf extends AbstractSummonMob {
 
 		if (this.isInWaterRainOrBubble()) {
 			this.isWet = true;
-			if (this.isShaking && !this.level.isClientSide) {
-				this.level.broadcastEntityEvent(this, (byte) 56);
+			if (this.isShaking && !this.isClient()) {
+				this.getLevel().broadcastEntityEvent(this, (byte) 56);
 			}
 		}
 
@@ -226,7 +229,7 @@ public class WitchWolf extends AbstractSummonMob {
 				for (int j = 0; j < i; ++j) {
 					float f1 = (this.getRand() * 2F - 1F) * this.getBbWidth() * 0.5F;
 					float f2 = (this.getRand() * 2F - 1F) * this.getBbWidth() * 0.5F;
-					this.level.addParticle(ParticleTypes.SPLASH, this.getX() + (double) f1, (double) (f + 0.8F), this.getZ() + (double) f2, vec3.x, vec3.y, vec3.z);
+					this.getLevel().addParticle(ParticleTypes.SPLASH, this.getX() + (double) f1, (double) (f + 0.8F), this.getZ() + (double) f2, vec3.x, vec3.y, vec3.z);
 				}
 			}
 		}
@@ -260,11 +263,11 @@ public class WitchWolf extends AbstractSummonMob {
 
 		BlockPos.MutableBlockPos muPos = new BlockPos.MutableBlockPos(x, y, z);
 
-		while (muPos.getY() > this.level.getMinBuildHeight() && !this.level.getBlockState(muPos).getMaterial().blocksMotion()) {
+		while (muPos.getY() > this.getLevel().getMinBuildHeight() && !this.getLevel().getBlockState(muPos).getMaterial().blocksMotion()) {
 			muPos.move(Direction.DOWN);
 		}
 
-		BlockState state = this.level.getBlockState(muPos);
+		BlockState state = this.getLevel().getBlockState(muPos);
 		boolean flag = state.getMaterial().blocksMotion();
 		boolean flag1 = state.getFluidState().is(FluidTags.WATER);
 
@@ -277,10 +280,10 @@ public class WitchWolf extends AbstractSummonMob {
 			boolean flag2 = this.randomTeleport(event.getTargetX(), event.getTargetY(), event.getTargetZ(), true);
 
 			if (flag2) {
-				this.level.gameEvent(GameEvent.TELEPORT, vec3, GameEvent.Context.of(this));
+				this.getLevel().gameEvent(GameEvent.TELEPORT, vec3, GameEvent.Context.of(this));
 
 				if (!this.isSilent()) {
-					this.level.playSound(null, this.xo, this.yo, this.zo, SoundEvents.ENDERMAN_TELEPORT, this.getSoundSource(), 1F, 1F);
+					this.getLevel().playSound(null, this.xo, this.yo, this.zo, SoundEvents.ENDERMAN_TELEPORT, this.getSoundSource(), 1F, 1F);
 					this.playSound(SoundEvents.ENDERMAN_TELEPORT, 1F, 1F);
 				}
 			}

@@ -59,9 +59,9 @@ public class ExplosionMagicShot extends AbstractMagicShot {
 	}
 
 	public void rangeAttack(BlockPos pos, float dame, double range) {
-		this.playSound(SoundEvents.GENERIC_EXPLODE, 3F, 1F / (this.random.nextFloat() * 0.2F + 0.9F));
+		this.playSound(SoundEvents.GENERIC_EXPLODE, 3F, 1F / (this.rand.nextFloat() * 0.2F + 0.9F));
 
-		if (this.level instanceof ServerLevel sever) {
+		if (this.getLevel() instanceof ServerLevel sever) {
 			sever.sendParticles(ParticleTypes.EXPLOSION_EMITTER, pos.getX(), pos.getY() + 0.5D, pos.getZ(), 2, 0D, 0D, 0D, 0D);
 		}
 
@@ -98,7 +98,7 @@ public class ExplosionMagicShot extends AbstractMagicShot {
 
 	// パーティクルスポーン
 	protected void spawnParticle() {
-		this.level.addParticle(ParticleInit.ORB, this.getX(), this.getY(), this.getZ(), 1F, 248F / 255F, 44F / 255F);
+		this.addParticle(ParticleInit.ORB, this.getX(), this.getY(), this.getZ(), 1F, 248F / 255F, 44F / 255F);
 	}
 
 	// 属性の取得

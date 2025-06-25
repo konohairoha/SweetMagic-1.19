@@ -6,8 +6,6 @@ import java.util.Random;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
-import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
@@ -27,7 +25,7 @@ import sweetmagic.util.SMDamage;
 
 public class CalamityBomb extends AbstractMagicShot {
 
-	private static final EntityDataAccessor<Integer> COUNT = SynchedEntityData.defineId(CalamityBomb.class, EntityDataSerializers.INT);
+	private static final EntityDataAccessor<Integer> COUNT = setEntityData(ISMMob.INT);
 
 	public CalamityBomb(EntityType<? extends AbstractMagicShot> entityType, Level world) {
 		super(entityType, world);
@@ -54,15 +52,15 @@ public class CalamityBomb extends AbstractMagicShot {
 
 	protected void defineSynchedData() {
 		super.defineSynchedData();
-		this.entityData.define(COUNT, 0);
+		this.define(COUNT, 0);
 	}
 
 	public void setCount(int count) {
-		this.entityData.set(COUNT, count);
+		this.set(COUNT, count);
 	}
 
 	public int getCount() {
-		return this.entityData.get(COUNT);
+		return this.get(COUNT);
 	}
 
 	public void tick() {
@@ -78,7 +76,7 @@ public class CalamityBomb extends AbstractMagicShot {
 	// ブロック着弾
 	protected void onHitBlock(BlockHitResult result) {
 
-		if (this.level.isClientSide) {
+		if (this.isClient()) {
 			this.setHitDead(false);
 		}
 
@@ -91,7 +89,7 @@ public class CalamityBomb extends AbstractMagicShot {
 			this.setDeltaMovement(dest);
 			this.playSound(SoundEvents.GENERIC_EXPLODE, 2F, 1F);
 
-			if (this.level instanceof ServerLevel sever) {
+			if (this.getLevel() instanceof ServerLevel sever) {
 				BlockPos pos = this.blockPosition().above();
 				float x = (float) (pos.getX() + 0.5F);
 				float y = (float) (pos.getY() - 0.5F);
@@ -105,7 +103,7 @@ public class CalamityBomb extends AbstractMagicShot {
 
 		else {
 
-			if (this.level instanceof ServerLevel sever) {
+			if (this.getLevel() instanceof ServerLevel sever) {
 				BlockPos pos = this.blockPosition().above();
 				float x = (float) (pos.getX() + 0.5F);
 				float y = (float) (pos.getY() - 0.5F);
@@ -151,7 +149,7 @@ public class CalamityBomb extends AbstractMagicShot {
 		float f1 = (float) (this.getX() - 0.5F + rand.nextFloat() + vec.x);
 		float f2 = (float) (this.getY() + 0.25F + rand.nextFloat() * 0.5 + vec.y);
 		float f3 = (float) (this.getZ() - 0.5F + rand.nextFloat() + vec.z);
-		this.level.addParticle(ParticleTypes.CLOUD, f1, f2, f3, x, y, z);
+		this.addParticle(ParticleTypes.CLOUD, f1, f2, f3, x, y, z);
 	}
 
 	// 属性の取得

@@ -62,7 +62,7 @@ public class CycloneMagicShot extends AbstractMagicShot {
 			}
 		}
 
-		if (this.level instanceof ServerLevel server) {
+		if (this.getLevel() instanceof ServerLevel server) {
 			this.spawnParticleShort(server, living.blockPosition());
 		}
 
@@ -78,7 +78,7 @@ public class CycloneMagicShot extends AbstractMagicShot {
 		float dame = 0.5F + 0.5F * this.getWandLevel() * this.getDamageRate();
 		this.rangeAttack(result.getBlockPos().above(), dame, range);
 
-		if (this.level instanceof ServerLevel server) {
+		if (this.getLevel() instanceof ServerLevel server) {
 			this.spawnParticleShort(server, result.getBlockPos().above());
 		}
 
@@ -141,12 +141,12 @@ public class CycloneMagicShot extends AbstractMagicShot {
 	}
 
 	protected void spawnParticleShort(ServerLevel sever, BlockPos pos) {
-		float x = (float) (pos.getX() + this.getRandFloat(0.5F));
-		float y = (float) (pos.getY() + this.getRandFloat(0.5F));
-		float z = (float) (pos.getZ() + this.getRandFloat(0.5F));
 
 		int count = 16;
 		float rate = 0.15F;
+		float x = pos.getX() + this.getRandFloat(0.5F);
+		float y = pos.getY() + this.getRandFloat(0.5F);
+		float z = pos.getZ() + this.getRandFloat(0.5F);
 
 		if (this.getData() >= 3) {
 			count = 64;
@@ -168,7 +168,7 @@ public class CycloneMagicShot extends AbstractMagicShot {
 		float x = (float) (-vec.x / 30F);
 		float y = (float) (-vec.y / 30F);
 		float z = (float) (-vec.z / 30F);
-		this.level.addParticle(ParticleInit.CYCLONE, this.getX(), this.getY() + 0.5F, this.getZ(), x, y, z);
+		this.addParticle(ParticleInit.CYCLONE, this.getX(), this.getY() + 0.5F, this.getZ(), x, y, z);
 	}
 
 	// 属性の取得

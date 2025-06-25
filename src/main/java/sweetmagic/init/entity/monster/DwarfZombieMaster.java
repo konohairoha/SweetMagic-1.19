@@ -41,13 +41,12 @@ import net.minecraft.world.phys.Vec3;
 import sweetmagic.api.ientity.ISMMob;
 import sweetmagic.init.EntityInit;
 import sweetmagic.init.ItemInit;
-import sweetmagic.util.SMDamage;
 
 public class DwarfZombieMaster extends AbstractSMMob {
 
 	private List<BlockPos> posList = new ArrayList <>();
-	private static final EntityDataAccessor<Boolean> ISSUMMON = ISMMob.setData(DwarfZombieMaster.class, BOOLEAN);
-	private static final EntityDataAccessor<Boolean> ISHALFHEALTH = ISMMob.setData(DwarfZombieMaster.class, BOOLEAN);
+	private static final EntityDataAccessor<Boolean> SUMMON = ISMMob.setData(DwarfZombieMaster.class, BOOLEAN);
+	private static final EntityDataAccessor<Boolean> HALF_HEALTH = ISMMob.setData(DwarfZombieMaster.class, BOOLEAN);
 
 	public DwarfZombieMaster(Level world) {
 		super(EntityInit.dwarfZombieMaster, world);
@@ -61,16 +60,16 @@ public class DwarfZombieMaster extends AbstractSMMob {
 
 	protected void defineSynchedData() {
 		super.defineSynchedData();
-		this.entityData.define(ISSUMMON, false);
-		this.entityData.define(ISHALFHEALTH, false);
+		this.define(SUMMON, false);
+		this.define(HALF_HEALTH, false);
 	}
 
 	protected void registerGoals() {
 		this.goalSelector.addGoal(4, new MeleeAttackGoal(this, 1.5D, false));
-		this.goalSelector.addGoal(5, new MoveTowardsRestrictionGoal(this, 1.0D));
-		this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1.0D, 0.0F));
-		this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
-		this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Warden.class, 8.0F));
+		this.goalSelector.addGoal(5, new MoveTowardsRestrictionGoal(this, 1D));
+		this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1D, 0F));
+		this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8F));
+		this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Warden.class, 8F));
 		this.goalSelector.addGoal(10, new RandomLookAroundGoal(this));
 		this.targetSelector.addGoal(1, (new HurtByTargetGoal(this)).setAlertOthers());
 		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Warden.class, true));
@@ -105,16 +104,15 @@ public class DwarfZombieMaster extends AbstractSMMob {
 		Entity attackEntity = src.getDirectEntity();
 		if (attacker != null && attacker instanceof ISMMob) { return false; }
 
+		// 魔法攻撃以外ならダメージ減少
 		if (this.notMagicDamage(attacker, attackEntity)) {
-			attacker.hurt(SMDamage.magicDamage, amount);
-			attacker.invulnerableTime = 0;
-			return false;
+			amount *= 0.25F;
 		}
 
 		// ダメージ倍処理
 		if (!this.isLeader(this)) {
-			amount = this.getBossDamageAmount(this.level, this.defTime , src, amount, 10F);
-			this.defTime = 2;
+			amount = this.getBossDamageAmount(this.getLevel(), this.defTime , src, amount, 12F);
+			this.defTime = 1;
 		}
 
 		return super.hurt(src, amount);
@@ -128,14 +126,14 @@ public class DwarfZombieMaster extends AbstractSMMob {
 		if (!this.getSummon()) {
 
 			for (int i = 0; i < 3; i++) {
-				DwarfZombie entity = new DwarfZombie(this.level);
+				DwarfZombie entity = new DwarfZombie(this.getLevel());
 				entity.setPos(this.getX() + 0.5D, this.getY() + 0.5D, this.getZ() + 0.5D);
 				entity.getAttribute(Attributes.MAX_HEALTH).setBaseValue(this.getMaxHealth() / 5F);
 				entity.setHealth(entity.getMaxHealth());
 				entity.setOwnerID(this.getUUID());
 				entity.setSummon(true);
 				entity.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.STONE_SWORD));
-				this.level.addFreshEntity(entity);
+				this.addEntity(entity);
 				entity.teleport();
 				entity.spawnAnim();
 				this.armorDropChances[EquipmentSlot.MAINHAND.getIndex()] = 0F;
@@ -150,7 +148,7 @@ public class DwarfZombieMaster extends AbstractSMMob {
 			List<BlockPos> posList = this.getPosList();
 
 			for (BlockPos pos : posList) {
-				DwarfZombie entity = new DwarfZombie(this.level);
+				DwarfZombie entity = new DwarfZombie(this.getLevel());
 				entity.setPos(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D);
 				entity.getAttribute(Attributes.MAX_HEALTH).setBaseValue(this.getMaxHealth() / 10F);
 				entity.setHealth(entity.getMaxHealth());
@@ -158,7 +156,7 @@ public class DwarfZombieMaster extends AbstractSMMob {
 				entity.setOwnerID(this.getUUID());
 				entity.setSummon(true);
 				entity.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.STONE_SWORD));
-				this.level.addFreshEntity(entity);
+				this.addEntity(entity);
 				entity.spawnAnim();
 				this.armorDropChances[EquipmentSlot.MAINHAND.getIndex()] = 0F;
 
@@ -214,19 +212,19 @@ public class DwarfZombieMaster extends AbstractSMMob {
 	}
 
 	public boolean getSummon() {
-		return this.entityData.get(ISSUMMON);
+		return this.get(SUMMON);
 	}
 
 	public void setSummon(boolean summonCount) {
-		this.entityData.set(ISSUMMON, summonCount);
+		this.set(SUMMON, summonCount);
 	}
 
 	public boolean isHalfHealth() {
-		return this.entityData.get(ISHALFHEALTH);
+		return this.get(HALF_HEALTH);
 	}
 
 	public void setHalfHealth(boolean isHalfHealth) {
-		this.entityData.set(ISHALFHEALTH, isHalfHealth);
+		this.set(HALF_HEALTH, isHalfHealth);
 	}
 
 	public List<BlockPos> getPosList() {

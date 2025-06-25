@@ -8,10 +8,8 @@ import com.mojang.math.Vector3f;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.BossEvent.BossBarColor;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -48,12 +46,10 @@ public class BlitzWizardMaster extends AbstractSMBoss {
 	private static final int MAX_LIGHTNINGWEBTIME = 600;
 	private int tridentReleaseTime = 300;
 	private static final int MAX_TRIDENTRELEASETIME = 450;
-	private float maxArmor = 0F;
 	public List<BlockPos> posList = new ArrayList<>();
 	public List<TridentThunder> tridentList = new ArrayList<>();
 	private static final EntityDataAccessor<Boolean> UP_BOOK = ISMMob.setData(BlitzWizardMaster.class, BOOLEAN);
 	private static final EntityDataAccessor<Boolean> LIGHNING_WEB = ISMMob.setData(BlitzWizardMaster.class, BOOLEAN);
-	private static final EntityDataAccessor<Float> ARMOR = ISMMob.setData(BlitzWizardMaster.class, FLOAT);
 
 	public BlitzWizardMaster(Level world) {
 		super(EntityInit.blitzWizardMaster, world);
@@ -76,17 +72,15 @@ public class BlitzWizardMaster extends AbstractSMBoss {
 
 	protected void defineSynchedData() {
 		super.defineSynchedData();
-		this.registerData(this, HALFHEALTH, false);
-		this.entityData.define(LIGHNING_WEB, false);
-		this.entityData.define(UP_BOOK, false);
-		this.entityData.define(ARMOR, 0F);
+		this.define(LIGHNING_WEB, false);
+		this.define(UP_BOOK, false);
 	}
 
 	protected void registerGoals() {
-		this.goalSelector.addGoal(5, new MoveTowardsRestrictionGoal(this, 1.0D));
-		this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1.0D, 0.0F));
-		this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
-		this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Warden.class, 8.0F));
+		this.goalSelector.addGoal(5, new MoveTowardsRestrictionGoal(this, 1D));
+		this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1D, 0F));
+		this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8F));
+		this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Warden.class, 8F));
 		this.goalSelector.addGoal(10, new SMRandomLookGoal(this));
 		this.targetSelector.addGoal(1, (new HurtByTargetGoal(this)).setAlertOthers());
 		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Warden.class, true));
@@ -107,41 +101,31 @@ public class BlitzWizardMaster extends AbstractSMBoss {
 	}
 
 	public boolean getLighningWeb() {
-		return this.entityData.get(LIGHNING_WEB);
+		return this.get(LIGHNING_WEB);
 	}
 
 	public void setLighningWeb(boolean lighningWeb) {
-		this.entityData.set(LIGHNING_WEB, lighningWeb);
+		this.set(LIGHNING_WEB, lighningWeb);
 	}
 
 	public boolean getUpBook() {
-		return this.entityData.get(UP_BOOK);
+		return this.get(UP_BOOK);
 	}
 
 	public void setUpBook(boolean upBook) {
-		this.entityData.set(UP_BOOK, upBook);
-	}
-
-	public float getArmor() {
-		return this.entityData.get(ARMOR);
-	}
-
-	public void setArmor(float armor) {
-		this.entityData.set(ARMOR, armor);
+		this.set(UP_BOOK, upBook);
 	}
 
 	public void addAdditionalSaveData(CompoundTag tags) {
 		super.addAdditionalSaveData(tags);
 		tags.putBoolean("lighningWeb", this.getLighningWeb());
 		tags.putBoolean("upBook", this.getUpBook());
-		tags.putFloat("armor", this.getArmor());
 	}
 
 	public void readAdditionalSaveData(CompoundTag tags) {
 		super.readAdditionalSaveData(tags);
 		this.setLighningWeb(tags.getBoolean("lighningWeb"));
 		this.setUpBook(tags.getBoolean("upBook"));
-		this.setArmor(tags.getFloat("armor"));
 	}
 
 	// ダメージ処理
@@ -152,7 +136,7 @@ public class BlitzWizardMaster extends AbstractSMBoss {
 
 		// ボスダメージ計算
 		float cap = this.isHalfHealth(this) ? 4F : 6F;
-		amount = this.getBossDamageAmount(this.level, this.defTime , src, amount, cap);
+		amount = this.getBossDamageAmount(this.getLevel(), this.defTime , src, amount, cap);
 		this.defTime = amount > 0 ? 2 : this.defTime;
 
 		if (attacker instanceof Warden) {
@@ -165,41 +149,7 @@ public class BlitzWizardMaster extends AbstractSMBoss {
 			amount *= 0.25F;
 		}
 
-		float armor = this.getArmor();
-		if (armor > 0F) {
-			this.setArmor(armor - amount);
-			amount = 0F;
-			this.playSound(SoundEvents.ARMOR_STAND_HIT, 2F, 0.85F);
-		}
-
 		return super.hurt(src, amount);
-	}
-
-	public boolean causeFallDamage(float par1, float par2, DamageSource src) {
-		return false;
-	}
-
-	public void initBossBar() {
-		if (!this.isBossBarView()) { return; }
-
-		ServerBossEvent event = this.getBossEvent();
-
-		if (this.getHalfHealth()) {
-			float armor = this.getArmor();
-			if(armor > 0F) {
-				event.setProgress(this.getArmor() / this.maxArmor);
-				event.setColor(BossBarColor.YELLOW);
-				event.setName(this.getTipArray(this.getDisplayName(), " (", this.getText("damage_armor"), ")"));
-				return;
-			}
-		}
-
-		event.setProgress(this.getHealth() / this.getMaxHealth());
-
-		if (this.isHalfHealth(this)) {
-			event.setColor(BossBarColor.RED);
-			event.setName(this.getDisplayName());
-		}
 	}
 
 	protected void customServerAiStep() {
@@ -216,15 +166,12 @@ public class BlitzWizardMaster extends AbstractSMBoss {
 
 		if (this.isHalfHealth(this)) {
 			this.secondAttack(target);
-
-			if (!this.getHalfHealth()) {
-				this.setHalfHealth(true);
-
-				List<LivingEntity> targetList = this.getEntityList(LivingEntity.class, this.getFilter(this.isPlayer(target)), 48D);
-				this.maxArmor = 100F + targetList.size() * 12.5F;
-				this.setArmor(this.maxArmor);
-			}
 		}
+	}
+
+	protected void armorHealthSet(LivingEntity target, int count) {
+		this.setMaxHealthArmor((100F + this.getPlayerCount(target) * 12.5F) * count);
+		this.setHealthArmor(this.getMaxHealthArmor());
 	}
 
 	public void firstAttack(LivingEntity target) {
@@ -261,7 +208,7 @@ public class BlitzWizardMaster extends AbstractSMBoss {
 
 		for (int i = 0; i < rangeMax; i++) {
 
-			ElectricMagicShot entity = new ElectricMagicShot(this.level, this);
+			ElectricMagicShot entity = new ElectricMagicShot(this.getLevel(), this);
 			double d0 = target.getX() - this.getX();
 			double d1 = target.getZ() - this.getZ();
 			double d3 = 0D;
@@ -273,7 +220,7 @@ public class BlitzWizardMaster extends AbstractSMBoss {
 			entity.setHitDead(false);
 			entity.setNotDamage(true);
 			entity.isRangeAttack = true;
-			this.level.addFreshEntity(entity);
+			this.addEntity(entity);
 		}
 
 		this.playSound(SoundEvents.BLAZE_SHOOT, 0.5F, 0.67F);
@@ -287,7 +234,7 @@ public class BlitzWizardMaster extends AbstractSMBoss {
 	// 避雷針落とし
 	public void lightningRod(LivingEntity target) {
 
-		List<LivingEntity> targetList = this.getEntityList(LivingEntity.class, this.getFilter(this.isPlayer(target)), 48D);
+		List<LivingEntity> targetList = this.getPlayerList(target);
 
 		for (LivingEntity entity : targetList) {
 
@@ -295,7 +242,7 @@ public class BlitzWizardMaster extends AbstractSMBoss {
 			double x = entity.getX() + (double) this.getRandFloat(4F);
 			double z = entity.getZ() + (double) this.getRandFloat(4F);
 
-			LightningRod magic = new LightningRod(this.level, this);
+			LightningRod magic = new LightningRod(this.getLevel(), this);
 			magic.setHitDead(false);
 			magic.setNotDamage(true);
 			magic.shoot(0, 0D, 0, 0F, 0F);
@@ -303,7 +250,7 @@ public class BlitzWizardMaster extends AbstractSMBoss {
 			magic.setAddDamage(magic.getAddDamage() + 30F);
 			magic.setRange(range);
 			magic.setMaxLifeTime(400 + this.rand.nextInt(60));
-			this.level.addFreshEntity(magic);
+			this.addEntity(magic);
 		}
 	}
 
@@ -345,8 +292,8 @@ public class BlitzWizardMaster extends AbstractSMBoss {
 			Vec3 look = this.getViewVector(-1F);
 			Vec3 src = new Vec3(this.getX(), this.getY(), this.getZ()).add(0, this.getEyeHeight(), 0);
 			Vec3 dest = src.add(look.x * 3, this.getY(), look.z * 3);
-			List<LivingEntity> targetList = this.getEntityList(LivingEntity.class, this.getFilter(this.isPlayer(target)), 48D);
-			int count = Math.min(50, targetList.size() * 3);
+			List<LivingEntity> targetList = this.getPlayerList(target);
+			int count = (int) Math.min(50F, this.getPlayerCount(targetList) * 3F);
 
 			for (int i = 0; i < count; i++) {
 
@@ -361,14 +308,14 @@ public class BlitzWizardMaster extends AbstractSMBoss {
 						double z = entity.getZ() - pos.getZ();
 						double xz = Math.sqrt(x * x + z * z);
 
-						TridentThunder knife = new TridentThunder(this.level, this);
+						TridentThunder knife = new TridentThunder(this.getLevel(), this);
 						knife.setHitDead(false);
 						knife.shoot(x, y - xz * 0.065D, z, 3F, 2F);
 						knife.setPos(pos.getX(), pos.getY(), pos.getZ());
 						knife.setAddDamage(knife.getAddDamage() + 20F);
 						knife.setRange(3D);
 						knife.setCharge(true);
-						this.level.addFreshEntity(knife);
+						this.addEntity(knife);
 						this.tridentList.add(knife);
 						this.posList.add(pos);
 						break;
@@ -378,8 +325,8 @@ public class BlitzWizardMaster extends AbstractSMBoss {
 		}
 
 		if (this.tridentReleaseTime + 100 >= MAX_TRIDENTRELEASETIME && !this.tridentList.isEmpty() && this.tickCount % 2 == 0) {
-			List<LivingEntity> targetList = this.getEntityList(LivingEntity.class, this.getFilter(this.isPlayer(target)), 48D);
 
+			List<LivingEntity> targetList = this.getPlayerList(target);
 			int size = Math.min(targetList.size(), this.rand.nextInt(targetList.size()));
 			LivingEntity entity = targetList.get(size);
 			TridentThunder knife = this.tridentList.get(0);
@@ -403,6 +350,10 @@ public class BlitzWizardMaster extends AbstractSMBoss {
 	@Override
 	public boolean isArmorEmpty() {
 		return false;
+	}
+
+	public void spawnAction() {
+		this.setHealthArmorCount(this.getHealthArmorCount() + 1);
 	}
 
 	public void clearInfo() {

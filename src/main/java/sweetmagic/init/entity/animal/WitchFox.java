@@ -30,6 +30,7 @@ import net.minecraft.world.entity.ai.goal.SitWhenOrderedToGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.monster.Slime;
 import net.minecraft.world.entity.monster.Witch;
 import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.entity.player.Player;
@@ -55,10 +56,9 @@ public class WitchFox extends AbstractSummonMob {
 	private float crouchAmountO;
 	private float interestedAngle;
 	private float interestedAngleO;
-	private static final EntityDataAccessor<Boolean> IS_POUNCE = ISMMob.setData(WitchFox.class, ISMMob.BOOLEAN);
-	private static final EntityDataAccessor<Boolean> IS_FACEPLANT = ISMMob.setData(WitchFox.class, ISMMob.BOOLEAN);
-	private static final EntityDataAccessor<Boolean> IS_CROUCH = ISMMob.setData(WitchFox.class, ISMMob.BOOLEAN);
-	private static final EntityDataAccessor<Boolean> IS_INTEREST = ISMMob.setData(WitchFox.class, ISMMob.BOOLEAN);
+	private static final EntityDataAccessor<Boolean> POUNCE = ISMMob.setData(WitchFox.class, ISMMob.BOOLEAN);
+	private static final EntityDataAccessor<Boolean> CROUCH = ISMMob.setData(WitchFox.class, ISMMob.BOOLEAN);
+	private static final EntityDataAccessor<Boolean> INTEREST = ISMMob.setData(WitchFox.class, ISMMob.BOOLEAN);
 	private static final EntityDataAccessor<Integer> FIRE_COUNT = ISMMob.setData(WitchFox.class, ISMMob.INT);
 
 	public WitchFox(Level world) {
@@ -72,11 +72,10 @@ public class WitchFox extends AbstractSummonMob {
 
 	protected void defineSynchedData() {
 		super.defineSynchedData();
-		this.entityData.define(IS_POUNCE, false);
-		this.entityData.define(IS_FACEPLANT, false);
-		this.entityData.define(IS_CROUCH, false);
-		this.entityData.define(IS_INTEREST, false);
-		this.entityData.define(FIRE_COUNT, 0);
+		this.define(POUNCE, false);
+		this.define(CROUCH, false);
+		this.define(INTEREST, false);
+		this.define(FIRE_COUNT, 0);
 	}
 
 	public static AttributeSupplier.Builder registerAttributes() {
@@ -94,7 +93,7 @@ public class WitchFox extends AbstractSummonMob {
 		this.goalSelector.addGoal(4, new GolemRandomStrollInVillageGoal(this, 0.6D));
 		this.goalSelector.addGoal(6, new FollowOwnerGoal(this, 1D, 10F, 2F, false) {
 			public boolean canUse() {
-				return !getFacePlant() && !getPounce() && super.canUse();
+				return !getPounce() && super.canUse();
 			}
 		});
 		this.goalSelector.addGoal(7, new LookAtPlayerGoal(this, Monster.class, 8F));
@@ -105,6 +104,7 @@ public class WitchFox extends AbstractSummonMob {
 		this.targetSelector.addGoal(4, new NearestAttackSMMobGoal<>(this, Monster.class, false));
 		this.targetSelector.addGoal(5, new AttackTargetGoal<>(this, Raider.class, false));
 		this.targetSelector.addGoal(6, new AttackTargetGoal<>(this, Warden.class, false));
+		this.targetSelector.addGoal(7, new AttackTargetGoal<>(this, Slime.class, false));
 	}
 
 	protected SoundEvent getAmbientSound() {
@@ -120,43 +120,35 @@ public class WitchFox extends AbstractSummonMob {
 	}
 
 	public boolean getPounce() {
-		return this.entityData.get(IS_POUNCE);
+		return this.get(POUNCE);
 	}
 
 	public void setPounce(boolean pounce) {
-		this.entityData.set(IS_POUNCE, pounce);
-	}
-
-	public boolean getFacePlant() {
-		return this.entityData.get(IS_FACEPLANT);
-	}
-
-	void setFacePlant(boolean facePlant) {
-		this.entityData.set(IS_FACEPLANT, facePlant);
+		this.set(POUNCE, pounce);
 	}
 
 	public boolean isCrouching() {
-		return this.entityData.get(IS_CROUCH);
+		return this.get(CROUCH);
 	}
 
 	public void setCrouch(boolean crouch) {
-		this.entityData.set(IS_CROUCH, crouch);
+		this.set(CROUCH, crouch);
 	}
 
 	public boolean isInterest() {
-		return this.entityData.get(IS_INTEREST);
+		return this.get(INTEREST);
 	}
 
 	public void setIsInterest(boolean interest) {
-		this.entityData.set(IS_INTEREST, interest);
+		this.set(INTEREST, interest);
 	}
 
 	public int getFireCount() {
-		return this.entityData.get(FIRE_COUNT);
+		return this.get(FIRE_COUNT);
 	}
 
 	public void setFireCount(int fireCount) {
-		this.entityData.set(FIRE_COUNT, fireCount);
+		this.set(FIRE_COUNT, fireCount);
 	}
 
 	public boolean isFullyCrouched() {
@@ -176,7 +168,7 @@ public class WitchFox extends AbstractSummonMob {
 	}
 
 	public boolean canMove() {
-		return !this.getShit() && !this.getFacePlant() && !this.getPounce();
+		return !this.getShit()  && !this.getPounce();
 	}
 
 	public void addAdditionalSaveData(CompoundTag tags) {
@@ -186,7 +178,6 @@ public class WitchFox extends AbstractSummonMob {
 		tags.putInt("magicTime", this.magicTime);
 		tags.putInt("fireTime", this.fireTime);
 		tags.putBoolean("Pounce", this.getPounce());
-		tags.putBoolean("FacePlant", this.getFacePlant());
 		tags.putBoolean("Crouching", this.isCrouching());
 		tags.putBoolean("Interest", this.isInterest());
 	}
@@ -198,7 +189,6 @@ public class WitchFox extends AbstractSummonMob {
 		this.magicTime = tags.getInt("magicTime");
 		this.fireTime = tags.getInt("fireCount");
 		this.setPounce(tags.getBoolean("Pounce"));
-		this.setFacePlant(tags.getBoolean("FacePlant"));
 		this.setCrouch(tags.getBoolean("Crouching"));
 		this.setIsInterest(tags.getBoolean("Interest"));
 	}
@@ -222,7 +212,7 @@ public class WitchFox extends AbstractSummonMob {
 			this.crouchAmount = 0F;
 		}
 
-		if (this.tickCount % 20 == 0 && this.level.isClientSide) {
+		if (this.tickCount % 20 == 0 && this.isClient()) {
 			int count = Math.min(10, this.getFireCount());
 			for (int i = 0; i < count; i++) {
 				float f1 = (float) (this.getX() + this.getRand(1.5F));
@@ -231,11 +221,11 @@ public class WitchFox extends AbstractSummonMob {
 				float x = this.getRand(0.025F);
 				float y = this.getRand(0.025F);
 				float z = this.getRand(0.025F);
-				this.level.addParticle(ParticleTypes.SOUL_FIRE_FLAME, f1, f2, f3, x, y, z);
+				this.getLevel().addParticle(ParticleTypes.SOUL_FIRE_FLAME, f1, f2, f3, x, y, z);
 			}
 		}
 
-		if (this.tickCount % 10 != 0 || this.level.isClientSide || this.getFireCount() >= 16) { return; }
+		if (this.tickCount % 10 != 0 || this.isClient() || this.getFireCount() >= 16) { return; }
 
 		// 死んでいるえんちちーが居なければ終了
 		List<Mob> entityList = this.getEntityList(Mob.class, 24D).stream().filter(t -> !t.isAlive() && !t.getPersistentData().contains("dead_" + this.getUUID())).toList();
@@ -259,6 +249,7 @@ public class WitchFox extends AbstractSummonMob {
 		if (target == null || !target.isAlive()) {
 			this.setCrouch(false);
 			this.setIsInterest(false);
+			this.setPounce(false);
 			this.setTarget(null);
 			return;
 		}
@@ -279,7 +270,7 @@ public class WitchFox extends AbstractSummonMob {
 		}
 	}
 
-	public void magicShot (LivingEntity target, AbstractMagicShot entity) {
+	public void magicShot(LivingEntity target, AbstractMagicShot entity) {
 
 		boolean isWarden = target instanceof Warden;
 		float dama = this.getPower(this.getWandLevel()) + (float) this.getAttributeValue(Attributes.ATTACK_DAMAGE) * 0.35F;
@@ -296,20 +287,20 @@ public class WitchFox extends AbstractSummonMob {
 		entity.shoot(x, y - xz * 0.035D, z, 2.25F, 0F);
 		entity.setAddDamage( (entity.getAddDamage() + dama) * dameRate );
 		this.playSound(SoundEvents.BLAZE_SHOOT, 0.5F, 0.67F);
-		this.level.addFreshEntity(entity);
+		this.getLevel().addFreshEntity(entity);
 	}
 
-	public AbstractMagicShot cherryShot () {
+	public AbstractMagicShot cherryShot() {
 		this.magicTime = 125 + this.rand.nextInt(75);
-		AbstractMagicShot entity = new CherryMagicShot(this.level, this);
+		AbstractMagicShot entity = new CherryMagicShot(this.getLevel(), this);
 		entity.setData(2);
 		entity.setRange(2.5D + this.getRange());
 		return entity;
 	}
 
-	public AbstractMagicShot fireShot () {
+	public AbstractMagicShot fireShot() {
 		this.fireTime = 225 + this.rand.nextInt(75);
-		AbstractMagicShot entity = new SoulBlazeShot(this.level, this);
+		AbstractMagicShot entity = new SoulBlazeShot(this.getLevel(), this);
 		entity.setRange(6.5D + this.getRange());
 		entity.setAddAttack(this.getFireCount());
 		return entity;
@@ -373,18 +364,15 @@ public class WitchFox extends AbstractSummonMob {
 
 		public void tick() {
 
-			if (!this.fox.getFacePlant()) {
+			Vec3 vec3 = this.fox.getDeltaMovement();
+			if (vec3.y * vec3.y < (double) 0.03F && this.fox.getXRot() != 0F) {
+				this.fox.setXRot(Mth.rotlerp(this.fox.getXRot(), 0F, 0.2F));
+			}
 
-				Vec3 vec3 = this.fox.getDeltaMovement();
-				if (vec3.y * vec3.y < (double) 0.03F && this.fox.getXRot() != 0F) {
-					this.fox.setXRot(Mth.rotlerp(this.fox.getXRot(), 0F, 0.2F));
-				}
-
-				else {
-					double d0 = vec3.horizontalDistance();
-					double d1 = Math.signum(-vec3.y) * Math.acos(d0 / vec3.length()) * (double) (180F / (float) Math.PI);
-					this.fox.setXRot((float) d1);
-				}
+			else {
+				double d0 = vec3.horizontalDistance();
+				double d1 = Math.signum(-vec3.y) * Math.acos(d0 / vec3.length()) * (double) (180F / (float) Math.PI);
+				this.fox.setXRot((float) d1);
 			}
 
 			LivingEntity target = this.fox.getTarget();
@@ -415,7 +403,7 @@ public class WitchFox extends AbstractSummonMob {
 		}
 
 		// パーティクルスポーン
-		protected void spawnParticleRing(ServerLevel server, ParticleOptions particle, double range, BlockPos pos, double ySpeed, double moveValue) {
+		protected void spawnParticleRing(ServerLevel server, ParticleOptions par, double range, BlockPos pos, double ySpeed, double moveValue) {
 
 			double x = pos.getX() + 0.5D;
 			double y = pos.getY() + 0.5D;
@@ -423,7 +411,7 @@ public class WitchFox extends AbstractSummonMob {
 
 			for (double degree = 0D; degree < range * Math.PI; degree += 0.1D) {
 				double rate = range;
-				server.sendParticles(particle, x + Math.cos(degree) * rate, y, z + Math.sin(degree) * rate, 0, -Math.cos(degree), ySpeed, -Math.sin(degree), moveValue);
+				server.sendParticles(par, x + Math.cos(degree) * rate, y, z + Math.sin(degree) * rate, 0, -Math.cos(degree), ySpeed, -Math.sin(degree), moveValue);
 			}
 		}
 
@@ -462,7 +450,7 @@ public class WitchFox extends AbstractSummonMob {
 			double d4 = d2 == 0D ? d1 * (double) ((float) i / 6F) : d3 / d2;
 
 			for (int k = 1; k < 4; ++k) {
-				if (!fox.level.getBlockState(new BlockPos(fox.getX() + d4, fox.getY() + (double) k, fox.getZ() + d3)).getMaterial().isReplaceable()) { return false;}
+				if (!fox.getLevel().getBlockState(new BlockPos(fox.getX() + d4, fox.getY() + (double) k, fox.getZ() + d3)).getMaterial().isReplaceable()) { return false;}
 			}
 		}
 

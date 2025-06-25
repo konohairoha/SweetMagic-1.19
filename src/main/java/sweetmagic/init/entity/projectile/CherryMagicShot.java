@@ -62,7 +62,7 @@ public class CherryMagicShot extends AbstractMagicShot {
 
 		double effectRange = range * range;
 
-		if (this.level instanceof ServerLevel server) {
+		if (this.getLevel() instanceof ServerLevel server) {
 
 			ParticleOptions par = ParticleInit.CHERRY_BLOSSOMS_LARGE;
 
@@ -120,7 +120,7 @@ public class CherryMagicShot extends AbstractMagicShot {
 			float f1 = (float) (this.getX() - 0.5F + rand.nextFloat() + vec.x * i / 5F);
 			float f2 = (float) (this.getY() - 0.25F + rand.nextFloat() * 0.5F + vec.y * i / 5F);
 			float f3 = (float) (this.getZ() - 0.5F + rand.nextFloat() + vec.z * i / 5F);
-			this.level.addParticle(ParticleInit.CHERRY_BLOSSOMS_LARGE, f1, f2, f3, x, y, z);
+			this.addParticle(ParticleInit.CHERRY_BLOSSOMS_LARGE, f1, f2, f3, x, y, z);
 		}
 	}
 
@@ -132,7 +132,6 @@ public class CherryMagicShot extends AbstractMagicShot {
 		Random rand = this.rand;
 
 		for (double degree = -range * Math.PI; degree < range * Math.PI; degree += 0.25D) {
-
 			if (rand.nextFloat() >= 0.1F) { continue; }
 			double rate = range * 0.75D;
 			server.sendParticles(par, x + Math.cos(degree) * rate, y, z + Math.sin(degree) * rate, 0, Math.cos(degree) * 0.65D, ySpeed, Math.sin(degree) * 0.65D, speed);

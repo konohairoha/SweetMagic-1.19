@@ -44,7 +44,7 @@ public class BraveShot extends AbstractMagicShot {
 		float dame = 0.5F + 0.5F * this.getWandLevel();
 		this.rangeAttack(result.getBlockPos().above(), dame, range);
 
-		if (this.level instanceof ServerLevel server) {
+		if (this.getLevel() instanceof ServerLevel server) {
 			this.spawnParticleShort(server, result.getBlockPos().above());
 		}
 
@@ -61,7 +61,7 @@ public class BraveShot extends AbstractMagicShot {
 		double x = this.getX();
 		double y = this.getY();
 		double z = this.getZ();
-		this.level.addParticle(ParticleTypes.SWEEP_ATTACK, x, y, z, 0, 0, 0);
+		this.addParticle(ParticleTypes.SWEEP_ATTACK, x, y, z, 0, 0, 0);
 	}
 
 	// 属性の取得

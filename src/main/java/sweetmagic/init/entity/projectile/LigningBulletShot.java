@@ -3,8 +3,6 @@ package sweetmagic.init.entity.projectile;
 import javax.annotation.Nullable;
 
 import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
-import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -12,13 +10,14 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import sweetmagic.api.emagic.SMElement;
+import sweetmagic.api.ientity.ISMMob;
 import sweetmagic.api.iitem.info.WandInfo;
 import sweetmagic.init.EntityInit;
 import sweetmagic.init.ParticleInit;
 
 public class LigningBulletShot extends AbstractMagicShot {
 
-	private static final EntityDataAccessor<Integer> TARGET = SynchedEntityData.defineId(LigningBulletShot.class, EntityDataSerializers.INT);
+	private static final EntityDataAccessor<Integer> TARGET = setEntityData(ISMMob.INT);
 
 	public LigningBulletShot(EntityType<? extends AbstractMagicShot> entityType, Level world) {
 		super(entityType, world);
@@ -44,7 +43,7 @@ public class LigningBulletShot extends AbstractMagicShot {
 
 	protected void defineSynchedData() {
 		super.defineSynchedData();
-		this.entityData.define(TARGET, -1);
+		define(TARGET, -1);
 	}
 
 	public void tick() {
@@ -80,16 +79,16 @@ public class LigningBulletShot extends AbstractMagicShot {
 
 	// パーティクルスポーン
 	protected void spawnParticle() {
-		this.level.addParticle(ParticleInit.MAGICLIGHT, this.getX(), this.getY(), this.getZ(), 0F, 0F, 0F);
+		this.addParticle(ParticleInit.MAGICLIGHT, this.getX(), this.getY(), this.getZ(), 0F, 0F, 0F);
 	}
 
 	@Nullable
 	private Entity getTarget() {
-		return this.level.getEntity(this.getEntityData().get(TARGET));
+		return this.getLevel().getEntity(this.get(TARGET));
 	}
 
 	public void setTarget(Entity entity) {
-		this.getEntityData().set(TARGET, entity == null ? -1 : entity.getId());
+		this.set(TARGET, entity == null ? -1 : entity.getId());
 	}
 
 	// 属性の取得

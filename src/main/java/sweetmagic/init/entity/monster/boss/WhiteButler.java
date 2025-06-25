@@ -50,10 +50,10 @@ public class WhiteButler extends AbstractSMBoss {
 	private static final int MAX_SICKLE_TICK = 360;
 	private int rifleTick = 0;
 	private static final int MAX_RIFLE_TICK = 320;
-	private static final EntityDataAccessor<Boolean> IS_ALIVE = ISMMob.setData(WhiteButler.class, BOOLEAN);
-	private static final EntityDataAccessor<Boolean> HAS_KNIFE = ISMMob.setData(WhiteButler.class, BOOLEAN);
-	private static final EntityDataAccessor<Boolean> HAS_SICKLE = ISMMob.setData(WhiteButler.class, BOOLEAN);
-	private static final EntityDataAccessor<Boolean> HAS_RIFLE = ISMMob.setData(WhiteButler.class, BOOLEAN);
+	private static final EntityDataAccessor<Boolean> ALIVE = ISMMob.setData(WhiteButler.class, BOOLEAN);
+	private static final EntityDataAccessor<Boolean> KNIFE = ISMMob.setData(WhiteButler.class, BOOLEAN);
+	private static final EntityDataAccessor<Boolean> SICKLE = ISMMob.setData(WhiteButler.class, BOOLEAN);
+	private static final EntityDataAccessor<Boolean> RIFLE = ISMMob.setData(WhiteButler.class, BOOLEAN);
 
 	public WhiteButler(Level world) {
 		super(EntityInit.whiteButler, world);
@@ -66,10 +66,10 @@ public class WhiteButler extends AbstractSMBoss {
 	}
 
 	protected void registerGoals() {
-		this.goalSelector.addGoal(5, new MoveTowardsRestrictionGoal(this, 1.0D));
-		this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1.0D, 0.0F));
-		this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
-		this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Warden.class, 8.0F));
+		this.goalSelector.addGoal(5, new MoveTowardsRestrictionGoal(this, 1D));
+		this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1D, 0F));
+		this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8F));
+		this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Warden.class, 8F));
 		this.goalSelector.addGoal(10, new SMRandomLookGoal(this));
 		this.targetSelector.addGoal(1, (new HurtByTargetGoal(this)).setAlertOthers());
 		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Warden.class, true));
@@ -89,43 +89,42 @@ public class WhiteButler extends AbstractSMBoss {
 
 	protected void defineSynchedData() {
 		super.defineSynchedData();
-		this.entityData.define(IS_ALIVE, false);
-		this.entityData.define(HAS_KNIFE, false);
-		this.entityData.define(HAS_SICKLE, false);
-		this.entityData.define(HAS_RIFLE, false);
-		this.entityData.define(HALFHEALTH, false);
+		this.define(ALIVE, false);
+		this.define(KNIFE, false);
+		this.define(SICKLE, false);
+		this.define(RIFLE, false);
 	}
 
 	public boolean getAlive() {
-		return this.entityData.get(IS_ALIVE);
+		return this.get(ALIVE);
 	}
 
 	public void setAlive(boolean isAlive) {
-		this.entityData.set(IS_ALIVE, isAlive);
+		this.set(ALIVE, isAlive);
 	}
 
 	public boolean getKnife() {
-		return this.entityData.get(HAS_KNIFE);
+		return this.get(KNIFE);
 	}
 
 	public void setKnife(boolean hasKnife) {
-		this.entityData.set(HAS_KNIFE, hasKnife);
+		this.set(KNIFE, hasKnife);
 	}
 
 	public boolean getSickle() {
-		return this.entityData.get(HAS_SICKLE);
+		return this.get(SICKLE);
 	}
 
 	public void setSickle(boolean hasSickle) {
-		this.entityData.set(HAS_SICKLE, hasSickle);
+		this.set(SICKLE, hasSickle);
 	}
 
 	public boolean getRifle() {
-		return this.entityData.get(HAS_RIFLE);
+		return this.get(RIFLE);
 	}
 
 	public void setRifle(boolean hasRifle) {
-		this.entityData.set(HAS_RIFLE, hasRifle);
+		this.set(RIFLE, hasRifle);
 	}
 
 	public void addAdditionalSaveData(CompoundTag tags) {
@@ -170,7 +169,7 @@ public class WhiteButler extends AbstractSMBoss {
 
 		LivingEntity entity = this.owner;
 
-		if (entity == null && this.level instanceof ServerLevel server) {
+		if (entity == null && this.getLevel() instanceof ServerLevel server) {
 			entity = (LivingEntity) server.getEntity(this.getOwnerID());
 		}
 
@@ -184,7 +183,7 @@ public class WhiteButler extends AbstractSMBoss {
 		if (attacker != null && attacker instanceof ISMMob) { return false; }
 
 		// ボスダメージ計算
-		amount = this.getBossDamageAmount(this.level, this.defTime , src, amount, 8F);
+		amount = this.getBossDamageAmount(this.getLevel(), this.defTime , src, amount, 8F);
 		this.defTime = amount > 0 ? 2 : this.defTime;
 
 		if (attacker instanceof Warden) {
@@ -276,7 +275,7 @@ public class WhiteButler extends AbstractSMBoss {
 
 	public void knifeAttack(LivingEntity target) {
 
-		List<LivingEntity> targetList = this.getEntityList(LivingEntity.class, this.getFilter(this.isPlayer(target)), 48D);
+		List<LivingEntity> targetList = this.getPlayerList(target);
 
 		for (LivingEntity entity : targetList) {
 
@@ -285,11 +284,11 @@ public class WhiteButler extends AbstractSMBoss {
 			double z = entity.getZ() - this.getZ();
 			double xz = Math.sqrt(x * x + z * z);
 
-			KnifeShot knife = new KnifeShot(this.level, this);
+			KnifeShot knife = new KnifeShot(this.getLevel(), this);
 			knife.setHitDead(false);
 			knife.shoot(x, y - xz * 0.065D, z, 1.5F, 2F);
 			knife.setAddDamage(knife.getAddDamage() + 6F);
-			this.level.addFreshEntity(knife);
+			this.addEntity(knife);
 		}
 
 		this.attackCount += targetList.size();
@@ -300,18 +299,17 @@ public class WhiteButler extends AbstractSMBoss {
 
 	public void sickleAttack(LivingEntity target) {
 
-		List<LivingEntity> targetList = this.getEntityList(LivingEntity.class, this.getFilter(this.isPlayer(target)), 48D);
-		double range = 3.5D + this.attackCount * 0.25D + targetList.size() * 0.1D;
+		double range = 3.5D + this.attackCount * 0.25D + this.getPlayerCount(target) * 0.1D;
 		double x = target.getX() - this.getX();
 		double z = target.getZ() - this.getZ();
 
-		SickleShot entity = new SickleShot(this.level, this);
+		SickleShot entity = new SickleShot(this.getLevel(), this);
 		entity.setHitDead(false);
 		entity.shoot(x, 0D, z, 1.75F, 2F);
 		entity.setAddDamage(entity.getAddDamage() + 12F);
 		entity.setRange(range);
 		entity.setMaxLifeTime(500);
-		this.level.addFreshEntity(entity);
+		this.addEntity(entity);
 		this.sickleTick = 0;
 		this.attackCount = 0;
 		this.setSickle(false);
@@ -320,12 +318,12 @@ public class WhiteButler extends AbstractSMBoss {
 
 	public void rifleAttack(LivingEntity target) {
 
-		List<LivingEntity> targetList = this.getEntityList(LivingEntity.class, this.getFilter(this.isPlayer(target)), 48D);
+		List<LivingEntity> targetList = this.getPlayerList(target);
 		this.playSound(SoundInit.RIFLE_SHOT, 0.2F, 0.85F);
 
 		for (LivingEntity entity : targetList) {
 			AbstractMagicShot magic = this.getMagicShot(entity, this.rifleCount, entity instanceof Warden);
-			this.level.addFreshEntity(magic);
+			this.addEntity(magic);
 		}
 
 		if (this.rifleCount++ >= 5) {
@@ -348,19 +346,19 @@ public class WhiteButler extends AbstractSMBoss {
 
 		switch (count) {
 		case 1:
-			entity = new FrostMagicShot(this.level, this);
+			entity = new FrostMagicShot(this.getLevel(), this);
 			break;
 		case 2:
-			entity = new GravityMagicShot(this.level, this);
+			entity = new GravityMagicShot(this.getLevel(), this);
 			break;
 		case 3:
-			entity = new CycloneMagicShot(this.level, this);
+			entity = new CycloneMagicShot(this.getLevel(), this);
 			break;
 		case 4:
-			entity = new DigMagicShot(this.level, this);
+			entity = new DigMagicShot(this.getLevel(), this);
 			break;
 		default:
-			entity = new FireMagicShot(this.level, this);
+			entity = new FireMagicShot(this.getLevel(), this);
 			break;
 		}
 

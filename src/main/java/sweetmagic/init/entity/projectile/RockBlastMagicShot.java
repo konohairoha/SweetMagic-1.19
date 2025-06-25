@@ -54,10 +54,10 @@ public class RockBlastMagicShot extends AbstractMagicShot {
 		Random rand = this.rand;
 
 		for (int i = 0; i < 6; i++) {
-			float f1 = (float) (this.getX() - 0.5F + rand.nextFloat() + vec.x * i / 4.0F);
-			float f2 = (float) (this.getY() + 0.25F + rand.nextFloat() * 0.5 + vec.y * i / 4.0D);
-			float f3 = (float) (this.getZ() - 0.5F + rand.nextFloat() + vec.z * i / 4.0D);
-			this.level.addParticle(ParticleInit.DIG, f1, f2, f3, x, y, z);
+			float f1 = (float) (this.getX() - 0.5F + rand.nextFloat() + vec.x * i / 4D);
+			float f2 = (float) (this.getY() + 0.25F + rand.nextFloat() * 0.5 + vec.y * i / 4D);
+			float f3 = (float) (this.getZ() - 0.5F + rand.nextFloat() + vec.z * i / 4D);
+			this.addParticle(ParticleInit.DIG, f1, f2, f3, x, y, z);
 		}
 	}
 

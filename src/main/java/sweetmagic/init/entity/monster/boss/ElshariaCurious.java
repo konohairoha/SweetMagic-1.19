@@ -25,6 +25,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.raid.Raider;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import sweetmagic.api.ientity.IAngel;
 import sweetmagic.api.ientity.ISMMob;
 import sweetmagic.init.EntityInit;
 import sweetmagic.init.PotionInit;
@@ -34,7 +35,7 @@ import sweetmagic.init.entity.projectile.ExplosionThunderShot;
 import sweetmagic.init.entity.projectile.LigningBulletShot;
 import sweetmagic.util.SMDamage;
 
-public class ElshariaCurious extends AbstractSMBoss {
+public class ElshariaCurious extends AbstractSMBoss implements IAngel {
 
 	private int bulletTime = 150;
 	private static final int MAX_BULLET_TTIME = 200;
@@ -42,7 +43,8 @@ public class ElshariaCurious extends AbstractSMBoss {
 	private static final int MAX_THUNDER_TTIME = 400;
 	private int lightBoltTime = 300;
 	private static final int MAX_LIGHTBOL_TTIME = 600;
-	private static final EntityDataAccessor<Boolean> ISBOLT = ISMMob.setData(ElshariaCurious.class, BOOLEAN);
+	private static final EntityDataAccessor<Boolean> BOLT = ISMMob.setData(ElshariaCurious.class, BOOLEAN);
+	private static final EntityDataAccessor<Boolean> CHARGE = ISMMob.setData(ElshariaCurious.class, BOOLEAN);
 	private Map<Integer, BlockPos> posMap = new LinkedHashMap<>();	// サンダーボルテックス
 
 	public ElshariaCurious(Level world) {
@@ -56,14 +58,15 @@ public class ElshariaCurious extends AbstractSMBoss {
 
 	protected void defineSynchedData() {
 		super.defineSynchedData();
-		this.entityData.define(ISBOLT, false);
+		this.define(BOLT, false);
+		this.define(CHARGE, false);
 	}
 
 	protected void registerGoals() {
 		this.goalSelector.addGoal(0, new FloatGoal(this));
-		this.goalSelector.addGoal(1, new WaterAvoidingRandomStrollGoal(this, 1.0D, 0.0F));
-		this.goalSelector.addGoal(2, new LookAtPlayerGoal(this, Player.class, 8.0F));
-		this.goalSelector.addGoal(3, new LookAtPlayerGoal(this, Warden.class, 8.0F));
+		this.goalSelector.addGoal(1, new WaterAvoidingRandomStrollGoal(this, 1D, 0F));
+		this.goalSelector.addGoal(2, new LookAtPlayerGoal(this, Player.class, 8F));
+		this.goalSelector.addGoal(3, new LookAtPlayerGoal(this, Warden.class, 8F));
 		this.goalSelector.addGoal(4, new SMRandomLookGoal(this));
 		this.targetSelector.addGoal(1, (new HurtByTargetGoal(this)).setAlertOthers());
 		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Warden.class, true));
@@ -82,16 +85,25 @@ public class ElshariaCurious extends AbstractSMBoss {
 	}
 
 	public boolean getBolt() {
-		return this.entityData.get(ISBOLT);
+		return this.get(BOLT);
 	}
 
 	public void setBolt(boolean arrow) {
-		this.entityData.set(ISBOLT, arrow);
+		this.set(BOLT, arrow);
+	}
+
+	public boolean getCharge() {
+		return this.get(CHARGE);
+	}
+
+	public void setCharge(boolean isCharge) {
+		this.set(CHARGE, isCharge);
 	}
 
 	public void addAdditionalSaveData(CompoundTag tags) {
 		super.addAdditionalSaveData(tags);
 		tags.putBoolean("bolt", this.getBolt());
+		tags.putBoolean("isCharge", this.getCharge());
 		tags.putInt("bulletTime", this.bulletTime);
 		tags.putInt("rodSetTime", this.thunderTime);
 		tags.putInt("lightBoltTime", this.lightBoltTime);
@@ -100,6 +112,7 @@ public class ElshariaCurious extends AbstractSMBoss {
 	public void readAdditionalSaveData(CompoundTag tags) {
 		super.readAdditionalSaveData(tags);
 		this.setBolt(tags.getBoolean("bolt"));
+		this.setCharge(tags.getBoolean("isCharge"));
 		this.bulletTime = tags.getInt("bulletTime");
 		this.thunderTime = tags.getInt("rodSetTime");
 		this.lightBoltTime = tags.getInt("lightBoltTime");
@@ -112,7 +125,7 @@ public class ElshariaCurious extends AbstractSMBoss {
 		if (attacker != null && attacker instanceof ISMMob) { return false; }
 
 		// ボスダメージ計算
-		amount = this.getBossDamageAmount(this.level, this.defTime , src, amount, 7F);
+		amount = this.getBossDamageAmount(this.getLevel(), this.defTime , src, amount, 7F);
 		this.defTime = amount > 0 ? 2 : this.defTime;
 
 		if (attacker instanceof Warden) {
@@ -126,10 +139,6 @@ public class ElshariaCurious extends AbstractSMBoss {
 		}
 
 		return super.hurt(src, amount);
-	}
-
-	public boolean causeFallDamage(float par1, float par2, DamageSource src) {
-		return false;
 	}
 
 	public void aiStep() {
@@ -176,6 +185,7 @@ public class ElshariaCurious extends AbstractSMBoss {
 
 	public void secondAttack(LivingEntity target) {
 		if (this.lightBoltTime++ >= MAX_LIGHTBOL_TTIME - 200) {
+			this.setCharge(true);
 			this.lightningBoltShot(target);
 		}
 	}
@@ -183,7 +193,7 @@ public class ElshariaCurious extends AbstractSMBoss {
 	public void bulletShot(LivingEntity target) {
 
 		float damage = (float) this.getAttributeValue(Attributes.ATTACK_DAMAGE) + 4F;
-		List<LivingEntity> targetList = this.getEntityList(LivingEntity.class, this.getFilter(this.isPlayer(target)), 48D);
+		List<LivingEntity> targetList = this.getPlayerList(target);
 
 		for (LivingEntity entity : targetList) {
 
@@ -192,12 +202,12 @@ public class ElshariaCurious extends AbstractSMBoss {
 			double z = entity.getZ() - this.getZ();
 			double xz = Math.sqrt(x * x + z * z);
 
-			LigningBulletShot magic = new LigningBulletShot(this.level, this);
+			LigningBulletShot magic = new LigningBulletShot(this.getLevel(), this);
 			magic.shoot(x, y - xz * 0.065D, z, 1F, 0F);
 			magic.setAddDamage(magic.getAddDamage() + damage);
 			magic.setTarget(entity);
 			magic.setMaxLifeTime(120);
-			this.level.addFreshEntity(magic);
+			this.addEntity(magic);
 		}
 
 		this.bulletTime = 0;
@@ -209,8 +219,7 @@ public class ElshariaCurious extends AbstractSMBoss {
 
 			if (this.posMap.isEmpty()) {
 
-				List<LivingEntity> targetList = this.getEntityList(LivingEntity.class, this.getFilter(this.isPlayer(target)), 48D);
-				int size = targetList.size() + 2;
+				int size = (int) this.getPlayerCount(target) + 2;
 
 				for (int i = 0; i < size; i++) {
 
@@ -240,7 +249,7 @@ public class ElshariaCurious extends AbstractSMBoss {
 			for (Entry<Integer, BlockPos> map : this.posMap.entrySet()) {
 				BlockPos pos = map.getValue().above(3);
 
-				AbstractMagicShot magic = new ElectricMagicShot(this.level, this);
+				AbstractMagicShot magic = new ElectricMagicShot(this.getLevel(), this);
 				magic.setAddDamage(magic.getAddDamage());
 				magic.setRange(5D);
 				magic.setData(2);
@@ -249,7 +258,7 @@ public class ElshariaCurious extends AbstractSMBoss {
 				magic.setAddDamage(magic.getAddDamage() + damage);
 				magic.setDeltaMovement(new Vec3(0, -10D, 0));
 				magic.setHitDead(false);
-				this.level.addFreshEntity(magic);
+				this.addEntity(magic);
 			}
 
 			this.thunderTime = 0;
@@ -259,7 +268,6 @@ public class ElshariaCurious extends AbstractSMBoss {
 	public void lightningBoltShot(LivingEntity target) {
 
 		if (this.lightBoltTime <= MAX_LIGHTBOL_TTIME) {
-
 			if (this.tickCount % 4 != 0) { return; }
 
 			float damage = (float) this.getAttributeValue(Attributes.ATTACK_DAMAGE) + 15F;
@@ -270,7 +278,7 @@ public class ElshariaCurious extends AbstractSMBoss {
 				int z = (int) (this.getZ() + this.getRandFloat(20F));
 				BlockPos pos = new BlockPos(x, y, z);
 
-				AbstractMagicShot magic = new ExplosionThunderShot(this.level, this);
+				AbstractMagicShot magic = new ExplosionThunderShot(this.getLevel(), this);
 				magic.setAddDamage(magic.getAddDamage());
 				magic.setRange(7.5D);
 				magic.shootFromRotation(this, this.getXRot(), this.getYRot(), 0, 0, 0);
@@ -278,12 +286,13 @@ public class ElshariaCurious extends AbstractSMBoss {
 				magic.setAddDamage(magic.getAddDamage() + damage);
 				magic.setDeltaMovement(new Vec3(0, -0.75D, 0));
 				magic.setHitDead(false);
-				this.level.addFreshEntity(magic);
+				this.addEntity(magic);
 			}
 		}
 
 		else {
 			this.lightBoltTime = 0;
+			this.setCharge(false);
 		}
 	}
 
@@ -295,5 +304,6 @@ public class ElshariaCurious extends AbstractSMBoss {
 	@Override
 	public void clearInfo() {
 		this.tickTime = 0;
+		this.setCharge(false);
 	}
 }

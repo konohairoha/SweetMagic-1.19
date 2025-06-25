@@ -194,7 +194,7 @@ public class WitchCat extends AbstractSummonMob {
 	}
 
 	public void addPotion() {
-		if (this.level.isClientSide) { return; }
+		if (this.isClient()) { return; }
 
 		if (this.tickCount % 10 == 0 && this.recastTime-- <= 0) {
 			this.recastTime = 10;
@@ -232,7 +232,7 @@ public class WitchCat extends AbstractSummonMob {
 				double pZ = entity.getZ();
 
 				for (int i = 0; i < 3; i++) {
-					this.spawnParticleRing(this.level, ParticleTypes.HAPPY_VILLAGER, 1D, pX, pY, pZ, 0.75D + i * 0.5D, 1D, 1D);
+					this.spawnParticleRing(this.getLevel(), ParticleTypes.HAPPY_VILLAGER, 1D, pX, pY, pZ, 0.75D + i * 0.5D, 1D, 1D);
 				}
 			}
 
@@ -240,7 +240,7 @@ public class WitchCat extends AbstractSummonMob {
 				this.addPotion(entity, MobEffects.DAMAGE_BOOST, 1, 1200);
 
 				if (isPlayer) {
-					entity.playSound(SoundEvents.BREWING_STAND_BREW, 0.0625F, 1.175F);
+					entity.playSound(SoundEvents.BREWING_STAND_BREW, 0.025F, 1.175F);
 				}
 			}
 
@@ -248,7 +248,7 @@ public class WitchCat extends AbstractSummonMob {
 				this.addPotion(entity, PotionInit.aether_armor, 1, 1200);
 
 				if (isPlayer) {
-					entity.playSound(SoundEvents.ENCHANTMENT_TABLE_USE, 0.0625F, 1.175F);
+					entity.playSound(SoundEvents.ENCHANTMENT_TABLE_USE, 0.025F, 1.175F);
 				}
 			}
 		}
@@ -259,7 +259,7 @@ public class WitchCat extends AbstractSummonMob {
 	public void eatFood(ItemStack stack) {
 
 		Item item = stack.getItem();
-		List<AbstractSummonMob> entityList = this.getEntityList(AbstractSummonMob.class, e -> e.isAlive() && e.getHealth() <= e.getMaxHealth() * 0.25F, this.getRange() * 2F);
+		List<AbstractSummonMob> entityList = this.getEntityList(AbstractSummonMob.class, e -> e.isAlive() && e.getHealth() <= e.getMaxHealth() * 0.33F, this.getRange() * 2F);
 
 		for (AbstractSummonMob entity : entityList) {
 			int foodValue = stack.getFoodProperties(entity).getNutrition();
@@ -298,7 +298,7 @@ public class WitchCat extends AbstractSummonMob {
 	}
 
 	// パーティクルスポーンリング
-	protected void spawnParticleRing(Level world, ParticleOptions particle, double range, double x, double y, double z, double addY, double ySpeed, double moveValue) {
+	protected void spawnParticleRing(Level world, ParticleOptions par, double range, double x, double y, double z, double addY, double ySpeed, double moveValue) {
 		if (!(world instanceof ServerLevel server)) { return; }
 
 		y += addY;
@@ -311,7 +311,7 @@ public class WitchCat extends AbstractSummonMob {
 				yS += this.rand.nextFloat() * 0.025F;
 			}
 
-			server.sendParticles(particle, x + Math.cos(degree), y, z + Math.sin(degree), 0, 0D, yS, 0D, moveValue);
+			server.sendParticles(par, x + Math.cos(degree), y, z + Math.sin(degree), 0, 0D, yS, 0D, moveValue);
 		}
 	}
 

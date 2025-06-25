@@ -91,7 +91,7 @@ public class FrostMagicShot extends AbstractMagicShot {
 		boolean isTier4 = this.getData() >= 3;
 		double effectRange = range * range;
 
-		if (isTier3 && this.level instanceof ServerLevel server) {
+		if (isTier3 && this.getLevel() instanceof ServerLevel server) {
 			this.rangeParticle(server, bPos, range, effectRange, isTier3, isTier4);
 		}
 
@@ -136,7 +136,7 @@ public class FrostMagicShot extends AbstractMagicShot {
 			}
 
 			for (int i = 0; i < 16; i ++) {
-				server.sendParticles(this.getParticle(STATE), this.getX(), this.getY() + 0.0D, this.getZ(), 0, 0F, 0F, 0F, 1F);
+				server.sendParticles(this.getParticle(STATE), this.getX(), this.getY(), this.getZ(), 0, 0F, 0F, 0F, 1F);
 			}
 		}
 
@@ -192,7 +192,7 @@ public class FrostMagicShot extends AbstractMagicShot {
 
 		if (this.getChangeParticle()) {
 			if (this.lifeTime > 1) { return; }
-			this.level.addParticle(ParticleInit.CRYSTAL, this.getX() - 0.5F, this.getY() - 10.5F, this.getZ() - 0.5F, x, vec.y, z);
+			this.addParticle(ParticleInit.CRYSTAL, this.getX() - 0.5F, this.getY() - 10.5F, this.getZ() - 0.5F, x, vec.y, z);
 		}
 
 		else {
@@ -204,10 +204,10 @@ public class FrostMagicShot extends AbstractMagicShot {
 			int count = isArrow ? 1 : 4;
 
 			for (int i = 0; i < count; i++) {
-				float f1 = (float) (this.getX() - 0.5F + rand.nextFloat() + vec.x * i / 4.0F);
-				float f2 = (float) (this.getY() - 0.25F + rand.nextFloat() * 0.5 + vec.y * i / 4.0D);
-				float f3 = (float) (this.getZ() - 0.5F + rand.nextFloat() + vec.z * i / 4.0D);
-				this.level.addParticle(ParticleInit.FROST, f1, f2, f3, x + this.getRandFloat(0.075F), y + this.getRandFloat(0.075F), z + this.getRandFloat(0.075F));
+				float f1 = (float) (this.getX() - 0.5F + rand.nextFloat() + vec.x * i / 4D);
+				float f2 = (float) (this.getY() - 0.25F + rand.nextFloat() * 0.5 + vec.y * i / 4D);
+				float f3 = (float) (this.getZ() - 0.5F + rand.nextFloat() + vec.z * i / 4D);
+				this.addParticle(ParticleInit.FROST, f1, f2, f3, x + this.getRandFloat(0.075F), y + this.getRandFloat(0.075F), z + this.getRandFloat(0.075F));
 			}
 		}
 	}

@@ -23,7 +23,6 @@ public class WindStormMagic extends AbstractBossMagic {
 
 	private int chargeTime = 0;						// ウィンドストームのチャージ時間
 	private static final int MAX_CHARGETIME = 60;	// ウィンドストームの最大チャージ時間
-
 	private List<LivingEntity> entityList = new ArrayList<>();
 
 	public WindStormMagic(EntityType<? extends WindStormMagic> entityType, Level world) {
@@ -76,7 +75,7 @@ public class WindStormMagic extends AbstractBossMagic {
 
 	// 魔法攻撃
 	public void attackMagic (LivingEntity target) {
-		if (this.level.isClientSide) { return; }
+		if (this.isClient()) { return; }
 
 		boolean isWarden = target instanceof Warden;
 		float damage = (isWarden ? 60F : 30F) + this.getAddDamage();
@@ -92,7 +91,7 @@ public class WindStormMagic extends AbstractBossMagic {
 
 		for (int i = 0; i < 2; i++) {
 
-			WindStormShot entity = new WindStormShot(this.level, player, this, info);
+			WindStormShot entity = new WindStormShot(this.getLevel(), player, this, info);
 
 			double d0 = target.getX() - this.getX();
 			double d1 = target.getZ() - this.getZ();
@@ -104,10 +103,10 @@ public class WindStormMagic extends AbstractBossMagic {
 			entity.setRange(1.5D);
 			entity.setBlockPenetration(true);
 			this.playSound(SoundEvents.BLAZE_SHOOT, 0.5F, 0.67F);
-			this.level.addFreshEntity(entity);
+			this.getLevel().addFreshEntity(entity);
 		}
 
-		WindStormShot entity = new WindStormShot(this.level, player, this, info);
+		WindStormShot entity = new WindStormShot(this.getLevel(), player, this, info);
 		double x = target.getX() - this.getX();
 		double y = target.getY(0.3333333333333333D) - this.getY();
 		double z = target.getZ() - this.getZ();
@@ -119,7 +118,7 @@ public class WindStormMagic extends AbstractBossMagic {
 		entity.setRange(1.5D);
 		entity.setBlockPenetration(true);
 		entity.setData(this.getData());
-		this.level.addFreshEntity(entity);
+		this.getLevel().addFreshEntity(entity);
 
 		this.playSound(SoundEvents.BLAZE_SHOOT, 0.5F, 0.67F);
 		this.chargeTime = 0;
@@ -129,12 +128,12 @@ public class WindStormMagic extends AbstractBossMagic {
 	public Vector3f getShotVector(AbstractBossMagic entity, Vec3 vec, float shake) {
 
 		Vec3 vec1 = vec.normalize();
-		Vec3 vec2 = vec1.cross(new Vec3(0.0D, 1.0D, 0.0D));
+		Vec3 vec2 = vec1.cross(new Vec3(0D, 1D, 0D));
 		if (vec2.lengthSqr() <= 1.0E-7D) {
-			vec2 = vec1.cross(entity.getUpVector(1.0F));
+			vec2 = vec1.cross(entity.getUpVector(1F));
 		}
 
-		Quaternion qua1 = new Quaternion(new Vector3f(vec2), 90.0F, true);
+		Quaternion qua1 = new Quaternion(new Vector3f(vec2), 90F, true);
 		Vector3f vecf1 = new Vector3f(vec1);
 		vecf1.transform(qua1);
 		Quaternion qua2 = new Quaternion(vecf1, shake, true);
@@ -173,7 +172,7 @@ public class WindStormMagic extends AbstractBossMagic {
 
 		// えんちちーの初期化が出来ていないなら初期化
 		if (this.summon == null) {
-			WindWitchMaster queen = new WindWitchMaster(this.level);
+			WindWitchMaster queen = new WindWitchMaster(this.getLevel());
 			queen.setMagic(true);
 			this.summon = queen;
 		}

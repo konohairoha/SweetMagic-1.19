@@ -64,8 +64,8 @@ public class TwilightHora extends AbstractSMBoss {
 	private static final int MAX_TWILIGHT_TIME = 250;
 	private int glowTime = 0;
 	private List<Player> playerList = new ArrayList<>();
-	private static final EntityDataAccessor<Boolean> ISSUMMON = ISMMob.setData(TwilightHora.class, BOOLEAN);
-	private static final EntityDataAccessor<Boolean> ISARMOR = ISMMob.setData(TwilightHora.class, BOOLEAN);
+	private static final EntityDataAccessor<Boolean> SUMMON = ISMMob.setData(TwilightHora.class, BOOLEAN);
+	private static final EntityDataAccessor<Boolean> ARMOR = ISMMob.setData(TwilightHora.class, BOOLEAN);
 
 	public TwilightHora(Level world) {
 		super(EntityInit.twilightHora, world);
@@ -78,15 +78,15 @@ public class TwilightHora extends AbstractSMBoss {
 
 	protected void defineSynchedData() {
 		super.defineSynchedData();
-		this.entityData.define(ISSUMMON, false);
-		this.entityData.define(ISARMOR, false);
+		this.define(SUMMON, false);
+		this.define(ARMOR, false);
 	}
 
 	protected void registerGoals() {
 		this.goalSelector.addGoal(0, new FloatGoal(this));
-		this.goalSelector.addGoal(1, new WaterAvoidingRandomStrollGoal(this, 1.0D, 0.0F));
-		this.goalSelector.addGoal(2, new LookAtPlayerGoal(this, Player.class, 8.0F));
-		this.goalSelector.addGoal(3, new LookAtPlayerGoal(this, Warden.class, 8.0F));
+		this.goalSelector.addGoal(1, new WaterAvoidingRandomStrollGoal(this, 1D, 0F));
+		this.goalSelector.addGoal(2, new LookAtPlayerGoal(this, Player.class, 8F));
+		this.goalSelector.addGoal(3, new LookAtPlayerGoal(this, Warden.class, 8F));
 		this.goalSelector.addGoal(4, new SMRandomLookGoal(this));
 		this.targetSelector.addGoal(1, (new HurtByTargetGoal(this)).setAlertOthers());
 		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Warden.class, true));
@@ -105,19 +105,19 @@ public class TwilightHora extends AbstractSMBoss {
 	}
 
 	public boolean getSummon() {
-		return this.entityData.get(ISSUMMON);
+		return this.get(SUMMON);
 	}
 
 	public void setSummon(boolean summon) {
-		this.entityData.set(ISSUMMON, summon);
+		this.set(SUMMON, summon);
 	}
 
 	public boolean getArmor() {
-		return this.entityData.get(ISARMOR);
+		return this.get(ARMOR);
 	}
 
 	public void setArmor(boolean armor) {
-		this.entityData.set(ISARMOR, armor);
+		this.set(ARMOR, armor);
 	}
 
 	public void addAdditionalSaveData(CompoundTag tags) {
@@ -137,7 +137,7 @@ public class TwilightHora extends AbstractSMBoss {
 		if (attacker != null && attacker instanceof ISMMob) { return false; }
 
 		// ボスダメージ計算
-		amount = this.getBossDamageAmount(this.level, this.defTime , src, amount, 7F);
+		amount = this.getBossDamageAmount(this.getLevel(), this.defTime , src, amount, 7F);
 		this.defTime = amount > 0 ? 2 : this.defTime;
 
 		if (attacker instanceof Warden) {
@@ -161,24 +161,20 @@ public class TwilightHora extends AbstractSMBoss {
 		return super.hurt(src, amount);
 	}
 
-	public boolean causeFallDamage(float par1, float par2, DamageSource src) {
-		return false;
-	}
-
 	public void tick() {
 		super.tick();
 		if (this.deathTime > 0 || this.tickCount % 7 != 0) { return; }
 
-		if (this.level.isClientSide) {
+		if (this.isClient()) {
 			float f1 = (float) this.getX() - 0.5F + this.rand.nextFloat();
 			float f2 = (float) this.getY() + 0.25F + this.rand.nextFloat() * 1.5F;
 			float f3 = (float) this.getZ() - 0.5F + this.rand.nextFloat();
-			this.level.addParticle(ParticleInit.NORMAL, f1, f2, f3, 0, 0, 0);
+			this.getLevel().addParticle(ParticleInit.NORMAL, f1, f2, f3, 0, 0, 0);
 		}
 
 		else {
 
-			ServerLevel sever = this.level.getServer().getLevel(Level.OVERWORLD);
+			ServerLevel sever = this.getLevel().getServer().getLevel(Level.OVERWORLD);
 			int dayTime = 24000;
 			long day = sever.getDayTime() / dayTime;
 			sever.setDayTime(12500 + (day * dayTime));
@@ -259,7 +255,7 @@ public class TwilightHora extends AbstractSMBoss {
 	}
 
 	public void summonMob(LivingEntity target) {
-		List<LivingEntity> targetList = this.getEntityList(LivingEntity.class, this.getFilter(this.isPlayer(target)), 48D);
+		List<LivingEntity> targetList = this.getPlayerList(target);
 		if (targetList.isEmpty()) { return; }
 
 		List<LivingEntity> summonList = this.getSummonList();
@@ -268,7 +264,7 @@ public class TwilightHora extends AbstractSMBoss {
 		boolean isHalf = this.isHalfHealth(this);
 		float addHealth = 1F + targetList.size() * 0.05F;
 		int count = Math.max(1, Math.min(16, 3 + targetList.size() - summonSize));
-		Level world = this.level;
+		Level world = this.getLevel();
 
 		for (int i = 0; i < count; i++) {
 
@@ -278,7 +274,7 @@ public class TwilightHora extends AbstractSMBoss {
 			BlockPos pos = this.blockPosition();
 			BlockPos summonPos = new BlockPos(x, this.getY() + 1D, z);
 
-			while (!world.getBlockState(summonPos).isAir() && !world.getBlockState(summonPos).is(BlockInit.rune_character)) {
+			while (!world.isEmptyBlock(summonPos) && !world.getBlockState(summonPos).is(BlockInit.rune_character)) {
 
 				summonPos = new BlockPos(pos.getX() + this.getRand(this.rand, 20), pos.getY(), pos.getZ() + this.getRand(this.rand, 20));
 
@@ -288,7 +284,7 @@ public class TwilightHora extends AbstractSMBoss {
 			Mob entity = this.getEntity(addHealth, isHalf, i % 4 == 1);
 			entity.setPos(summonPos.getX() + 0.5D, summonPos.getY() + 0.5D, summonPos.getZ() + 0.5D);
 			entity.setTarget(targetList.get(this.rand.nextInt(targetList.size())));
-			this.level.addFreshEntity(entity);
+			this.addEntity(entity);
 		}
 
 		this.summonTime = 0;
@@ -298,7 +294,7 @@ public class TwilightHora extends AbstractSMBoss {
 
 	public void twilightShot(LivingEntity target) {
 
-		List<LivingEntity> targetList = this.getEntityList(LivingEntity.class, this.getFilter(this.isPlayer(target)), 48D);
+		List<LivingEntity> targetList = this.getPlayerList(target);
 
 		for (LivingEntity entity : targetList) {
 
@@ -307,10 +303,10 @@ public class TwilightHora extends AbstractSMBoss {
 			double z = entity.getZ() - this.getZ();
 			double xz = Math.sqrt(x * x + z * z);
 
-			TwiLightShot magic = new TwiLightShot(this.level, this);
+			TwiLightShot magic = new TwiLightShot(this.getLevel(), this);
 			magic.shoot(x, y - xz * 0.065D, z, 1.5F, 0.75F);
 			magic.setAddDamage(magic.getAddDamage() + 10F);
-			this.level.addFreshEntity(magic);
+			this.addEntity(magic);
 		}
 
 		this.playSound(SoundEvents.BLAZE_SHOOT, 0.5F, 0.67F);
@@ -323,27 +319,27 @@ public class TwilightHora extends AbstractSMBoss {
 		if (isBig) {
 			switch (this.rand.nextInt(5)) {
 			case 0:
-				entity = new SkullFrostRoyalGuard(this.level);
+				entity = new SkullFrostRoyalGuard(this.getLevel());
 				entity.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.BOW));
 				entity.setItemSlot(EquipmentSlot.CHEST, new ItemStack(Items.IRON_CHESTPLATE));
 				entity.setItemSlot(EquipmentSlot.FEET, new ItemStack(Items.IRON_BOOTS));
 				break;
 			case 1:
-				entity = new SkullFlameArcher(this.level);
+				entity = new SkullFlameArcher(this.getLevel());
 				entity.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.BOW));
 				entity.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.DIAMOND_HELMET));
 				entity.setItemSlot(EquipmentSlot.FEET, new ItemStack(Items.DIAMOND_BOOTS));
 				break;
 			case 2:
-				entity = new BlazeTempestTornado(this.level);
+				entity = new BlazeTempestTornado(this.getLevel());
 				break;
 			case 3:
-				entity = new EnderShadow(this.level);
+				entity = new EnderShadow(this.getLevel());
 				entity.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SWORD));
 				this.addPotion(entity, MobEffects.MOVEMENT_SLOWDOWN, 99999, 0);
 				break;
 			case 4:
-				entity = new DwarfZombieMaster(this.level);
+				entity = new DwarfZombieMaster(this.getLevel());
 				entity.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ItemInit.alt_sword));
 				this.addPotion(entity, MobEffects.MOVEMENT_SLOWDOWN, 99999, 1);
 				break;
@@ -355,32 +351,32 @@ public class TwilightHora extends AbstractSMBoss {
 		else {
 			switch (this.rand.nextInt(8)) {
 			case 0:
-				entity = new BlazeTempest(this.level);
+				entity = new BlazeTempest(this.getLevel());
 				break;
 			case 1:
-				entity = new EnderMage(this.level);
+				entity = new EnderMage(this.getLevel());
 				entity.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.BOW));
 				break;
 			case 2:
-				entity = new SkullFrost(this.level);
+				entity = new SkullFrost(this.getLevel());
 				entity.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.BOW));
 				break;
 			case 3:
-				entity = new ArchSpider(this.level);
+				entity = new ArchSpider(this.getLevel());
 				break;
 			case 4:
-				entity = new SkullFlame(this.level);
+				entity = new SkullFlame(this.getLevel());
 				entity.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.BOW));
 				break;
 			case 5:
-				entity = new DwarfZombie(this.level);
+				entity = new DwarfZombie(this.getLevel());
 				entity.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ItemInit.alt_pick));
 				break;
 			case 6:
-				entity = new CreeperCalamity(this.level);
+				entity = new CreeperCalamity(this.getLevel());
 				break;
 			case 7:
-				entity = new WindWitch(this.level);
+				entity = new WindWitch(this.getLevel());
 				break;
 			}
 		}
@@ -399,8 +395,8 @@ public class TwilightHora extends AbstractSMBoss {
 
 		if (this.deathTime >= 10 && this.deathTime <= 300) {
 
-			if (!this.level.isClientSide) {
-				ServerLevel world = this.level.getServer().getLevel(Level.OVERWORLD);
+			if (!this.isClient()) {
+				ServerLevel world = this.getLevel().getServer().getLevel(Level.OVERWORLD);
 				world.setDayTime(world.getDayTime() + 36);
 			}
 
@@ -408,13 +404,13 @@ public class TwilightHora extends AbstractSMBoss {
 				this.playSound(SoundEvents.GENERIC_EXPLODE, 3F, 1F / (this.rand.nextFloat() * 0.2F + 0.9F));
 			}
 
-			if (this.deathTime % 5 == 0 && this.level instanceof ServerLevel sever) {
+			if (this.deathTime % 5 == 0 && this.getLevel() instanceof ServerLevel sever) {
 				sever.sendParticles(ParticleTypes.EXPLOSION_EMITTER, this.getX(), this.getY() + 0.5D, this.getZ(), 2, 0D, 0D, 0D, 0D);
 			}
 		}
 
-		if (this.deathTime >= 300 && !this.level.isClientSide()) {
-			this.level.broadcastEntityEvent(this, (byte) 60);
+		if (this.deathTime >= 300 && !this.isClient()) {
+			this.getLevel().broadcastEntityEvent(this, (byte) 60);
 			this.remove(Entity.RemovalReason.KILLED);
 			List<LivingEntity> targetList = this.getSummonList();
 			targetList.forEach(e -> e.setHealth(0F));

@@ -11,7 +11,10 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
+import net.minecraft.util.profiling.ProfilerFiller;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -30,9 +33,11 @@ import net.minecraft.world.entity.ai.goal.SitWhenOrderedToGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.monster.Slime;
 import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.raid.Raider;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -58,8 +63,10 @@ public class WitchAllay extends AbstractSummonMob {
 	private float danceTick;
 	private float spinTick;
 	private float spinTick0;
+	public AnimationState magicAttackAnim = new AnimationState();
+	public AnimationState winkAnim = new AnimationState();
 	private final DynamicGameEventListener<WitchAllay.JukeboxListener> jukeboxListener;
-	private static final EntityDataAccessor<Boolean> IS_DANCING = ISMMob.setData(WitchAllay.class, ISMMob.BOOLEAN);
+	private static final EntityDataAccessor<Boolean> DANCE = ISMMob.setData(WitchAllay.class, ISMMob.BOOLEAN);
 
 	public WitchAllay(Level world) {
 		this(EntityInit.witchAllay, world);
@@ -77,7 +84,7 @@ public class WitchAllay extends AbstractSummonMob {
 
 	protected void defineSynchedData() {
 		super.defineSynchedData();
-		this.entityData.define(IS_DANCING, false);
+		this.define(DANCE, false);
 	}
 
 	public static AttributeSupplier.Builder registerAttributes() {
@@ -89,6 +96,24 @@ public class WitchAllay extends AbstractSummonMob {
 				.add(Attributes.KNOCKBACK_RESISTANCE, 1D)
 				.add(Attributes.ARMOR, 0.15D)
 				.add(Attributes.FOLLOW_RANGE, 48D);
+	}
+
+	public void handleEntityEvent(byte par1) {
+		switch(par1) {
+		case 4:
+			this.magicAttackAnim.stop();
+			this.winkAnim.stop();
+			break;
+		case 5:
+			this.magicAttackAnim.start(this.tickCount);
+			break;
+		case 6:
+			this.winkAnim.start(this.tickCount);
+			break;
+		default:
+			super.handleEntityEvent(par1);
+			break;
+		}
 	}
 
 	protected void registerGoals() {
@@ -107,6 +132,7 @@ public class WitchAllay extends AbstractSummonMob {
 		this.targetSelector.addGoal(4, new NearestAttackSMMobGoal<>(this, Monster.class, false));
 		this.targetSelector.addGoal(5, new AttackTargetGoal<>(this, Raider.class, false));
 		this.targetSelector.addGoal(6, new AttackTargetGoal<>(this, Warden.class, false));
+		this.targetSelector.addGoal(7, new AttackTargetGoal<>(this, Slime.class, false));
 	}
 
 	public void setState (double rate) {
@@ -127,13 +153,13 @@ public class WitchAllay extends AbstractSummonMob {
 		return 0.25F;
 	}
 
-	public boolean isDancing() {
-		return this.entityData.get(IS_DANCING);
+	public boolean getDancing() {
+		return this.get(DANCE);
 	}
 
 	public void setDancing(boolean dancing) {
-		if (!this.level.isClientSide) {
-			this.entityData.set(IS_DANCING, dancing);
+		if (!this.isClient()) {
+			this.set(DANCE, dancing);
 		}
 	}
 
@@ -182,12 +208,12 @@ public class WitchAllay extends AbstractSummonMob {
 	}
 
 	private boolean shouldStopDancing() {
-		return this.jukeboxPos == null || !this.jukeboxPos.closerToCenterThan(this.position(), (double) GameEvent.JUKEBOX_PLAY.getNotificationRadius()) || !this.level.getBlockState(this.jukeboxPos).is(Blocks.JUKEBOX);
+		return this.jukeboxPos == null || !this.jukeboxPos.closerToCenterThan(this.position(), (double) GameEvent.JUKEBOX_PLAY.getNotificationRadius()) || !this.getLevel().getBlockState(this.jukeboxPos).is(Blocks.JUKEBOX);
 	}
 
 	public void setJukeboxPlaying(BlockPos pos, boolean flag) {
 		if (flag) {
-			if (!this.isDancing()) {
+			if (!this.getDancing()) {
 				this.jukeboxPos = pos;
 				this.setDancing(true);
 			}
@@ -210,18 +236,30 @@ public class WitchAllay extends AbstractSummonMob {
 	protected void playStepSound(BlockPos pos, BlockState state) { }
 
 	public void updateDynamicGameEventListener(BiConsumer<DynamicGameEventListener<?>, ServerLevel> bi) {
-		if (this.level instanceof ServerLevel server) {
+		if (this.getLevel() instanceof ServerLevel server) {
 			bi.accept(this.jukeboxListener, server);
 		}
 	}
 
+	public InteractionResult mobClick(InteractionResult result, Player player, ItemStack stack) {
+		this.getLevel().broadcastEntityEvent(this, (byte) (!this.isOrderedToSit() ? 6 : 4));
+
+		if(!this.isOrderedToSit()) {
+			double d1 = player.getX() - this.getX();
+			double d2 = player.getZ() - this.getZ();
+			this.setYRot(-((float) Math.atan2(d1, d2)) * (180F / (float) Math.PI));
+		}
+
+		return super.mobClick(result, player, stack);
+	}
+
 	public void aiStep() {
 		super.aiStep();
-		if (!this.level.isClientSide && this.isAlive() && this.tickCount % 20 == 0) {
+		if (!this.isClient() && this.isAlive() && this.tickCount % 20 == 0) {
 			this.heal(1F);
 		}
 
-		if (this.isDancing() && this.shouldStopDancing() && this.tickCount % 20 == 0) {
+		if (this.getDancing() && this.shouldStopDancing() && this.tickCount % 20 == 0) {
 			this.setDancing(false);
 			this.jukeboxPos = null;
 		}
@@ -229,9 +267,9 @@ public class WitchAllay extends AbstractSummonMob {
 
 	public void tick() {
 		super.tick();
-		if (!this.level.isClientSide) { return; }
+		if (!this.isClient()) { return; }
 
-		if (this.isDancing()) {
+		if (this.getDancing()) {
 
 			++this.danceTick;
 			this.spinTick0 = this.spinTick;
@@ -254,14 +292,15 @@ public class WitchAllay extends AbstractSummonMob {
 	}
 
 	protected void customServerAiStep() {
-		this.level.getProfiler().push("allayBrain");
-		this.level.getProfiler().pop();
-		this.level.getProfiler().push("allayActivityUpdate");
-		this.level.getProfiler().pop();
+		ProfilerFiller pro = this.getLevel().getProfiler();
+		pro.push("allayBrain");
+		pro.pop();
+		pro.push("allayActivityUpdate");
+		pro.pop();
 		super.customServerAiStep();
 
 		if (this.recastTime > 0) {
-			this.recastTime--;
+			this.recastTime = Math.min(this.recastTime - 1, 300);
 		}
 
 		LivingEntity target = this.getTarget();
@@ -271,12 +310,13 @@ public class WitchAllay extends AbstractSummonMob {
 			this.setTarget(null);
 		}
 
+		this.getLevel().broadcastEntityEvent(this, (byte) 5);
 		boolean isWarden = target instanceof Warden;
 		this.recastTime = (int) ((this.rand.nextInt(RAND_RECASTTIME) + 130) * (isWarden ? 0.25F : 1F));
 
 		AbstractMagicShot entity = this.getMagicShot(target, isWarden);
 		this.playSound(SoundEvents.BLAZE_SHOOT, 0.5F, 0.67F);
-		this.level.addFreshEntity(entity);
+		this.getLevel().addFreshEntity(entity);
 	}
 
 	public AbstractMagicShot getMagicShot(LivingEntity target, boolean isWarden) {
@@ -297,13 +337,13 @@ public class WitchAllay extends AbstractSummonMob {
 
 		switch (this.rand.nextInt(3)) {
 		case 0:
-			entity = new FireMagicShot(this.level, this);
+			entity = new FireMagicShot(this.getLevel(), this);
 			break;
 		case 1:
-			entity = new FrostMagicShot(this.level, this);
+			entity = new FrostMagicShot(this.getLevel(), this);
 			break;
 		case 2:
-			entity = new PoisonMagicShot(this.level, this);
+			entity = new PoisonMagicShot(this.getLevel(), this);
 			break;
 		}
 
@@ -312,7 +352,6 @@ public class WitchAllay extends AbstractSummonMob {
 		entity.setRange(3D + this.getRange());
 		entity.shoot(x, y - xz * 0.035D, z, 1.75F, 0F);
 		entity.setAddDamage((entity.getAddDamage() + dama) * dameRate);
-
 		return entity;
 	}
 

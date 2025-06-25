@@ -4,6 +4,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
@@ -59,10 +60,10 @@ public class BlazeTempest extends Blaze implements ISMMob {
 	}
 
 	protected void registerGoals() {
-		this.goalSelector.addGoal(4, new BlazeAttackGoal(this, this.isHard(this.level), 0));
-		this.goalSelector.addGoal(5, new MoveTowardsRestrictionGoal(this, 1.0D));
-		this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1.0D, 0.0F));
-		this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
+		this.goalSelector.addGoal(4, new BlazeAttackGoal(this, this.isHard(this.getLevel()), 0));
+		this.goalSelector.addGoal(5, new MoveTowardsRestrictionGoal(this, 1D));
+		this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1D, 0F));
+		this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8F));
 		this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));
 		this.targetSelector.addGoal(1, (new HurtByTargetGoal(this)).setAlertOthers());
 		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Warden.class, true));
@@ -78,6 +79,10 @@ public class BlazeTempest extends Blaze implements ISMMob {
 				.add(Attributes.FOLLOW_RANGE, 24D);
 	}
 
+	public SynchedEntityData getData() {
+		return this.getEntityData();
+	}
+
 	public EntityDimensions getDimensions(Pose pose) {
 		float rate = 1F + 0.375F * this.getPotionLevel(this, PotionInit.leader_flag);
 		return super.getDimensions(pose).scale(rate);
@@ -89,7 +94,7 @@ public class BlazeTempest extends Blaze implements ISMMob {
 		if (attacker != null && attacker instanceof ISMMob) { return false; }
 
 		// ダメージ倍処理
-		amount = this.getDamageAmount(this.level , src, amount, 1F);
+		amount = this.getDamageAmount(this.getLevel() , src, amount, 1F);
 		return super.hurt(src, amount);
 	}
 
@@ -116,19 +121,19 @@ public class BlazeTempest extends Blaze implements ISMMob {
 	public void tick() {
 		super.tick();
 
-		if (this.level.isClientSide && this.getTarget() != null) {
-			RandomSource rand = this.level.random;
+		if (this.getLevel().isClientSide() && this.getTarget() != null) {
+			RandomSource rand = this.getLevel().getRandom();
 			double x = +this.xo + (rand.nextDouble() - 0.5D);
 			double y = +this.yo + (rand.nextDouble() + 0.5D);
 			double z = +this.zo + (rand.nextDouble() - 0.5D);
-			this.level.addParticle(ParticleTypes.SWEEP_ATTACK, x, y, z, 0D, 0D, 0D);
+			this.getLevel().addParticle(ParticleTypes.SWEEP_ATTACK, x, y, z, 0D, 0D, 0D);
 		}
 	}
 
 	public void aiStep() {
 
-		if (!this.onGround && this.getDeltaMovement().y < 0.0D) {
-			this.setDeltaMovement(this.getDeltaMovement().multiply(1.0D, 0.6D, 1.0D));
+		if (!this.onGround && this.getDeltaMovement().y < 0D) {
+			this.setDeltaMovement(this.getDeltaMovement().multiply(1D, 0.6D, 1D));
 		}
 
 		super.aiStep();
@@ -139,14 +144,14 @@ public class BlazeTempest extends Blaze implements ISMMob {
 		--this.nextTick;
 		if (this.nextTick <= 0) {
 			this.nextTick = 100;
-			this.allowHeight = (float) this.random.triangle(0.5D, 6.891D);
+			this.allowHeight = (float) this.getRandom().triangle(0.5D, 6.891D);
 		}
 
 		LivingEntity target = this.getTarget();
 
 		if (target != null && target.getEyeY() > this.getEyeY() + (double) this.allowHeight) {
 			Vec3 vec3 = this.getDeltaMovement();
-			this.setDeltaMovement(this.getDeltaMovement().add(0.0D, ((double) 0.3F - vec3.y) * (double) 0.4F, 0.0D));
+			this.setDeltaMovement(this.getDeltaMovement().add(0D, ((double) 0.3F - vec3.y) * (double) 0.4F, 0D));
 			this.hasImpulse = true;
 		}
 

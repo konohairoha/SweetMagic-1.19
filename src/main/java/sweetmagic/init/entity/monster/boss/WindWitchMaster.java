@@ -18,6 +18,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -38,6 +39,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.Vec3;
 import sweetmagic.api.ientity.ISMMob;
+import sweetmagic.api.ientity.IWitch;
 import sweetmagic.init.EntityInit;
 import sweetmagic.init.PotionInit;
 import sweetmagic.init.entity.projectile.AbstractMagicShot;
@@ -46,16 +48,18 @@ import sweetmagic.init.entity.projectile.TripleTornadoShot;
 import sweetmagic.init.entity.projectile.WindStormShot;
 import sweetmagic.util.SMDamage;
 
-public class WindWitchMaster extends AbstractSMBoss {
+public class WindWitchMaster extends AbstractSMBoss implements IWitch {
 
 	private int tickTime = 0;
 	private int recastTime = 0;
 	private int recastSecondTime = 100;
 	private List<Player> playerList = new ArrayList<>();
-	private static final EntityDataAccessor<Boolean> IS_TARGET = ISMMob.setData(WindWitchMaster.class, BOOLEAN);
+	public AnimationState magicAttackAnim = new AnimationState();
+	private static final EntityDataAccessor<Boolean> TARGET = ISMMob.setData(WindWitchMaster.class, BOOLEAN);
 	private static final EntityDataAccessor<Integer> ATTACK = ISMMob.setData(WindWitchMaster.class, INT);
 	private static final EntityDataAccessor<Integer> ARMOR = ISMMob.setData(WindWitchMaster.class, INT);
-	private static final EntityDataAccessor<Boolean> ISRESURRECTION = ISMMob.setData(WindWitchMaster.class, BOOLEAN);
+	private static final EntityDataAccessor<Boolean> RESURRECTION = ISMMob.setData(WindWitchMaster.class, BOOLEAN);
+	private static final EntityDataAccessor<Boolean> CHARGE = ISMMob.setData(WindWitchMaster.class, BOOLEAN);
 	private int windBlastTime = 0;									// ウィンドブラストの時間
 	private int windBlastCount = 2;									// ウィンドブラストの時間
 	private Map<Integer, BlockPos> posMap = new LinkedHashMap<>();	// トリトル対象座標
@@ -79,17 +83,18 @@ public class WindWitchMaster extends AbstractSMBoss {
 
 	protected void defineSynchedData() {
 		super.defineSynchedData();
-		this.registerData(this, IS_TARGET, false);
-		this.registerData(this, ISRESURRECTION, false);
-		this.registerData(this, ATTACK, 0);
-		this.registerData(this, ARMOR, 0);
+		this.define(TARGET, false);
+		this.define(RESURRECTION, false);
+		this.define(CHARGE, false);
+		this.define(ATTACK, 0);
+		this.define(ARMOR, 0);
 	}
 
 	protected void registerGoals() {
-		this.goalSelector.addGoal(5, new MoveTowardsRestrictionGoal(this, 1.0D));
-		this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1.0D, 0.0F));
-		this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
-		this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Warden.class, 8.0F));
+		this.goalSelector.addGoal(5, new MoveTowardsRestrictionGoal(this, 1D));
+		this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1D, 0F));
+		this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8F));
+		this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Warden.class, 8F));
 		this.goalSelector.addGoal(10, new SMRandomLookGoal(this));
 		this.targetSelector.addGoal(1, (new HurtByTargetGoal(this)).setAlertOthers());
 		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Warden.class, true));
@@ -110,25 +115,25 @@ public class WindWitchMaster extends AbstractSMBoss {
 	}
 
 	public int getAttackType() {
-		return this.getData(this, ATTACK);
+		return this.get(ATTACK);
 	}
 
 	public void setAttackType(int attack) {
-		this.setData(this, ATTACK, attack);
+		this.set(ATTACK, attack);
 	}
 
 	public int getArmor() {
-		return this.getData(this, ARMOR);
+		return this.get(ARMOR);
 	}
 
 	public void setArmor(int armor) {
 
 		int oldArmor = this.getArmor();
-		this.setData(this, ARMOR, armor);
+		this.set(ARMOR, armor);
 
 		if (oldArmor > 0 && armor <= 0) {
 
-			if (!this.level.isClientSide && !this.playerList.isEmpty()) {
+			if (!this.isClient() && !this.playerList.isEmpty()) {
 				this.sendMSG(this.playerList, this.getText("wind_break").withStyle(GREEN));
 			}
 
@@ -137,20 +142,32 @@ public class WindWitchMaster extends AbstractSMBoss {
 		}
 	}
 
-	public void setResurrection (boolean isResurrection) {
-		this.setData(this, ISRESURRECTION, isResurrection);
+	public void setResurrection(boolean isResurrection) {
+		this.set(RESURRECTION, isResurrection);
 	}
 
 	public boolean getResurrection() {
-		return this.getData(this, ISRESURRECTION);
+		return this.get(RESURRECTION);
 	}
 
-	public boolean isHard() {
-		return super.isHard() || !this.isLectern();
+	public boolean getHard() {
+		return super.getHard() || !this.getLectern();
 	}
 
 	public boolean isTarget() {
-		return this.getData(this, IS_TARGET);
+		return this.get(TARGET);
+	}
+
+	public boolean isCharge() {
+		return this.get(CHARGE);
+	}
+
+	public void setCharge(boolean isCharge) {
+		this.set(CHARGE, isCharge);
+	}
+
+	public AnimationState getAnimaState() {
+		return this.magicAttackAnim;
 	}
 
 	// ダメージ処理
@@ -160,8 +177,8 @@ public class WindWitchMaster extends AbstractSMBoss {
 		if (attacker != null && attacker instanceof ISMMob) { return false; }
 
 		// ボスダメージ計算
-		boolean isLectern = this.isLectern();
-		amount = this.getBossDamageAmount(this.level, this.defTime , src, amount, isLectern ? 7.5F : 5.5F);
+		boolean isLectern = this.getLectern();
+		amount = this.getBossDamageAmount(this.getLevel(), this.defTime , src, amount, isLectern ? 7.5F : 5.5F);
 		this.defTime = amount > 0 ? 2 : this.defTime;
 
 		if (attacker instanceof Warden) {
@@ -219,7 +236,7 @@ public class WindWitchMaster extends AbstractSMBoss {
 
 	protected boolean teleport() {
 		BlockPos spawnPos = this.getSpawnPos();
-		if (!this.level.isClientSide() && this.isAlive() && spawnPos != null) {
+		if (!this.isClient() && this.isAlive() && spawnPos != null) {
 			double d0 = spawnPos.getX() + (this.rand.nextDouble() - 0.5D) * 10D;
 			double d1 = spawnPos.getY() + 1.5D;
 			double d2 = spawnPos.getZ() + (this.rand.nextDouble() - 0.5D) * 10D;
@@ -232,18 +249,20 @@ public class WindWitchMaster extends AbstractSMBoss {
 		super.addAdditionalSaveData(tags);
 		tags.putBoolean("is_target", this.isTarget());
 		tags.putBoolean("isResurrection", this.getResurrection());
+		tags.putBoolean("isCharge", this.isCharge());
 		tags.putInt("armor", this.getArmor());
 		tags.putInt("attackType", this.getAttackType());
 	}
 
 	public void readAdditionalSaveData(CompoundTag tags) {
 		super.readAdditionalSaveData(tags);
-		this.setData(this, IS_TARGET, tags.getBoolean("is_target"));
-		this.setData(this, ISRESURRECTION, tags.getBoolean("isResurrection"));
+		this.set(TARGET, tags.getBoolean("is_target"));
+		this.set(RESURRECTION, tags.getBoolean("isResurrection"));
+		this.set(CHARGE, tags.getBoolean("isCharge"));
 		this.setArmor(tags.getInt("armor"));
 		this.setAttackType(tags.getInt("attackType"));
 
-		if (!this.isLectern()) {
+		if (!this.getLectern()) {
 			this.setBossEvent(BC_BLUE, NOTCHED_6);
 		}
 	}
@@ -266,7 +285,7 @@ public class WindWitchMaster extends AbstractSMBoss {
 	public float getBuffPower() {
 		float damage = super.getBuffPower();
 
-		if (!this.isLectern()) {
+		if (!this.getLectern()) {
 			damage += 8F;
 			damage *= 1.25F;
 		}
@@ -279,6 +298,7 @@ public class WindWitchMaster extends AbstractSMBoss {
 
 		if (this.getResurrection()) {
 			this.setResurrection(false);
+			this.addPotion(this, PotionInit.reflash_effect, 99999, 3);
 			this.addPotion(this, PotionInit.magic_damage_cause, 99999, 3);
 			this.addPotion(this, MobEffects.DAMAGE_BOOST, 99999, 3);
 		}
@@ -287,9 +307,9 @@ public class WindWitchMaster extends AbstractSMBoss {
 	public void tick() {
 		super.tick();
 
-		if (!this.level.isClientSide && this.tickTime++ > 10) {
+		if (!this.isClient() && this.tickTime++ > 10) {
 			this.tickTime = 0;
-			this.setData(this, IS_TARGET, this.getTarget() != null);
+			this.set(TARGET, this.getTarget() != null);
 		}
 	}
 
@@ -313,6 +333,7 @@ public class WindWitchMaster extends AbstractSMBoss {
 			}
 
 			if (this.recastSecondTime-- <= 0) {
+				this.setCharge(true);
 				this.secondPhaseSttack(target);
 			}
 		}
@@ -354,18 +375,18 @@ public class WindWitchMaster extends AbstractSMBoss {
 		double range = Math.min(32D, 16D + entityList.size() * 1.35D);
 		BlockPos pos = entityList.stream().sorted( (s1, s2) -> this.sortEntity(this, s1, s2) ).toList().get(0).blockPosition();
 
-		TripleTornadoShot entity = new TripleTornadoShot(this.level, this);
+		TripleTornadoShot entity = new TripleTornadoShot(this.getLevel(), this);
 		entity.shootFromRotation(this, this.getXRot(), this.getYRot(), 0, 1F, 0);
 		entity.shoot(0D, 0D, 0D, 0F, 0F);
 		entity.setPos(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D);
 		entity.setHitDead(false);
 		entity.setNotDamage(true);
 		entity.setRange(range);
-		entity.setAddDamage((this.isHard() ? 80F : 35F) + this.getBuffPower());
+		entity.setAddDamage((this.getHard() ? 80F : 35F) + this.getBuffPower());
 		entity.isPlayer = isPlayer;
 
-		if (!this.level.isClientSide) {
-			this.level.addFreshEntity(entity);
+		if (!this.isClient()) {
+			this.addEntity(entity);
 		}
 
 		// 情報の初期化
@@ -402,7 +423,7 @@ public class WindWitchMaster extends AbstractSMBoss {
 				while (true) {
 					BlockPos pos = basePos.offset(this.randRange(mapRange), 0, this.randRange(mapRange));
 
-					if (!this.posMap.containsValue(pos) && !this.level.getBlockState(pos.below()).isAir()) {
+					if (!this.posMap.containsValue(pos) && !this.getLevel().isEmptyBlock(pos.below())) {
 						this.posMap.put(i, pos);
 						break;
 					}
@@ -414,18 +435,18 @@ public class WindWitchMaster extends AbstractSMBoss {
 		for (Entry<Integer, BlockPos> map : this.posMap.entrySet()) {
 
 			BlockPos pos = map.getValue();
-			TripleTornadoShot entity = new TripleTornadoShot(this.level, this);
+			TripleTornadoShot entity = new TripleTornadoShot(this.getLevel(), this);
 			entity.shootFromRotation(this, this.getXRot(), this.getYRot(), 0, 1F, 0);
 			entity.shoot(0D, 0D, 0D, 0F, 0F);
 			entity.setPos(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D);
 			entity.setHitDead(false);
 			entity.setNotDamage(true);
 			entity.setRange(range);
-			entity.setAddDamage( (this.isHard() ? 50F : 20F) + this.getBuffPower());
+			entity.setAddDamage( (this.getHard() ? 50F : 20F) + this.getBuffPower());
 			entity.isPlayer = isPlayer;
 
-			if (!this.level.isClientSide) {
-				this.level.addFreshEntity(entity);
+			if (!this.isClient()) {
+				this.addEntity(entity);
 			}
 		}
 
@@ -441,7 +462,7 @@ public class WindWitchMaster extends AbstractSMBoss {
 
 		for (int i = 0; i < 2; i++) {
 
-			WindStormShot entity = new WindStormShot(this.level, this);
+			WindStormShot entity = new WindStormShot(this.getLevel(), this);
 
 			double d0 = target.getX() - this.getX();
 			double d1 = target.getZ() - this.getZ();
@@ -454,12 +475,12 @@ public class WindWitchMaster extends AbstractSMBoss {
 			entity.setBlockPenetration(true);
 			entity.isPlayer = isPlayer;
 			this.playSound(SoundEvents.BLAZE_SHOOT, 0.5F, 0.67F);
-			if (!this.level.isClientSide) {
-				this.level.addFreshEntity(entity);
+			if (!this.isClient()) {
+				this.addEntity(entity);
 			}
 		}
 
-		WindStormShot entity = new WindStormShot(this.level, this);
+		WindStormShot entity = new WindStormShot(this.getLevel(), this);
 		double x = target.getX() - this.getX();
 		double y = target.getY(0.3333333333333333D) - this.getY();
 		double z = target.getZ() - this.getZ();
@@ -473,8 +494,8 @@ public class WindWitchMaster extends AbstractSMBoss {
 		entity.isPlayer = isPlayer;
 		this.playSound(SoundEvents.BLAZE_SHOOT, 0.5F, 0.67F);
 
-		if (!this.level.isClientSide) {
-			this.level.addFreshEntity(entity);
+		if (!this.isClient()) {
+			this.addEntity(entity);
 		}
 
 		if (--this.windBlastCount > 0) {
@@ -483,7 +504,7 @@ public class WindWitchMaster extends AbstractSMBoss {
 
 		else {
 			this.clearInfo();
-			this.recastSecondTime = 250 + this.random.nextInt(100);
+			this.recastSecondTime = 250 + this.rand.nextInt(100);
 			this.windBlastCount = 2;
 		}
 	}
@@ -500,9 +521,10 @@ public class WindWitchMaster extends AbstractSMBoss {
 	@Override
 	public void clearInfo() {
 		this.windBlastTime = 0;
-		this.setAttackType(this.random.nextInt(2));
+		this.setAttackType(this.rand.nextInt(2));
 		this.posMap.clear();
-		this.recastTime = 150 + this.random.nextInt(50);
+		this.recastTime = 150 + this.rand.nextInt(50);
+		this.setCharge(false);
 	}
 
 	// えんちちーソート

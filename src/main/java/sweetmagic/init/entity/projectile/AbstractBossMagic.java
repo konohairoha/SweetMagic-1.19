@@ -20,6 +20,7 @@ import sweetmagic.init.EntityInit;
 import sweetmagic.init.ParticleInit;
 import sweetmagic.init.TagInit;
 import sweetmagic.init.entity.monster.boss.QueenFrost;
+import sweetmagic.util.WorldHelper;
 
 public abstract class AbstractBossMagic extends AbstractMagicShot {
 
@@ -44,17 +45,17 @@ public abstract class AbstractBossMagic extends AbstractMagicShot {
 
 	protected void defineSynchedData() {
 		super.defineSynchedData();
-		this.entityData.define(ROT, 0F);
+		this.define(ROT, 0F);
 	}
 
 	// 回転率の取得
 	public float getRotData() {
-		return this.entityData.get(ROT);
+		return this.get(ROT);
 	}
 
 	// 回転率の設定
 	public void setRotData(float rot) {
-		this.entityData.set(ROT, rot);
+		this.set(ROT, rot);
 	}
 
 	public void tick() {
@@ -77,7 +78,7 @@ public abstract class AbstractBossMagic extends AbstractMagicShot {
 	}
 
 	public void teleportToPlayer() {
-		if(this.tickCount % 70 != 0 || this.target != null || this.getOwner().distanceTo(this) > 128F) { return; }
+		if(this.tickCount % 100 != 0 || this.target != null || this.getOwner() == null || this.getOwner().distanceTo(this) < 256F) { return; }
 		this.teleportTo(this.getOwner().getX(), this.getOwner().getY(), this.getOwner().getZ() + 1);
 	}
 
@@ -89,7 +90,7 @@ public abstract class AbstractBossMagic extends AbstractMagicShot {
 
 	// 召喚時スポーンパーティクル
 	public void summonSpawnParticle() {
-		if (this.tickCount != 1 || !(this.level instanceof ServerLevel server)) { return; }
+		if (this.tickCount != 1 || !(this.getLevel() instanceof ServerLevel server)) { return; }
 
 		BlockPos pos = this.blockPosition();
 		double range = 1D;
@@ -112,7 +113,7 @@ public abstract class AbstractBossMagic extends AbstractMagicShot {
 	}
 
 	public <T extends Entity> List<T> getEntityList(Class<T> enClass, AABB aabb) {
-		return this.level.getEntitiesOfClass(enClass, aabb);
+		return WorldHelper.getEntityList(this, enClass, aabb);
 	}
 
 	// 範囲の取得
@@ -131,7 +132,7 @@ public abstract class AbstractBossMagic extends AbstractMagicShot {
 
 			switch (this.getData()) {
 			case 0:
-				QueenFrost queen = new QueenFrost(EntityInit.queenFrost, this.level);
+				QueenFrost queen = new QueenFrost(EntityInit.queenFrost, this.getLevel());
 				queen.setArmor(3);
 				queen.setMagic(true);
 				this.summon = queen;
@@ -145,7 +146,7 @@ public abstract class AbstractBossMagic extends AbstractMagicShot {
 	protected void tickDespawn() {
 
 		// 最大生存時間を超えたらエンティティを削除
-		if (this.getLifeTime() >= this.getMaxLifeTime() && this.level instanceof ServerLevel server) {
+		if (this.getLifeTime() >= this.getMaxLifeTime() && this.getLevel() instanceof ServerLevel server) {
 			this.discordParticle(server);
 		}
 
@@ -217,7 +218,7 @@ public abstract class AbstractBossMagic extends AbstractMagicShot {
 	}
 
 	protected void spawnParticleCycle(BlockPos pos, double range, Random rand) {
-		if (!(this.level instanceof ServerLevel server) || pos == null) { return; }
+		if (!(this.getLevel() instanceof ServerLevel server) || pos == null) { return; }
 
 		int count = 18;
 		ParticleOptions par = ParticleInit.CYCLE_ELECTRIC;
@@ -234,7 +235,7 @@ public abstract class AbstractBossMagic extends AbstractMagicShot {
 	}
 
 	public void teleportParticle(ParticleOptions par, Level world, BlockPos beforePos, BlockPos afterPos) {
-		if (!(this.level instanceof ServerLevel sever)) { return; }
+		if (!(this.getLevel() instanceof ServerLevel sever)) { return; }
 
 		float pX = afterPos.getX() - beforePos.getX();
 		float pY = afterPos.getY() - beforePos.getY();
