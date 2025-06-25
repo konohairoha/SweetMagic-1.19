@@ -1,9 +1,9 @@
 {
 	"type": "sweetmagic:furniture_craft",
 	"ingredients": [
-		{ "tag": "sweetmagic:woodchest", "count": 1 }
+		{"tag": "sweetmagic:woodchest", "count": 1}
 	],
 	"result": [
-		{ "item": "sweetmagic:couter_table_chest_white_brick_w", "count": 1 }
+		{"item": "sweetmagic:couter_table_chest_white_brick_w", "count": 1}
 	]
 }

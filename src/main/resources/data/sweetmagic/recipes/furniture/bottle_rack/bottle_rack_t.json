@@ -1,9 +1,9 @@
 {
 	"type": "sweetmagic:furniture_craft",
 	"ingredients": [
-		{ "tag": "sweetmagic:smlogs", "count": 1 }
+		{"tag": "sweetmagic:smlogs", "count": 1}
 	],
 	"result": [
-		{ "item": "sweetmagic:bottle_rack_t", "count": 2 }
+		{"item": "sweetmagic:bottle_rack_t", "count": 2}
 	]
 }

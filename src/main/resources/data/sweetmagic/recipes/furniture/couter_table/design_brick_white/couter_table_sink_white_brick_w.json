@@ -1,9 +1,9 @@
 {
 	"type": "sweetmagic:furniture_craft",
 	"ingredients": [
-		{ "item": "sweetmagic:design_brick_w", "count": 1 }
+		{"item": "sweetmagic:design_brick_w", "count": 1}
 	],
 	"result": [
-		{ "item": "sweetmagic:couter_table_sink_white_brick_w", "count": 1 }
+		{"item": "sweetmagic:couter_table_sink_white_brick_w", "count": 1}
 	]
 }

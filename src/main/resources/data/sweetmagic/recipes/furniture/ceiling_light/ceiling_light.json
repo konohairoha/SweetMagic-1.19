@@ -1,9 +1,9 @@
 {
 	"type": "sweetmagic:furniture_craft",
 	"ingredients": [
-		{ "item": "minecraft:glowstone_dust", "count": 1 }
+		{"item": "minecraft:glowstone_dust", "count": 1}
 	],
 	"result": [
-		{ "item": "sweetmagic:ceiling_light", "count": 1 }
+		{"item": "sweetmagic:ceiling_light", "count": 1}
 	]
 }

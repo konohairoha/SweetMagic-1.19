@@ -1,9 +1,9 @@
 {
 	"type": "sweetmagic:furniture_craft",
 	"ingredients": [
-		{ "tag": "minecraft:wool", "count": 1 }
+		{"tag": "minecraft:wool", "count": 1}
 	],
 	"result": [
-		{ "item": "sweetmagic:awning_tent_p", "count": 4 }
+		{"item": "sweetmagic:awning_tent_p", "count": 4}
 	]
 }

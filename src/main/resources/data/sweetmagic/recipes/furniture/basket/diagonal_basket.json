@@ -1,0 +1,9 @@
+{
+	"type": "sweetmagic:furniture_craft",
+	"ingredients": [
+		{"tag": "sweetmagic:smlogs", "count": 1}
+	],
+	"result": [
+		{"item": "sweetmagic:diagonal_basket", "count": 4}
+	]
+}

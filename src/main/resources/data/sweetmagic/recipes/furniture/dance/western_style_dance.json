@@ -1,9 +1,9 @@
 {
 	"type": "sweetmagic:furniture_craft",
 	"ingredients": [
-		{ "tag": "sweetmagic:woodchest", "count": 1 }
+		{"tag": "sweetmagic:woodchest", "count": 1}
 	],
 	"result": [
-		{ "item": "sweetmagic:western_style_dance", "count": 1 }
+		{"item": "sweetmagic:western_style_dance", "count": 1}
 	]
 }
