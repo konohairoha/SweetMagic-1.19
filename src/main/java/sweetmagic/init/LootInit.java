@@ -76,6 +76,13 @@ public class LootInit {
 		setLoot("wizard_house/house_0");
 		setLoot("wizard_house/house_1");
 		setLoot("wizard_house/house_2");
+		setLoot("wizard_fortress/fortress_0");
+		setLoot("wizard_fortress/fortress_1");
+		setLoot("wizard_fortress/fortress_2");
+		setLoot("labyrinth_large/labyrinth_0");
+		setLoot("labyrinth_large/labyrinth_1");
+		setLoot("labyrinth_large/labyrinth_2");
+		setLoot("labyrinth_large/labyrinth_3");
 	}
 
 	public static void setLoot(String name) {

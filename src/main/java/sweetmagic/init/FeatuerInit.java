@@ -27,18 +27,18 @@ public class FeatuerInit {
 	public static final Feature<NoneFeatureConfiguration> PEARCH = register("peatch", new SMTreeFeatuer(4));
 	public static final Feature<NoneFeatureConfiguration> CHERRY = register("cherry", new SMTreeFeatuer(5));
 	public static final Feature<NoneFeatureConfiguration> MAPLE = register("maple", new SMTreeFeatuer(6));
-	public static final Feature<TreeConfiguration> CHERRY_BIG = register("cherry_big", new CherryFeatuer(true));
+	public static final Feature<TreeConfiguration> CHERRY_BIG = register("cherry_big", new CherryFeatuer(1));
 	public static final Feature<NoneFeatureConfiguration> AZALEA = register("azalea", new AzaleaFeatuer());
 	public static final Feature<NoneFeatureConfiguration> MAGIA = register("magia_fst", new MagiaFeature());
 	public static final Feature<NoneFeatureConfiguration> MAGIA_BIG = register("magia_big", new PrismFeature(1, false));
-	public static final Feature<TreeConfiguration> MAGIA_LONG = register("magia_long", new CherryFeatuer(false));
+	public static final Feature<TreeConfiguration> MAGIA_LONG = register("magia_long", new CherryFeatuer(0));
 	public static final Feature<NoneFeatureConfiguration> LEMON_BIG = register("lemon_big", new PrismFeature(2, false));
 	public static final Feature<NoneFeatureConfiguration> ORANGE_BIG = register("orange_big", new PrismFeature(3, false));
 	public static final Feature<NoneFeatureConfiguration> ESTOR_BIG = register("estor_big", new PrismFeature(4, false));
 	public static final Feature<NoneFeatureConfiguration> PEARCH_BIG = register("peatch_big", new PrismFeature(5, false));
 	public static final Feature<NoneFeatureConfiguration> CHESTNUT_BIG = register("chestnut_big", new PrismFeature(6, false));
 	public static final Feature<NoneFeatureConfiguration> MAPLE_BIG = register("maple_big", new PrismFeature(7, false));
-	public static final Feature<TreeConfiguration> MAPLE_LONG = register("maple_long", new CherryFeatuer(false));
+	public static final Feature<TreeConfiguration> MAPLE_LONG = register("maple_long", new CherryFeatuer(2));
 
 	private static Feature<NoneFeatureConfiguration> register(String name, AbstractTreeFeatuer fea) {
 		REGISTER.register(name, () -> fea);

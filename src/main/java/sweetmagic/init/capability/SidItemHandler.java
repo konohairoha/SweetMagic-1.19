@@ -9,6 +9,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
+import sweetmagic.init.capability.icap.ICapabilityResolver;
 import sweetmagic.init.tile.slot.WrappedItemHandler;
 import sweetmagic.init.tile.slot.WrappedItemHandler.WriteMode;
 

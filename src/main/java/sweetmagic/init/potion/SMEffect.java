@@ -13,6 +13,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 import sweetmagic.init.ParticleInit;
 import sweetmagic.init.PotionInit;
@@ -44,10 +45,6 @@ public class SMEffect extends MobEffect {
 			this.addAttributeModifier(Attributes.MOVEMENT_SPEED, SMEffect.SPEED_UUID.toString(), -0.25D, AttributeModifier.Operation.MULTIPLY_TOTAL);
 		}
 
-		else if (data == 9) {
-			this.addAttributeModifier(Attributes.MOVEMENT_SPEED, SMEffect.SPEED_UUID.toString(), 0.05D, AttributeModifier.Operation.ADDITION);
-		}
-
 		PotionInit.potionMap.put(this, name);
 	}
 
@@ -76,8 +73,8 @@ public class SMEffect extends MobEffect {
 			if (entity.getHealth() < entity.getMaxHealth()) {
 				entity.heal(1F);
 
-				if (entity.level instanceof ServerLevel sever) {
-					RandomSource rand = sever.random;
+				if (entity.getLevel() instanceof ServerLevel sever) {
+					RandomSource rand = sever.getRandom();
 					double x = entity.xo;
 					double y = entity.yo + 1D;
 					double z = entity.zo;
@@ -98,12 +95,31 @@ public class SMEffect extends MobEffect {
 			}
 		}
 
+		else if (this == PotionInit.belial_flame) {
+			this.magicDamage(entity, SMDamage.flameDamage, 1F * (entity.getEffect(PotionInit.belial_flame).getAmplifier() + 1));
+
+			if (entity.getLevel() instanceof ServerLevel sever) {
+
+				RandomSource rand = sever.getRandom();
+				double x = entity.xo;
+				double y = entity.yo + 1D;
+				double z = entity.zo;
+
+				for (int i = 0; i < 8; ++i) {
+					double d0 = rand.nextGaussian() * 0.02D;
+					double d1 = rand.nextGaussian() * 0.02D;
+					double d2 = rand.nextGaussian() * 0.02D;
+					sever.sendParticles(ParticleInit.BELIAL_FLAME, this.getRandPos(x, rand, 0.5D), this.getRandPos(y, rand, 1D), this.getRandPos(z, rand, 0.5D), 0, d0, d1, d2, 1F);
+				}
+			}
+		}
+
 		else if (this == PotionInit.flame) {
-			this.magicDamage(entity, SMDamage.flameDamage, 0.75F);
+				this.magicDamage(entity, SMDamage.flameDamage, 0.75F);
 
-			if (entity.level instanceof ServerLevel sever) {
+			if (entity.getLevel() instanceof ServerLevel sever) {
 
-				RandomSource rand = sever.random;
+				RandomSource rand = sever.getRandom();
 				double x = entity.xo;
 				double y = entity.yo + 1D;
 				double z = entity.zo;
@@ -129,7 +145,7 @@ public class SMEffect extends MobEffect {
 			double z = vec.z;
 
 			if (!entity.isOnGround()) {
-				y -= ( (level + 2) * 0.0275D);
+				y -= (level + 2) * 0.0275D;
 			}
 
 			if (level >= 1) {
@@ -142,48 +158,43 @@ public class SMEffect extends MobEffect {
 
 		else if (this == PotionInit.bubble) {
 
-			// 移動速度を取得
+			// 落下速度を設定
 			Vec3 vec = entity.getDeltaMovement();
 			double vX = vec.x * 0.67D;
 			double vY = 0.033D;
 			double vZ = vec.z * 0.67D;
-
-			// 落下速度を設定
 			entity.setDeltaMovement(new Vec3(vX, vY, vZ));
 
 			if (level >= 1 && this.tickTime % 20 == 0) {
 				this.magicDamage(entity, SMDamage.magicDamage, 1F);
 			}
 
-			if (entity.level instanceof ServerLevel sever) {
-
+			if (entity.getLevel() instanceof ServerLevel sever) {
 				Random rand = new Random();
-				float x = (float) (entity.getX() - 0.25F + rand.nextFloat() * 0.5F);
-				float y = (float) (entity.getY() - 0.25F + rand.nextFloat() * 0.5F) + 0.5F;
-				float z = (float) (entity.getZ() - 0.15F + rand.nextFloat() * 0.5F);
-
-				for (int i = 0; i < 1; i++) {
-					sever.sendParticles(ParticleInit.BUBBLE, x, y, z, 1, 0F, 0F, 0F, 0.03F);
-				}
+				float x = (float) entity.getX() - 0.25F + rand.nextFloat() * 0.5F;
+				float y = (float) entity.getY() - 0.25F + rand.nextFloat() * 0.5F + 0.5F;
+				float z = (float) entity.getZ() - 0.15F + rand.nextFloat() * 0.5F;
+				sever.sendParticles(ParticleInit.BUBBLE, x, y, z, 1, 0F, 0F, 0F, 0.03F);
 			}
 		}
 
 		else if (this == PotionInit.darkness_fog) {
 
-			if (entity.level instanceof ServerLevel sever) {
+			if (entity.getLevel() instanceof ServerLevel sever) {
 
-				RandomSource rand = sever.random;
+				RandomSource rand = sever.getRandom();
 				double x = entity.xo;
 				double y = entity.yo + 1D;
 				double z = entity.zo;
-
-				for (int i = 0; i < 1; ++i) {
-					double d0 = rand.nextDouble() * 0.075D;
-					double d1 = 0.05D + rand.nextDouble() * 0.1D;
-					double d2 = rand.nextDouble() * 0.075D;
-					sever.sendParticles(ParticleInit.DARK, this.getRandPos(x, rand, 0.75D), this.getRandPos(y, rand, 1D) + 0.5D, this.getRandPos(z, rand, 0.75D), 0, d0, d1, d2, 1F);
-				}
+				double d0 = rand.nextDouble() * 0.075D;
+				double d1 = 0.05D + rand.nextDouble() * 0.1D;
+				double d2 = rand.nextDouble() * 0.075D;
+				sever.sendParticles(ParticleInit.DARK, this.getRandPos(x, rand, 0.75D), this.getRandPos(y, rand, 1D) + 0.5D, this.getRandPos(z, rand, 0.75D), 0, d0, d1, d2, 1F);
 			}
+		}
+
+		else if (this == PotionInit.non_destructive && entity instanceof Player player && !player.isCreative() && !player.isSpectator() && player.getAbilities().flying) {
+			player.setDeltaMovement(player.getDeltaMovement().add(0D, -0.16D, 0D));
 		}
 
 		if (this.tickTime > 20) {
@@ -198,23 +209,28 @@ public class SMEffect extends MobEffect {
 	}
 
 	// 毒発動が出来るか
-	public boolean isDurationEffectTick(int level, int time) {
+	public boolean isDurationEffectTick(int time, int level) {
 
 		if (this == PotionInit.deadly_poison || this == PotionInit.flame || this == PotionInit.bleeding || this == PotionInit.regeneration || this == PotionInit.attack_disable) {
-			int j = 25 >> time;
-			return j > 0 ? level % j == 0 : true;
+			int j = 25 >> level;
+			return j > 0 ? time % j == 0 : true;
 		}
 
-		else if (this == PotionInit.frost && level >= 1) {
-			int j = 40 >> time;
-			return j > 0 ? level % j == 0 : true;
+		else if (this == PotionInit.frost && time >= 1) {
+			int j = 40 >> level;
+			return j > 0 ? time % j == 0 : true;
+		}
+
+
+		else if (this == PotionInit.belial_flame) {
+			return time % 20 == 0;
 		}
 
 		return this.isActive;
 	}
 
 	public double getRandPos(double pos, RandomSource rand, double scale) {
-		return pos + ((rand.nextDouble() - rand.nextDouble()) * scale);
+		return pos + (rand.nextDouble() - rand.nextDouble()) * scale;
 	}
 
 	public void magicDamage(LivingEntity entity, SMDamage src, float dame) {

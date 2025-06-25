@@ -95,7 +95,7 @@ public class PlaceInit {
 
 		if (src.equals(MAPLE_LONG_SRC)) {
 			leave = BlockInit.maple_leaves;
-			log = BlockInit.peach_log;
+			log = BlockInit.maple_log;
 		}
 
 		Holder<ConfiguredFeature<TreeConfiguration, ?>> cf = FeatureUtils.register(src.getPath(), tc, (new TreeConfiguration.TreeConfigurationBuilder(BlockStateProvider.simple(log), new GiantTrunkPlacer(13, 2, 14), BlockStateProvider.simple(leave), new MegaPineFoliagePlacer(ConstantInt.of(0), ConstantInt.of(0), UniformInt.of(13, 17)), new TwoLayersFeatureSize(1, 1, 2))).build());

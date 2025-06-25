@@ -33,12 +33,14 @@ public class StructureInit {
 		register(3, true, "witch_large_house");
 		register(3, true, "well_old");
 		register(4, true, "white_silver_house");
-		register(3, true, "broken_ruins_site_ice");
+		register(4, true, "broken_ruins_site_ice");
 		register(4, true, "broken_ruins_site_light");
-		register(4, true, "broken_ruins_site_fire");
-		register(5, true, "broken_ruins_site_wind");
-		register(5, true, "castle");
+		register(5, true, "broken_ruins_site_fire");
+		register(6, true, "broken_ruins_site_wind");
+		register(6, true, "castle");
 		register(5, true, "wizard_house");
+		register(6, true, "wizard_fortress");
+		register(7, true, "large_labyrinth");
 	}
 
 	public static void register(int level, boolean isSMDim, String name) {
@@ -47,8 +49,6 @@ public class StructureInit {
 	}
 
 	public record StructureInfo(int level, boolean isSMDim, String name) {
-		public int getLevel() { return this.level; }
 		public String getDim() { return this.isSMDim ? "sweetmagic" : "overworld"; }
-		public String getName() { return this.name; }
 	}
 }

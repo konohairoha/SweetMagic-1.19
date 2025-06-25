@@ -37,6 +37,13 @@ public class TagInit {
 	public static final TagKey<Item> MAGIC_PAGE = smItemTag("magic_page");
 	public static final TagKey<Item> COSMIC_ORE = smItemTag("cosmic_ore");
 	public static final TagKey<Item> LAVA = smItemTag("lava_bucket");
+	public static final TagKey<Item> SMSAPLING = smItemTag("smsapling");
+
+	public static final TagKey<Item> SEED = smItemTag("trade/seed");
+	public static final TagKey<Item> MAGIC = smItemTag("trade/magic");
+	public static final TagKey<Item> FURNITURE = smItemTag("trade/furniture");
+	public static final TagKey<Item> VANILLA = smItemTag("trade/vanilla");
+	public static final TagKey<Item> SEASONING = smItemTag("trade/seasoning");
 
 	public static final TagKey<Block> STONE = forgeBlockTag("stone");
 
@@ -49,6 +56,7 @@ public class TagInit {
 	public static final TagKey<Item> MILK = forgeItemTag("milk");
 	public static final TagKey<Item> SEEDS = forgeItemTag("seeds");
 	public static final TagKey<Item> FLOWER = minecraftItemTag("flowers");
+	public static final TagKey<Item> SAPLINGS = minecraftItemTag("saplings");
 	public static final TagKey<Item> MEAT = forgeItemTag("foods/meat/raw");
 
 	public static final TagKey<EntityType<?>> BOSS = forgeEntityTag("bosses");

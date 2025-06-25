@@ -21,8 +21,7 @@ public class VillageInit {
 	public static final RegistryObject<PoiType> MAGICIAN_POI = POI_TYPE.register("magician", () -> new PoiType(ImmutableSet.copyOf(BlockInit.obmagia_top.getStateDefinition().getPossibleStates()), 1, 1));
 	public static final RegistryObject<VillagerProfession> MAGICIAN_PRO = regster("magician", MAGICIAN_POI, SoundInit.WRITE);
 
-	public static RegistryObject<VillagerProfession> regster(String name, RegistryObject<PoiType> poyType, SoundEvent sound) {
-		return PRO_TYPE.register(name, () -> new VillagerProfession(SweetMagicCore.MODID + name, h -> h.is(poyType.getKey()),
-				h -> h.is(poyType.getKey()), ImmutableSet.of(), ImmutableSet.of(), sound));
+	public static RegistryObject<VillagerProfession> regster(String name, RegistryObject<PoiType> poy, SoundEvent sound) {
+		return PRO_TYPE.register(name, () -> new VillagerProfession(SweetMagicCore.MODID + name, h -> h.is(poy.getKey()), h -> h.is(poy.getKey()), ImmutableSet.of(), ImmutableSet.of(), sound));
 	}
 }

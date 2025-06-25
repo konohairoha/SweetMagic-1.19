@@ -51,8 +51,10 @@ public class ParticleInit {
 	public static final SimpleParticleType CYCLE_FROST_TORNADO = register("cycle_frost_tornado");
 	public static final SimpleParticleType CYCLE_FIRE = register("cycle_fire");
 	public static final SimpleParticleType CYCLE_FIRE_TORNADO = register("cycle_fire_tornado");
+	public static final SimpleParticleType CYCLE_BELIAL_TORNADO = register("cycle_belial_tornado");
 	public static final SimpleParticleType CYCLE_ELECTRIC = register("cycle_electric");
 	public static final SimpleParticleType CYCLE_BLOOD = register("cycle_blood");
+	public static final SimpleParticleType CYCLE_BLOOD_TORNADO = register("cycle_blood_tornado");
 	public static final SimpleParticleType CYCLE_HEAL = register("cycle_heal");
 	public static final SimpleParticleType CYCLE_REFLASH = register("cycle_reflash");
 	public static final SimpleParticleType CYCLE_TORNADO = register("cycle_tornado");
@@ -66,6 +68,7 @@ public class ParticleInit {
 	public static final SimpleParticleType GRAVITY_FIELD = register("gravity_filed");
 	public static final SimpleParticleType WIND_FIELD = register("wind_filed");
 	public static final SimpleParticleType RAIN_FIELD = register("rain_filed");
+	public static final SimpleParticleType BELIAL_FLAME = register("belial_flame");
 
 	public static SimpleParticleType register(String name) {
 		SimpleParticleType par = new SimpleParticleType(false);
@@ -87,6 +90,7 @@ public class ParticleInit {
 		engine.register(LAY, ParticleLay.Factory::new);
 		engine.register(FROST, ParticleNomal.Maigc::new);
 		engine.register(CYCLONE, ParticleCyclone.Factory::new);
+		engine.register(BELIAL_FLAME, ParticleCyclone.Belial::new);
 		engine.register(SMOKY, ParticleSmoky.Factory::new);
 		engine.register(BUBBLE, ParticleNomal.Maigc::new);
 		engine.register(BLOOD, ParticleNomal.Blood::new);
@@ -106,8 +110,10 @@ public class ParticleInit {
 		engine.register(CYCLE_FROST_TORNADO, RotationParticle.Cyclon2::new);
 		engine.register(CYCLE_FIRE, RotationParticle.Frost::new);
 		engine.register(CYCLE_FIRE_TORNADO, RotationParticle.Cyclon2::new);
+		engine.register(CYCLE_BELIAL_TORNADO, RotationParticle.Cyclon2::new);
 		engine.register(CYCLE_ELECTRIC, RotationParticle.Electoric::new);
 		engine.register(CYCLE_BLOOD, RotationParticle.Blood::new);
+		engine.register(CYCLE_BLOOD_TORNADO, RotationParticle.BloodCyclone::new);
 		engine.register(CYCLE_HEAL, RotationParticle.Heal::new);
 		engine.register(CYCLE_REFLASH, RotationParticle.Reflash::new);
 		engine.register(CYCLE_TORNADO, RotationParticle.Cyclone::new);

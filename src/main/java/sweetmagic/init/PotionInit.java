@@ -6,6 +6,7 @@ import java.util.Map;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegisterEvent;
 import sweetmagic.SweetMagicCore;
@@ -13,6 +14,7 @@ import sweetmagic.init.potion.SMEffect;
 
 public class PotionInit {
 
+	public static final DeferredRegister<MobEffect> REGISTRY = SweetMagicCore.getDef(ForgeRegistries.MOB_EFFECTS);
 	public static final MobEffectCategory BUFF = MobEffectCategory.BENEFICIAL;
 	public static final MobEffectCategory DEBUFF = MobEffectCategory.HARMFUL;
 	public static final MobEffectCategory NONE = MobEffectCategory.NEUTRAL;
@@ -27,7 +29,7 @@ public class PotionInit {
 	public static final MobEffect gravity = new SMEffect("gravity", 6, DEBUFF, true);
 	public static final MobEffect bubble = new SMEffect("bubble", 7, DEBUFF);
 	public static final MobEffect resistance_blow = new SMEffect("resistance_blow", 8, BUFF);
-	public static final MobEffect prompt_feather = new SMEffect("prompt_feather", 9, BUFF);
+	public static final MobEffect belial_flame = new SMEffect("belial_flame", 9, NONE);
 	public static final MobEffect mfcostdown = new SMEffect("mfcostdown", 10, BUFF);
 	public static final MobEffect drop_increase = new SMEffect("drop_increase", 11, BUFF);
 	public static final MobEffect leader_flag = new SMEffect("leader_flag", 12, NONE);
@@ -45,7 +47,7 @@ public class PotionInit {
 	public static final MobEffect magic_damage_cause = new SMEffect("magic_damage_cause", 24, BUFF, false);
 	public static final MobEffect magic_damage_receive = new SMEffect("magic_damage_receive", 25, DEBUFF, false);
 	public static final MobEffect future_vision = new SMEffect("future_vision", 26, BUFF, false);
-	public static final MobEffect non_destructive = new SMEffect("non_destructive", 27, NONE, false);
+	public static final MobEffect non_destructive = new SMEffect("non_destructive", 27, NONE, true);
 	public static final MobEffect flame_explosion_vulnerable = new SMEffect("flame_explosion_vulnerable", 28, NONE, false);
 	public static final MobEffect flost_water_vulnerable = new SMEffect("flost_water_vulnerable", 29, NONE, false);
 	public static final MobEffect lightning_wind_vulnerable = new SMEffect("lightning_wind_vulnerable", 30, NONE, false);
@@ -58,6 +60,10 @@ public class PotionInit {
 	public static final MobEffect witch_bless = new SMEffect("witch_bless", 37, NONE, false);
 	public static final MobEffect arlaune_bless = new SMEffect("arlaune_bless", 38, NONE, false);
 	public static final MobEffect sandryon_bless = new SMEffect("sandryon_bless", 39, NONE, false);
+	public static final MobEffect aether_barrier_origin = new SMEffect("aether_barrier_origin", 40, BUFF, false);
+	public static final MobEffect critical_increase = new SMEffect("critical_increase", 41, BUFF, false);
+	public static final MobEffect magic_rangeup = new SMEffect("magic_rangeup", 42, BUFF, false);
+	public static final MobEffect debuff_duration_increase = new SMEffect("debuff_duration_increase", 42, BUFF, false);
 
 	@SubscribeEvent
 	public static void registerPotion(RegisterEvent event) {

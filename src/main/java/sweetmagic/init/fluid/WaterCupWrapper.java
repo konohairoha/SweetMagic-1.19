@@ -79,17 +79,15 @@ public class WaterCupWrapper implements IFluidHandlerItem, ICapabilityProvider {
 			return FluidStack.EMPTY;
 		}
 
-		FluidStack fluidStack = this.getFluid();
-		if (!fluidStack.isEmpty() && fluidStack.isFluidEqual(resource)) {
+		FluidStack fluid = this.getFluid();
+		if (!fluid.isEmpty() && fluid.isFluidEqual(resource)) {
 			if (action.execute()) {
 				this.setFluid(FluidStack.EMPTY);
 			}
 
-//			this.stack.shrink(1);
-			return fluidStack;
+			return fluid;
 		}
 
-//		this.stack.shrink(1);
 		return FluidStack.EMPTY;
 	}
 
@@ -100,17 +98,15 @@ public class WaterCupWrapper implements IFluidHandlerItem, ICapabilityProvider {
 			return FluidStack.EMPTY;
 		}
 
-		FluidStack fluidStack = this.getFluid();
-		if (!fluidStack.isEmpty()) {
+		FluidStack fluid = this.getFluid();
+		if (!fluid.isEmpty()) {
 			if (action.execute()) {
 				this.setFluid(FluidStack.EMPTY);
 			}
 
-//			this.stack.shrink(1);
-			return fluidStack;
+			return fluid;
 		}
 
-//		this.stack.shrink(1);
 		return FluidStack.EMPTY;
 	}
 
