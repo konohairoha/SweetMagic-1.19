@@ -1,9 +1,9 @@
 {
 	"type": "sweetmagic:furniture_craft",
 	"ingredients": [
-		{ "tag": "forge:ingots/iron", "count": 1 }
+		{"tag": "forge:ingots/iron", "count": 1}
 	],
 	"result": [
-		{ "item": "sweetmagic:iron_railings_w", "count": 16 }
+		{"item": "sweetmagic:iron_railings_w", "count": 16}
 	]
 }

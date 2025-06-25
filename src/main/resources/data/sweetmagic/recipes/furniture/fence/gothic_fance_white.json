@@ -1,9 +1,9 @@
 {
 	"type": "sweetmagic:furniture_craft",
 	"ingredients": [
-		{ "tag": "forge:ingots/iron", "count": 1 }
+		{"tag": "forge:ingots/iron", "count": 1}
 	],
 	"result": [
-		{ "item": "sweetmagic:gothic_fance_white", "count": 16 }
+		{"item": "sweetmagic:gothic_fance_white", "count": 16}
 	]
 }

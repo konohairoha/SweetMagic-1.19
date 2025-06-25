@@ -1,9 +1,9 @@
 {
 	"type": "sweetmagic:furniture_craft",
 	"ingredients": [
-		{ "tag": "sweetmagic:mill", "count": 1 }
+		{"tag": "sweetmagic:mill", "count": 1}
 	],
 	"result": [
-		{ "item": "sweetmagic:mixer_r", "count": 1 }
+		{"item": "sweetmagic:mixer_r", "count": 1}
 	]
 }

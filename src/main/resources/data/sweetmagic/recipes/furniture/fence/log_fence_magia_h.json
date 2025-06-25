@@ -1,0 +1,9 @@
+{
+	"type": "sweetmagic:furniture_craft",
+	"ingredients": [
+		{"tag": "sweetmagic:smplanks", "count": 1}
+	],
+	"result": [
+		{"item": "sweetmagic:log_fence_magia_h", "count": 8}
+	]
+}

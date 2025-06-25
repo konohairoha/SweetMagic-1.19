@@ -1,9 +1,9 @@
 {
 	"type": "sweetmagic:furniture_craft",
 	"ingredients": [
-		{ "tag": "sweetmagic:juice_maker", "count": 1 }
+		{"tag": "sweetmagic:juice_maker", "count": 1}
 	],
 	"result": [
-		{ "item": "sweetmagic:coffee_maker_pu", "count": 1 }
+		{"item": "sweetmagic:coffee_maker_pu", "count": 1}
 	]
 }

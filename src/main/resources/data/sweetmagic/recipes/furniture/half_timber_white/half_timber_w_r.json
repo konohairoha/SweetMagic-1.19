@@ -1,0 +1,9 @@
+{
+	"type": "sweetmagic:furniture_craft",
+	"ingredients": [
+		{"tag": "sweetmagic:smplanks", "count": 1}
+	],
+	"result": [
+		{"item": "sweetmagic:half_timber_w_r", "count": 1}
+	]
+}

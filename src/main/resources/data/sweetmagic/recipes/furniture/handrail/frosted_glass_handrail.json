@@ -1,9 +1,9 @@
 {
 	"type": "sweetmagic:furniture_craft",
 	"ingredients": [
-		{ "tag": "sweetmagic:iron_fence", "count": 1 }
+		{"tag": "sweetmagic:iron_fence", "count": 1}
 	],
 	"result": [
-		{ "item": "sweetmagic:frosted_glass_handrail", "count": 1 }
+		{"item": "sweetmagic:frosted_glass_handrail", "count": 1}
 	]
 }
