@@ -8,16 +8,14 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import sweetmagic.SweetMagicCore;
-import sweetmagic.api.util.ISMTip;
 import sweetmagic.init.tile.gui.util.SMRenderTex;
 import sweetmagic.init.tile.gui.util.SMRenderTex.MFRenderGage;
 import sweetmagic.init.tile.menu.AetherRepairMenu;
 import sweetmagic.init.tile.sm.TileAetherRepair;
 
-public class GuiAetherRepair extends GuiSMBase<AetherRepairMenu> implements ISMTip {
+public class GuiAetherRepair extends GuiSMBase<AetherRepairMenu> {
 
 	private static final ResourceLocation TEX = SweetMagicCore.getSRC("textures/gui/gui_toolrepair.png");
-	private static final ResourceLocation MISC = SweetMagicCore.getSRC("textures/gui/gui_misc.png");
 	private final TileAetherRepair tile;
 
 	public GuiAetherRepair(AetherRepairMenu menu, Inventory pInv, Component title) {

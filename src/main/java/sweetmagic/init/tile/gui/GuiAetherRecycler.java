@@ -13,8 +13,8 @@ import sweetmagic.init.tile.sm.TileAetherRecycler;
 
 public class GuiAetherRecycler extends GuiSMBase<AetherRecyclerMenu> {
 
-	public final TileAetherRecycler tile;
 	private static final ResourceLocation TEX = SweetMagicCore.getSRC("textures/gui/gui_aether_recycler.png");
+	public final TileAetherRecycler tile;
 
 	public GuiAetherRecycler(AetherRecyclerMenu menu, Inventory pInv, Component title) {
 		super(menu, pInv, title);

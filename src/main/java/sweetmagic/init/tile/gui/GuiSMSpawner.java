@@ -19,12 +19,12 @@ public class GuiSMSpawner extends GuiSMBase<SMSpawnerMenu> {
 		super(menu, pInv, title);
 		this.tile = menu.tile;
 		this.setGuiSize(173, 133);
-		this.addButtonMap(0, new SMButton(TEX, 136, 7, 176, 7, 11, 9));
-		this.addButtonMap(1, new SMButton(TEX, 148, 7, 176, 16, 11, 9));
-		this.addButtonMap(2, new SMButton(TEX, 136, 22, 176, 7, 11, 9));
-		this.addButtonMap(3, new SMButton(TEX, 148, 22, 176, 16, 11, 9));
-		this.addButtonMap(4, new SMButton(TEX, 136, 37, 176, 7, 11, 9));
-		this.addButtonMap(5, new SMButton(TEX, 148, 37, 176, 16, 11, 9));
+		this.addButtonMap(0, new SMButton(TEX, 145, 7, 176, 7, 11, 9));
+		this.addButtonMap(1, new SMButton(TEX, 157, 7, 176, 16, 11, 9));
+		this.addButtonMap(2, new SMButton(TEX, 145, 22, 176, 7, 11, 9));
+		this.addButtonMap(3, new SMButton(TEX, 157, 22, 176, 16, 11, 9));
+		this.addButtonMap(4, new SMButton(TEX, 145, 37, 176, 7, 11, 9));
+		this.addButtonMap(5, new SMButton(TEX, 157, 37, 176, 16, 11, 9));
 	}
 
 	protected void renderBGBase(PoseStack pose, float parTick, int mouseX, int mouseY) {
@@ -39,9 +39,9 @@ public class GuiSMSpawner extends GuiSMBase<SMSpawnerMenu> {
 		// 座標の取得
 		int tipX = this.getWidth();
 		int tipY = this.getHeight();
-		this.font.drawShadow(pose, this.getTip("range: " + this.tile.getRange()), tipX + 8, tipY + 7, 0x2BC444);
-		this.font.drawShadow(pose, this.getTip("level: " + this.tile.getMobLevel()), tipX + 8, tipY + 22, 0x2BC444);
-		this.font.drawShadow(pose, this.getTip("type(" + this.tile.getMobType() + "): " + this.tile.getEntityName()), tipX + 8, tipY + 37, 0x2BC444);
+		this.font.drawShadow(pose, this.getLabel("range: " + this.tile.getRange()), tipX + 8, tipY + 7, 0x2BC444);
+		this.font.drawShadow(pose, this.getLabel("level: " + this.tile.getMobLevel()), tipX + 8, tipY + 22, 0x2BC444);
+		this.font.drawShadow(pose, this.getLabel("type(" + this.tile.getMobType() + "): " + this.tile.getEntityName()), tipX + 8, tipY + 37, 0x2BC444);
 	}
 
 	@Override

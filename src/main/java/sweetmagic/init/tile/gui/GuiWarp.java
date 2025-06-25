@@ -17,25 +17,21 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import sweetmagic.SweetMagicCore;
-import sweetmagic.api.util.ISMTip;
 import sweetmagic.init.ItemInit;
 import sweetmagic.init.tile.menu.WarpMenu;
 import sweetmagic.init.tile.sm.TileWarp;
 
-public class GuiWarp extends GuiSMBase<WarpMenu> implements ISMTip {
+public class GuiWarp extends GuiSMBase<WarpMenu> {
 
 	private final static ItemStack CLERO = new ItemStack(ItemInit.clero_petal);
 	private static final ResourceLocation TEX = SweetMagicCore.getSRC("textures/gui/gui_warp.png");
-	private static final ResourceLocation MISC = SweetMagicCore.getSRC("textures/gui/gui_misc.png");
 	private final TileWarp tile;
-	private final WarpMenu menu;
 	private boolean buttonView[] = new boolean[4];
 
 	public GuiWarp(WarpMenu menu, Inventory pInv, Component title) {
 		super(menu, pInv, title);
 		this.setGuiSize(173, 134);
 		this.tile = menu.tile;
-		this.menu = menu;
 	}
 
 	@Override
@@ -93,10 +89,10 @@ public class GuiWarp extends GuiSMBase<WarpMenu> implements ISMTip {
 
 				String pos = x + ", " + y + ", " + z;
 				tipList.add(this.getTipArray(stack.getHoverName()).withStyle(GREEN));
-				tipList.add(this.getLabel(" "));
+				tipList.add(this.empty());
 				tipList.add(this.getTipArray(this.getText("teleport_pos"), pos).withStyle(GOLD));
 				tipList.add(this.getTipArray(this.getText("teleport_dim"), dim).withStyle(GOLD));
-				tipList.add(this.getLabel(" "));
+				tipList.add(this.empty());
 				tipList.add(this.getText("teleport_action").withStyle(GREEN));
 
 				this.renderComponentTooltip(pose, tipList, xAxis, yAxis);

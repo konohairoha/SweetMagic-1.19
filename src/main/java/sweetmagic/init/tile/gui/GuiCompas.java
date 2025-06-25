@@ -16,7 +16,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
 import sweetmagic.SweetMagicCore;
-import sweetmagic.api.util.ISMTip;
 import sweetmagic.handler.PacketHandler;
 import sweetmagic.init.StructureInit;
 import sweetmagic.init.StructureInit.StructureInfo;
@@ -24,7 +23,7 @@ import sweetmagic.init.tile.gui.util.SMButton;
 import sweetmagic.init.tile.menu.CompasMenu;
 import sweetmagic.packet.CompasPKT;
 
-public class GuiCompas extends GuiSMBase<CompasMenu> implements ISMTip {
+public class GuiCompas extends GuiSMBase<CompasMenu> {
 
 	private static final ResourceLocation TEX = SweetMagicCore.getSRC("textures/gui/gui_dungeon_compas.png");
 	private boolean lootView[] = new boolean[4];
@@ -80,7 +79,7 @@ public class GuiCompas extends GuiSMBase<CompasMenu> implements ISMTip {
 
 			if (id + this.startIndex >= size) { break; }
 
-			String name = StructureInit.strucMap.get(id + this.startIndex).getName();
+			String name = StructureInit.strucMap.get(id + this.startIndex).name();
 			this.font.drawShadow(pose, this.getTip("structure.sweetmagic." + name), x + 17, y + 12 + id * 20, 0x2BC444);
 		}
 	}
@@ -104,9 +103,9 @@ public class GuiCompas extends GuiSMBase<CompasMenu> implements ISMTip {
 				if (id + this.startIndex >= strucMap.size()) { break; }
 
 				StructureInfo info = strucMap.get(id + this.startIndex);
-				MutableComponent struc = this.getTip("structure.sweetmagic." + info.getName()).withStyle(GOLD);
+				MutableComponent struc = this.getTip("structure.sweetmagic." + info.name()).withStyle(GOLD);
 				MutableComponent dim = this.getTipArray(this.getText("dimension"), ": ", this.getText(info.getDim())).withStyle(GREEN);
-				MutableComponent dif = this.getTipArray(this.getText("difficulty"), ": ★", "" + info.getLevel()).withStyle(GREEN);
+				MutableComponent dif = this.getTipArray(this.getText("difficulty"), ": ★", info.level()).withStyle(GREEN);
 				List<Component> comList = Arrays.<Component> asList(struc, dim, dif);
 				this.renderComponentTooltip(pose, comList, xAxis + 0, yAxis - 20);
 				this.lootView[id] = true;
@@ -146,7 +145,7 @@ public class GuiCompas extends GuiSMBase<CompasMenu> implements ISMTip {
 		aX = this.leftPos + 58;
 
 		if (guiX >= aX && guiX < aX + w && guiY >= aY && guiY < aY + h) {
-			this.player.level.playSound(null, this.player.blockPosition(), SoundEvents.UI_BUTTON_CLICK, SoundSource.PLAYERS, 0.25F, 1F);
+			this.player.getLevel().playSound(null, this.player.blockPosition(), SoundEvents.UI_BUTTON_CLICK, SoundSource.PLAYERS, 0.25F, 1F);
 			this.minecraft.player.closeContainer();
 			return super.mouseClicked(guiX, guiY, mouseButton);
 		}
@@ -163,7 +162,7 @@ public class GuiCompas extends GuiSMBase<CompasMenu> implements ISMTip {
 			if (dX >= 0D && dX <= 98D && dY >= 0D && dY < 20D) {
 				int newSelectID = id + this.startIndex;
 				this.selectID = (newSelectID != this.selectID) ? newSelectID : -1;
-				this.player.level.playSound(null, this.player.blockPosition(), SoundEvents.UI_BUTTON_CLICK, SoundSource.PLAYERS, 0.25F, 1F);
+				this.player.getLevel().playSound(null, this.player.blockPosition(), SoundEvents.UI_BUTTON_CLICK, SoundSource.PLAYERS, 0.25F, 1F);
 			}
 		}
 

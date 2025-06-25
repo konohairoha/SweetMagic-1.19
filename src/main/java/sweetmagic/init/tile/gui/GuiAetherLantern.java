@@ -38,8 +38,8 @@ public class GuiAetherLantern extends GuiSMBase<AetherLanternMenu> {
 		// 座標の取得
 		int tip_x = this.getWidth();
 		int tip_y = this.getHeight();
-		this.font.drawShadow(pose, this.getTip("" + this.tile.range), tip_x + 125, tip_y + 30, 0x2BC444);
-		this.font.drawShadow(pose, this.getTip(String.format("%,d", this.tile.mfInsert / 2) + "mf"), tip_x + 20, tip_y + 30, 0x2BC444);
+		this.font.drawShadow(pose, this.getLabel(this.tile.range), tip_x + 125, tip_y + 30, 0x2BC444);
+		this.font.drawShadow(pose, this.getLabel(this.format(this.tile.mfInsert) + "mf"), tip_x + 20, tip_y + 30, 0x2BC444);
 	}
 
 	@Override

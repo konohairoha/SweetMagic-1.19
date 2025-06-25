@@ -28,8 +28,6 @@ import sweetmagic.init.tile.sm.TileMagiaRewrite;
 public class GuiMagiaRewrite extends GuiSMBase<MagiaRewriteMenu> {
 
 	private static final ResourceLocation TEX = SweetMagicCore.getSRC("textures/gui/gui_magiawrite.png");
-	private static final ResourceLocation MISC = SweetMagicCore.getSRC("textures/gui/gui_misc.png");
-	private final MagiaRewriteMenu menu;
 	public final TileMagiaRewrite tile;
 	private int tickTime = 0;
 	private int counter = 0;
@@ -44,7 +42,6 @@ public class GuiMagiaRewrite extends GuiSMBase<MagiaRewriteMenu> {
 	public GuiMagiaRewrite(MagiaRewriteMenu menu, Inventory pInv, Component title) {
 		super(menu, pInv, title);
 		this.setGuiSize(217, 190);
-		this.menu = menu;
 		this.tile = menu.tile;
 		this.scrolling = false;
 		this.startIndex = 0;
@@ -52,7 +49,7 @@ public class GuiMagiaRewrite extends GuiSMBase<MagiaRewriteMenu> {
 		this.addRenderTexList(new SMRenderTex(TEX, 35, 29, 0, 0, 11, 77, new MFRenderGage(menu.tile, true)));
 	}
 
-	protected void renderBGBase (PoseStack pose, float parTick, int mouseX, int mouseY) {
+	protected void renderBGBase(PoseStack pose, float parTick, int mouseX, int mouseY) {
 		RenderSystem.setShader(GameRenderer::getPositionColorTexShader);
 		RenderSystem.setShaderTexture(0, this.getTEX());
 		RenderSystem.setShaderColor(1F, 1F, 1F, 1F);
@@ -110,7 +107,6 @@ public class GuiMagiaRewrite extends GuiSMBase<MagiaRewriteMenu> {
 			int size = enchaList.size();
 
 			for (int id = 0; id < 4; id++) {
-
 				if (id + this.startIndex >= size) { break; }
 
 				int cost = tile.getEnchantCost(id + this.startIndex);
@@ -135,7 +131,7 @@ public class GuiMagiaRewrite extends GuiSMBase<MagiaRewriteMenu> {
 				this.blit(pose, x + 177, y + 6, 212 + (this.addLevelView ? 7 : 0), 0, 7, 10);
 			}
 
-			this.font.drawShadow(pose, this.getTipArray("Level: ", this.getLabel("" + nowLevel).withStyle(WHITE)), x + 112, y + 12, 0x2BC444);
+			this.font.drawShadow(pose, this.getTipArray("Level: ", this.getLabel(nowLevel, WHITE)), x + 112, y + 12, 0x2BC444);
 		}
 
 		// アイテム描画
@@ -208,14 +204,14 @@ public class GuiMagiaRewrite extends GuiSMBase<MagiaRewriteMenu> {
 
 		//描画位置を計算
 		tipX = this.getWidth() + 76 + addX;
-		tipY = this.getHeight() + 30;
+		tipY = this.getHeight() + 28;
 
 		for (int id = 0; id < 4; id++) {
 
 			this.enchaView[id] = false;
 
-			if (!this.isRender(tipX, tipY, mouseX, mouseY, 98, 18)) {
-				tipY += 19;
+			if (!this.isRender(tipX, tipY, mouseX, mouseY, 98, 19)) {
+				tipY += 20;
 				continue;
 			}
 
@@ -240,14 +236,14 @@ public class GuiMagiaRewrite extends GuiSMBase<MagiaRewriteMenu> {
 			String addLevel = "" + tile.getChanedLevel(buttonId);
 			String canMaxLevel = "" + tile.getMaxRwiteLevel(maxLevel);
 
-			String tip = String.format("%,d", cost);
+			String tip = this.format(cost);
 			List<Component> tipList = new ArrayList<>();
-			tipList.add(this.getTipArray(this.getText("needmf"), this.getLabel(tip).withStyle(WHITE)).withStyle(GOLD));
-			tipList.add(this.getTipArray(this.getText("nowlevel"), ": ", this.getLabel(level).withStyle(WHITE), " → ", this.getLabel(addLevel).withStyle(RED)).withStyle(GREEN));
-			tipList.add(this.getTipArray(this.getText("maxlevel"), ": ", this.getLabel("" + maxLevel).withStyle(WHITE), " (", this.getLabel(canMaxLevel).withStyle(RED), ")").withStyle(GREEN));
+			tipList.add(this.getTipArray(this.getText("needmf"), this.getLabel(tip, WHITE)).withStyle(GOLD));
+			tipList.add(this.getTipArray(this.getText("nowlevel"), ": ", this.getLabel(level, WHITE), " → ", this.getLabel(addLevel, RED)).withStyle(GREEN));
+			tipList.add(this.getTipArray(this.getText("maxlevel"), ": ", this.getLabel(maxLevel, WHITE), " (", this.getLabel(canMaxLevel, RED), ")").withStyle(GREEN));
 			this.renderComponentTooltip(pose, tipList, xAxis - 80, yAxis - 24);
 			this.enchaView[id] = true;
-			tipY += 19;
+			tipY += 20;
 		}
 	}
 
@@ -283,10 +279,10 @@ public class GuiMagiaRewrite extends GuiSMBase<MagiaRewriteMenu> {
 		dX = guiX - (double) (x + 76);
 		for (int id = 0; id < 4; ++id) {
 
-			dY = guiY - (double) (y + 30 + 18 * id);
+			dY = guiY - (double) (y + 26 + 21D * id);
 
 			// 各エンチャントの当たり判定チェック
-			if (dX >= 0D && dX <= 95 && dY >= 0D && dY < 18D) {
+			if (dX >= 0D && dX <= 95 && dY >= 0D && dY < 21D) {
 				this.clickButton(id + this.startIndex + 2);
 			}
 		}
@@ -323,7 +319,7 @@ public class GuiMagiaRewrite extends GuiSMBase<MagiaRewriteMenu> {
 	}
 
 	// アイテム描画
-	public void renderSlotItem (Slot slot, ItemStack stack, PoseStack pose) {
+	public void renderSlotItem(Slot slot, ItemStack stack, PoseStack pose) {
 		if (!slot.getItem().isEmpty()) { return; }
 
 		int x = this.leftPos + slot.x;

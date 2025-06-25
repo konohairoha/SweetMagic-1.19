@@ -20,7 +20,9 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -42,23 +44,25 @@ import sweetmagic.api.util.ISMTip;
 import sweetmagic.init.tile.gui.util.SMButton;
 import sweetmagic.init.tile.gui.util.SMRenderTex;
 import sweetmagic.init.tile.gui.util.SMRenderTex.MFRenderGage;
+import sweetmagic.init.tile.slot.MagiaSlot;
 import sweetmagic.init.tile.sm.TileMFChanger;
 import sweetmagic.init.tile.sm.TileSMMagic;
 
-public abstract class GuiSMBase <T extends AbstractContainerMenu> extends AbstractContainerScreen<T> implements ISMTip {
+public abstract class GuiSMBase<M extends AbstractContainerMenu> extends AbstractContainerScreen<M> implements ISMTip {
 
 	protected final Player player;
-	protected final AbstractContainerMenu menu;
-	protected static final ResourceLocation MISC = SweetMagicCore.getSRC("textures/gui/gui_misc.png");
+	protected final M menu;
 	protected boolean hasRobe = false;
 	protected boolean hasPorch = false;
 	protected boolean hasWand = false;
 	protected boolean hasBook = false;
 	private final Map<Integer, SMButton> buttonMap = new HashMap<>();
 	private final List<SMRenderTex> renderList = new ArrayList<>();
+	protected Map<Slot, Integer> stackCountMap = new HashMap<>();
 	protected static final String[] ENCODED_SUFFIXES = {"K", "M", "G"};
+	protected static final ResourceLocation MISC = SweetMagicCore.getSRC("textures/gui/gui_misc.png");
 
-	public GuiSMBase(T menu, Inventory pInv, Component title) {
+	public GuiSMBase(M menu, Inventory pInv, Component title) {
 		super(menu, pInv, title);
 		this.menu = menu;
 		this.player = pInv.player;
@@ -94,7 +98,6 @@ public abstract class GuiSMBase <T extends AbstractContainerMenu> extends Abstra
 
 		Map<Integer, SMButton> buttonMap = this.getButtonMap();
 		for (Entry<Integer, SMButton> map : buttonMap.entrySet()) {
-
 			SMButton button = map.getValue();
 			if (!button.isButtonRender()) { continue; }
 
@@ -167,15 +170,15 @@ public abstract class GuiSMBase <T extends AbstractContainerMenu> extends Abstra
 	@Override
 	protected void renderLabels(PoseStack pose, int mouseX, int mouseY) {
 
-		int texSizeX = this.getWidth();
-		int texSizeY = this.getHeight();
+		int x = this.getWidth();
+		int y = this.getHeight();
 
 		if (!this.getButtonMap().isEmpty()) {
-			this.buttonMapLabel(pose, mouseX, mouseY, texSizeX, texSizeY);
+			this.buttonMapLabel(pose, mouseX, mouseY, x, y);
 		}
 
 		if (!this.getRenderTexList().isEmpty()) {
-			this.renderTexLabel(pose, mouseX, mouseY, texSizeX, texSizeY);
+			this.renderTexLabel(pose, mouseX, mouseY, x, y);
 		}
 	}
 
@@ -243,8 +246,8 @@ public abstract class GuiSMBase <T extends AbstractContainerMenu> extends Abstra
 				int xAxis = mouseX - this.getWidth();
 				int yAxis = mouseY - this.getHeight();
 
-				String tip = String.format("%,d", mf) + "mf / " + String.format("%,d", max) + "mf" + par;
-				this.renderTooltip(pose, this.getTip(tip), xAxis, yAxis);
+				String tip = this.format(mf) + "mf / " + this.format(max) + "mf" + par;
+				this.renderTooltip(pose, this.getLabel(tip), xAxis, yAxis);
 			}
 		}
 	}
@@ -321,6 +324,23 @@ public abstract class GuiSMBase <T extends AbstractContainerMenu> extends Abstra
 		this.renderList.add(val);
 	}
 
+	protected void drawFont(PoseStack pose, Component tip, float maxSize, float x, float y, int color, boolean isShadow) {
+		pose.pushPose();
+		int spSize2 = this.font.width(tip.getString());
+		pose.scale(spSize2 < maxSize ? 1F : maxSize / spSize2, 1F, 1F);
+		float addX2 = spSize2 < maxSize ? 1F : spSize2 / maxSize;
+
+		if(isShadow) {
+			this.font.drawShadow(pose, tip, (x) * addX2, y, color);
+		}
+
+		else {
+			this.font.draw(pose, tip, (x) * addX2, y, color);
+		}
+
+		pose.popPose();
+	}
+
 	// アイテム描画
 	public void renderSlotItem(Slot slot, ItemStack stack, PoseStack pose) {
 		if (!slot.getItem().isEmpty()) { return; }
@@ -351,6 +371,106 @@ public abstract class GuiSMBase <T extends AbstractContainerMenu> extends Abstra
 		this.renderSlotItem(slot, copy, pose);
 	}
 
+	public void renderMagiaStack(PoseStack pose, int mouseX, int mouseY, float parTick, NonNullList<Slot> slotList, NonNullList<Slot> slots) {
+
+		this.stackCountMap.clear();
+
+		for (int i = 0; i < slotList.size(); i++) {
+			Slot slot = slots.get(i);
+			if(!slot.isActive()) { continue; }
+
+			ItemStack stack = slots.get(i).getItem().copy();
+			this.stackCountMap.put(slot, stack.getCount());
+
+			if (stack.isEmpty() || this.checkStackCount(stack.getCount())) { continue; }
+			stack.setCount(1);
+			slot.set(stack);
+		}
+
+		this.renderBackground(pose);
+		super.render(pose, mouseX, mouseY, parTick);
+		this.renderTooltip(pose, mouseX, mouseY);
+
+		for (int i = 0; i < slotList.size(); i++) {
+			Slot slot = slots.get(i);
+			if (!slot.isActive() || this.stackCountMap.get(slot) == null) { continue; }
+
+			int count = this.stackCountMap.get(slot);
+			if (this.checkStackCount(count)) { continue; }
+
+			ItemStack stack = slot.getItem();
+			if (stack.isEmpty()) { continue; }
+
+			if (count > 1) {
+				this.renderSlotCount(slot, stack, count, pose);
+			}
+			stack.setCount(count);
+			slot.set(stack);
+		}
+	}
+
+	public boolean checkStackCount(int count) {
+		return count <= 1;
+	}
+
+	protected void renderMagiaStackTooltip(PoseStack pose, ItemStack stack, int x, int y, NonNullList<Slot> slotList) {
+		List<Component> tipList = this.getTooltipFromItem(stack);
+
+		if (this.hoveredSlot instanceof MagiaSlot slot) {
+			int vCount = this.stackCountMap.get(slot);
+			if(vCount <= 0) { return; }
+
+//			int vCount = this.stackCountMap.get(i);
+			int vMax = this.hoveredSlot.getMaxStackSize();
+			String count = this.format(vCount) + "/";
+			String max = this.format(vMax);
+			String par = " (" + this.format(((float) vCount / (float) vMax) * 100F) + "%" + ")";
+			tipList.add(this.getLabel(count + max + par, GOLD));
+//			for(int i = 0; i < slotList.size(); i++) {
+//				if(slotList.get(i) != slot) { continue; }
+//
+//				int index = this.hoveredSlot.getSlotIndex();
+//				if (i >= this.stackCountMap.size()) { return; }
+//
+//			}
+		}
+		this.renderTooltip(pose, tipList, stack.getTooltipImage(), x, y);
+	}
+
+	// アイテム描画
+	public void renderSlotCount(Slot slot, ItemStack stack, int count, PoseStack pose) {
+		int x = this.leftPos + slot.x;
+		int y = this.topPos + slot.y + 0;
+		PoseStack view = RenderSystem.getModelViewStack();
+
+		view.pushPose();
+		view.mulPoseMatrix(pose.last().pose());
+		Font font = IClientItemExtensions.of(stack).getFont(stack, IClientItemExtensions.FontContext.TOOLTIP);
+		font = font == null ? this.font : font;
+
+		RenderSystem.enableDepthTest();
+		RenderSystem.depthFunc(516);
+		GuiComponent.fill(view, x, y, x + 16, y + 16, 0);
+		RenderSystem.depthFunc(515);
+		RenderSystem.disableDepthTest();
+		String stackSize = String.valueOf(count);
+
+		if (stackSize.length() > 3) {
+			int stackLength = (stackSize.length() - 1) / 3;
+			String encord = ENCODED_SUFFIXES[stackLength - 1];
+			stackSize = stackSize.substring(0, stackSize.length() - stackLength * 3 + 1) + encord;
+			stackSize = stackSize.substring(0, stackSize.length() - 2) + "." + stackSize.substring(stackSize.length() - 2, stackSize.length());
+		}
+
+		MultiBufferSource.BufferSource buf = MultiBufferSource.immediate(Tesselator.getInstance().getBuilder());
+		PoseStack poses = new PoseStack();
+		poses.scale(0.5F, 0.5F, 0.5F);
+		poses.translate(0D, 0D, 600D);
+		font.drawInBatch(stackSize, (x + 6 + 9) * 2 - font.width(stackSize), (y + 12) * 2, 16777215, true, poses.last().pose(), buf, false, 0, 15728880);
+		buf.endBatch();
+		view.popPose();
+	}
+
 	// カーソルがあった時に描画するか
 	public boolean isRender(int tipX, int tipY, int mouseX, int mouseY, int maxX, int maxY) {
 		return tipX <= mouseX && mouseX <= tipX + maxX && tipY <= mouseY && mouseY <= tipY + maxY;
@@ -362,13 +482,11 @@ public abstract class GuiSMBase <T extends AbstractContainerMenu> extends Abstra
 
 		int tipX = this.getWidth() + slot.x;
 		int tipY = this.getHeight() + slot.y;
+		if (!this.isRender(tipX, tipY, mouseX, mouseY, 16, 16)) { return; }
 
-		//GUIの左上からの位置
-		if (this.isRender(tipX, tipY, mouseX, mouseY, 16, 16)) {
-			int xAxis = (mouseX - this.getWidth());
-			int yAxis = (mouseY - this.getHeight());
-			this.renderComponentTooltip(pose, tipList, xAxis, yAxis);
-		}
+		int xAxis = (mouseX - this.getWidth());
+		int yAxis = (mouseY - this.getHeight());
+		this.renderComponentTooltip(pose, tipList, xAxis, yAxis);
 	}
 
 	// スロットの説明
@@ -377,16 +495,13 @@ public abstract class GuiSMBase <T extends AbstractContainerMenu> extends Abstra
 
 		int tipX = this.getWidth() + slot.x;
 		int tipY = this.getHeight() + slot.y;
+		if (!this.isRender(tipX, tipY, mouseX, mouseY, 16, 16)) { return; }
 
-		//GUIの左上からの位置
-		if (this.isRender(tipX, tipY, mouseX, mouseY, 16, 16)) {
-			int xAxis = mouseX - this.getWidth();
-			int yAxis = mouseY - this.getHeight();
-
-			List<Component> tipList = new ArrayList<>();
-			this.setTip(tipList, stack);
-			this.renderComponentTooltip(pose, tipList, xAxis, yAxis);
-		}
+		int xAxis = mouseX - this.getWidth();
+		int yAxis = mouseY - this.getHeight();
+		List<Component> tipList = new ArrayList<>();
+		this.setTip(tipList, stack);
+		this.renderComponentTooltip(pose, tipList, xAxis, yAxis);
 	}
 
 	public void renderStock(List<ItemStack> tileStackList, PoseStack pose, int stockId, int restockId, int addX, int addY) {
@@ -406,21 +521,7 @@ public abstract class GuiSMBase <T extends AbstractContainerMenu> extends Abstra
 				itemList.add(stack.getItem());
 			}
 
-			for (int x = 0; x < 9; x++) {
-				ItemStack stack = pInveList.get(x);
-				if (stack.isEmpty() || !itemList.contains(stack.getItem())) { continue; }
-
-				this.blit(pose, this.leftPos + 47 + x * 18 + addX, this.topPos + 209 + addY, 114, 47, 18, 18);
-			}
-
-			for (int y = 0; y < 3; y++) {
-				for (int x = 0; x < 9; x++) {
-					ItemStack stack = pInveList.get(9 + x + y * 9);
-					if (stack.isEmpty() || !itemList.contains(stack.getItem())) { continue; }
-
-					this.blit(pose, this.leftPos + 47 + x * 18 + addX, this.topPos + 150 + y * 18 + addY, 114, 47, 18, 18);
-				}
-			}
+			this.renderInvStock(itemList, pInveList, pose, addX, addY);
 		}
 
 		if (!restock.isView()) { return; }
@@ -432,6 +533,29 @@ public abstract class GuiSMBase <T extends AbstractContainerMenu> extends Abstra
 			itemList.add(stack.getItem());
 		}
 
+		this.renderChestStock(itemList, tileStackList, pose, addX, addY);
+	}
+
+	public void renderInvStock(List<Item> itemList, List<ItemStack> pInveList, PoseStack pose, int addX, int addY) {
+
+		for (int x = 0; x < 9; x++) {
+			ItemStack stack = pInveList.get(x);
+			if (stack.isEmpty() || !itemList.contains(stack.getItem())) { continue; }
+
+			this.blit(pose, this.leftPos + 47 + x * 18 + addX, this.topPos + 209 + addY, 114, 47, 18, 18);
+		}
+
+		for (int y = 0; y < 3; y++) {
+			for (int x = 0; x < 9; x++) {
+				ItemStack stack = pInveList.get(9 + x + y * 9);
+				if (stack.isEmpty() || !itemList.contains(stack.getItem())) { continue; }
+
+				this.blit(pose, this.leftPos + 47 + x * 18 + addX, this.topPos + 150 + y * 18 + addY, 114, 47, 18, 18);
+			}
+		}
+	}
+
+	public void renderChestStock(List<Item> itemList, List<ItemStack> tileStackList, PoseStack pose, int addX, int addY) {
 		for (int y = 0; y < 8; y++) {
 			for (int x = 0; x < 13; x++) {
 				if (itemList.contains(tileStackList.get(x + y * 13).getItem())) {
@@ -456,7 +580,8 @@ public abstract class GuiSMBase <T extends AbstractContainerMenu> extends Abstra
 	}
 
 	public boolean hasWand() {
-		return this.player.getMainHandItem().getItem() instanceof IWand;
+		ItemStack stack = IWand.getWand(this.player);
+		return !stack.isEmpty() && stack.getItem() instanceof IWand;
 	}
 
 	public boolean hasPorch() {

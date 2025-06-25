@@ -88,8 +88,7 @@ public class SMRenderTex {
 	public record MFRenderGage(TileSMMagic tile, boolean isVertical) {
 
 		public static MFRenderGage createChanger(TileSMMagic tile) {
-			MFRenderGage render = new MFRenderGage(tile, false);
-			return render;
+			return new MFRenderGage(tile, false);
 		}
 	}
 }

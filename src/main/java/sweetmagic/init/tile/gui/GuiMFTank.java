@@ -56,8 +56,8 @@ public class GuiMFTank extends GuiSMBase<MFTankMenu> {
 		super.renderBg(pose, parTick, mouseX, mouseY);
 		int tipX = this.getWidth();
 		int tipY = this.getHeight();
-		this.font.drawShadow(pose, this.getTip(String.format("%,d", this.tile.viewMFInsert) + "mf"), tipX + 10, tipY + 9.5F, 0x2BC444);
-		this.font.drawShadow(pose, this.getTip(String.format("%,d", this.tile.viewMFExtract) + "mf"), tipX + 104, tipY + 9.5F, 0xFF5349);
+		this.font.drawShadow(pose, this.getLabel(this.format(this.tile.viewMFInsert) + "mf"), tipX + 10, tipY + 9.5F, 0x2BC444);
+		this.font.drawShadow(pose, this.getLabel(this.format(this.tile.viewMFExtract) + "mf"), tipX + 104, tipY + 9.5F, 0xFF5349);
 	}
 
 	@Override

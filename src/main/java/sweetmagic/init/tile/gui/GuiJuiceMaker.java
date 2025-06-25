@@ -55,7 +55,7 @@ public class GuiJuiceMaker extends GuiSMBase<JuiceMakerMenu> {
 		int max = this.tile.getMaxFuildValue();
 		int xAxis = mouseX - this.getWidth();
 		int yAxis = mouseY - this.getHeight();
-		String tip = String.format("%,d", mf) + "mb / " + String.format("%,d", max) + "mb";
+		String tip = this.format(mf) + "mb / " + this.format(max) + "mb";
 		this.renderTooltip(pose, this.getLabel(tip), xAxis, yAxis);
 	}
 

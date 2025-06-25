@@ -42,7 +42,7 @@ public class GuiMagiaDrawer extends GuiSMBase<MagiaDrawerMenu> {
 	protected void renderBg(PoseStack pose, float parTick, int mouseX, int mouseY) {
 		super.renderBg(pose, parTick, mouseX, mouseY);
 		this.renderStock(this.tile.getInputList(), pose, 5, 6, -7, 8);
-		this.font.drawShadow(pose, this.getTip("" + this.tile.range), this.getWidth() + 10, this.getHeight() + 185, 0x2BC444);
+		this.font.drawShadow(pose, this.getLabel(this.tile.range), this.getWidth() + 10, this.getHeight() + 185, 0x2BC444);
 	}
 
 	@Override

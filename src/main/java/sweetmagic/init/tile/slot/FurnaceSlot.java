@@ -34,7 +34,7 @@ public class FurnaceSlot extends SMSlot {
 		if (stack.isEmpty() || this.tile.exp <= 0F) { return; }
 
 		Level world = this.player.level;
-		if (world.isClientSide) { return; }
+		if (world.isClientSide()) { return; }
 
 		ExperienceOrb entity = new ExperienceOrb(world, this.player.getX(), this.player.getY(), this.player.getZ(), (int) this.tile.exp);
 		world.addFreshEntity(entity);

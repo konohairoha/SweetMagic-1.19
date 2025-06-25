@@ -19,8 +19,8 @@ public class GuiSpawnCrystal extends GuiSMBase<SpawnCrystalMenu> {
 		super(menu, pInv, title);
 		this.tile = menu.tile;
 		this.setGuiSize(173, 133);
-		this.addButtonMap(0, new SMButton(TEX, 136, 7, 176, 7, 11, 9));
-		this.addButtonMap(1, new SMButton(TEX, 148, 7, 176, 16, 11, 9));
+		this.addButtonMap(0, new SMButton(TEX, 145, 7, 176, 7, 11, 9));
+		this.addButtonMap(1, new SMButton(TEX, 157, 7, 176, 16, 11, 9));
 	}
 
 	protected void renderBGBase(PoseStack pose, float parTick, int mouseX, int mouseY) {
@@ -31,7 +31,7 @@ public class GuiSpawnCrystal extends GuiSMBase<SpawnCrystalMenu> {
 	@Override
 	protected void renderBg(PoseStack pose, float parTick, int mouseX, int mouseY) {
 		super.renderBg(pose, parTick, mouseX, mouseY);
-		this.font.drawShadow(pose, this.getTip("range: " + this.tile.getRange()), this.getWidth() + 8, this.getHeight() + 7, 0x2BC444);
+		this.font.drawShadow(pose, this.getLabel("range: " + this.tile.getRange()), this.getWidth() + 8, this.getHeight() + 7, 0x2BC444);
 	}
 
 	@Override

@@ -26,13 +26,11 @@ public class GuiAetherHopper extends GuiSMBase<AetherHopperMenu> {
 	private static final ResourceLocation TEX = SweetMagicCore.getSRC("textures/gui/gui_aether_hopper.png");
 	private final static ItemStack WAND = new ItemStack(ItemInit.mf_stuff);
 	private final TileAetherHopper tile;
-	protected final AetherHopperMenu menu;
 
 	public GuiAetherHopper(AetherHopperMenu menu, Inventory pInv, Component title) {
 		super(menu, pInv, title);
 		this.setGuiSize(176, 175);
 		this.tile = (TileAetherHopper) menu.tile;
-		this.menu = menu;
 		this.addButtonMap(0, new SMButton(MISC, 150, -11, 114, 0, 10, 9, new SMButtonTip("sort", -18, 14)));
 		this.addRenderTexList(new SMRenderTex(TEX, 7, 10, 0, 0, 11, 77, new MFRenderGage(this.tile, true)));
 	}
@@ -65,7 +63,7 @@ public class GuiAetherHopper extends GuiSMBase<AetherHopperMenu> {
 	@Override
 	protected void renderLabels(PoseStack pose, int mouseX, int mouseY) {
 		super.renderLabels(pose, mouseX, mouseY);
-		this.renderItemLabel(this.menu.wandSlot, WAND, pose, mouseX, mouseY, Arrays.<Component> asList(this.getText("send_stuff_0").withStyle(GOLD), this.getText("send_stuff_1").withStyle(GOLD), this.getTip(""), this.getText("can_stuff").withStyle(GREEN), WAND.getDisplayName()));
+		this.renderItemLabel(this.menu.wandSlot, WAND, pose, mouseX, mouseY, Arrays.<Component> asList(this.getText("send_stuff_0").withStyle(GOLD), this.getText("send_stuff_1").withStyle(GOLD), this.empty(), this.getText("can_stuff").withStyle(GREEN), WAND.getDisplayName()));
 	}
 
 	protected ResourceLocation getTEX() {

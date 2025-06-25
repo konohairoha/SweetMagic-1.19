@@ -1,23 +1,16 @@
 package sweetmagic.init.tile.gui;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.Tesselator;
 
-import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import sweetmagic.SweetMagicCore;
 import sweetmagic.init.tile.gui.util.SMButton;
 import sweetmagic.init.tile.gui.util.SMButton.SMButtonTip;
@@ -28,15 +21,12 @@ public class GuiAetherCraftTable extends GuiSMBase<AetherCraftTableMenu> {
 
 	private static final ResourceLocation TEX = SweetMagicCore.getSRC("textures/gui/gui_aether_crafttable.png");
 	public final TileAetherCraftTable tile;
-	public final AetherCraftTableMenu menu;
-	private List<Integer> stackList = new ArrayList<>();
 	private int startIndex = 0;
 	private boolean scrollingView = false;
 
 	public GuiAetherCraftTable(AetherCraftTableMenu menu, Inventory pInv, Component title) {
 		super(menu, pInv, title);
 		this.setGuiSize(190, 241);
-		this.menu = menu;
 		this.tile = menu.tile;
 		this.addButtonMap(0, new SMButton(TEX, 170, 99, 194, 99, 16, 16, new SMButtonTip("id_sort", 10, -4)));
 		this.addButtonMap(1, new SMButton(TEX, 170, 119, 194, 119, 16, 16, new SMButtonTip("name_sort", 10, -4)));
@@ -46,34 +36,11 @@ public class GuiAetherCraftTable extends GuiSMBase<AetherCraftTableMenu> {
 	}
 
 	public void render(PoseStack pose, int mouseX, int mouseY, float parTick) {
+		this.renderMagiaStack(pose, mouseX, mouseY, parTick, this.menu.slotList, this.menu.slots);
+	}
 
-		this.stackList.clear();
-
-		for (Slot slot : this.menu.slotList) {
-			if (!slot.isActive()) { continue; }
-
-			ItemStack stack = slot.getItem().copy();
-			this.stackList.add(stack.getCount());
-			if (stack.isEmpty() || stack.getCount() <= 64) { continue; }
-			stack.setCount(1);
-			slot.set(stack);
-		}
-
-		super.render(pose, mouseX, mouseY, parTick);
-
-		for (int i = 0; i < this.menu.slotList.size(); i++) {
-			Slot slot = this.menu.slotList.get(i);
-			if (!slot.isActive()) { continue; }
-
-			int count = this.stackList.get(i);
-			if (count <= 64) { continue; }
-
-			ItemStack stack = slot.getItem();
-			this.renderSlotItem(slot, stack, count, pose);
-
-			stack.setCount(count);
-			slot.set(stack);
-		}
+	public boolean checkStackCount(int count) {
+		return count <= 64;
 	}
 
 	@Override
@@ -111,20 +78,15 @@ public class GuiAetherCraftTable extends GuiSMBase<AetherCraftTableMenu> {
 
 	@Override
 	protected void renderTooltip(PoseStack pose, ItemStack stack, int x, int y) {
-
 		List<Component> tipList = this.getTooltipFromItem(stack);
 		int vMax = this.hoveredSlot.getMaxStackSize();
 
 		if (vMax > 64) {
-			int index = this.hoveredSlot.getSlotIndex();
-			if (index >= this.stackList.size()) { return; }
-
-			int vCount = this.stackList.get(index);
-			String count = String.format("%,d", vCount) + "/";
-			String max = String.format("%,d", vMax);
-			String par = " (" + String.format("%.1f", ((float) vCount / (float) vMax) * 100F) + "%" + ")";
-
-			tipList.add(this.getLabel(count + max + par).withStyle(GOLD));
+			int vCount = this.stackCountMap.get(this.hoveredSlot);
+			String count = this.format(vCount) + "/";
+			String max = this.format(vMax);
+			String par = " (" + this.format(((float) vCount / (float) vMax) * 100F) + "%" + ")";
+			tipList.add(this.getLabel(count + max + par, GOLD));
 		}
 		this.renderTooltip(pose, tipList, stack.getTooltipImage(), x, y);
 	}
@@ -229,40 +191,6 @@ public class GuiAetherCraftTable extends GuiSMBase<AetherCraftTableMenu> {
 
 	public boolean canScroll() {
 		return this.menu.maxSlots >= 45;
-	}
-
-	// アイテム描画
-	public void renderSlotItem(Slot slot, ItemStack stack, int count, PoseStack pose) {
-		int x = this.leftPos + slot.x;
-		int y = this.topPos + slot.y + 0;
-		PoseStack view = RenderSystem.getModelViewStack();
-
-		view.pushPose();
-		view.mulPoseMatrix(pose.last().pose());
-		Font font = IClientItemExtensions.of(stack).getFont(stack, IClientItemExtensions.FontContext.TOOLTIP);
-		font = font == null ? this.font : font;
-
-		RenderSystem.enableDepthTest();
-		RenderSystem.depthFunc(516);
-		GuiComponent.fill(view, x, y, x + 16, y + 16, 0);
-		RenderSystem.depthFunc(515);
-		RenderSystem.disableDepthTest();
-		String stackSize = String.valueOf(count);
-
-		if (stackSize.length() > 3) {
-			int stackLength = (stackSize.length() - 1) / 3;
-			String encord = ENCODED_SUFFIXES[stackLength - 1];
-			stackSize = stackSize.substring(0, stackSize.length() - stackLength * 3 + 1) + encord;
-			stackSize = stackSize.substring(0, stackSize.length() - 2) + "." + stackSize.substring(stackSize.length() - 2, stackSize.length());
-		}
-
-		MultiBufferSource.BufferSource buf = MultiBufferSource.immediate(Tesselator.getInstance().getBuilder());
-		PoseStack poses = new PoseStack();
-		poses.scale(0.5F, 0.5F, 0.5F);
-		poses.translate(0D, 0D, 600D);
-		font.drawInBatch(stackSize, (x + 6 + 9) * 2 - font.width(stackSize), (y + 12) * 2, 16777215, true, poses.last().pose(), buf, false, 0, 15728880);
-		buf.endBatch();
-		view.popPose();
 	}
 
 	protected ResourceLocation getTEX() {

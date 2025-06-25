@@ -86,7 +86,7 @@ public class GuiAlternativeTank extends GuiSMBase<AlternativeTankMenu> {
 			int yAxis = mouseY - this.getHeight();
 
 			String tip = String.format("%,.1f", fluid) + "B / " + String.format("%,.1f", maxFluid) + "B" + par;
-			this.renderTooltip(pose, this.getTip(tip), xAxis, yAxis);
+			this.renderTooltip(pose, this.getLabel(tip), xAxis, yAxis);
 		}
 	}
 

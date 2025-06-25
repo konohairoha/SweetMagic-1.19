@@ -21,7 +21,6 @@ public class GuiFurnitureCraft extends GuiSMBase<FurnitureCraftMenu> {
 
 	private static final ResourceLocation TEX = SweetMagicCore.getSRC("textures/gui/gui_furniture_craft.png");
 	private final TileFurnitureTable tile;
-	private final FurnitureCraftMenu menu;
 	private EditBox count;
 	private int oldSetCount = 0;
 	private boolean isInit = false;
@@ -29,7 +28,6 @@ public class GuiFurnitureCraft extends GuiSMBase<FurnitureCraftMenu> {
 	public GuiFurnitureCraft(FurnitureCraftMenu menu, Inventory pInv, Component title) {
 		super(menu, pInv, title);
 		this.tile = menu.tile;
-		this.menu = menu;
 		this.setGuiSize(80, 81);
 		this.addButtonMap(0, new SMButton(TEX, 9, 9, 83, 9, 20, 11));
 		this.addButtonMap(1, new SMButton(TEX, 9, 43, 83, 9, 20, 11));

@@ -18,14 +18,13 @@ import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.fluids.FluidStack;
 import sweetmagic.SweetMagicCore;
-import sweetmagic.api.util.ISMTip;
 import sweetmagic.init.tile.gui.util.SMButton;
 import sweetmagic.init.tile.gui.util.SMRenderTex;
 import sweetmagic.init.tile.gui.util.SMRenderTex.MFRenderGage;
 import sweetmagic.init.tile.menu.AquariumPotMenu;
 import sweetmagic.init.tile.sm.TileAquariumPot;
 
-public class GuiAquariumPot extends GuiSMBase<AquariumPotMenu> implements ISMTip {
+public class GuiAquariumPot extends GuiSMBase<AquariumPotMenu> {
 
 	private static final ResourceLocation TEX = SweetMagicCore.getSRC("textures/gui/gui_aquarium.png");
 	private final TileAquariumPot tile;
@@ -64,7 +63,7 @@ public class GuiAquariumPot extends GuiSMBase<AquariumPotMenu> implements ISMTip
 			this.font.drawShadow(pose, this.getLabel("-1"), x + 116, y + 24, 0xEEEEEE);
 			this.font.drawShadow(pose, this.getLabel("-10"), x + 135, y + 24, 0xEEEEEE);
 
-			MutableComponent tip = this.getLabel("" + this.player.experienceLevel);
+			MutableComponent tip = this.getLabel(this.player.experienceLevel);
 			this.font.drawShadow(pose, tip, x + 114 + this.font.width(tip.getString()), y + 10, 0x70FF6D);
 		}
 
@@ -125,7 +124,7 @@ public class GuiAquariumPot extends GuiSMBase<AquariumPotMenu> implements ISMTip
 
 			String tip = this.tile.getStackCount() + " / " + TileAquariumPot.MAX_STACKCOUNT;
 			List<Component> tipList = new ArrayList<>();
-			tipList.add(this.getTipArray(this.getText("stack_count"), ": ", this.getTip(tip).withStyle(isMax ? GOLD : WHITE)).withStyle(GREEN));
+			tipList.add(this.getTipArray(this.getText("stack_count"), ": ", this.getLabel(tip, isMax ? GOLD : WHITE)).withStyle(GREEN));
 
 			if (!isMax) {
 				tipList.add(this.getTipArray(this.getText("stack_count_item"), ": ").withStyle(GOLD));
@@ -167,7 +166,7 @@ public class GuiAquariumPot extends GuiSMBase<AquariumPotMenu> implements ISMTip
 			int yAxis = mouseY - this.getHeight();
 
 			String tip = String.format("%,.1f", fluid) + "B / " + String.format("%,.1f", maxFluid) + "B" + par;
-			this.renderTooltip(pose, this.getTip(tip), xAxis, yAxis);
+			this.renderTooltip(pose, this.getLabel(tip), xAxis, yAxis);
 		}
 	}
 

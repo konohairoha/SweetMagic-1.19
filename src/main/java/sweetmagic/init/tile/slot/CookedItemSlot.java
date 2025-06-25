@@ -14,7 +14,7 @@ import sweetmagic.api.iitem.IFood;
 import sweetmagic.api.iitem.IPorch;
 import sweetmagic.api.iitem.info.FoodInfo;
 import sweetmagic.init.ItemInit;
-import sweetmagic.init.capability.ICookingStatus;
+import sweetmagic.init.capability.icap.ICookingStatus;
 
 public class CookedItemSlot extends SMSlot {
 
@@ -30,7 +30,6 @@ public class CookedItemSlot extends SMSlot {
 		if (this.hasItem()) {
 			this.removeCount = Math.min(count, this.getItem().getCount());
 		}
-
 		return super.remove(count);
 	}
 
@@ -60,9 +59,9 @@ public class CookedItemSlot extends SMSlot {
 		FoodProperties food = item.getFoodProperties();
 		float amount = Math.max(food.getNutrition(), 1F) * Math.max(food.getSaturationModifier(), 0.5F) * count;
 		int xp = (int) (Math.max(1, amount));
-		Level world = this.player.level;
+		Level world = this.player.getLevel();
 
-		if (!world.isClientSide) {
+		if (!world.isClientSide()) {
 			int cookLevel = ICookingStatus.getState(this.player).getLevel();
 			float rate = 1F + cookLevel * 0.05F;
 

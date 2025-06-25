@@ -13,14 +13,13 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
 import sweetmagic.SweetMagicCore;
-import sweetmagic.api.util.ISMTip;
 import sweetmagic.handler.PacketHandler;
 import sweetmagic.init.LootInit;
 import sweetmagic.init.tile.menu.WoodChestLootMenu;
 import sweetmagic.init.tile.sm.TileWoodChest;
 import sweetmagic.packet.WoodChestLootPKT;
 
-public class GuiWoodChestLoot extends GuiSMBase<WoodChestLootMenu> implements ISMTip {
+public class GuiWoodChestLoot extends GuiSMBase<WoodChestLootMenu> {
 
 	private static final ResourceLocation TEX = SweetMagicCore.getSRC("textures/gui/gui_woodchest_loot.png");
 	public final TileWoodChest tile;
@@ -54,14 +53,14 @@ public class GuiWoodChestLoot extends GuiSMBase<WoodChestLootMenu> implements IS
 		int x = this.getWidth();
 		int y = this.getHeight();
 
+		if (this.isView) {
+			this.blit(pose, x + 20, y + 70, 180, 18, 27, 12);
+		}
+
 		// スクロールバーの表示
 		int h = (int) (60F * this.scrollOffset);
 		RenderSystem.setShaderTexture(0, MISC);
 		this.blit(pose, x + 160, y + 9 + h, 83, 93, 8, 15);
-
-		if (this.isView) {
-			this.blit(pose, x + 20, y + 70, 180, 18, 27, 12);
-		}
 
 		int size = LootInit.lootList.size();
 		for (int id = 0; id < 4; id++) {
@@ -85,7 +84,7 @@ public class GuiWoodChestLoot extends GuiSMBase<WoodChestLootMenu> implements IS
 			String lootText = LootInit.lootList.get(id + this.startIndex).toString();
 			String result = lootText.substring(lootText.indexOf("/") + 1);
 			String tip = result.substring(result.indexOf("/") + 1);
-			this.font.drawShadow(pose, this.getTip(tip), x + 60, y + 12 + id * 20, 0x2BC444);
+			this.font.drawShadow(pose, this.getLabel(tip), x + 60, y + 12 + id * 20, 0x2BC444);
 		}
 	}
 
@@ -108,8 +107,8 @@ public class GuiWoodChestLoot extends GuiSMBase<WoodChestLootMenu> implements IS
 			if (this.isRender(tipX, tipY, mouseX, mouseY, 98, 19)) {
 				if (id + this.startIndex >= LootInit.lootList.size()) { break; }
 
-				ResourceLocation loot = LootInit.lootList.get(id + this.startIndex);
-				this.renderTooltip(pose, this.getTip(loot.toString()).withStyle(GOLD), xAxis - 80, yAxis - 6);
+				String loot = LootInit.lootList.get(id + this.startIndex).toString();
+				this.renderTooltip(pose, this.getLabel(loot.substring(loot.indexOf(":") + 1), GOLD), xAxis - 80, yAxis - 6);
 				this.lootView[id] = true;
 			}
 
@@ -158,13 +157,12 @@ public class GuiWoodChestLoot extends GuiSMBase<WoodChestLootMenu> implements IS
 
 	@Override
 	public boolean mouseDragged(double mouseX, double mouseY, int mouseButton, double dragX, double dragY) {
-		List<ResourceLocation> enchaList = LootInit.lootList;
-		int size = enchaList.size();
 		if (!this.scrolling) { return super.mouseDragged(mouseX, mouseY, mouseButton, dragX, dragY); }
 
-		int i = topPos + 44;
-		int j = i + 73;
-		int offscreenRows = size - 4;
+		int i = this.topPos + 9;
+		int j = i + 83;
+		List<ResourceLocation> enchaList = LootInit.lootList;
+		int offscreenRows = enchaList.size() - 4;
 		this.scrollOffset = ((float) mouseY - (float) i + 5F) / ((float) (j - i) - 15F);
 		this.scrollOffset = Mth.clamp(this.scrollOffset, 0F, 1F);
 		this.startIndex = (int) ((double) (this.scrollOffset * (float) offscreenRows) + 0.5D);
@@ -175,8 +173,7 @@ public class GuiWoodChestLoot extends GuiSMBase<WoodChestLootMenu> implements IS
 	@Override
 	public boolean mouseScrolled(double mouseX, double mouseY, double scrollDelta) {
 		List<ResourceLocation> enchaList = LootInit.lootList;
-		int size = enchaList.size();
-		int offscreenRows = size - 4;
+		int offscreenRows = enchaList.size() - 4;
 		this.scrollOffset = (float) ((double) this.scrollOffset - scrollDelta / (double) offscreenRows);
 		this.scrollOffset = Mth.clamp(this.scrollOffset, 0F, 1F);
 		this.startIndex = (int) ((double) (this.scrollOffset * (float) offscreenRows) + 0.5D);

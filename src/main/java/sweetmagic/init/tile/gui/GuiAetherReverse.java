@@ -19,7 +19,6 @@ import sweetmagic.init.tile.sm.TileAetherReverse;
 public class GuiAetherReverse extends GuiSMBase<AetherReverseMenu> {
 
 	private static final ResourceLocation TEX = SweetMagicCore.getSRC("textures/gui/gui_aether_reverse.png");
-	private static final ResourceLocation MISC = SweetMagicCore.getSRC("textures/gui/gui_misc.png");
 	public final TileAetherReverse tile;
 	private boolean caraftView = false;
 
@@ -91,7 +90,10 @@ public class GuiAetherReverse extends GuiSMBase<AetherReverseMenu> {
 			int yAxis = mouseY - this.getHeight();
 
 			if (!this.tile.craftList.isEmpty()) {
-				List<Component> tipList = Arrays.<Component> asList(this.getText("reverse_start").withStyle(GREEN), this.getTipArray(this.getText("needmf"), String.format("%,d", this.tile.getReverseCost())).withStyle(GOLD));
+				List<Component> tipList = Arrays.<Component> asList(
+					this.getText("reverse_start").withStyle(GREEN), this.getTipArray(this.getText("needmf"),
+					this.format(this.tile.getReverseCost())).withStyle(GOLD)
+				);
 				this.renderComponentTooltip(pose, tipList, xAxis, yAxis);
 			}
 

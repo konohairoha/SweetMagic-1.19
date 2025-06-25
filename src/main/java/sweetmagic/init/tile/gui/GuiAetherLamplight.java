@@ -101,17 +101,17 @@ public class GuiAetherLamplight extends GuiSMBase<AetherLamplightMenu> {
 				MutableComponent tip = this.getLabel("×" + Collections.frequency(this.blockList, block));
 				int orderNumber = order.getBlockOrder(block);
 				ChatFormatting color = orderNumber == -1 ? RED : WHITE;
-				this.font.drawShadow(pose, this.getTipArray(this.getText("order"), this.getLabel(" " + orderNumber).withStyle(color)).withStyle(GOLD), x + 100, y + 13 + id * 20, 0xEEEEEE);
+				this.font.drawShadow(pose, this.getTipArray(this.getText("order"), this.getLabel(" " + orderNumber, color)).withStyle(GOLD), x + 100, y + 13 + id * 20, 0xEEEEEE);
 				pose.translate(0D, 0D, 200D);
 				this.font.drawShadow(pose, tip, x + 80, y + 16 + id * 20, 0xEEEEEE);
 				pose.popPose();
 			}
 		}
 
-		this.font.drawShadow(pose, this.getLabel("" + this.tile.range), x + 35, y + 34, 0x2BC444);
+		this.font.drawShadow(pose, this.getLabel(this.tile.range), x + 35, y + 34, 0x2BC444);
 
 		if (this.selectId != -1 && !this.blockSet.isEmpty()) {
-			this.font.drawShadow(pose, this.getLabel("" + this.tile.order), x + 35, y + 56, 0x2BC444);
+			this.font.drawShadow(pose, this.getLabel(this.tile.order), x + 35, y + 56, 0x2BC444);
 			this.font.drawShadow(pose, this.getText("decision"), x + 39, y + 73, 0x2BC444);
 		}
 	}
@@ -126,7 +126,7 @@ public class GuiAetherLamplight extends GuiSMBase<AetherLamplightMenu> {
 		if (this.isRender(tipX, tipY, mouseX, mouseY, 14, 14)) {
 			int xAxis = (mouseX - this.getWidth());
 			int yAxis = (mouseY - this.getHeight());
-			this.renderTooltip(pose, this.getTipArray(this.getText("isrange"), this.getTip("" + this.tile.isRangeView)).withStyle(GOLD), xAxis, yAxis);
+			this.renderTooltip(pose, this.getTipArray(this.getText("isrange"), this.getLabel(this.tile.isRangeView), GOLD), xAxis, yAxis);
 		}
 
 		if (!this.blockSet.isEmpty()) {

@@ -29,7 +29,6 @@ public class GuiObMagia extends GuiSMBase<ObMagiaMenu> {
 
 	private static final ResourceLocation TEX = SweetMagicCore.getSRC("textures/gui/gui_obmagia.png");
 	private final TileObMagia tile;
-	private final ObMagiaMenu menu;
 	private int tickTime = 0;
 	private int pageCounter = 0;
 	private int baseCounter = 0;
@@ -40,7 +39,6 @@ public class GuiObMagia extends GuiSMBase<ObMagiaMenu> {
 		super(menu, pInv, title);
 		this.setGuiSize(219, 189);
 		this.tile = menu.tile;
-		this.menu = menu;
 
 		SMButtonTip buttonTip = new SMButtonTip("", 30, 0, this.tile) {
 

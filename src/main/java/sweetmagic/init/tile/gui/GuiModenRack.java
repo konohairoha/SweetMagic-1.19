@@ -33,6 +33,7 @@ public class GuiModenRack extends GuiSMBase<ModenRackMenu> {
 					this.blit(pose, x + 6 + addX * 54, y + 7 + addY * 18, 173, 0, 54, 18);
 			break;
 		case 1:
+		case 9:
 			this.blit(pose, x + 60, y + 7, 173, 0, 54, 18);
 			break;
 		case 2:
@@ -49,6 +50,16 @@ public class GuiModenRack extends GuiSMBase<ModenRackMenu> {
 		case 5:
 			for (int addY = 0; addY < 2; addY++)
 				this.blit(pose, x + 78, y + 7 + addY * 18, 173, 0, 18, 18);
+			break;
+		case 6:
+		case 7:
+			for (int addX = 0; addX < 4; addX++)
+				for (int addY = 0; addY < 2; addY++)
+				this.blit(pose, x + 51 + addX * 18, y + 7 + addY * 18, 173, 0, 18, 18);
+			break;
+		case 8:
+			for (int addX = 0; addX < 4; addX++)
+				this.blit(pose, x + 51 + addX * 18, y + 16, 173, 0, 18, 18);
 			break;
 		}
 	}

@@ -15,12 +15,10 @@ import sweetmagic.init.tile.menu.TrunkCaseMenu;
 public class GuiTrunkCase extends GuiSMBase<TrunkCaseMenu> {
 
 	private static final ResourceLocation TEX = SweetMagicCore.getSRC("textures/gui/gui_dchest.png");
-	private final TrunkCaseMenu menu;
 
 	public GuiTrunkCase(TrunkCaseMenu menu, Inventory pInv, Component title) {
 		super(menu, pInv, title);
 		this.setGuiSize(255, 230);
-		this.menu = menu;
 		this.addButtonMap(0, new SMButton(MISC, 231, -11, 114, 0, 10, 9, new SMButtonTip("sort", -18, 14)));
 		this.addButtonMap(1, new SMButton(MISC, 219, -11, 137, 0, 11, 9, new SMButtonTip("quick_stack", -18, 14)));
 		this.addButtonMap(2, new SMButton(MISC, 207, -11, 161, 0, 11, 9, new SMButtonTip("restock", -18, 14)));

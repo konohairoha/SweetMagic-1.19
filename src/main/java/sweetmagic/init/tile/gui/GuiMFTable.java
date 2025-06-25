@@ -22,7 +22,7 @@ public class GuiMFTable extends GuiSMBase<MFTableMenu> {
 		super(menu, pInv, title);
 		this.tile = menu.tile;
 		this.setGuiSize(234, 243);
-		this.addRenderTexList(new SMRenderTex(TEX, 171, 36, 0, 0, 3, 50, new MFRenderGage(this.tile, true)));
+		this.addRenderTexList(new SMRenderTex(TEX, 171, 36, 0, 0, 11, 77, new MFRenderGage(this.tile, true)));
 	}
 
 	@Override
@@ -103,8 +103,8 @@ public class GuiMFTable extends GuiSMBase<MFTableMenu> {
 				int wandMF = wand.getMF(stack);
 				int wabdMax = wand.getMaxMF(stack);
 
-				String tip = String.format("%,d", wandMF) + "mf / " + String.format("%,d", wabdMax) + "mf";
-				this.renderTooltip(pose, this.getTip(tip), xAxis, yAxis);
+				String tip = this.format(wandMF) + "mf / " + this.format(wabdMax) + "mf";
+				this.renderTooltip(pose, this.getLabel(tip), xAxis, yAxis);
 			}
 		}
 
@@ -149,7 +149,7 @@ public class GuiMFTable extends GuiSMBase<MFTableMenu> {
 				int wandMF = wand.getMF(stack);
 				int wabdMax = wand.getMaxMF(stack);
 
-				String tip = String.format("%,d", wandMF) + "mf / " + String.format("%,d", wabdMax) + "mf";
+				String tip = this.format(wandMF) + "mf / " + this.format(wabdMax) + "mf";
 				this.renderTooltip(pose, this.getTip(tip), xAxis, yAxis);
 			}
 		}

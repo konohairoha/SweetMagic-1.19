@@ -25,7 +25,7 @@ public class GuiSMWand extends GuiSMBase<SMWandMenu> {
 		super(menu, pInv, title);
 		this.setGuiSize(196, 211);
 
-		this.stack = this.player.getMainHandItem();
+		this.stack = this.menu.stack;
 		this.wand = IWand.getWand(this.stack);
 		this.slot = this.wand.getSlotCount(this.stack);
 		this.hasRobe = this.hasRobe();
@@ -53,8 +53,8 @@ public class GuiSMWand extends GuiSMBase<SMWandMenu> {
 			int yAxis = (mouseY - this.getHeight());
 			int mf = this.wand.getMF(this.stack);
 			int max = this.wand.getMaxMF(this.stack);
-			String tip = String.format("%,d", mf) + "mf / " + String.format("%,d", max) + "mf";
-			this.renderTooltip(pose, Component.translatable(tip), xAxis, yAxis);
+			String tip =this.format(mf) + "mf / " + this.format(max) + "mf";
+			this.renderTooltip(pose, this.getLabel(tip), xAxis, yAxis);
 		}
 	}
 
@@ -76,12 +76,12 @@ public class GuiSMWand extends GuiSMBase<SMWandMenu> {
 		int count = 0;
 
 		for (int k = 0; k < 5; k++) {
-			for (int i = 0; i < 6; i++) {
+			for (int i = 0; i < 7; i++) {
 
 				count++;
 				if (count > this.slot) { break; }
 
-				this.blit(pose, x + 38 + 22 * i, y + 13 + 19 * k, 0, 72, 18, 18);
+				this.blit(pose, x + 30 + 22 * i, y + 13 + 19 * k, 0, 72, 18, 18);
 			}
 
 			if (count > this.slot) { break; }

@@ -21,7 +21,7 @@ public class GuiPorch extends GuiSMBase<SMPorchMenu> {
 
 	public GuiPorch(SMPorchMenu menu, Inventory pInv, Component title) {
 		super(menu, pInv, title);
-		this.setGuiSize(176, 142);
+		this.setGuiSize(176, 148);
 		this.hasRobe = this.hasRobe();
 		this.hasWand = this.hasWand();
 		int x = 130;
@@ -48,10 +48,10 @@ public class GuiPorch extends GuiSMBase<SMPorchMenu> {
 		int y = this.getHeight();
 		int count = 0;
 
-		for (int tY = 0; tY < 2; tY++) {
+		for (int tY = 0; tY < 3; tY++) {
 			for (int tX = 0; tX < 8; tX++) {
 				if (++count > this.slotSize) { break; }
-				this.blit(pose, x + 14 + tX * 18, y + 12 + tY * 18, 238, 22, 18, 18);
+				this.blit(pose, x + 15 + tX * 18, y + 7 + tY * 18, 238, 22, 18, 18);
 			}
 		}
 

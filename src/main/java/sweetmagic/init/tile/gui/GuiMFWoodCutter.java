@@ -9,22 +9,22 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.Tags;
 import sweetmagic.SweetMagicCore;
+import sweetmagic.init.TagInit;
 import sweetmagic.init.tile.gui.util.SMRenderTex;
 import sweetmagic.init.tile.gui.util.SMRenderTex.MFRenderGage;
-import sweetmagic.init.tile.menu.MFMinerAdvancedMenu;
-import sweetmagic.init.tile.sm.TileMFMinerAdvanced;
+import sweetmagic.init.tile.menu.MFWoodCutterMenu;
+import sweetmagic.init.tile.sm.TileMFWoodCutter;
 
-public class GuiMFMinerAdvanced extends GuiSMBase<MFMinerAdvancedMenu> {
+public class GuiMFWoodCutter extends GuiSMBase<MFWoodCutterMenu> {
 
 	private static final ResourceLocation TEX = SweetMagicCore.getSRC("textures/gui/gui_mf_miner_advanced.png");
-	private final TileMFMinerAdvanced tile;
+	private final TileMFWoodCutter tile;
 	private int counter = 0;
 	private int tickTime = 0;
-	private final static List<ItemStack> STONE_LIST = GuiSMBase.getTagStack(Tags.Items.COBBLESTONE);
+	private final static List<ItemStack> SAPLING_LIST = GuiSMBase.getTagStack(TagInit.SMSAPLING);
 
-	public GuiMFMinerAdvanced(MFMinerAdvancedMenu menu, Inventory pInv, Component title) {
+	public GuiMFWoodCutter(MFWoodCutterMenu menu, Inventory pInv, Component title) {
 		super(menu, pInv, title);
 		this.setGuiSize(176, 228);
 		this.tile = menu.tile;
@@ -46,16 +46,14 @@ public class GuiMFMinerAdvanced extends GuiSMBase<MFMinerAdvancedMenu> {
 		if (this.tickTime++ > 120) {
 			this.tickTime = 0;
 
-			if (this.counter++ >= STONE_LIST.size() - 1) {
+			if (this.counter++ >= SAPLING_LIST.size() - 1) {
 				this.counter = 0;
 			}
 		}
 
-		for (int tY = 0; tY < 2; tY++)
-			for (int tX = 0; tX < 5; tX++)
-				this.blit(pose, x + 42 + tX * 18, y + 22 + tY * 18, 180, 0, 18, 18);
+		this.blit(pose, x + 79, y + 40, 180, 0, 18, 18);
 
-		this.renderSlotItem(this.menu.stoneSlotList.get(0), STONE_LIST.get(this.counter), pose);
+		this.renderSlotItem(this.menu.stoneSlotList.get(0), SAPLING_LIST.get(this.counter), pose);
 	}
 
 	@Override
@@ -63,7 +61,7 @@ public class GuiMFMinerAdvanced extends GuiSMBase<MFMinerAdvancedMenu> {
 		super.renderLabels(pose, mouseX, mouseY);
 
 		// 要求アイテムの描画
-		this.renderItemLabel(this.menu.stoneSlotList.get(0), STONE_LIST.get(this.counter), pose, mouseX, mouseY);
+		this.renderItemLabel(this.menu.stoneSlotList.get(0), SAPLING_LIST.get(this.counter), pose, mouseX, mouseY);
 
 		int tipX = this.getWidth() + 80;
 		int tipY = this.getHeight() + 61;

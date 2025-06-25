@@ -10,13 +10,12 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import sweetmagic.SweetMagicCore;
-import sweetmagic.api.util.ISMTip;
 import sweetmagic.handler.PacketHandler;
 import sweetmagic.init.tile.gui.util.SMButton;
 import sweetmagic.init.tile.menu.CleroMenu;
 import sweetmagic.packet.CleroPKT;
 
-public class GuiClero extends GuiSMBase<CleroMenu> implements ISMTip {
+public class GuiClero extends GuiSMBase<CleroMenu> {
 
 	private static final ResourceLocation TEX = SweetMagicCore.getSRC("textures/gui/gui_clerodendrum_petal.png");
 	private ItemStack stack; 		// 杖のアイテムスタック
@@ -27,6 +26,17 @@ public class GuiClero extends GuiSMBase<CleroMenu> implements ISMTip {
 		this.setGuiSize(173, 107);
 		this.stack = pInv.player.getMainHandItem();
 		this.addButtonMap(0, new SMButton(TEX, 136, 6, 175, 6, 28, 14));
+	}
+
+	public void render(PoseStack pose, int mouseX, int mouseY, float parTick) {
+		super.render(pose, mouseX, mouseY, parTick);
+		this.name.render(pose, mouseX, mouseY, parTick);
+	}
+
+	@Override
+	protected void renderBg(PoseStack pose, float parTick, int mouseX, int mouseY) {
+		super.renderBg(pose, parTick, mouseX, mouseY);
+		this.font.drawShadow(pose, this.getText("save"), this.getWidth() + 141, this.getHeight() + 9, 0xFFFFFF);
 	}
 
 	public boolean mouseClicked(double guiX, double guiY, int mouseButton) {
@@ -97,17 +107,6 @@ public class GuiClero extends GuiSMBase<CleroMenu> implements ISMTip {
 			String s = name;
 			this.minecraft.player.connection.send(new ServerboundRenameItemPacket(s));
 		}
-	}
-
-	public void render(PoseStack pose, int mouseX, int mouseY, float parTick) {
-		super.render(pose, mouseX, mouseY, parTick);
-		this.name.render(pose, mouseX, mouseY, parTick);
-	}
-
-	@Override
-	protected void renderBg(PoseStack pose, float parTick, int mouseX, int mouseY) {
-		super.renderBg(pose, parTick, mouseX, mouseY);
-		this.font.drawShadow(pose, this.getText("save"), this.getWidth() + 141, this.getHeight() + 9, 0xFFFFFF);
 	}
 
 	@Override

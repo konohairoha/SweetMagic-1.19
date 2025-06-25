@@ -22,7 +22,7 @@ public class GuiMagicBook extends GuiSMBase<MagicBookMenu> {
 
 	public GuiMagicBook(MagicBookMenu menu, Inventory pInv, Component title) {
 		super(menu, pInv, title);
-		this.setGuiSize(175, 141);
+		this.setGuiSize(176, 148);
 
 		this.stack = this.player.getMainHandItem();
 		this.book = IMagicBook.getBook(this.stack);
@@ -62,7 +62,7 @@ public class GuiMagicBook extends GuiSMBase<MagicBookMenu> {
 				count++;
 				if (count > this.slot) { break; }
 
-				this.blit(pose, x + 36 + 22 * i, y + 11 + 19 * k, 238, 0, 18, 18);
+				this.blit(pose, x + 36 + 22 * i, y + 12 + 22 * k, 238, 0, 18, 18);
 			}
 
 			if (count > this.slot) { break; }

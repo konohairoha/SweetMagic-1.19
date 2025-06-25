@@ -28,7 +28,6 @@ import sweetmagic.init.tile.sm.TileMFGenerater;
 public class GuiMFGenerater extends GuiSMBase<MFGeneraterMenu> {
 
 	private static final ResourceLocation TEX = SweetMagicCore.getSRC("textures/gui/gui_mf_generator.png");
-	private final MFGeneraterMenu menu;
 	private final TileMFGenerater tile;
 	private int counter = 0;
 	private int counter_lava = 0;
@@ -39,7 +38,6 @@ public class GuiMFGenerater extends GuiSMBase<MFGeneraterMenu> {
 	public GuiMFGenerater(MFGeneraterMenu menu, Inventory pInv, Component title) {
 		super(menu, pInv, title);
 		this.setGuiSize(176, 172);
-		this.menu = menu;
 		this.tile = menu.tile;
 		this.addRenderTexList(new SMRenderTex(TEX, 7, 7, 0, 0, 11, 77, new MFRenderGage(menu.tile, true)));
 	}
@@ -117,7 +115,7 @@ public class GuiMFGenerater extends GuiSMBase<MFGeneraterMenu> {
 			int yAxis = mouseY - this.getHeight();
 
 			String tip = String.format("%,.1f", fluid) + "B / " + String.format("%,.1f", maxFluid) + "B" + par;
-			this.renderTooltip(pose, this.getTip(tip), xAxis, yAxis);
+			this.renderTooltip(pose, this.getLabel(tip), xAxis, yAxis);
 		}
 
 		// 要求アイテムの描画

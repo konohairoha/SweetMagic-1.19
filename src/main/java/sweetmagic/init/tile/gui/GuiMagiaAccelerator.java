@@ -37,7 +37,7 @@ public class GuiMagiaAccelerator extends GuiSMBase<MagiaAcceleratorMenu> {
 	@Override
 	protected void renderBg(PoseStack pose, float parTick, int mouseX, int mouseY) {
 		super.renderBg(pose, parTick, mouseX, mouseY);
-		this.font.drawShadow(pose, this.getTip("" + this.tile.range), this.getWidth() + 125, this.getHeight() + 30, 0x2BC444);
+		this.font.drawShadow(pose, this.getLabel(this.tile.range), this.getWidth() + 125, this.getHeight() + 30, 0x2BC444);
 	}
 
 	@Override
@@ -49,7 +49,7 @@ public class GuiMagiaAccelerator extends GuiSMBase<MagiaAcceleratorMenu> {
 		if (this.isRender(tipX, tipY, mouseX, mouseY, 14, 14)) {
 			int xAxis = (mouseX - this.getWidth());
 			int yAxis = (mouseY - this.getHeight());
-			this.renderTooltip(pose, this.getTipArray(this.getText("isrange"), this.getTip("" + this.tile.isRangeView)).withStyle(GOLD), xAxis, yAxis);
+			this.renderTooltip(pose, this.getTipArray(this.getText("isrange"), this.getLabel(this.tile.isRangeView)).withStyle(GOLD), xAxis, yAxis);
 		}
 	}
 

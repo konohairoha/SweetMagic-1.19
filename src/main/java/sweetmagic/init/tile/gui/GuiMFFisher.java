@@ -43,7 +43,7 @@ public class GuiMFFisher extends GuiSMBase<MFFisherMenu> {
 		if (this.isRender(tipX, tipY, mouseX, mouseY, 15, 22)) {
 			int xAxis = mouseX - this.getWidth();
 			int yAxis = mouseY - this.getHeight();
-			this.renderTooltip(pose, this.getText("progress", "" + this.tile.getCraftProgress(100)).withStyle(GOLD), xAxis, yAxis);
+			this.renderTooltip(pose, this.getText("progress", this.tile.getCraftProgress(100)).withStyle(GOLD), xAxis, yAxis);
 		}
 	}
 

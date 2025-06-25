@@ -28,18 +28,16 @@ public class GuiAccessoryTable extends GuiSMBase<AccessoryTableMenu> {
 	private static final ResourceLocation TEX = SweetMagicCore.getSRC("textures/gui/gui_accessory_processing.png");
 	private final static ItemStack STAR = new ItemStack(ItemInit.starlight);
 	private final TileAccessoryTable tile;
-	private final AccessoryTableMenu atMenu;
 
 	public GuiAccessoryTable(AccessoryTableMenu menu, Inventory pInv, Component title) {
 		super(menu, pInv, title);
 		this.setGuiSize(176, 172);
 		this.tile = menu.tile;
-		this.atMenu = (AccessoryTableMenu) this.menu;
 
 		SMButtonTip buttonTip = new SMButtonTip("", -18, 14, this.tile) {
 
 			public boolean isFlagText(TileAccessoryTable tile) {
-				return tile.canCraft();
+				return tile.canCraft(stackCountMap.get(menu.slotList.get(2)));
 			}
 
 			public String getTip() {
@@ -51,12 +49,20 @@ public class GuiAccessoryTable extends GuiSMBase<AccessoryTableMenu> {
 
 			public boolean isButtonRender() {
 				TileAccessoryTable tile = (TileAccessoryTable) this.getButtonTip().getTile();
-				return tile.canCraft();
+				return tile.canCraft(stackCountMap.get(menu.slotList.get(2)));
 			}
 		};
 
 		this.addButtonMap(0, button);
 		this.addRenderTexList(new SMRenderTex(TEX, 7, 7, 0, 0, 11, 77, new MFRenderGage(this.tile, true)));
+	}
+
+	public void render(PoseStack pose, int mouseX, int mouseY, float parTick) {
+		this.renderMagiaStack(pose, mouseX, mouseY, parTick, this.menu.slotList, this.menu.slots);
+	}
+
+	protected void renderTooltip(PoseStack pose, ItemStack stack, int x, int y) {
+		this.renderMagiaStackTooltip(pose, stack, x, y, this.menu.slotList);
 	}
 
 	@Override
@@ -67,7 +73,7 @@ public class GuiAccessoryTable extends GuiSMBase<AccessoryTableMenu> {
 		int x = this.getWidth();
 		int y = this.getHeight();
 
-		if (!this.tile.canCraft()) {
+		if (!this.tile.canCraft(this.stackCountMap.get(menu.slotList.get(2)))) {
 			RenderSystem.setShaderTexture(0, MISC);
 			this.blit(pose, x + 128, y + 38, 20, 0, 32, 14);
 		}
@@ -80,13 +86,13 @@ public class GuiAccessoryTable extends GuiSMBase<AccessoryTableMenu> {
 			this.blit(pose, x + 73, y + 17, 197, 17, progress, 57);
 		}
 
-		this.renderSlotItem(this.atMenu.starSlot, STAR, pose);
+		this.renderSlotItem(this.menu.starSlot, STAR, pose);
 	}
 
 	@Override
 	protected void renderLabels(PoseStack pose, int mouseX, int mouseY) {
 		super.renderLabels(pose, mouseX, mouseY);
-		this.renderItemLabel(this.atMenu.starSlot, STAR, pose, mouseX, mouseY);
+		this.renderItemLabel(this.menu.starSlot, STAR, pose, mouseX, mouseY);
 	}
 
 	// アイテム描画
@@ -130,8 +136,8 @@ public class GuiAccessoryTable extends GuiSMBase<AccessoryTableMenu> {
 		int tipY = this.getHeight() + slot.y;
 		if (!this.isRender(tipX, tipY, mouseX, mouseY, 16, 16)) { return; }
 
-		int xAxis = (mouseX - this.getWidth());
-		int yAxis = (mouseY - this.getHeight());
+		int xAxis = mouseX - this.getWidth();
+		int yAxis = mouseY - this.getHeight();
 		String name = flag ? "craft_out" : "slot_need";
 		List<Component> tipList = Arrays.<Component> asList(this.getText(name).withStyle(GREEN), stack.getDisplayName());
 		this.renderComponentTooltip(pose, tipList, xAxis, yAxis);

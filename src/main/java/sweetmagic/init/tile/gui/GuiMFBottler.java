@@ -102,7 +102,7 @@ public class GuiMFBottler extends GuiSMBase<MFBottlerMenu> {
 		this.font.drawShadow(pose, this.getLabel("+10"), x + 20, y + 52, 0xEEEEEE);
 		this.font.drawShadow(pose, this.getLabel("-10"), x + 41, y + 52, 0xEEEEEE);
 
-		MutableComponent com = this.getLabel("" + this.tile.setCount);
+		MutableComponent com = this.getLabel(this.tile.setCount);
 		this.font.drawShadow(pose, com, x + 55 - this.font.width(com.getString()), y + 34, 0xEEEEEE);
 
 		for (int i = 0; i < maxItemList; i++) {
@@ -114,7 +114,6 @@ public class GuiMFBottler extends GuiSMBase<MFBottlerMenu> {
 			this.itemRenderer.renderAndDecorateFakeItem(stack, x + 67, y + 8 + i * 20);
 		}
 	}
-
 
 	@Override
 	protected void renderLabels(PoseStack pose, int mouseX, int mouseY) {
@@ -134,8 +133,8 @@ public class GuiMFBottler extends GuiSMBase<MFBottlerMenu> {
 
 			if (this.isRender(tipX, tipY, mouseX, mouseY, 98, 19)) {
 				int cost = SweetMagicAPI.getMF(stackList.get(id + this.startIndex));
-				String tip = String.format("%,d", cost);
-				this.renderTooltip(pose, this.getTipArray(this.getText("needmf"), this.getLabel(tip).withStyle(WHITE)).withStyle(GOLD), xAxis, yAxis);
+				String tip = this.format(cost);
+				this.renderTooltip(pose, this.getTipArray(this.getText("needmf"), this.getLabel(tip, WHITE)).withStyle(GOLD), xAxis, yAxis);
 				this.enchaView[id] = true;
 			}
 
@@ -154,8 +153,8 @@ public class GuiMFBottler extends GuiSMBase<MFBottlerMenu> {
 			tipList.add(this.getText(isSelect ? "caraft_start" : "select_recipe").withStyle(GREEN));
 
 			if (isSelect) {
-				String tipMF = String.format("%,d", SweetMagicAPI.getMF(stackList.get(this.selectId)) * this.tile.setCount);
-				tipList.add(this.getTipArray(this.getText("needmf"), this.getLabel(tipMF).withStyle(WHITE)).withStyle(GOLD));
+				String tipMF = this.format(SweetMagicAPI.getMF(stackList.get(this.selectId)) * this.tile.setCount);
+				tipList.add(this.getTipArray(this.getText("needmf"), this.getLabel(tipMF, WHITE)).withStyle(GOLD));
 			}
 
 			this.renderComponentTooltip(pose, tipList, xAxis, yAxis);

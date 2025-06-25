@@ -31,8 +31,6 @@ import sweetmagic.init.tile.sm.TileEnchantEduce;
 public class GuiEnchantEduce extends GuiSMBase<EnchantEduceMenu> {
 
 	private static final ResourceLocation TEX = SweetMagicCore.getSRC("textures/gui/gui_enchant_educe.png");
-	private static final ResourceLocation MISC = SweetMagicCore.getSRC("textures/gui/gui_misc.png");
-	private final EnchantEduceMenu menu;
 	private final TileEnchantEduce tile;
 	private int tickTime = 0;
 	private int counter = 0;
@@ -49,7 +47,6 @@ public class GuiEnchantEduce extends GuiSMBase<EnchantEduceMenu> {
 	public GuiEnchantEduce(EnchantEduceMenu menu, Inventory pInv, Component title) {
 		super(menu, pInv, title);
 		this.setGuiSize(217, 190);
-		this.menu = menu;
 		this.tile = menu.tile;
 		this.scrolling = false;
 		this.startIndex = 0;
@@ -140,7 +137,7 @@ public class GuiEnchantEduce extends GuiSMBase<EnchantEduceMenu> {
 				this.blit(pose, x + 182, y + 3, 210 + (this.addLevelView ? 7 : 0), 0, 7, 10);
 			}
 
-			this.font.drawShadow(pose, this.getTipArray("Level: ", this.getLabel("" + nowLevel).withStyle(WHITE)), x + 112, y + 12, 0x2BC444);
+			this.font.drawShadow(pose, this.getTipArray("Level: ", this.getLabel(nowLevel, WHITE)), x + 112, y + 12, 0x2BC444);
 		}
 
 		// アイテム描画
@@ -151,7 +148,6 @@ public class GuiEnchantEduce extends GuiSMBase<EnchantEduceMenu> {
 		int size = enchaList.size();
 
 		for (int id = 0; id < 4; id++) {
-
 			if (id + this.startIndex >= size) { break; }
 			MutableComponent name = this.getTip(enchaList.get(id + this.startIndex).getDescriptionId());
 
@@ -204,23 +200,23 @@ public class GuiEnchantEduce extends GuiSMBase<EnchantEduceMenu> {
 
 		//描画位置を計算
 		tipX = this.getWidth() + 76 + addX;
-		tipY = this.getHeight() + 30;
+		tipY = this.getHeight() + 26;
 
 		for (int id = 0; id < 4; id++) {
 
 			this.enchaView[id] = false;
 
-			if (this.isRender(tipX, tipY, mouseX, mouseY, 98, 18)) {
+			if (this.isRender(tipX, tipY, mouseX, mouseY, 98, 20)) {
 
 				int cost = this.tile.getEnchantCost(id + this.startIndex, (SMBook) magicBook.getItem());
 				if (cost <= 0) { break; }
 
 				String tip = String.format("%,d", cost);
-				this.renderTooltip(pose, this.getTipArray(this.getText("needmf"), this.getLabel(tip).withStyle(WHITE)).withStyle(GOLD), xAxis - 80, yAxis - 6);
+				this.renderTooltip(pose, this.getTipArray(this.getText("needmf"), this.getLabel(tip, WHITE)).withStyle(GOLD), xAxis - 80, yAxis - 6);
 				this.enchaView[id] = true;
 			}
 
-			tipY += 19;
+			tipY += 21;
 		}
 	}
 
@@ -256,11 +252,12 @@ public class GuiEnchantEduce extends GuiSMBase<EnchantEduceMenu> {
 		dX = guiX - (double) (x + 101) + addX;
 		for (int id = 0; id < 4; ++id) {
 
-			dY = guiY - (double) (y + 30 + 18 * id);
+			dY = guiY - (double) (y + 26 + 21D * id);
 
 			// 各エンチャントの当たり判定チェック
-			if (dX >= 0D && dX <= 95 && dY >= 0D && dY < 18D) {
+			if (dX >= 0D && dX <= 95 && dY >= 0D && dY < 21D) {
 				this.clickButton(id + this.startIndex + 2);
+				break;
 			}
 		}
 
