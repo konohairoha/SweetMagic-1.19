@@ -1,5 +1,5 @@
 {
 	"type": "minecraft:stonecutting", "count": 1,
-	"ingredient": { "tag": "sweetmagic:cafe_chair" },
+	"ingredient": {"tag": "sweetmagic:cafe_chair"},
 	"result": "sweetmagic:cafe_chair_l"
 }

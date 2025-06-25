@@ -1,5 +1,5 @@
 {
 	"type": "minecraft:stonecutting", "count": 1,
-	"ingredient": { "tag": "sweetmagic:armrest_dining_chair" },
+	"ingredient": {"tag": "sweetmagic:armrest_dining_chair"},
 	"result": "sweetmagic:armrest_dining_chair_b"
 }

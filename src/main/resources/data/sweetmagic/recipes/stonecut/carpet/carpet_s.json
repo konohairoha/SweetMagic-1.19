@@ -1,0 +1,5 @@
+{
+	"type": "minecraft:stonecutting", "count": 1,
+	"ingredient": {"tag": "sweetmagic:smcarpet"},
+	"result": "sweetmagic:carpet_s"
+}

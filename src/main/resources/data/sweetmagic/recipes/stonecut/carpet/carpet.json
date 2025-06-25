@@ -1,0 +1,5 @@
+{
+	"type": "minecraft:stonecutting", "count": 4,
+	"ingredient": {"tag": "minecraft:wool"},
+	"result": "sweetmagic:carpet_o"
+}

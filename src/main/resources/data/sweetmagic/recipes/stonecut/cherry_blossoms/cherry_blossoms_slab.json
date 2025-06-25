@@ -1,5 +1,5 @@
 {
 	"type": "minecraft:stonecutting", "count": 2,
-	"ingredient": { "item": "sweetmagic:cherry_blossoms_planks" },
+	"ingredient": {"tag": "sweetmagic:cherry_blossoms_planks"},
 	"result": "sweetmagic:cherry_blossoms_slab"
 }

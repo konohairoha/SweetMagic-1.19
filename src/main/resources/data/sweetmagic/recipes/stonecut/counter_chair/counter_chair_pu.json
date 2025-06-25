@@ -1,0 +1,5 @@
+{
+	"type": "minecraft:stonecutting", "count": 1,
+	"ingredient": {"tag": "sweetmagic:counter_chair"},
+	"result": "sweetmagic:counter_chair_pu"
+}
