@@ -1,5 +1,5 @@
 {
 	"type": "minecraft:stonecutting", "count": 2,
-	"ingredient": { "tag": "sweetmagic:pasteltile_brick/all" },
+	"ingredient": {"tag": "sweetmagic:pasteltile_brick/all"},
 	"result": "sweetmagic:pasteltile_brick_gr_slab"
 }
