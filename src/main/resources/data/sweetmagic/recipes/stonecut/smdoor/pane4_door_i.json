@@ -1,5 +1,5 @@
 {
 	"type": "minecraft:stonecutting", "count": 1,
-	"ingredient": { "tag": "sweetmagic:smdoors" },
+	"ingredient": {"tag": "sweetmagic:smdoors"},
 	"result": "sweetmagic:pane4_door_i"
 }

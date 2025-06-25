@@ -1,5 +1,5 @@
 {
 	"type": "minecraft:stonecutting", "count": 1,
-	"ingredient": { "tag": "sweetmagic:antique_brick_all" },
+	"ingredient": {"tag": "sweetmagic:antique_brick/all"},
 	"result": "sweetmagic:stone_fence_antique_r"
 }
