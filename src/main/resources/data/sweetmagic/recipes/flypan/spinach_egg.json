@@ -1,13 +1,13 @@
 {
 	"type": "sweetmagic:frypan_craft",
 	"ingredients": [
-		{ "tag": "forge:crops/spinach", "count": 4 },
-		{ "tag": "forge:eggs", "count": 2 },
-		{ "tag": "forge:soy_sauce", "count": 2 },
-		{ "tag": "forge:wine", "count": 2 },
-		{ "tag": "forge:oil", "count": 1 }
+		{"tag": "forge:crops/spinach", "count": 4},
+		{"tag": "forge:eggs", "count": 2},
+		{"tag": "forge:soy_sauce", "count": 2},
+		{"tag": "forge:wine", "count": 2},
+		{"tag": "forge:oil", "count": 1}
 	],
 	"result": [
-		{ "item": "sweetmagic:spinach_egg", "count": 8 }
+		{"item": "sweetmagic:spinach_egg", "count": 8}
 	]
 }

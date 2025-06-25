@@ -1,13 +1,13 @@
 {
 	"type": "sweetmagic:freezer_craft",
 	"ingredients": [
-		{ "tag": "forge:fruit", "count": 4 },
-		{ "tag": "forge:crops/apple", "count": 3 },
-		{ "tag": "forge:fruit", "count": 4 },
-		{ "tag": "forge:crops/lettuce", "count": 3 },
-		{ "tag": "forge:cheese", "count": 1 }
+		{"tag": "forge:fruit", "count": 4},
+		{"tag": "forge:crops/apple", "count": 3},
+		{"tag": "forge:fruit", "count": 4},
+		{"tag": "forge:crops/lettuce", "count": 3},
+		{"tag": "forge:cheese", "count": 1}
 	],
 	"result": [
-		{ "item": "sweetmagic:salad_fruit", "count": 8 }
+		{"item": "sweetmagic:salad_fruit", "count": 8}
 	]
 }

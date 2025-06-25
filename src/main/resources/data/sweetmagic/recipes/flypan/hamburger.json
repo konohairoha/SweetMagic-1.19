@@ -1,14 +1,14 @@
 {
 	"type": "sweetmagic:frypan_craft",
 	"ingredients": [
-		{ "tag": "forge:hamburg", "count": 2 },
-		{ "tag": "forge:toast", "count": 4 },
-		{ "tag": "forge:crops/tomato", "count": 4 },
-		{ "tag": "forge:crops/onion", "count": 2 },
-		{ "tag": "forge:crops/lettuce", "count": 2 },
-		{ "tag": "forge:cheese", "count": 4 }
+		{"tag": "forge:hamburg", "count": 2},
+		{"tag": "forge:toast", "count": 4},
+		{"tag": "forge:crops/tomato", "count": 4},
+		{"tag": "forge:crops/onion", "count": 2},
+		{"tag": "forge:crops/lettuce", "count": 2},
+		{"tag": "forge:cheese", "count": 4}
 	],
 	"result": [
-		{ "item": "sweetmagic:hamburger", "count": 4 }
+		{"item": "sweetmagic:hamburger", "count": 4}
 	]
 }

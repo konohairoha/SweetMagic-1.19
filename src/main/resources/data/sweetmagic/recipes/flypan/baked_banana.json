@@ -1,10 +1,10 @@
 {
 	"type": "sweetmagic:frypan_craft",
 	"ingredients": [
-		{ "tag": "forge:crops/banana", "count": 2 },
-		{ "tag": "forge:oil", "count": 1 }
+		{"tag": "forge:crops/banana", "count": 2},
+		{"tag": "forge:oil", "count": 1}
 	],
 	"result": [
-		{ "item": "sweetmagic:baked_banana", "count": 3 }
+		{"item": "sweetmagic:baked_banana", "count": 3}
 	]
 }

@@ -1,12 +1,12 @@
 {
 	"type": "sweetmagic:freezer_craft",
 	"ingredients": [
-		{ "tag": "forge:crops/greenpepper", "count": 5 },
-		{ "tag": "forge:bonito_flakes", "count": 5 },
-		{ "tag": "forge:soy_sauce", "count": 2 },
-		{ "tag": "forge:oil", "count": 1 }
+		{"tag": "forge:crops/greenpepper", "count": 5},
+		{"tag": "forge:bonito_flakes", "count": 5},
+		{"tag": "forge:soy_sauce", "count": 2},
+		{"tag": "forge:oil", "count": 1}
 	],
 	"result": [
-		{ "item": "sweetmagic:peppers_with_soy_sauce_and_bonito", "count": 8 }
+		{"item": "sweetmagic:peppers_with_soy_sauce_and_bonito", "count": 8}
 	]
 }

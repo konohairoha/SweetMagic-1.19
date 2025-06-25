@@ -1,0 +1,15 @@
+{
+	"type": "sweetmagic:freezer_craft",
+	"ingredients": [
+		{"tag": "forge:chocolate", "count": 3},
+		{"tag": "forge:cream", "count": 2},
+		{"tag": "forge:butter", "count": 3},
+		{"tag": "forge:flour", "count": 3},
+		{"tag": "forge:ice", "count": 1},
+		{"tag": "forge:salt", "count": 1},
+		{"tag": "forge:sugar", "count": 3}
+	],
+	"result": [
+		{"item": "sweetmagic:mille_feuille", "count": 14}
+	]
+}

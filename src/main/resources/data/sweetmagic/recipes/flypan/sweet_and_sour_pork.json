@@ -1,18 +1,18 @@
 {
 	"type": "sweetmagic:frypan_craft",
 	"ingredients": [
-		{ "tag": "forge:raw_pork", "count": 6 },
-		{ "tag": "forge:crops/onion", "count": 4 },
-		{ "tag": "forge:crops/carrot", "count": 4 },
-		{ "tag": "forge:crops/greenpepper", "count": 3 },
-		{ "tag": "forge:crops/pineapple", "count": 1 },
-		{ "tag": "forge:soy_sauce", "count": 4 },
-		{ "tag": "forge:wine", "count": 3 },
-		{ "tag": "forge:vinegar", "count": 3 },
-		{ "tag": "forge:oil", "count": 2 },
-		{ "tag": "forge:water", "count": 3 }
+		{"tag": "forge:raw_pork", "count": 6},
+		{"tag": "forge:crops/onion", "count": 4},
+		{"tag": "forge:crops/carrot", "count": 4},
+		{"tag": "forge:crops/greenpepper", "count": 3},
+		{"tag": "forge:crops/pineapple", "count": 1},
+		{"tag": "forge:soy_sauce", "count": 4},
+		{"tag": "forge:wine", "count": 3},
+		{"tag": "forge:vinegar", "count": 3},
+		{"tag": "forge:oil", "count": 2},
+		{"tag": "forge:water", "count": 3}
 	],
 	"result": [
-		{ "item": "sweetmagic:sweet_and_sour_pork", "count": 8 }
+		{"item": "sweetmagic:sweet_and_sour_pork", "count": 8}
 	]
 }

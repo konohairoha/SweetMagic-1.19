@@ -1,14 +1,14 @@
 {
 	"type": "sweetmagic:freezer_craft",
 	"ingredients": [
-		{ "tag": "forge:chocolate", "count": 3 },
-		{ "tag": "forge:milk", "count": 6 },
-		{ "tag": "forge:cream", "count": 6 },
-		{ "tag": "forge:gelatin", "count": 1 },
-		{ "tag": "forge:vannila_essence", "count": 8 },
-		{ "tag": "forge:sugar", "count": 3 }
+		{"tag": "forge:chocolate", "count": 3},
+		{"tag": "forge:milk", "count": 6},
+		{"tag": "forge:cream", "count": 6},
+		{"tag": "forge:gelatin", "count": 1},
+		{"tag": "forge:vannila_essence", "count": 8},
+		{"tag": "forge:sugar", "count": 3}
 	],
 	"result": [
-		{ "item": "sweetmagic:softcream_chocolate", "count": 16 }
+		{"item": "sweetmagic:softcream_chocolate", "count": 16}
 	]
 }

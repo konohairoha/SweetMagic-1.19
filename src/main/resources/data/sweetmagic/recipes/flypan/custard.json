@@ -1,12 +1,12 @@
 {
 	"type": "sweetmagic:frypan_craft",
 	"ingredients": [
-		{ "tag": "forge:milk", "count": 4 },
-		{ "tag": "forge:eggs", "count": 4 },
-		{ "tag": "forge:salt", "count": 2 },
-		{ "tag": "forge:flour", "count": 3 }
+		{"tag": "forge:milk", "count": 4},
+		{"tag": "forge:eggs", "count": 4},
+		{"tag": "forge:salt", "count": 2},
+		{"tag": "forge:flour", "count": 3}
 	],
 	"result": [
-		{ "item": "sweetmagic:custard", "count": 8 }
+		{"item": "sweetmagic:custard", "count": 8}
 	]
 }

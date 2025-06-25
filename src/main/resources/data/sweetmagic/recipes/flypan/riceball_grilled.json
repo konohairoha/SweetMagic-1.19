@@ -1,12 +1,12 @@
 {
 	"type": "sweetmagic:frypan_craft",
 	"ingredients": [
-		{ "tag": "forge:cook/rice", "count": 4 },
-		{ "tag": "forge:soy_sauce", "count": 2 },
-		{ "tag": "forge:wine", "count": 2 },
-		{ "tag": "forge:oil", "count": 1 }
+		{"tag": "forge:cook/rice", "count": 4},
+		{"tag": "forge:soy_sauce", "count": 2},
+		{"tag": "forge:wine", "count": 2},
+		{"tag": "forge:oil", "count": 1}
 	],
 	"result": [
-		{ "item": "sweetmagic:riceball_grilled", "count": 4 }
+		{"item": "sweetmagic:riceball_grilled", "count": 4}
 	]
 }

@@ -1,12 +1,12 @@
 {
 	"type": "sweetmagic:frypan_craft",
 	"ingredients": [
-		{ "tag": "forge:crops/rice", "count": 4 },
-		{ "tag": "forge:water", "count": 2 },
-		{ "tag": "forge:salt", "count": 1 },
-		{ "item": "minecraft:stick", "count": 2 }
+		{"tag": "forge:crops/rice", "count": 4},
+		{"tag": "forge:water", "count": 2},
+		{"tag": "forge:salt", "count": 1},
+		{"item": "minecraft:stick", "count": 2}
 	],
 	"result": [
-		{ "item": "sweetmagic:kiritanpo", "count": 8 }
+		{"item": "sweetmagic:kiritanpo", "count": 8}
 	]
 }

@@ -1,15 +1,16 @@
 {
 	"type": "sweetmagic:frypan_craft",
 	"ingredients": [
-		{ "tag": "forge:vannila_essence", "count": 8 },
-		{ "tag": "forge:flour", "count": 8 },
-		{ "tag": "forge:eggs", "count": 4 },
-		{ "tag": "forge:butter", "count": 2 },
-		{ "tag": "forge:milk", "count": 2 },
-		{ "tag": "forge:oil", "count": 2 },
-		{ "tag": "forge:sugar", "count": 3 }
+		{"tag": "forge:vannila_essence", "count": 8},
+		{"tag": "forge:flour", "count": 8},
+		{"tag": "forge:eggs", "count": 4},
+		{"tag": "forge:butter", "count": 2},
+		{"tag": "forge:milk", "count": 2},
+		{"tag": "forge:oil", "count": 2},
+		{"tag": "forge:honey", "count": 1},
+		{"tag": "forge:sugar", "count": 3}
 	],
 	"result": [
-		{ "item": "sweetmagic:hotcake", "count": 8 }
+		{"item": "sweetmagic:hotcake", "count": 8}
 	]
 }

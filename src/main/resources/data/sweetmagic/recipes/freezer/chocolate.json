@@ -1,11 +1,11 @@
 {
 	"type": "sweetmagic:freezer_craft",
 	"ingredients": [
-		{ "tag": "forge:cocoa_powder", "count": 8 },
-		{ "tag": "forge:sugar", "count": 2 },
-		{ "tag": "forge:milk", "count": 2 }
+		{"tag": "forge:cocoa_powder", "count": 8},
+		{"tag": "forge:sugar", "count": 2},
+		{"tag": "forge:milk", "count": 2}
 	],
 	"result": [
-		{ "item": "sweetmagic:chocolate", "count": 6 }
+		{"item": "sweetmagic:chocolate", "count": 6}
 	]
 }

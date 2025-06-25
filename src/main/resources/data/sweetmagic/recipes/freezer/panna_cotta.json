@@ -1,15 +1,15 @@
 {
 	"type": "sweetmagic:freezer_craft",
 	"ingredients": [
-		{ "tag": "forge:crops/strawberry", "count": 4 },
-		{ "tag": "forge:crops/lemon", "count": 1 },
-		{ "tag": "forge:crops/mint", "count": 2 },
-		{ "tag": "forge:gelatin", "count": 1 },
-		{ "tag": "forge:cream", "count": 6 },
-		{ "tag": "forge:milk", "count": 6 },
-		{ "tag": "forge:sugar", "count": 3 }
+		{"tag": "forge:crops/strawberry", "count": 4},
+		{"tag": "forge:crops/lemon", "count": 1},
+		{"tag": "forge:crops/mint", "count": 2},
+		{"tag": "forge:gelatin", "count": 1},
+		{"tag": "forge:cream", "count": 6},
+		{"tag": "forge:milk", "count": 6},
+		{"tag": "forge:sugar", "count": 3}
 	],
 	"result": [
-		{ "item": "sweetmagic:panna_cotta", "count": 12 }
+		{"item": "sweetmagic:panna_cotta", "count": 12}
 	]
 }

@@ -1,11 +1,11 @@
 {
 	"type": "sweetmagic:frypan_craft",
 	"ingredients": [
-		{ "tag": "forge:crops/corn", "count": 3 },
-		{ "tag": "forge:oil", "count": 2 },
-		{ "tag": "forge:salt", "count": 2 }
+		{"tag": "forge:crops/corn", "count": 3},
+		{"tag": "forge:oil", "count": 2},
+		{"tag": "forge:salt", "count": 2}
 	],
 	"result": [
-		{ "item": "sweetmagic:salt_popcorn", "count": 6 }
+		{"item": "sweetmagic:salt_popcorn", "count": 6}
 	]
 }

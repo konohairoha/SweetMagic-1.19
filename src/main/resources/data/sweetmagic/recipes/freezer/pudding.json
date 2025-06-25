@@ -1,12 +1,12 @@
 {
 	"type": "sweetmagic:freezer_craft",
 	"ingredients": [
-		{ "tag": "forge:vannila_essence", "count": 4 },
-		{ "tag": "forge:eggs", "count": 4 },
-		{ "tag": "forge:milk", "count": 3 },
-		{ "tag": "forge:sugar", "count": 2 }
+		{"tag": "forge:vannila_essence", "count": 4},
+		{"tag": "forge:eggs", "count": 4},
+		{"tag": "forge:milk", "count": 3},
+		{"tag": "forge:sugar", "count": 2}
 	],
 	"result": [
-		{ "item": "sweetmagic:pudding", "count": 12 }
+		{"item": "sweetmagic:pudding", "count": 12}
 	]
 }

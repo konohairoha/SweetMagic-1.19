@@ -1,17 +1,17 @@
 {
 	"type": "sweetmagic:frypan_craft",
 	"ingredients": [
-		{ "tag": "forge:crops/greenpepper", "count": 2 },
-		{ "tag": "forge:foods/meat/raw", "count": 4 },
-		{ "tag": "forge:crops/tomato", "count": 2 },
-		{ "tag": "forge:eggs", "count": 2 },
-		{ "tag": "forge:bread_crumbs", "count": 3 },
-		{ "tag": "forge:milk", "count": 2 },
-		{ "tag": "forge:salt", "count": 2 },
-		{ "tag": "forge:wine", "count": 1 },
-		{ "tag": "forge:oil", "count": 3 }
+		{"tag": "forge:crops/greenpepper", "count": 2},
+		{"tag": "forge:foods/meat/raw", "count": 4},
+		{"tag": "forge:crops/tomato", "count": 2},
+		{"tag": "forge:eggs", "count": 2},
+		{"tag": "forge:bread_crumbs", "count": 3},
+		{"tag": "forge:milk", "count": 2},
+		{"tag": "forge:salt", "count": 2},
+		{"tag": "forge:wine", "count": 1},
+		{"tag": "forge:oil", "count": 3}
 	],
 	"result": [
-		{ "item": "sweetmagic:peppers_stuffed_with_meat", "count": 8 }
+		{"item": "sweetmagic:peppers_stuffed_with_meat", "count": 8}
 	]
 }

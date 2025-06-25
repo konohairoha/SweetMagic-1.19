@@ -1,10 +1,10 @@
 {
 	"type": "sweetmagic:freezer_craft",
 	"ingredients": [
-		{ "tag": "forge:raw_pufferfish", "count": 2 },
-		{ "tag": "forge:soy_sauce", "count": 1 }
+		{"tag": "forge:raw_pufferfish", "count": 2},
+		{"tag": "forge:soy_sauce", "count": 1}
 	],
 	"result": [
-		{ "item": "sweetmagic:fugu_sashimi", "count": 4 }
+		{"item": "sweetmagic:fugu_sashimi", "count": 4}
 	]
 }

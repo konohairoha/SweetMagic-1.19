@@ -1,16 +1,16 @@
 {
 	"type": "sweetmagic:frypan_craft",
 	"ingredients": [
-		{ "tag": "forge:cook/rice", "count": 6 },
-		{ "tag": "forge:eggs", "count": 8 },
-		{ "tag": "forge:crops/tomato", "count": 4 },
-		{ "tag": "forge:crops/onion", "count": 2 },
-		{ "tag": "forge:raw_chicken", "count": 2 },
-		{ "tag": "forge:butter", "count": 4 },
-		{ "tag": "forge:salt", "count": 1 },
-		{ "tag": "forge:oil", "count": 1 }
+		{"tag": "forge:cook/rice", "count": 6},
+		{"tag": "forge:eggs", "count": 8},
+		{"tag": "forge:crops/tomato", "count": 4},
+		{"tag": "forge:crops/onion", "count": 2},
+		{"tag": "forge:raw_chicken", "count": 2},
+		{"tag": "forge:butter", "count": 4},
+		{"tag": "forge:salt", "count": 1},
+		{"tag": "forge:oil", "count": 1}
 	],
 	"result": [
-		{ "item": "sweetmagic:omelet_rice", "count": 4 }
+		{"item": "sweetmagic:omelet_rice", "count": 4}
 	]
 }

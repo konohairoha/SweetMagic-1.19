@@ -1,13 +1,13 @@
 {
 	"type": "sweetmagic:freezer_craft",
 	"ingredients": [
-		{ "tag": "forge:crops/cabbage", "count": 4 },
-		{ "tag": "forge:crops/corn", "count": 4 },
-		{ "tag": "forge:crops/carrot", "count": 1 },
-		{ "tag": "forge:dressing", "count": 2 },
-		{ "tag": "forge:salt", "count": 1 }
+		{"tag": "forge:crops/cabbage", "count": 4},
+		{"tag": "forge:crops/corn", "count": 4},
+		{"tag": "forge:crops/carrot", "count": 1},
+		{"tag": "forge:dressing", "count": 2},
+		{"tag": "forge:salt", "count": 1}
 	],
 	"result": [
-		{ "item": "sweetmagic:salad_coleslaw", "count": 8 }
+		{"item": "sweetmagic:salad_coleslaw", "count": 8}
 	]
 }

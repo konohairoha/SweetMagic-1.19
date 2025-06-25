@@ -1,17 +1,17 @@
 {
 	"type": "sweetmagic:frypan_craft",
 	"ingredients": [
-		{ "tag": "forge:flour", "count": 4 },
-		{ "tag": "forge:fruit", "count": 3 },
-		{ "tag": "forge:fruit", "count": 3 },
-		{ "tag": "forge:eggs", "count": 2 },
-		{ "tag": "forge:cream", "count": 1 },
-		{ "tag": "forge:butter", "count": 1 },
-		{ "tag": "forge:milk", "count": 1 },
-		{ "tag": "forge:water", "count": 1 },
-		{ "tag": "forge:sugar", "count": 3 }
+		{"tag": "forge:flour", "count": 4},
+		{"tag": "forge:fruit", "count": 3},
+		{"tag": "forge:fruit", "count": 3},
+		{"tag": "forge:eggs", "count": 2},
+		{"tag": "forge:cream", "count": 1},
+		{"tag": "forge:butter", "count": 1},
+		{"tag": "forge:milk", "count": 1},
+		{"tag": "forge:water", "count": 1},
+		{"tag": "forge:sugar", "count": 3}
 	],
 	"result": [
-		{ "item": "sweetmagic:fruit_crepe", "count": 9 }
+		{"item": "sweetmagic:fruit_crepe", "count": 9}
 	]
 }

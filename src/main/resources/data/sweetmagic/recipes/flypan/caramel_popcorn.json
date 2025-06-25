@@ -1,13 +1,13 @@
 {
 	"type": "sweetmagic:frypan_craft",
 	"ingredients": [
-		{ "tag": "forge:crops/corn", "count": 4 },
-		{ "tag": "forge:butter", "count": 1 },
-		{ "tag": "forge:milk", "count": 2 },
-		{ "tag": "forge:oil", "count": 2 },
-		{ "tag": "forge:sugar", "count": 2 }
+		{"tag": "forge:crops/corn", "count": 4},
+		{"tag": "forge:butter", "count": 1},
+		{"tag": "forge:milk", "count": 2},
+		{"tag": "forge:oil", "count": 2},
+		{"tag": "forge:sugar", "count": 2}
 	],
 	"result": [
-		{ "item": "sweetmagic:caramel_popcorn", "count": 12 }
+		{"item": "sweetmagic:caramel_popcorn", "count": 12}
 	]
 }
