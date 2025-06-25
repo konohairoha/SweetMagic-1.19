@@ -1,0 +1,9 @@
+{
+	"type": "sweetmagic:furniture_craft",
+	"ingredients": [
+		{"tag": "sweetmagic:phone", "count": 1}
+	],
+	"result": [
+		{"item": "sweetmagic:phone_l", "count": 1}
+	]
+}

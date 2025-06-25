@@ -1,0 +1,9 @@
+{
+	"type": "sweetmagic:furniture_craft",
+	"ingredients": [
+		{"tag": "sweetmagic:note_pc", "count": 1}
+	],
+	"result": [
+		{"item": "sweetmagic:note_pc_s", "count": 1}
+	]
+}

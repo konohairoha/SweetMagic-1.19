@@ -1,0 +1,9 @@
+{
+	"type": "sweetmagic:furniture_craft",
+	"ingredients": [
+		{"tag": "sweetmagic:smplanks", "count": 1}
+	],
+	"result": [
+		{"item": "sweetmagic:moden_stairs_maple_w", "count": 2}
+	]
+}

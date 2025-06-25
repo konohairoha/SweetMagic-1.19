@@ -1,9 +1,9 @@
 {
 	"type": "sweetmagic:furniture_craft",
 	"ingredients": [
-		{ "tag": "sweetmagic:oven", "count": 1 }
+		{"tag": "sweetmagic:oven", "count": 1}
 	],
 	"result": [
-		{ "item": "sweetmagic:toaster_l", "count": 1 }
+		{"item": "sweetmagic:toaster_l", "count": 1}
 	]
 }
