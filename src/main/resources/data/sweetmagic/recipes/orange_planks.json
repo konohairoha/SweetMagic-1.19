@@ -1,7 +1,7 @@
 {
 	"type": "minecraft:crafting_shapeless",
 	"ingredients": [
-		{ "item": "sweetmagic:orange_log" }
+		{"item": "sweetmagic:orange_log"}
 	],
-	"result": { "item": "sweetmagic:orange_planks", "count": 4 }
+	"result": {"item": "sweetmagic:orange_planks", "count": 4}
 }

@@ -1,7 +1,7 @@
 {
 	"type": "minecraft:crafting_shapeless",
 	"ingredients": [
-		{ "item": "sweetmagic:redberyl_block" }
+		{"item": "sweetmagic:redberyl_block"}
 	],
-	"result": { "item": "sweetmagic:redberyl", "count": 9 }
+	"result": {"item": "sweetmagic:redberyl", "count": 9}
 }

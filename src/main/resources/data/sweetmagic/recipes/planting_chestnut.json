@@ -1,9 +1,9 @@
 {
 	"type": "minecraft:crafting_shapeless",
 	"ingredients": [
-		{ "item": "sweetmagic:chestnut_leaves" },
-		{ "item": "sweetmagic:chestnut_leaves" },
-		{ "tag": "minecraft:saplings" }
+		{"item": "sweetmagic:chestnut_leaves"},
+		{"item": "sweetmagic:chestnut_leaves"},
+		{"tag": "minecraft:saplings"}
 	],
-	"result": { "item": "sweetmagic:planting_chestnut", "count": 16 }
+	"result": {"item": "sweetmagic:planting_chestnut", "count": 16}
 }

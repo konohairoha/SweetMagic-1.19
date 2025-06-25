@@ -1,12 +1,12 @@
 {
 	"type": "minecraft:crafting_shaped",
 	"key": {
-		"B": { "item": "sweetmagic:orange_planks" }
+		"B": {"item": "sweetmagic:orange_planks"}
 	},
 	"pattern": [
 		"  B",
 		" BB",
 		"BBB"
 	],
-	"result": { "item": "sweetmagic:orange_stairs", "count": 6 }
+	"result": {"item": "sweetmagic:orange_stairs", "count": 6}
 }

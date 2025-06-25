@@ -1,12 +1,12 @@
 {
 	"type": "minecraft:crafting_shaped",
 	"key": {
-		"C": { "item": "sweetmagic:pure_crystal" }
+		"C": {"item": "sweetmagic:pure_crystal"}
 	},
 	"pattern": [
 		"CCC",
 		"CCC",
 		"CCC"
 	],
-	"result": { "item": "sweetmagic:purecrystal_block" }
+	"result": {"item": "sweetmagic:purecrystal_block"}
 }

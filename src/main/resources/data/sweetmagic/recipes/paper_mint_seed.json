@@ -1,7 +1,7 @@
 {
 	"type": "minecraft:crafting_shapeless",
 	"ingredients": [
-		{ "item": "sweetmagic:paper_mint" }
+		{"item": "sweetmagic:paper_mint"}
 	],
-	"result": { "item": "sweetmagic:paper_mint_seed", "count": 2 }
+	"result": {"item": "sweetmagic:paper_mint_seed", "count": 2}
 }

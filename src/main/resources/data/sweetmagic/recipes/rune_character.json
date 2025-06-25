@@ -1,8 +1,8 @@
 {
 	"type": "minecraft:crafting_shapeless",
 	"ingredients": [
-		{ "tag": "minecraft:sand" },
-		{ "tag": "forge:magic_book" }
+		{"tag": "minecraft:sand"},
+		{"tag": "forge:magic_book"}
 	],
-	"result": { "item": "sweetmagic:rune_character", "count": 8 }
+	"result": {"item": "sweetmagic:rune_character", "count": 8}
 }

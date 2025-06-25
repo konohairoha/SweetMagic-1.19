@@ -1,14 +1,14 @@
 {
 	"type": "minecraft:crafting_shaped",
 	"key": {
-		"B": { "tag": "sweetmagic:orange_planks/orange_planks_w" },
-		"M": { "item": "sweetmagic:magic_meal" },
-		"D": { "item": "sweetmagic:potting_soil" }
+		"B": {"tag": "sweetmagic:orange_planks/white"},
+		"M": {"item": "sweetmagic:magic_meal"},
+		"D": {"item": "sweetmagic:potting_soil"}
 	},
 	"pattern": [
 		"MMM",
 		"DDD",
 		"BBB"
 	],
-	"result": { "item": "sweetmagic:orange_planks_pot_w", "count": 4 }
+	"result": {"item": "sweetmagic:orange_planks_pot_w", "count": 4}
 }

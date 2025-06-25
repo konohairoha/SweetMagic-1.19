@@ -1,14 +1,14 @@
 {
 	"type": "minecraft:crafting_shaped",
 	"key": {
-		"F": { "tag": "sweetmagic:iron_fence" },
-		"I": { "tag": "forge:ingots/iron" },
-		"N": { "tag": "forge:nuggets/iron" }
+		"F": {"tag": "sweetmagic:iron_fence"},
+		"I": {"tag": "forge:ingots/iron"},
+		"N": {"tag": "forge:nuggets/iron"}
 	},
 	"pattern": [
 		"FNF",
 		"I I",
 		"INI"
 	],
-	"result": { "item": "sweetmagic:pot_w" }
+	"result": {"item": "sweetmagic:pot_w"}
 }

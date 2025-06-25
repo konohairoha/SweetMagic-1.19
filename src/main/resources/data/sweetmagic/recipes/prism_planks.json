@@ -1,7 +1,7 @@
 {
 	"type": "minecraft:crafting_shapeless",
 	"ingredients": [
-		{ "item": "sweetmagic:prism_log" }
+		{"item": "sweetmagic:prism_log"}
 	],
-	"result": { "item": "sweetmagic:prism_planks", "count": 4 }
+	"result": {"item": "sweetmagic:prism_planks", "count": 4}
 }

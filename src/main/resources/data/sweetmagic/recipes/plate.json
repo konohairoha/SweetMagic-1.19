@@ -1,12 +1,12 @@
 {
 	"type": "minecraft:crafting_shaped",
 	"key": {
-		"I": { "tag": "forge:nuggets/iron" },
-		"R": { "tag": "forge:recipe_book" }
+		"I": {"tag": "forge:nuggets/iron"},
+		"R": {"tag": "forge:recipe_book"}
 	},
 	"pattern": [
 		"IRI",
 		"III"
 	],
-	"result": { "item": "sweetmagic:plate", "count": 16 }
+	"result": {"item": "sweetmagic:plate", "count": 16}
 }

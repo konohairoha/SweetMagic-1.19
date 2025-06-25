@@ -1,14 +1,14 @@
 {
 	"type": "minecraft:crafting_shaped",
 	"key": {
-		"B": { "item": "sweetmagic:pasteltile_brick_y" },
-		"M": { "item": "sweetmagic:magic_meal" },
-		"D": { "item": "sweetmagic:potting_soil" }
+		"B": {"item": "sweetmagic:pasteltile_brick_y"},
+		"M": {"item": "sweetmagic:magic_meal"},
+		"D": {"item": "sweetmagic:potting_soil"}
 	},
 	"pattern": [
 		"MMM",
 		"DDD",
 		"BBB"
 	],
-	"result": { "item": "sweetmagic:pasteltile_brick_pot_y", "count": 4 }
+	"result": {"item": "sweetmagic:pasteltile_brick_pot_y", "count": 4}
 }

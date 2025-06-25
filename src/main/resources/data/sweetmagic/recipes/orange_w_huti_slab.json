@@ -1,10 +1,10 @@
 {
 	"type": "minecraft:crafting_shaped",
 	"key": {
-		"B": { "tag": "sweetmagic:orange_planks/orange_planks_huti_w" }
+		"B": {"tag": "sweetmagic:orange_planks/huti_white"}
 	},
 	"pattern": [
 		"BBB"
 	],
-	"result": { "item": "sweetmagic:orange_w_huti_slab", "count": 6 }
+	"result": {"item": "sweetmagic:orange_w_huti_slab", "count": 6}
 }
