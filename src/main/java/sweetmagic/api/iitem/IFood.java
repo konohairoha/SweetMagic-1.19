@@ -19,7 +19,7 @@ import sweetmagic.api.iitem.info.FoodInfo;
 import sweetmagic.config.SMConfig;
 import sweetmagic.init.ItemInit;
 import sweetmagic.init.PotionInit;
-import sweetmagic.init.capability.ICookingStatus;
+import sweetmagic.init.capability.icap.ICookingStatus;
 import sweetmagic.util.PlayerHelper;
 import sweetmagic.util.WorldHelper;
 
@@ -40,7 +40,7 @@ public interface IFood {
 		int qualityValue = 0;
 
 		int count = 0;
-		Level world = player.level;
+		Level world = player.getLevel();
 		List<IFoodExpBlock> blockList = new ArrayList<>();
 		Iterable<BlockPos> posList = WorldHelper.getRangePos(pos, 16);
 		ItemStack leg = player.getItemBySlot(EquipmentSlot.LEGS);
@@ -187,6 +187,7 @@ public interface IFood {
 			PlayerHelper.setPotion(entity, info.potion(), info.level(), info.time());
 			break;
 		case 3:
+		case 4:
 			PlayerHelper.setPotion(entity, info.potion(), info.level(), (int) (info.time() * 1.5F));
 			break;
 		}
@@ -255,7 +256,7 @@ public interface IFood {
 		switch(this.getFoodType()) {
 		case Fermentation:	return new PotionInfo(PotionInit.reflash_effect, 0, 600);
 		case Baked: 		return new PotionInfo(PotionInit.mfcostdown, 0, 1200);
-		case Simmered:		return new PotionInfo(MobEffects.DAMAGE_RESISTANCE, 0, 1200);
+		case Simmered:		return new PotionInfo(PotionInit.critical_increase, 0, 1200);
 		case Stir:			return new PotionInfo(PotionInit.damage_cut, 0, 1200);
 		case Fried:			return new PotionInfo(PotionInit.recast_reduction, 0, 600);
 		case Rice:			return new PotionInfo(MobEffects.ABSORPTION, 2, 1200);
@@ -267,6 +268,8 @@ public interface IFood {
 		case Cake:			return new PotionInfo(PotionInit.mfcostdown, 0, 1200);
 		case Chilling:		return new PotionInfo(PotionInit.increased_recovery, 0, 1200);
 		case Salad:			return new PotionInfo(PotionInit.regeneration, 0, 200);
+		case WITCH:			return new PotionInfo(PotionInit.magic_rangeup, 0, 1200);
+		case DEVIL:			return new PotionInfo(PotionInit.debuff_duration_increase, 0, 1200);
 		default:			return new PotionInfo(PotionInit.increased_experience, 0, 1200);
 		}
 	}
@@ -286,7 +289,9 @@ public interface IFood {
 		Cake,			// ケーキ
 		Chilling,		// 冷蔵
 		Salad,			// サラダ
-		Drink			// 飲み物
+		Drink,			// 飲み物
+		WITCH,			// ウィッチ
+		DEVIL			// デビル
 	}
 
 	public record PotionInfo(MobEffect potion, int level, int time) { }

@@ -33,13 +33,14 @@ import sweetmagic.api.emagic.SMMagicType;
 import sweetmagic.api.iitem.info.MagicInfo;
 import sweetmagic.api.iitem.info.WandInfo;
 import sweetmagic.config.SMConfig;
+import sweetmagic.init.AdvancedInit;
 import sweetmagic.init.EnchantInit;
 import sweetmagic.init.ItemInit;
 import sweetmagic.init.PotionInit;
 import sweetmagic.init.SoundInit;
 import sweetmagic.init.item.magic.RankUpMagic;
 import sweetmagic.init.tile.inventory.SMInventory.SMWandInventory;
-import sweetmagic.init.tile.menu.container.ContainerWand;
+import sweetmagic.init.tile.menu.container.BaseContainer.ContainerWand;
 
 public interface IWand extends IMFTool {
 
@@ -87,22 +88,15 @@ public interface IWand extends IMFTool {
 
 		// アイテムスタックを取得
 		ItemStack stack = player.getItemInHand(hand);
+		if (stack.isEmpty()) { return InteractionResultHolder.fail(stack); }
 
-		if (hand == InteractionHand.OFF_HAND || stack.isEmpty()) {
-			return InteractionResultHolder.fail(stack);
-		}
-
-		// 杖情報を取得
-		WandInfo wandInfo = new WandInfo(stack);
-
-		// 選択中のアイテムを取得
-		ItemStack slotItem = this.getSlotItem(player, wandInfo);
-
+		WandInfo wandInfo = new WandInfo(stack);					// 杖情報を取得
+		ItemStack slotItem = this.getSlotItem(player, wandInfo);	// 選択中のアイテムを取得
 		if (slotItem.isEmpty() || !(slotItem.getItem() instanceof IMagicItem)) { return InteractionResultHolder.fail(stack); }
 
 		// 魔法の情報を取得
-		MagicInfo slotInfo = new MagicInfo(slotItem);
-		IMagicItem item = slotInfo.getMagicItem();
+		MagicInfo magicInfo = new MagicInfo(slotItem);
+		IMagicItem item = magicInfo.getMagicItem();
 		this.setMagicItem(item);
 
 		// 射撃タイプで分別
@@ -115,7 +109,7 @@ public interface IWand extends IMFTool {
 			}
 
 			else {
-				this.shotterActived(world, player, wandInfo, slotInfo);
+				this.shotterActived(world, player, wandInfo, magicInfo);
 			}
 			break;
 
@@ -124,7 +118,7 @@ public interface IWand extends IMFTool {
 		case FIELD:
 		case SUMMON:
 		case BOSS:
-			this.airActived(world, player, wandInfo, slotInfo);
+			this.airActived(world, player, wandInfo, magicInfo);
 			break;
 		case CHARGE:
 			player.startUsingItem(hand);
@@ -138,7 +132,7 @@ public interface IWand extends IMFTool {
 
 	//右クリックチャージをやめたときに矢を消費せずに矢を射る
 	default void onPlayerStoppedUsing(ItemStack stack, Level world, LivingEntity living, int timeLeft) {
-		if ( !(living instanceof Player player) || player.getMainHandItem().isEmpty()) { return;}
+		if (!(living instanceof Player player) || stack.isEmpty()) { return;}
 
 		// 選択中のアイテムを取得
 		WandInfo wandInfo = new WandInfo(stack);
@@ -147,8 +141,8 @@ public interface IWand extends IMFTool {
 		if (slotItem.isEmpty() || !(slotItem.getItem() instanceof IMagicItem)) { return; }
 
 		// 魔法の情報を取得
-		MagicInfo slotInfo = new MagicInfo(slotItem);
-		IMagicItem item = slotInfo.getMagicItem();
+		MagicInfo magicInfo = new MagicInfo(slotItem);
+		IMagicItem item = magicInfo.getMagicItem();
 		this.setMagicItem(item);
 
 		float rate = 20F;
@@ -166,12 +160,12 @@ public interface IWand extends IMFTool {
 
 		// 地面タイプ
 		case CHARGE:
-			this.chargeActived(world, player, wandInfo, slotInfo);
+			this.chargeActived(world, player, wandInfo, magicInfo);
 			break;
 		// 射撃タイプ
 		case SHOT:
 			if (!this.isScope()) { return; }
-			this.shotterActived(world, player, wandInfo, slotInfo);
+			this.shotterActived(world, player, wandInfo, magicInfo);
 			break;
 		default:
 			return;
@@ -179,42 +173,42 @@ public interface IWand extends IMFTool {
 	}
 
 	// 射撃処理
-	default void shotterActived(Level world, Player player, WandInfo wandInfo, MagicInfo slotInfo) {
+	default void shotterActived(Level world, Player player, WandInfo wandInfo, MagicInfo magicInfo) {
 
 		// クリエワンド以外で魔法が使えるかチェック
-		if(!this.magicActionBeforeCheck(player, wandInfo, slotInfo)) { return; }
+		if(!this.magicActionBeforeCheck(player, wandInfo, magicInfo)) { return; }
 
 		// アイテムの処理を実行
-		boolean actionFlag = this.onAction(world, player, wandInfo, slotInfo);
+		boolean actionFlag = this.onAction(world, player, wandInfo, magicInfo);
 
 		// 魔法アクション後の処理
-		this.magicActionAfter(world, player, wandInfo, slotInfo, actionFlag);
+		this.magicActionAfter(world, player, wandInfo, magicInfo, actionFlag);
 	}
 
 	// 空中処理
-	default void airActived(Level world, Player player, WandInfo wandInfo, MagicInfo slotInfo) {
+	default void airActived(Level world, Player player, WandInfo wandInfo, MagicInfo magicInfo) {
 
 		// クリエワンド以外で魔法が使えるかチェック
-		if(!this.magicActionBeforeCheck(player, wandInfo, slotInfo)) { return; }
+		if(!this.magicActionBeforeCheck(player, wandInfo, magicInfo)) { return; }
 
 		// アイテムの処理を実行
-		boolean actionFlag = this.onAction(world, player, wandInfo, slotInfo);
+		boolean actionFlag = this.onAction(world, player, wandInfo, magicInfo);
 
 		// 魔法アクション後の処理
-		this.magicActionAfter(world, player, wandInfo, slotInfo, actionFlag);
+		this.magicActionAfter(world, player, wandInfo, magicInfo, actionFlag);
 	}
 
 	// 溜め行動
-	default void chargeActived(Level world, Player player, WandInfo wandInfo, MagicInfo slotInfo) {
+	default void chargeActived(Level world, Player player, WandInfo wandInfo, MagicInfo magicInfo) {
 
 		// クリエワンド以外で魔法が使えるかチェック
-		if(!this.magicActionBeforeCheck(player, wandInfo, slotInfo)) { return; }
+		if(!this.magicActionBeforeCheck(player, wandInfo, magicInfo)) { return; }
 
 		// アイテムの処理を実行
-		boolean actionFlag = this.onAction(world, player, wandInfo, slotInfo);
+		boolean actionFlag = this.onAction(world, player, wandInfo, magicInfo);
 
 		// 魔法アクション後の処理
-		this.magicActionAfter(world, player, wandInfo, slotInfo, actionFlag);
+		this.magicActionAfter(world, player, wandInfo, magicInfo, actionFlag);
 	}
 
 	/*
@@ -276,7 +270,7 @@ public interface IWand extends IMFTool {
 		// nbtを取得
 		this.getNBT(stack);
 
-		if (!world.isClientSide) {
+		if (!world.isClientSide()) {
 			NetworkHooks.openScreen((ServerPlayer) player, new ContainerWand(stack));
 			this.playSound(world, player, SoundInit.PAGE, 0.125F, 1F);
 		}
@@ -302,30 +296,19 @@ public interface IWand extends IMFTool {
 		IMagicItem smItem = magicInfo.getMagicItem();
 
 		// MFが消費量を超えてかつtierを満たしてるかどうか
-		if (this.isCreativeWand()) {
-			return true;
-		}
+		if (this.isCreativeWand()) { return true; }
 
 		// MFが足りてるか
-		if (!this.canUseMagic(stack, this.getCostMF(player, stack, magicInfo))) {
-			return false;
-		}
+		if (!this.canUseMagic(stack, this.getCostMF(player, stack, magicInfo))) { return false; }
 
 		// tierが杖のほうが大きいか
-		if (this.checkOverTier(smItem)) {
-			return false;
-		}
+		if (this.checkOverTier(smItem)) { return false; }
 
 		// クールタイムがあるなら
-		if (!smItem.isNoRecast(magicInfo.getStack())) {
-			return false;
-		}
+		if (!smItem.isNoRecast(magicInfo.getStack())) { return false; }
 
 		// 魔法の発動条件を満たしていないなら
-		if (!smItem.canItemMagic(player.level, player, wandInfo)) {
-			return false;
-		}
-
+		if (!smItem.canItemMagic(player.getLevel(), player, wandInfo)) { return false; }
 		return true;
 	}
 
@@ -353,13 +336,9 @@ public interface IWand extends IMFTool {
 	 */
 
 	// 魔法アクション中の処理
-	default boolean onAction(Level world, Player player, WandInfo wandInfo, MagicInfo slotInfo) {
-
+	default boolean onAction(Level world, Player player, WandInfo wandInfo, MagicInfo magicInfo) {
 		// 魔法が発動出来たかのフラグを取得
-		boolean flag = slotInfo.getMagicItem().onItemAction(world, player, wandInfo, slotInfo);
-//		AdvancedInit.active_magic.triggerFor(player);
-
-		return flag;
+		return magicInfo.getMagicItem().onItemAction(world, player, wandInfo, magicInfo);
 	}
 
 	/*
@@ -377,44 +356,41 @@ public interface IWand extends IMFTool {
 
 
 	// 魔法アクション後の処理
-	default void magicActionAfter(Level world, Player player, WandInfo wandInfo, MagicInfo slotInfo, boolean actionFlag) {
+	default void magicActionAfter(Level world, Player player, WandInfo wandInfo, MagicInfo magicInfo, boolean actionFlag) {
+		if (this.isCreativeWand()) { return; }
 
-		// クリエワンド以外なら
-		if (!this.isCreativeWand()) {
+		ItemStack stack = wandInfo.getStack();
+		ItemStack magicStack = magicInfo.getStack();
+		IMagicItem smItem = magicInfo.getMagicItem();
 
-			ItemStack stack = wandInfo.getStack();
-			ItemStack magicStack = slotInfo.getStack();
-			IMagicItem smItem = slotInfo.getMagicItem();
+		// 属性一致ボーナス効果設定
+		this.setElementBonus(wandInfo, magicInfo);
 
-			// 属性一致ボーナス効果設定
-			this.setElementBonus(wandInfo, slotInfo);
+		// 即発動フラグをfalseに
+		smItem.setImmedFlag(magicStack, false);
 
-			// 即発動フラグをfalseに
-			smItem.setImmedFlag(magicStack, false);
+		// リキャストタイムの設定
+		smItem.setRecastTime(magicStack, this.getRecastTime(player, stack, magicInfo));
 
-			// リキャストタイムの設定
-			smItem.setRecastTime(magicStack, this.getRecastTime(player, stack, slotInfo));
+		// 即発動受付時間の設定
+		this.setImmedTime(wandInfo, 13);
 
-			// 即発動受付時間の設定
-			this.setImmedTime(wandInfo, 13);
+		// 使用した魔法分だけ消費
+		this.setMF(stack, this.setMF(player, stack, magicInfo));
 
-			// 使用した魔法分だけ消費
-			this.setMF(stack, this.setMF(player, stack, slotInfo));
+		// アイテムを消費するかどうか
+		if (smItem.isShirink() && !player.isCreative()) {
+			this.shrinkItem(player, wandInfo, magicInfo);
+		}
 
-			// アイテムを消費するかどうか
-			if (smItem.isShirink() && !player.isCreative()) {
-				this.shrinkItem(player, stack, magicStack);
-			}
+		// actionFlagがtrueならレベルアップチェック
+		if (actionFlag && !world.isClientSide()) {
+			this.levelUpCheck(world, player, stack, this.getAddExp(player, magicInfo));
+		}
 
-			// actionFlagがtrueならレベルアップチェック
-			if (actionFlag && !world.isClientSide) {
-				this.levelUpCheck(world, player, stack, this.getAddExp(player, smItem));
-			}
-
-			// 魔法使用時に空腹ゲージ減少する設定なら
-			if (SMConfig.hungerSetting.get()) {
-				player.causeFoodExhaustion(slotInfo.getMagicItem().getUseMF() * 0.001F);
-			}
+		// 魔法使用時に空腹ゲージ減少する設定なら
+		if (SMConfig.hungerSetting.get()) {
+			player.causeFoodExhaustion(magicInfo.getMagicItem().getUseMF() * 0.001F);
 		}
 	}
 
@@ -430,21 +406,21 @@ public interface IWand extends IMFTool {
 	}
 
 	// MFを設定
-	default int setMF(Player player, ItemStack stack, MagicInfo slotInfo) {
-		return this.getMF(stack) - this.getCostMF(player, stack, slotInfo);
+	default int setMF(Player player, ItemStack stack, MagicInfo magicInfo) {
+		return this.getMF(stack) - this.getCostMF(player, stack, magicInfo);
 	}
 
 	// 消費MF量取得
-	default int getCostMF(Player player, ItemStack stack, MagicInfo slotInfo) {
+	default int getCostMF(Player player, ItemStack stack, MagicInfo magicInfo) {
 
 		float costDown = 0;
-		IMagicItem magicItem = slotInfo.getMagicItem();
+		IMagicItem magicItem = magicInfo.getMagicItem();
 
 		if (magicItem.getNoMF(player)) {
 			return (int) costDown;
 		}
 
-		int useMF = slotInfo.getMagicItem().getUseMF();
+		int useMF = magicInfo.getMagicItem().getUseMF();
 
 		// エンチャ分のMF消費の減少
 		costDown += this.getEnchantLevel(EnchantInit.mfCostDown, stack) * 7;
@@ -472,14 +448,15 @@ public interface IWand extends IMFTool {
 	}
 
 	// リキャストタイムの取得
-	default int getRecastTime(Player player, ItemStack stack, MagicInfo slotInfo) {
+	default int getRecastTime(Player player, ItemStack stack, MagicInfo info) {
 
 		int recastDown = 0;
-		IMagicItem magicItem = slotInfo.getMagicItem();
+		Level world = player.getLevel();
+		IMagicItem magicItem = info.getMagicItem();
 
 		if (magicItem.getNoRecast(player)) {
-			this.playSound(player.level, player, SoundInit.RECAST_CLEAR, 0.25F, 1F);
-			return recastDown;
+			this.playSound(world, player, SoundInit.RECAST_CLEAR, 0.25F, 1F);
+			return magicItem.isUniqueMagic() ? (int) (magicItem.getMaxRecastTime() * 0.05F) : recastDown;
 		}
 
 		int recastTime = magicItem.getMaxRecastTime();
@@ -495,10 +472,10 @@ public interface IWand extends IMFTool {
 		// 即発動受付時間内ならリキャストタイム減少
 		if (!this.isEmptyImmedTime(stack) && this.diffSlot(stack)) {
 			recastDown += 10;
-			magicItem.setImmedFlag(slotInfo.getStack(), true);
+			magicItem.setImmedFlag(info.getStack(), true);
 
-			if (!player.level.isClientSide) {
-				this.playSound(player.level, player, SoundInit.QUICK, 0.0625F, 1F);
+			if (!world.isClientSide()) {
+				this.playSound(world, player, SoundInit.QUICK, 0.0625F, 1F);
 			}
 		}
 
@@ -511,14 +488,15 @@ public interface IWand extends IMFTool {
 		this.setImmedSlot(stack, this.getSelectSlot(stack));
 
 		// 装備品分
-		recastDown += this.acceCoolTime(player.level, player.getItemBySlot(EquipmentSlot.LEGS), slotInfo);
+		recastDown += this.acceCoolTime(world, player.getItemBySlot(EquipmentSlot.LEGS), info);
 
 		if (this.isScope() && magicItem.getMagicType().is(SMMagicType.SHOT)) {
 			recastDown += 10;
 		}
 
 		// リキャストタイムが99%より大きくならないように
-		recastDown = Math.min(99, recastDown);
+		int maxRecast = info.getMagicItem().isUniqueMagic() ? 90 : 99;
+		recastDown = Math.min(recastTime, recastDown);
 
 		// リキャストタイム減少が0より大きいなら
 		if (recastDown > 0) {
@@ -530,7 +508,7 @@ public interface IWand extends IMFTool {
 
 		// ユニーク魔法の場合、同じ魔法にすべてリキャスト設定
 		if (magicItem.isUniqueMagic()) {
-			List<ItemStack> magicList = IWand.getMagicList(IWand.getWandList(player), e -> magicItem.isEqualMagic(e, slotInfo));
+			List<ItemStack> magicList = IWand.getMagicList(IWand.getWandList(player), e -> magicItem.isEqualMagic(e, info));
 
 			// リキャストタイムの設定
 			for (ItemStack magic : magicList) {
@@ -552,13 +530,10 @@ public interface IWand extends IMFTool {
 		return Math.min(player.getEffect(potion).getAmplifier() + 1, 10);
 	}
 
-	// 追加杖レベル
+	// 射撃魔法以外ならエンチャレベルだけを返す
 	default int addWandLevel(Level world, Player player, ItemStack stack, IMagicItem smItem, Enchantment enchant) {
-
-		// 射撃魔法以外ならエンチャレベルだけを返す
 		int enchaLevel = this.getEnchantLevel(enchant, stack);
 		if (!smItem.getMagicType().is(SMMagicType.SHOT)) { return enchaLevel; }
-
 		return enchaLevel;
 	}
 
@@ -582,7 +557,7 @@ public interface IWand extends IMFTool {
 	}
 
 	// 装備品のクールタイム取得
-	default int acceCoolTime(Level world, ItemStack stack, MagicInfo slotInfo) {
+	default int acceCoolTime(Level world, ItemStack stack, MagicInfo magicInfo) {
 		if (!(stack.getItem() instanceof IPorch porch)) { return 0; }
 
 		int coolTime = 0;
@@ -591,7 +566,7 @@ public interface IWand extends IMFTool {
 			coolTime += 10;
 		}
 
-		if (porch.hasAcce(stack, ItemInit.twilight_hourglass) && slotInfo.getMagicItem().getMagicType().is(SMMagicType.SUMMON)) {
+		if (porch.hasAcce(stack, ItemInit.twilight_hourglass) && magicInfo.getMagicItem().getMagicType().is(SMMagicType.SUMMON)) {
 
 			long worldTime = world.dayTime() % 24000;
 			if (worldTime >= 10400 && worldTime < 14000) {
@@ -604,7 +579,6 @@ public interface IWand extends IMFTool {
 
 	// 装備品のMF消費取得
 	default float acceCostRate(Player player) {
-
 		int costValue = 0;
 		ItemStack leg = player.getItemBySlot(EquipmentSlot.LEGS);
 		if (!(leg.getItem() instanceof IPorch porch)) { return costValue; }
@@ -613,13 +587,14 @@ public interface IWand extends IMFTool {
 	}
 
 	// 装備品の経験値追加
-	default int getAddExp(Player player, IMagicItem smItem) {
+	default int getAddExp(Player player, MagicInfo magicInfo) {
 
-		int exp = Math.max((int) smItem.getUseMF() / 10, 0) + smItem.addExp();
+		IMagicItem magic = magicInfo.getMagicItem();
+		int exp = Math.max((int) magic.getUseMF() / 10, 0) + magic.addExp() * (magic.isAllShrink() ? magicInfo.getStack().getCount() : 1);
 		float addPower = 1F + this.getPotionLevel(player, PotionInit.increased_experience);
 
 		ItemStack leg = player.getItemBySlot(EquipmentSlot.LEGS);
-		if (smItem instanceof RankUpMagic && leg.getItem() instanceof IPorch porch) {
+		if (!(magic instanceof RankUpMagic) && leg.getItem() instanceof IPorch porch) {
 			addPower += 0.125F * porch.acceCount(leg, ItemInit.magicians_grobe, 8);
 		}
 
@@ -664,7 +639,7 @@ public interface IWand extends IMFTool {
 		tags.putInt(LEVEL, upLevel);
 		tags.putInt(EXP, needExp);
 
-		if (!player.level.isClientSide) {
+		if (!player.getLevel().isClientSide()) {
 			this.playSound(world, player, SoundInit.LEVELUP, 0.0625F, 1F);
 		}
 
@@ -681,11 +656,13 @@ public interface IWand extends IMFTool {
 	default void checkAdavanced(Player player, ItemStack stack) {
 
 		// 杖レベル取得
-//		int level = this.getNBT(stack).getInt(LEVEL);
-//		AdvancedInit.apprentice_magician.triggerLevel(player, 10, level);
-//		AdvancedInit.intermediate_magician.triggerLevel(player, 20, level);
-//		AdvancedInit.advanced_magician.triggerLevel(player, 30, level);
-//		AdvancedInit.maestro_magician.triggerLevel(player, 40, level);
+		int level = this.getNBT(stack).getInt(LEVEL);
+
+		if(player instanceof ServerPlayer sPlayer) {
+			AdvancedInit.biginerMagician.trigger(sPlayer, 10, level);
+			AdvancedInit.intermediateMagician.trigger(sPlayer, 20, level);
+			AdvancedInit.advancedMagician.trigger(sPlayer, 30, level);
+		}
 	}
 
 	// 最大レベルの取得
@@ -695,8 +672,6 @@ public interface IWand extends IMFTool {
 
 	// 必要経験値を取得
 	default int needExp(int maxLevel, int nextLevel, ItemStack stack) {
-
-		// 必要経験値量 - 取得済みの経験値
 		int needExp = this.getNeedExp(nextLevel) - this.getExpValue(stack);
 		return (nextLevel - 1) >= maxLevel ? 0 : needExp;
 	}
@@ -704,22 +679,18 @@ public interface IWand extends IMFTool {
 	// 必要経験値を取得
 	default int getNeedExp(int nextLevel) {
 
-		int level = nextLevel - 1;								// 今のレベルを取得
-		int tierLevel = level % 8 == 0 ? level - 1 : level;		// レベル8用に別の変数に
-		int tier = (int) (tierLevel / 8);						// レベル8ごとに振り分け用
-		int value = level - ( tier * 8 );						// 0～7に振り分け
+		int level = nextLevel - 1;							// 今のレベルを取得
+		int tierLevel = level % 8 == 0 ? level - 1 : level;	// レベル8用に別の変数に
+		int tier = (int) (tierLevel / 8);					// レベル8ごとに振り分け用
+		int value = level - (tier * 8);						// 0～7に振り分け
 
 		value = value != 0 ? value : 8;			// 0なら8に上げる
 		tier = level == 8 ? tier - 1 : tier;	// レベル8ならtierを一つ落とす
-
-		// 経験値の取得
-		int exp = value * 120;
+		int exp = value * 120;					// 経験値の取得
 
 		// レベル9以降なら一桁増やす
 		if (tier > 0) {
-			for (int i = 0; i < tier; i++) {
-				exp *= 10;
-			}
+			for (int i = 0; i < tier; i++) { exp *= 10; }
 		}
 
 		return Math.min(exp, 600000);
@@ -912,11 +883,10 @@ public interface IWand extends IMFTool {
 	}
 
 	// スロット内のアイテムを減らす処理
-	default void shrinkItem(Player player, ItemStack stack, ItemStack magicItem) {
-
-		// インベントリ取得してアイテム消費
-		SMWandInventory inv = new WandInfo(stack).getInv();
-		inv.getStackInSlot(this.getSelectSlot(stack)).shrink(1);
+	default void shrinkItem(Player player, WandInfo wandInfo, MagicInfo magicInfo) {
+		SMWandInventory inv = wandInfo.getInv();
+		ItemStack selectStack = inv.getStackInSlot(this.getSelectSlot(wandInfo.getStack()));
+		selectStack.shrink(magicInfo.getMagicItem().isAllShrink() ? selectStack.getCount() : 1);
 		inv.writeBack();
 	}
 
@@ -930,7 +900,7 @@ public interface IWand extends IMFTool {
 	}
 
 	default void shotSound(Player player) {
-		this.playSound(player.level, player, SoundEvents.BLAZE_SHOOT, 0.5F, 0.67F);
+		this.playSound(player.getLevel(), player, SoundEvents.BLAZE_SHOOT, 0.5F, 0.67F);
 	}
 
 	default List<Component> addTip() {
@@ -982,13 +952,13 @@ public interface IWand extends IMFTool {
 
 	// 魔法と杖の属性一致確認
 	default boolean isElementEqual(IMagicItem smItem) {
-		SMElement wandElemet = this.getWandElement();
-		return smItem.getElement() == wandElemet || ( smItem.getSubElement() != null && smItem.getSubElement() == wandElemet );
+		SMElement elemet = this.getWandElement();
+		return smItem.getElement() == elemet || (smItem.getSubElement() != null && smItem.getSubElement() == elemet);
 	}
 
 	// 魔法と杖の属性一致確認
 	default boolean isElementEqual(IMagicItem smItem, SMElement ele) {
-		return smItem.getElement().is(ele) || ( smItem.getSubElement() != null && smItem.getSubElement().is(ele) );
+		return smItem.getElement().is(ele) || (smItem.getSubElement() != null && smItem.getSubElement().is(ele));
 	}
 
 	// インベントリ常時更新
@@ -1008,8 +978,8 @@ public interface IWand extends IMFTool {
 	default void slotUpdate(Level level, Player player, ItemStack stack) {
 
 		// インベントリ取得
-		WandInfo wandInfo = new WandInfo(stack);
-		SMWandInventory inv = wandInfo.getInv();
+		WandInfo info = new WandInfo(stack);
+		SMWandInventory inv = info.getInv();
 
 		for (int i = 0; i < inv.getSlots(); i++) {
 
@@ -1017,9 +987,9 @@ public interface IWand extends IMFTool {
 			if (magicStack.isEmpty()) { continue; }
 
 			// 魔法の取得
-			MagicInfo slotInfo = new MagicInfo(magicStack);
-			IMagicItem magicItem = slotInfo.getMagicItem();
-			magicItem.onMagicUpdate(level, player, wandInfo, magicStack);
+			MagicInfo magicInfo = new MagicInfo(magicStack);
+			IMagicItem magicItem = magicInfo.getMagicItem();
+			magicItem.onMagicUpdate(level, player, info, magicStack);
 
 			boolean hasTag = magicStack.getTag() != null;
 			magicItem.getNBT(magicStack);
@@ -1044,12 +1014,11 @@ public interface IWand extends IMFTool {
 
 		// インベントリ取得
 		SMWandInventory inv = new WandInfo(stack).getInv();
-		int slotCount = inv.getSlots();
 		List<ItemStack> stackList = new ArrayList<>();
+		int slotCount = inv.getSlots();
 
+		// 選択中のアイテムを取得
 		for (int i = 0; i < slotCount; i++) {
-
-			// 選択中のアイテムを取得
 			stackList.add(inv.inv.getStackInSlot(i));
 		}
 
@@ -1102,12 +1071,12 @@ public interface IWand extends IMFTool {
 
 	// 火力取得( レベル × 0.2 ) + 最小( (レベル - 1) × 0.175, 5) + 最小( 最大(5 × (1 - (レベル - 1) × 0.02), 0), 4)
 	default float getPower(float level) {
-		return ( level * 0.2F ) + Math.min( (level - 1) * 0.255F, 5) + Math.min( Math.max(6 * (1 - (level - 1) * 0.0185F), 0), 5.8F);
+		return (level * 0.2F) + Math.min((level - 1) * 0.255F, 5) + Math.min(Math.max(6 * (1 - (level - 1) * 0.0185F), 0), 5.8F);
 	}
 
 	// ポーション効果時間(最大( 1200 × ( 1 - (レベル - 1) × 0.05 ), 0) + 450 × (レベル - 1) × 最大( 2 - (レベル - 1) × 0.1, 0.65 ))
 	default int effectTime(int level) {
-		return (int) (Math.max( 1200 * ( 1 - (level - 1) * 0.05F ), 0) + 450 * (level - 1) * Math.max( 2 - (level - 1) * 0.1F, 0.65F ));
+		return (int) (Math.max(1200 * (1 - (level - 1) * 0.05F), 0) + 450 * (level - 1) * Math.max(2 - (level - 1) * 0.1F, 0.65F));
 	}
 
 	/*
@@ -1198,6 +1167,20 @@ public interface IWand extends IMFTool {
 		}
 
 		return magicList;
+	}
+
+	public static ItemStack getWand(Player player) {
+		ItemStack stack = player.getMainHandItem();
+
+		if(stack.isEmpty() || !(stack.getItem() instanceof IWand)) {
+			stack = player.getOffhandItem();
+		}
+
+		if(stack.isEmpty() || !(stack.getItem() instanceof IWand)) {
+			stack = ItemStack.EMPTY;
+		}
+
+		return stack;
 	}
 
 	/*

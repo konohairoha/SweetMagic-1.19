@@ -23,13 +23,14 @@ import sweetmagic.util.WorldHelper;
 
 public abstract class AbstractChopTaskEvent {
 
-	protected final Level world;
-	protected final Player player;
-	protected final boolean isCreative;
-	protected final BlockPos start;
-	protected final int blockTick;
-	protected List<BlockPos> targetblockList = new ArrayList<>(); // 対象リスト
-	protected Set<BlockPos> posSet = new HashSet<>(); // 対象座標リスト
+	public final Level world;
+	public final Player player;
+	public final boolean isCreative;
+	public final BlockPos start;
+	public final int blockTick;
+	public List<BlockPos> targetblockList = new ArrayList<>(); // 対象リスト
+	public Set<BlockPos> posSet = new HashSet<>(); // 対象座標リスト
+	public final Direction[] allFace = new Direction[] { Direction.UP, Direction.DOWN, Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST };
 
 	public AbstractChopTaskEvent(BlockPos start, Player player, int blockTick) {
 		this.world = player.getLevel();
@@ -50,13 +51,12 @@ public abstract class AbstractChopTaskEvent {
 		}
 
 		BlockPos pos;
-		int left = this.blockTick;
+		int tick = this.blockTick;
 		List<ItemStack> dropList = new ArrayList<>();
-		Direction[] allFace = new Direction[] { Direction.UP, Direction.DOWN, Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST };
 		boolean isFirst = this.posSet.isEmpty();
 
 		// 見つかるまで回す
-		while(left > 0) {
+		while(tick > 0) {
 
 			// 空なら終了
 			if(this.targetblockList.isEmpty()) {
@@ -75,7 +75,7 @@ public abstract class AbstractChopTaskEvent {
 
 				this.world.destroyBlock(pos, false);
 
-				for (Direction face : allFace) {
+				for (Direction face : this.allFace) {
 					BlockPos posFace = pos.relative(face);
 
 					// 原木なら
@@ -101,7 +101,7 @@ public abstract class AbstractChopTaskEvent {
 			this.world.destroyBlock(pos, false);
 
 			// 4方向確認
-			for (Direction face : allFace) {
+			for (Direction face : this.allFace) {
 
 				// 未チェック領域なら追加
 				BlockPos posFace = pos.relative(face);
@@ -112,7 +112,7 @@ public abstract class AbstractChopTaskEvent {
 				}
 			}
 
-			left--;
+			tick--;
 		}
 
 		//リストに入れたアイテムをドロップさせる

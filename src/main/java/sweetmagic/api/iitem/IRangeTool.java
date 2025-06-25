@@ -31,7 +31,6 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import sweetmagic.init.ItemInit;
 import sweetmagic.init.PotionInit;
-import sweetmagic.util.SMDebug;
 import sweetmagic.util.WorldHelper;
 
 public interface IRangeTool {
@@ -41,13 +40,13 @@ public interface IRangeTool {
 	);
 
 	int getRange();
-
+	
 	default boolean isDepth() {
 		return false;
 	}
 
 	default void rangeBreake(ItemStack stack, Level world, BlockPos pos, LivingEntity living, RayTracePointer ray) {
-		if (world.isClientSide || !(living instanceof Player player) || living.hasEffect(PotionInit.non_destructive)) { return; }
+		if (world.isClientSide() || !(living instanceof Player player) || living.hasEffect(PotionInit.non_destructive)) { return; }
 
 		HitResult mop = ray.rayTrace(world, player, ClipContext.Fluid.NONE);
 		if (!(mop instanceof BlockHitResult result) || result.getType() == HitResult.Type.MISS || !pos.equals(result.getBlockPos())) { return; }
@@ -104,8 +103,6 @@ public interface IRangeTool {
 		}
 
 		for (BlockPos p : pList) {
-
-			SMDebug.info(p);
 			BlockState state = world.getBlockState(p);
 			if (!this.isAllBlock() && !stack.isCorrectToolForDrops(state)) { continue; }
 
@@ -119,7 +116,7 @@ public interface IRangeTool {
 				}
 
 				if (state.getBlock() instanceof DropExperienceBlock block) {
-					sumXP += block.getExpDrop(state, world, world.random, pos, fortune, silkTouch);
+					sumXP += block.getExpDrop(state, world, world.getRandom(), pos, fortune, silkTouch);
 				}
 			}
 
@@ -147,7 +144,7 @@ public interface IRangeTool {
 	default LootContext.Builder getLoot (ServerLevel world, BlockPos pos) {
 		ItemStack tool = new ItemStack(ItemInit.alt_pick);
 		tool.enchant(Enchantments.SILK_TOUCH, 1);
-		return new LootContext.Builder(world).withRandom(world.random).withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(pos))
+		return new LootContext.Builder(world).withRandom(world.getRandom()).withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(pos))
 				.withParameter(LootContextParams.TOOL, tool).withOptionalParameter(LootContextParams.BLOCK_ENTITY, world.getBlockEntity(pos));
 	}
 

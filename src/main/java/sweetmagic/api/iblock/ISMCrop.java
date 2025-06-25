@@ -78,7 +78,7 @@ public interface ISMCrop {
 	default List<ItemStack> rightClickStack(Level world, BlockState state, BlockPos pos) {
 
 		// アイテムの取得
-		List<ItemStack> stackList = Arrays.<ItemStack> asList( this.getDropStack(world.random) );
+		List<ItemStack> stackList = Arrays.<ItemStack> asList(this.getDropStack(world.getRandom()));
 
 		// 作物の成長段階を下げる
 		world.setBlock(pos, state.setValue(this.getSMMaxAge(), this.RCSetState()), 2);
@@ -149,7 +149,7 @@ public interface ISMCrop {
 	}
 
 	default int getBonemealAgeIncrease(Level world) {
-		return Mth.nextInt(world.random, 0, Math.min(2, this.getMaxBlockState() - 2));
+		return Mth.nextInt(world.getRandom(), 0, Math.min(2, this.getMaxBlockState() - 2));
 	}
 
 	default BlockState getStateForAge(int addAge) {
@@ -159,7 +159,7 @@ public interface ISMCrop {
 	default List<ItemStack> getDropList(BlockState state, LootContext.Builder build) {
 
 		List<ItemStack> stackList = Lists.newArrayList();
-		RandomSource rand = build.getLevel().random;
+		RandomSource rand = build.getLevel().getRandom();
 
 		// 最大成長しているなら
 		if (this.isMaxAge(state)) {

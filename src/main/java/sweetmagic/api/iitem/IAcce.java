@@ -3,6 +3,9 @@ package sweetmagic.api.iitem;
 import java.util.List;
 import java.util.function.Predicate;
 
+import com.google.common.collect.ImmutableMultimap;
+import com.google.common.collect.Multimap;
+
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.sounds.SoundEvent;
@@ -10,6 +13,8 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -20,6 +25,7 @@ import sweetmagic.api.iitem.info.AcceInfo;
 import sweetmagic.api.iitem.info.PorchInfo;
 import sweetmagic.api.util.ISMTip;
 import sweetmagic.util.PlayerHelper;
+import sweetmagic.util.WorldHelper;
 
 public interface IAcce extends ISMTip {
 
@@ -45,6 +51,10 @@ public interface IAcce extends ISMTip {
 
 	default MutableComponent getHowGetTip() {
 		return this.getText(this.getDropType().getName());
+	}
+
+	default Multimap<Attribute, AttributeModifier> getAttributeMap(Level world, Player player, AcceInfo info, PorchInfo pInfo) {
+		return ImmutableMultimap.of();
 	}
 
 	// アクセサリタイプの取得
@@ -77,11 +87,11 @@ public interface IAcce extends ISMTip {
 	}
 
 	default <T extends Entity> List<T> getEntityList(Class<T> enClass, Entity entity, double range) {
-		return entity.level.getEntitiesOfClass(enClass, this.getAABB(entity, range));
+		return WorldHelper.getEntityList(entity, enClass, this.getAABB(entity, range));
 	}
 
 	default <T extends Entity> List<T> getEntityList(Class<T> enClass, Entity entity, Predicate<T> filter, double range) {
-		return entity.level.getEntitiesOfClass(enClass, this.getAABB(entity, range)).stream().filter(filter).toList();
+		return WorldHelper.getEntityList(entity, enClass, filter, this.getAABB(entity, range));
 	}
 
 	// 範囲の取得

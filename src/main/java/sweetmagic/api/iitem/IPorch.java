@@ -6,11 +6,16 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.google.common.collect.ImmutableMultimap;
+import com.google.common.collect.Multimap;
+
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -44,9 +49,14 @@ public interface IPorch extends ISMArmor {
 
 	// 常時発動処理
 	default void onTick(Level world, Player player, ItemStack porch) {
-		if (player.isSpectator()) { return; }
+		if (player.isSpectator() || world.isClientSide()) { return; }
 
-		// インベントリを取得
+		Multimap<Attribute, AttributeModifier> map = this.getAttributeMap();
+		if (!map.isEmpty()) {
+			player.getAttributes().removeAttributeModifiers(map);
+			this.setAttributeMap(ImmutableMultimap.of());
+		}
+
 		List<ItemStack> stackList = this.getStackList(porch);
 		if (stackList.isEmpty()) { return; }
 
@@ -77,8 +87,22 @@ public interface IPorch extends ISMArmor {
 		}
 
 		if (acceSet.isEmpty()) { return; }
+
 		PorchInfo pInfo = new PorchInfo(porch);
-		acceSet.forEach(i -> i.getAcce().onMultiUpdate(world, player, i, pInfo));
+		ImmutableMultimap.Builder<Attribute, AttributeModifier> imMap = ImmutableMultimap.builder();
+
+		for(AcceInfo accInfo : acceSet) {
+			IAcce acc = accInfo.getAcce();
+			acc.onMultiUpdate(world, player, accInfo, pInfo);
+			imMap.putAll(acc.getAttributeMap(world, player, accInfo, pInfo));
+		}
+
+		Multimap<Attribute, AttributeModifier> mulMap = imMap.build();
+		this.setAttributeMap(mulMap);
+
+		if(!mulMap.isEmpty()) {
+			player.getAttributes().addTransientAttributeModifiers(mulMap);
+		}
 	}
 
 	default List<ItemStack> getStackList(ItemStack stack) {
@@ -127,11 +151,15 @@ public interface IPorch extends ISMArmor {
 			// リキャスト時間の経過を通知
 			inv.writeBack();
 			boolean notActive = tags.getBoolean(SMAcce.NOT_ACTIVE);
-			this.playSound(player.level, player, SoundInit.STOVE_OFF, 0.1F, !notActive ? 0.75F : 1.25F);
+			this.playSound(player.getLevel(), player, SoundInit.STOVE_OFF, 0.1F, !notActive ? 0.75F : 1.25F);
 			player.sendSystemMessage(this.getTipArray(((MutableComponent) magicStack.getDisplayName()).withStyle(GOLD), this.getText(notActive ? "acce_invalid" : "acce_active").withStyle(notActive ? RED : GREEN)));
 			break;
 		}
 	}
+
+	Multimap<Attribute, AttributeModifier> getAttributeMap();
+
+	void setAttributeMap(Multimap<Attribute, AttributeModifier> map);
 
 	public static IPorch getPorch(Player player) {
 		ItemStack leg = player.getItemBySlot(EquipmentSlot.LEGS);

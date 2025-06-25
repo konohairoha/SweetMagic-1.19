@@ -115,9 +115,13 @@ public interface IMagicItem extends ISMUtil {
 		return false;
 	}
 
+	// 使用時に全て消費するか
+	default boolean isAllShrink() {
+		return false;
+	}
+
 	default boolean isEqualMagic(ItemStack stack, MagicInfo info) {
 		return stack.is(info.getItem());
-
 	}
 
 	// nbt初期化用
@@ -217,9 +221,9 @@ public interface IMagicItem extends ISMUtil {
 		SMElement subEle = this.getSubElement();
 		if (!this.gethollyCharm(player) || !this.isElement(ele, subEle, SMElement.SHINE)) { return; }
 
-		Level world = player.level;
+		Level world = player.getLevel();
 		SimpleParticleType par = ParticleTypes.END_ROD;
-		RandomSource rand = world.random;
+		RandomSource rand = world.getRandom();
 		float dame = ( (float) obj ) * 0.67F;
 		List<Monster> entityList = this.getEntityList(Monster.class, player, 7.5D);
 
@@ -232,7 +236,7 @@ public interface IMagicItem extends ISMUtil {
 				entity.invulnerableTime = 0;
 			}
 
-			if ( !(world instanceof ServerLevel sever) ) { continue; }
+			if (!(world instanceof ServerLevel sever)) { continue; }
 
 			BlockPos pos = entity.blockPosition().above();
 
@@ -245,8 +249,8 @@ public interface IMagicItem extends ISMUtil {
 		}
 	}
 
-	default boolean isElement (SMElement ele, SMElement subEle, SMElement checkEle) {
-		return ele.is(checkEle) || ( subEle != null && subEle.is(checkEle) );
+	default boolean isElement(SMElement ele, SMElement subEle, SMElement checkEle) {
+		return ele.is(checkEle) || (subEle != null && subEle.is(checkEle));
 	}
 
 	// アップデート
@@ -259,7 +263,7 @@ public interface IMagicItem extends ISMUtil {
 
 		BookInfo info = new BookInfo(stackBookList.get(0));
 		IMagicBook book = info.getBook();
-		return book.checkChance(book.getHealPage(info), player.level);
+		return book.checkChance(book.getHealPage(info), player.getLevel());
 	}
 
 	// MF無しができるか
@@ -269,7 +273,7 @@ public interface IMagicItem extends ISMUtil {
 
 		BookInfo info = new BookInfo(stackBookList.get(0));
 		IMagicBook book = info.getBook();
-		return book.checkChance(book.getMFPage(info), player.level);
+		return book.checkChance(book.getMFPage(info), player.getLevel());
 	}
 
 	// リキャスト無しができるか
@@ -279,7 +283,7 @@ public interface IMagicItem extends ISMUtil {
 
 		BookInfo info = new BookInfo(stackBookList.get(0));
 		IMagicBook book = info.getBook();
-		return book.checkChance(book.getRecastPage(info), player.level);
+		return book.checkChance(book.getRecastPage(info), player.getLevel());
 	}
 
 	default float getHealValue(Player player, float healValue) {

@@ -2,18 +2,11 @@ package sweetmagic.api.iitem;
 
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.MenuProvider;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -21,8 +14,8 @@ import net.minecraftforge.network.NetworkHooks;
 import sweetmagic.api.iitem.info.BookInfo;
 import sweetmagic.init.ItemInit;
 import sweetmagic.init.SoundInit;
-import sweetmagic.init.tile.menu.SMBookMenu;
-import sweetmagic.init.tile.menu.container.ContainerMagicBook;
+import sweetmagic.init.tile.menu.container.BaseContainer.ContainerBook;
+import sweetmagic.init.tile.menu.container.BaseContainer.ContainerMagicBook;
 
 public interface IMagicBook {
 
@@ -30,7 +23,7 @@ public interface IMagicBook {
 
 	// 確率で発動できるか確認
 	default boolean checkChance(float chance, Level world) {
-		return chance * 0.01F >= world.random.nextFloat();
+		return chance * 0.01F >= world.getRandom().nextFloat();
 	}
 
 	// 確率で発動できるか確認
@@ -95,14 +88,14 @@ public interface IMagicBook {
 		// nbtを取得
 		this.getNBT(stack);
 
-		if (!world.isClientSide) {
+		if (!world.isClientSide()) {
 			NetworkHooks.openScreen((ServerPlayer) player, new ContainerMagicBook(stack));
 			this.playSound(world, player, SoundInit.PAGE, 0.125F, 1F);
 		}
 	}
 
 	default void openCraftGui(Level world, Player player, ItemStack stack) {
-		if (!world.isClientSide) {
+		if (!world.isClientSide()) {
 			NetworkHooks.openScreen((ServerPlayer) player, new ContainerBook(stack));
 			this.playSound(world, player, SoundInit.PAGE, 0.125F, 1F);
 		}
@@ -149,20 +142,5 @@ public interface IMagicBook {
 	// 本の取得
 	public static IMagicBook getBook(ItemStack stack) {
 		return (IMagicBook) stack.getItem();
-	}
-
-	public record ContainerBook(ItemStack stack) implements MenuProvider {
-
-		@NotNull
-		@Override
-		public AbstractContainerMenu createMenu(int windowId, @NotNull Inventory pInv, @NotNull Player player) {
-			return new SMBookMenu(windowId, pInv, ContainerLevelAccess.create(player.getCommandSenderWorld(), player.blockPosition()));
-		}
-
-		@NotNull
-		@Override
-		public Component getDisplayName() {
-			return stack.getHoverName();
-		}
 	}
 }

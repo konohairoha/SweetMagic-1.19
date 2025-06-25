@@ -49,6 +49,7 @@ import sweetmagic.init.PotionInit;
 import sweetmagic.init.TagInit;
 import sweetmagic.init.entity.animal.AbstractSummonMob;
 import sweetmagic.init.entity.projectile.AbstractMagicShot;
+import sweetmagic.init.entity.projectile.EvilArrow;
 import sweetmagic.util.PlayerHelper;
 import sweetmagic.util.SMDamage;
 import sweetmagic.util.WorldHelper;
@@ -110,6 +111,14 @@ public interface ISMMob {
 			amount = Math.min(cap * 0.5F, amount) * 0.5F;
 		}
 
+		else if(attacker instanceof EvilArrow) {
+			return amount;
+		}
+
+		else if(attacker instanceof AbstractMagicShot magic && magic.getCritical()) {
+			cap *= magic.getCriticalDamage();
+		}
+
 		// 火力キャップ
 		float defTimeDamage = src == SMDamage.addDamage ? cap / 5F : 0F;
 		return Math.min(defTime <= 0 ? cap : defTimeDamage, amount);
@@ -123,7 +132,7 @@ public interface ISMMob {
 
 	// 魔法ダメージ以外か
 	default boolean notMagicDamage(Entity attacker, Entity attackEntity) {
-		return attacker != null && attackEntity != null && !( attackEntity instanceof AbstractMagicShot || attackEntity instanceof AbstractSummonMob);
+		return attacker != null && attackEntity != null && !(attackEntity instanceof AbstractMagicShot || attackEntity instanceof AbstractSummonMob);
 	}
 
 	// ボスのダメージチェック
@@ -132,15 +141,15 @@ public interface ISMMob {
 	}
 
 	default <T extends Entity> List<T> getEntityList(Class<T> enClass, Entity entity, double range) {
-		return entity.level.getEntitiesOfClass(enClass, this.getAABB(entity, range));
+		return WorldHelper.getEntityList(entity, enClass, this.getAABB(entity, range));
 	}
 
 	default <T extends Entity> List<T> getEntityList(Class<T> enClass, Entity entity, Predicate<T> filter, double range) {
-		return entity.level.getEntitiesOfClass(enClass, this.getAABB(entity, range)).stream().filter(filter).toList();
+		return WorldHelper.getEntityList(entity, enClass, filter, this.getAABB(entity, range));
 	}
 
 	default <T extends Entity> List<T> getEntityList(Class<T> enClass, Entity entity, Predicate<T> filter, BlockPos pos, double range) {
-		return entity.level.getEntitiesOfClass(enClass, this.getAABB(pos, range)).stream().filter(filter).toList();
+		return WorldHelper.getEntityList(entity, enClass, filter, this.getAABB(pos, range));
 	}
 
 	// 範囲の取得
@@ -156,6 +165,24 @@ public interface ISMMob {
 	// 範囲の取得
 	default AABB getAABB(BlockPos pos, double range) {
 		return new AABB(pos.getX() - range, pos.getY() - range, pos.getZ() - range, pos.getX() + range, pos.getY() + range, pos.getZ() + range);
+	}
+
+	SynchedEntityData getData();
+
+	default <T> T get(EntityDataAccessor<T> value) {
+		return this.getData().get(value);
+	}
+
+	default <T> void set(EntityDataAccessor<T> value, T par) {
+		this.getData().set(value, par);
+	}
+
+	default <T> void define(EntityDataAccessor<T> value, T par) {
+		this.getData().define(value, par);
+	}
+
+	public static <T> EntityDataAccessor<T> setData(Class<? extends Mob> entity, EntityDataSerializer<T> seria) {
+		return SynchedEntityData.defineId(entity, seria);
 	}
 
 	// えんちちーソート
@@ -299,12 +326,12 @@ public interface ISMMob {
 	default Vector3f getShotVector(Mob entity, Vec3 vec, float shake) {
 
 		Vec3 vec1 = vec.normalize();
-		Vec3 vec2 = vec1.cross(new Vec3(0.0D, 1.0D, 0.0D));
+		Vec3 vec2 = vec1.cross(new Vec3(0D, 1D, 0D));
 		if (vec2.lengthSqr() <= 1.0E-7D) {
-			vec2 = vec1.cross(entity.getUpVector(1.0F));
+			vec2 = vec1.cross(entity.getUpVector(1F));
 		}
 
-		Quaternion qua1 = new Quaternion(new Vector3f(vec2), 90.0F, true);
+		Quaternion qua1 = new Quaternion(new Vector3f(vec2), 90F, true);
 		Vector3f vecf1 = new Vector3f(vec1);
 		vecf1.transform(qua1);
 		Quaternion qua2 = new Quaternion(vecf1, shake, true);
@@ -330,17 +357,13 @@ public interface ISMMob {
 
 	// スポーン条件のチェック
 	public static boolean checkMonsterSpawnRules(EntityType<? extends Mob> enType, ServerLevelAccessor world, MobSpawnType spType, BlockPos pos, RandomSource rand) {
-		return world.getDifficulty() != Difficulty.PEACEFUL && ISMMob.isDarkEnoughToSpawn(world, pos, rand) &&
+		return !WorldHelper.isPeace(world) && ISMMob.isDarkEnoughToSpawn(world, pos, rand) &&
 				Mob.checkMobSpawnRules(enType, world, spType, pos, rand) && ISMMob.isDayElapse(world, SMConfig.spawnDate.get());
 	}
 
 	// スポーン条件のチェック
 	public static boolean checkMonsterSpawnRulesSM(EntityType<? extends Mob> enType, ServerLevelAccessor world, MobSpawnType spType, BlockPos pos, RandomSource rand) {
-		return world.getDifficulty() != Difficulty.PEACEFUL && ISMMob.isDarkEnoughToSpawnSM(world, pos, rand) && Mob.checkMobSpawnRules(enType, world, spType, pos, rand);
-	}
-
-	public static <T> EntityDataAccessor<T> setData(Class<? extends Mob> entity, EntityDataSerializer<T> seria) {
-		return SynchedEntityData.defineId(entity, seria);
+		return !WorldHelper.isPeace(world) && ISMMob.isDarkEnoughToSpawnSM(world, pos, rand) && Mob.checkMobSpawnRules(enType, world, spType, pos, rand);
 	}
 
 	default void addPotion(LivingEntity entity, MobEffect potion, int time, int level) {
@@ -403,7 +426,7 @@ public interface ISMMob {
 		}
 
 		public boolean canUse() {
-			return !this.mob.getMoveControl().hasWanted() && this.mob.level.random.nextInt(reducedTickDelay(1)) == 0;
+			return !this.mob.getMoveControl().hasWanted() && this.mob.getLevel().getRandom().nextInt(reducedTickDelay(1)) == 0;
 		}
 
 		public boolean canContinueToUse() {
@@ -413,33 +436,21 @@ public interface ISMMob {
 		public void tick() {
 
 			BlockPos pos = this.mob.blockPosition();
-			RandomSource rand = this.mob.level.random;
+			RandomSource rand = this.mob.getLevel().getRandom();
 
 			for (int i = 0; i < 3; ++i) {
 
 				BlockPos pos1 = pos.offset(rand.nextInt(15) - 7, rand.nextInt(11) - 5, rand.nextInt(15) - 7);
-				if (!this.mob.level.isEmptyBlock(pos1)) { continue; }
+				if (!this.mob.getLevel().isEmptyBlock(pos1)) { continue; }
 
 				this.mob.getMoveControl().setWantedPosition((double) pos1.getX() + 0.5D, (double) pos1.getY() + 0.5D, (double) pos1.getZ() + 0.5D, 0.25D);
 
 				if (this.mob.getTarget() == null) {
-					this.mob.getLookControl().setLookAt((double) pos1.getX() + 0.5D, (double) pos1.getY() + 0.5D, (double) pos1.getZ() + 0.5D, 180.0F, 20.0F);
+					this.mob.getLookControl().setLookAt((double) pos1.getX() + 0.5D, (double) pos1.getY() + 0.5D, (double) pos1.getZ() + 0.5D, 180F, 20F);
 				}
 				break;
 			}
 		}
-	}
-
-	default <T> void registerData(LivingEntity entity, EntityDataAccessor<T> data, T value) {
-		entity.getEntityData().define(data, value);
-	}
-
-	default <T> T getData(LivingEntity entity, EntityDataAccessor<T> data) {
-		return entity.getEntityData().get(data);
-	}
-
-	default <T> void setData(LivingEntity entity, EntityDataAccessor<T> data, T value) {
-		entity.getEntityData().set(data, value);
 	}
 
 	default Iterable<BlockPos> getPosList(BlockPos pos, double range) {

@@ -37,11 +37,11 @@ public interface ISMUtil {
 	}
 
 	default <T extends Entity> List<T> getEntityList(Class<T> enClass, Entity entity, double range) {
-		return entity.level.getEntitiesOfClass(enClass, this.getAABB(entity, range));
+		return WorldHelper.getEntityList(entity, enClass, this.getAABB(entity, range));
 	}
 
 	default <T extends Entity> List<T> getEntityList(Class<T> enClass, Entity entity, Predicate<T> filter, double range) {
-		return entity.level.getEntitiesOfClass(enClass, this.getAABB(entity, range)).stream().filter(filter).toList();
+		return WorldHelper.getEntityList(entity, enClass, filter, this.getAABB(entity, range));
 	}
 
 	// 範囲の取得
