@@ -1,11 +1,11 @@
 {
 	"type": "sweetmagic:alstromeria_craft",
 	"ingredients": [
-		{ "tag": "forge:mushroom", "count": 2 },
-		{ "tag": "forge:sugar", "count": 2 },
-		{ "item": "minecraft:bone_meal", "count": 1 }
+		{"tag": "forge:mushroom", "count": 2},
+		{"tag": "forge:sugar", "count": 2},
+		{"item": "minecraft:bone_meal", "count": 1}
 	],
 	"result": [
-		{ "item": "minecraft:spider_eye", "count": 3 }
+		{"item": "minecraft:spider_eye", "count": 3}
 	]
 }

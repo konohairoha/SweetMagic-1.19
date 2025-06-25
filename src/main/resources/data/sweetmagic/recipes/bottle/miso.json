@@ -1,10 +1,10 @@
 {
 	"type": "sweetmagic:bottle_craft",
 	"ingredients": [
-		{ "tag": "forge:crops/soybean", "count": 8 },
-		{ "tag": "forge:salt", "count": 2 }
+		{"tag": "forge:crops/soybean", "count": 8},
+		{"tag": "forge:salt", "count": 2}
 	],
 	"result": [
-		{ "item": "sweetmagic:miso", "count": 32 }
+		{"item": "sweetmagic:miso", "count": 32}
 	]
 }

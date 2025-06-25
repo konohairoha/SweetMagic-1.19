@@ -1,10 +1,10 @@
 {
 	"type": "sweetmagic:alstromeria_craft",
 	"ingredients": [
-		{ "item": "minecraft:ender_pearl", "count": 1 },
-		{ "item": "sweetmagic:starlight", "count": 1 }
+		{"item": "minecraft:ender_pearl", "count": 1},
+		{"item": "sweetmagic:starlight", "count": 1}
 	],
 	"result": [
-		{ "item": "sweetmagic:stray_soul", "count": 1 }
+		{"item": "sweetmagic:stray_soul", "count": 1}
 	]
 }

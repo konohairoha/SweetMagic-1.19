@@ -1,10 +1,10 @@
 {
 	"type": "sweetmagic:alstromeria_craft",
 	"ingredients": [
-		{ "item": "minecraft:ghast_tear", "count": 1 },
-		{ "item": "sweetmagic:starlight", "count": 2 }
+		{"item": "minecraft:ghast_tear", "count": 1},
+		{"item": "sweetmagic:starlight", "count": 2}
 	],
 	"result": [
-		{ "item": "sweetmagic:witch_tears", "count": 1 }
+		{"item": "sweetmagic:witch_tears", "count": 1}
 	]
 }

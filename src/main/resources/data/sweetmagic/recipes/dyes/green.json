@@ -1,8 +1,8 @@
 {
 	"type": "minecraft:crafting_shapeless",
 	"ingredients": [
-		{ "tag": "forge:dyes/green" },
-		{ "tag": "forge:recipe_book" }
+		{"tag": "forge:dyes/green"},
+		{"tag": "forge:recipe_book"}
 	],
-	"result": { "item": "minecraft:green_dye", "count": 1 }
+	"result": {"item": "minecraft:green_dye", "count": 1}
 }

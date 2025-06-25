@@ -1,10 +1,10 @@
 {
 	"type": "sweetmagic:bottle_craft",
 	"ingredients": [
-		{ "item": "minecraft:bone_meal", "count": 1 },
-		{ "tag": "minecraft:dirt", "count": 1 }
+		{"item": "minecraft:bone_meal", "count": 1},
+		{"tag": "minecraft:dirt", "count": 1}
 	],
 	"result": [
-		{ "item": "minecraft:podzol", "count": 1 }
+		{"item": "minecraft:podzol", "count": 1}
 	]
 }

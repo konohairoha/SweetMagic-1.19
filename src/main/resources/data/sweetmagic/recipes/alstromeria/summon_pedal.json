@@ -1,0 +1,10 @@
+{
+	"type": "sweetmagic:alstromeria_craft",
+	"ingredients": [
+		{"item": "sweetmagic:aether_crystal", "count": 3},
+		{"tag": "forge:stone", "count": 8}
+	],
+	"result": [
+		{"item": "sweetmagic:summon_pedal", "count": 1}
+	]
+}

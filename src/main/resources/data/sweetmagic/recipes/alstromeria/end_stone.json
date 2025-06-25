@@ -1,0 +1,11 @@
+{
+	"type": "sweetmagic:alstromeria_craft",
+	"ingredients": [
+		{"tag": "forge:stone", "count": 8},
+		{"item": "sweetmagic:ender_shard", "count": 1},
+		{"item": "minecraft:chorus_fruit", "count": 1}
+	],
+	"result": [
+		{"item": "minecraft:end_stone", "count": 32}
+	]
+}

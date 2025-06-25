@@ -1,10 +1,10 @@
 {
 	"type": "sweetmagic:alstromeria_craft",
 	"ingredients": [
-		{ "item": "minecraft:clay_ball", "count": 64 },
-		{ "item": "sweetmagic:fire_powder", "count": 1 }
+		{"item": "minecraft:clay_ball", "count": 64},
+		{"item": "sweetmagic:fire_powder", "count": 1}
 	],
 	"result": [
-		{ "item": "minecraft:brick", "count": 64 }
+		{"item": "minecraft:brick", "count": 64}
 	]
 }

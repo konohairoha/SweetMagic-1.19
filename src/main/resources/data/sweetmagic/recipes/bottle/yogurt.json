@@ -1,10 +1,10 @@
 {
 	"type": "sweetmagic:bottle_craft",
 	"ingredients": [
-		{ "tag": "forge:milk", "count": 4 },
-		{ "tag": "forge:salt", "count": 1 }
+		{"tag": "forge:milk", "count": 4},
+		{"tag": "forge:salt", "count": 1}
 	],
 	"result": [
-		{ "item": "sweetmagic:yogurt", "count": 4 }
+		{"item": "sweetmagic:yogurt", "count": 4}
 	]
 }

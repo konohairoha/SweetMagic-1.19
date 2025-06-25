@@ -1,10 +1,10 @@
 {
 	"type": "sweetmagic:bottle_craft",
 	"ingredients": [
-		{ "item": "minecraft:rotten_flesh", "count": 1 },
-		{ "item": "sweetmagic:fire_powder", "count": 1 }
+		{"item": "minecraft:rotten_flesh", "count": 1},
+		{"item": "sweetmagic:fire_powder", "count": 1}
 	],
 	"result": [
-		{ "item": "minecraft:leather", "count": 2 }
+		{"item": "minecraft:leather", "count": 2}
 	]
 }

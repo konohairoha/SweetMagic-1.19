@@ -1,10 +1,10 @@
 {
 	"type": "sweetmagic:bottle_craft",
 	"ingredients": [
-		{ "tag": "forge:seaweed", "count": 4 },
-		{ "tag": "forge:salt", "count": 2 }
+		{"tag": "forge:seaweed", "count": 4},
+		{"tag": "forge:salt", "count": 2}
 	],
 	"result": [
-		{ "item": "sweetmagic:dry_seaweed", "count": 32 }
+		{"item": "sweetmagic:dry_seaweed", "count": 32}
 	]
 }

@@ -1,10 +1,10 @@
 {
 	"type": "sweetmagic:alstromeria_craft",
 	"ingredients": [
-		{ "item": "minecraft:glass_bottle", "count": 1 },
-		{ "item": "sweetmagic:starlight", "count": 1 }
+		{"item": "minecraft:glass_bottle", "count": 1},
+		{"item": "sweetmagic:starlight", "count": 1}
 	],
 	"result": [
-		{ "item": "sweetmagic:poison_bottle", "count": 1 }
+		{"item": "sweetmagic:poison_bottle", "count": 1}
 	]
 }

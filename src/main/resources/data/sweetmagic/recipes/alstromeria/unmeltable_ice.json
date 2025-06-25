@@ -1,10 +1,10 @@
 {
 	"type": "sweetmagic:alstromeria_craft",
 	"ingredients": [
-		{ "item": "minecraft:ice", "count": 1 },
-		{ "item": "sweetmagic:starlight", "count": 1 }
+		{"item": "minecraft:ice", "count": 1},
+		{"item": "sweetmagic:starlight", "count": 1}
 	],
 	"result": [
-		{ "item": "sweetmagic:unmeltable_ice", "count": 1 }
+		{"item": "sweetmagic:unmeltable_ice", "count": 1}
 	]
 }

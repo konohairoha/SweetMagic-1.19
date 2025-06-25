@@ -1,11 +1,11 @@
 {
 	"type": "sweetmagic:alstromeria_craft",
 	"ingredients": [
-		{ "tag": "forge:glass/colorless" , "count": 4 },
-		{ "tag": "forge:ingots/iron" , "count": 4 },
-		{ "tag": "minecraft:planks" , "count": 8 }
+		{"tag": "forge:glass/colorless", "count": 4},
+		{"tag": "forge:ingots/iron", "count": 4},
+		{"tag": "minecraft:planks", "count": 8}
 	],
 	"result": [
-		{ "item": "sweetmagic:aether_lanp", "count": 1 }
+		{"item": "sweetmagic:aether_lanp", "count": 1}
 	]
 }

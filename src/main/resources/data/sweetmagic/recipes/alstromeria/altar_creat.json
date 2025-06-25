@@ -1,12 +1,12 @@
 {
 	"type": "sweetmagic:alstromeria_craft",
 	"ingredients": [
-		{ "item": "sweetmagic:pedestal_creat", "count": 1 },
-		{ "item": "sweetmagic:magia_bottle", "count": 1 },
-		{ "item": "sweetmagic:divine_crystal", "count": 3 },
-		{ "tag": "forge:magic_book_cosmic", "count": 1 }
+		{"item": "sweetmagic:pedestal_creat", "count": 1},
+		{"item": "sweetmagic:magia_bottle", "count": 1},
+		{"item": "sweetmagic:divine_crystal", "count": 3},
+		{"tag": "forge:magic_book_cosmic", "count": 1}
 	],
 	"result": [
-		{ "item": "sweetmagic:altar_creat", "count": 1 }
+		{"item": "sweetmagic:altar_creat", "count": 1}
 	]
 }

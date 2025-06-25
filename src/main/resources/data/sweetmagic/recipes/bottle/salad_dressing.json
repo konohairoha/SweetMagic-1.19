@@ -1,13 +1,13 @@
 {
 	"type": "sweetmagic:bottle_craft",
 	"ingredients": [
-		{ "tag": "forge:mayonnaise", "count": 8 },
-		{ "tag": "forge:vinegar", "count": 2 },
-		{ "tag": "forge:salt", "count": 1 },
-		{ "tag": "forge:sugar", "count": 1 },
-		{ "tag": "forge:oil", "count": 1 }
+		{"tag": "forge:mayonnaise", "count": 8},
+		{"tag": "forge:vinegar", "count": 2},
+		{"tag": "forge:salt", "count": 1},
+		{"tag": "forge:sugar", "count": 1},
+		{"tag": "forge:oil", "count": 1}
 	],
 	"result": [
-		{ "item": "sweetmagic:salad_dressing", "count": 32 }
+		{"item": "sweetmagic:salad_dressing", "count": 32}
 	]
 }

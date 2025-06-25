@@ -1,10 +1,10 @@
 {
 	"type": "sweetmagic:alstromeria_craft",
 	"ingredients": [
-		{ "item": "minecraft:quartz", "count": 4 },
-		{ "item": "minecraft:glowstone_dust", "count": 4 }
+		{"item": "minecraft:quartz", "count": 4},
+		{"item": "minecraft:glowstone_dust", "count": 4}
 	],
 	"result": [
-		{ "item": "minecraft:ghast_tear", "count": 2 }
+		{"item": "minecraft:ghast_tear", "count": 2}
 	]
 }

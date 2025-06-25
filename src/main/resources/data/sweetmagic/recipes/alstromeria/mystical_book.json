@@ -1,12 +1,12 @@
 {
 	"type": "sweetmagic:alstromeria_craft",
 	"ingredients": [
-		{ "item": "sweetmagic:mystical_page", "count": 1 },
-		{ "item": "sweetmagic:mysterious_page", "count": 2 },
-		{ "item": "sweetmagic:paper_mint", "count": 3 },
-		{ "item": "sweetmagic:sugarbell", "count": 4 }
+		{"item": "sweetmagic:mystical_page", "count": 1},
+		{"item": "sweetmagic:mysterious_page", "count": 2},
+		{"item": "sweetmagic:paper_mint", "count": 3},
+		{"item": "sweetmagic:sugarbell", "count": 4}
 	],
 	"result": [
-		{ "item": "sweetmagic:mystical_book", "count": 1 }
+		{"item": "sweetmagic:mystical_book", "count": 1}
 	]
 }

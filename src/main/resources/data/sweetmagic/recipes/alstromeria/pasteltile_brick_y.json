@@ -1,10 +1,10 @@
 {
 	"type": "sweetmagic:alstromeria_craft",
 	"ingredients": [
-		{ "item": "minecraft:nether_brick" , "count": 4 },
-		{ "item": "minecraft:bricks" , "count": 16 }
+		{"item": "minecraft:nether_brick", "count": 4},
+		{"item": "minecraft:bricks", "count": 16}
 	],
 	"result": [
-		{ "item": "sweetmagic:pasteltile_brick_y", "count": 64 }
+		{"item": "sweetmagic:pasteltile_brick_y", "count": 64}
 	]
 }

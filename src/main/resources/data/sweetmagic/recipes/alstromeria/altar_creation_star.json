@@ -1,12 +1,12 @@
 {
 	"type": "sweetmagic:alstromeria_craft",
 	"ingredients": [
-		{ "item": "sweetmagic:altar_creat", "count": 1 },
-		{ "item": "sweetmagic:magiaflux_block", "count": 1 },
-		{ "item": "sweetmagic:pure_crystal", "count": 3 },
-		{ "tag": "forge:magic_book_scarlet", "count": 1 }
+		{"item": "sweetmagic:altar_creat", "count": 1},
+		{"item": "sweetmagic:magiaflux_block", "count": 1},
+		{"item": "sweetmagic:pure_crystal", "count": 3},
+		{"tag": "forge:magic_book_scarlet", "count": 1}
 	],
 	"result": [
-		{ "item": "sweetmagic:altar_creation_star", "count": 1 }
+		{"item": "sweetmagic:altar_creation_star", "count": 1}
 	]
 }

@@ -1,10 +1,10 @@
 {
 	"type": "sweetmagic:alstromeria_craft",
 	"ingredients": [
-		{ "tag": "minecraft:dirt" , "count": 4 },
-		{ "item": "minecraft:bricks" , "count": 8 }
+		{"tag": "minecraft:dirt", "count": 4},
+		{"item": "minecraft:bricks", "count": 8}
 	],
 	"result": [
-		{ "item": "sweetmagic:design_brick_w", "count": 64 }
+		{"item": "sweetmagic:design_brick_w", "count": 64}
 	]
 }

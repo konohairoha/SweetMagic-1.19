@@ -1,10 +1,10 @@
 {
 	"type": "sweetmagic:alstromeria_craft",
 	"ingredients": [
-		{ "item": "minecraft:feather", "count": 1 },
-		{ "item": "sweetmagic:starlight", "count": 1 }
+		{"item": "minecraft:feather", "count": 1},
+		{"item": "sweetmagic:starlight", "count": 1}
 	],
 	"result": [
-		{ "item": "sweetmagic:tiny_feather", "count": 1 }
+		{"item": "sweetmagic:tiny_feather", "count": 1}
 	]
 }

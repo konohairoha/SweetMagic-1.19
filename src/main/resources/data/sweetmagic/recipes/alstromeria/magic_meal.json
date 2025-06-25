@@ -1,10 +1,10 @@
 {
 	"type": "sweetmagic:alstromeria_craft",
 	"ingredients": [
-		{ "tag": "forge:sugar", "count": 2 },
-		{ "tag": "forge:bone_meal", "count": 1 }
+		{"tag": "forge:sugar", "count": 2},
+		{"tag": "forge:bone_meal", "count": 1}
 	],
 	"result": [
-		{ "item": "sweetmagic:magic_meal", "count": 2 }
+		{"item": "sweetmagic:magic_meal", "count": 2}
 	]
 }

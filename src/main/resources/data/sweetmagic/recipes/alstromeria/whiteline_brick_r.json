@@ -1,10 +1,10 @@
 {
 	"type": "sweetmagic:alstromeria_craft",
 	"ingredients": [
-		{ "tag": "minecraft:sand" , "count": 4 },
-		{ "item": "minecraft:bricks" , "count": 8 }
+		{"tag": "minecraft:sand", "count": 4},
+		{"item": "minecraft:bricks", "count": 8}
 	],
 	"result": [
-		{ "item": "sweetmagic:whiteline_brick_r", "count": 64 }
+		{"item": "sweetmagic:whiteline_brick_r", "count": 64}
 	]
 }

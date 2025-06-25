@@ -1,11 +1,11 @@
 {
 	"type": "sweetmagic:alstromeria_craft",
 	"ingredients": [
-		{ "tag": "sweetmagic:magic_accessory", "count": 1 },
-		{ "item": "minecraft:string", "count": 1 },
-		{ "item": "sweetmagic:cotton_cloth", "count": 4 }
+		{"tag": "sweetmagic:magic_accessory", "count": 1},
+		{"item": "minecraft:string", "count": 1},
+		{"item": "sweetmagic:cotton_cloth", "count": 4}
 	],
 	"result": [
-		{ "item": "sweetmagic:acce_bag", "count": 1 }
+		{"item": "sweetmagic:acce_bag", "count": 1}
 	]
 }

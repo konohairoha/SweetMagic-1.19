@@ -1,12 +1,12 @@
 {
 	"type": "sweetmagic:alstromeria_craft",
 	"ingredients": [
-		{ "item": "sweetmagic:divine_crystal" , "count": 4 },
-		{ "item": "sweetmagic:mf_bottle" , "count": 4 },
-		{ "item": "sweetmagic:sannyflower_petal" , "count": 8 },
-		{ "item": "sweetmagic:moonblossom_petal" , "count": 8 }
+		{"item": "sweetmagic:divine_crystal", "count": 4},
+		{"item": "sweetmagic:mf_bottle", "count": 4},
+		{"item": "sweetmagic:sannyflower_petal", "count": 8},
+		{"item": "sweetmagic:moonblossom_petal", "count": 8}
 	],
 	"result": [
-		{ "item": "sweetmagic:pure_crystal", "count": 1 }
+		{"item": "sweetmagic:pure_crystal", "count": 1}
 	]
 }
