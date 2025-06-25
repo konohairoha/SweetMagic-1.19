@@ -1,0 +1,5 @@
+{
+	"type": "minecraft:stonecutting", "count": 1,
+	"ingredient": {"tag": "sweetmagic:maple_planks"},
+	"result": "sweetmagic:maple_planks_w_plate"
+}

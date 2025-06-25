@@ -1,5 +1,5 @@
 {
 	"type": "minecraft:stonecutting", "count": 1,
-	"ingredient": { "tag": "sweetmagic:longtile_brick/all" },
+	"ingredient": {"tag": "sweetmagic:longtile_brick/all"},
 	"result": "sweetmagic:longtile_brick_g_stairs"
 }
