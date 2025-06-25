@@ -32,7 +32,6 @@ public abstract class AbstractRecipeSerializer{
 		ItemStack stack = ItemStack.EMPTY;
 
 		for (JsonElement json : resultArray) {
-
 			ItemStack result = this.readJsonResult(json);
 			if (result.isEmpty()) { continue; }
 
@@ -105,14 +104,7 @@ public abstract class AbstractRecipeSerializer{
 
 		// タグなら
 		else if (json.has("tag")) {
-
-			// タグアイテムの取得
-			TagKey<Item> tagkey = TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation(GsonHelper.getAsString(json, "tag")));
-//			List<ItemStack> stackList = new ArrayList<>();
-//			ForgeRegistries.ITEMS.tags().getTag(tagkey).forEach(i -> stackList.add(new ItemStack(i)));
-
-			// 配列で返す
-			return Ingredient.of(tagkey);
+			return Ingredient.of(TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation(GsonHelper.getAsString(json, "tag"))));
 		}
 
 		// アイテムとタグでなかったならエラー
@@ -138,24 +130,6 @@ public abstract class AbstractRecipeSerializer{
 		resultArray.forEach(r -> list.add(GsonHelper.getAsBoolean(r.getAsJsonObject(), "nbt")));
 		return list;
 	}
-
-//	public static class ItemListValue implements Ingredient.Value {
-//		private final List<ItemStack> stackList;
-//
-//		public ItemListValue(List<ItemStack> stackList) {
-//			this.stackList = stackList;
-//		}
-//
-//		public Collection<ItemStack> getItems() {
-//			return this.stackList;
-//		}
-//
-//		public JsonObject serialize() {
-//			JsonObject json = new JsonObject();
-//			json.addProperty("item", Registry.ITEM.getKey(this.stackList.get(0).getItem()).toString());
-//			return json;
-//		}
-//	}
 
 	protected List<Float> readChanceList(JsonObject jo, String name) {
 		JsonArray resultArray = this.getArray(jo, name);
