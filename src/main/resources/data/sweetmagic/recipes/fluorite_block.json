@@ -1,12 +1,12 @@
 {
 	"type": "minecraft:crafting_shaped",
 	"key": {
-		"C": { "item": "sweetmagic:fluorite" }
+		"C": {"item": "sweetmagic:fluorite"}
 	},
 	"pattern": [
 		"CCC",
 		"CCC",
 		"CCC"
 	],
-	"result": { "item": "sweetmagic:fluorite_block" }
+	"result": {"item": "sweetmagic:fluorite_block"}
 }

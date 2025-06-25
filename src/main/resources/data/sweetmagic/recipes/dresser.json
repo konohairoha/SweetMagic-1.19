@@ -1,9 +1,9 @@
 {
 	"type": "minecraft:crafting_shapeless",
 	"ingredients": [
-		{ "tag": "forge:recipe_book" },
-		{ "tag": "forge:chests/wooden" },
-		{ "tag": "forge:chests/wooden" }
+		{"tag": "forge:recipe_book"},
+		{"tag": "forge:chests/wooden"},
+		{"tag": "forge:chests/wooden"}
 	],
-	"result": { "item": "sweetmagic:dresser" }
+	"result": {"item": "sweetmagic:dresser"}
 }

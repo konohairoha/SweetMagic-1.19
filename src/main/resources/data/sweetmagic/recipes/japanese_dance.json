@@ -1,14 +1,14 @@
 {
 	"type": "minecraft:crafting_shaped",
 	"key": {
-		"S": { "item": "sweetmagic:cherry_blossoms_planks" },
-		"C": { "tag": "forge:chests/wooden" },
-		"R": { "tag": "forge:recipe_book" }
+		"S": {"item": "sweetmagic:cherry_blossoms_planks"},
+		"C": {"tag": "forge:chests/wooden"},
+		"R": {"tag": "forge:recipe_book"}
 	},
 	"pattern": [
 		"SCS",
 		"CRC",
 		"SCS"
 	],
-	"result": { "item": "sweetmagic:japanese_dance" }
+	"result": {"item": "sweetmagic:japanese_dance"}
 }

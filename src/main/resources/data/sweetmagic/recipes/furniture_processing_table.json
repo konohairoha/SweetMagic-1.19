@@ -1,9 +1,9 @@
 {
 	"type": "minecraft:crafting_shapeless",
 	"ingredients": [
-		{ "item": "minecraft:stonecutter" },
-		{ "item": "minecraft:crafting_table" },
-		{ "tag": "forge:recipe_book" }
+		{"item": "minecraft:stonecutter"},
+		{"item": "minecraft:crafting_table"},
+		{"tag": "forge:recipe_book"}
 	],
-	"result": { "item": "sweetmagic:furniture_processing_table", "count": 1 }
+	"result": {"item": "sweetmagic:furniture_processing_table", "count": 1}
 }

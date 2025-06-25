@@ -1,11 +1,11 @@
 {
 	"type": "minecraft:crafting_shaped",
 	"key": {
-		"G": { "item": "sweetmagic:frosted_glass_line" }
+		"G": {"item": "sweetmagic:frosted_glass_line"}
 	},
 	"pattern": [
 		"GGG",
 		"GGG"
 	],
-	"result": { "item": "sweetmagic:frosted_glass_line_pane", "count": 16 }
+	"result": {"item": "sweetmagic:frosted_glass_line_pane", "count": 16}
 }

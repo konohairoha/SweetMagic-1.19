@@ -1,0 +1,12 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"key": {
+		"L": {"item": "sweetmagic:maple_log"}
+	},
+	"pattern": [
+		" L ",
+		" L ",
+		" L "
+	],
+	"result": {"item": "sweetmagic:fence_pole_maple", "count": 18}
+}

@@ -1,7 +1,7 @@
 {
 	"type": "minecraft:crafting_shapeless",
 	"ingredients": [
-		{ "item": "sweetmagic:estor_log" }
+		{"item": "sweetmagic:estor_log"}
 	],
-	"result": { "item": "sweetmagic:estor_planks", "count": 4 }
+	"result": {"item": "sweetmagic:estor_planks", "count": 4}
 }

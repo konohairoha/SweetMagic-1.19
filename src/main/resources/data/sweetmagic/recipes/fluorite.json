@@ -1,7 +1,7 @@
 {
 	"type": "minecraft:crafting_shapeless",
 	"ingredients": [
-		{ "item": "sweetmagic:fluorite_block" }
+		{"item": "sweetmagic:fluorite_block"}
 	],
-	"result": { "item": "sweetmagic:fluorite", "count": 9 }
+	"result": {"item": "sweetmagic:fluorite", "count": 9}
 }

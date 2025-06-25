@@ -1,12 +1,12 @@
 {
 	"type": "minecraft:crafting_shaped",
 	"key": {
-		"L": { "item": "sweetmagic:orange_log" }
+		"L": {"item": "sweetmagic:orange_log"}
 	},
 	"pattern": [
 		" L ",
 		" L ",
 		" L "
 	],
-	"result": { "item": "sweetmagic:fence_pole_orange", "count": 18 }
+	"result": {"item": "sweetmagic:fence_pole_orange", "count": 18}
 }

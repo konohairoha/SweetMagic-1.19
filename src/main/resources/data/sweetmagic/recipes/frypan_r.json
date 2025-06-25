@@ -1,12 +1,12 @@
 {
 	"type": "minecraft:crafting_shaped",
 	"key": {
-		"I": { "tag": "forge:ingots/iron" },
-		"N": { "tag": "forge:nuggets/iron" }
+		"I": {"tag": "forge:ingots/iron"},
+		"N": {"tag": "forge:nuggets/iron"}
 	},
 	"pattern": [
 		"NII",
 		" II"
 	],
-	"result": { "item": "sweetmagic:frypan_r" }
+	"result": {"item": "sweetmagic:frypan_r"}
 }

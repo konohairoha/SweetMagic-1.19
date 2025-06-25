@@ -1,12 +1,12 @@
 {
 	"type": "minecraft:crafting_shaped",
 	"key": {
-		"B": { "item": "sweetmagic:flagstone_color" }
+		"B": {"item": "sweetmagic:flagstone_color"}
 	},
 	"pattern": [
 		"  B",
 		" BB",
 		"BBB"
 	],
-	"result": { "item": "sweetmagic:flagstone_color_stairs", "count": 6 }
+	"result": {"item": "sweetmagic:flagstone_color_stairs", "count": 6}
 }

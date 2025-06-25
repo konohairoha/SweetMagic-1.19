@@ -1,0 +1,7 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		{"item": "sweetmagic:basket"}
+	],
+	"result": {"item": "sweetmagic:diagonal_basket", "count": 1}
+}

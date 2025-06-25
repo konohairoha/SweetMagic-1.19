@@ -1,17 +1,17 @@
 {
 	"type": "minecraft:crafting_shaped",
 	"key": {
-		"T": { "tag": "forge:chests/wooden" },
-		"I": { "tag": "forge:ingots/iron" },
-		"F": { "item": "minecraft:furnace" },
-		"P": { "tag": "forge:ingots/iron" },
-		"H": { "item": "minecraft:hopper" },
-		"G": { "tag": "forge:glass/colorless" }
+		"T": {"tag": "forge:chests/wooden"},
+		"I": {"tag": "forge:ingots/iron"},
+		"F": {"item": "minecraft:furnace"},
+		"P": {"tag": "forge:ingots/iron"},
+		"H": {"item": "minecraft:hopper"},
+		"G": {"tag": "forge:glass/colorless"}
 	},
 	"pattern": [
 		"GTH",
 		"GFP",
 		"III"
 	],
-	"result": { "item": "sweetmagic:juice_maker" }
+	"result": {"item": "sweetmagic:juice_maker"}
 }

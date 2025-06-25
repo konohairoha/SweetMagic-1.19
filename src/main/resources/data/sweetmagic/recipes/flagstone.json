@@ -1,11 +1,11 @@
 {
 	"type": "minecraft:crafting_shapeless",
 	"ingredients": [
-		{ "tag": "forge:cobblestone" },
-		{ "tag": "forge:cobblestone" },
-		{ "tag": "forge:cobblestone" },
-		{ "tag": "forge:cobblestone" },
-		{ "tag": "forge:recipe_book" }
+		{"tag": "forge:cobblestone"},
+		{"tag": "forge:cobblestone"},
+		{"tag": "forge:cobblestone"},
+		{"tag": "forge:cobblestone"},
+		{"tag": "forge:recipe_book"}
 	],
-	"result": { "item": "sweetmagic:flagstone", "count": 16 }
+	"result": {"item": "sweetmagic:flagstone", "count": 16}
 }

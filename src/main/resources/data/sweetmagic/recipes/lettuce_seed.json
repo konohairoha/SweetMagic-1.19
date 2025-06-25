@@ -1,7 +1,7 @@
 {
 	"type": "minecraft:crafting_shapeless",
 	"ingredients": [
-		{ "item": "sweetmagic:lettuce" }
+		{"item": "sweetmagic:lettuce"}
 	],
-	"result": { "item": "sweetmagic:lettuce_seed", "count": 2 }
+	"result": {"item": "sweetmagic:lettuce_seed", "count": 2}
 }

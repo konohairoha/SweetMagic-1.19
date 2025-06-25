@@ -1,0 +1,12 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"key": {
+		"P": {"item": "sweetmagic:ender_shard"}
+	},
+	"pattern": [
+		"PPP",
+		"PPP",
+		"PPP"
+	],
+	"result": {"item": "minecraft:ender_pearl", "count": 1}
+}
