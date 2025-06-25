@@ -1,12 +1,12 @@
 {
 	"type": "sweetmagic:iris_craft",
 	"ingredients": [
-		{ "item": "sweetmagic:magicians_robe", "count": 1 },
-		{ "tag": "forge:dyes/light_blue", "count": 2 },
-		{ "item": "sweetmagic:acce_bag", "count": 4 },
-		{ "item": "sweetmagic:magia_bottle", "count": 3 }
+		{"item": "sweetmagic:magicians_robe", "count": 1},
+		{"tag": "forge:dyes/light_blue", "count": 2},
+		{"item": "sweetmagic:acce_bag", "count": 4},
+		{"item": "sweetmagic:magia_bottle", "count": 3}
 	],
 	"result": [
-		{ "item": "sweetmagic:queenfrost_robe", "count": 1 }
+		{"item": "sweetmagic:queenfrost_robe", "count": 1}
 	]
 }

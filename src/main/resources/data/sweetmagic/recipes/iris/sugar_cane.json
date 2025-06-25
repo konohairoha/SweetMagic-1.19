@@ -1,10 +1,10 @@
 {
 	"type": "sweetmagic:iris_craft",
 	"ingredients": [
-		{ "tag": "minecraft:sand", "count": 2 },
-		{ "tag": "forge:dyes/lime", "count": 1 }
+		{"tag": "minecraft:sand", "count": 2},
+		{"tag": "forge:dyes/lime", "count": 1}
 	],
 	"result": [
-		{ "item": "minecraft:sugar_cane", "count": 1 }
+		{"item": "minecraft:sugar_cane", "count": 1}
 	]
 }

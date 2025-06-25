@@ -1,12 +1,12 @@
 {
 	"type": "sweetmagic:iris_craft",
 	"ingredients": [
-		{ "tag": "sweetmagic:cosmic_wand", "count": 1 },
-		{ "tag": "forge:gems/fluorite", "count": 8 },
-		{ "tag": "forge:gems/redberyl", "count": 8 },
-		{ "item": "sweetmagic:cosmic_crystal", "count": 1 }
+		{"tag": "sweetmagic:cosmic_wand", "count": 1},
+		{"tag": "forge:gems/fluorite", "count": 8},
+		{"tag": "forge:gems/redberyl", "count": 8},
+		{"item": "sweetmagic:cosmic_crystal", "count": 1}
 	],
 	"result": [
-		{ "item": "sweetmagic:cosmic_magia_wand", "count": 1 }
+		{"item": "sweetmagic:cosmic_magia_wand", "count": 1}
 	]
 }

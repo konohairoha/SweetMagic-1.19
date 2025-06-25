@@ -1,10 +1,10 @@
 {
 	"type": "sweetmagic:iris_craft",
 	"ingredients": [
-		{ "tag": "minecraft:dirt", "count": 2 },
-		{ "tag": "forge:dyes/green", "count": 1 }
+		{"tag": "minecraft:dirt", "count": 2},
+		{"tag": "forge:dyes/green", "count": 1}
 	],
 	"result": [
-		{ "item": "minecraft:bamboo", "count": 1 }
+		{"item": "minecraft:bamboo", "count": 1}
 	]
 }

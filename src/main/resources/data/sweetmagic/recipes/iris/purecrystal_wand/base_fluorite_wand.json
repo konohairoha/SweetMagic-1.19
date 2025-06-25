@@ -1,10 +1,10 @@
 {
 	"type": "sweetmagic:iris_craft",
 	"ingredients": [
-		{ "item": "sweetmagic:purecrystal_wand", "count": 1 },
-		{ "item": "sweetmagic:fluorite", "count": 2 }
+		{"item": "sweetmagic:purecrystal_wand", "count": 1},
+		{"item": "sweetmagic:fluorite", "count": 2}
 	],
 	"result": [
-		{ "item": "sweetmagic:fluorite_wand", "count": 1 }
+		{"item": "sweetmagic:fluorite_wand", "count": 1}
 	]
 }

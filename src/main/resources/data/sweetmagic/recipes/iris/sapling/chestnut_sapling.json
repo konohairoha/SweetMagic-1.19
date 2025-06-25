@@ -1,10 +1,10 @@
 {
 	"type": "sweetmagic:iris_craft",
 	"ingredients": [
-		{ "tag": "minecraft:saplings", "count": 1 },
-		{ "tag": "forge:dyes/brown", "count": 1 }
+		{"tag": "minecraft:saplings", "count": 1},
+		{"tag": "forge:dyes/brown", "count": 1}
 	],
 	"result": [
-		{ "item": "sweetmagic:chestnut_sapling", "count": 1 }
+		{"item": "sweetmagic:chestnut_sapling", "count": 1}
 	]
 }

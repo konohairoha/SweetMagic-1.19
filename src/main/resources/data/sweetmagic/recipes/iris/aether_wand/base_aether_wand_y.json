@@ -1,11 +1,11 @@
 {
 	"type": "sweetmagic:iris_craft",
 	"ingredients": [
-		{ "item": "sweetmagic:aether_wand", "count": 1 },
-		{ "tag": "forge:dyes/yellow", "count": 2 },
-		{ "item": "sweetmagic:magic_meal", "count": 2 }
+		{"item": "sweetmagic:aether_wand", "count": 1},
+		{"tag": "forge:dyes/yellow", "count": 2},
+		{"item": "sweetmagic:magic_meal", "count": 2}
 	],
 	"result": [
-		{ "item": "sweetmagic:aether_wand_y", "count": 1 }
+		{"item": "sweetmagic:aether_wand_y", "count": 1}
 	]
 }

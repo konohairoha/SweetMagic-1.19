@@ -1,10 +1,10 @@
 {
 	"type": "sweetmagic:iris_craft",
 	"ingredients": [
-		{ "item": "sweetmagic:deuscrystal_wand", "count": 1 },
-		{ "item": "sweetmagic:redberyl", "count": 2 }
+		{"item": "sweetmagic:deuscrystal_wand", "count": 1},
+		{"item": "sweetmagic:redberyl", "count": 2}
 	],
 	"result": [
-		{ "item": "sweetmagic:redberyl_wand", "count": 1 }
+		{"item": "sweetmagic:redberyl_wand", "count": 1}
 	]
 }

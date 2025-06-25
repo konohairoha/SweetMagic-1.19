@@ -1,11 +1,11 @@
 {
 	"type": "sweetmagic:iris_craft",
 	"ingredients": [
-		{ "tag": "sweetmagic:cosmic_wand", "count": 1 },
-		{ "item": "sweetmagic:fire_nasturtium_petal", "count": 16 },
-		{ "item": "sweetmagic:cosmic_crystal", "count": 1 }
+		{"tag": "sweetmagic:cosmic_wand", "count": 1},
+		{"item": "sweetmagic:fire_nasturtium_petal", "count": 16},
+		{"item": "sweetmagic:cosmic_crystal", "count": 1}
 	],
 	"result": [
-		{ "item": "sweetmagic:cosmic_prominence_wand", "count": 1 }
+		{"item": "sweetmagic:cosmic_prominence_wand", "count": 1}
 	]
 }

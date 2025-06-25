@@ -1,11 +1,11 @@
 {
 	"type": "sweetmagic:iris_craft",
 	"ingredients": [
-		{ "tag": "sweetmagic:deuscrystal_wand", "count": 1 },
-		{ "tag": "forge:dyes/red", "count": 2 },
-		{ "item": "sweetmagic:pure_crystal", "count": 2 }
+		{"tag": "sweetmagic:deuscrystal_wand", "count": 1},
+		{"tag": "forge:dyes/red", "count": 2},
+		{"item": "sweetmagic:pure_crystal", "count": 2}
 	],
 	"result": [
-		{ "item": "sweetmagic:deuscrystal_wand_r", "count": 1 }
+		{"item": "sweetmagic:deuscrystal_wand_r", "count": 1}
 	]
 }

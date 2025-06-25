@@ -1,11 +1,11 @@
 {
 	"type": "sweetmagic:iris_craft",
 	"ingredients": [
-		{ "item": "sweetmagic:divine_wand", "count": 1 },
-		{ "tag": "forge:dyes/red", "count": 2 },
-		{ "item": "sweetmagic:aether_crystal", "count": 2 }
+		{"item": "sweetmagic:divine_wand", "count": 1},
+		{"tag": "forge:dyes/red", "count": 2},
+		{"item": "sweetmagic:aether_crystal", "count": 2}
 	],
 	"result": [
-		{ "item": "sweetmagic:divine_wand_r", "count": 1 }
+		{"item": "sweetmagic:divine_wand_r", "count": 1}
 	]
 }
