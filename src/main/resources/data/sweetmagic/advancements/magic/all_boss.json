@@ -1,0 +1,59 @@
+{
+	"display": {
+		"icon": {"item": "sweetmagic:magic_infinitwand"},
+		"title": {"translate": "smadbent.all_boss.title"},
+		"description": {"translate": "smadbent.all_boss.text"},
+		"frame": "challenge"
+	},
+	"parent": "sweetmagic:magic/dungeon_compas", "criteria": {
+		"figurine_queenfrost": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:figurine_queenfrost"]} ]}
+		},
+		"figurine_holyangel": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:figurine_holyangel"]} ]}
+		},
+		"figurine_ignisknight": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:figurine_ignisknight"]} ]}
+		},
+		"figurine_windwitch_master": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:figurine_windwitch_master"]} ]}
+		},
+		"figurine_bullfight": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:figurine_bullfight"]} ]}
+		},
+		"figurine_ancientfairy": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:figurine_ancientfairy"]} ]}
+		},
+		"figurine_arlaune": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:figurine_arlaune"]} ]}
+		},
+		"figurine_landroad": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:figurine_landroad"]} ]}
+		},
+		"figurine_butler": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:figurine_butler"]} ]}
+		},
+		"figurine_hora": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:figurine_hora"]} ]}
+		},
+		"figurine_brave": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:figurine_brave"]} ]}
+		},
+		"figurine_curious": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:figurine_curious"]} ]}
+		},
+		"figurine_sandryon": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:figurine_sandryon"]} ]}
+		},
+		"figurine_blitz": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:figurine_blitz"]} ]}
+		},
+		"figurine_stella": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:figurine_stella"]} ]}
+		},
+		"figurine_belial": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:figurine_belial"]} ]}
+		}
+	},
+	"rewards": {"loot": ["sweetmagic:advance/magia_bottle_2"]}
+}

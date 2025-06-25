@@ -1,13 +1,13 @@
 {
 	"display": {
-		"icon": { "item": "sweetmagic:figurine_blitz" },
-		"title": { "translate": "smadbent.blitz_wizard.title" },
-		"description": { "translate": "smadbent.blitz_wizard.text" }
+		"icon": {"item": "sweetmagic:figurine_blitz"},
+		"title": {"translate": "smadbent.blitz_wizard.title"},
+		"description": {"translate": "smadbent.blitz_wizard.text"}
 	},
 	"parent": "sweetmagic:magic/bullfight", "criteria": {
-		"trigger": { "trigger": "minecraft:inventory_changed", "conditions": {
-			"items": [ { "items": [ "sweetmagic:figurine_blitz" ] } ]
-		} }
+		"trigger": {"trigger": "minecraft:inventory_changed", "conditions": {
+			"items": [{"items": ["sweetmagic:figurine_blitz"]}]
+		}}
 	},
-	"rewards": { "loot": ["sweetmagic:advance/mf_bottle_7"] }
+	"rewards": {"loot": ["sweetmagic:advance/mf_bottle_7"]}
 }

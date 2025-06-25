@@ -1,13 +1,13 @@
 {
 	"display": {
-		"icon": { "item": "sweetmagic:altar_creation_star" },
-		"title": { "translate": "smadbent.altar_creation_star.title" },
-		"description": { "translate": "smadbent.altar_creation_star.text" }
+		"icon": {"item": "sweetmagic:altar_creation_star"},
+		"title": {"translate": "smadbent.altar_creation_star.title"},
+		"description": {"translate": "smadbent.altar_creation_star.text"}
 	},
 	"parent": "sweetmagic:magic/magic_book_scarlet", "criteria": {
-		"trigger": { "trigger": "minecraft:inventory_changed", "conditions": {
-			"items": [ { "items": [ "sweetmagic:altar_creation_star" ] } ]
-		} }
+		"trigger": {"trigger": "minecraft:inventory_changed", "conditions": {
+			"items": [{"items": ["sweetmagic:altar_creation_star"]}]
+		}}
 	},
-	"rewards": { "loot": ["sweetmagic:advance/mf_bottle_5"] }
+	"rewards": {"loot": ["sweetmagic:advance/mf_bottle_5"]}
 }

@@ -1,56 +1,25 @@
 {
 	"display": {
-		"icon": { "item": "sweetmagic:cosmic_magia_wand" },
-		"title": { "translate": "smadbent.cosmic_magia_wand.title" },
-		"description": { "translate": "smadbent.cosmic_magia_wand.text" }
+		"icon": {"item": "sweetmagic:cosmic_magia_wand"},
+		"title": {"translate": "smadbent.cosmic_magia_wand.title"},
+		"description": {"translate": "smadbent.cosmic_magia_wand.text"}
 	},
 	"parent": "sweetmagic:magic/cosmiccrystal_wand", "criteria": {
-		"cosmic_sacred_wand": { "trigger": "minecraft:inventory_changed",
-			"conditions": { "items": [ { "items": ["sweetmagic:cosmic_sacred_wand"] } ] }
-		},
-		"cosmic_blizzard_wand": { "trigger": "minecraft:inventory_changed",
-			"conditions": { "items": [ { "items": ["sweetmagic:cosmic_blizzard_wand"] } ] }
-		},
-		"cosmic_flugel_wand": { "trigger": "minecraft:inventory_changed",
-			"conditions": { "items": [ { "items": ["sweetmagic:cosmic_flugel_wand"] } ] }
-		},
-		"cosmic_gravity_wand": { "trigger": "minecraft:inventory_changed",
-			"conditions": { "items": [ { "items": ["sweetmagic:cosmic_gravity_wand"] } ] }
-		},
-		"cosmic_aquamarine_wand": { "trigger": "minecraft:inventory_changed",
-			"conditions": { "items": [ { "items": ["sweetmagic:cosmic_aquamarine_wand"] } ] }
-		},
-		"cosmic_prominence_wand": { "trigger": "minecraft:inventory_changed",
-			"conditions": { "items": [ { "items": ["sweetmagic:cosmic_prominence_wand"] } ] }
-		},
-		"cosmic_voltic_wand": { "trigger": "minecraft:inventory_changed",
-			"conditions": { "items": [ { "items": ["sweetmagic:cosmic_voltic_wand"] } ] }
-		},
-		"cosmic_poison_wand": { "trigger": "minecraft:inventory_changed",
-			"conditions": { "items": [ { "items": ["sweetmagic:cosmic_poison_wand"] } ] }
-		},
-		"cosmic_explosion_wand": { "trigger": "minecraft:inventory_changed",
-			"conditions": { "items": [ { "items": ["sweetmagic:cosmic_explosion_wand"] } ] }
-		},
-		"cosmic_magia_wand": { "trigger": "minecraft:inventory_changed",
-			"conditions": { "items": [ { "items": ["sweetmagic:cosmic_magia_wand"] } ] }
-		},
-		"cosmic_rifle": { "trigger": "minecraft:inventory_changed",
-			"conditions": { "items": [ { "items": ["sweetmagic:cosmic_rifle"] } ] }
+		"cosmic_sacred_wand": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": [
+				"sweetmagic:cosmic_sacred_wand",
+				"sweetmagic:cosmic_blizzard_wand",
+				"sweetmagic:cosmic_flugel_wand",
+				"sweetmagic:cosmic_gravity_wand",
+				"sweetmagic:cosmic_aquamarine_wand",
+				"sweetmagic:cosmic_prominence_wand",
+				"sweetmagic:cosmic_voltic_wand",
+				"sweetmagic:cosmic_poison_wand",
+				"sweetmagic:cosmic_explosion_wand",
+				"sweetmagic:cosmic_magia_wand",
+				"sweetmagic:cosmic_rifle"
+			]} ]}
 		}
 	},
-	"requirements": [[
-		"cosmic_sacred_wand",
-		"cosmic_blizzard_wand",
-		"cosmic_flugel_wand",
-		"cosmic_gravity_wand",
-		"cosmic_aquamarine_wand",
-		"cosmic_prominence_wand",
-		"cosmic_voltic_wand",
-		"cosmic_poison_wand",
-		"cosmic_explosion_wand",
-		"cosmic_magia_wand",
-		"cosmic_rifle"
-	]],
-	"rewards": { "loot": ["sweetmagic:advance/magia_bottle_2"] }
+	"rewards": {"loot": ["sweetmagic:advance/magia_bottle_2"]}
 }

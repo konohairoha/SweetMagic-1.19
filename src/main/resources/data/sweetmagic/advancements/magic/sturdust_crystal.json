@@ -1,13 +1,13 @@
 {
 	"display": {
-		"icon": { "item": "sweetmagic:sturdust_crystal" },
-		"title": { "translate": "smadbent.sturdust_crystal.title" },
-		"description": { "translate": "smadbent.sturdust_crystal.text" }
+		"icon": {"item": "sweetmagic:sturdust_crystal"},
+		"title": {"translate": "smadbent.sturdust_crystal.title"},
+		"description": {"translate": "smadbent.sturdust_crystal.text"}
 	},
 	"parent": "sweetmagic:magic/altar_creat", "criteria": {
-		"trigger": { "trigger": "minecraft:inventory_changed", "conditions": {
-			"items": [ { "items": [ "sweetmagic:sturdust_crystal" ] } ]
-		} }
+		"trigger": {"trigger": "minecraft:inventory_changed", "conditions": {
+			"items": [{"items": ["sweetmagic:sturdust_crystal"]}]
+		}}
 	},
-	"rewards": { "loot": ["sweetmagic:advance/mf_bottle_3"] }
+	"rewards": {"loot": ["sweetmagic:advance/mf_bottle_3"]}
 }

@@ -1,13 +1,13 @@
 {
 	"display": {
-		"icon": { "item": "sweetmagic:magic_book_cosmic" },
-		"title": { "translate": "smadbent.magic_book_cosmic.title" },
-		"description": { "translate": "smadbent.magic_book_cosmic.text" }
+		"icon": {"item": "sweetmagic:magic_book_cosmic"},
+		"title": {"translate": "smadbent.magic_book_cosmic.title"},
+		"description": {"translate": "smadbent.magic_book_cosmic.text"}
 	},
 	"parent": "sweetmagic:magic/pedestal_creat", "criteria": {
-		"trigger": { "trigger": "minecraft:inventory_changed", "conditions": {
-			"items": [ { "items": [ "sweetmagic:magic_book_cosmic" ] } ]
-		} }
+		"trigger": {"trigger": "minecraft:inventory_changed", "conditions": {
+			"items": [{"items": ["sweetmagic:magic_book_cosmic"]}]
+		}}
 	},
-	"rewards": { "loot": ["sweetmagic:advance/magic_book_cosmic"] }
+	"rewards": {"loot": ["sweetmagic:advance/magic_book_cosmic"]}
 }

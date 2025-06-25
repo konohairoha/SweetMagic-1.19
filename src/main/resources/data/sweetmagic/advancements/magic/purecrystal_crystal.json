@@ -1,13 +1,13 @@
 {
 	"display": {
-		"icon": { "item": "sweetmagic:pure_crystal" },
-		"title": { "translate": "smadbent.purecrystal_crystal.title" },
-		"description": { "translate": "smadbent.purecrystal_crystal.text" }
+		"icon": {"item": "sweetmagic:pure_crystal"},
+		"title": {"translate": "smadbent.purecrystal_crystal.title"},
+		"description": {"translate": "smadbent.purecrystal_crystal.text"}
 	},
 	"parent": "sweetmagic:magic/divine_crystal", "criteria": {
-		"trigger": { "trigger": "minecraft:inventory_changed", "conditions": {
-			"items": [ { "items": [ "sweetmagic:pure_crystal" ] } ]
-		} }
+		"trigger": {"trigger": "minecraft:inventory_changed", "conditions": {
+			"items": [{"items": ["sweetmagic:pure_crystal"]}]
+		}}
 	},
-	"rewards": { "loot": ["sweetmagic:advance/mf_bottle_3"] }
+	"rewards": {"loot": ["sweetmagic:advance/mf_bottle_3"]}
 }

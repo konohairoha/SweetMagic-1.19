@@ -1,13 +1,13 @@
 {
 	"display": {
-		"icon": { "item": "sweetmagic:figurine_landroad" },
-		"title": { "translate": "smadbent.silver_landroad.title" },
-		"description": { "translate": "smadbent.silver_landroad.text" }
+		"icon": {"item": "sweetmagic:figurine_landroad"},
+		"title": {"translate": "smadbent.silver_landroad.title"},
+		"description": {"translate": "smadbent.silver_landroad.text"}
 	},
 	"parent": "sweetmagic:magic/arlaune", "criteria": {
-		"trigger": { "trigger": "minecraft:inventory_changed", "conditions": {
-			"items": [ { "items": [ "sweetmagic:figurine_landroad" ] } ]
-		} }
+		"trigger": {"trigger": "minecraft:inventory_changed", "conditions": {
+			"items": [{"items": ["sweetmagic:figurine_landroad"]}]
+		}}
 	},
-	"rewards": { "loot": ["sweetmagic:advance/mf_bottle_5"] }
+	"rewards": {"loot": ["sweetmagic:advance/mf_bottle_5"]}
 }

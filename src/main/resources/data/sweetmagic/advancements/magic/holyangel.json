@@ -1,13 +1,13 @@
 {
 	"display": {
-		"icon": { "item": "sweetmagic:figurine_holyangel" },
-		"title": { "translate": "smadbent.holyangel.title" },
-		"description": { "translate": "smadbent.holyangel.text" }
+		"icon": {"item": "sweetmagic:figurine_holyangel"},
+		"title": {"translate": "smadbent.holyangel.title"},
+		"description": {"translate": "smadbent.holyangel.text"}
 	},
 	"parent": "sweetmagic:magic/queenfrost", "criteria": {
-		"trigger": { "trigger": "minecraft:inventory_changed", "conditions": {
-			"items": [ { "items": [ "sweetmagic:magic_holybuster" ] } ]
-		} }
+		"trigger": {"trigger": "minecraft:inventory_changed", "conditions": {
+			"items": [{"items": ["sweetmagic:magic_holybuster"]}]
+		}}
 	},
-	"rewards": { "loot": ["sweetmagic:advance/mf_bottle_3"] }
+	"rewards": {"loot": ["sweetmagic:advance/mf_bottle_3"]}
 }

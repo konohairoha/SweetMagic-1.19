@@ -1,13 +1,13 @@
 {
 	"display": {
-		"icon": { "item": "sweetmagic:enchant_educe" },
-		"title": { "translate": "smadbent.enchant_educe.title" },
-		"description": { "translate": "smadbent.enchant_educe.text" }
+		"icon": {"item": "sweetmagic:enchant_educe"},
+		"title": {"translate": "smadbent.enchant_educe.title"},
+		"description": {"translate": "smadbent.enchant_educe.text"}
 	},
 	"parent": "sweetmagic:magic/pedestal_creat", "criteria": {
-		"trigger": { "trigger": "minecraft:inventory_changed", "conditions": {
-			"items": [ { "items": [ "sweetmagic:enchant_educe" ] } ]
-		} }
+		"trigger": {"trigger": "minecraft:inventory_changed", "conditions": {
+			"items": [{"items": ["sweetmagic:enchant_educe"]}]
+		}}
 	},
-	"rewards": { "loot": ["sweetmagic:advance/mf_bottle_3"] }
+	"rewards": {"loot": ["sweetmagic:advance/mf_bottle_3"]}
 }

@@ -1,13 +1,13 @@
 {
 	"display": {
-		"icon": { "item": "sweetmagic:carnation_crayola_pot" },
-		"title": { "translate": "smadbent.carnation_crayola_pot.title" },
-		"description": { "translate": "smadbent.carnation_crayola_pot.text" }
+		"icon": {"item": "sweetmagic:carnation_crayola_pot"},
+		"title": {"translate": "smadbent.carnation_crayola_pot.title"},
+		"description": {"translate": "smadbent.carnation_crayola_pot.text"}
 	},
 	"parent": "sweetmagic:magic/magic_meal", "criteria": {
-		"trigger": { "trigger": "minecraft:inventory_changed", "conditions": {
-			"items": [ { "items": [ "sweetmagic:carnation_crayola_pot" ] } ]
-		} }
+		"trigger": {"trigger": "minecraft:inventory_changed", "conditions": {
+			"items": [{"items": ["sweetmagic:carnation_crayola_pot"]}]
+		}}
 	},
-	"rewards": { "loot": ["sweetmagic:advance/mf_sbottle_2"] }
+	"rewards": {"loot": ["sweetmagic:advance/mf_sbottle_2"]}
 }

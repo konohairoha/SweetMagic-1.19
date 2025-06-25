@@ -1,13 +1,13 @@
 {
 	"display": {
-		"icon": { "item": "sweetmagic:drizzly_mysotis_pot" },
-		"title": { "translate": "smadbent.drizzly_mysotis_pot.title" },
-		"description": { "translate": "smadbent.drizzly_mysotis_pot.text" }
+		"icon": {"item": "sweetmagic:drizzly_mysotis_pot"},
+		"title": {"translate": "smadbent.drizzly_mysotis_pot.title"},
+		"description": {"translate": "smadbent.drizzly_mysotis_pot.text"}
 	},
 	"parent": "sweetmagic:magic/carnation_crayola_pot", "criteria": {
-		"trigger": { "trigger": "minecraft:inventory_changed", "conditions": {
-			"items": [ { "items": [ "sweetmagic:drizzly_mysotis_pot" ] } ]
-		} }
+		"trigger": {"trigger": "minecraft:inventory_changed", "conditions": {
+			"items": [{"items": ["sweetmagic:drizzly_mysotis_pot"]}]
+		}}
 	},
-	"rewards": { "loot": ["sweetmagic:advance/mf_bottle_1"] }
+	"rewards": {"loot": ["sweetmagic:advance/mf_bottle_1"]}
 }

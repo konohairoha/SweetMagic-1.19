@@ -1,13 +1,13 @@
 {
 	"display": {
-		"icon": { "item": "sweetmagic:figurine_sandryon" },
-		"title": { "translate": "smadbent.witch_sandryon.title" },
-		"description": { "translate": "smadbent.witch_sandryon.text" }
+		"icon": {"item": "sweetmagic:figurine_sandryon"},
+		"title": {"translate": "smadbent.witch_sandryon.title"},
+		"description": {"translate": "smadbent.witch_sandryon.text"}
 	},
 	"parent": "sweetmagic:magic/elsharia_curious", "criteria": {
-		"trigger": { "trigger": "minecraft:inventory_changed", "conditions": {
-			"items": [ { "items": [ "sweetmagic:figurine_sandryon" ] } ]
-		} }
+		"trigger": {"trigger": "minecraft:inventory_changed", "conditions": {
+			"items": [{"items": ["sweetmagic:figurine_sandryon"]}]
+		}}
 	},
-	"rewards": { "loot": ["sweetmagic:advance/cosmic"] }
+	"rewards": {"loot": ["sweetmagic:advance/cosmic"]}
 }

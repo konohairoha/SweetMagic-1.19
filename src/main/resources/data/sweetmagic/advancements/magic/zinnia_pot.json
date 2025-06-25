@@ -1,13 +1,13 @@
 {
 	"display": {
-		"icon": { "item": "sweetmagic:zinnia_pot" },
-		"title": { "translate": "smadbent.zinnia_pot.title" },
-		"description": { "translate": "smadbent.zinnia_pot.text" }
+		"icon": {"item": "sweetmagic:zinnia_pot"},
+		"title": {"translate": "smadbent.zinnia_pot.title"},
+		"description": {"translate": "smadbent.zinnia_pot.text"}
 	},
 	"parent": "sweetmagic:magic/altar_creat", "criteria": {
-		"trigger": { "trigger": "minecraft:inventory_changed", "conditions": {
-			"items": [ { "items": [ "sweetmagic:zinnia_pot" ] } ]
-		} }
+		"trigger": {"trigger": "minecraft:inventory_changed", "conditions": {
+			"items": [{"items": ["sweetmagic:zinnia_pot"]}]
+		}}
 	},
-	"rewards": { "loot": ["sweetmagic:advance/mf_bottle_2"] }
+	"rewards": {"loot": ["sweetmagic:advance/mf_bottle_2"]}
 }

@@ -1,0 +1,11 @@
+{
+	"display": {
+		"icon": {"item": "sweetmagic:magic_aether_force"},
+		"title": {"translate": "smadbent.biginer_magician.title"},
+		"description": {"translate": "smadbent.biginer_magician.text"}
+	},
+	"parent": "sweetmagic:magic/aether_wand", "criteria": {
+		"trigger": {"trigger": "sweetmagic:biginer_magician"}
+	},
+	"rewards": {"loot": ["sweetmagic:advance/mf_bottle_3"]}
+}

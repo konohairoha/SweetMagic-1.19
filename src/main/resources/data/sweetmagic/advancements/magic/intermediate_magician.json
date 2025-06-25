@@ -1,0 +1,11 @@
+{
+	"display": {
+		"icon": {"item": "sweetmagic:magic_divine_force"},
+		"title": {"translate": "smadbent.intermediate_magician.title"},
+		"description": {"translate": "smadbent.intermediate_magician.text"}
+	},
+	"parent": "sweetmagic:magic/biginer_magician", "criteria": {
+		"trigger": {"trigger": "sweetmagic:intermediate_magician"}
+	},
+	"rewards": {"loot": ["sweetmagic:advance/mf_bottle_5"]}
+}

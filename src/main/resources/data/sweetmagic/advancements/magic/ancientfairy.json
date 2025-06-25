@@ -1,13 +1,13 @@
 {
 	"display": {
-		"icon": { "item": "sweetmagic:figurine_ancientfairy" },
-		"title": { "translate": "smadbent.ancientfairy.title" },
-		"description": { "translate": "smadbent.ancientfairy.text" }
+		"icon": {"item": "sweetmagic:figurine_ancientfairy"},
+		"title": {"translate": "smadbent.ancientfairy.title"},
+		"description": {"translate": "smadbent.ancientfairy.text"}
 	},
 	"parent": "sweetmagic:magic/bullfight", "criteria": {
-		"trigger": { "trigger": "minecraft:inventory_changed", "conditions": {
-			"items": [ { "items": [ "sweetmagic:figurine_ancientfairy" ] } ]
-		} }
+		"trigger": {"trigger": "minecraft:inventory_changed", "conditions": {
+			"items": [{"items": ["sweetmagic:figurine_ancientfairy"]}]
+		}}
 	},
-	"rewards": { "loot": ["sweetmagic:advance/mf_bottle_5"] }
+	"rewards": {"loot": ["sweetmagic:advance/mf_bottle_5"]}
 }

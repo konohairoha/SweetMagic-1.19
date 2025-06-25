@@ -1,13 +1,13 @@
 {
 	"display": {
-		"icon": { "item": "sweetmagic:parallel_interfere" },
-		"title": { "translate": "smadbent.parallel_interfere.title" },
-		"description": { "translate": "smadbent.parallel_interfere.text" }
+		"icon": {"item": "sweetmagic:parallel_interfere"},
+		"title": {"translate": "smadbent.parallel_interfere.title"},
+		"description": {"translate": "smadbent.parallel_interfere.text"}
 	},
 	"parent": "sweetmagic:magic/moden_shelf_y", "criteria": {
-		"trigger": { "trigger": "minecraft:inventory_changed", "conditions": {
-			"items": [ { "items": [ "sweetmagic:parallel_interfere" ] } ]
-		} }
+		"trigger": {"trigger": "minecraft:inventory_changed", "conditions": {
+			"items": [{"items": ["sweetmagic:parallel_interfere"]}]
+		}}
 	},
-	"rewards": { "loot": ["sweetmagic:advance/mf_bottle_1"] }
+	"rewards": {"loot": ["sweetmagic:advance/mf_bottle_1"]}
 }

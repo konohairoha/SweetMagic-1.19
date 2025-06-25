@@ -1,13 +1,13 @@
 {
 	"display": {
-		"icon": { "item": "sweetmagic:moonblossom_petal" },
-		"title": { "translate": "smadbent.moonblossom_petal.title" },
-		"description": { "translate": "smadbent.moonblossom_petal.text" }
+		"icon": {"item": "sweetmagic:moonblossom_petal"},
+		"title": {"translate": "smadbent.moonblossom_petal.title"},
+		"description": {"translate": "smadbent.moonblossom_petal.text"}
 	},
 	"parent": "sweetmagic:magic/sannyflower_petal", "criteria": {
-		"trigger": { "trigger": "minecraft:inventory_changed", "conditions": {
-			"items": [ { "items": [ "sweetmagic:moonblossom_petal" ] } ]
-		} }
+		"trigger": {"trigger": "minecraft:inventory_changed", "conditions": {
+			"items": [{"items": ["sweetmagic:moonblossom_petal"]}]
+		}}
 	},
-	"rewards": { "loot": ["sweetmagic:advance/moonblossom_petal"] }
+	"rewards": {"loot": ["sweetmagic:advance/moonblossom_petal"]}
 }

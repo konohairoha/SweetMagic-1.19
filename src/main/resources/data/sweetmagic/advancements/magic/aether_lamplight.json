@@ -1,13 +1,13 @@
 {
 	"display": {
-		"icon": { "item": "sweetmagic:aether_lamplight" },
-		"title": { "translate": "smadbent.aether_lamplight.title" },
-		"description": { "translate": "smadbent.aether_lamplight.text" }
+		"icon": {"item": "sweetmagic:aether_lamplight"},
+		"title": {"translate": "smadbent.aether_lamplight.title"},
+		"description": {"translate": "smadbent.aether_lamplight.text"}
 	},
 	"parent": "sweetmagic:magic/aether_lanp", "criteria": {
-		"trigger": { "trigger": "minecraft:inventory_changed", "conditions": {
-			"items": [ { "items": [ "sweetmagic:aether_lamplight" ] } ]
-		} }
+		"trigger": {"trigger": "minecraft:inventory_changed", "conditions": {
+			"items": [{"items": ["sweetmagic:aether_lamplight"]}]
+		}}
 	},
-	"rewards": { "loot": ["sweetmagic:advance/mf_sbottle_2"] }
+	"rewards": {"loot": ["sweetmagic:advance/mf_sbottle_2"]}
 }

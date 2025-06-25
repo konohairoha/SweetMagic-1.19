@@ -1,13 +1,13 @@
 {
 	"display": {
-		"icon": { "item": "sweetmagic:figurine_windwitch_master" },
-		"title": { "translate": "smadbent.windwitch.title" },
-		"description": { "translate": "smadbent.windwitch.text" }
+		"icon": {"item": "sweetmagic:figurine_windwitch_master"},
+		"title": {"translate": "smadbent.windwitch.title"},
+		"description": {"translate": "smadbent.windwitch.text"}
 	},
 	"parent": "sweetmagic:magic/ignisknight", "criteria": {
-		"trigger": { "trigger": "minecraft:inventory_changed", "conditions": {
-			"items": [ { "items": [ "sweetmagic:magic_windstorm" ] } ]
-		} }
+		"trigger": {"trigger": "minecraft:inventory_changed", "conditions": {
+			"items": [{"items": ["sweetmagic:magic_windstorm"]}]
+		}}
 	},
-	"rewards": { "loot": ["sweetmagic:advance/mf_bottle_3"] }
+	"rewards": {"loot": ["sweetmagic:advance/mf_bottle_3"]}
 }

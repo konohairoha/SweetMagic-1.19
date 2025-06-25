@@ -1,13 +1,13 @@
 {
 	"display": {
-		"icon": { "item": "sweetmagic:solid_star_aquarium" },
-		"title": { "translate": "smadbent.solid_star_aquarium.title" },
-		"description": { "translate": "smadbent.solid_star_aquarium.text" }
+		"icon": {"item": "sweetmagic:solid_star_aquarium"},
+		"title": {"translate": "smadbent.solid_star_aquarium.title"},
+		"description": {"translate": "smadbent.solid_star_aquarium.text"}
 	},
 	"parent": "sweetmagic:magic/zinnia_aquarium", "criteria": {
-		"trigger": { "trigger": "minecraft:inventory_changed", "conditions": {
-			"items": [ { "items": [ "sweetmagic:solid_star_aquarium" ] } ]
-		} }
+		"trigger": {"trigger": "minecraft:inventory_changed", "conditions": {
+			"items": [{"items": ["sweetmagic:solid_star_aquarium"]}]
+		}}
 	},
-	"rewards": { "loot": ["sweetmagic:advance/magia_bottle_2"] }
+	"rewards": {"loot": ["sweetmagic:advance/magia_bottle_2"]}
 }

@@ -1,13 +1,13 @@
 {
 	"display": {
-		"icon": { "item": "sweetmagic:figurine_curious" },
-		"title": { "translate": "smadbent.elsharia_curious.title" },
-		"description": { "translate": "smadbent.elsharia_curious.text" }
+		"icon": {"item": "sweetmagic:figurine_curious"},
+		"title": {"translate": "smadbent.elsharia_curious.title"},
+		"description": {"translate": "smadbent.elsharia_curious.text"}
 	},
 	"parent": "sweetmagic:magic/brave_skeleton", "criteria": {
-		"trigger": { "trigger": "minecraft:inventory_changed", "conditions": {
-			"items": [ { "items": [ "sweetmagic:figurine_curious" ] } ]
-		} }
+		"trigger": {"trigger": "minecraft:inventory_changed", "conditions": {
+			"items": [{"items": ["sweetmagic:figurine_curious"]}]
+		}}
 	},
-	"rewards": { "loot": ["sweetmagic:advance/cosmic"] }
+	"rewards": {"loot": ["sweetmagic:advance/cosmic"]}
 }

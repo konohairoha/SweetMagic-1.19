@@ -1,13 +1,13 @@
 {
 	"display": {
-		"icon": { "item": "sweetmagic:magia_rewrite" },
-		"title": { "translate": "smadbent.magia_rewrite.title" },
-		"description": { "translate": "smadbent.magia_rewrite.text" }
+		"icon": {"item": "sweetmagic:magia_rewrite"},
+		"title": {"translate": "smadbent.magia_rewrite.title"},
+		"description": {"translate": "smadbent.magia_rewrite.text"}
 	},
 	"parent": "sweetmagic:magic/enchant_educe", "criteria": {
-		"trigger": { "trigger": "minecraft:inventory_changed", "conditions": {
-			"items": [ { "items": [ "sweetmagic:magia_rewrite" ] } ]
-		} }
+		"trigger": {"trigger": "minecraft:inventory_changed", "conditions": {
+			"items": [{"items": ["sweetmagic:magia_rewrite"]}]
+		}}
 	},
-	"rewards": { "loot": ["sweetmagic:advance/mf_bottle_5"] }
+	"rewards": {"loot": ["sweetmagic:advance/mf_bottle_5"]}
 }

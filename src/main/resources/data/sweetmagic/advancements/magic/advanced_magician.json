@@ -1,0 +1,12 @@
+{
+	"display": {
+		"icon": {"item": "sweetmagic:magic_pure_force"},
+		"title": {"translate": "smadbent.advanced_magician.title"},
+		"description": {"translate": "smadbent.advanced_magician.text"},
+		"frame": "challenge"
+	},
+	"parent": "sweetmagic:magic/intermediate_magician", "criteria": {
+		"trigger": {"trigger": "sweetmagic:advanced_magician"}
+	},
+	"rewards": {"loot": ["sweetmagic:advance/magia_bottle_2"]}
+}

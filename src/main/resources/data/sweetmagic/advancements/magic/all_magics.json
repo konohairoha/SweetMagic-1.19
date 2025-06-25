@@ -1,0 +1,326 @@
+{
+	"display": {
+		"icon": {"item": "sweetmagic:magic_shining_flare"},
+		"title": {"translate": "smadbent.all_magics.title"},
+		"description": {"translate": "smadbent.all_magics.text"},
+		"frame": "challenge"
+	},
+	"parent": "sweetmagic:magic/obmagia", "criteria": {
+		"magic_quickheal": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_quickheal"]}]}
+		},
+		"magic_hiheal": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_hiheal"]}]}
+		},
+		"magic_roudheal": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_roudheal"]}]}
+		},
+		"magic_healingwish": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_healingwish"]}]}
+		},
+		"magic_effectremover": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_effectremover"]}]}
+		},
+		"magic_reflasheffect": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_reflasheffect"]}]}
+		},
+		"magic_reflashresurrection": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_reflashresurrection"]}]}
+		},
+		"magic_reflashfield": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_reflashfield"]}]}
+		},
+		"magic_light": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_light"]}]}
+		},
+		"magic_holy_light": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_holy_light"]}]}
+		},
+		"magic_illuminate": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_illuminate"]}]}
+		},
+		"magic_shining_flare": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_shining_flare"]}]}
+		},
+		"magic_aether_armor": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_aether_armor"]}]}
+		},
+		"magic_aether_barrier": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_aether_barrier"]}]}
+		},
+		"magic_magia_protection": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_magia_protection"]}]}
+		},
+		"magic_expand_barrier": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_expand_barrier"]}]}
+		},
+		"magic_fire": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_fire"]}]}
+		},
+		"magic_flamenova": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_flamenova"]}]}
+		},
+		"magic_meteor": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_meteor"]}]}
+		},
+		"magic_meteorite_impact": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_meteorite_impact"]}]}
+		},
+		"magic_frost": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_frost"]}]}
+		},
+		"magic_frostspear": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_frostspear"]}]}
+		},
+		"magic_frostrain": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_frostrain"]}]}
+		},
+		"magic_absolute_zero": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_absolute_zero"]}]}
+		},
+		"magic_tornado": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_tornado"]}]}
+		},
+		"magic_storm": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_storm"]}]}
+		},
+		"magic_gale": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_gale"]}]}
+		},
+		"magic_tempest_storm": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_tempest_storm"]}]}
+		},
+		"magic_burst": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_burst"]}]}
+		},
+		"magic_blast": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_blast"]}]}
+		},
+		"magic_magia_destroy": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_magia_destroy"]}]}
+		},
+		"magic_supernova": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_supernova"]}]}
+		},
+		"magic_ballast": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_ballast"]}]}
+		},
+		"magic_gravitywave": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_gravitywave"]}]}
+		},
+		"magic_gravity_break": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_gravity_break"]}]}
+		},
+		"magic_blackhole": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_blackhole"]}]}
+		},
+		"magic_poison_shoot": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_poison_shoot"]}]}
+		},
+		"magic_toxic": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_toxic"]}]}
+		},
+		"magic_deadly_poison": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_deadly_poison"]}]}
+		},
+		"magic_end_poison": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_end_poison"]}]}
+		},
+		"magic_lightningbolt": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_lightningbolt"]}]}
+		},
+		"magic_thunder": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_thunder"]}]}
+		},
+		"magic_thunderrain": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_thunderrain"]}]}
+		},
+		"magic_thunderforce": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_thunderforce"]}]}
+		},
+		"magic_dig": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_dig"]}]}
+		},
+		"magic_silk_dig": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_silk_dig"]}]}
+		},
+		"magic_range_dig": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_range_dig"]}]}
+		},
+		"magic_magia_dig": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_magia_dig"]}]}
+		},
+		"magic_rockblast": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_rockblast"]}]}
+		},
+		"magic_ironblast": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_ironblast"]}]}
+		},
+		"magic_diamondblast": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_diamondblast"]}]}
+		},
+		"magic_netheriteblast": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_netheriteblast"]}]}
+		},
+		"magic_cherry": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_cherry"]}]}
+		},
+		"magic_cherry_wind": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_cherry_wind"]}]}
+		},
+		"magic_cherry_storm": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_cherry_storm"]}]}
+		},
+		"magic_cherry_blizzard": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_cherry_blizzard"]}]}
+		},
+		"magic_normal": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_normal"]}]}
+		},
+		"magic_completion": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_completion"]}]}
+		},
+		"magic_advance": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_advance"]}]}
+		},
+		"magic_additional": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_additional"]}]}
+		},
+		"magic_bubleprison": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_bubleprison"]}]}
+		},
+		"magic_scumefang": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_scumefang"]}]}
+		},
+		"magic_bublehell": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_bublehell"]}]}
+		},
+		"magic_bubleburst": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_bubleburst"]}]}
+		},
+		"magic_bloodshot": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_bloodshot"]}]}
+		},
+		"magic_bloodwave": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_bloodwave"]}]}
+		},
+		"magic_bloodvortex": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_bloodvortex"]}]}
+		},
+		"magic_bloodspear": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_bloodspear"]}]}
+		},
+		"magic_summon_cat": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_summon_cat"]}]}
+		},
+		"magic_summon_wolf": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_summon_wolf"]}]}
+		},
+		"magic_summon_allay": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_summon_allay"]}]}
+		},
+		"magic_summon_golem": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_summon_golem"]}]}
+		},
+		"magic_summon_fox": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_summon_fox"]}]}
+		},
+		"magic_witchmaster": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_witchmaster"]}]}
+		},
+		"magic_wotchwindine": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_wotchwindine"]}]}
+		},
+		"magic_witchifrit": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_witchifrit"]}]}
+		},
+		"magic_growth_effect": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_growth_effect"]}]}
+		},
+		"magic_growth_aura": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_growth_aura"]}]}
+		},
+		"magic_growth_wide": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_growth_wide"]}]}
+		},
+		"magic_growth_harvest": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_growth_harvest"]}]}
+		},
+		"magic_invisible": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_invisible"]}]}
+		},
+		"magic_aether_shield": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_aether_shield"]}]}
+		},
+		"magic_aether_shield2": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_aether_shield2"]}]}
+		},
+		"magic_aether_shield3": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_aether_shield3"]}]}
+		},
+		"magic_gravityfield": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_gravityfield"]}]}
+		},
+		"magic_gravityfield2": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_gravityfield2"]}]}
+		},
+		"magic_gravityfield3": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_gravityfield3"]}]}
+		},
+		"magic_gravityfield4": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_gravityfield4"]}]}
+		},
+		"magic_windfield": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_windfield"]}]}
+		},
+		"magic_windfield2": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_windfield2"]}]}
+		},
+		"magic_windfield3": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_windfield3"]}]}
+		},
+		"magic_windfield4": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_windfield4"]}]}
+		},
+		"magic_rainfield": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_rainfield"]}]}
+		},
+		"magic_rainfield2": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_rainfield2"]}]}
+		},
+		"magic_rainfield3": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_rainfield3"]}]}
+		},
+		"magic_rainfield4": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_rainfield4"]}]}
+		},
+		"magic_future_visionfiled": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_future_visionfiled"]}]}
+		},
+		"magic_future_visionfiled2": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_future_visionfiled2"]}]}
+		},
+		"magic_future_visionfiled3": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_future_visionfiled3"]}]}
+		},
+		"magic_future_visionfiled4": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_future_visionfiled4"]}]}
+		},
+		"magic_water_breath": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_water_breath"]}]}
+		},
+		"magic_night_vision": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_night_vision"]}]}
+		},
+		"magic_speed": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_speed"]}]}
+		},
+		"magic_strength": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_strength"]}]}
+		},
+		"magic_regeneration": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magic_regeneration"]}]}
+		}
+	},
+	"rewards": {"loot": ["sweetmagic:advance/magia_bottle_2"]}
+}

@@ -1,13 +1,13 @@
 {
 	"display": {
-		"icon": { "item": "sweetmagic:divine_crystal" },
-		"title": { "translate": "smadbent.divine_crystal.title" },
-		"description": { "translate": "smadbent.divine_crystal.text" }
+		"icon": {"item": "sweetmagic:divine_crystal"},
+		"title": {"translate": "smadbent.divine_crystal.title"},
+		"description": {"translate": "smadbent.divine_crystal.text"}
 	},
 	"parent": "sweetmagic:magic/aether_crystal", "criteria": {
-		"trigger": { "trigger": "minecraft:inventory_changed", "conditions": {
-			"items": [ { "items": [ "sweetmagic:divine_crystal" ] } ]
-		} }
+		"trigger": {"trigger": "minecraft:inventory_changed", "conditions": {
+			"items": [{"items": ["sweetmagic:divine_crystal"]}]
+		}}
 	},
-	"rewards": { "loot": ["sweetmagic:advance/mf_bottle_1"] }
+	"rewards": {"loot": ["sweetmagic:advance/mf_bottle_1"]}
 }

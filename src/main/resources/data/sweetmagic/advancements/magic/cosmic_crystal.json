@@ -1,13 +1,13 @@
 {
 	"display": {
-		"icon": { "item": "sweetmagic:cosmic_crystal" },
-		"title": { "translate": "smadbent.cosmic_crystal.title" },
-		"description": { "translate": "smadbent.cosmic_crystal.text" }
+		"icon": {"item": "sweetmagic:cosmic_crystal"},
+		"title": {"translate": "smadbent.cosmic_crystal.title"},
+		"description": {"translate": "smadbent.cosmic_crystal.text"}
 	},
 	"parent": "sweetmagic:magic/deus_crystal", "criteria": {
-		"trigger": { "trigger": "minecraft:inventory_changed", "conditions": {
-			"items": [ { "items": [ "sweetmagic:cosmic_crystal" ] } ]
-		} }
+		"trigger": {"trigger": "minecraft:inventory_changed", "conditions": {
+			"items": [{"items": ["sweetmagic:cosmic_crystal"]}]
+		}}
 	},
-	"rewards": { "loot": ["sweetmagic:advance/magia_bottle_1"] }
+	"rewards": {"loot": ["sweetmagic:advance/magia_bottle_1"]}
 }

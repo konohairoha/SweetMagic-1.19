@@ -1,13 +1,13 @@
 {
 	"display": {
-		"icon": { "item": "sweetmagic:mftable" },
-		"title": { "translate": "smadbent.mftable.title" },
-		"description": { "translate": "smadbent.mftable.text" }
+		"icon": {"item": "sweetmagic:mftable"},
+		"title": {"translate": "smadbent.mftable.title"},
+		"description": {"translate": "smadbent.mftable.text"}
 	},
 	"parent": "sweetmagic:magic/mftank", "criteria": {
-		"trigger": { "trigger": "minecraft:inventory_changed", "conditions": {
-			"items": [ { "items": [ "sweetmagic:mftable" ] } ]
-		} }
+		"trigger": {"trigger": "minecraft:inventory_changed", "conditions": {
+			"items": [{"items": ["sweetmagic:mftable"]}]
+		}}
 	},
-	"rewards": { "loot": ["sweetmagic:advance/mf_sbottle_1"] }
+	"rewards": {"loot": ["sweetmagic:advance/mf_sbottle_1"]}
 }

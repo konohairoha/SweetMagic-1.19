@@ -1,13 +1,13 @@
 {
 	"display": {
-		"icon": { "item": "sweetmagic:aether_lanp" },
-		"title": { "translate": "smadbent.aether_lanp.title" },
-		"description": { "translate": "smadbent.aether_lanp.text" }
+		"icon": {"item": "sweetmagic:aether_lanp"},
+		"title": {"translate": "smadbent.aether_lanp.title"},
+		"description": {"translate": "smadbent.aether_lanp.text"}
 	},
 	"parent": "sweetmagic:magic/carnation_crayola_pot", "criteria": {
-		"trigger": { "trigger": "minecraft:inventory_changed", "conditions": {
-			"items": [ { "items": [ "sweetmagic:aether_lanp" ] } ]
-		} }
+		"trigger": {"trigger": "minecraft:inventory_changed", "conditions": {
+			"items": [{"items": ["sweetmagic:aether_lanp"]}]
+		}}
 	},
-	"rewards": { "loot": ["sweetmagic:advance/mf_sbottle_2"] }
+	"rewards": {"loot": ["sweetmagic:advance/mf_sbottle_2"]}
 }

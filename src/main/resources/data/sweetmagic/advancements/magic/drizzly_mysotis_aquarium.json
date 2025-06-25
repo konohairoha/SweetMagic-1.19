@@ -1,13 +1,13 @@
 {
 	"display": {
-		"icon": { "item": "sweetmagic:drizzly_mysotis_aquarium" },
-		"title": { "translate": "smadbent.drizzly_mysotis_aquarium.title" },
-		"description": { "translate": "smadbent.drizzly_mysotis_aquarium.text" }
+		"icon": {"item": "sweetmagic:drizzly_mysotis_aquarium"},
+		"title": {"translate": "smadbent.drizzly_mysotis_aquarium.title"},
+		"description": {"translate": "smadbent.drizzly_mysotis_aquarium.text"}
 	},
 	"parent": "sweetmagic:magic/altar_creation_star", "criteria": {
-		"trigger": { "trigger": "minecraft:inventory_changed", "conditions": {
-			"items": [ { "items": [ "sweetmagic:drizzly_mysotis_aquarium" ] } ]
-		} }
+		"trigger": {"trigger": "minecraft:inventory_changed", "conditions": {
+			"items": [{"items": ["sweetmagic:drizzly_mysotis_aquarium"]}]
+		}}
 	},
-	"rewards": { "loot": ["sweetmagic:advance/mf_bottle_5"] }
+	"rewards": {"loot": ["sweetmagic:advance/mf_bottle_5"]}
 }

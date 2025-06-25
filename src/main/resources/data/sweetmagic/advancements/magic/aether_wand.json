@@ -1,13 +1,13 @@
 {
 	"display": {
-		"icon": { "item": "sweetmagic:aether_wand" },
-		"title": { "translate": "smadbent.aether_wand.title" },
-		"description": { "translate": "smadbent.aether_wand.text" }
+		"icon": {"item": "sweetmagic:aether_wand"},
+		"title": {"translate": "smadbent.aether_wand.title"},
+		"description": {"translate": "smadbent.aether_wand.text"}
 	},
 	"parent": "sweetmagic:magic/aether_crystal", "criteria": {
-		"trigger": { "trigger": "minecraft:inventory_changed", "conditions": {
-			"items": [ { "items": [ "sweetmagic:aether_wand" ] } ]
-		} }
+		"trigger": {"trigger": "minecraft:inventory_changed", "conditions": {
+			"items": [{"items": ["sweetmagic:aether_wand"]}]
+		}}
 	},
-	"rewards": { "loot": ["sweetmagic:advance/mf_sbottle_2"] }
+	"rewards": {"loot": ["sweetmagic:advance/mf_sbottle_2"]}
 }

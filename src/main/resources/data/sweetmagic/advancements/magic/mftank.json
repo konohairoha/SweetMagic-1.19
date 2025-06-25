@@ -1,13 +1,13 @@
 {
 	"display": {
-		"icon": { "item": "sweetmagic:mftank" },
-		"title": { "translate": "smadbent.mftank.title" },
-		"description": { "translate": "smadbent.mftank.text" }
+		"icon": {"item": "sweetmagic:mftank"},
+		"title": {"translate": "smadbent.mftank.title"},
+		"description": {"translate": "smadbent.mftank.text"}
 	},
 	"parent": "sweetmagic:magic/mfchanger", "criteria": {
-		"trigger": { "trigger": "minecraft:inventory_changed", "conditions": {
-			"items": [ { "items": [ "sweetmagic:mftank" ] } ]
-		} }
+		"trigger": {"trigger": "minecraft:inventory_changed", "conditions": {
+			"items": [{"items": ["sweetmagic:mftank"]}]
+		}}
 	},
-	"rewards": { "loot": ["sweetmagic:advance/mftank"] }
+	"rewards": {"loot": ["sweetmagic:advance/mftank"]}
 }

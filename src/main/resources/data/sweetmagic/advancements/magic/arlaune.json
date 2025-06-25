@@ -1,13 +1,13 @@
 {
 	"display": {
-		"icon": { "item": "sweetmagic:figurine_arlaune" },
-		"title": { "translate": "smadbent.arlaune.title" },
-		"description": { "translate": "smadbent.arlaune.text" }
+		"icon": {"item": "sweetmagic:figurine_arlaune"},
+		"title": {"translate": "smadbent.arlaune.title"},
+		"description": {"translate": "smadbent.arlaune.text"}
 	},
 	"parent": "sweetmagic:magic/ancientfairy", "criteria": {
-		"trigger": { "trigger": "minecraft:inventory_changed", "conditions": {
-			"items": [ { "items": [ "sweetmagic:figurine_arlaune" ] } ]
-		} }
+		"trigger": {"trigger": "minecraft:inventory_changed", "conditions": {
+			"items": [{"items": ["sweetmagic:figurine_arlaune"]}]
+		}}
 	},
-	"rewards": { "loot": ["sweetmagic:advance/mf_bottle_5"] }
+	"rewards": {"loot": ["sweetmagic:advance/mf_bottle_5"]}
 }
