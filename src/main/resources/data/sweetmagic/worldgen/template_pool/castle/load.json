@@ -1,0 +1,7 @@
+{
+	"name": "sweetmagic:castle/castle_load", "fallback": "minecraft:empty", "elements": [{
+		"weight": 1, "element": {
+			"location": "sweetmagic:castle/castle_load", "processors": "minecraft:empty", "projection": "rigid", "element_type": "minecraft:single_pool_element"
+		}
+	}]
+}

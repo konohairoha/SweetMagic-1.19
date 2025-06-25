@@ -79,13 +79,19 @@
 			}
 		},
 		{
+			"weight": 7, "element": {
+				"location": "sweetmagic:village/vil_house16",
+				"processors": "minecraft:empty", "projection": "rigid", "element_type": "minecraft:single_pool_element"
+			}
+		},
+		{
 			"weight": 20, "element": {
 				"location": "sweetmagic:village/vil_house17", "processors": "minecraft:empty", "projection": "rigid", "element_type": "minecraft:single_pool_element"
 			}
 		},
 		{
-			"weight": 7, "element": {
-				"location": "sweetmagic:village/vil_house16",
+			"weight": 10, "element": {
+				"location": "sweetmagic:village/vil_house18",
 				"processors": "minecraft:empty", "projection": "rigid", "element_type": "minecraft:single_pool_element"
 			}
 		},

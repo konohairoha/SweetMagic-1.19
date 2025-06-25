@@ -1,0 +1,14 @@
+{
+	"name": "sweetmagic:house_ruin/house_ruin", "fallback": "minecraft:empty", "elements": [
+		{
+			"weight": 10, "element": {
+				"location": "sweetmagic:house_ruin/house_ruin0", "processors": "minecraft:empty", "projection": "rigid", "element_type": "minecraft:single_pool_element"
+			}
+		},
+		{
+			"weight": 10, "element": {
+				"location": "sweetmagic:house_ruin/house_ruin1", "processors": "minecraft:empty", "projection": "rigid", "element_type": "minecraft:single_pool_element"
+			}
+		}
+	]
+}

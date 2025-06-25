@@ -1,0 +1,13 @@
+{
+	"name": "sweetmagic:mineshaft/lemon/main", "fallback": "minecraft:empty", "elements": [
+	{
+		"weight": 6, "element": {
+			"location": "sweetmagic:mineshaft/lemon/ladder", "processors": "minecraft:empty", "projection": "rigid", "element_type": "minecraft:single_pool_element"
+		}
+	},
+	{
+		"weight": 4, "element": {
+			"location": "sweetmagic:mineshaft/lemon/main", "processors": "minecraft:empty", "projection": "rigid", "element_type": "minecraft:single_pool_element"
+		}
+	}]
+}

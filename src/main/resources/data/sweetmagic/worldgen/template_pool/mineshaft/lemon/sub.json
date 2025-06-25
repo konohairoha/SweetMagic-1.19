@@ -1,0 +1,38 @@
+{
+	"name": "sweetmagic:mineshaft/lemon/sub", "fallback": "minecraft:empty", "elements": [
+	{
+		"weight": 10, "element": {
+			"location": "sweetmagic:mineshaft/lemon/sub1", "processors": "minecraft:empty", "projection": "rigid", "element_type": "minecraft:single_pool_element"
+		}
+	},
+	{
+		"weight": 16, "element": {
+			"location": "sweetmagic:mineshaft/lemon/subroom1", "processors": "minecraft:empty", "projection": "rigid", "element_type": "minecraft:single_pool_element"
+		}
+	},
+	{
+		"weight": 16, "element": {
+			"location": "sweetmagic:mineshaft/lemon/subroom2", "processors": "minecraft:empty", "projection": "rigid", "element_type": "minecraft:single_pool_element"
+		}
+	},
+	{
+		"weight": 16, "element": {
+			"location": "sweetmagic:mineshaft/lemon/subroom3", "processors": "minecraft:empty", "projection": "rigid", "element_type": "minecraft:single_pool_element"
+		}
+	},
+	{
+		"weight": 16, "element": {
+			"location": "sweetmagic:mineshaft/lemon/subroom4", "processors": "minecraft:empty", "projection": "rigid", "element_type": "minecraft:single_pool_element"
+		}
+	},
+	{
+		"weight": 16, "element": {
+			"location": "sweetmagic:mineshaft/lemon/subroom5", "processors": "minecraft:empty", "projection": "rigid", "element_type": "minecraft:single_pool_element"
+		}
+	},
+	{
+		"weight": 3, "element": {
+			"location": "sweetmagic:mineshaft/lemon/under", "processors": "minecraft:empty", "projection": "rigid", "element_type": "minecraft:single_pool_element"
+		}
+	}]
+}

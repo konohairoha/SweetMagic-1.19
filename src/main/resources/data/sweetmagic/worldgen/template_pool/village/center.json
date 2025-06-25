@@ -1,7 +1,7 @@
 {
 	"name": "sweetmagic:village/center", "fallback": "minecraft:empty", "elements": [{
 		"weight": 1, "element": {
-				"location": "sweetmagic:village/vil_cen", "processors": "minecraft:empty", "projection": "rigid", "element_type": "minecraft:single_pool_element"
+			"location": "sweetmagic:village/vil_cen", "processors": "minecraft:empty", "projection": "rigid", "element_type": "minecraft:single_pool_element"
 		}
 	}]
 }

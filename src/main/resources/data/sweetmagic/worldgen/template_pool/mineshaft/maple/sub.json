@@ -1,0 +1,33 @@
+{
+	"name": "sweetmagic:mineshaft/maple/sub", "fallback": "minecraft:empty", "elements": [
+	{
+		"weight": 12, "element": {
+			"location": "sweetmagic:mineshaft/maple/sub1", "processors": "minecraft:empty", "projection": "rigid", "element_type": "minecraft:single_pool_element"
+		}
+	},
+	{
+		"weight": 16, "element": {
+			"location": "sweetmagic:mineshaft/maple/subroom1", "processors": "minecraft:empty", "projection": "rigid", "element_type": "minecraft:single_pool_element"
+		}
+	},
+	{
+		"weight": 16, "element": {
+			"location": "sweetmagic:mineshaft/maple/subroom2", "processors": "minecraft:empty", "projection": "rigid", "element_type": "minecraft:single_pool_element"
+		}
+	},
+	{
+		"weight": 16, "element": {
+			"location": "sweetmagic:mineshaft/maple/subroom3", "processors": "minecraft:empty", "projection": "rigid", "element_type": "minecraft:single_pool_element"
+		}
+	},
+	{
+		"weight": 16, "element": {
+			"location": "sweetmagic:mineshaft/maple/subroom4", "processors": "minecraft:empty", "projection": "rigid", "element_type": "minecraft:single_pool_element"
+		}
+	},
+	{
+		"weight": 16, "element": {
+			"location": "sweetmagic:mineshaft/maple/subroom5", "processors": "minecraft:empty", "projection": "rigid", "element_type": "minecraft:single_pool_element"
+		}
+	}]
+}

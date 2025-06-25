@@ -1,0 +1,7 @@
+{
+	"name": "sweetmagic:mineshaft/maple/ladder", "fallback": "minecraft:empty", "elements": [{
+		"weight": 1, "element": {
+			"location": "sweetmagic:mineshaft/maple/ladder", "processors": "minecraft:empty", "projection": "rigid", "element_type": "minecraft:single_pool_element"
+		}
+	}]
+}

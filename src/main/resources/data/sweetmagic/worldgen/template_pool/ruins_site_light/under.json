@@ -1,0 +1,7 @@
+{
+	"name": "sweetmagic:ruins_site_light/under", "fallback": "minecraft:empty", "elements": [{
+		"weight": 1, "element": {
+			"location": "sweetmagic:ruins_site_light/under", "processors": "minecraft:empty", "projection": "rigid", "element_type": "minecraft:single_pool_element"
+		}
+	}]
+}

@@ -1,13 +1,6 @@
 {
-	"name": "sweetmagic:arena/arena_main",
-	"fallback": "minecraft:empty",
-	"elements": [{
-	"weight": 1,
-		"element": {
-			"location": "sweetmagic:arena/arena_main",
-			"processors": "minecraft:empty",
-			"projection": "rigid",
-			"element_type": "minecraft:single_pool_element"
-		}
-	}]
+	"name": "sweetmagic:arena/arena_main", "fallback": "minecraft:empty", "elements": [{
+	"weight": 1, "element": {
+		"location": "sweetmagic:arena/arena_main", "processors": "minecraft:empty", "projection": "rigid", "element_type": "minecraft:single_pool_element"
+	} }]
 }

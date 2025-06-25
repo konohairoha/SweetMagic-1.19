@@ -1,0 +1,7 @@
+{
+	"name": "sweetmagic:large_labyrinth/under", "fallback": "minecraft:empty", "elements": [{
+		"weight": 1, "element": {
+			"location": "sweetmagic:large_labyrinth/labyrinth_under", "processors": "minecraft:empty", "projection": "rigid", "element_type": "minecraft:single_pool_element"
+		}
+	}]
+}
