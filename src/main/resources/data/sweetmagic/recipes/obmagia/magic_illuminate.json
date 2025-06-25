@@ -1,20 +1,20 @@
 {
 	"type": "sweetmagic:obmagia_craft",
 	"ingredients": [
-		{ "item": "sweetmagic:magic_holy_light", "count": 1 },
-		{ "item": "sweetmagic:pure_crystal", "count": 1 },
-		{ "item": "sweetmagic:prizmium", "count": 6 }
+		{"item": "sweetmagic:magic_holy_light", "count": 1},
+		{"item": "sweetmagic:pure_crystal", "count": 1},
+		{"item": "sweetmagic:prizmium", "count": 6}
 	],
 	"base": [
-		{ "tag": "forge:magic_book_cosmic", "count": 1 }
+		{"tag": "forge:magic_book_cosmic", "count": 1}
 	],
 	"page": [
-		{ "item": "sweetmagic:mystical_page", "count": 1 }
+		{"item": "sweetmagic:mystical_page", "count": 1}
 	],
 	"result": [
-		{ "item": "sweetmagic:magic_illuminate", "count": 1 }
+		{"item": "sweetmagic:magic_illuminate", "count": 1}
 	],
 	"crafttime": [
-		{ "time": 12 }
+		{"time": 12}
 	]
 }

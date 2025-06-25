@@ -1,22 +1,22 @@
 {
 	"type": "sweetmagic:obmagia_craft",
 	"ingredients": [
-		{ "item": "sweetmagic:magic_quickheal", "count": 1 },
-		{ "item": "sweetmagic:divine_crystal", "count": 2 },
-		{ "item": "sweetmagic:drizzly_mysotis_flower", "count": 8 },
-		{ "item": "sweetmagic:sugarbell", "count": 16 },
-		{ "item": "sweetmagic:sannyflower_petal", "count": 16 }
+		{"item": "sweetmagic:magic_quickheal", "count": 1},
+		{"item": "sweetmagic:divine_crystal", "count": 2},
+		{"item": "sweetmagic:drizzly_mysotis_flower", "count": 8},
+		{"item": "sweetmagic:sugarbell", "count": 16},
+		{"item": "sweetmagic:sannyflower_petal", "count": 16}
 	],
 	"base": [
-		{ "tag": "forge:magic_book", "count": 1 }
+		{"tag": "forge:magic_book", "count": 1}
 	],
 	"page": [
-		{ "item": "sweetmagic:mysterious_page", "count": 1 }
+		{"item": "sweetmagic:mysterious_page", "count": 1}
 	],
 	"result": [
-		{ "item": "sweetmagic:magic_hiheal", "count": 1 }
+		{"item": "sweetmagic:magic_hiheal", "count": 1}
 	],
 	"crafttime": [
-		{ "time": 8 }
+		{"time": 8}
 	]
 }

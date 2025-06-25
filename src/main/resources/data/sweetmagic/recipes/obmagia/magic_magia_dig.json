@@ -1,0 +1,22 @@
+{
+	"type": "sweetmagic:obmagia_craft",
+	"ingredients": [
+		{"item": "sweetmagic:magic_range_dig", "count": 1},
+		{"item": "sweetmagic:cosmic_crystal_shard", "count": 4},
+		{"tag": "forge:gems/fluorite", "count": 3},
+		{"tag": "forge:gems/redberyl", "count": 3},
+		{"item": "sweetmagic:magia_bottle", "count": 1}
+	],
+	"base": [
+		{"tag": "forge:magic_book_scarlet", "count": 1}
+	],
+	"page": [
+		{"item": "sweetmagic:mystical_book", "count": 1}
+	],
+	"result": [
+		{"item": "sweetmagic:magic_magia_dig", "count": 1}
+	],
+	"crafttime": [
+		{"time": 20}
+	]
+}

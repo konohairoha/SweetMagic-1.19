@@ -1,20 +1,20 @@
 {
 	"type": "sweetmagic:obmagia_craft",
 	"ingredients": [
-		{ "item": "sweetmagic:magic_gravityfield2", "count": 1 },
-		{ "item": "sweetmagic:grav_powder", "count": 10 },
-		{ "item": "sweetmagic:magia_bottle", "count": 1 }
+		{"item": "sweetmagic:magic_gravityfield2", "count": 1},
+		{"item": "sweetmagic:grav_powder", "count": 10},
+		{"item": "sweetmagic:magia_bottle", "count": 1}
 	],
 	"base": [
-		{ "tag": "forge:magic_book_cosmic", "count": 1 }
+		{"tag": "forge:magic_book_cosmic", "count": 1}
 	],
 	"page": [
-		{ "item": "sweetmagic:mystical_page", "count": 1 }
+		{"item": "sweetmagic:mystical_page", "count": 1}
 	],
 	"result": [
-		{ "item": "sweetmagic:magic_gravityfield3", "count": 1 }
+		{"item": "sweetmagic:magic_gravityfield3", "count": 1}
 	],
 	"crafttime": [
-		{ "time": 12 }
+		{"time": 12}
 	]
 }

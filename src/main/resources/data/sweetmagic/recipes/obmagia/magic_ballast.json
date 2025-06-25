@@ -1,21 +1,21 @@
 {
 	"type": "sweetmagic:obmagia_craft",
 	"ingredients": [
-		{ "item": "sweetmagic:grav_powder", "count": 3 },
-		{ "item": "sweetmagic:aether_crystal", "count": 2 },
-		{ "item": "sweetmagic:sugarbell", "count": 4 },
-		{ "item": "sweetmagic:clerodendrum_petal", "count": 4 }
+		{"item": "sweetmagic:grav_powder", "count": 3},
+		{"item": "sweetmagic:aether_crystal", "count": 2},
+		{"item": "sweetmagic:sugarbell", "count": 4},
+		{"item": "sweetmagic:clerodendrum_petal", "count": 4}
 	],
 	"base": [
-		{ "item": "sweetmagic:blank_magic", "count": 1 }
+		{"item": "sweetmagic:blank_magic", "count": 1}
 	],
 	"page": [
-		{ "item": "sweetmagic:blank_page", "count": 1 }
+		{"item": "sweetmagic:blank_page", "count": 1}
 	],
 	"result": [
-		{ "item": "sweetmagic:magic_ballast", "count": 1 }
+		{"item": "sweetmagic:magic_ballast", "count": 1}
 	],
 	"crafttime": [
-		{ "time": 5 }
+		{"time": 5}
 	]
 }

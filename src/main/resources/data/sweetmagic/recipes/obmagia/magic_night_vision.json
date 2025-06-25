@@ -1,24 +1,24 @@
 {
 	"type": "sweetmagic:obmagia_craft",
 	"ingredients": [
-		{ "item": "sweetmagic:aether_crystal", "count": 2 },
-		{ "item": "minecraft:glass_bottle", "count": 4 },
-		{ "item": "sweetmagic:paper_mint", "count": 2 },
-		{ "item": "sweetmagic:fire_nasturtium_petal", "count": 2 },
-		{ "item": "sweetmagic:drizzly_mysotis_flower", "count": 2 },
-		{ "item": "sweetmagic:sannyflower_petal", "count": 2 },
-		{ "item": "sweetmagic:moonblossom_petal", "count": 2 }
+		{"item": "sweetmagic:aether_crystal", "count": 2},
+		{"item": "minecraft:glass_bottle", "count": 4},
+		{"item": "sweetmagic:paper_mint", "count": 2},
+		{"item": "sweetmagic:fire_nasturtium_petal", "count": 2},
+		{"item": "sweetmagic:drizzly_mysotis_flower", "count": 2},
+		{"item": "sweetmagic:sannyflower_petal", "count": 2},
+		{"item": "sweetmagic:moonblossom_petal", "count": 2}
 	],
 	"base": [
-		{ "item": "sweetmagic:blank_magic", "count": 1 }
+		{"item": "sweetmagic:blank_magic", "count": 1}
 	],
 	"page": [
-		{ "item": "sweetmagic:blank_page", "count": 1 }
+		{"item": "sweetmagic:blank_page", "count": 1}
 	],
 	"result": [
-		{ "item": "sweetmagic:magic_night_vision", "count": 1 }
+		{"item": "sweetmagic:magic_night_vision", "count": 1}
 	],
 	"crafttime": [
-		{ "time": 4 }
+		{"time": 4}
 	]
 }

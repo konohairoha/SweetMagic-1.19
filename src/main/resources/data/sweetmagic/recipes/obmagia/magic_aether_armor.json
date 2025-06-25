@@ -1,22 +1,22 @@
 {
 	"type": "sweetmagic:obmagia_craft",
 	"ingredients": [
-		{ "tag": "forge:ingots/iron", "count": 1 },
-		{ "tag": "minecraft:logs", "count": 1 },
-		{ "item": "sweetmagic:aether_crystal", "count": 4 },
-		{ "item": "sweetmagic:sugarbell", "count": 4 },
-		{ "item": "sweetmagic:paper_mint", "count": 4 }
+		{"tag": "forge:ingots/iron", "count": 1},
+		{"tag": "minecraft:logs", "count": 1},
+		{"item": "sweetmagic:aether_crystal", "count": 4},
+		{"item": "sweetmagic:sugarbell", "count": 4},
+		{"item": "sweetmagic:paper_mint", "count": 4}
 	],
 	"base": [
-		{ "item": "sweetmagic:blank_magic", "count": 1 }
+		{"item": "sweetmagic:blank_magic", "count": 1}
 	],
 	"page": [
-		{ "item": "sweetmagic:blank_page", "count": 1 }
+		{"item": "sweetmagic:blank_page", "count": 1}
 	],
 	"result": [
-		{ "item": "sweetmagic:magic_aether_armor", "count": 1 }
+		{"item": "sweetmagic:magic_aether_armor", "count": 1}
 	],
 	"crafttime": [
-		{ "time": 5 }
+		{"time": 5}
 	]
 }

@@ -1,21 +1,21 @@
 {
 	"type": "sweetmagic:obmagia_craft",
 	"ingredients": [
-		{ "item": "sweetmagic:unmeltable_ice", "count": 1 },
-		{ "item": "sweetmagic:aether_crystal", "count": 1 },
-		{ "item": "sweetmagic:sugarbell", "count": 2 },
-		{ "item": "sweetmagic:moonblossom_petal", "count": 3 }
+		{"item": "sweetmagic:unmeltable_ice", "count": 1},
+		{"item": "sweetmagic:aether_crystal", "count": 1},
+		{"item": "sweetmagic:sugarbell", "count": 2},
+		{"item": "sweetmagic:moonblossom_petal", "count": 3}
 	],
 	"base": [
-		{ "item": "sweetmagic:blank_magic", "count": 1 }
+		{"item": "sweetmagic:blank_magic", "count": 1}
 	],
 	"page": [
-		{ "item": "sweetmagic:blank_page", "count": 1 }
+		{"item": "sweetmagic:blank_page", "count": 1}
 	],
 	"result": [
-		{ "item": "sweetmagic:magic_frost", "count": 1 }
+		{"item": "sweetmagic:magic_frost", "count": 1}
 	],
 	"crafttime": [
-		{ "time": 5 }
+		{"time": 5}
 	]
 }

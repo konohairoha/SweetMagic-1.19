@@ -1,0 +1,22 @@
+{
+	"type": "sweetmagic:obmagia_craft",
+	"ingredients": [
+		{"item": "sweetmagic:magic_future_visionfiled3", "count": 1},
+		{"item": "sweetmagic:cosmic_crystal_shard", "count": 4},
+		{"item": "sweetmagic:sannyflower_petal", "count": 16},
+		{"item": "sweetmagic:moonblossom_petal", "count": 16},
+		{"item": "sweetmagic:magia_bottle", "count": 2}
+	],
+	"base": [
+		{"tag": "forge:magic_book_scarlet", "count": 1}
+	],
+	"page": [
+		{"item": "sweetmagic:mystical_book", "count": 1}
+	],
+	"result": [
+		{"item": "sweetmagic:magic_future_visionfiled4", "count": 1}
+	],
+	"crafttime": [
+		{"time": 20}
+	]
+}

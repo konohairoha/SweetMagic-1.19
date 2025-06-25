@@ -1,20 +1,20 @@
 {
 	"type": "sweetmagic:obmagia_craft",
 	"ingredients": [
-		{ "item": "sweetmagic:drizzly_mysotis_flower", "count": 8 },
-		{ "item": "sweetmagic:aether_crystal", "count": 4 },
-		{ "item": "sweetmagic:magic_meal", "count": 16 }
+		{"item": "sweetmagic:drizzly_mysotis_flower", "count": 8},
+		{"item": "sweetmagic:aether_crystal", "count": 4},
+		{"item": "sweetmagic:magic_meal", "count": 16}
 	],
 	"base": [
-		{ "item": "sweetmagic:blank_magic", "count": 1 }
+		{"item": "sweetmagic:blank_magic", "count": 1}
 	],
 	"page": [
-		{ "item": "sweetmagic:mysterious_page", "count": 4 }
+		{"item": "sweetmagic:blank_page", "count": 4}
 	],
 	"result": [
-		{ "item": "sweetmagic:magic_bubleprison", "count": 1 }
+		{"item": "sweetmagic:magic_bubleprison", "count": 1}
 	],
 	"crafttime": [
-		{ "time": 5 }
+		{"time": 5}
 	]
 }

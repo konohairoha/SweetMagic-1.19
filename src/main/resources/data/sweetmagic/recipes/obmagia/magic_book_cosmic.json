@@ -1,18 +1,18 @@
 {
 	"type": "sweetmagic:obmagia_craft",
 	"ingredients": [
-		{ "item": "sweetmagic:divine_crystal", "count": 2 }
+		{"item": "sweetmagic:divine_crystal", "count": 2}
 	],
 	"base": [
-		{ "tag": "forge:magic_book_cosmic", "count": 1 }
+		{"tag": "forge:magic_book_cosmic", "count": 1}
 	],
 	"page": [
-		{ "item": "sweetmagic:mysterious_page", "count": 4 }
+		{"item": "sweetmagic:mysterious_page", "count": 4}
 	],
 	"result": [
-		{ "item": "sweetmagic:magic_book_cosmic", "count": 1 }
+		{"item": "sweetmagic:magic_book_cosmic", "count": 1}
 	],
 	"crafttime": [
-		{ "time": 8 }
+		{"time": 8}
 	]
 }

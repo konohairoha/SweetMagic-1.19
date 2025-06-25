@@ -1,20 +1,20 @@
 {
 	"type": "sweetmagic:obmagia_craft",
 	"ingredients": [
-		{ "item": "sweetmagic:magic_dig", "count": 1 },
-		{ "item": "sweetmagic:alternative_ingot", "count": 3 },
-		{ "item": "minecraft:stick", "count": 2 }
+		{"item": "sweetmagic:magic_dig", "count": 1},
+		{"item": "sweetmagic:alternative_ingot", "count": 3},
+		{"item": "minecraft:stick", "count": 2}
 	],
 	"base": [
-		{ "tag": "forge:magic_book", "count": 1 }
+		{"tag": "forge:magic_book", "count": 1}
 	],
 	"page": [
-		{ "item": "sweetmagic:mysterious_page", "count": 2 }
+		{"item": "sweetmagic:mysterious_page", "count": 2}
 	],
 	"result": [
-		{ "item": "sweetmagic:magic_silk_dig", "count": 1 }
+		{"item": "sweetmagic:magic_silk_dig", "count": 1}
 	],
 	"crafttime": [
-		{ "time": 8 }
+		{"time": 8}
 	]
 }

@@ -1,21 +1,21 @@
 {
 	"type": "sweetmagic:obmagia_craft",
 	"ingredients": [
-		{ "item": "sweetmagic:clerodendrum_petal", "count": 4 },
-		{ "item": "sweetmagic:sannyflower_petal", "count": 2 },
-		{ "item": "sweetmagic:moonblossom_petal", "count": 2 },
-		{ "item": "sweetmagic:mf_small_bottle", "count": 1 }
+		{"item": "sweetmagic:clerodendrum_petal", "count": 4},
+		{"item": "sweetmagic:sannyflower_petal", "count": 2},
+		{"item": "sweetmagic:moonblossom_petal", "count": 2},
+		{"item": "sweetmagic:mf_small_bottle", "count": 1}
 	],
 	"base": [
-		{ "item": "sweetmagic:blank_magic", "count": 1 }
+		{"item": "sweetmagic:blank_magic", "count": 1}
 	],
 	"page": [
-		{ "item": "sweetmagic:blank_page", "count": 1 }
+		{"item": "sweetmagic:blank_page", "count": 1}
 	],
 	"result": [
-		{ "item": "sweetmagic:magic_summon_wolf", "count": 1 }
+		{"item": "sweetmagic:magic_summon_wolf", "count": 1}
 	],
 	"crafttime": [
-		{ "time": 5 }
+		{"time": 5}
 	]
 }

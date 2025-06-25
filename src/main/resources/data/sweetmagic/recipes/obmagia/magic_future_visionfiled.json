@@ -1,21 +1,21 @@
 {
 	"type": "sweetmagic:obmagia_craft",
 	"ingredients": [
-		{ "item": "minecraft:clock", "count": 1 },
-		{ "item": "sweetmagic:mf_small_bottle", "count": 1 },
-		{ "item": "sweetmagic:sannyflower_petal", "count": 3 },
-		{ "item": "sweetmagic:moonblossom_petal", "count": 3 }
+		{"item": "minecraft:clock", "count": 1},
+		{"item": "sweetmagic:mf_small_bottle", "count": 1},
+		{"item": "sweetmagic:sannyflower_petal", "count": 3},
+		{"item": "sweetmagic:moonblossom_petal", "count": 3}
 	],
 	"base": [
-		{ "item": "sweetmagic:blank_magic", "count": 1 }
+		{"item": "sweetmagic:blank_magic", "count": 1}
 	],
 	"page": [
-		{ "item": "sweetmagic:blank_page", "count": 1 }
+		{"item": "sweetmagic:blank_page", "count": 1}
 	],
 	"result": [
-		{ "item": "sweetmagic:magic_future_visionfiled", "count": 1 }
+		{"item": "sweetmagic:magic_future_visionfiled", "count": 1}
 	],
 	"crafttime": [
-		{ "time": 5 }
+		{"time": 5}
 	]
 }

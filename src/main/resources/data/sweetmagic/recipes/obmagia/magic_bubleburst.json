@@ -1,0 +1,21 @@
+{
+	"type": "sweetmagic:obmagia_craft",
+	"ingredients": [
+		{"item": "sweetmagic:magic_bublehell", "count": 1},
+		{"item": "sweetmagic:cosmic_crystal_shard", "count": 4},
+		{"item": "sweetmagic:drizzly_mysotis_flower", "count": 48},
+		{"item": "sweetmagic:magia_bottle", "count": 1}
+	],
+	"base": [
+		{"tag": "forge:magic_book_scarlet", "count": 1}
+	],
+	"page": [
+		{"item": "sweetmagic:mystical_book", "count": 1}
+	],
+	"result": [
+		{"item": "sweetmagic:magic_bubleburst", "count": 1}
+	],
+	"crafttime": [
+		{"time": 20}
+	]
+}

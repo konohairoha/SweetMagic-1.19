@@ -1,0 +1,22 @@
+{
+	"type": "sweetmagic:obmagia_craft",
+	"ingredients": [
+		{"item": "sweetmagic:magic_illuminate", "count": 1},
+		{"item": "sweetmagic:magic_flamenova", "count": 1},
+		{"item": "sweetmagic:cosmic_crystal_shard", "count": 4},
+		{"item": "sweetmagic:prizmium", "count": 8},
+		{"item": "sweetmagic:magia_bottle", "count": 1}
+	],
+	"base": [
+		{"tag": "forge:magic_book_scarlet", "count": 1}
+	],
+	"page": [
+		{"item": "sweetmagic:mystical_book", "count": 1}
+	],
+	"result": [
+		{"item": "sweetmagic:magic_shining_flare", "count": 1}
+	],
+	"crafttime": [
+		{"time": 20}
+	]
+}

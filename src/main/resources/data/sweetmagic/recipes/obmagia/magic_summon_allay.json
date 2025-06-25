@@ -1,20 +1,20 @@
 {
 	"type": "sweetmagic:obmagia_craft",
 	"ingredients": [
-		{ "item": "sweetmagic:magic_summon_wolf", "count": 1 },
-		{ "item": "sweetmagic:clerodendrum_petal", "count": 8 },
-		{ "item": "sweetmagic:mf_bottle", "count": 1 }
+		{"item": "sweetmagic:magic_summon_wolf", "count": 1},
+		{"item": "sweetmagic:clerodendrum_petal", "count": 8},
+		{"item": "sweetmagic:mf_bottle", "count": 1}
 	],
 	"base": [
-		{ "tag": "forge:magic_book", "count": 1 }
+		{"tag": "forge:magic_book", "count": 1}
 	],
 	"page": [
-		{ "item": "sweetmagic:mysterious_page", "count": 2 }
+		{"item": "sweetmagic:mysterious_page", "count": 2}
 	],
 	"result": [
-		{ "item": "sweetmagic:magic_summon_allay", "count": 1 }
+		{"item": "sweetmagic:magic_summon_allay", "count": 1}
 	],
 	"crafttime": [
-		{ "time": 8 }
+		{"time": 8}
 	]
 }

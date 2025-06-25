@@ -1,21 +1,21 @@
 {
 	"type": "sweetmagic:obmagia_craft",
 	"ingredients": [
-		{ "item": "sweetmagic:sannyflower_petal", "count": 2 },
-		{ "item": "sweetmagic:aether_crystal", "count": 2 },
-		{ "item": "sweetmagic:sugarbell", "count": 2 },
-		{ "item": "sweetmagic:magic_meal", "count": 3 }
+		{"item": "sweetmagic:sannyflower_petal", "count": 2},
+		{"item": "sweetmagic:aether_crystal", "count": 2},
+		{"item": "sweetmagic:sugarbell", "count": 2},
+		{"item": "sweetmagic:magic_meal", "count": 3}
 	],
 	"base": [
-		{ "item": "sweetmagic:blank_magic", "count": 1 }
+		{"item": "sweetmagic:blank_magic", "count": 1}
 	],
 	"page": [
-		{ "item": "sweetmagic:blank_page", "count": 1 }
+		{"item": "sweetmagic:blank_page", "count": 1}
 	],
 	"result": [
-		{ "item": "sweetmagic:magic_quickheal", "count": 1 }
+		{"item": "sweetmagic:magic_quickheal", "count": 1}
 	],
 	"crafttime": [
-		{ "time": 5 }
+		{"time": 5}
 	]
 }

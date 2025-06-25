@@ -1,0 +1,24 @@
+{
+	"type": "sweetmagic:obmagia_craft",
+	"ingredients": [
+		{"item": "sweetmagic:magic_frostlaser", "count": 1},
+		{"item": "sweetmagic:frosted_chain", "count": 1},
+		{"tag": "sweetmagic:magic_accessory_boss", "count": 1},
+		{"tag": "sweetmagic:magic_accessory_boss", "count": 1},
+		{"item": "sweetmagic:acce_bag", "count": 4},
+		{"item": "sweetmagic:cosmic_crystal_shard", "count": 8},
+		{"item": "sweetmagic:starlight", "count": 8}
+	],
+	"base": [
+		{"tag": "forge:magic_book_scarlet", "count": 1}
+	],
+	"page": [
+		{"item": "sweetmagic:mystical_book", "count": 1}
+	],
+	"result": [
+		{"item": "sweetmagic:magic_magia_frostlaser", "count": 1}
+	],
+	"crafttime": [
+		{"time": 24}
+	]
+}

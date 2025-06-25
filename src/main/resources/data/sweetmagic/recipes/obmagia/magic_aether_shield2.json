@@ -1,21 +1,21 @@
 {
 	"type": "sweetmagic:obmagia_craft",
 	"ingredients": [
-		{ "item": "sweetmagic:magic_aether_shield", "count": 1 },
-		{ "item": "sweetmagic:prizmium", "count": 3 },
-		{ "item": "sweetmagic:cosmos_light_ingot", "count": 2 },
-		{ "item": "sweetmagic:magia_bottle", "count": 1 }
+		{"item": "sweetmagic:magic_aether_shield", "count": 1},
+		{"item": "sweetmagic:prizmium", "count": 3},
+		{"item": "sweetmagic:cosmos_light_ingot", "count": 2},
+		{"item": "sweetmagic:magia_bottle", "count": 1}
 	],
 	"base": [
-		{ "tag": "forge:magic_book_cosmic", "count": 1 }
+		{"tag": "forge:magic_book_cosmic", "count": 1}
 	],
 	"page": [
-		{ "item": "sweetmagic:mystical_page", "count": 1 }
+		{"item": "sweetmagic:mystical_page", "count": 1}
 	],
 	"result": [
-		{ "item": "sweetmagic:magic_aether_shield2", "count": 1 }
+		{"item": "sweetmagic:magic_aether_shield2", "count": 1}
 	],
 	"crafttime": [
-		{ "time": 12 }
+		{"time": 12}
 	]
 }

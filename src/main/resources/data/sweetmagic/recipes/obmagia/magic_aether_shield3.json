@@ -1,0 +1,22 @@
+{
+	"type": "sweetmagic:obmagia_craft",
+	"ingredients": [
+		{"item": "sweetmagic:magic_aether_shield2", "count": 1},
+		{"item": "sweetmagic:cosmic_crystal_shard", "count": 4},
+		{"item": "sweetmagic:prizmium", "count": 5},
+		{"item": "sweetmagic:cosmos_light_ingot", "count": 3},
+		{"item": "sweetmagic:magia_bottle", "count": 2}
+	],
+	"base": [
+		{"tag": "forge:magic_book_scarlet", "count": 1}
+	],
+	"page": [
+		{"item": "sweetmagic:mystical_book", "count": 1}
+	],
+	"result": [
+		{"item": "sweetmagic:magic_aether_shield3", "count": 1}
+	],
+	"crafttime": [
+		{"time": 20}
+	]
+}

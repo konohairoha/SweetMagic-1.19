@@ -1,21 +1,21 @@
 {
 	"type": "sweetmagic:obmagia_craft",
 	"ingredients": [
-		{ "item": "sweetmagic:fire_nasturtium_petal", "count": 4 },
-		{ "item": "minecraft:blaze_powder", "count": 3 },
-		{ "item": "sweetmagic:sugarbell", "count": 2 },
-		{ "item": "sweetmagic:sannyflower_petal", "count": 3 }
+		{"item": "sweetmagic:fire_nasturtium_petal", "count": 4},
+		{"item": "minecraft:blaze_powder", "count": 3},
+		{"item": "sweetmagic:sugarbell", "count": 2},
+		{"item": "sweetmagic:sannyflower_petal", "count": 3}
 	],
 	"base": [
-		{ "item": "sweetmagic:blank_magic", "count": 1 }
+		{"item": "sweetmagic:blank_magic", "count": 1}
 	],
 	"page": [
-		{ "item": "sweetmagic:blank_page", "count": 1 }
+		{"item": "sweetmagic:blank_page", "count": 1}
 	],
 	"result": [
-		{ "item": "sweetmagic:magic_fire", "count": 1 }
+		{"item": "sweetmagic:magic_fire", "count": 1}
 	],
 	"crafttime": [
-		{ "time": 5 }
+		{"time": 5}
 	]
 }

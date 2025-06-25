@@ -1,21 +1,21 @@
 {
 	"type": "sweetmagic:obmagia_craft",
 	"ingredients": [
-		{ "item": "sweetmagic:prizmium", "count": 2 },
-		{ "item": "minecraft:glowstone", "count": 1 },
-		{ "item": "sweetmagic:sugarbell", "count": 2 },
-		{ "item": "sweetmagic:magic_meal", "count": 3 }
+		{"item": "sweetmagic:prizmium", "count": 2},
+		{"item": "minecraft:glowstone", "count": 1},
+		{"item": "sweetmagic:sugarbell", "count": 2},
+		{"item": "sweetmagic:magic_meal", "count": 3}
 	],
 	"base": [
-		{ "item": "sweetmagic:blank_magic", "count": 1 }
+		{"item": "sweetmagic:blank_magic", "count": 1}
 	],
 	"page": [
-		{ "item": "sweetmagic:blank_page", "count": 1 }
+		{"item": "sweetmagic:blank_page", "count": 1}
 	],
 	"result": [
-		{ "item": "sweetmagic:magic_light", "count": 1 }
+		{"item": "sweetmagic:magic_light", "count": 1}
 	],
 	"crafttime": [
-		{ "time": 5 }
+		{"time": 5}
 	]
 }

@@ -1,22 +1,22 @@
 {
 	"type": "sweetmagic:obmagia_craft",
 	"ingredients": [
-		{ "item": "sweetmagic:magic_cherry_wind", "count": 1 },
-		{ "tag": "minecraft:saplings", "count": 24 },
-		{ "item": "sweetmagic:sugarbell", "count": 12 },
-		{ "item": "sweetmagic:sannyflower_petal", "count": 6 },
-		{ "item": "sweetmagic:moonblossom_petal", "count": 6 }
+		{"item": "sweetmagic:magic_cherry_wind", "count": 1},
+		{"tag": "minecraft:saplings", "count": 24},
+		{"item": "sweetmagic:sugarbell", "count": 12},
+		{"item": "sweetmagic:sannyflower_petal", "count": 6},
+		{"item": "sweetmagic:moonblossom_petal", "count": 6}
 	],
 	"base": [
-		{ "tag": "forge:magic_book_cosmic", "count": 1 }
+		{"tag": "forge:magic_book_cosmic", "count": 1}
 	],
 	"page": [
-		{ "item": "sweetmagic:mystical_page", "count": 1 }
+		{"item": "sweetmagic:mystical_page", "count": 1}
 	],
 	"result": [
-		{ "item": "sweetmagic:magic_cherry_storm", "count": 1 }
+		{"item": "sweetmagic:magic_cherry_storm", "count": 1}
 	],
 	"crafttime": [
-		{ "time": 12 }
+		{"time": 12}
 	]
 }

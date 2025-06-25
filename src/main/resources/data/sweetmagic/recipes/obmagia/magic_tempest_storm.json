@@ -1,0 +1,21 @@
+{
+	"type": "sweetmagic:obmagia_craft",
+	"ingredients": [
+		{"item": "sweetmagic:magic_gale", "count": 1},
+		{"item": "sweetmagic:cosmic_crystal_shard", "count": 4},
+		{"item": "sweetmagic:tiny_feather", "count": 32},
+		{"item": "sweetmagic:magia_bottle", "count": 1}
+	],
+	"base": [
+		{"tag": "forge:magic_book_scarlet", "count": 1}
+	],
+	"page": [
+		{"item": "sweetmagic:mystical_book", "count": 1}
+	],
+	"result": [
+		{"item": "sweetmagic:magic_tempest_storm", "count": 1}
+	],
+	"crafttime": [
+		{"time": 20}
+	]
+}
