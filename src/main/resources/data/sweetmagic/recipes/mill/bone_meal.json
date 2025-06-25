@@ -1,11 +1,11 @@
 {
 	"type": "sweetmagic:mill_craft",
 	"ingredients": [
-		{ "item": "minecraft:flint", "count": 1 }
+		{"item": "minecraft:flint", "count": 1}
 	],
 	"result": [
-		{ "item": "minecraft:bone_meal", "count": 1 },
-		{ "item": "minecraft:iron_nugget", "count": 1, "chance": 0.15 },
-		{ "item": "minecraft:gold_nugget", "count": 1, "chance": 0.15 }
+		{"item": "minecraft:bone_meal", "count": 1},
+		{"item": "minecraft:iron_nugget", "count": 1, "chance": 0.15},
+		{"item": "minecraft:gold_nugget", "count": 1, "chance": 0.15}
 	]
 }

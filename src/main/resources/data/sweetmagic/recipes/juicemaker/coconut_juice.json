@@ -1,12 +1,12 @@
 {
 	"type": "sweetmagic:juicemaker_craft",
 	"ingredients": [
-		{ "tag": "forge:crops/coconut", "count": 2 },
-		{ "tag": "forge:crops/lemon", "count": 1 },
-		{ "item": "minecraft:melon_slice", "count": 1 },
-		{ "tag": "forge:salt", "count": 1 }
+		{"tag": "forge:crops/coconut", "count": 2},
+		{"tag": "forge:crops/lemon", "count": 1},
+		{"item": "minecraft:melon_slice", "count": 1},
+		{"tag": "forge:salt", "count": 1}
 	],
 	"result": [
-		{ "item": "sweetmagic:coconut_juice", "count": 4 }
+		{"item": "sweetmagic:coconut_juice", "count": 4}
 	]
 }

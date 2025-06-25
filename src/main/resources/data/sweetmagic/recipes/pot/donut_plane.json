@@ -1,14 +1,14 @@
 {
 	"type": "sweetmagic:pot_craft",
 	"ingredients": [
-		{ "tag": "forge:flour", "count": 4 },
-		{ "tag": "forge:eggs", "count": 2 },
-		{ "tag": "forge:butter", "count": 2 },
-		{ "tag": "forge:oil", "count": 4 },
-		{ "tag": "forge:milk", "count": 2 },
-		{ "tag": "forge:sugar", "count": 3 }
+		{"tag": "forge:flour", "count": 4},
+		{"tag": "forge:eggs", "count": 2},
+		{"tag": "forge:butter", "count": 2},
+		{"tag": "forge:oil", "count": 4},
+		{"tag": "forge:milk", "count": 2},
+		{"tag": "forge:sugar", "count": 3}
 	],
 	"result": [
-		{ "item": "sweetmagic:donut_plane", "count": 8 }
+		{"item": "sweetmagic:donut_plane", "count": 8}
 	]
 }

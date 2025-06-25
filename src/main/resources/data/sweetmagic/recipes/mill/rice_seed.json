@@ -1,12 +1,12 @@
 {
 	"type": "sweetmagic:mill_craft",
 	"ingredients": [
-		{ "tag": "forge:crops/rice_plants", "count": 1 }
+		{"tag": "forge:crops/rice_plants", "count": 1}
 	],
 	"result": [
-		{ "item": "sweetmagic:rice_seed", "count": 3 },
-		{ "item": "sweetmagic:rice_seed", "count": 2, "chance": 0.5 },
-		{ "item": "sweetmagic:rice_seed", "count": 1, "chance": 0.25 },
-		{ "item": "sweetmagic:plant_chips", "count": 1, "chance": 0.3 }
+		{"item": "sweetmagic:rice_seed", "count": 3},
+		{"item": "sweetmagic:rice_seed", "count": 2, "chance": 0.5},
+		{"item": "sweetmagic:rice_seed", "count": 1, "chance": 0.25},
+		{"item": "sweetmagic:plant_chips", "count": 1, "chance": 0.3}
 	]
 }

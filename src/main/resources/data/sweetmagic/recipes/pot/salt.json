@@ -1,9 +1,9 @@
 {
 	"type": "sweetmagic:pot_craft",
 	"ingredients": [
-		{ "tag": "forge:water", "count": 4 }
+		{"tag": "forge:water", "count": 4}
 	],
 	"result": [
-		{ "item": "sweetmagic:salt", "count": 16 }
+		{"item": "sweetmagic:salt", "count": 16}
 	]
 }

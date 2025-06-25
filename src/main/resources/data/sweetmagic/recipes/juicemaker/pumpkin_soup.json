@@ -1,12 +1,12 @@
 {
 	"type": "sweetmagic:juicemaker_craft",
 	"ingredients": [
-		{ "tag": "forge:crops/pumpkin", "count": 1 },
-		{ "tag": "forge:crops/onion", "count": 3 },
-		{ "tag": "forge:milk", "count": 2 },
-		{ "tag": "forge:cream", "count": 1 }
+		{"tag": "forge:crops/pumpkin", "count": 1},
+		{"tag": "forge:crops/onion", "count": 3},
+		{"tag": "forge:milk", "count": 2},
+		{"tag": "forge:cream", "count": 1}
 	],
 	"result": [
-		{ "item": "sweetmagic:pumpkin_soup", "count": 5 }
+		{"item": "sweetmagic:pumpkin_soup", "count": 5}
 	]
 }

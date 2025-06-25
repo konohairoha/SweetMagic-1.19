@@ -1,12 +1,12 @@
 {
 	"type": "sweetmagic:pot_craft",
 	"ingredients": [
-		{ "tag": "forge:crops/adzukibeans", "count": 6 },
-		{ "tag": "forge:rice_cake", "count": 3 },
-		{ "tag": "forge:salt", "count": 1 },
-		{ "tag": "forge:water", "count": 4 }
+		{"tag": "forge:crops/adzukibeans", "count": 6},
+		{"tag": "forge:rice_cake", "count": 3},
+		{"tag": "forge:salt", "count": 1},
+		{"tag": "forge:water", "count": 4}
 	],
 	"result": [
-		{ "item": "sweetmagic:sweet_azuki_bean_soup", "count": 6 }
+		{"item": "sweetmagic:sweet_azuki_bean_soup", "count": 6}
 	]
 }

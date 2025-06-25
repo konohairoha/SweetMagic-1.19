@@ -1,15 +1,15 @@
 {
 	"type": "sweetmagic:pot_craft",
 	"ingredients": [
-		{ "tag": "forge:raw_beef", "count": 3 },
-		{ "tag": "forge:cook/rice", "count": 6 },
-		{ "tag": "forge:crops/onion", "count": 2 },
-		{ "tag": "forge:water", "count": 3 },
-		{ "tag": "forge:soy_sauce", "count": 1 },
-		{ "tag": "forge:wine", "count": 1 },
-		{ "tag": "forge:salt", "count": 2 }
+		{"tag": "forge:raw_beef", "count": 3},
+		{"tag": "forge:cook/rice", "count": 6},
+		{"tag": "forge:crops/onion", "count": 2},
+		{"tag": "forge:water", "count": 3},
+		{"tag": "forge:soy_sauce", "count": 1},
+		{"tag": "forge:wine", "count": 1},
+		{"tag": "forge:salt", "count": 2}
 	],
 	"result": [
-		{ "item": "sweetmagic:gyuudon", "count": 6 }
+		{"item": "sweetmagic:gyuudon", "count": 6}
 	]
 }

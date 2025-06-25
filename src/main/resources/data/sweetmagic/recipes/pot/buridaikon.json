@@ -1,13 +1,13 @@
 {
 	"type": "sweetmagic:pot_craft",
 	"ingredients": [
-		{ "tag": "forge:raw_cod", "count": 3 },
-		{ "tag": "forge:crops/japanese_radish", "count": 6 },
-		{ "tag": "forge:soy_sauce", "count": 3 },
-		{ "tag": "forge:sugar", "count": 2 },
-		{ "tag": "forge:water", "count": 2 }
+		{"tag": "forge:raw_cod", "count": 3},
+		{"tag": "forge:crops/japanese_radish", "count": 6},
+		{"tag": "forge:soy_sauce", "count": 3},
+		{"tag": "forge:sugar", "count": 2},
+		{"tag": "forge:water", "count": 2}
 	],
 	"result": [
-		{ "item": "sweetmagic:buridaikon", "count": 6 }
+		{"item": "sweetmagic:buridaikon", "count": 6}
 	]
 }

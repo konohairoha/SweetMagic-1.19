@@ -1,13 +1,13 @@
 {
 	"type": "sweetmagic:pot_craft",
 	"ingredients": [
-		{ "tag": "forge:crops/chestnut", "count": 4 },
-		{ "tag": "forge:crops/sweetpotato", "count": 2 },
-		{ "tag": "forge:water", "count": 2 },
-		{ "tag": "forge:salt", "count": 1 },
-		{ "tag": "forge:sugar", "count": 2 }
+		{"tag": "forge:crops/chestnut", "count": 4},
+		{"tag": "forge:crops/sweetpotato", "count": 2},
+		{"tag": "forge:water", "count": 2},
+		{"tag": "forge:salt", "count": 1},
+		{"tag": "forge:sugar", "count": 2}
 	],
 	"result": [
-		{ "item": "sweetmagic:kurikinton", "count": 6 }
+		{"item": "sweetmagic:kurikinton", "count": 6}
 	]
 }

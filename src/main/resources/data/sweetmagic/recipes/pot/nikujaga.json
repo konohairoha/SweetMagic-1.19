@@ -1,17 +1,17 @@
 {
 	"type": "sweetmagic:pot_craft",
 	"ingredients": [
-		{ "tag": "forge:crops/potato", "count": 4 },
-		{ "tag": "forge:crops/carrot", "count": 2 },
-		{ "tag": "forge:crops/onion", "count": 2 },
-		{ "tag": "forge:crops/greenbeans", "count": 1 },
-		{ "tag": "forge:raw_beef", "count": 1 },
-		{ "tag": "forge:soy_sauce", "count": 2 },
-		{ "tag": "forge:wine", "count": 2 },
-		{ "tag": "forge:water", "count": 3 },
-		{ "tag": "forge:salt", "count": 1 }
+		{"tag": "forge:crops/potato", "count": 4},
+		{"tag": "forge:crops/carrot", "count": 2},
+		{"tag": "forge:crops/onion", "count": 2},
+		{"tag": "forge:crops/greenbeans", "count": 1},
+		{"tag": "forge:raw_beef", "count": 1},
+		{"tag": "forge:soy_sauce", "count": 2},
+		{"tag": "forge:wine", "count": 2},
+		{"tag": "forge:water", "count": 3},
+		{"tag": "forge:salt", "count": 1}
 	],
 	"result": [
-		{ "item": "sweetmagic:nikujaga", "count": 8 }
+		{"item": "sweetmagic:nikujaga", "count": 8}
 	]
 }

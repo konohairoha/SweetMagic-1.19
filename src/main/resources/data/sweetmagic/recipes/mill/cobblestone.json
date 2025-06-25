@@ -1,10 +1,10 @@
 {
 	"type": "sweetmagic:mill_craft",
 	"ingredients": [
-		{ "item": "minecraft:cobbled_deepslate", "count": 1 }
+		{"item": "minecraft:cobbled_deepslate", "count": 1}
 	],
 	"result": [
-		{ "item": "minecraft:cobblestone", "count": 1 },
-		{ "item": "minecraft:dirt", "count": 1, "chance": 0.25 }
+		{"item": "minecraft:cobblestone", "count": 1},
+		{"item": "minecraft:dirt", "count": 1, "chance": 0.25}
 	]
 }

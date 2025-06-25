@@ -1,9 +1,9 @@
 {
 	"type": "sweetmagic:mill_craft",
 	"ingredients": [
-		{ "item": "minecraft:dark_oak_leaves", "count": 1 }
+		{"item": "minecraft:dark_oak_leaves", "count": 1}
 	],
 	"result": [
-		{ "item": "minecraft:mangrove_propagule", "count": 1 }
+		{"item": "minecraft:mangrove_propagule", "count": 1}
 	]
 }

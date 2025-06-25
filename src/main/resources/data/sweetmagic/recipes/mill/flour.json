@@ -1,11 +1,11 @@
 {
 	"type": "sweetmagic:mill_craft",
 	"ingredients": [
-		{ "tag": "forge:crops/wheat", "count": 1 }
+		{"tag": "forge:crops/wheat", "count": 1}
 	],
 	"result": [
-		{ "item": "sweetmagic:flour", "count": 2 },
-		{ "item": "sweetmagic:flour", "count": 1, "chance": 0.4 },
-		{ "item": "sweetmagic:plant_chips", "count": 1, "chance": 0.25 }
+		{"item": "sweetmagic:flour", "count": 2},
+		{"item": "sweetmagic:flour", "count": 1, "chance": 0.4},
+		{"item": "sweetmagic:plant_chips", "count": 1, "chance": 0.25}
 	]
 }

@@ -1,11 +1,11 @@
 {
 	"type": "sweetmagic:juicemaker_craft",
 	"ingredients": [
-		{ "tag": "forge:seaweed", "count": 4 },
-		{ "tag": "forge:bonito_flakes", "count": 2 },
-		{ "tag": "forge:oil", "count": 1 }
+		{"tag": "forge:seaweed", "count": 4},
+		{"tag": "forge:bonito_flakes", "count": 2},
+		{"tag": "forge:oil", "count": 1}
 	],
 	"result": [
-		{ "item": "sweetmagic:seaplant_soup", "count": 6 }
+		{"item": "sweetmagic:seaplant_soup", "count": 6}
 	]
 }

@@ -1,12 +1,12 @@
 {
 	"type": "sweetmagic:juicemaker_craft",
 	"ingredients": [
-		{ "tag": "forge:crops/banana", "count": 2 },
-		{ "tag": "forge:crops/fruits", "count": 3 },
-		{ "tag": "forge:milk", "count": 1 },
-		{ "tag": "forge:ice", "count": 1 }
+		{"tag": "forge:crops/banana", "count": 2},
+		{"tag": "forge:fruit", "count": 3},
+		{"tag": "forge:milk", "count": 1},
+		{"tag": "forge:ice", "count": 1}
 	],
 	"result": [
-		{ "item": "sweetmagic:mixed_juice", "count": 6 }
+		{"item": "sweetmagic:mixed_juice", "count": 6}
 	]
 }

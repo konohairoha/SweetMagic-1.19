@@ -1,12 +1,12 @@
 {
 	"type": "sweetmagic:mill_craft",
 	"ingredients": [
-		{ "tag": "forge:toast", "count": 1 }
+		{"tag": "forge:toast", "count": 1}
 	],
 	"result": [
-		{ "item": "sweetmagic:breadcrumbs", "count": 8 },
-		{ "item": "sweetmagic:breadcrumbs", "count": 1, "chance": 0.5 },
-		{ "item": "sweetmagic:breadcrumbs", "count": 1, "chance": 0.25 },
-		{ "item": "sweetmagic:breadcrumbs", "count": 1, "chance": 0.1 }
+		{"item": "sweetmagic:breadcrumbs", "count": 8},
+		{"item": "sweetmagic:breadcrumbs", "count": 1, "chance": 0.5},
+		{"item": "sweetmagic:breadcrumbs", "count": 1, "chance": 0.25},
+		{"item": "sweetmagic:breadcrumbs", "count": 1, "chance": 0.1}
 	]
 }

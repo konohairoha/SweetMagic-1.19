@@ -1,13 +1,13 @@
 {
 	"type": "sweetmagic:pot_craft",
 	"ingredients": [
-		{ "tag": "forge:crops/spinach", "count": 4 },
-		{ "tag": "forge:bonito_flakes", "count": 3 },
-		{ "tag": "forge:soy_sauce", "count": 2 },
-		{ "tag": "forge:water", "count": 3 },
-		{ "tag": "forge:salt", "count": 1 }
+		{"tag": "forge:crops/spinach", "count": 4},
+		{"tag": "forge:bonito_flakes", "count": 3},
+		{"tag": "forge:soy_sauce", "count": 2},
+		{"tag": "forge:water", "count": 3},
+		{"tag": "forge:salt", "count": 1}
 	],
 	"result": [
-		{ "item": "sweetmagic:salad_ohitasi", "count": 8 }
+		{"item": "sweetmagic:salad_ohitasi", "count": 8}
 	]
 }

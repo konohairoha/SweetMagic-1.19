@@ -1,9 +1,9 @@
 {
 	"type": "sweetmagic:mill_craft",
 	"ingredients": [
-		{ "item": "minecraft:acacia_leaves", "count": 1 }
+		{"item": "minecraft:acacia_leaves", "count": 1}
 	],
 	"result": [
-		{ "item": "minecraft:dark_oak_sapling", "count": 1 }
+		{"item": "minecraft:dark_oak_sapling", "count": 1}
 	]
 }

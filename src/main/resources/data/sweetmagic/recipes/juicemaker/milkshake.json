@@ -1,0 +1,12 @@
+{
+	"type": "sweetmagic:juicemaker_craft",
+	"ingredients": [
+		{"tag": "forge:milk", "count": 2},
+		{"tag": "forge:vannila_essence", "count": 2},
+		{"tag": "forge:eggs", "count": 1},
+		{"tag": "forge:sugar", "count": 1}
+	],
+	"result": [
+		{"item": "sweetmagic:milkshake", "count": 5}
+	]
+}

@@ -1,12 +1,12 @@
 {
 	"type": "sweetmagic:pot_craft",
 	"ingredients": [
-		{ "tag": "forge:raw_cod", "count": 3 },
-		{ "tag": "forge:miso", "count": 3 },
-		{ "tag": "forge:sugar", "count": 3 },
-		{ "tag": "forge:water", "count": 2 }
+		{"tag": "forge:raw_cod", "count": 3},
+		{"tag": "forge:miso", "count": 3},
+		{"tag": "forge:sugar", "count": 3},
+		{"tag": "forge:water", "count": 2}
 	],
 	"result": [
-		{ "item": "sweetmagic:saba_miso", "count": 6 }
+		{"item": "sweetmagic:saba_miso", "count": 6}
 	]
 }

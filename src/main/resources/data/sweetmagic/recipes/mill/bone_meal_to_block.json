@@ -1,13 +1,13 @@
 {
 	"type": "sweetmagic:mill_craft",
 	"ingredients": [
-		{ "item": "minecraft:bone_block", "count": 1 }
+		{"item": "minecraft:bone_block", "count": 1}
 	],
 	"result": [
-		{ "item": "minecraft:bone_meal", "count": 10 },
-		{ "item": "minecraft:bone_meal", "count": 1, "chance": 0.5 },
-		{ "item": "minecraft:bone_meal", "count": 1, "chance": 0.25 },
-		{ "item": "minecraft:bone_meal", "count": 1, "chance": 0.12 },
-		{ "item": "minecraft:bone_meal", "count": 1, "chance": 0.7 }
+		{"item": "minecraft:bone_meal", "count": 10},
+		{"item": "minecraft:bone_meal", "count": 1, "chance": 0.5},
+		{"item": "minecraft:bone_meal", "count": 1, "chance": 0.25},
+		{"item": "minecraft:bone_meal", "count": 1, "chance": 0.12},
+		{"item": "minecraft:bone_meal", "count": 1, "chance": 0.7}
 	]
 }

@@ -1,11 +1,11 @@
 {
 	"type": "sweetmagic:mill_craft",
 	"ingredients": [
-		{ "tag": "forge:crops/olive", "count": 1 }
+		{"tag": "forge:crops/olive", "count": 1}
 	],
 	"result": [
-		{ "item": "sweetmagic:olive_oil", "count": 2 },
-		{ "item": "sweetmagic:olive_oil", "count": 1, "chance": 0.4 },
-		{ "item": "sweetmagic:plant_chips", "count": 1, "chance": 0.25 }
+		{"item": "sweetmagic:olive_oil", "count": 2},
+		{"item": "sweetmagic:olive_oil", "count": 1, "chance": 0.4},
+		{"item": "sweetmagic:plant_chips", "count": 1, "chance": 0.25}
 	]
 }

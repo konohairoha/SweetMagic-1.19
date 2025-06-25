@@ -1,12 +1,12 @@
 {
 	"type": "sweetmagic:juicemaker_craft",
 	"ingredients": [
-		{ "tag": "forge:crops/pineapple", "count": 3 },
-		{ "tag": "forge:crops/lemon", "count": 1 },
-		{ "tag": "forge:milk", "count": 1 },
-		{ "tag": "forge:sugar", "count": 2 }
+		{"tag": "forge:crops/pineapple", "count": 3},
+		{"tag": "forge:crops/lemon", "count": 1},
+		{"tag": "forge:milk", "count": 1},
+		{"tag": "forge:sugar", "count": 2}
 	],
 	"result": [
-		{ "item": "sweetmagic:pine_smoothy", "count": 6 }
+		{"item": "sweetmagic:pine_smoothy", "count": 6}
 	]
 }

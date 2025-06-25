@@ -1,9 +1,9 @@
 {
 	"type": "sweetmagic:mill_craft",
 	"ingredients": [
-		{ "tag": "forge:sandstone", "count": 1 }
+		{"tag": "forge:sandstone", "count": 1}
 	],
 	"result": [
-		{ "item": "minecraft:sand", "count": 4 }
+		{"item": "minecraft:sand", "count": 4}
 	]
 }

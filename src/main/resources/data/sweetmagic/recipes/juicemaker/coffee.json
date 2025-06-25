@@ -1,10 +1,10 @@
 {
 	"type": "sweetmagic:juicemaker_craft",
 	"ingredients": [
-		{ "tag": "forge:crops/coffee", "count": 8 },
-		{ "tag": "forge:sugar", "count": 1 }
+		{"tag": "forge:crops/coffee", "count": 8},
+		{"tag": "forge:sugar", "count": 1}
 	],
 	"result": [
-		{ "item": "sweetmagic:coffee", "count": 1 }
+		{"item": "sweetmagic:coffee", "count": 1}
 	]
 }

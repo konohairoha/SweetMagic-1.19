@@ -1,11 +1,11 @@
 {
 	"type": "sweetmagic:juicemaker_craft",
 	"ingredients": [
-		{ "tag": "forge:crops/strawberry", "count": 6 },
-		{ "tag": "forge:milk", "count": 3 },
-		{ "tag": "forge:sugar", "count": 2 }
+		{"tag": "forge:crops/strawberry", "count": 6},
+		{"tag": "forge:milk", "count": 3},
+		{"tag": "forge:sugar", "count": 2}
 	],
 	"result": [
-		{ "item": "sweetmagic:strawberry_milk", "count": 8 }
+		{"item": "sweetmagic:strawberry_milk", "count": 8}
 	]
 }

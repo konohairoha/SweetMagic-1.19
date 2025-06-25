@@ -1,9 +1,9 @@
 {
 	"type": "sweetmagic:mill_craft",
 	"ingredients": [
-		{ "item": "minecraft:mangrove_leaves", "count": 1 }
+		{"item": "minecraft:mangrove_leaves", "count": 1}
 	],
 	"result": [
-		{ "item": "minecraft:azalea", "count": 1 }
+		{"item": "minecraft:azalea", "count": 1}
 	]
 }

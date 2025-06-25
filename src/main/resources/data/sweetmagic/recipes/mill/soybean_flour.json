@@ -1,11 +1,11 @@
 {
 	"type": "sweetmagic:mill_craft",
 	"ingredients": [
-		{ "tag": "forge:crops/soybean", "count": 1 }
+		{"tag": "forge:crops/soybean", "count": 1}
 	],
 	"result": [
-		{ "item": "sweetmagic:soybean_flour", "count": 2 },
-		{ "item": "sweetmagic:soybean_flour", "count": 1, "chance": 0.4 },
-		{ "item": "sweetmagic:plant_chips", "count": 1, "chance": 0.25 }
+		{"item": "sweetmagic:soybean_flour", "count": 2},
+		{"item": "sweetmagic:soybean_flour", "count": 1, "chance": 0.4},
+		{"item": "sweetmagic:plant_chips", "count": 1, "chance": 0.25}
 	]
 }
