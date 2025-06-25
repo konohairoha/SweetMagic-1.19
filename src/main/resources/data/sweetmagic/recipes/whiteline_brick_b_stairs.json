@@ -1,12 +1,12 @@
 {
 	"type": "minecraft:crafting_shaped",
 	"key": {
-		"B": { "item": "sweetmagic:whiteline_brick_b" }
+		"B": {"item": "sweetmagic:whiteline_brick_b"}
 	},
 	"pattern": [
 		"  B",
 		" BB",
 		"BBB"
 	],
-	"result": { "item": "sweetmagic:whiteline_brick_b_stairs", "count": 6 }
+	"result": {"item": "sweetmagic:whiteline_brick_b_stairs", "count": 6}
 }

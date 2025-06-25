@@ -1,12 +1,12 @@
 {
 	"type": "minecraft:crafting_shaped",
 	"key": {
-		"G": { "tag": "forge:glass/colorless" },
-		"F": { "item": "sweetmagic:fire_nasturtium_petal" }
+		"G": {"tag": "forge:glass/colorless"},
+		"F": {"item": "sweetmagic:fire_nasturtium_petal"}
 	},
 	"pattern": [
 		" F ",
 		" G "
 	],
-	"result": { "item": "sweetmagic:table_lantern" , "count": 4 }
+	"result": {"item": "sweetmagic:table_lantern", "count": 4}
 }

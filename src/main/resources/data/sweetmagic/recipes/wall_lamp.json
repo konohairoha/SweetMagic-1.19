@@ -1,12 +1,12 @@
 {
 	"type": "minecraft:crafting_shaped",
 	"key": {
-		"G": { "item": "minecraft:glowstone_dust" },
-		"I": { "tag": "sweetmagic:iron_fence" }
+		"G": {"item": "minecraft:glowstone_dust"},
+		"I": {"tag": "sweetmagic:iron_fence"}
 	},
 	"pattern": [
 		" I ",
 		" G "
 	],
-	"result": { "item": "sweetmagic:wall_lamp", "count": 2 }
+	"result": {"item": "sweetmagic:wall_lamp", "count": 2}
 }

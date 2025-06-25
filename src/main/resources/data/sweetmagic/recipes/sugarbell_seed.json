@@ -1,8 +1,8 @@
 {
 	"type": "minecraft:crafting_shapeless",
 	"ingredients": [
-		{ "tag": "forge:seeds" },
-		{ "tag": "minecraft:dirt" }
+		{"tag": "forge:seeds"},
+		{"tag": "minecraft:dirt"}
 	],
-	"result": { "item": "sweetmagic:sugarbell_seed", "count": 1 }
+	"result": {"item": "sweetmagic:sugarbell_seed", "count": 1}
 }

@@ -1,14 +1,14 @@
 {
 	"type": "minecraft:crafting_shaped",
 	"key": {
-		"S": { "tag": "sweetmagic:smlogs" },
-		"C": { "tag": "forge:chests/wooden" },
-		"R": { "tag": "forge:recipe_book" }
+		"S": {"tag": "sweetmagic:smlogs"},
+		"C": {"tag": "forge:chests/wooden"},
+		"R": {"tag": "forge:recipe_book"}
 	},
 	"pattern": [
 		"SCS",
 		"CRC",
 		"SCS"
 	],
-	"result": { "item": "sweetmagic:wood_chest" }
+	"result": {"item": "sweetmagic:wood_chest"}
 }

@@ -1,7 +1,7 @@
 {
 	"type": "minecraft:crafting_shapeless",
 	"ingredients": [
-		{ "item": "sweetmagic:spinach" }
+		{"item": "sweetmagic:spinach"}
 	],
-	"result": { "item": "sweetmagic:spinach_seed", "count": 2 }
+	"result": {"item": "sweetmagic:spinach_seed", "count": 2}
 }

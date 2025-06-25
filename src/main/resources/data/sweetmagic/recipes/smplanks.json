@@ -1,12 +1,12 @@
 {
 	"type": "minecraft:crafting_shaped",
 	"key": {
-		"P": { "tag": "sweetmagic:smplanks" }
+		"P": {"tag": "sweetmagic:smplanks"}
 	},
 	"pattern": [
 		"PPP",
 		"P P",
 		"PPP"
 	],
-	"result": { "item": "minecraft:chest" }
+	"result": {"item": "minecraft:chest"}
 }

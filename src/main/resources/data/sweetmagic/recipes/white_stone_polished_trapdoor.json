@@ -1,11 +1,11 @@
 {
 	"type": "minecraft:crafting_shaped",
 	"key": {
-		"P": { "item": "sweetmagic:white_stone_polished" }
+		"P": {"item": "sweetmagic:white_stone_polished"}
 	},
 	"pattern": [
 		"PPP",
 		"PPP"
 	],
-	"result": { "item": "sweetmagic:white_stone_polished_trapdoor", "count": 8 }
+	"result": {"item": "sweetmagic:white_stone_polished_trapdoor", "count": 8}
 }

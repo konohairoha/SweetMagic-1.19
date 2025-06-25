@@ -1,7 +1,7 @@
 {
 	"type": "minecraft:crafting_shapeless",
 	"ingredients": [
-		{ "item": "sweetmagic:sugarbell" }
+		{"item": "sweetmagic:sugarbell"}
 	],
-	"result": { "item": "minecraft:sugar", "count": 2 }
+	"result": {"item": "minecraft:sugar", "count": 2}
 }

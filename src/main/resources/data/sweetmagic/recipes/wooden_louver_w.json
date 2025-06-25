@@ -1,11 +1,11 @@
 {
 	"type": "minecraft:crafting_shaped",
 	"key": {
-		"P": { "tag": "sweetmagic:smplanks" }
+		"P": {"tag": "sweetmagic:smplanks"}
 	},
 	"pattern": [
 		"PPP",
 		"PPP"
 	],
-	"result": { "item": "sweetmagic:wooden_louver_w", "count": 8 }
+	"result": {"item": "sweetmagic:wooden_louver_w", "count": 8}
 }

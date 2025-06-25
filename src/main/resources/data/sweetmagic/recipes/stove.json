@@ -1,9 +1,9 @@
 {
 	"type": "minecraft:crafting_shaped",
 	"key": {
-		"I": { "tag": "forge:ingots/iron" },
-		"B": { "tag": "sweetmagic:iron_fence" },
-		"F": { "item": "minecraft:furnace" }
+		"I": {"tag": "forge:ingots/iron"},
+		"B": {"tag": "sweetmagic:iron_fence"},
+		"F": {"item": "minecraft:furnace"}
 	},
 	"pattern": [
 		"BBB",

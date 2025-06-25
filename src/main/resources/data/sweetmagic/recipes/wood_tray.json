@@ -1,13 +1,13 @@
 {
 	"type": "minecraft:crafting_shaped",
 	"key": {
-		"W": { "tag": "sweetmagic:smplanks" },
-		"S": { "item": "minecraft:stick" },
-		"R": { "tag": "forge:recipe_book" }
+		"W": {"tag": "sweetmagic:smplanks"},
+		"S": {"item": "minecraft:stick"},
+		"R": {"tag": "forge:recipe_book"}
 	},
 	"pattern": [
 		"SRS",
 		"WWW"
 	],
-	"result": { "item": "sweetmagic:wood_tray", "count": 8 }
+	"result": {"item": "sweetmagic:wood_tray", "count": 8}
 }

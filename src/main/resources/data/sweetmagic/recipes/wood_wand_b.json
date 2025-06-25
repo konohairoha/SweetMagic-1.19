@@ -1,0 +1,7 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		{"item": "sweetmagic:magician_wand"}
+	],
+	"result": {"item": "sweetmagic:wood_wand_b", "count": 1}
+}

@@ -1,14 +1,14 @@
 {
 	"type": "minecraft:crafting_shaped",
 	"key": {
-		"S": { "tag": "forge:leather" },
-		"C": { "tag": "forge:chests/wooden" },
-		"R": { "tag": "forge:recipe_book" }
+		"S": {"tag": "forge:leather"},
+		"C": {"tag": "forge:chests/wooden"},
+		"R": {"tag": "forge:recipe_book"}
 	},
 	"pattern": [
 		"SCS",
 		"CRC",
 		"SCS"
 	],
-	"result": { "item": "sweetmagic:trunk_case_s" }
+	"result": {"item": "sweetmagic:trunk_case_s"}
 }

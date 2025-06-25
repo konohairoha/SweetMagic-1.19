@@ -1,7 +1,7 @@
 {
 	"type": "minecraft:crafting_shaped",
 	"key": {
-		"B": { "item": "sweetmagic:white_stone" }
+		"B": {"item": "sweetmagic:white_stone"}
 	},
 	"pattern": [
 		"  B",

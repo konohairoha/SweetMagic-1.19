@@ -1,11 +1,11 @@
 {
 	"type": "minecraft:crafting_shaped",
 	"key": {
-		"P": { "item": "sweetmagic:whiteline_brick_b" }
+		"P": {"item": "sweetmagic:whiteline_brick_b"}
 	},
 	"pattern": [
 		"PPP",
 		"PPP"
 	],
-	"result": { "item": "sweetmagic:whiteline_brick_b_trapdoor", "count": 8 }
+	"result": {"item": "sweetmagic:whiteline_brick_b_trapdoor", "count": 8}
 }

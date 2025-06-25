@@ -1,8 +1,8 @@
 {
 	"type": "minecraft:crafting_shapeless",
 	"ingredients": [
-		{ "item": "sweetmagic:fire_powder" },
-		{ "item": "minecraft:stick" }
+		{"item": "sweetmagic:fire_powder"},
+		{"item": "minecraft:stick"}
 	],
-	"result": { "item": "minecraft:torch", "count": 2 }
+	"result": {"item": "minecraft:torch", "count": 2}
 }

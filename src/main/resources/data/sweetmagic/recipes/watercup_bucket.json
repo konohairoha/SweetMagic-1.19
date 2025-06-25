@@ -1,7 +1,7 @@
 {
 	"type": "minecraft:crafting_shapeless",
 	"ingredients": [
-		{ "item": "sweetmagic:alternative_bucket_water" }
+		{"item": "sweetmagic:alternative_bucket_water"}
 	],
-	"result": { "item": "sweetmagic:watercup", "count": 8 }
+	"result": {"item": "sweetmagic:watercup", "count": 8}
 }
