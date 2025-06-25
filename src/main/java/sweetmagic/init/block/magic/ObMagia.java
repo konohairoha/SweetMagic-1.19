@@ -58,13 +58,13 @@ public class ObMagia extends BaseFaceBlock implements EntityBlock {
 
 	// ブロックでのアクション
 	public boolean actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
-		if (world.isClientSide) { return true; }
+		if (world.isClientSide()) { return true; }
 
 		pos = this.isTop ? pos.below() : pos;
-		BlockEntity tile = this.getTile(world, pos);
+		TileAbstractSM tile = this.getTile(world, pos);
 
-		if (tile != null && tile instanceof TileObMagia ob) {
-			this.openGUI(world, pos, player, ob);
+		if (tile != null) {
+			this.openGUI(world, pos, player, tile);
 		}
 
 		else if (this.getBlock(world, pos) instanceof BaseSMBlock sm) {
@@ -80,7 +80,7 @@ public class ObMagia extends BaseFaceBlock implements EntityBlock {
 
 	@Override
 	public boolean canSurvive(BlockState state, LevelReader world, BlockPos pos) {
-		return world.getBlockState(pos.above()).isAir();
+		return world.isEmptyBlock(pos.above());
 	}
 
 	@Override

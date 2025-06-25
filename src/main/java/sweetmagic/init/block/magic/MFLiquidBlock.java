@@ -11,9 +11,4 @@ public class MFLiquidBlock extends BaseModelBlock {
 		super(name, setState(Material.PISTON, SoundType.METAL, 1F, 8192F));
 		BlockInfo.create(this, null, name);
 	}
-
-	@Override
-	public float getEnchantPower() {
-		return 1F;
-	}
 }

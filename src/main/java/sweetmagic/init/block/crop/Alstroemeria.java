@@ -168,11 +168,11 @@ public class Alstroemeria extends BushBlock implements ISMCrop, EntityBlock, ISM
 		}
 
 		// アルストロメリアクラフト
-		if ( !player.isShiftKeyDown() && !stack.isEmpty()) {
+		if (!player.isShiftKeyDown() && !stack.isEmpty()) {
 			this.getRecipeAlstroemeria(world, pos, player, stack, false);
 		}
 
-		return InteractionResult.sidedSuccess(world.isClientSide);
+		return InteractionResult.sidedSuccess(world.isClientSide());
 	}
 
 	// 時間、天気操作
@@ -206,7 +206,6 @@ public class Alstroemeria extends BushBlock implements ISMCrop, EntityBlock, ISM
 
 			// 夕方設定
 			if (objMoon != null) {
-
 				this.setTime(world, 10400);
 				SMUtil.getStack(objSun[1]).shrink(1);
 				SMUtil.getStack(objMoon[1]).shrink(1);
@@ -280,7 +279,7 @@ public class Alstroemeria extends BushBlock implements ISMCrop, EntityBlock, ISM
 	}
 
 	public void setTwilightlight(Level world, BlockPos pos, Player player, ItemStack stack, Block block) {
-		if (!world.getBlockState(pos.above()).isAir()) { return; }
+		if (!world.isEmptyBlock(pos.above())) { return; }
 
 		world.setBlock(pos.above(), block.defaultBlockState(), 3);
 		world.setBlock(pos, world.getBlockState(pos).setValue(this.getSMMaxAge(), 1), 3);
@@ -299,7 +298,7 @@ public class Alstroemeria extends BushBlock implements ISMCrop, EntityBlock, ISM
 		Optional<AlstroemeriaRecipe> recipe = AlstroemeriaRecipe.getRecipe(world, stackList);
 		if (recipe.isEmpty()) { return true; }
 
-		if (!world.isClientSide) {
+		if (!world.isClientSide()) {
 
 			// クラフト要求アイテムの消費とクラフト後のアイテム取得
 			RecipeUtil recipeUtil = isAllCraft ?
@@ -316,7 +315,7 @@ public class Alstroemeria extends BushBlock implements ISMCrop, EntityBlock, ISM
 			}
 
 			resultList.forEach(s -> world.addFreshEntity(new ItemEntity(world, player.xo, player.yo, player.zo, s.copy())));
-			this.playerSound(world, pos, SoundEvents.FIREWORK_ROCKET_BLAST_FAR, 0.5F, 1F / (world.random.nextFloat() * 0.4F + 1.2F) + 1 * 0.5F);
+			this.playerSound(world, pos, SoundEvents.FIREWORK_ROCKET_BLAST_FAR, 0.5F, 1F / (world.getRandom().nextFloat() * 0.4F + 1.2F) + 1 * 0.5F);
 		}
 
 		else {
@@ -338,18 +337,18 @@ public class Alstroemeria extends BushBlock implements ISMCrop, EntityBlock, ISM
 		float posX = pos.getX() + 0.5F;
 		float posY = pos.getY() + 1.1F;
 		float posZ = pos.getZ() + 0.5F;
-		RandomSource rand = world.random;
+		RandomSource rand = world.getRandom();
 
 		for (int k = 0; k < 6; k++) {
-			float f1 = (float) posX - 0.625F + rand.nextFloat() * 1.25F;
-			float f2 = (float) posY + 0.5F + rand.nextFloat() * 0.5F;
-			float f3 = (float) posZ - 0.625F + rand.nextFloat() * 1.25F;
+			float f1 = posX - 0.625F + rand.nextFloat() * 1.25F;
+			float f2 = posY + 0.5F + rand.nextFloat() * 0.5F;
+			float f3 = posZ - 0.625F + rand.nextFloat() * 1.25F;
 			sever.sendParticles(ParticleInit.TWILIGHTLIGHT, f1, f2, f3, 2, 0F, 0F, 0F, 0.01F);
 		}
 	}
 
-	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> def) {
-		def.add(this.getSMMaxAge());
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> build) {
+		build.add(this.getSMMaxAge());
 	}
 
 	@Override
@@ -358,8 +357,8 @@ public class Alstroemeria extends BushBlock implements ISMCrop, EntityBlock, ISM
 	}
 
 	@Nullable
-	protected static <T extends BlockEntity> BlockEntityTicker<T> createMailBoxTicker(Level level, BlockEntityType<T> bEntityType, BlockEntityType<? extends TileAbstractSM> grill) {
-		return createTickerHelper(bEntityType, grill, level.isClientSide() ? TileAbstractSM::clientTick : TileAbstractSM::serverTick);
+	protected static <T extends BlockEntity> BlockEntityTicker<T> createMailBoxTicker(Level world, BlockEntityType<T> tileType, BlockEntityType<? extends TileAbstractSM> grill) {
+		return createTickerHelper(tileType, grill, world.isClientSide() ? TileAbstractSM::clientTick : TileAbstractSM::serverTick);
 	}
 
 	@Nullable

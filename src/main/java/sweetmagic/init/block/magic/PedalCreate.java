@@ -60,7 +60,7 @@ public class PedalCreate extends BaseMFBlock implements ISMCraftBlock {
 
 	// ブロックでのアクション
 	public boolean actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
-		if (world.isClientSide) { return true; }
+		if (world.isClientSide()) { return true; }
 		this.pedalCraft(world, pos, player, stack, false);
 		return true;
 	}
@@ -70,7 +70,7 @@ public class PedalCreate extends BaseMFBlock implements ISMCraftBlock {
 		if (tile.isCraft) { return; }
 
 		if (stack.isEmpty()) {
-			player.sendSystemMessage(this.getTipArray(String.format("%,d", tile.getMF()) + "MF").withStyle(GREEN));
+			player.sendSystemMessage(this.getLabel(this.format(tile.getMF()) + "MF", GREEN));
 		}
 
 		// クラフト後アイテムが空なら未作成なのでレシピチェック
@@ -101,7 +101,7 @@ public class PedalCreate extends BaseMFBlock implements ISMCraftBlock {
 	@Override
 	public void setPlacedBy(Level world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
 
-		TilePedalCreate tile = (TilePedalCreate) this.getTile(world, pos);
+		TilePedalCreate tile = this.getTile(TilePedalCreate::new, world, pos);
 		tile.isHaveBlock = tile.checkBlock();
 		tile.sendPKT();
 
@@ -116,7 +116,7 @@ public class PedalCreate extends BaseMFBlock implements ISMCraftBlock {
 		float posX = pos.getX() + 0.5F;
 		float posY = pos.getY() - 0.5F;
 		float posZ = pos.getZ() + 0.5F;
-		RandomSource rand = world.random;
+		RandomSource rand = world.getRandom();
 
 		for (int k = 0; k < 12; k++) {
 			float f1 = (float) posX - 0.75F + rand.nextFloat() * 1.5F;
@@ -154,8 +154,8 @@ public class PedalCreate extends BaseMFBlock implements ISMCraftBlock {
 	@Override
 	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
 		switch (this.data) {
-		case 1:  return new TileAltarCreat(pos, state);
-		case 2:  return new TileAltarCreatStar(pos, state);
+		case 1: return new TileAltarCreat(pos, state);
+		case 2: return new TileAltarCreatStar(pos, state);
 		default: return new TilePedalCreate(pos, state);
 		}
 	}

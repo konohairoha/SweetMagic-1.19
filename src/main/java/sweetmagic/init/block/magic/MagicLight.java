@@ -45,7 +45,12 @@ public class MagicLight extends BaseSMBlock implements IWaterBlock, ISMTip {
 
 	// 当たり判定
 	public VoxelShape getShape(BlockState state, BlockGetter get, BlockPos pos, CollisionContext col) {
-		return this.data == 1 || HasItemEvent.hasThisItem ? LIGHT : Shapes.empty();
+		try {
+			return this.data == 1 || HasItemEvent.hasThisItem ? LIGHT : Shapes.empty();
+		}
+
+		catch (RuntimeException run) { }
+		return Shapes.empty();
 	}
 
 	@Nullable
@@ -55,12 +60,12 @@ public class MagicLight extends BaseSMBlock implements IWaterBlock, ISMTip {
 		BlockState state = con.getLevel().getBlockState(pos);
 
 		if (state.is(this)) {
-			return state.setValue(WATERLOGGED, Boolean.valueOf(false));
+			return state.setValue(WATERLOGGED, false);
 		}
 
 		else {
 			FluidState fluid = con.getLevel().getFluidState(pos);
-			return this.defaultBlockState().setValue(WATERLOGGED, Boolean.valueOf(fluid.getType() == Fluids.WATER));
+			return this.defaultBlockState().setValue(WATERLOGGED, fluid.getType() == Fluids.WATER);
 		}
 	}
 
@@ -81,12 +86,12 @@ public class MagicLight extends BaseSMBlock implements IWaterBlock, ISMTip {
 		return type == PathComputationType.WATER ? get.getFluidState(pos).is(FluidTags.WATER) : false;
 	}
 
-	public float getEnchantPower () {
+	public float getEnchantPower() {
 		return this.enchaPower;
 	}
 
 	@Override
-	public void addBlockTip (List<Component> toolTip) {
+	public void addBlockTip(List<Component> toolTip) {
 		if (this.data == 0) { return; }
 		toolTip.add(this.tierTip(1));
 		toolTip.add(this.getText(this.name).withStyle(GREEN));

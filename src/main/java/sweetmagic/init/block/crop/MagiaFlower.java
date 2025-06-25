@@ -176,7 +176,7 @@ public class MagiaFlower extends BushBlock implements ISMCrop {
 	// 成長度ダウン
 	public void glowUp(Level world, BlockState state, BlockPos pos) {
 		int nowAge = this.getNowState(state);
-		BlockState glowState = state.setValue(this.getSMMaxAge(), Integer.valueOf(nowAge + 1));
+		BlockState glowState = state.setValue(this.getSMMaxAge(), nowAge + 1);
 		world.setBlock(pos, glowState, 2);
 		world.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(glowState));
 		ForgeHooks.onCropsGrowPost(world, pos, state);
@@ -201,12 +201,12 @@ public class MagiaFlower extends BushBlock implements ISMCrop {
 		if (!this.isMaxAge(state)) { return InteractionResult.SUCCESS; }
 
 		this.onRicghtClick(world, player, state, pos, player.getItemInHand(hand));
-		return InteractionResult.sidedSuccess(world.isClientSide);
+		return InteractionResult.sidedSuccess(world.isClientSide());
 	}
 
 	// 右クリック
 	public void onRicghtClick(Level world, Player player, BlockState state, BlockPos pos, ItemStack stack) {
-		RandomSource rand = world.random;
+		RandomSource rand = world.getRandom();
 		ItemEntity drop = this.getDropItem(world, player, stack, this.getCrop(), this.getDropValue(rand, 0));
 		world.addFreshEntity(drop);
 		world.setBlock(pos, state.setValue(this.getSMMaxAge(), this.RCSetState()), 2); //作物の成長段階を2下げる
@@ -217,13 +217,13 @@ public class MagiaFlower extends BushBlock implements ISMCrop {
 		build.add(this.getSMMaxAge());
 	}
 
-	public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource rand) {
+	public void animateTick(BlockState state, Level world, BlockPos pos, RandomSource rand) {
 		if (rand.nextFloat() <= 0.95F) { return; }
 
-		boolean isDayTime = level.getDayTime() % 24000 < 12000;
+		boolean isDayTime = world.getDayTime() % 24000 < 12000;
 
-		if ((this.data == 0 && isDayTime) || (this.data == 1 && !isDayTime) || (level.isRaining() && this.data == 2)) {
-			this.addParticlesAroundSelf(level, rand, pos, ParticleTypes.HAPPY_VILLAGER);
+		if ((this.data == 0 && isDayTime) || (this.data == 1 && !isDayTime) || (world.isRaining() && this.data == 2)) {
+			this.addParticlesAroundSelf(world, rand, pos, ParticleTypes.HAPPY_VILLAGER);
 		}
 	}
 

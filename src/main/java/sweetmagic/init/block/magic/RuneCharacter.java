@@ -53,13 +53,13 @@ public class RuneCharacter extends BaseFaceBlock {
 		if (size > 7) { size = 0; }
 
 		world.setBlock(pos, state.setValue(SIZE, size), 3);
-		this.playerSound(world, pos, SoundEvents.SAND_PLACE, 0.25F, world.random.nextFloat() * 0.1F + 1.2F);
+		this.playerSound(world, pos, SoundEvents.SAND_PLACE, 0.25F, world.getRandom().nextFloat() * 0.1F + 1.2F);
 		return super.onUse(world, pos, player, hand);
 	}
 
 	@Nullable
 	public BlockState getStateForPlacement(BlockPlaceContext con) {
-		return super.getStateForPlacement(con).setValue(SIZE, con.getLevel().random.nextInt(8));
+		return super.getStateForPlacement(con).setValue(SIZE, con.getLevel().getRandom().nextInt(8));
 	}
 
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> build) {

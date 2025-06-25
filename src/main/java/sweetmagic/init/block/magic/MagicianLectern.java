@@ -47,9 +47,9 @@ public class MagicianLectern extends BaseFaceBlock implements EntityBlock, ISMNe
 	private static final VoxelShape AABB = Block.box(3D, 0D, 3D, 13D, 12.5D, 13D);
 
 	public MagicianLectern(String name, int data) {
-		super(name, setState(Material.WOOD, SoundType.WOOD, 2F, 8192.0F));
+		super(name, setState(Material.WOOD, SoundType.WOOD, 2F, 8192F));
 		this.registerDefaultState(this.setState());
-		BlockInfo.create(this, SweetMagicCore.smMagicTab, name);
+		BlockInfo.create(this, SweetMagicCore.smTab, name);
 		this.data = data;
 	}
 
@@ -71,9 +71,9 @@ public class MagicianLectern extends BaseFaceBlock implements EntityBlock, ISMNe
 		TileAbstractMagicianLectern tile = (TileAbstractMagicianLectern) this.getTile(world, pos);
 		if (tile.summonType.is(SummonType.CHARGE) || tile.summonType.is(SummonType.SUMMON)) { return false; }
 
-		if (world.isClientSide) { return true; }
+		if (world.isClientSide()) { return true; }
 		if (world.getDifficulty() == Difficulty.PEACEFUL) {
-			if (!world.isClientSide) {
+			if (!world.isClientSide()) {
 				player.sendSystemMessage(this.getText("magician_lectern_peaceful").withStyle(RED));
 			}
 
@@ -87,7 +87,7 @@ public class MagicianLectern extends BaseFaceBlock implements EntityBlock, ISMNe
 		List<ItemStack> wandList = stackList.stream().filter(s -> s.getItem() instanceof IWand wand && this.checkWand(hasHardItem, s, wand)).toList();
 		if (wandList.isEmpty()) {
 
-			if (!world.isClientSide) {
+			if (!world.isClientSide()) {
 				player.sendSystemMessage(this.getText(hasHardItem ? "magician_lectern_wand_hard" : "magician_lectern_wand").withStyle(RED));
 			}
 

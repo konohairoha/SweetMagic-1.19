@@ -174,8 +174,7 @@ public class SweetCrops_STAGE3 extends BushBlock implements ISMCrop, Bonemealabl
 
 		// 最大まで成長しているなら終了
 		if (!this.isMaxAge(state) && ForgeHooks.onCropsGrowPre(world, pos, state, this.isGlowChange(rand))) {
-			int nowAge = this.getNowState(state);
-			BlockState glowState = state.setValue(this.getSMMaxAge(), Integer.valueOf(nowAge + 1));
+			BlockState glowState = state.setValue(this.getSMMaxAge(), this.getNowState(state) + 1);
 			world.setBlock(pos, glowState, 2);
 			world.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(glowState));
 			ForgeHooks.onCropsGrowPost(world, pos, state);
@@ -198,12 +197,12 @@ public class SweetCrops_STAGE3 extends BushBlock implements ISMCrop, Bonemealabl
 		}
 
 		this.onRicghtClick(world, player, state, pos, stack);
-		return InteractionResult.sidedSuccess(world.isClientSide);
+		return InteractionResult.sidedSuccess(world.isClientSide());
 	}
 
 	// 右クリック
 	public void onRicghtClick(Level world, Player player, BlockState state, BlockPos pos, ItemStack stack) {
-		RandomSource rand = world.random;
+		RandomSource rand = world.getRandom();
 		ItemEntity drop = this.getDropItem(world, player, stack, this.getCrop(), this.getDropValue(rand, 0));
 		world.addFreshEntity(drop);
 		world.setBlock(pos, state.setValue(this.getSMMaxAge(), this.RCSetState()), 2); //作物の成長段階を2下げる
@@ -220,13 +219,13 @@ public class SweetCrops_STAGE3 extends BushBlock implements ISMCrop, Bonemealabl
 	}
 
 	@Override
-	public boolean isBonemealSuccess(Level level, RandomSource rand, BlockPos pos, BlockState state) {
+	public boolean isBonemealSuccess(Level world, RandomSource rand, BlockPos pos, BlockState state) {
 		return true;
 	}
 
 	@Override
-	public void performBonemeal(ServerLevel level, RandomSource rand, BlockPos pos, BlockState state) {
-		this.growCrops(level, pos, state);
+	public void performBonemeal(ServerLevel world, RandomSource rand, BlockPos pos, BlockState state) {
+		this.growCrops(world, pos, state);
 	}
 
 	@Override
@@ -235,9 +234,9 @@ public class SweetCrops_STAGE3 extends BushBlock implements ISMCrop, Bonemealabl
 	}
 
 	@Override
-	public boolean canSurvive(BlockState state, LevelReader render, BlockPos pos) {
-		BlockPos underpos = pos.below();
-		return this.mayPlaceOn(render.getBlockState(underpos), render, underpos);
+	public boolean canSurvive(BlockState state, LevelReader world, BlockPos pos) {
+		BlockPos underPos = pos.below();
+		return this.mayPlaceOn(world.getBlockState(underPos), world, underPos);
 	}
 
 	@Override
@@ -252,7 +251,7 @@ public class SweetCrops_STAGE3 extends BushBlock implements ISMCrop, Bonemealabl
 	}
 
 	@Override
-	public PlantType getPlantType(BlockGetter world, BlockPos pos) {
+	public PlantType getPlantType(BlockGetter get, BlockPos pos) {
 		return PlantType.CROP;
 	}
 }

@@ -26,7 +26,6 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import sweetmagic.init.TileInit;
 import sweetmagic.init.block.base.BaseMFBlock;
-import sweetmagic.init.tile.sm.TileAbstractSM;
 import sweetmagic.init.tile.sm.TileAetherHopper;
 
 public class AetherHopper extends BaseMFBlock {
@@ -41,7 +40,7 @@ public class AetherHopper extends BaseMFBlock {
 	// ブロックでのアクション
 	public boolean actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
 		if (world.isClientSide) { return false; }
-		this.openGUI(world, pos, player, (TileAetherHopper) this.getTile(world, pos));
+		this.openGUI(world, pos, player, this.getTile(world, pos));
 		return true;
 	}
 
@@ -55,13 +54,9 @@ public class AetherHopper extends BaseMFBlock {
 		return new TileAetherHopper(pos, state);
 	}
 
-	public BlockEntityType<? extends TileAbstractSM> getTileType() {
-		return TileInit.aetherHopper;
-	}
-
 	@Nullable
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
-		return this.createMailBoxTicker(world, type, this.getTileType());
+		return this.createMailBoxTicker(world, type, TileInit.aetherHopper);
 	}
 
 	@Override

@@ -8,8 +8,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemNameBlockItem;
@@ -43,6 +41,7 @@ import sweetmagic.init.tile.sm.TileMFBottler;
 import sweetmagic.init.tile.sm.TileMFBottlerAdcanced;
 import sweetmagic.init.tile.sm.TileMFGenerater;
 import sweetmagic.init.tile.sm.TileMFMinerAdvanced;
+import sweetmagic.init.tile.sm.TileMFWoodCutter;
 import sweetmagic.init.tile.sm.TileMagiaAccelerator;
 import sweetmagic.init.tile.sm.TileMagiaDrawer;
 import sweetmagic.init.tile.sm.TileMagiaRewrite;
@@ -87,6 +86,7 @@ public class ToolRepair extends BaseMFBlock {
 		case 8: return 20000;
 		case 10: return 1000000;
 		case 11: return 7000000;
+		case 14: return 10000;
 		default: return 100000;
 		}
 	}
@@ -129,62 +129,13 @@ public class ToolRepair extends BaseMFBlock {
 	// 右クリックしない
 	public boolean canRightClick(Level world, BlockPos pos, Player player, ItemStack stack) {
 		return !(this.data == 8 && (stack.getItem() instanceof ItemNameBlockItem || stack.is(Items.BAMBOO) ||
-				(stack.getItem() instanceof BlockItem bItem && bItem.getBlock() instanceof MushroomBlock) && this.getBlock(world, pos.above()).defaultBlockState().isAir()));
+				(stack.getItem() instanceof BlockItem bItem && bItem.getBlock() instanceof MushroomBlock) && world.isEmptyBlock(pos.above())));
 	}
 
 	// ブロックでのアクション
 	public boolean actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
-		if (world.isClientSide) { return true; }
-
-		MenuProvider tile = null;
-
-		switch (this.data) {
-		case 0:
-			tile = (TileAetherRepair) this.getTile(world, pos);
-			break;
-		case 1:
-			tile = (TileEnchantEduce) this.getTile(world, pos);
-			break;
-		case 2:
-			tile = (TileMagiaRewrite) this.getTile(world, pos);
-			break;
-		case 3:
-			tile = (TileAetherReverse) this.getTile(world, pos);
-			break;
-		case 4:
-			this.playerSound(world, pos, SoundEvents.PISTON_CONTRACT, 0.5F, world.random.nextFloat() * 0.1F + 0.9F);
-			tile = (TileMagiaDrawer) this.getTile(world, pos);
-			break;
-		case 5:
-			tile = (TileMagiaAccelerator) this.getTile(world, pos);
-			break;
-		case 6:
-			tile = (TileAccessoryTable) this.getTile(world, pos);
-			break;
-		case 7:
-			tile = (TileAlstroemeriaAquarium) this.getTile(world, pos);
-			break;
-		case 8:
-			tile = (TileAetherPlanter) this.getTile(world, pos);
-			break;
-		case 9:
-			tile = (TileMFMinerAdvanced) this.getTile(world, pos);
-			break;
-		case 10:
-			tile = (TileMFBottler) this.getTile(world, pos);
-			break;
-		case 11:
-			tile = (TileMFBottlerAdcanced) this.getTile(world, pos);
-			break;
-		case 12:
-			tile = (TileMFGenerater) this.getTile(world, pos);
-			break;
-		case 13:
-			tile = (TileMagiaTable) this.getTile(world, pos);
-			break;
-		}
-
-		this.openGUI(world, pos, player, tile);
+		if (world.isClientSide()) { return true; }
+		this.openGUI(world, pos, player, this.getTile(world, pos));
 		return true;
 	}
 
@@ -204,6 +155,7 @@ public class ToolRepair extends BaseMFBlock {
 		case 11: return new TileMFBottlerAdcanced(pos, state);
 		case 12: return new TileMFGenerater(pos, state);
 		case 13: return new TileMagiaTable(pos, state);
+		case 14: return new TileMFWoodCutter(pos, state);
 		default: return new TileAetherRepair(pos, state);
 		}
 	}
@@ -224,6 +176,7 @@ public class ToolRepair extends BaseMFBlock {
 		case 11: return TileInit.mfBottlerAdvance;
 		case 12: return TileInit.mfGenerater;
 		case 13: return TileInit.magiaTable;
+		case 14: return TileInit.woodCutter;
 		default: return TileInit.aetherRepair;
 		}
 	}

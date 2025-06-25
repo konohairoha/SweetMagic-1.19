@@ -65,7 +65,7 @@ public abstract class BaseMFBlock extends BaseFaceBlock implements EntityBlock {
 		// 何も持ってなかったら終了
 		if (stack.isEmpty()) {
 			this.actionBlock(world, pos, player, stack);
-			return InteractionResult.sidedSuccess(world.isClientSide);
+			return InteractionResult.sidedSuccess(world.isClientSide());
 		}
 
 		// NBTを取得
@@ -78,7 +78,7 @@ public abstract class BaseMFBlock extends BaseFaceBlock implements EntityBlock {
 			}
 
 			this.actionBlock(world, pos, player, stack);
-			return InteractionResult.sidedSuccess(world.isClientSide);
+			return InteractionResult.sidedSuccess(world.isClientSide());
 		}
 
 		BlockEntity tile = world.getBlockEntity(pos);
@@ -103,13 +103,13 @@ public abstract class BaseMFBlock extends BaseFaceBlock implements EntityBlock {
 			tags.remove("Y");
 			tags.remove("Z");
 
-			if (!world.isClientSide) {
+			if (!world.isClientSide()) {
 				player.sendSystemMessage(this.getText("posregi").withStyle(GREEN));
 			}
 
 			else {
 				player.playSound(SoundEvents.ENDERMAN_TELEPORT, 1F, 1F);
-				this.spawnParticl(world, pos, world.random);
+				this.spawnParticl(world, pos, world.getRandom());
 			}
 		}
 
@@ -118,7 +118,7 @@ public abstract class BaseMFBlock extends BaseFaceBlock implements EntityBlock {
 			this.setBlockPos(world, tags, stack, player, pos);
 		}
 
-		return InteractionResult.sidedSuccess(world.isClientSide);
+		return InteractionResult.sidedSuccess(world.isClientSide());
 	}
 
 	// 座標を登録
@@ -136,23 +136,22 @@ public abstract class BaseMFBlock extends BaseFaceBlock implements EntityBlock {
 		tags.putInt("Y", pos.getY());
 		tags.putInt("Z", pos.getZ());
 
-		if (!world.isClientSide) {
+		if (!world.isClientSide()) {
 			player.sendSystemMessage(this.getText("posset").withStyle(GOLD));
 		}
 
 		else {
 			player.playSound(SoundEvents.ENDERMAN_TELEPORT, 1F, 1F);
-			this.spawnParticl(world, pos, world.random);
+			this.spawnParticl(world, pos, world.getRandom());
 		}
 
-		return InteractionResult.sidedSuccess(world.isClientSide);
+		return InteractionResult.sidedSuccess(world.isClientSide());
 	}
 
 	// パーティクルスポーン
 	public void spawnParticl(Level world, BlockPos pos, RandomSource rand) {
 
 		for (int i = 0; i < 16; i++) {
-
 			float f1 = pos.getX() + 0.5F;
 			float f2 = pos.getY() + 0.25F + rand.nextFloat() * 0.5F;
 			float f3 = pos.getZ() + 0.5F;
@@ -201,12 +200,12 @@ public abstract class BaseMFBlock extends BaseFaceBlock implements EntityBlock {
 
 		CompoundTag tags = stack.getTag();
 		this.addTip(toolTip, stack, tags);
-		toolTip.add(this.getTip(""));
+		toolTip.add(this.empty());
 		toolTip.add(this.tierTip(this.getTier()));
-		toolTip.add(this.getTipArray(this.getText("maxmf"), ": ", getTip(String.format("%,d", this.getMaxMF())).withStyle(WHITE), GREEN));
+		toolTip.add(this.getTipArray(this.getText("maxmf"), ": ", this.getLabel(this.format(this.getMaxMF()), WHITE), GREEN));
 
 		int mf = tags != null ? tags.getInt("mf") : 0;
-		toolTip.add(this.getTipArray(String.format("%,d", mf), getTip("MF").withStyle(GREEN), WHITE));
+		toolTip.add(this.getTipArray(this.format(mf), this.getLabel("MF", GREEN), WHITE));
 	}
 
 	public void addTip(List<Component> toolTip, ItemStack stack, CompoundTag tags) {

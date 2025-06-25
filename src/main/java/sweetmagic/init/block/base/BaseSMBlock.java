@@ -95,6 +95,7 @@ public class BaseSMBlock extends Block implements ISMTip {
 	}
 
 	public void spawnItem(Level world, BlockPos pos, ItemStack stack) {
+		if(stack.isEmpty()) { return; }
 		ItemEntity entity = new ItemEntity(world, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, stack.copy());
 		entity.setNoPickUpDelay();
 		entity.setUnlimitedLifetime();
@@ -111,8 +112,13 @@ public class BaseSMBlock extends Block implements ISMTip {
 	}
 
 	// ブロックえんちちーの取得
-	public BlockEntity getTile(Level world, BlockPos pos) {
-		return world.getBlockEntity(pos);
+	public TileAbstractSM getTile(Level world, BlockPos pos) {
+		return world.getBlockEntity(pos) instanceof TileAbstractSM tile ? tile : null;
+	}
+
+	// ブロックえんちちーの取得
+	public <T extends TileAbstractSM> T getTile(BlockEntityType.BlockEntitySupplier<T> tiType, Level world, BlockPos pos) {
+		return world.getBlockEntity(pos) instanceof TileAbstractSM tile ? (T) tile : null;
 	}
 
 	// RS信号で停止するかどうか
@@ -153,7 +159,7 @@ public class BaseSMBlock extends Block implements ISMTip {
 	}
 
 	public static Properties setState(Material material, SoundType sound, float destroyTime, float explosionResist, int lightLevel) {
-		return setState(material, sound, destroyTime, explosionResist).lightLevel((l) -> lightLevel);
+		return setState(material, sound, destroyTime, explosionResist).lightLevel(l -> lightLevel);
 	}
 
 	public Block getBlock(ItemStack stack) {
@@ -176,8 +182,8 @@ public class BaseSMBlock extends Block implements ISMTip {
 		if (!state.is(newState.getBlock()) && !world.isClientSide) {
 
 			// ブロックえんちちーを取得
-			BlockEntity entity = this.getTile(world, pos);
-			if (entity != null && entity instanceof TileAbstractSM tile) {
+			TileAbstractSM tile = this.getTile(world, pos);
+			if (tile != null) {
 				this.onRemove(world, pos, state, tile);
 			}
 		}
@@ -210,7 +216,7 @@ public class BaseSMBlock extends Block implements ISMTip {
 
 	public void addBlockTip(List<Component> toolTip) {
 		if (this.getEnchantPower() > 0F) {
-			toolTip.add(this.getTipArray(this.getText("enchant_power"), ": ", this.getLabel("" + this.getEnchantPower()).withStyle(WHITE) , GOLD));
+			toolTip.add(this.getTipArray(this.getText("enchant_power"), ": ", this.getLabel(this.getEnchantPower(), WHITE) , GOLD));
 		}
 
 		if (this.isRSStop()) {

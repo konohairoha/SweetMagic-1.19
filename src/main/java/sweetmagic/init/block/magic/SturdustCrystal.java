@@ -14,7 +14,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -46,7 +45,7 @@ public class SturdustCrystal extends BaseFaceBlock implements EntityBlock {
 	public static final BooleanProperty ISTOP = BooleanProperty.create("is_top");
 
 	public SturdustCrystal(String name) {
-		super(name, setState(Material.GLASS, SoundType.GLASS, 0.5F, 8192.0F).noCollission());
+		super(name, setState(Material.GLASS, SoundType.GLASS, 0.5F, 8192F).noCollission());
 		this.registerDefaultState(this.defaultBlockState().setValue(FACING, Direction.NORTH).setValue(ISTOP, false));
 		BlockInfo.create(this, SweetMagicCore.smMagicTab, name);
 	}
@@ -63,7 +62,7 @@ public class SturdustCrystal extends BaseFaceBlock implements EntityBlock {
 
 	// ブロックでのアクション
 	public boolean actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
-		if (world.isClientSide) { return true; }
+		if (world.isClientSide()) { return true; }
 		if (pos.getY() <= world.getMinBuildHeight() + 1) { return false; }
 
 		if (world.getBlockState(pos).getValue(ISTOP)) {
@@ -89,7 +88,6 @@ public class SturdustCrystal extends BaseFaceBlock implements EntityBlock {
 		for (int addX = -3; addX < 3; addX++) {
 			for (int addY = -1; addY < 5; addY++) {
 				for (int addZ = -2; addZ < 3; addZ++) {
-
 					BlockPos targetPos = isZ ? pos.offset(addX, addY, addZ) : pos.offset(addZ, addY, addX);
 					BlockState state = world.getBlockState(targetPos);
 					Block block = state.getBlock();
@@ -105,8 +103,7 @@ public class SturdustCrystal extends BaseFaceBlock implements EntityBlock {
 		}
 
 		if (!dropList.isEmpty()) {
-			BlockPos pPos = player.blockPosition();
-			this.spawnItemList(world, pPos, dropList);
+			this.spawnItemList(world, player.blockPosition(), dropList);
 		}
 
 		Map<BlockPos, BlockState> posMap = isZ ? SturdustCrystal.getZPosMap(pos) : SturdustCrystal.getXPosMap(pos);
@@ -116,7 +113,7 @@ public class SturdustCrystal extends BaseFaceBlock implements EntityBlock {
 
 	@Override
 	public boolean canSurvive(BlockState state, LevelReader world, BlockPos pos) {
-		return world.getBlockState(pos.above()).isAir();
+		return world.isEmptyBlock(pos.above());
 	}
 
 	@Override
@@ -132,9 +129,7 @@ public class SturdustCrystal extends BaseFaceBlock implements EntityBlock {
 
 		// ドロップするブロックが破壊されたらアイテムドロップ
 		if (!isTop && newState.isAir()) {
-			ItemEntity entity = new ItemEntity(world, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, new ItemStack(this));
-			entity.setDefaultPickUpDelay();
-			world.addFreshEntity(entity);
+			this.spawnItem(world, pos, new ItemStack(this));
 		}
 
 		// ブロックの状態が変わった場合
@@ -224,7 +219,6 @@ public class SturdustCrystal extends BaseFaceBlock implements EntityBlock {
 		map.put(pos.offset(2, 0, -3), light);
 		map.put(pos.offset(-2, 0, 3), light);
 		map.put(pos.offset(2, 0, 3), light);
-
 		return map;
 	}
 
@@ -271,8 +265,8 @@ public class SturdustCrystal extends BaseFaceBlock implements EntityBlock {
 
 		map.put(pos.offset(-3, 0, -2), light);
 		map.put(pos.offset(-3, 0, 2), light);
-		map.put(pos.offset(2, 0, -2), light);
-		map.put(pos.offset(2, 0, 2), light);
+		map.put(pos.offset(3, 0, -2), light);
+		map.put(pos.offset(3, 0, 2), light);
 		return map;
 	}
 }

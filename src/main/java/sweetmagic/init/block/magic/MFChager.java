@@ -7,7 +7,6 @@ import javax.annotation.Nullable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
@@ -57,23 +56,8 @@ public class MFChager extends BaseMFBlock {
 
 	// ブロックでのアクション
 	public boolean actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
-		if (world.isClientSide) { return false; }
-
-		MenuProvider tile = null;
-
-		switch (this.data) {
-		case 0:
-			tile = (TileMFChanger) world.getBlockEntity(pos);
-			break;
-		case 1:
-			tile = (TileMFChangerAdvanced) world.getBlockEntity(pos);
-			break;
-		case 2:
-			tile = (TileMFChangerMaster) world.getBlockEntity(pos);
-			break;
-		}
-
-		this.openGUI(world, pos, player, tile);
+		if (world.isClientSide()) { return false; }
+		this.openGUI(world, pos, player, this.getTile(world, pos));
 		return true;
 	}
 

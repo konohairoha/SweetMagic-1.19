@@ -21,7 +21,6 @@ import sweetmagic.init.BlockInit.BlockInfo;
 import sweetmagic.init.ItemInit;
 import sweetmagic.init.TileInit;
 import sweetmagic.init.block.base.BaseFaceBlock;
-import sweetmagic.init.tile.sm.TileAbstractSM;
 import sweetmagic.init.tile.sm.TileSpawnCrystal;
 
 public class SpawnCrystal extends BaseFaceBlock implements EntityBlock {
@@ -42,7 +41,7 @@ public class SpawnCrystal extends BaseFaceBlock implements EntityBlock {
 	// ブロックでのアクション
 	public boolean actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
 		if (world.isClientSide) { return true; }
-		this.openGUI(world, pos, player, (TileSpawnCrystal) this.getTile(world, pos));
+		this.openGUI(world, pos, player, this.getTile(world, pos));
 		return true;
 	}
 
@@ -51,13 +50,9 @@ public class SpawnCrystal extends BaseFaceBlock implements EntityBlock {
 		return new TileSpawnCrystal(pos, state);
 	}
 
-	public BlockEntityType<? extends TileAbstractSM> getTileType() {
-		return TileInit.spawn_crystal;
-	}
-
 	@Nullable
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
-		return this.createMailBoxTicker(world, type, this.getTileType());
+		return this.createMailBoxTicker(world, type, TileInit.spawn_crystal);
 	}
 
 	@Override

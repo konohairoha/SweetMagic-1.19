@@ -12,7 +12,6 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import sweetmagic.init.TileInit;
 import sweetmagic.init.block.base.BaseMFBlock;
-import sweetmagic.init.tile.sm.TileAbstractSM;
 import sweetmagic.init.tile.sm.TileAetherRecycler;
 
 public class AetherRecycler extends BaseMFBlock {
@@ -38,8 +37,8 @@ public class AetherRecycler extends BaseMFBlock {
 
 	// ブロックでのアクション
 	public boolean actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
-		if (world.isClientSide) { return false; }
-		this.openGUI(world, pos, player, (TileAetherRecycler) this.getTile(world, pos));
+		if (world.isClientSide()) { return false; }
+		this.openGUI(world, pos, player, this.getTile(world, pos));
 		return true;
 	}
 
@@ -48,12 +47,8 @@ public class AetherRecycler extends BaseMFBlock {
 		return new TileAetherRecycler(pos, state);
 	}
 
-	public BlockEntityType<? extends TileAbstractSM> getTileType() {
-		return TileInit.aetherRecycler;
-	}
-
 	@Nullable
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
-		return this.createMailBoxTicker(world, type, this.getTileType());
+		return this.createMailBoxTicker(world, type, TileInit.aetherRecycler);
 	}
 }

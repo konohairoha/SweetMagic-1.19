@@ -21,7 +21,6 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import sweetmagic.init.ItemInit;
 import sweetmagic.init.TileInit;
 import sweetmagic.init.block.base.BaseMFBlock;
-import sweetmagic.init.tile.sm.TileAbstractSM;
 import sweetmagic.init.tile.sm.TileMFFisher;
 
 public class MFFisher extends BaseMFBlock {
@@ -64,8 +63,8 @@ public class MFFisher extends BaseMFBlock {
 
 	// ブロックでのアクション
 	public boolean actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
-		if (world.isClientSide) { return true; }
-		this.openGUI(world, pos, player, (TileMFFisher) world.getBlockEntity(pos));
+		if (world.isClientSide()) { return true; }
+		this.openGUI(world, pos, player, this.getTile(world, pos));
 		return true;
 	}
 
@@ -74,13 +73,9 @@ public class MFFisher extends BaseMFBlock {
 		return new TileMFFisher(pos, state);
 	}
 
-	public BlockEntityType<? extends TileAbstractSM> getTileType() {
-		return TileInit.mfFisher;
-	}
-
 	@Nullable
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
-		return this.createMailBoxTicker(world, type, this.getTileType());
+		return this.createMailBoxTicker(world, type, TileInit.mfFisher);
 	}
 
 	public int getData() {

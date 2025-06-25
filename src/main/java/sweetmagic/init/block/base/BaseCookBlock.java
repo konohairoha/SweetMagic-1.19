@@ -25,7 +25,7 @@ import sweetmagic.api.iitem.IPorch;
 import sweetmagic.init.BlockInit.BlockInfo;
 import sweetmagic.init.ItemInit;
 import sweetmagic.init.block.sm.Stove;
-import sweetmagic.init.capability.ICookingStatus;
+import sweetmagic.init.capability.icap.ICookingStatus;
 import sweetmagic.init.tile.sm.TileAbstractSM;
 import sweetmagic.init.tile.sm.TileAbstractSMCook;
 
@@ -92,7 +92,7 @@ public abstract class BaseCookBlock extends BaseFaceBlock implements EntityBlock
 		if (!hasFok) { return; }
 
 		int xp = 0;
-		Level world = player.level;
+		Level world = player.getLevel();
 
 		for (ItemStack stack : outList) {
 

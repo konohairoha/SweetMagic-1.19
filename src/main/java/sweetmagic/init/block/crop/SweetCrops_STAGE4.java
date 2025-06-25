@@ -93,7 +93,7 @@ public class SweetCrops_STAGE4 extends BushBlock implements ISMCrop, Bonemealabl
 
 	// 種の取得
 	@Override
-	public ItemLike getSeed () {
+	public ItemLike getSeed() {
 		switch (this.data) {
 		case 1: return ItemInit.onion;
 		case 2: return ItemInit.olive;
@@ -166,15 +166,14 @@ public class SweetCrops_STAGE4 extends BushBlock implements ISMCrop, Bonemealabl
 		return !this.isMaxAge(state);
 	}
 
-	public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource rand) {
+	public void randomTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource rand) {
 
 		// 最大まで成長しているなら終了
-		if (!this.isMaxAge(state) && ForgeHooks.onCropsGrowPre(level, pos, state, this.isGlowChange(rand))) {
-			int nowAge = this.getNowState(state);
-			BlockState glowState = state.setValue(this.getSMMaxAge(), Integer.valueOf(nowAge + 1));
-			level.setBlock(pos, glowState, 2);
-			level.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(glowState));
-			ForgeHooks.onCropsGrowPost(level, pos, state);
+		if (!this.isMaxAge(state) && ForgeHooks.onCropsGrowPre(world, pos, state, this.isGlowChange(rand))) {
+			BlockState glowState = state.setValue(this.getSMMaxAge(), this.getNowState(state) + 1);
+			world.setBlock(pos, glowState, 2);
+			world.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(glowState));
+			ForgeHooks.onCropsGrowPost(world, pos, state);
 		}
 	}
 
@@ -194,12 +193,12 @@ public class SweetCrops_STAGE4 extends BushBlock implements ISMCrop, Bonemealabl
 		}
 
 		this.onRicghtClick(world, player, state, pos, stack);
-		return InteractionResult.sidedSuccess(world.isClientSide);
+		return InteractionResult.sidedSuccess(world.isClientSide());
 	}
 
 	// 右クリック
 	public void onRicghtClick(Level world, Player player, BlockState state, BlockPos pos, ItemStack stack) {
-		RandomSource rand = world.random;
+		RandomSource rand = world.getRandom();
 		ItemEntity drop = this.getDropItem(world, player, stack, this.getCrop(), this.getDropValue(rand, 0));
 		world.addFreshEntity(drop);
 		world.setBlock(pos, state.setValue(this.getSMMaxAge(), this.RCSetState()), 2); //作物の成長段階を2下げる

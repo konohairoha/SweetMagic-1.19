@@ -163,8 +163,7 @@ public class SweetCrops_STAGE5 extends BushBlock implements ISMCrop, Bonemealabl
 
 		// 最大まで成長しているなら終了
 		if (!this.isMaxAge(state) && ForgeHooks.onCropsGrowPre(world, pos, state, this.isGlowChange(rand))) {
-			int nowAge = this.getNowState(state);
-			BlockState glowState = state.setValue(this.getSMMaxAge(), Integer.valueOf(nowAge + 1));
+			BlockState glowState = state.setValue(this.getSMMaxAge(), this.getNowState(state) + 1);
 			world.setBlock(pos, glowState, 2);
 			world.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(glowState));
 			ForgeHooks.onCropsGrowPost(world, pos, state);
@@ -190,7 +189,7 @@ public class SweetCrops_STAGE5 extends BushBlock implements ISMCrop, Bonemealabl
 
 			if (this.data == 2 && this.getNowState(state) >= (this.getMaxBlockState() - 1)) {
 
-				RandomSource rand = world.random;
+				RandomSource rand = world.getRandom();
 				ItemEntity drop = this.getDropItem(world, player, player.getItemInHand(hand), ItemInit.edamame,
 						this.getDropValue(rand, 0));
 				world.addFreshEntity(drop);
@@ -202,13 +201,12 @@ public class SweetCrops_STAGE5 extends BushBlock implements ISMCrop, Bonemealabl
 		}
 
 		this.onRicghtClick(world, player, state, pos, stack);
-		return InteractionResult.sidedSuccess(world.isClientSide);
+		return InteractionResult.sidedSuccess(world.isClientSide());
 	}
 
 	// 右クリック
 	public void onRicghtClick(Level world, Player player, BlockState state, BlockPos pos, ItemStack stack) {
-
-		RandomSource rand = world.random;
+		RandomSource rand = world.getRandom();
 		ItemEntity drop = this.getDropItem(world, player, stack, this.getCrop(), this.getDropValue(rand, 0));
 		world.addFreshEntity(drop);
 		world.setBlock(pos, state.setValue(this.getSMMaxAge(), this.RCSetState()), 2); //作物の成長段階を2下げる
@@ -216,18 +214,18 @@ public class SweetCrops_STAGE5 extends BushBlock implements ISMCrop, Bonemealabl
 	}
 
 	// 右クリック時アイテムを取得
-	public List<ItemStack> rightClickStack(Level level, BlockState state, BlockPos pos) {
+	public List<ItemStack> rightClickStack(Level world, BlockState state, BlockPos pos) {
 
 		// アイテムの取得
 		List<ItemStack> stackList = new ArrayList<>();
-		stackList.add(this.getDropStack(level.random));
+		stackList.add(this.getDropStack(world.getRandom()));
 
 		if (this.data == 2) {
-			stackList.add(new ItemStack(ItemInit.edamame, this.getDropValue(level.random, 0)));
+			stackList.add(new ItemStack(ItemInit.edamame, this.getDropValue(world.getRandom(), 0)));
 		}
 
 		// 作物の成長段階を下げる
-		level.setBlock(pos, state.setValue(this.getSMMaxAge(), this.RCSetState()), 2);
+		world.setBlock(pos, state.setValue(this.getSMMaxAge(), this.RCSetState()), 2);
 
 		return stackList;
 	}
@@ -242,13 +240,13 @@ public class SweetCrops_STAGE5 extends BushBlock implements ISMCrop, Bonemealabl
 	}
 
 	@Override
-	public boolean isBonemealSuccess(Level level, RandomSource rand, BlockPos pos, BlockState state) {
+	public boolean isBonemealSuccess(Level world, RandomSource rand, BlockPos pos, BlockState state) {
 		return true;
 	}
 
 	@Override
-	public void performBonemeal(ServerLevel level, RandomSource rand, BlockPos pos, BlockState state) {
-		this.growCrops(level, pos, state);
+	public void performBonemeal(ServerLevel world, RandomSource rand, BlockPos pos, BlockState state) {
+		this.growCrops(world, pos, state);
 	}
 
 	@Override
@@ -260,7 +258,7 @@ public class SweetCrops_STAGE5 extends BushBlock implements ISMCrop, Bonemealabl
 	public List<ItemStack> getDropList(BlockState state, LootContext.Builder build) {
 
 		List<ItemStack> stackList = Lists.newArrayList();
-		RandomSource rand = build.getLevel().random;
+		RandomSource rand = build.getLevel().getRandom();
 
 		// 最大成長しているなら
 		if (this.isMaxAge(state)) {

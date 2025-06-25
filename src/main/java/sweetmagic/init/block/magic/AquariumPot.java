@@ -22,8 +22,8 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.fluids.FluidUtil;
 import sweetmagic.init.TileInit;
 import sweetmagic.init.block.base.BaseMFBlock;
+import sweetmagic.init.tile.sm.TileAbstractSM;
 import sweetmagic.init.tile.sm.TileAquariumPot;
-import sweetmagic.init.tile.sm.TileSMMagic;
 
 public class AquariumPot extends BaseMFBlock {
 
@@ -60,16 +60,16 @@ public class AquariumPot extends BaseMFBlock {
 
 	// ブロックでのアクション
 	public boolean actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
-		if (world.isClientSide) { return true; }
+		if (world.isClientSide()) { return true; }
 
-		TileAquariumPot tile = (TileAquariumPot) this.getTile(world, pos);
+		TileAbstractSM tile = this.getTile(world, pos);
 		if(this.data == 10 && FluidUtil.getFluidHandler(player.getItemInHand(InteractionHand.MAIN_HAND)).isPresent()){
 			FluidUtil.interactWithFluidHandler(player, player.getUsedItemHand(), world, pos, null);
 			tile.sendPKT();
 		}
 
 		else {
-			this.openGUI(world, pos, player, (TileAquariumPot) this.getTile(world, pos));
+			this.openGUI(world, pos, player, tile);
 		}
 
 		return true;
@@ -131,12 +131,8 @@ public class AquariumPot extends BaseMFBlock {
 		return new TileAquariumPot(pos, state);
 	}
 
-	public BlockEntityType<? extends TileSMMagic> getTileType() {
-		return TileInit.aquariumpot;
-	}
-
 	@Nullable
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
-		return this.createMailBoxTicker(world, type, this.getTileType());
+		return this.createMailBoxTicker(world, type, TileInit.aquariumpot);
 	}
 }

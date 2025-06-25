@@ -17,7 +17,6 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import sweetmagic.init.TileInit;
 import sweetmagic.init.block.base.BaseMFBlock;
-import sweetmagic.init.tile.sm.TileAbstractSM;
 import sweetmagic.init.tile.sm.TileMFPot;
 
 public class MFPot extends BaseMFBlock {
@@ -53,7 +52,7 @@ public class MFPot extends BaseMFBlock {
 
 	// ブロックでのアクション
 	public boolean actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
-		if (world.isClientSide) { return false; }
+		if (world.isClientSide()) { return false; }
 
 		TileMFPot tile = (TileMFPot) this.getTile(world, pos);
 
@@ -70,7 +69,7 @@ public class MFPot extends BaseMFBlock {
 		}
 
 		else {
-			player.sendSystemMessage(this.getTipArray(String.format("%,d", tile.getMF()) + "MF").withStyle(GREEN));
+			player.sendSystemMessage(this.getLabel(this.format(tile.getMF()) + "MF", GREEN));
 		}
 		return true;
 	}
@@ -94,12 +93,8 @@ public class MFPot extends BaseMFBlock {
 		return new TileMFPot(pos, state);
 	}
 
-	public BlockEntityType<? extends TileAbstractSM> getTileType() {
-		return TileInit.mfpot;
-	}
-
 	@Nullable
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
-		return this.createMailBoxTicker(world, type, this.getTileType());
+		return this.createMailBoxTicker(world, type, TileInit.mfpot);
 	}
 }

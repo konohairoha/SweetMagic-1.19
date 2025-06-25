@@ -7,7 +7,6 @@ import javax.annotation.Nullable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -35,26 +34,8 @@ public class MFTank extends BaseMFBlock {
 
 	// ブロックでのアクション
 	public boolean actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
-		if (world.isClientSide) { return true; }
-
-		MenuProvider tile = null;
-
-		switch (this.data) {
-		case 0:
-			tile = (TileMFTank) world.getBlockEntity(pos);
-			break;
-		case 1:
-			tile = (TileMFTankAdavance) world.getBlockEntity(pos);
-			break;
-		case 2:
-			tile = (TileMFTankMaster) world.getBlockEntity(pos);
-			break;
-		case 3:
-			tile = (TileMFTankCreative) world.getBlockEntity(pos);
-			break;
-		}
-
-		this.openGUI(world, pos, player, tile);
+		if (world.isClientSide()) { return true; }
+		this.openGUI(world, pos, player, this.getTile(world, pos));
 		return true;
 	}
 
