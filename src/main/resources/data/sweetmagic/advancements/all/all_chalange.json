@@ -1,0 +1,12 @@
+{
+	"display": {
+		"icon": {"item": "sweetmagic:sugarbell"},
+		"title": {"translate": "smadbent.all_chalange_end.title"},
+		"description": {"translate": "smadbent.all_chalange_end.text"},
+		"frame": "challenge"
+	},
+	"parent": "sweetmagic:all/all_magics", "criteria": {
+		"trigger": {"trigger": "sweetmagic:all_chalange"}
+	},
+	"rewards": {"loot": ["sweetmagic:advance/magic_aether_barrier"]}
+}

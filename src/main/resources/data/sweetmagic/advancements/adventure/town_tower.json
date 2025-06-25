@@ -1,14 +1,14 @@
 {
 	"display": {
-		"icon": { "item": "sweetmagic:whiteline_brick_r" },
-		"title": { "translate": "smadbent.town_tower.title" },
-		"description": { "translate": "smadbent.town_tower.text" }
+		"icon": {"item": "sweetmagic:whiteline_brick_r"},
+		"title": {"translate": "smadbent.town_tower.title"},
+		"description": {"translate": "smadbent.town_tower.text"}
 	},
 	"parent": "sweetmagic:adventure/witch_tower", "criteria": {
- 		"trigger": { "trigger": "minecraft:location", "conditions": { "player": [{
+ 		"trigger": {"trigger": "minecraft:location", "conditions": {"player": [{
 			"condition": "minecraft:entity_properties", "entity": "this",
-			"predicate": { "location": { "structure": "sweetmagic:town_tower" } }
-		}] } }
+			"predicate": {"location": {"structure": "sweetmagic:town_tower"}}
+		}]}}
 	},
-	"rewards": { "loot": ["sweetmagic:advance/mf_bottle_2"] }
+	"rewards": {"loot": ["sweetmagic:advance/mf_bottle_2"]}
 }

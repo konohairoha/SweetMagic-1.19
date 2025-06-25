@@ -1,14 +1,14 @@
 {
 	"display": {
-		"icon": { "item": "sweetmagic:antique_brick_0" },
-		"title": { "translate": "smadbent.witch_house.title" },
-		"description": { "translate": "smadbent.witch_house.text" }
+		"icon": {"item": "sweetmagic:antique_brick_0"},
+		"title": {"translate": "smadbent.witch_house.title"},
+		"description": {"translate": "smadbent.witch_house.text"}
 	},
 	"parent": "sweetmagic:adventure/tomb", "criteria": {
-		"event": { "trigger": "minecraft:location", "conditions": { "player": [{
+		"event": {"trigger": "minecraft:location", "conditions": {"player": [{
 			"condition": "minecraft:entity_properties", "entity": "this",
-			"predicate": { "location": { "structure": "sweetmagic:witch_house" } }
-		}] } }
+			"predicate": {"location": {"structure": "sweetmagic:witch_house"}}
+		}]}}
 	},
-	"rewards": { "loot": ["sweetmagic:advance/ruins_site"] }
+	"rewards": {"loot": ["sweetmagic:advance/ruins_site"]}
 }

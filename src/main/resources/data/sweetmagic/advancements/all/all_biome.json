@@ -1,0 +1,13 @@
+{
+	"display": {
+		"icon": {"item": "sweetmagic:fluorite"},
+		"title": {"translate": "smadbent.all_biome.title"},
+		"description": {"translate": "smadbent.all_biome_chalange.text"},
+		"show_toast": false,
+		"announce_to_chat": false
+	},
+	"parent": "sweetmagic:all/root", "criteria": {
+		"trigger": {"trigger": "sweetmagic:all/all_biome"}
+	},
+	"rewards": {"experience": 5}
+}

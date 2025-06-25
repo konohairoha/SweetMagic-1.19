@@ -1,15 +1,15 @@
 {
 	"display": {
-		"icon": { "item": "sweetmagic:short_cake" },
-		"title": { "translate": "smadbent.cook_root.title" },
-		"description": { "translate": "smadbent.cook_root.text" },
+		"icon": {"item": "sweetmagic:short_cake"},
+		"title": {"translate": "smadbent.cook_root.title"},
+		"description": {"translate": "smadbent.cook_root.text"},
 		"background": "sweetmagic:textures/block/tamagotti_wood.png",
 		"show_toast": false,
 		"announce_to_chat": false
 	},
 	"criteria": {
-		"trigger": { "trigger": "minecraft:inventory_changed", "conditions": {
-			"items": [ { "items": [ 
+		"trigger": {"trigger": "minecraft:inventory_changed", "conditions": {
+			"items": [{"items": [
 				"sweetmagic:sugarbell_seed",
 				"sweetmagic:sannyflower_seed",
 				"sweetmagic:moonblossom_seed",
@@ -34,7 +34,7 @@
 				"sweetmagic:j_radish_seed",
 				"sweetmagic:whitenet_seed",
 				"sweetmagic:azuki_seed"
-			 ] } ]
-		} }
+			]}]
+		}}
 	}
 }

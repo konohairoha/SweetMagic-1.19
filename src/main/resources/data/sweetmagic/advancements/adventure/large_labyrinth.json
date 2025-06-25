@@ -1,0 +1,14 @@
+{
+	"display": {
+		"icon": {"item": "sweetmagic:prism_leaves"},
+		"title": {"translate": "smadbent.large_labyrinth.title"},
+		"description": {"translate": "smadbent.large_labyrinth.text"}
+	},
+	"parent": "sweetmagic:adventure/castle", "criteria": {
+		"trigger": {"trigger": "minecraft:location", "conditions": {"player": [{
+			"condition": "minecraft:entity_properties", "entity": "this",
+			"predicate": {"location": {"structure": "sweetmagic:large_labyrinth"}}
+		}]}}
+	},
+	"rewards": {"loot": ["sweetmagic:advance/mf_bottle_5"]}
+}

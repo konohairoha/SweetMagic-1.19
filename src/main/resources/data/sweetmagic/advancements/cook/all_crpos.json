@@ -1,0 +1,176 @@
+{
+	"display": {
+		"icon": {"item": "sweetmagic:sugarbell_seed"},
+		"title": {"translate": "smadbent.all_crpos.title"},
+		"description": {"translate": "smadbent.all_crpos.text"},
+		"frame": "challenge"
+	},
+	"parent": "sweetmagic:cook/root", "criteria": {
+		"chestnut_sapling": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:chestnut_sapling"]} ]}
+		},
+		"lemon_sapling": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:lemon_sapling"]} ]}
+		},
+		"orange_sapling": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:orange_sapling"]} ]}
+		},
+		"coconut_sapling": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:coconut_sapling"]} ]}
+		},
+		"prism_sapling": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:prism_sapling"]} ]}
+		},
+		"banana_sapling": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:banana_sapling"]} ]}
+		},
+		"estor_sapling": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:estor_sapling"]} ]}
+		},
+		"peach_sapling": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:peach_sapling"]} ]}
+		},
+		"magiawood_sapling": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:magiawood_sapling"]} ]}
+		},
+		"cherry_blossoms_sapling": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:cherry_blossoms_sapling"]} ]}
+		},
+		"maple_sapling": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:maple_sapling"]} ]}
+		},
+		"cornflower": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:cornflower"]} ]}
+		},
+		"lily_valley": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:lily_valley"]} ]}
+		},
+		"cosmos": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:cosmos"]} ]}
+		},
+		"blackrose": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:blackrose"]} ]}
+		},
+		"white_clover": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:white_clover"]} ]}
+		},
+		"foxtail_grass": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:foxtail_grass"]} ]}
+		},
+		"snowdrop": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:snowdrop"]} ]}
+		},
+		"turkey_balloonflower": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:turkey_balloonflower"]} ]}
+		},
+		"iberis_umbellata": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:iberis_umbellata"]} ]}
+		},
+		"ultramarine_rose": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:ultramarine_rose"]} ]}
+		},
+		"solid_star": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:solid_star"]} ]}
+		},
+		"zinnia": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:zinnia"]} ]}
+		},
+		"campanula": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:campanula"]} ]}
+		},
+		"primula_polyansa": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:primula_polyansa"]} ]}
+		},
+		"hydrangea": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:hydrangea"]} ]}
+		},
+		"carnation_crayola": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:carnation_crayola"]} ]}
+		},
+		"christmas_rose": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:christmas_rose"]} ]}
+		},
+		"portulaca": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:portulaca"]} ]}
+		},
+		"surfinia": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:surfinia"]} ]}
+		},
+		"pansy_blue": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:pansy_blue"]} ]}
+		},
+		"pansy_yellowmazenta": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:pansy_yellowmazenta"]} ]}
+		},
+		"marigold": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:marigold"]} ]}
+		},
+		"christmarose_ericsmithii": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:christmarose_ericsmithii"]} ]}
+		},
+		"sugarbell_seed": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:sugarbell_seed"]} ]}
+		},
+		"sannyflower_seed": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:sannyflower_seed"]} ]}
+		},
+		"moonblossom_seed": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:moonblossom_seed"]} ]}
+		},
+		"fire_nasturtium_seed": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:fire_nasturtium_seed"]} ]}
+		},
+		"drizzly_mysotis_seed": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:drizzly_mysotis_seed"]} ]}
+		},
+		"clerodendrum_seed": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:clerodendrum_seed"]} ]}
+		},
+		"cotton_seed": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:cotton_seed"]} ]}
+		},
+		"glowflower_seed": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:glowflower_seed"]} ]}
+		},
+		"sticky_stuff_seed": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:sticky_stuff_seed"]} ]}
+		},
+		"quartz_seed": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:quartz_seed"]} ]}
+		},
+		"lapislazuli_seed": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:lapislazuli_seed"]} ]}
+		},
+		"redstone_seed": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:redstone_seed"]} ]}
+		},
+		"eggplant_seed": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:eggplant_seed"]} ]}
+		},
+		"cabbage_seed": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:cabbage_seed"]} ]}
+		},
+		"lettuce_seed": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:lettuce_seed"]} ]}
+		},
+		"paper_mint_seed": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:paper_mint_seed"]} ]}
+		},
+		"pineapple_seed": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:pineapple_seed"]} ]}
+		},
+		"greenpepper_seed": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:greenpepper_seed"]} ]}
+		},
+		"spinach_seed": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:spinach_seed"]} ]}
+		},
+		"j_radish_seed": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:j_radish_seed"]} ]}
+		},
+		"whitenet_seed": {"trigger": "minecraft:inventory_changed",
+			"conditions": {"items": [{"items": ["sweetmagic:whitenet_seed"]} ]}
+		}
+	},
+	"rewards": {"experience": 100}
+}

@@ -1,12 +1,12 @@
 {
 	"display": {
-		"icon": { "item": "sweetmagic:juice_maker" },
-		"title": { "translate": "smadbent.juice_maker.title" },
-		"description": { "translate": "smadbent.juice_maker.text" }
+		"icon": {"item": "sweetmagic:juice_maker"},
+		"title": {"translate": "smadbent.juice_maker.title"},
+		"description": {"translate": "smadbent.juice_maker.text"}
 	},
 	"parent": "sweetmagic:cook/root", "criteria": {
-		"trigger": { "trigger": "minecraft:inventory_changed", "conditions": {
-			"items": [ { "items": [
+		"trigger": {"trigger": "minecraft:inventory_changed", "conditions": {
+			"items": [{"items": [
 				"sweetmagic:juice_maker",
 				"sweetmagic:coffee_maker_r",
 				"sweetmagic:coffee_maker_l",
@@ -14,8 +14,8 @@
 				"sweetmagic:coffee_maker_pi",
 				"sweetmagic:coffee_maker_pu",
 				"sweetmagic:coffee_maker_s"
-			] } ]
-		} }
+			]} ]
+		}}
 	},
-	"rewards": { "experience": 5 }
+	"rewards": {"experience": 5}
 }

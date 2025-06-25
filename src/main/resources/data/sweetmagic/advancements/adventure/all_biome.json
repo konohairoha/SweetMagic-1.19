@@ -1,0 +1,35 @@
+{
+	"display": {
+		"icon": {"item": "sweetmagic:fluorite"},
+		"title": {"translate": "smadbent.all_biome.title"},
+		"description": {"translate": "smadbent.all_biome.text"},
+		"frame": "challenge"
+	},
+	"parent": "sweetmagic:adventure/sweetmagic_world", "criteria": {
+		"prism_forest_sm": {"trigger": "minecraft:location", "conditions": {"player": [{
+			"condition": "minecraft:entity_properties", "entity": "this", "predicate": {"location": {"biome": "sweetmagic:prism_forest_sm"}}}]}
+		},
+		"fruit_forest_sm": {"trigger": "minecraft:location", "conditions": {"player": [{
+			"condition": "minecraft:entity_properties", "entity": "this", "predicate": {"location": {"biome": "sweetmagic:fruit_forest_sm"}}}]}
+		},
+		"cherry_blossoms_forest_sm": {"trigger": "minecraft:location", "conditions": {"player": [{
+			"condition": "minecraft:entity_properties", "entity": "this", "predicate": {"location": {"biome": "sweetmagic:cherry_blossoms_forest_sm"}}}]}
+		},
+		"flower_garden": {"trigger": "minecraft:location", "conditions": {"player": [{
+			"condition": "minecraft:entity_properties", "entity": "this", "predicate": {"location": {"biome": "sweetmagic:flower_garden"}}}]}
+		},
+		"magiawood_forest": {"trigger": "minecraft:location", "conditions": {"player": [{
+			"condition": "minecraft:entity_properties", "entity": "this", "predicate": {"location": {"biome": "sweetmagic:magiawood_forest"}}}]}
+		},
+		"fruittower_forest": {"trigger": "minecraft:location", "conditions": {"player": [{
+			"condition": "minecraft:entity_properties", "entity": "this", "predicate": {"location": {"biome": "sweetmagic:fruittower_forest"}}}]}
+		},
+		"frozen_forest": {"trigger": "minecraft:location", "conditions": {"player": [{
+			"condition": "minecraft:entity_properties", "entity": "this", "predicate": {"location": {"biome": "sweetmagic:frozen_forest"}}}]}
+		},
+		"maple_forest": {"trigger": "minecraft:location", "conditions": {"player": [{
+			"condition": "minecraft:entity_properties", "entity": "this", "predicate": {"location": {"biome": "sweetmagic:maple_forest"}}}]}
+		}
+	},
+	"rewards": {"loot": ["sweetmagic:advance/magia_bottle_2"]}
+}

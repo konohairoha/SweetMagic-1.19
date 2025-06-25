@@ -1,12 +1,12 @@
 {
 	"display": {
-		"icon": { "item": "sweetmagic:freezer" },
-		"title": { "translate": "smadbent.freezer.title" },
-		"description": { "translate": "smadbent.freezer.text" }
+		"icon": {"item": "sweetmagic:freezer"},
+		"title": {"translate": "smadbent.freezer.title"},
+		"description": {"translate": "smadbent.freezer.text"}
 	},
 	"parent": "sweetmagic:cook/root", "criteria": {
-		"trigger": { "trigger": "minecraft:inventory_changed", "conditions": { 
-			"items": [ { "items": [ 
+		"trigger": {"trigger": "minecraft:inventory_changed", "conditions": { 
+			"items": [{"items": [
 				"sweetmagic:freezer",
 				"sweetmagic:freezer_r",
 				"sweetmagic:freezer_l",
@@ -14,8 +14,8 @@
 				"sweetmagic:freezer_pi",
 				"sweetmagic:freezer_pu",
 				"sweetmagic:freezer_s"
-			] } ]
-		} }
+			]} ]
+		}}
 	},
-	"rewards": { "experience": 5 }
+	"rewards": {"experience": 5}
 }

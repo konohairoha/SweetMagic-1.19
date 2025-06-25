@@ -1,15 +1,15 @@
 {
 	"display": {
-		"icon": { "item": "sweetmagic:aether_wand" },
-		"title": { "translate": "smadbent.adventure_root.title" },
-		"description": { "translate": "smadbent.adventure_root.text" },
+		"icon": {"item": "sweetmagic:aether_wand"},
+		"title": {"translate": "smadbent.adventure_root.title"},
+		"description": {"translate": "smadbent.adventure_root.text"},
 		"background": "sweetmagic:textures/block/white_stone.png",
 		"show_toast": false,
 		"announce_to_chat": false
 	},
-	"criteria": { "trigger": {
+	"criteria": {"trigger": {
 		"trigger": "minecraft:inventory_changed", "conditions": {
-			"items": [ { "items": [ "sweetmagic:aether_wand"] } ]
-		} }
+			"items": [{"items": ["sweetmagic:aether_wand"]} ]
+		}}
 	}
 }

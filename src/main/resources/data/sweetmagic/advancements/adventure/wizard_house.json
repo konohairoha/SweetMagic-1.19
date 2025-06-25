@@ -1,14 +1,14 @@
 {
 	"display": {
-		"icon": { "item": "sweetmagic:white_stone_polished" },
-		"title": { "translate": "smadbent.wizard_house.title" },
-		"description": { "translate": "smadbent.wizard_house.text" }
+		"icon": {"item": "sweetmagic:white_stone_polished"},
+		"title": {"translate": "smadbent.wizard_house.title"},
+		"description": {"translate": "smadbent.wizard_house.text"}
 	},
 	"parent": "sweetmagic:adventure/white_silver_house", "criteria": {
-		"trigger": { "trigger": "minecraft:location", "conditions": { "player": [{
+		"trigger": {"trigger": "minecraft:location", "conditions": {"player": [{
 			"condition": "minecraft:entity_properties", "entity": "this",
-			"predicate": { "location": { "structure": "sweetmagic:wizard_house" } }
-		}] } }
+			"predicate": {"location": {"structure": "sweetmagic:wizard_house"}}
+		}]}}
 	},
-	"rewards": { "loot": ["sweetmagic:advance/mf_bottle_5"] }
+	"rewards": {"loot": ["sweetmagic:advance/mf_bottle_5"]}
 }

@@ -1,14 +1,14 @@
 {
 	"display": {
-		"icon": { "item": "sweetmagic:treasure_chest" },
-		"title": { "translate": "smadbent.beginner.title" },
-		"description": { "translate": "smadbent.beginner.text" }
+		"icon": {"item": "sweetmagic:treasure_chest"},
+		"title": {"translate": "smadbent.beginner.title"},
+		"description": {"translate": "smadbent.beginner.text"}
 	},
 	"parent": "sweetmagic:adventure/root", "criteria": {
-		"trigger": { "trigger": "minecraft:location", "conditions": { "player": [{
+		"trigger": {"trigger": "minecraft:location", "conditions": {"player": [{
 			"condition": "minecraft:entity_properties", "entity": "this",
-			"predicate": { "location": { "structure": "sweetmagic:bonus" } }
-		}] } }
+			"predicate": {"location": {"structure": "sweetmagic:bonus"}}
+		}]}}
 	},
-	"rewards": { "loot": ["sweetmagic:advance/mf_sbottle_1"] }
+	"rewards": {"loot": ["sweetmagic:advance/mf_sbottle_1"]}
 }

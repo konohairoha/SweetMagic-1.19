@@ -1,14 +1,14 @@
 {
 	"display": {
-		"icon": { "item": "sweetmagic:magician_lectern" },
-		"title": { "translate": "smadbent.ruins_site.title" },
-		"description": { "translate": "smadbent.ruins_site.text" }
+		"icon": {"item": "sweetmagic:magician_lectern"},
+		"title": {"translate": "smadbent.ruins_site.title"},
+		"description": {"translate": "smadbent.ruins_site.text"}
 	},
 	"parent": "sweetmagic:adventure/witch_house", "criteria": {
-		"trigger": { "trigger": "minecraft:location", "conditions": { "player": [{
+		"trigger": {"trigger": "minecraft:location", "conditions": {"player": [{
 			"condition": "minecraft:entity_properties", "entity": "this",
-			"predicate": { "location": { "structure": "sweetmagic:ruins_site" } }
-		}] } }
+			"predicate": {"location": {"structure": "sweetmagic:ruins_site"}}
+		}]}}
 	},
-	"rewards": { "loot": ["sweetmagic:advance/mf_bottle_3"] }
+	"rewards": {"loot": ["sweetmagic:advance/mf_bottle_3"]}
 }

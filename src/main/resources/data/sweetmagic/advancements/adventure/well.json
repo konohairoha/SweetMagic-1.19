@@ -1,14 +1,14 @@
 {
 	"display": {
-		"icon": { "item": "sweetmagic:veil_darkness" },
-		"title": { "translate": "smadbent.well.title" },
-		"description": { "translate": "smadbent.well.text" }
+		"icon": {"item": "sweetmagic:veil_darkness"},
+		"title": {"translate": "smadbent.well.title"},
+		"description": {"translate": "smadbent.well.text"}
 	},
 	"parent": "sweetmagic:adventure/witch_house", "criteria": {
-		"trigger": { "trigger": "minecraft:location", "conditions": { "player": [{
+		"trigger": {"trigger": "minecraft:location", "conditions": {"player": [{
 			"condition": "minecraft:entity_properties", "entity": "this",
-			"predicate": { "location": { "structure": "sweetmagic:well" } }
-		}] } }
+			"predicate": {"location": {"structure": "sweetmagic:well"}}
+		}]}}
 	},
-	"rewards": { "loot": ["sweetmagic:advance/mf_bottle_1"] }
+	"rewards": {"loot": ["sweetmagic:advance/mf_bottle_1"]}
 }

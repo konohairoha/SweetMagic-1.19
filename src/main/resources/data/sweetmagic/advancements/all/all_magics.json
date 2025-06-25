@@ -1,0 +1,13 @@
+{
+	"display": {
+		"icon": {"item": "sweetmagic:magic_shining_flare"},
+		"title": {"translate": "smadbent.all_magics.title"},
+		"description": {"translate": "smadbent.all_magics_chalange.text"},
+		"show_toast": false,
+		"announce_to_chat": false
+	},
+	"parent": "sweetmagic:all/all_boss", "criteria": {
+		"trigger": {"trigger": "sweetmagic:all/all_magics"}
+	},
+	"rewards": {"experience": 5}
+}

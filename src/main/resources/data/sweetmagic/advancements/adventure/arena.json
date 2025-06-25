@@ -1,14 +1,14 @@
 {
 	"display": {
-		"icon": { "item": "sweetmagic:antique_brick_0" },
-		"title": { "translate": "smadbent.arena.title" },
-		"description": { "translate": "smadbent.arena.text" }
+		"icon": {"item": "sweetmagic:antique_brick_0"},
+		"title": {"translate": "smadbent.arena.title"},
+		"description": {"translate": "smadbent.arena.text"}
 	},
 	"parent": "sweetmagic:adventure/sweetmagic_world", "criteria": {
-		"trigger": { "trigger": "minecraft:location", "conditions": { "player": [{
+		"trigger": {"trigger": "minecraft:location", "conditions": {"player": [{
 			"condition": "minecraft:entity_properties", "entity": "this",
-			"predicate": { "location": { "structure": "sweetmagic:arena" } }
-		}] } }
+			"predicate": {"location": {"structure": "sweetmagic:arena"}}
+		}]}}
 	},
-	"rewards": { "loot": ["sweetmagic:advance/mf_bottle_3"] }
+	"rewards": {"loot": ["sweetmagic:advance/mf_bottle_3"]}
 }

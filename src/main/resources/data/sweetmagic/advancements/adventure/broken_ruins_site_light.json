@@ -1,14 +1,14 @@
 {
 	"display": {
-		"icon": { "item": "sweetmagic:magician_lectern_light" },
-		"title": { "translate": "smadbent.broken_ruins_site_light.title" },
-		"description": { "translate": "smadbent.broken_ruins_site_light.text" }
+		"icon": {"item": "sweetmagic:magician_lectern_light"},
+		"title": {"translate": "smadbent.broken_ruins_site_light.title"},
+		"description": {"translate": "smadbent.broken_ruins_site_light.text"}
 	},
 	"parent": "sweetmagic:adventure/broken_ruins_site_ice", "criteria": {
-		"trigger": { "trigger": "minecraft:location", "conditions": { "player": [{
+		"trigger": {"trigger": "minecraft:location", "conditions": {"player": [{
 			"condition": "minecraft:entity_properties", "entity": "this",
-			"predicate": { "location": { "structure": "sweetmagic:broken_ruins_site_light" } }
-		}] } }
+			"predicate": {"location": {"structure": "sweetmagic:broken_ruins_site_light"}}
+		}]}}
 	},
-	"rewards": { "loot": ["sweetmagic:advance/mf_bottle_3"] }
+	"rewards": {"loot": ["sweetmagic:advance/mf_bottle_3"]}
 }

@@ -1,12 +1,12 @@
 {
 	"display": {
-		"icon": { "item": "sweetmagic:pot_w" },
-		"title": { "translate": "smadbent.pot_w.title" },
-		"description": { "translate": "smadbent.pot_w.text" }
+		"icon": {"item": "sweetmagic:pot_w"},
+		"title": {"translate": "smadbent.pot_w.title"},
+		"description": {"translate": "smadbent.pot_w.text"}
 	},
 	"parent": "sweetmagic:cook/stove", "criteria": {
-		"trigger": { "trigger": "minecraft:inventory_changed", "conditions": {
-			"items": [ { "items": [ 
+		"trigger": {"trigger": "minecraft:inventory_changed", "conditions": {
+			"items": [{"items": [
 				"sweetmagic:pot_w",
 				"sweetmagic:pot_r",
 				"sweetmagic:pot_l",
@@ -20,8 +20,8 @@
 				"sweetmagic:single_pot_pi",
 				"sweetmagic:single_pot_pu",
 				"sweetmagic:single_pot_s"
-			] } ]
-		} }
+			]} ]
+		}}
 	},
-	"rewards": { "experience": 5 }
+	"rewards": {"experience": 5}
 }

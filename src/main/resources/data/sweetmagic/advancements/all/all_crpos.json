@@ -1,0 +1,13 @@
+{
+	"display": {
+		"icon": {"item": "sweetmagic:sugarbell_seed"},
+		"title": {"translate": "smadbent.all_crpos.title"},
+		"description": {"translate": "smadbent.all_crpos_chalange.text"},
+		"show_toast": false,
+		"announce_to_chat": false
+	},
+	"parent": "sweetmagic:all/advanced_cook", "criteria": {
+		"trigger": {"trigger": "sweetmagic:all/all_crpos"}
+	},
+	"rewards": {"experience": 5}
+}

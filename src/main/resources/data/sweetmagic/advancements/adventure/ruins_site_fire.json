@@ -1,14 +1,14 @@
 {
 	"display": {
-		"icon": { "item": "sweetmagic:magician_lectern_fire" },
-		"title": { "translate": "smadbent.ruins_site_fire.title" },
-		"description": { "translate": "smadbent.ruins_site_fire.text" }
+		"icon": {"item": "sweetmagic:magician_lectern_fire"},
+		"title": {"translate": "smadbent.ruins_site_fire.title"},
+		"description": {"translate": "smadbent.ruins_site_fire.text"}
 	},
 	"parent": "sweetmagic:adventure/ruins_site_light", "criteria": {
-		"trigger": { "trigger": "minecraft:location", "conditions": { "player": [{
+		"trigger": {"trigger": "minecraft:location", "conditions": {"player": [{
 			"condition": "minecraft:entity_properties", "entity": "this",
-			"predicate": { "location": { "structure": "sweetmagic:ruins_site_fire" } }
-		}] } }
+			"predicate": {"location": {"structure": "sweetmagic:ruins_site_fire"}}
+		}]}}
 	},
-	"rewards": { "loot": ["sweetmagic:advance/mf_bottle_3"] }
+	"rewards": {"loot": ["sweetmagic:advance/mf_bottle_3"]}
 }

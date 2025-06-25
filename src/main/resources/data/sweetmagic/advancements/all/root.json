@@ -1,0 +1,15 @@
+{
+	"display": {
+		"icon": {"item": "sweetmagic:sugarbell"},
+		"title": {"translate": "smadbent.all_charange.title"},
+		"description": {"translate": "smadbent.all_charange.text"},
+		"background": "sweetmagic:textures/block/design_brick_w.png",
+		"show_toast": false,
+		"announce_to_chat": false
+	},
+	"criteria": {
+		"trigger": {"trigger": "minecraft:inventory_changed", "conditions": {
+			"items": [{"items": ["sweetmagic:sugarbell_seed"]} ]
+		}}
+	}
+}

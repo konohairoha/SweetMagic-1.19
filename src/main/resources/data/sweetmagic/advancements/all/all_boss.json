@@ -1,0 +1,13 @@
+{
+	"display": {
+		"icon": {"item": "sweetmagic:magic_infinitwand"},
+		"title": {"translate": "smadbent.all_boss.title"},
+		"description": {"translate": "smadbent.all_boss_chalange.text"},
+		"show_toast": false,
+		"announce_to_chat": false
+	},
+	"parent": "sweetmagic:all/advanced_magician", "criteria": {
+		"trigger": {"trigger": "sweetmagic:all/all_boss"}
+	},
+	"rewards": {"experience": 5}
+}

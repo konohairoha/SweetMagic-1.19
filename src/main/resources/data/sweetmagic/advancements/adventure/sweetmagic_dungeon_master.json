@@ -1,0 +1,47 @@
+{
+	"display": {
+		"icon": {"item": "sweetmagic:redberyl"},
+		"title": {"translate": "smadbent.sweetmagic_dungeon_master.title"},
+		"description": {"translate": "smadbent.sweetmagic_dungeon_master.text"},
+		"frame": "challenge"
+	},
+	"parent": "sweetmagic:adventure/overworld_dungeon_master", "criteria": {
+		"arena": {"trigger": "minecraft:location", "conditions": {"player": [{
+			"condition": "minecraft:entity_properties", "entity": "this", "predicate": {"location": {"structure": "sweetmagic:arena"}}} ]}
+		},
+		"witch_large_house": {"trigger": "minecraft:location", "conditions": {"player": [{
+			"condition": "minecraft:entity_properties", "entity": "this", "predicate": {"location": {"structure": "sweetmagic:witch_large_house"}}} ]}
+		},
+		"well_old": {"trigger": "minecraft:location", "conditions": {"player": [{
+			"condition": "minecraft:entity_properties", "entity": "this", "predicate": {"location": {"structure": "sweetmagic:well_old"}}} ]}
+		},
+		"white_silver_house": {"trigger": "minecraft:location", "conditions": {"player": [{
+			"condition": "minecraft:entity_properties", "entity": "this", "predicate": {"location": {"structure": "sweetmagic:white_silver_house"}}} ]}
+		},
+		"broken_ruins_site_ice": {"trigger": "minecraft:location", "conditions": {"player": [{
+			"condition": "minecraft:entity_properties", "entity": "this", "predicate": {"location": {"structure": "sweetmagic:broken_ruins_site_ice"}}} ]}
+		},
+		"broken_ruins_site_light": {"trigger": "minecraft:location", "conditions": {"player": [{
+			"condition": "minecraft:entity_properties", "entity": "this", "predicate": {"location": {"structure": "sweetmagic:broken_ruins_site_light"}}} ]}
+		},
+		"broken_ruins_site_fire": {"trigger": "minecraft:location", "conditions": {"player": [{
+			"condition": "minecraft:entity_properties", "entity": "this", "predicate": {"location": {"structure": "sweetmagic:broken_ruins_site_fire"}}} ]}
+		},
+		"broken_ruins_site_wind": {"trigger": "minecraft:location", "conditions": {"player": [{
+			"condition": "minecraft:entity_properties", "entity": "this", "predicate": {"location": {"structure": "sweetmagic:broken_ruins_site_wind"}}} ]}
+		},
+		"castle": {"trigger": "minecraft:location", "conditions": {"player": [{
+			"condition": "minecraft:entity_properties", "entity": "this", "predicate": {"location": {"structure": "sweetmagic:castle"}}} ]}
+		},
+		"wizard_house": {"trigger": "minecraft:location", "conditions": {"player": [{
+			"condition": "minecraft:entity_properties", "entity": "this", "predicate": {"location": {"structure": "sweetmagic:wizard_house"}}} ]}
+		},
+		"wizard_fortress": {"trigger": "minecraft:location", "conditions": {"player": [{
+			"condition": "minecraft:entity_properties", "entity": "this", "predicate": {"location": {"structure": "sweetmagic:wizard_fortress"}}} ]}
+		},
+		"large_labyrinth": {"trigger": "minecraft:location", "conditions": {"player": [{
+			"condition": "minecraft:entity_properties", "entity": "this", "predicate": {"location": {"structure": "sweetmagic:large_labyrinth"}}} ]}
+		}
+	},
+	"rewards": {"loot": ["sweetmagic:advance/magia_bottle_2"]}
+}

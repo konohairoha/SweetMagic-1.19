@@ -1,0 +1,11 @@
+{
+	"display": {
+		"icon": {"item": "sweetmagic:ice_strawberrie"},
+		"title": {"translate": "smadbent.intermediate_cook.title"},
+		"description": {"translate": "smadbent.intermediate_cook.text"}
+	},
+	"parent": "sweetmagic:cook/biginer_cook", "criteria": {
+		"trigger": {"trigger": "sweetmagic:intermediate_cook"}
+	},
+	"rewards": {"experience": 300}
+}

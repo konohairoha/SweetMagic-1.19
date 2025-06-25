@@ -1,0 +1,13 @@
+{
+	"display": {
+		"icon": {"item": "minecraft:diamond"},
+		"title": {"translate": "smadbent.overworld_dungeon_master.title"},
+		"description": {"translate": "smadbent.overworld_dungeon_master_chalange.text"},
+		"show_toast": false,
+		"announce_to_chat": false
+	},
+	"parent": "sweetmagic:all/all_biome", "criteria": {
+		"trigger": {"trigger": "sweetmagic:all/overworld_dungeon_master"}
+	},
+	"rewards": {"experience": 5}
+}

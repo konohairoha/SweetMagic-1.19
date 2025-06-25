@@ -1,13 +1,13 @@
 {
 	"display": {
-		"icon": { "item": "sweetmagic:sturdust_crystal" },
-		"title": { "translate": "smadbent.sweetmagic_world.title" },
-		"description": { "translate": "smadbent.sweetmagic_world.text" }
+		"icon": {"item": "sweetmagic:sturdust_crystal"},
+		"title": {"translate": "smadbent.sweetmagic_world.title"},
+		"description": {"translate": "smadbent.sweetmagic_world.text"}
 	},
 	"parent": "sweetmagic:adventure/ruins_site", "criteria": {
-		"trigger": { "trigger": "minecraft:changed_dimension", "conditions": {
+		"trigger": {"trigger": "minecraft:changed_dimension", "conditions": {
 			"to": "sweetmagic:sweetmagic_world"
-		} }
+		}}
 	},
-	"rewards": { "loot": ["sweetmagic:advance/mf_bottle_5"] }
+	"rewards": {"loot": ["sweetmagic:advance/mf_bottle_5"]}
 }

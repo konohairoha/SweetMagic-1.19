@@ -1,14 +1,14 @@
 {
 	"display": {
-		"icon": { "item": "sweetmagic:old_brick_b" },
-		"title": { "translate": "smadbent.castle.title" },
-		"description": { "translate": "smadbent.castle.text" }
+		"icon": {"item": "sweetmagic:old_brick_b"},
+		"title": {"translate": "smadbent.castle.title"},
+		"description": {"translate": "smadbent.castle.text"}
 	},
-	"parent": "sweetmagic:adventure/broken_ruins_site_wind", "criteria": {
-		"trigger": { "trigger": "minecraft:location", "conditions": { "player": [{
+	"parent": "sweetmagic:adventure/well_old", "criteria": {
+		"trigger": {"trigger": "minecraft:location", "conditions": {"player": [{
 			"condition": "minecraft:entity_properties", "entity": "this",
-			"predicate": { "location": { "structure": "sweetmagic:castle" } }
-		}] } }
+			"predicate": {"location": {"structure": "sweetmagic:castle"}}
+		}]}}
 	},
-	"rewards": { "loot": ["sweetmagic:advance/mf_bottle_3"] }
+	"rewards": {"loot": ["sweetmagic:advance/mf_bottle_3"]}
 }

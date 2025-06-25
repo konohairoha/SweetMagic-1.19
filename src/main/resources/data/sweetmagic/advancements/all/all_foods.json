@@ -1,0 +1,13 @@
+{
+	"display": {
+		"icon": {"item": "sweetmagic:short_cake"},
+		"title": {"translate": "smadbent.all_foods.title"},
+		"description": {"translate": "smadbent.all_foods_chalange.text"},
+		"show_toast": false,
+		"announce_to_chat": false
+	},
+	"parent": "sweetmagic:all/all_crpos", "criteria": {
+		"trigger": {"trigger": "sweetmagic:all/all_foods"}
+	},
+	"rewards": {"experience": 5}
+}

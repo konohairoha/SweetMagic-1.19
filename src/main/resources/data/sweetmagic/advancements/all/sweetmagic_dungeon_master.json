@@ -1,0 +1,13 @@
+{
+	"display": {
+		"icon": {"item": "sweetmagic:redberyl"},
+		"title": {"translate": "smadbent.sweetmagic_dungeon_master.title"},
+		"description": {"translate": "smadbent.sweetmagic_dungeon_master_chalange.text"},
+		"show_toast": false,
+		"announce_to_chat": false
+	},
+	"parent": "sweetmagic:all/overworld_dungeon_master", "criteria": {
+		"trigger": {"trigger": "sweetmagic:all/sweetmagic_dungeon_master"}
+	},
+	"rewards": {"experience": 5}
+}

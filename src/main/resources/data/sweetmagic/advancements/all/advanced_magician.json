@@ -1,0 +1,13 @@
+{
+	"display": {
+		"icon": {"item": "sweetmagic:magic_pure_force"},
+		"title": {"translate": "smadbent.advanced_magician.title"},
+		"description": {"translate": "smadbent.advanced_magician_chalange.text"},
+		"show_toast": false,
+		"announce_to_chat": false
+	},
+	"parent": "sweetmagic:all/root", "criteria": {
+		"trigger": {"trigger": "sweetmagic:all/advanced_magician"}
+	},
+	"rewards": {"experience": 5}
+}

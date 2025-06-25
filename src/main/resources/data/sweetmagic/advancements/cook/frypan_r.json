@@ -1,20 +1,20 @@
 {
 	"display": {
-		"icon": { "item": "sweetmagic:frypan_r" },
-		"title": { "translate": "smadbent.frypan_r.title" },
-		"description": { "translate": "smadbent.frypan_r.text" }
+		"icon": {"item": "sweetmagic:frypan_r"},
+		"title": {"translate": "smadbent.frypan_r.title"},
+		"description": {"translate": "smadbent.frypan_r.text"}
 	},
 	"parent": "sweetmagic:cook/stove", "criteria": {
-		"trigger": { "trigger": "minecraft:inventory_changed", "conditions": {
-			"items": [ { "items": [
+		"trigger": {"trigger": "minecraft:inventory_changed", "conditions": {
+			"items": [{"items": [
 				"sweetmagic:frypan_r",
 				"sweetmagic:frypan_l",
 				"sweetmagic:frypan_o",
 				"sweetmagic:frypan_pi",
 				"sweetmagic:frypan_pu",
 				"sweetmagic:frypan_s"
-			] } ]
-		} }
+			]} ]
+		}}
 	},
-	"rewards": { "experience": 5 }
+	"rewards": {"experience": 5}
 }

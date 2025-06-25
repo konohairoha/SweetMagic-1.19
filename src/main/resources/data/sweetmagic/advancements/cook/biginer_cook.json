@@ -1,0 +1,11 @@
+{
+	"display": {
+		"icon": {"item": "sweetmagic:strawberry_seed"},
+		"title": {"translate": "smadbent.biginer_cook.title"},
+		"description": {"translate": "smadbent.biginer_cook.text"}
+	},
+	"parent": "sweetmagic:cook/root", "criteria": {
+		"trigger": {"trigger": "sweetmagic:biginer_cook"}
+	},
+	"rewards": {"experience": 100}
+}

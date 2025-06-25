@@ -1,0 +1,14 @@
+{
+	"display": {
+		"icon": {"item": "sweetmagic:design_brick_bl"},
+		"title": {"translate": "smadbent.wizard_fortress.title"},
+		"description": {"translate": "smadbent.wizard_fortress.text"}
+	},
+	"parent": "sweetmagic:adventure/wizard_house", "criteria": {
+		"trigger": {"trigger": "minecraft:location", "conditions": {"player": [{
+			"condition": "minecraft:entity_properties", "entity": "this",
+			"predicate": {"location": {"structure": "sweetmagic:wizard_fortress"}}
+		}]}}
+	},
+	"rewards": {"loot": ["sweetmagic:advance/mf_bottle_5"]}
+}

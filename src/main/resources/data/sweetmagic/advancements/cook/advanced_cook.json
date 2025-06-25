@@ -1,0 +1,12 @@
+{
+	"display": {
+		"icon": {"item": "sweetmagic:strawberry_tart"},
+		"title": {"translate": "smadbent.advanced_cook.title"},
+		"description": {"translate": "smadbent.advanced_cook.text"},
+		"frame": "challenge"
+	},
+	"parent": "sweetmagic:cook/intermediate_cook", "criteria": {
+		"trigger": {"trigger": "sweetmagic:advanced_cook"}
+	},
+	"rewards": {"experience": 500}
+}

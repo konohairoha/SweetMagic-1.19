@@ -1,12 +1,12 @@
 {
 	"display": {
-		"icon": { "item": "sweetmagic:mill" },
-		"title": { "translate": "smadbent.mill.title" },
-		"description": { "translate": "smadbent.mill.text" }
+		"icon": {"item": "sweetmagic:mill"},
+		"title": {"translate": "smadbent.mill.title"},
+		"description": {"translate": "smadbent.mill.text"}
 	},
 	"parent": "sweetmagic:cook/root", "criteria": {
-		"trigger": { "trigger": "minecraft:inventory_changed", "conditions": {
-			"items": [ { "items": [
+		"trigger": {"trigger": "minecraft:inventory_changed", "conditions": {
+			"items": [{"items": [
 				"sweetmagic:mill",
 				"sweetmagic:mixer_r",
 				"sweetmagic:mixer_l",
@@ -14,8 +14,8 @@
 				"sweetmagic:mixer_pi",
 				"sweetmagic:mixer_pu",
 				"sweetmagic:mixer_s"
-			] } ]
-		} }
+			]} ]
+		}}
 	},
-	"rewards": { "experience": 5 }
+	"rewards": {"experience": 5}
 }

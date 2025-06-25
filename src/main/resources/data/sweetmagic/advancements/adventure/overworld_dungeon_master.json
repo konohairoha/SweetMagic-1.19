@@ -1,0 +1,44 @@
+{
+	"display": {
+		"icon": {"item": "minecraft:diamond"},
+		"title": {"translate": "smadbent.overworld_dungeon_master.title"},
+		"description": {"translate": "smadbent.overworld_dungeon_master.text"},
+		"frame": "challenge"
+	},
+	"parent": "sweetmagic:adventure/beginner", "criteria": {
+		"tomb": {"trigger": "minecraft:location", "conditions": {"player": [{
+			"condition": "minecraft:entity_properties", "entity": "this", "predicate": {"location": {"structure": "sweetmagic:tomb"}}} ]}
+		},
+		"witch_house": {"trigger": "minecraft:location", "conditions": {"player": [{
+			"condition": "minecraft:entity_properties", "entity": "this", "predicate": {"location": {"structure": "sweetmagic:witch_house"}}} ]}
+		},
+		"well": {"trigger": "minecraft:location", "conditions": {"player": [{
+			"condition": "minecraft:entity_properties", "entity": "this", "predicate": {"location": {"structure": "sweetmagic:well"}}} ]}
+		},
+		"witch_tower": {"trigger": "minecraft:location", "conditions": {"player": [{
+			"condition": "minecraft:entity_properties", "entity": "this", "predicate": {"location": {"structure": "sweetmagic:witch_tower"}}} ]}
+		},
+		"town_tower": {"trigger": "minecraft:location", "conditions": {"player": [{
+			"condition": "minecraft:entity_properties", "entity": "this", "predicate": {"location": {"structure": "sweetmagic:town_tower"}}} ]}
+		},
+		"labyrinth": {"trigger": "minecraft:location", "conditions": {"player": [{
+			"condition": "minecraft:entity_properties", "entity": "this", "predicate": {"location": {"structure": "sweetmagic:labyrinth"}}} ]}
+		},
+		"desert_mine": {"trigger": "minecraft:location", "conditions": {"player": [{
+			"condition": "minecraft:entity_properties", "entity": "this", "predicate": {"location": {"structure": "sweetmagic:desert_mine"}}} ]}
+		},
+		"ruins_site": {"trigger": "minecraft:location", "conditions": {"player": [{
+			"condition": "minecraft:entity_properties", "entity": "this", "predicate": {"location": {"structure": "sweetmagic:ruins_site"}}} ]}
+		},
+		"ruins_site_light": {"trigger": "minecraft:location", "conditions": {"player": [{
+			"condition": "minecraft:entity_properties", "entity": "this", "predicate": {"location": {"structure": "sweetmagic:ruins_site_light"}}} ]}
+		},
+		"ruins_site_fire": {"trigger": "minecraft:location", "conditions": {"player": [{
+			"condition": "minecraft:entity_properties", "entity": "this", "predicate": {"location": {"structure": "sweetmagic:ruins_site_fire"}}} ]}
+		},
+		"ruins_site_wind": {"trigger": "minecraft:location", "conditions": {"player": [{
+			"condition": "minecraft:entity_properties", "entity": "this", "predicate": {"location": {"structure": "sweetmagic:ruins_site_wind"}}} ]}
+		}
+	},
+	"rewards": {"loot": ["sweetmagic:advance/mf_bottle_3"]}
+}
