@@ -1,5 +1,5 @@
 {
 	"type": "minecraft:stonecutting", "count": 1,
-	"ingredient": { "item": "sweetmagic:estor_planks" },
+	"ingredient": {"tag": "sweetmagic:estor_planks"},
 	"result": "sweetmagic:estor_planks_plate"
 }

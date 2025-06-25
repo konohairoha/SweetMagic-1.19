@@ -1,5 +1,5 @@
 {
 	"type": "minecraft:stonecutting", "count": 1,
-	"ingredient": { "tag": "sweetmagic:flagstone/all" },
+	"ingredient": {"tag": "sweetmagic:flagstone/all"},
 	"result": "sweetmagic:flagstone_color_plate"
 }

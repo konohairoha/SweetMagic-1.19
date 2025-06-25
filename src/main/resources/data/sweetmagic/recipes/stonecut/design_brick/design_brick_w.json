@@ -1,5 +1,5 @@
 {
 	"type": "minecraft:stonecutting", "count": 1,
-	"ingredient": { "tag": "sweetmagic:design_brick/all" },
+	"ingredient": {"tag": "sweetmagic:design_brick/all"},
 	"result": "sweetmagic:design_brick_w"
 }

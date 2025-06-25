@@ -1,5 +1,5 @@
 {
 	"type": "minecraft:stonecutting", "count": 1,
-	"ingredient": { "tag": "sweetmagic:smglass" },
+	"ingredient": {"tag": "sweetmagic:smglass"},
 	"result": "sweetmagic:lightbrown4panel_glass"
 }
