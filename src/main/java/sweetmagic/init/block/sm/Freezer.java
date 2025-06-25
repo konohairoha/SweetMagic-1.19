@@ -31,7 +31,7 @@ public class Freezer extends BaseFaceBlock implements EntityBlock, ISMCookBlock 
 	private Block botBlock;
 
 	public Freezer(String name, int data) {
-		super(name, setState(Material.METAL, SoundType.METAL, 1.0F, 8192.0F));
+		super(name, setState(Material.METAL, SoundType.METAL, 1F, 8192F));
 		this.registerDefaultState(this.defaultBlockState().setValue(FACING, Direction.NORTH));
 		this.botBlock = this;
 		BlockInit.blockMap.put(new BlockInfo(this, null), name);
@@ -44,11 +44,11 @@ public class Freezer extends BaseFaceBlock implements EntityBlock, ISMCookBlock 
 
 	// ブロックでのアクション
 	public boolean actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
-		if (world.isClientSide) { return true; }
-		TileFreezer tile = (TileFreezer) this.getTile(world, pos);
+		if (world.isClientSide()) { return true; }
+		TileFreezer tile = this.getTile(TileFreezer::new, world, pos);
 		tile.player = player;
 		this.openGUI(world, pos, player, tile);
-		this.playerSound(world, pos, SoundInit.FREEZER_OPEN, 0.2F, world.random.nextFloat() * 0.1F + 1.4F);
+		this.playerSound(world, pos, SoundInit.FREEZER_OPEN, 0.2F, world.getRandom().nextFloat() * 0.1F + 1.4F);
 		return true;
 	}
 
@@ -82,13 +82,9 @@ public class Freezer extends BaseFaceBlock implements EntityBlock, ISMCookBlock 
 		return new TileFreezer(pos, state);
 	}
 
-	public BlockEntityType<? extends TileAbstractSM> getTileType() {
-		return TileInit.freezer;
-	}
-
 	@Nullable
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
-		return this.createMailBoxTicker(world, type, this.getTileType());
+		return this.createMailBoxTicker(world, type, TileInit.freezer);
 	}
 
 	// ドロップするかどうか

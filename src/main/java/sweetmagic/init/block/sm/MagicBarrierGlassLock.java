@@ -22,7 +22,6 @@ import net.minecraftforge.common.MinecraftForge;
 import sweetmagic.init.BlockInit;
 import sweetmagic.init.ItemInit;
 import sweetmagic.init.TileInit;
-import sweetmagic.init.tile.sm.TileAbstractSM;
 import sweetmagic.init.tile.sm.TileMagicBarrier;
 
 public class MagicBarrierGlassLock extends MagicBarrierGlass implements EntityBlock {
@@ -39,8 +38,8 @@ public class MagicBarrierGlassLock extends MagicBarrierGlass implements EntityBl
 	// ブロックでのアクション
 	public boolean actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
 
-		if (stack.is(ItemInit.creative_wand) && !world.isClientSide) {
-			this.openGUI(world, pos, player, (TileMagicBarrier) this.getTile(world, pos));
+		if (stack.is(ItemInit.creative_wand) && !world.isClientSide()) {
+			this.openGUI(world, pos, player, this.getTile(world, pos));
 		}
 
 		if (!stack.is(ItemInit.magickey)) { return false; }
@@ -49,7 +48,7 @@ public class MagicBarrierGlassLock extends MagicBarrierGlass implements EntityBl
 			stack.shrink(1);
 		}
 
-		((TileMagicBarrier) this.getTile(world, pos)).removeDestructive(world);
+		(this.getTile(TileMagicBarrier::new, world, pos)).removeDestructive(world);
 
 		if (world instanceof ServerLevel) {
 			MinecraftForge.EVENT_BUS.register(new GlassChopTask(pos, player, 1));
@@ -62,13 +61,9 @@ public class MagicBarrierGlassLock extends MagicBarrierGlass implements EntityBl
 		return new TileMagicBarrier(pos, state);
 	}
 
-	public BlockEntityType<? extends TileAbstractSM> getTileType() {
-		return TileInit.barrierGlass;
-	}
-
 	@Nullable
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
-		return this.createMailBoxTicker(world, type, this.getTileType());
+		return this.createMailBoxTicker(world, type, TileInit.barrierGlass);
 	}
 
 	@Override

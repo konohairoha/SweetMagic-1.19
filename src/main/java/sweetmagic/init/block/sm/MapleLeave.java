@@ -8,7 +8,7 @@ import sweetmagic.api.iblock.ISMCrop;
 
 public class MapleLeave extends SMLeave {
 
-	   public static final IntegerProperty AGE_5 = ISMCrop.AGE5;
+	public static final IntegerProperty AGE_5 = ISMCrop.AGE5;
 
 	public MapleLeave(String name, int data) {
 		super(name, data);

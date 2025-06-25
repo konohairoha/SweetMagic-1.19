@@ -49,7 +49,7 @@ public class FurnitureTable extends BaseFaceBlock implements EntityBlock {
 
 	// ブロックでのアクション
 	public boolean actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
-		if (world.isClientSide) { return true; }
+		if (world.isClientSide()) { return true; }
 
 		BlockState state = world.getBlockState(pos);
 
@@ -57,14 +57,14 @@ public class FurnitureTable extends BaseFaceBlock implements EntityBlock {
 			pos = pos.relative(state.getValue(FACING).getClockWise());
 		}
 
-		this.openGUI(world, pos, player, (TileFurnitureTable) world.getBlockEntity(pos));
+		this.openGUI(world, pos, player, this.getTile(world, pos));
 		return true;
 	}
 
 	@Override
 	public boolean canSurvive(BlockState state, LevelReader reader, BlockPos pos) {
 		Direction face = state.getValue(FACING).getCounterClockWise();
-		return reader.getBlockState(pos.relative(face)).isAir();
+		return reader.isEmptyBlock(pos.relative(face));
 	}
 
 	@Override
@@ -78,12 +78,14 @@ public class FurnitureTable extends BaseFaceBlock implements EntityBlock {
 	public void onRemove(@NotNull BlockState state, @NotNull Level world, @NotNull BlockPos pos, @NotNull BlockState newState, boolean isMoving) {
 
 		// ドロップするブロックが破壊されたらアイテムドロップ
-		if (state.getValue(ISDROP) && newState.isAir()) {
+		if (newState.isAir()) {
 
 			// ブロックえんちちーを取得
 			BlockEntity bEntity = world.getBlockEntity(pos);
-			if (bEntity != null && bEntity instanceof TileFurnitureTable tile) {
-				this.spawnItem(world, pos, tile.getDropStack(new ItemStack(this)));
+			if (bEntity != null) {
+				if(bEntity instanceof TileFurnitureTable tile) {
+					this.spawnItem(world, pos, tile.getDropStack(new ItemStack(this)));
+				}
 				world.removeBlockEntity(pos);
 			}
 		}
@@ -93,8 +95,7 @@ public class FurnitureTable extends BaseFaceBlock implements EntityBlock {
 
 			Direction face = state.getValue(FACING);
 			BlockPos upPos = pos.relative(state.getValue(ISDROP) ? face.getCounterClockWise() : face.getClockWise());
-			BlockState upState = world.getBlockState(upPos);
-			if (upState.getBlock() instanceof FurnitureTable pole) {
+			if (this.getBlock(world, upPos) instanceof FurnitureTable) {
 				this.breakBlock(world, upPos);
 				world.removeBlockEntity(upPos);
 			}
@@ -113,9 +114,9 @@ public class FurnitureTable extends BaseFaceBlock implements EntityBlock {
 	}
 
 	@Nullable
-	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
+	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
 		if (!state.getValue(ISDROP)) { return null; }
-		return this.createMailBoxTicker(level, type, TileInit.furnitureTable);
+		return this.createMailBoxTicker(world, type, TileInit.furnitureTable);
 	}
 
 	// ドロップするかどうか

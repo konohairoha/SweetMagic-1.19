@@ -17,7 +17,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import sweetmagic.init.TileInit;
-import sweetmagic.init.tile.sm.TileAbstractSM;
 import sweetmagic.init.tile.sm.TileTrashCan;
 import sweetmagic.util.FaceAABB;
 
@@ -31,8 +30,8 @@ public class TrashCan extends WoodChest {
 
 	// ブロックでのアクション
 	public boolean actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
-		if (world.isClientSide) { return true; }
-		this.openGUI(world, pos, player, (TileTrashCan) this.getTile(world, pos));
+		if (world.isClientSide()) { return true; }
+		this.openGUI(world, pos, player, this.getTile(world, pos));
 		return true;
 	}
 
@@ -52,13 +51,8 @@ public class TrashCan extends WoodChest {
 		return new TileTrashCan(pos, state);
 	}
 
-	public BlockEntityType<? extends TileAbstractSM> getTileType() {
-		return TileInit.trashCan;
-	}
-
 	@Nullable
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
-		BlockEntityType<? extends TileAbstractSM> tileType = this.getTileType();
-		return tileType != null ? this.createMailBoxTicker(world, type, tileType) : null;
+		return this.createMailBoxTicker(world, type, TileInit.trashCan);
 	}
 }

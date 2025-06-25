@@ -21,7 +21,6 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import sweetmagic.api.iblock.ISMCraftBlock;
 import sweetmagic.init.TileInit;
 import sweetmagic.init.block.base.BaseCookBlock;
-import sweetmagic.init.tile.sm.TileAbstractSM;
 import sweetmagic.init.tile.sm.TileBottle;
 import sweetmagic.recipe.RecipeHelper;
 import sweetmagic.recipe.RecipeHelper.RecipeUtil;
@@ -43,7 +42,7 @@ public class Bottle extends BaseCookBlock implements ISMCraftBlock {
 
 	// ブロックでのアクション
 	public boolean actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
-		if (world.isClientSide) { return true; }
+		if (world.isClientSide()) { return true; }
 
 		BlockState state = world.getBlockState(pos);
 		int cookState = this.getState(state);
@@ -57,7 +56,7 @@ public class Bottle extends BaseCookBlock implements ISMCraftBlock {
 		else if (cookState == 2) {
 
 			// クラフト後アイテムのドロップ
-			TileBottle tile = (TileBottle) this.getTile(world, pos);
+			TileBottle tile = this.getTile(TileBottle::new, world, pos);
 			this.spawnItemList(world, player.blockPosition(), tile.resultList);
 			tile.player = player;
 			tile.getExpValue();
@@ -80,7 +79,7 @@ public class Bottle extends BaseCookBlock implements ISMCraftBlock {
 		RecipeUtil recipeUtil = RecipeHelper.recipeAllCraft(stackList, recipe.get());
 
 		// クラフトアイテムの情報をえんちちーへ送信
-		TileBottle tile = (TileBottle) this.getTile(world, pos);
+		TileBottle tile = this.getTile(TileBottle::new, world, pos);
 		tile.craftList = recipeUtil.getInputList();
 		tile.resultList = recipeUtil.getResultList();
 		tile.player = player;
@@ -92,13 +91,9 @@ public class Bottle extends BaseCookBlock implements ISMCraftBlock {
 		return new TileBottle(pos, state);
 	}
 
-	public BlockEntityType<? extends TileAbstractSM> getTileType() {
-		return TileInit.bottle;
-	}
-
 	@Nullable
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
-		return this.createMailBoxTicker(world, type, this.getTileType());
+		return this.createMailBoxTicker(world, type, TileInit.bottle);
 	}
 
 	@Override

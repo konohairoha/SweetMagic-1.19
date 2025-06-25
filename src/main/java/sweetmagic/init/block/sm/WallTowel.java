@@ -42,7 +42,7 @@ public class WallTowel extends BaseFaceBlock {
 	public boolean actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
 		BlockState state = world.getBlockState(pos);
 		world.setBlock(pos, state.cycle(HIDE), 3);
-		this.playerSound(world, pos, SoundEvents.WOOL_BREAK, 0.25F, world.random.nextFloat() * 0.1F + 1.2F);
+		this.playerSound(world, pos, SoundEvents.WOOL_BREAK, 0.25F, world.getRandom().nextFloat() * 0.1F + 1.2F);
 		return true;
 	}
 

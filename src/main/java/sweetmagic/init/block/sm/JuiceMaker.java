@@ -30,7 +30,6 @@ import sweetmagic.init.ItemInit;
 import sweetmagic.init.TileInit;
 import sweetmagic.init.block.base.BaseFaceBlock;
 import sweetmagic.init.item.sm.SMBucket;
-import sweetmagic.init.tile.sm.TileAbstractSM;
 import sweetmagic.init.tile.sm.TileJuiceMaker;
 import sweetmagic.util.FaceAABB;
 
@@ -69,7 +68,7 @@ public class JuiceMaker extends BaseFaceBlock implements EntityBlock, ISMCookBlo
 
 	// ブロックでのアクション
 	public boolean actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
-		if (world.isClientSide) { return true; }
+		if (world.isClientSide()) { return true; }
 
 		TileJuiceMaker tile = (TileJuiceMaker) this.getTile(world, pos);
 
@@ -116,13 +115,9 @@ public class JuiceMaker extends BaseFaceBlock implements EntityBlock, ISMCookBlo
 		return new TileJuiceMaker(pos, state);
 	}
 
-	public BlockEntityType<? extends TileAbstractSM> getTileType() {
-		return TileInit.juicemaker;
-	}
-
 	@Nullable
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
-		return this.createMailBoxTicker(world, type, this.getTileType());
+		return this.createMailBoxTicker(world, type, TileInit.juicemaker);
 	}
 
 	// ドロップするかどうか

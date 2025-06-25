@@ -50,7 +50,7 @@ public class FlowerBuscket extends BaseModelBlock {
 
 	// ブロックでのアクション
 	public boolean actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
-		if (world.isClientSide) { return true; }
+		if (world.isClientSide()) { return true; }
 		if (!(stack.getItem() instanceof BlockItem blockItem) || !(blockItem.getBlock() instanceof FlowerBuscket) ) { return false; }
 
 		Block block = this.getBlock(stack);
@@ -61,7 +61,7 @@ public class FlowerBuscket extends BaseModelBlock {
 			BlockPos targetPos = pos.below(i);
 			BlockState state = world.getBlockState(targetPos);
 			Block targetBlock = state.getBlock();
-			if ( !state.isAir() && !(targetBlock instanceof FlowerBuscket) ) { return false; }
+			if (!state.isAir() && !(targetBlock instanceof FlowerBuscket)) { return false; }
 			if (!state.isAir()) { continue; }
 
 			world.setBlock(targetPos, block.defaultBlockState(), 3);

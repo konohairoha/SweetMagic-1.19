@@ -26,7 +26,6 @@ import sweetmagic.SweetMagicCore;
 import sweetmagic.init.BlockInit.BlockInfo;
 import sweetmagic.init.TileInit;
 import sweetmagic.init.block.base.BaseFaceBlock;
-import sweetmagic.init.tile.sm.TileAbstractSM;
 import sweetmagic.init.tile.sm.TileAlternativeTank;
 import sweetmagic.init.tile.sm.TileCosmosLightTank;
 
@@ -78,13 +77,9 @@ public class AlternativeTank extends BaseFaceBlock implements EntityBlock {
 		return true;
 	}
 
-	public BlockEntityType<? extends TileAbstractSM> getTileType() {
-		return this.data == 1 ? TileInit.cosmosLightTank : TileInit.alternativeTank;
-	}
-
 	@Nullable
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
-		return this.createMailBoxTicker(world, type, this.getTileType());
+		return this.createMailBoxTicker(world, type, this.data == 1 ? TileInit.cosmosLightTank : TileInit.alternativeTank);
 	}
 
 	@Override
@@ -99,13 +94,13 @@ public class AlternativeTank extends BaseFaceBlock implements EntityBlock {
 	public void appendHoverText(ItemStack stack, @Nullable BlockGetter get, List<Component> toolTip, TooltipFlag flag) {
 		toolTip.add(this.tierTip(this.data + 1));
 		toolTip.add(this.getText("keep_tank").withStyle(GREEN));
-		toolTip.add(this.getTipArray(this.getText("max_value"), ": ", this.getLabel(String.format("%,.1f", this.getMaxFluidValue() * 0.001F) + "B").withStyle(GREEN) ));
+		toolTip.add(this.getTipArray(this.getText("max_value"), ": ", this.getLabel(String.format("%,.1f", this.getMaxFluidValue() * 0.001F) + "B", GREEN)));
 		if (!stack.getOrCreateTag().contains("BlockEntityTag")) { return; }
 
 		CompoundTag tags = stack.getTagElement("BlockEntityTag");
 		if (tags == null) { return; }
 
 		FluidStack fluid = FluidStack.loadFluidStackFromNBT(tags.getCompound("fluid"));
-		toolTip.add(this.getTipArray(fluid.getDisplayName().getString(), ": ", this.getLabel(String.format("%,.1f", fluid.getAmount() * 0.001F) + "B").withStyle(GREEN) ));
+		toolTip.add(this.getTipArray(fluid.getDisplayName().getString(), ": ", this.getLabel(String.format("%,.1f", fluid.getAmount() * 0.001F) + "B", GREEN)));
 	}
 }

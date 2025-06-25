@@ -79,13 +79,13 @@ public class TransferGateVertical extends BaseModelBlock implements EntityBlock 
 
 	// ブロックでのアクション
 	public boolean actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
-		if (world.isClientSide) { return true; }
+		if (world.isClientSide()) { return true; }
 
 		boolean isBreak = world.getBlockState(pos).getValue(BREAK);
 		if (!isBreak) { return false; }
 
 		pos = this.data == 1 ? pos : pos.above();
-		this.openGUI(world, pos, player, (TileTransferGateVertical) this.getTile(world, pos));
+		this.openGUI(world, pos, player, this.getTile(world, pos));
 		return true;
 	}
 
@@ -128,15 +128,15 @@ public class TransferGateVertical extends BaseModelBlock implements EntityBlock 
 
 	@Nullable
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
-		return this.createMailBoxTicker(world, type, this.getTileType());
+		return this.createMailBoxTicker(world, type, this.data == 1 ? TileInit.transferGateVertical : null);
 	}
 
 	public void entityInside(BlockState state, Level world, BlockPos pos, Entity entity) {
-		if (world.isClientSide || this.tickTime++ % 30 != 0 || !(entity instanceof LivingEntity living)) { return; }
+		if (world.isClientSide() || this.tickTime++ % 30 != 0 || !(entity instanceof LivingEntity living)) { return; }
 
 		if (state.getValue(BREAK) && this.data == 0) {
 
-			TileTransferGateVertical tile = (TileTransferGateVertical) this.getTile(world, pos.above());
+			TileTransferGateVertical tile = this.getTile(TileTransferGateVertical::new, world, pos.above());
 			if (tile.doTereport(living)) {
 				this.tickTime = 25;
 			}
@@ -213,8 +213,14 @@ public class TransferGateVertical extends BaseModelBlock implements EntityBlock 
 	public void onRemove(@NotNull BlockState state, @NotNull Level world, @NotNull BlockPos pos, @NotNull BlockState newState, boolean isMoving) {
 
 		// ブロックの状態が変わった場合
-		if (state.getBlock() != newState.getBlock() && !world.isClientSide) {
+		if (state.getBlock() != newState.getBlock() && !world.isClientSide()) {
 			BlockPos targetPos = this.data == 0 ? pos.above() : pos.below();
+
+			TileTransferGateVertical tile = this.getTile(TileTransferGateVertical::new, world, targetPos);
+			if(this.data == 0 && tile != null) {
+				this.spawnItem(world, pos, tile.getInputItem());
+			}
+
 			this.breakBlock(world, targetPos);
 		}
 

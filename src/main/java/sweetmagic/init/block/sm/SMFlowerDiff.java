@@ -49,7 +49,7 @@ public class SMFlowerDiff extends SMFlower implements ISMTip {
 		if (player == null || stack.is(ItemInit.magic_meal)) { return InteractionResult.PASS; }
 
 		this.actionBlock(world, pos, player, stack);
-		return InteractionResult.sidedSuccess(world.isClientSide);
+		return InteractionResult.sidedSuccess(world.isClientSide());
 	}
 
 	// ブロックでのアクション

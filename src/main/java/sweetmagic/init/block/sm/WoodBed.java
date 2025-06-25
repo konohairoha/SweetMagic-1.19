@@ -51,7 +51,7 @@ public class WoodBed extends BedBlock implements ISMTip {
 			}
 		});
 
-		return InteractionResult.sidedSuccess(world.isClientSide);
+		return InteractionResult.sidedSuccess(world.isClientSide());
 	}
 
 	public RenderShape getRenderShape(BlockState state) {

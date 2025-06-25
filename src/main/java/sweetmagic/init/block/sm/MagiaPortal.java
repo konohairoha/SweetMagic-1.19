@@ -68,7 +68,7 @@ public class MagiaPortal extends BaseModelBlock {
 		}
 
 		for (Direction fa : faceArray) {
-			if (!world.getBlockState(pos.relative(fa)).isAir()) { continue; }
+			if (!world.isEmptyBlock(pos.relative(fa))) { continue; }
 			this.breakBlock(world, pos);
 		}
 
@@ -82,15 +82,16 @@ public class MagiaPortal extends BaseModelBlock {
 
 	@Override
 	public void entityInside(BlockState state, Level world, BlockPos pos, Entity entity) {
-		if (entity.isPassenger() || entity.isVehicle() || !entity.canChangeDimensions() || entity.level.isClientSide || world == null || world.dimension() == null) { return; }
+		if (entity.isPassenger() || entity.isVehicle() || !entity.canChangeDimensions() || entity.getLevel().isClientSide() || world == null || world.dimension() == null) { return; }
 
 		if (entity.isOnPortalCooldown()) {
 			entity.setPortalCooldown();
 		}
 
+
 		if (entity.isOnPortalCooldown() || !(entity instanceof LivingEntity liv)) { return; }
 
-		entity.level.getProfiler().push(world.dimension().location().getPath());
+		entity.getLevel().getProfiler().push(world.dimension().location().getPath());
 		ResourceKey<Level> smDim = DimentionInit.SweetMagicWorld;
 		ResourceKey<Level> key = world.dimension() == smDim ? Level.OVERWORLD : smDim;
 		ServerLevel dim = world.getServer().getLevel(key);

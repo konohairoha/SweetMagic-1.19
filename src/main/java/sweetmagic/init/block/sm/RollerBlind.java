@@ -90,7 +90,7 @@ public class RollerBlind extends BaseFaceBlock {
 		}
 
 		world.setBlock(pos, world.getBlockState(pos).cycle(CLOSE), 2);
-		this.playerSound(world, pos, SoundEvents.WOOL_BREAK, 0.5F, world.random.nextFloat() * 0.1F + 0.9F);
+		this.playerSound(world, pos, SoundEvents.WOOL_BREAK, 0.5F, world.getRandom().nextFloat() * 0.1F + 0.9F);
 		return true;
 	}
 

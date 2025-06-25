@@ -45,8 +45,8 @@ public class AetherCraftTable extends BaseFaceBlock implements EntityBlock, IWat
 
 	// ブロックでのアクション
 	public boolean actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
-		if (world.isClientSide) { return true; }
-		this.openGUI(world, pos, player, (TileAetherCraftTable) this.getTile(world, pos));
+		if (world.isClientSide()) { return true; }
+		this.openGUI(world, pos, player, this.getTile(world, pos));
 		return true;
 	}
 
@@ -88,7 +88,7 @@ public class AetherCraftTable extends BaseFaceBlock implements EntityBlock, IWat
 
 	@Override
 	public void addBlockTip(List<Component> toolTip) {
-		toolTip.add(this.getText(this.name, BlockInit.chest_reader.getName().getString(), "" + 4).withStyle(GREEN));
+		toolTip.add(this.getText(this.name, BlockInit.chest_reader.getName().getString(), 4).withStyle(GREEN));
 		toolTip.add(this.getText(this.name + "_chest").withStyle(GOLD));
 		toolTip.add(this.getText(this.name + "_craft").withStyle(GOLD));
 	}

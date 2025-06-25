@@ -29,14 +29,14 @@ public class FreezerChest extends BaseFaceBlock implements EntityBlock {
 	private Block botBlock;
 
 	public FreezerChest(String name, Block botBlock) {
-		super(name, setState(Material.METAL, SoundType.METAL, 1.0F, 8192.0F));
+		super(name, setState(Material.METAL, SoundType.METAL, 1F, 8192F));
 		this.registerDefaultState(this.defaultBlockState().setValue(FACING, Direction.NORTH));
 		this.botBlock = botBlock;
 		BlockInit.blockMap.put(new BlockInfo(this, SweetMagicCore.smFoodTab), name);
 	}
 
 	public FreezerChest(String name, Block botBlock, int data) {
-		super(name, setState(Material.METAL, SoundType.METAL, 1.0F, 8192.0F));
+		super(name, setState(Material.METAL, SoundType.METAL, 1F, 8192F));
 		this.registerDefaultState(this.defaultBlockState().setValue(FACING, Direction.NORTH));
 		this.botBlock = botBlock;
 		BlockInit.blockMap.put(new BlockInfo(this, SweetMagicCore.smTab), name);
@@ -49,9 +49,9 @@ public class FreezerChest extends BaseFaceBlock implements EntityBlock {
 
 	// ブロックでのアクション
 	public boolean actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
-		if (world.isClientSide) { return true; }
-		this.openGUI(world, pos, player, (TileFreezerChest) world.getBlockEntity(pos));
-		this.playerSound(world, pos, SoundEvents.BARREL_OPEN, 0.5F, world.random.nextFloat() * 0.1F + 1.4F);
+		if (world.isClientSide()) { return true; }
+		this.openGUI(world, pos, player, this.getTile(world, pos));
+		this.playerSound(world, pos, SoundEvents.BARREL_OPEN, 0.5F, world.getRandom().nextFloat() * 0.1F + 1.4F);
 		return true;
 	}
 

@@ -60,11 +60,11 @@ public class MirageGlass extends BaseFaceBlock implements EntityBlock {
 	}
 
 	public void neighborChanged(BlockState state, Level world, BlockPos pos, Block block, BlockPos block2, boolean par1) {
-		if (world.isClientSide || this.data != 1 || !world.hasNeighborSignal(pos) || state.getValue(ISVIEW)) { return; }
-		this.setValue(world, pos);
+		if (world.isClientSide() || this.data != 1 || !world.hasNeighborSignal(pos) || state.getValue(ISVIEW)) { return; }
+		this.setValue(world, pos, true);
 	}
 
-	public void setValue(Level world, BlockPos pos) {
+	public void setValue(Level world, BlockPos pos, boolean flag) {
 		BlockState state1 = world.getBlockState(pos);
 		if (state1.getValue(ISVIEW)) { return; }
 
@@ -74,7 +74,10 @@ public class MirageGlass extends BaseFaceBlock implements EntityBlock {
 			BlockState state = tile.getState();
 			SoundType sound = state.getBlock().getSoundType(state, world, pos, null);
 			Random rand = new Random();
-			this.playerSound(world, pos, sound.getBreakSound(), 2.5F, 0.9F + rand.nextFloat() * 0.2F);
+
+			if(flag) {
+				this.playerSound(world, pos, sound.getBreakSound(), 1.5F, 0.9F + rand.nextFloat() * 0.2F);
+			}
 
 			if (world instanceof ServerLevel sever) {
 
@@ -100,7 +103,7 @@ public class MirageGlass extends BaseFaceBlock implements EntityBlock {
 			BlockState state = world.getBlockState(pos.relative(face));
 
 			if (state.hasProperty(ISVIEW) && !state.getValue(ISVIEW) && state.getBlock() == this) {
-				((MirageGlass) state.getBlock()).setValue(world, pos.relative(face));
+				((MirageGlass) state.getBlock()).setValue(world, pos.relative(face), false);
 			}
 		}
 	}
@@ -137,13 +140,13 @@ public class MirageGlass extends BaseFaceBlock implements EntityBlock {
 
 		List<BlockPos> posList = new ArrayList<>();
 		posList.add(pos);
-		this.rangeSetBlock(world, pos, tile, item.getBlock(), posList);
+		this.rangeSetBlock(world, pos, tile, item.getBlock(), tile.state, posList);
 		this.playerSound(world, pos, SoundEvents.ITEM_PICKUP, 1F, 1F);
 		return true;
 	}
 
-	public void rangeSetBlock(Level world, BlockPos pos, TileMirageGlass tile, Block block, List<BlockPos> posList) {
-		if(world.isClientSide) { return; }
+	public void rangeSetBlock(Level world, BlockPos pos, TileMirageGlass tile, Block block, BlockState tileState, List<BlockPos> posList) {
+		if(world.isClientSide()) { return; }
 
 		tile.state = block.defaultBlockState();
 		world.setBlockAndUpdate(pos, tile.getState(pos).setValue(LIGHT_LEVEL, tile.state.getLightEmission(world, pos)));
@@ -157,17 +160,17 @@ public class MirageGlass extends BaseFaceBlock implements EntityBlock {
 			if (!state.is(this)) { continue; }
 
 			TileMirageGlass tile2 = (TileMirageGlass) this.getTile(world, p);
-			if (tile2.state.is(block)) { continue; }
+			if (tile2.state != TileMirageGlass.MIRAGE && tile2.state != tileState) { continue; }
 
 			posList.add(p);
-			((MirageGlass) state.getBlock()).rangeSetBlock(world, p, tile2, block, posList);
+			((MirageGlass) state.getBlock()).rangeSetBlock(world, p, tile2, block, tileState, posList);
 		}
 	}
 
 	@Nonnull
 	@Override
 	public VoxelShape getCollisionShape(BlockState state, @Nonnull BlockGetter world, @Nonnull BlockPos pos, CollisionContext col) {
-		return (this.data == 0 || state.getValue(ISVIEW) ) && col instanceof EntityCollisionContext con && this.checkEntity(con.getEntity()) ? Shapes.empty() : super.getCollisionShape(state, world, pos, col);
+		return (this.data == 0 || state.getValue(ISVIEW)) && col instanceof EntityCollisionContext con && this.checkEntity(con.getEntity()) ? Shapes.empty() : super.getCollisionShape(state, world, pos, col);
 	}
 
 	public boolean checkEntity(Entity entity) {

@@ -43,6 +43,8 @@ public class WoodChest extends BaseFaceBlock implements EntityBlock, IWaterBlock
 	public final int data;
 	private final static VoxelShape[] AABB = FaceAABB.create(0D, 0D, 8D, 16D, 16D, 16D);
 	private final static VoxelShape[] WOOD_CHEST = FaceAABB.create(0D, 0D, 2D, 16D, 16D, 16D);
+	private final static VoxelShape[] POST = FaceAABB.create(4D, 0D, 7D, 12D, 19.5D, 14D);
+	private final static VoxelShape[] CABINET = FaceAABB.create(0D, 0D, 6D, 16D, 16D, 16D);
 
 	public WoodChest(String name, int data) {
 		super(name, setState(Material.WOOD, SoundType.WOOD, 0.5F, 8192F));
@@ -68,7 +70,7 @@ public class WoodChest extends BaseFaceBlock implements EntityBlock, IWaterBlock
 
 	// ブロックでのアクション
 	public boolean actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
-		if (world.isClientSide) { return true; }
+		if (world.isClientSide()) { return true; }
 
 		TileWoodChest tile = (TileWoodChest) this.getTile(world, pos);
 
@@ -98,11 +100,17 @@ public class WoodChest extends BaseFaceBlock implements EntityBlock, IWaterBlock
 			sound = SoundEvents.IRON_DOOR_OPEN;
 			break;
 		case 6:
+		case 9:
+		case 10:
+		case 11:
 			sound = SoundEvents.WOODEN_TRAPDOOR_OPEN;
+			break;
+		case 8:
+			sound = SoundEvents.LEVER_CLICK;
 			break;
 		}
 
-		this.playerSound(world, pos, sound, 0.5F, world.random.nextFloat() * 0.1F + 0.9F);
+		this.playerSound(world, pos, sound, 0.5F, world.getRandom().nextFloat() * 0.1F + 0.9F);
 		return true;
 	}
 
@@ -111,6 +119,9 @@ public class WoodChest extends BaseFaceBlock implements EntityBlock, IWaterBlock
 		switch (this.data) {
 		case 0: return FaceAABB.getAABB(AABB, state);
 		case 4: return FaceAABB.getAABB(WOOD_CHEST, state);
+		case 9: return FaceAABB.getAABB(POST, state);
+		case 10: return FaceAABB.getAABB(POST, state);
+		case 11: return FaceAABB.getAABB(CABINET, state);
 		default: return Shapes.block();
 		}
 	}

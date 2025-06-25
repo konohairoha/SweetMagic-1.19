@@ -19,7 +19,6 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.items.ItemHandlerHelper;
 import sweetmagic.SweetMagicCore;
 import sweetmagic.api.iblock.ISMCookBlock;
 import sweetmagic.api.iblock.ISMCraftBlock;
@@ -29,6 +28,7 @@ import sweetmagic.init.tile.sm.TileAbstractSM;
 import sweetmagic.init.tile.sm.TileMill;
 import sweetmagic.recipe.base.AbstractRecipe;
 import sweetmagic.recipe.mill.MillRecipe;
+import sweetmagic.util.ItemHelper;
 
 public class Mill extends BaseCookBlock implements ISMCraftBlock, ISMCookBlock {
 
@@ -56,7 +56,7 @@ public class Mill extends BaseCookBlock implements ISMCraftBlock, ISMCookBlock {
 
 	// ブロックでのアクション
 	public boolean actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
-		if (world.isClientSide) { return true; }
+		if (world.isClientSide()) { return true; }
 
 		BlockState state = world.getBlockState(pos);
 		int cookState = this.getState(state);
@@ -66,7 +66,7 @@ public class Mill extends BaseCookBlock implements ISMCraftBlock, ISMCookBlock {
 		}
 
 		else if (cookState == 2) {
-			TileMill tile = (TileMill) this.getTile(world, pos);
+			TileMill tile = this.getTile(TileMill::new, world, pos);
 			this.spawnItemList(world, player.blockPosition(), tile.getOutPutList());
 			this.setState(world, pos, 0);
 			tile.outPutClear();
@@ -92,8 +92,8 @@ public class Mill extends BaseCookBlock implements ISMCraftBlock, ISMCookBlock {
 		copy.setCount(shrinkAmount);
 		stack.shrink(shrinkAmount);
 
-		TileMill tile = (TileMill) this.getTile(world, pos);
-		ItemHandlerHelper.insertItemStacked(tile.getHand(), copy, false);
+		TileMill tile = this.getTile(TileMill::new, world, pos);
+		ItemHelper.insertStack(tile.getHand(), copy, false);
 		tile.craftStart();
 	}
 

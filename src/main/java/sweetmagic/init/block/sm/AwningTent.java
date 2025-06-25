@@ -27,7 +27,7 @@ public class AwningTent extends BaseFaceBlock {
 	private static final VoxelShape AABB = Block.box(0D, 0D, 0D, 16D, 8D, 16D);
 	public static final IntegerProperty CENTER = IntegerProperty.create("center", 0, 5);
 
-	public AwningTent (String name) {
+	public AwningTent(String name) {
 		super(name, setState(Material.WOOD, SoundType.WOOL, 0.35F, 8192F));
 		this.registerDefaultState(this.setState().setValue(CENTER, 0));
 		BlockInfo.create(this, SweetMagicCore.smTab, name);

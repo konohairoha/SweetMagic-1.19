@@ -30,6 +30,7 @@ import sweetmagic.init.ParticleInit;
 import sweetmagic.init.SoundInit;
 import sweetmagic.init.TileInit;
 import sweetmagic.init.block.base.BaseFaceBlock;
+import sweetmagic.init.tile.sm.TileAbstractSM;
 import sweetmagic.init.tile.sm.TileMagiaStorage;
 import sweetmagic.util.RenderUtil.RGBColor;
 
@@ -57,11 +58,11 @@ public class MagiaStorage extends BaseFaceBlock implements EntityBlock {
 
 	// ブロックでのアクション
 	public boolean actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
-		if (world.isClientSide) { return true; }
-		TileMagiaStorage tile = (TileMagiaStorage) this.getTile(world, pos);
+		if (world.isClientSide()) { return true; }
+		TileAbstractSM tile = this.getTile(world, pos);
 		tile.sendPKT();
 		this.openGUI(world, pos, player, tile);
-		this.playerSound(world, pos, SoundInit.STORAGE, 0.125F, world.random.nextFloat() * 0.1F + 0.9F);
+		this.playerSound(world, pos, SoundInit.STORAGE, 0.125F, world.getRandom().nextFloat() * 0.1F + 0.9F);
 		return true;
 	}
 
@@ -83,7 +84,7 @@ public class MagiaStorage extends BaseFaceBlock implements EntityBlock {
 	@Override
 	public void addBlockTip(List<Component> toolTip) {
 		toolTip.add(this.getText("sm_chest").withStyle(GREEN));
-		toolTip.add(this.getText("magia_storage", String.format("%,d", this.getMaxStackSize())).withStyle(GREEN));
+		toolTip.add(this.getText("magia_storage",this.format(this.getMaxStackSize())).withStyle(GREEN));
 		super.addBlockTip(toolTip);
 	}
 

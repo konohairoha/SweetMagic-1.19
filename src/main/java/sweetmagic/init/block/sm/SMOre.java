@@ -57,7 +57,7 @@ public class SMOre extends DropExperienceBlock {
 	@Override
 	public List<ItemStack> getDrops(BlockState state, LootContext.Builder build) {
 
-		RandomSource rand = build.getLevel().random;
+		RandomSource rand = build.getLevel().getRandom();
 		List<ItemStack> stackList = new ArrayList<ItemStack>();
 		ItemStack stack = build.getOptionalParameter(LootContextParams.TOOL);
 

@@ -72,7 +72,7 @@ public class SMLeave extends LeavesBlock {
 	public List<ItemStack> getDrops(BlockState state, LootContext.Builder build) {
 
 		ServerLevel world = build.getLevel();
-		RandomSource rand = world.random;
+		RandomSource rand = world.getRandom();
 		List<ItemStack> stackList = new ArrayList<ItemStack>();
 		ItemStack stack = build.getOptionalParameter(LootContextParams.TOOL);
 
@@ -93,7 +93,7 @@ public class SMLeave extends LeavesBlock {
 	}
 
 	public void animateTick(BlockState state, Level world, BlockPos pos, RandomSource rand) {
-		if (this.data != 5 || rand.nextFloat() <= 0.85F || !world.getBlockState(pos.below()).isAir()) { return; }
+		if (this.data != 5 || rand.nextFloat() <= 0.85F || !world.isEmptyBlock(pos.below())) { return; }
 
 		double d0 = rand.nextDouble() * 0.05D;
 		double d1 = rand.nextDouble() * 0.02D;

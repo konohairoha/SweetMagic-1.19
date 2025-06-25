@@ -33,7 +33,7 @@ public class StendGlassLamp extends BaseSMBlock {
 	}
 
 	public void neighborChanged(BlockState state, Level world, BlockPos pos1, Block block, BlockPos block2, boolean par1) {
-		if (world.isClientSide) { return; }
+		if (world.isClientSide()) { return; }
 
 		boolean flag = state.getValue(LIT);
 		if (flag == world.hasNeighborSignal(pos1)) { return; }

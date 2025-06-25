@@ -7,7 +7,6 @@ import javax.annotation.Nullable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
@@ -49,20 +48,8 @@ public class ParallelInterfere extends BaseFaceBlock implements EntityBlock {
 
 	// ブロックでのアクション
 	public boolean actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
-		if (world.isClientSide) { return true; }
-
-		MenuProvider tile = null;
-
-		switch (this.data) {
-		case 0:
-			tile = (TileParallelInterfere) this.getTile(world, pos);
-			break;
-		case 1:
-			tile = (TileStardustWish) this.getTile(world, pos);
-			break;
-		}
-
-		this.openGUI(world, pos, player, tile);
+		if (world.isClientSide()) { return true; }
+		this.openGUI(world, pos, player, this.getTile(world, pos));
 		return true;
 	}
 
@@ -102,7 +89,7 @@ public class ParallelInterfere extends BaseFaceBlock implements EntityBlock {
 
 	@Override
 	public void addBlockTip(List<Component> toolTip) {
-		toolTip.add(this.getText("parallel_interfere", "" + (this.data + 1) * 20).withStyle(GREEN));
+		toolTip.add(this.getText("parallel_interfere", (this.data + 1) * 20).withStyle(GREEN));
 		toolTip.add(this.getText("sm_chest").withStyle(GREEN));
 		super.addBlockTip(toolTip);
 	}

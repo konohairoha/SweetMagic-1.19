@@ -22,7 +22,6 @@ import sweetmagic.SweetMagicCore;
 import sweetmagic.api.iblock.ISMCraftBlock;
 import sweetmagic.init.TileInit;
 import sweetmagic.init.block.base.BaseCookBlock;
-import sweetmagic.init.tile.sm.TileAbstractSM;
 import sweetmagic.init.tile.sm.TileOven;
 import sweetmagic.recipe.RecipeHelper;
 import sweetmagic.recipe.RecipeHelper.RecipeUtil;
@@ -55,7 +54,7 @@ public class Oven extends BaseCookBlock implements ISMCraftBlock {
 
 	// ブロックでのアクション
 	public boolean actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
-		if (world.isClientSide) { return true; }
+		if (world.isClientSide()) { return true; }
 
 		BlockState state = world.getBlockState(pos);
 		int cookState = this.getState(state);
@@ -107,13 +106,9 @@ public class Oven extends BaseCookBlock implements ISMCraftBlock {
 		return new TileOven(pos, state);
 	}
 
-	public BlockEntityType<? extends TileAbstractSM> getTileType() {
-		return TileInit.oven;
-	}
-
 	@Nullable
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
-		return this.createMailBoxTicker(world, type, this.getTileType());
+		return this.createMailBoxTicker(world, type, TileInit.oven);
 	}
 
 	public boolean notNullRecipe(Level world, List<ItemStack> stackList) {

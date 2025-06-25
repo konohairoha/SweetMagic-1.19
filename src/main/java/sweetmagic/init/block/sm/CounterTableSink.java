@@ -24,12 +24,11 @@ import sweetmagic.init.BlockInit.BlockInfo;
 import sweetmagic.init.ItemInit;
 import sweetmagic.init.block.base.BaseFaceBlock;
 import sweetmagic.init.item.sm.SMBucket;
-import sweetmagic.util.SMDebug;
 
 public class CounterTableSink extends BaseFaceBlock implements IFoodExpBlock {
 
 	public CounterTableSink(String name) {
-		super(name, BlockBehaviour.Properties.of(Material.WOOD, MaterialColor.WOOD).sound(SoundType.WOOD).strength(0.5F, 8192.0F).noOcclusion());
+		super(name, BlockBehaviour.Properties.of(Material.WOOD, MaterialColor.WOOD).sound(SoundType.WOOD).strength(0.5F, 8192F).noOcclusion());
 		this.registerDefaultState(this.defaultBlockState().setValue(FACING, Direction.NORTH));
 		BlockInit.blockMap.put(new BlockInfo(this, SweetMagicCore.smTab), name);
 	}
@@ -41,10 +40,9 @@ public class CounterTableSink extends BaseFaceBlock implements IFoodExpBlock {
 
 	// ブロックでのアクション
 	public boolean actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
-		if (world.isClientSide) { return true; }
+		if (world.isClientSide()) { return true; }
 
-		this.playerSound(world, pos, SoundEvents.BUCKET_FILL, 0.2F, world.random.nextFloat() * 0.1F + 1.4F);
-		SMDebug.info();
+		this.playerSound(world, pos, SoundEvents.BUCKET_FILL, 0.2F, world.getRandom().nextFloat() * 0.1F + 1.4F);
 
 		if (stack.is(Items.BUCKET)) {
 			stack.shrink(1);
@@ -88,7 +86,6 @@ public class CounterTableSink extends BaseFaceBlock implements IFoodExpBlock {
 		}
 
 		bucket.saveFluid(stack, fluid);
-//		ItemHandlerHelper.insertItemStacked(this.getBucket(), stack, false);
 	}
 
 	@Override

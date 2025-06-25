@@ -54,7 +54,7 @@ public class CeilingFan extends BaseFaceBlock implements EntityBlock {
 		TileCeilingFan tile = (TileCeilingFan) this.getTile(world, pos);
 		tile.isAction = !tile.isAction;
 		tile.sendPKT();
-		this.playerSound(world, pos, SoundEvents.UI_BUTTON_CLICK, 0.25F, world.random.nextFloat() * 0.1F + 1.2F);
+		this.playerSound(world, pos, SoundEvents.UI_BUTTON_CLICK, 0.25F, world.getRandom().nextFloat() * 0.1F + 1.2F);
 		return true;
 	}
 

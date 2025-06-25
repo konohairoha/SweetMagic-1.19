@@ -60,7 +60,7 @@ public class BedSideLamp extends BaseModelBlock {
 		}
 
 		world.setBlock(pos, block.defaultBlockState(), 3);
-		this.playerSound(world, pos, SoundEvents.UI_BUTTON_CLICK, 0.25F, world.random.nextFloat() * 0.1F + 1.2F);
+		this.playerSound(world, pos, SoundEvents.UI_BUTTON_CLICK, 0.25F, world.getRandom().nextFloat() * 0.1F + 1.2F);
 		return true;
 	}
 

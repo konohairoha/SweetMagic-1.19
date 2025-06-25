@@ -40,7 +40,7 @@ public class WallHungCafeSign extends BaseFaceBlock {
 
 	@Override
 	public boolean canSurvive(BlockState state, LevelReader world, BlockPos pos) {
-		return world.getBlockState(pos.above()).isAir();
+		return world.isEmptyBlock(pos.above());
 	}
 
 	@Override
@@ -53,7 +53,7 @@ public class WallHungCafeSign extends BaseFaceBlock {
 	public void onRemove(BlockState state, Level world, BlockPos pos, BlockState newState, boolean isMoving) {
 
 		// ブロックの状態が変わった場合
-		if (state.getBlock() != newState.getBlock() && !world.isClientSide) {
+		if (state.getBlock() != newState.getBlock() && !world.isClientSide()) {
 			boolean isTop = state.getValue(ISTOP);
 			BlockPos targetPos = isTop ? pos.below() : pos.above();
 			world.setBlock(targetPos, Blocks.AIR.defaultBlockState(), 3);

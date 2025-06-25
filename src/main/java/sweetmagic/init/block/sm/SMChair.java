@@ -17,7 +17,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import sweetmagic.SweetMagicCore;
 import sweetmagic.init.BlockInit.BlockInfo;
 import sweetmagic.init.block.base.BaseFaceBlock;
-import sweetmagic.init.entity.block.ChairEntity;
+import sweetmagic.init.entity.block.Chair;
 
 public class SMChair extends BaseFaceBlock {
 
@@ -59,7 +59,7 @@ public class SMChair extends BaseFaceBlock {
 			break;
 		}
 
-		ChairEntity.create(world, pos, y, player, world.getBlockState(pos).getValue(FACING));
+		Chair.create(world, pos, y, player, world.getBlockState(pos).getValue(FACING));
 		return true;
 	}
 

@@ -32,7 +32,6 @@ import sweetmagic.init.BlockInit;
 import sweetmagic.init.BlockInit.BlockInfo;
 import sweetmagic.init.TileInit;
 import sweetmagic.init.block.base.BaseFaceBlock;
-import sweetmagic.init.tile.sm.TileAbstractSM;
 import sweetmagic.init.tile.sm.TileStove;
 import sweetmagic.init.tile.sm.TileTransferGate;
 import sweetmagic.util.FaceAABB;
@@ -75,17 +74,13 @@ public class TransferGate extends BaseFaceBlock implements EntityBlock {
 		return this.data == 1 ? new TileTransferGate(pos, state) : new TileStove(pos, state);
 	}
 
-	public BlockEntityType<? extends TileAbstractSM> getTileType() {
-		return this.data == 1 ? TileInit.transferGate : null;
-	}
-
 	@Nullable
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
-		return this.createMailBoxTicker(world, type, this.getTileType());
+		return this.createMailBoxTicker(world, type, this.data == 1 ? TileInit.transferGate : null);
 	}
 
 	public void entityInside(BlockState state, Level world, BlockPos pos, Entity entity) {
-		if (this.data == 0 || world.isClientSide || this.tickTime++ % 30 != 0 || !(entity instanceof LivingEntity)) { return; }
+		if (this.data == 0 || world.isClientSide() || this.tickTime++ % 30 != 0 || !(entity instanceof LivingEntity)) { return; }
 
 		Direction face = state.getValue(FACING);
 		for (int i = 1; i < 512; i++) {
@@ -152,9 +147,8 @@ public class TransferGate extends BaseFaceBlock implements EntityBlock {
 	public void onRemove(@NotNull BlockState state, @NotNull Level world, @NotNull BlockPos pos, @NotNull BlockState newState, boolean isMoving) {
 
 		// ブロックの状態が変わった場合
-		if (state.getBlock() != newState.getBlock() && !world.isClientSide) {
-			BlockPos targetPos = this.data == 0 ? pos.above() : pos.below();
-			this.breakBlock(world, targetPos);
+		if (state.getBlock() != newState.getBlock() && !world.isClientSide()) {
+			this.breakBlock(world, this.data == 0 ? pos.above() : pos.below());
 		}
 
 		super.onRemove(state, world, pos, newState, isMoving);

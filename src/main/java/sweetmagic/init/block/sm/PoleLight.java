@@ -62,7 +62,7 @@ public class PoleLight extends BaseFaceBlock {
 		boolean canPlaceFace = false;
 
 		for (int i = 0; i < 5; i++) {
-			canPlace = world.getBlockState(pos.above(i)).isAir();
+			canPlace = world.isEmptyBlock(pos.above(i));
 			if(!canPlace) { break; }
 		}
 
@@ -136,7 +136,7 @@ public class PoleLight extends BaseFaceBlock {
 		}
 
 		// ブロックの状態が変わった場合
-		if (state.getBlock() != newState.getBlock() && !world.isClientSide) {
+		if (state.getBlock() != newState.getBlock() && !world.isClientSide()) {
 
 			BlockPos upPos = pos.above(1);
 			BlockState upState = world.getBlockState(upPos);

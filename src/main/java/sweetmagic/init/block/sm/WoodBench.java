@@ -58,7 +58,7 @@ public class WoodBench extends SMChair {
 	}
 
 	@Override
-	public void addBlockTip (List<Component> toolTip) {
+	public void addBlockTip(List<Component> toolTip) {
 		super.addBlockTip(toolTip);
 		toolTip.add(this.getText("smhorizontal").withStyle(GOLD));
 	}

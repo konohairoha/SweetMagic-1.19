@@ -29,8 +29,8 @@ public class ModenStair extends BaseFaceBlock {
 	// 当たり判定
 	public VoxelShape getShape(BlockState state, BlockGetter get, BlockPos pos, CollisionContext con) {
 		switch(state.getValue(FACING)) {
-		case WEST: 	return AABB_WEST;
-		case EAST: 	return AABB_EAST;
+		case WEST: return AABB_WEST;
+		case EAST: return AABB_EAST;
 		case SOUTH: return AABB_SOUTH;
 		default: return AABB_NORTH;
 		}

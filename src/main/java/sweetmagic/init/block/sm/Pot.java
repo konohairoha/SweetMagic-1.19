@@ -51,7 +51,7 @@ public class Pot extends BaseCookBlock implements ISMCraftBlock {
 
 	// ブロックでのアクション
 	public boolean actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
-		if (world.isClientSide) { return true; }
+		if (world.isClientSide()) { return true; }
 		BlockState state = world.getBlockState(pos);
 		int cookState = this.getState(state);
 
@@ -120,13 +120,9 @@ public class Pot extends BaseCookBlock implements ISMCraftBlock {
 		return new TilePot(pos, state);
 	}
 
-	public BlockEntityType<? extends TileAbstractSM> getTileType() {
-		return TileInit.pot;
-	}
-
 	@Nullable
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
-		return this.createMailBoxTicker(world, type, this.getTileType());
+		return this.createMailBoxTicker(world, type, TileInit.pot);
 	}
 
 	@Override

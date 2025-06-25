@@ -63,14 +63,14 @@ public class ModenLamp extends BaseModelBlock {
 
 		if (!stack.isEmpty() && stack.getItem() instanceof BlockItem blockItem && blockItem.getBlock() instanceof ModenLamp) {
 			this.actionBlock(world, pos, player, stack);
-			return InteractionResult.sidedSuccess(world.isClientSide);
+			return InteractionResult.sidedSuccess(world.isClientSide());
 		}
 
 		if ( player.isShiftKeyDown() && ( this.data == 1 || this.data == 2 ) ) {
 			Block block = this.data == 1 ? BlockInit.wall_lamp_long : BlockInit.wall_lamp;
 			world.setBlock(pos, block.defaultBlockState().setValue(VERTICAL, world.getBlockState(pos).getValue(VERTICAL)), 3);
 			this.playerSound(world, pos, SoundEvents.UI_BUTTON_CLICK, 0.25F, world.random.nextFloat() * 0.1F + 1.2F);
-			return InteractionResult.sidedSuccess(world.isClientSide);
+			return InteractionResult.sidedSuccess(world.isClientSide());
 		}
 
 		return InteractionResult.PASS;
@@ -78,7 +78,7 @@ public class ModenLamp extends BaseModelBlock {
 
 	// ブロックでのアクション
 	public boolean actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
-		if (world.isClientSide) { return true; }
+		if (world.isClientSide()) { return true; }
 
 		Block block = this.getBlock(stack);
 		if ( block != this ) { return false; }

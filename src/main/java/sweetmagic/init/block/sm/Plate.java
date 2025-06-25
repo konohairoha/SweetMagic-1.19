@@ -20,24 +20,27 @@ import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.items.ItemHandlerHelper;
 import sweetmagic.SweetMagicCore;
 import sweetmagic.api.iblock.IFoodExpBlock;
 import sweetmagic.init.BlockInit.BlockInfo;
 import sweetmagic.init.block.base.BaseFaceBlock;
 import sweetmagic.init.tile.sm.TilePlate;
+import sweetmagic.util.ItemHelper;
 
 public class Plate extends BaseFaceBlock implements EntityBlock, IFoodExpBlock {
 
 	public final int data;
+	private final Block block;
 	private static final VoxelShape PLATE = Block.box(2D, 0D, 2D, 14D, 1.5D, 14D);
 	private static final VoxelShape TRAY = Block.box(0D, 0D, 0D, 16D, 2D, 16D);
+	private static final VoxelShape DIG = Block.box(0D, 0D, 0D, 16D, 8D, 16D);
 
-	public Plate(String name, int data) {
+	public Plate(String name, int data, Block block) {
 		super(name, setState(Material.STONE, SoundType.STONE, 0.5F, 8192F));
 		this.data = data;
 		this.registerDefaultState(this.setState());
 		BlockInfo.create(this, SweetMagicCore.smTab, name);
+		this.block = block;
 	}
 
 	// 当たり判定
@@ -46,6 +49,7 @@ public class Plate extends BaseFaceBlock implements EntityBlock, IFoodExpBlock {
 		case 0: return PLATE;
 		case 1: return TRAY;
 		case 2: return TRAY;
+		case 4: return DIG;
 		default: return Shapes.block();
 		}
 	}
@@ -62,7 +66,7 @@ public class Plate extends BaseFaceBlock implements EntityBlock, IFoodExpBlock {
 
 	// ブロックでのアクション
 	public boolean actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
-		if (world.isClientSide) { return true; }
+		if (world.isClientSide()) { return true; }
 		if (!(this.getTile(world, pos) instanceof TilePlate tile)) { return false; }
 
 		ItemStack inputStack = tile.getInputItem(0);
@@ -73,7 +77,7 @@ public class Plate extends BaseFaceBlock implements EntityBlock, IFoodExpBlock {
 			// 完成品を入れる
 			if (!stack.isEmpty() && !isSneak) {
 				ItemStack copy = stack.copy();
-				ItemHandlerHelper.insertItemStacked(tile.getInput(), copy, false);
+				ItemHelper.insertStack(tile.getInput(), copy, false);
 				stack.shrink(stack.getCount());
 				this.playerSound(world, pos, SoundEvents.ITEM_PICKUP, 0.5F, 1F);
 			}
@@ -110,6 +114,8 @@ public class Plate extends BaseFaceBlock implements EntityBlock, IFoodExpBlock {
 		switch (this.data) {
 		case 0:
 			toolTip.add(this.getText("plate_in").withStyle(GREEN));
+			if (this.block == null) { return; }
+			toolTip.add(this.getText("originatorblock", this.block.getName().getString()).withStyle(GOLD));
 			break;
 		}
 	}

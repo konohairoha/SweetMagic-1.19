@@ -64,23 +64,23 @@ public class Dresser extends BaseFaceBlock implements EntityBlock {
 		if (world.isClientSide) { return true; }
 		pos = world.getBlockState(pos).getValue(ISTOP) ? pos.below() : pos;
 
-		BlockEntity tile = this.getTile(world, pos);
+		TileAbstractSM tile = this.getTile(world, pos);
 
-		if (tile != null && tile instanceof TileDresser dre) {
-			this.openGUI(world, pos, player, dre);
+		if (tile != null) {
+			this.openGUI(world, pos, player, tile);
 		}
 
 		else if (this.getBlock(world, pos) instanceof BaseSMBlock sm) {
 			sm.actionBlock(world, pos, player, stack);
 		}
 
-		this.playerSound(world, pos, SoundEvents.BARREL_OPEN, 0.5F, world.random.nextFloat() * 0.1F + 0.9F);
+		this.playerSound(world, pos, SoundEvents.BARREL_OPEN, 0.5F, world.getRandom().nextFloat() * 0.1F + 0.9F);
 		return true;
 	}
 
 	@Override
 	public boolean canSurvive(BlockState state, LevelReader world, BlockPos pos) {
-		return world.getBlockState(pos.above()).isAir();
+		return world.isEmptyBlock(pos.above());
 	}
 
 	@Override

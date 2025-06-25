@@ -27,7 +27,7 @@ public class MagiaCrystalLight extends BaseModelBlock implements EntityBlock {
 
 	public MagiaCrystalLight(String name) {
 		super(name, setState(Material.METAL,SoundType.METAL, 1F, 8192F, 15).noCollission());
-		BlockInfo.create(this, SweetMagicCore.smMagicTab, name);
+		BlockInfo.create(this, SweetMagicCore.smTab, name);
 	}
 
 	public VoxelShape getShape(BlockState state, BlockGetter get, BlockPos pos, CollisionContext cont) {

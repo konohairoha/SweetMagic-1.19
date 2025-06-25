@@ -7,7 +7,6 @@ import org.jetbrains.annotations.NotNull;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
@@ -59,7 +58,7 @@ public class Pole extends BaseModelBlock {
 		boolean canPlace = false;
 
 		for (int i = 0; i < 5; i++) {
-			canPlace = reader.getBlockState(pos.above(i)).isAir();
+			canPlace = reader.isEmptyBlock(pos.above(i));
 			if(!canPlace) { break; }
 		}
 
@@ -77,11 +76,10 @@ public class Pole extends BaseModelBlock {
 		int addY = 0;
 
 		for (int i = 0; i < 64; i++) {
-
-			if (!world.getBlockState(pos.above(i + 1)).isAir()) { continue; }
+			if (!world.isEmptyBlock(pos.above(i + 1))) { continue; }
 
 			for (int y = 0; y < 5; y++) {
-				if (!world.getBlockState(pos.above(i + y + 1)).isAir()) { return false; }
+				if (!world.isEmptyBlock(pos.above(i + y + 1))) { return false; }
 			}
 
 			addY = i;
@@ -142,23 +140,19 @@ public class Pole extends BaseModelBlock {
 
 		// ドロップするブロックが破壊されたらアイテムドロップ
 		if (state.getValue(ISDROP) && newState.isAir()) {
-			ItemEntity entity = new ItemEntity(world, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, new ItemStack(this));
-			entity.setDefaultPickUpDelay();
-			world.addFreshEntity(entity);
+			this.spawnItem(world, pos, new ItemStack(this));
 		}
 
 		// ブロックの状態が変わった場合
 		if (state.getBlock() != newState.getBlock() && !world.isClientSide) {
 
 			BlockPos upPos = pos.above(1);
-			BlockState upState = world.getBlockState(upPos);
-			if (upState.getBlock() instanceof Pole pole) {
+			if (this.getBlock(world, upPos) instanceof Pole) {
 				this.breakBlock(world, upPos);
 			}
 
 			BlockPos downPos = pos.below(1);
-			BlockState downState = world.getBlockState(downPos);
-			if (downState.getBlock() instanceof Pole pole) {
+			if (this.getBlock(world, downPos) instanceof Pole) {
 				this.breakBlock(world, downPos);
 			}
 		}

@@ -29,7 +29,6 @@ import sweetmagic.init.block.base.BaseModelBlock;
 
 public class MetalPole extends BaseModelBlock {
 
-//	private final int data;
 	private static final VoxelShape CEN = Block.box(6.5D, 0D, 6.5D, 9.5D, 16D, 9.5D);
 	private static final VoxelShape AABB = Block.box(5D, 0D, 5D, 11D, 16D, 11D);
 	public static final EnumProperty<EnumVertical> VERTICAL = EnumProperty.create("vertical", EnumVertical.class);
@@ -57,7 +56,7 @@ public class MetalPole extends BaseModelBlock {
 			BlockPos targetPos = pos.above(i);
 			BlockState state = world.getBlockState(targetPos);
 			Block targetBlock = state.getBlock();
-			if ( !state.isAir() && !this.canSetBlock(targetBlock) ) { return false; }
+			if (!state.isAir() && !this.canSetBlock(targetBlock)) { return false; }
 			if (!state.isAir()) { continue; }
 
 			world.setBlock(targetPos, this.setVertical(block.defaultBlockState(), world, targetPos), 3);

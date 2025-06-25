@@ -25,7 +25,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import sweetmagic.SweetMagicCore;
 import sweetmagic.init.BlockInit.BlockInfo;
 import sweetmagic.init.block.base.BaseFaceBlock;
-import sweetmagic.init.entity.block.ChairEntity;
+import sweetmagic.init.entity.block.Chair;
 import sweetmagic.util.FaceAABB;
 
 public class Sofa extends BaseFaceBlock {
@@ -54,7 +54,7 @@ public class Sofa extends BaseFaceBlock {
 	// ブロックでのアクション
 	public boolean actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
 		double y = 0.35D;
-		ChairEntity.create(world, pos, y, player, world.getBlockState(pos).getValue(FACING));
+		Chair.create(world, pos, y, player, world.getBlockState(pos).getValue(FACING));
 		return true;
 	}
 

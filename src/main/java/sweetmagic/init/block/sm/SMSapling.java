@@ -50,7 +50,7 @@ public class SMSapling extends SaplingBlock {
 		case 7: return BlockInit.peach_log;
 		case 8: return BlockInit.magiawood_log;
 		case 9: return BlockInit.cherry_blossoms_log;
-		case 10: return BlockInit.peach_log;
+		case 10: return BlockInit.maple_log;
 		default: return BlockInit.chestnut_log;
 		}
 	}
@@ -95,7 +95,7 @@ public class SMSapling extends SaplingBlock {
 
 	public void advanceTree(ServerLevel world, BlockPos pos, BlockState state, RandomSource rand) {
 
-		if (state.getValue(STAGE) == 0) {
+		if (state.hasProperty(STAGE) && state.getValue(STAGE) == 0) {
 			world.setBlock(pos, state.cycle(STAGE), 4);
 		}
 

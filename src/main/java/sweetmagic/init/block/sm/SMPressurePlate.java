@@ -15,7 +15,7 @@ import sweetmagic.init.block.base.BaseSMBlock;
 
 public class SMPressurePlate extends PressurePlateBlock {
 
-	public SMPressurePlate (String name, int data) {
+	public SMPressurePlate(String name, int data) {
 		super(data == 1 ? Sensitivity.MOBS : Sensitivity.EVERYTHING, BaseSMBlock.setState(data == 1 ? Material.STONE : Material.WOOD, data == 1 ? SoundType.STONE : SoundType.WOOD, 0.5F, 8192F));
 		BlockInfo.create(this, SweetMagicCore.smTab, name);
 	}

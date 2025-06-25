@@ -39,7 +39,7 @@ public class IrisCreation extends BaseModelBlock implements EntityBlock {
 	public static final BooleanProperty UNDER = BooleanProperty.create("under");
 
 	public IrisCreation(String name) {
-		super(name, setState(Material.METAL,SoundType.METAL, 1.0F, 8192.0F));
+		super(name, setState(Material.METAL,SoundType.METAL, 1F, 8192F));
 		this.registerDefaultState(this.defaultBlockState().setValue(UNDER, false));
 		BlockInfo.create(this, SweetMagicCore.smMagicTab, name);
 	}
@@ -82,13 +82,9 @@ public class IrisCreation extends BaseModelBlock implements EntityBlock {
 		return new TileIrisCreation(pos, state);
 	}
 
-	public BlockEntityType<? extends TileAbstractSM> getTileType() {
-		return TileInit.iris;
-	}
-
 	@Nullable
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
-		return this.createMailBoxTicker(world, type, this.getTileType());
+		return this.createMailBoxTicker(world, type, TileInit.iris);
 	}
 
 	@Override

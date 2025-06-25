@@ -22,7 +22,6 @@ import sweetmagic.SweetMagicCore;
 import sweetmagic.init.BlockInit.BlockInfo;
 import sweetmagic.init.TileInit;
 import sweetmagic.init.block.base.BaseFaceBlock;
-import sweetmagic.init.tile.sm.TileAbstractSM;
 import sweetmagic.init.tile.sm.TileSummonPedal;
 
 public class SummonPedal extends BaseFaceBlock implements EntityBlock {
@@ -39,13 +38,9 @@ public class SummonPedal extends BaseFaceBlock implements EntityBlock {
 		return AABB;
 	}
 
-	public BlockEntityType<? extends TileAbstractSM> getTileType() {
-		return TileInit.summonPedal;
-	}
-
 	@Nullable
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
-		return this.createMailBoxTicker(world, type, this.getTileType());
+		return this.createMailBoxTicker(world, type, TileInit.summonPedal);
 	}
 
 	@Override
@@ -54,7 +49,7 @@ public class SummonPedal extends BaseFaceBlock implements EntityBlock {
 	}
 
 	@Override
-	public void addBlockTip (List<Component> toolTip) {
+	public void addBlockTip(List<Component> toolTip) {
 		toolTip.add(this.getText(this.name).withStyle(GREEN));
 	}
 }

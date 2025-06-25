@@ -30,7 +30,7 @@ public class WallLantern extends BaseFaceBlock {
 	private static final VoxelShape[] AABB = FaceAABB.create(4D, 3D, 3D, 12D, 16D, 16D);
 
 	public WallLantern(String name, int data) {
-		super(name, setState(Material.METAL, SoundType.METAL, 0.5F, 8192F));
+		super(name, setState(Material.METAL, SoundType.METAL, 0.5F, 8192F, 15));
 		this.registerDefaultState(this.setState().setValue(ISON, false));
 		this.data = data;
 		BlockInfo.create(this, SweetMagicCore.smTab, name);
@@ -46,8 +46,8 @@ public class WallLantern extends BaseFaceBlock {
 
 		if ( player.isShiftKeyDown() && this.data == 0) {
 			world.setBlock(pos, world.getBlockState(pos).cycle(ISON), 3);
-			this.playerSound(world, pos, SoundEvents.UI_BUTTON_CLICK, 0.25F, world.random.nextFloat() * 0.1F + 0.9F);
-			return InteractionResult.sidedSuccess(world.isClientSide);
+			this.playerSound(world, pos, SoundEvents.UI_BUTTON_CLICK, 0.25F, world.getRandom().nextFloat() * 0.1F + 0.9F);
+			return InteractionResult.sidedSuccess(world.isClientSide());
 		}
 
 		return InteractionResult.PASS;
@@ -58,7 +58,7 @@ public class WallLantern extends BaseFaceBlock {
 	}
 
 	@Override
-	public void addBlockTip (List<Component> toolTip) {
+	public void addBlockTip(List<Component> toolTip) {
 		if (this.data == 1) { return; }
 		toolTip.add(this.getText("shift_change").withStyle(GOLD));
 	}

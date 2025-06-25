@@ -50,7 +50,7 @@ public class RangeFood extends BaseFaceBlock implements IFoodExpBlock {
 		}
 
 		world.setBlock(pos, block.defaultBlockState().setValue(FACING, world.getBlockState(pos).getValue(FACING)), 3);
-		this.playerSound(world, pos, SoundEvents.UI_BUTTON_CLICK, 0.25F, world.random.nextFloat() * 0.1F + 1.2F);
+		this.playerSound(world, pos, SoundEvents.UI_BUTTON_CLICK, 0.25F, world.getRandom().nextFloat() * 0.1F + 1.2F);
 		return true;
 	}
 

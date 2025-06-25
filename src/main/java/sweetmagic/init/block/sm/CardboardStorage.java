@@ -32,8 +32,8 @@ public class CardboardStorage extends BaseFaceBlock implements EntityBlock {
 
 	// ブロックでのアクション
 	public boolean actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
-		if (world.isClientSide) { return true; }
-		TileCardboardStorage tile = (TileCardboardStorage) this.getTile(world, pos);
+		if (world.isClientSide()) { return true; }
+		TileAbstractSM tile = this.getTile(world, pos);
 		tile.sendPKT();
 		this.openGUI(world, pos, player, tile);
 		return true;

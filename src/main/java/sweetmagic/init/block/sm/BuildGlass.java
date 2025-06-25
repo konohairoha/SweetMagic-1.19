@@ -33,18 +33,17 @@ public class BuildGlass extends SMGlass {
 			}
 		}
 
-		if (this.data == 1) {
+		if (this.data != 1) { return; }
 
-			int range = 32;
-			Iterable<BlockPos> posList = WorldHelper.getRangePos(pos, range);
+		int range = 32;
+		Iterable<BlockPos> posList = WorldHelper.getRangePos(pos, range);
 
-			for (BlockPos p : posList) {
-				if (!world.getFluidState(p).is(Fluids.WATER)) { continue; }
+		for (BlockPos p : posList) {
+			if (!world.getFluidState(p).is(Fluids.WATER)) { continue; }
 
-				BlockState state2 = world.getBlockState(p);
-				if (state2.hasProperty(BlockStateProperties.WATERLOGGED)) {
-					world.setBlock(p, state2.setValue(BlockStateProperties.WATERLOGGED, false), 3);
-				}
+			BlockState state2 = world.getBlockState(p);
+			if (state2.hasProperty(BlockStateProperties.WATERLOGGED)) {
+				world.setBlock(p, state2.setValue(BlockStateProperties.WATERLOGGED, false), 3);
 			}
 		}
 	}

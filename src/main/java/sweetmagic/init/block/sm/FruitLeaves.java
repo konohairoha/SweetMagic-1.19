@@ -177,12 +177,12 @@ public class FruitLeaves extends BushBlock implements ISMCrop, BonemealableBlock
 		}
 
 		this.onRicghtClick(world, player, state, pos, stack);
-		return InteractionResult.sidedSuccess(world.isClientSide);
+		return InteractionResult.sidedSuccess(world.isClientSide());
 	}
 
 	// 右クリック
 	public void onRicghtClick(Level world, Player player, BlockState state, BlockPos pos, ItemStack stack) {
-		RandomSource rand = world.random;
+		RandomSource rand = world.getRandom();
 		ItemEntity drop = this.getDropItem(world, player, stack, this.getCrop(), this.getDropValue(rand, 0));
 		world.addFreshEntity(drop);
 		world.setBlock(pos, state.setValue(this.getSMMaxAge(), this.RCSetState()), 2); //作物の成長段階を2下げる
@@ -210,7 +210,7 @@ public class FruitLeaves extends BushBlock implements ISMCrop, BonemealableBlock
 
 	@Override
 	public int getBonemealAgeIncrease(Level world) {
-		return Mth.nextInt(world.random, 0, 1);
+		return Mth.nextInt(world.getRandom(), 0, 1);
 	}
 
 	// シルクタッチでのドロップ
@@ -222,7 +222,7 @@ public class FruitLeaves extends BushBlock implements ISMCrop, BonemealableBlock
 	public List<ItemStack> getDrops(BlockState state, LootContext.Builder build) {
 
 		ServerLevel world = build.getLevel();
-		RandomSource rand = world.random;
+		RandomSource rand = world.getRandom();
 		List<ItemStack> stackList = new ArrayList<ItemStack>();
 		ItemStack stack = build.getOptionalParameter(LootContextParams.TOOL);
 
@@ -247,7 +247,7 @@ public class FruitLeaves extends BushBlock implements ISMCrop, BonemealableBlock
 	public List<ItemStack> getDropList(BlockState state, LootContext.Builder build) {
 
 		List<ItemStack> stackList = Lists.newArrayList();
-		RandomSource rand = build.getLevel().random;
+		RandomSource rand = build.getLevel().getRandom();
 
 		// 最大成長しているなら
 		if (this.isMaxAge(state)) {

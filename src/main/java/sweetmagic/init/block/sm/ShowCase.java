@@ -21,7 +21,6 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import sweetmagic.api.util.EnumHorizontal;
-import sweetmagic.init.tile.sm.TilePlate;
 import sweetmagic.init.tile.sm.TileShowCase;
 import sweetmagic.util.FaceAABB;
 
@@ -31,17 +30,14 @@ public class ShowCase extends Plate {
 	public static final EnumProperty<EnumHorizontal> HORIZONTAL = EnumProperty.create("horizontal", EnumHorizontal.class);
 
 	public ShowCase(String name, int data) {
-		super(name, 3);
+		super(name, 3, null);
 		this.registerDefaultState(this.setState().setValue(HORIZONTAL, EnumHorizontal.NOR));
 	}
 
 	// ブロックでのアクション
 	public boolean actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
-		if (world.isClientSide) { return true; }
-
-		if (this.getTile(world, pos) instanceof TilePlate tile) {
-			this.openGUI(world, pos, player, tile);
-		}
+		if (world.isClientSide()) { return true; }
+		this.openGUI(world, pos, player, this.getTile(world, pos));
 		return true;
 	}
 

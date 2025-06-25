@@ -17,7 +17,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import sweetmagic.SweetMagicCore;
 import sweetmagic.init.TileInit;
 import sweetmagic.init.block.base.BaseModelBlock;
-import sweetmagic.init.tile.sm.TileAbstractSM;
 import sweetmagic.init.tile.sm.TileWarp;
 
 public class WarpBlock extends BaseModelBlock implements EntityBlock {
@@ -33,8 +32,8 @@ public class WarpBlock extends BaseModelBlock implements EntityBlock {
 
 	// ブロックでのアクション
 	public boolean actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
-		if (world.isClientSide) { return true; }
-		this.openGUI(world, pos, player, (TileWarp) world.getBlockEntity(pos));
+		if (world.isClientSide()) { return true; }
+		this.openGUI(world, pos, player, this.getTile(world, pos));
 		return true;
 	}
 
@@ -48,13 +47,9 @@ public class WarpBlock extends BaseModelBlock implements EntityBlock {
 		return new TileWarp(pos, state);
 	}
 
-	public BlockEntityType<? extends TileAbstractSM> getTileType() {
-		return TileInit.warpBlock;
-	}
-
 	@Nullable
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
-		return this.createMailBoxTicker(world, type, this.getTileType());
+		return this.createMailBoxTicker(world, type, TileInit.warpBlock);
 	}
 
 	@Override

@@ -7,6 +7,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.LeadItem;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -41,18 +43,22 @@ public class WoodPole extends BaseModelBlock {
 
 	// ブロックでのアクション
 	public boolean actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
-		if (world.isClientSide) { return true; }
+		if (world.isClientSide()) { return true; }
 
-		if (stack.getItem() instanceof BlockItem blockItem && this.canSetBlock(blockItem.getBlock())) {
+		if(stack.is(Items.LEAD)) {
+			LeadItem.bindPlayerMobs(player, world, pos);
+		}
 
-			Block block = blockItem.getBlock();
+		if (stack.getItem() instanceof BlockItem bItem && this.canSetBlock(bItem.getBlock())) {
+
+			Block block = bItem.getBlock();
 
 			for (int i = 1; i < 11; i++) {
 
 				BlockPos targetPos = pos.above(i);
 				BlockState state = world.getBlockState(targetPos);
 				Block targetBlock = state.getBlock();
-				if ( !state.isAir() && !this.canSetBlock(targetBlock) ) { return false; }
+				if (!state.isAir() && !this.canSetBlock(targetBlock)) { return false; }
 				if (!state.isAir()) { continue; }
 
 				world.setBlock(targetPos, this.setVertical(block.defaultBlockState(), world, targetPos), 3);

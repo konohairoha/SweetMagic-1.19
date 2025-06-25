@@ -57,7 +57,7 @@ public class SMDoor3 extends BaseSMBlock {
 	public static final EnumProperty<DoorHingeSide> HINGE = BlockStateProperties.DOOR_HINGE;
 	public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
 	public static final EnumProperty<EnumConect> HALF = EnumProperty.create("vertical", EnumConect.class);
-	protected static final float AABB_DOOR_THICKNESS = 3.0F;
+	protected static final float AABB_DOOR_THICKNESS = 3F;
 	protected static final VoxelShape SOUTH_AABB = Block.box(0D, 0D, 0D, 16D, 16D, 3D);
 	protected static final VoxelShape NORTH_AABB = Block.box(0D, 0D, 13D, 16D, 16D, 16D);
 	protected static final VoxelShape WEST_AABB = Block.box(13D, 0D, 0D, 16D, 16D, 16D);
@@ -213,7 +213,7 @@ public class SMDoor3 extends BaseSMBlock {
 		world.setBlock(pos, state, 10);
 		world.levelEvent(player, state.getValue(OPEN) ? this.getOpenSound() : this.getCloseSound(), pos, 0);
 		world.gameEvent(player, this.isOpen(state) ? GameEvent.BLOCK_OPEN : GameEvent.BLOCK_CLOSE, pos);
-		return InteractionResult.sidedSuccess(world.isClientSide);
+		return InteractionResult.sidedSuccess(world.isClientSide());
 	}
 
 	public boolean isOpen(BlockState state) {

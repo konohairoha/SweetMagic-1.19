@@ -66,7 +66,7 @@ public class SMTable extends BaseModelBlock {
 	}
 
 	@Override
-	public void addBlockTip (List<Component> toolTip) {
+	public void addBlockTip(List<Component> toolTip) {
 		if (this.data != 0) { return; }
 		toolTip.add(this.getText("conect").withStyle(GREEN));
 	}
