@@ -1,10 +1,10 @@
 {
-	"structures": [ {
+	"structures": [{
 		"structure": "sweetmagic:tomb", "weight": 2
 	}],
 	"placement": {
 		"salt": 22420919,
-		"frequency": 0.65,
+		"frequency": 0.7,
 		"spacing": 40,
 		"separation": 20,
 		"type": "minecraft:random_spread",

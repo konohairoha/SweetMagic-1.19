@@ -1,10 +1,10 @@
 {
 	"structures": [{
-		"structure": "sweetmagic:sky_crystal", "weight": 2
+		"structure": "sweetmagic:sky_ruin", "weight": 2
 	}],
 	"placement": {
-		"salt": 597156,
-		"frequency": 0.35,
+		"salt": 697112,
+		"frequency": 0.4,
 		"spacing": 32,
 		"separation": 16,
 		"type": "minecraft:random_spread"

@@ -1,9 +1,10 @@
 {
 	"structures": [{
-		"structure": "sweetmagic:bonus", "weight": 2
+		"structure": "sweetmagic:sky_bonus", "weight": 2
 	}],
 	"placement": {
 		"salt": 22427519,
+		"frequency": 0.4,
 		"spacing": 28,
 		"separation": 14,
 		"type": "minecraft:random_spread"

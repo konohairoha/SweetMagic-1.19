@@ -1,12 +1,12 @@
 {
-	"structures": [ {
+	"structures": [{
 		"structure": "sweetmagic:ruins_site_wind", "weight": 2
 	}],
 	"placement": {
 		"salt": 1224999,
-		"frequency": 0.5,
-		"spacing": 78,
-		"separation": 38,
+		"frequency": 0.45,
+		"spacing": 80,
+		"separation": 40,
 		"type": "minecraft:random_spread",
 		"exclusion_zone": {
 			"chunk_count": 4,

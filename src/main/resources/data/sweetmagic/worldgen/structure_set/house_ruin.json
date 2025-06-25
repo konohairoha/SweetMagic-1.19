@@ -1,0 +1,12 @@
+{
+	"structures": [{
+		"structure": "sweetmagic:house_ruin", "weight": 2
+	}],
+	"placement": {
+		"salt": 3696154,
+		"frequency": 0.575,
+		"spacing": 48,
+		"separation": 24,
+		"type": "minecraft:random_spread"
+	}
+}

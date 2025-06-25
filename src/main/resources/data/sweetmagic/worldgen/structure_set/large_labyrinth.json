@@ -1,0 +1,12 @@
+{
+	"structures": [{
+		"structure": "sweetmagic:large_labyrinth", "weight": 2
+	}],
+	"placement": {
+		"salt": 1224987,
+		"frequency": 0.75,
+		"spacing": 48,
+		"separation": 24,
+		"type": "minecraft:random_spread"
+	}
+}

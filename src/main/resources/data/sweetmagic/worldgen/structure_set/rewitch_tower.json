@@ -1,9 +1,9 @@
 {
 	"structures": [{
-		"structure": "sweetmagic:village", "weight": 2
+		"structure": "sweetmagic:rewitch_tower", "weight": 2
 	}],
 	"placement": {
-		"salt": 46512544,
+		"salt": 334565,
 		"frequency": 0.5,
 		"spacing": 64,
 		"separation": 32,

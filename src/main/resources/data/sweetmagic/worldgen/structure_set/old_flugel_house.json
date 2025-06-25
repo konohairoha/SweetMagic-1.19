@@ -1,9 +1,9 @@
 {
 	"structures": [{
-		"structure": "sweetmagic:village", "weight": 2
+		"structure": "sweetmagic:old_flugel_house", "weight": 2
 	}],
 	"placement": {
-		"salt": 46512544,
+		"salt": 5151512,
 		"frequency": 0.5,
 		"spacing": 64,
 		"separation": 32,
