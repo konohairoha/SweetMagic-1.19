@@ -36,7 +36,7 @@ public class RenderMagiaTable<T extends TileMagiaTable> extends RenderAbstractTi
 		pose.pushPose();
 		pose.translate(0.5D, 1D, 0.5D);
 		float f = (float) tile.time + parTick;
-		pose.translate(0.0D, (double) (0.1F + Mth.sin(f * 0.1F) * 0.01F), 0.0D);
+		pose.translate(0D, (double) (0.1F + Mth.sin(f * 0.1F) * 0.01F), 0D);
 
 		float rot = 1.5825F;
 
@@ -76,7 +76,6 @@ public class RenderMagiaTable<T extends TileMagiaTable> extends RenderAbstractTi
 		pose.mulPose(Vector3f.YP.rotationDegrees(rotY * this.pi));
 		pose.scale(0.5F, 0.5F, 0.5F);
 		info.itemRenderNo(tile.copyMagic);
-//		info.itemRenderNo(tile.getInputItem());
 		pose.popPose();
 	}
 }

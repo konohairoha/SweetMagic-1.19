@@ -63,7 +63,7 @@ public class RenderMagiaCrystalLight<T extends TileMagiaCrystalLight> extends Re
 		pose.pushPose();
 		pose.translate(0.5D, Math.sin((gameTime + parTick) / 15F) * 0.02D + 0.35D, 0.5D);
 		pose.scale(2F, 2F, 2F);
-		float angle = -(gameTime + parTick) / 20.0F * this.pi;
+		float angle = -(gameTime + parTick) / 20F * this.pi;
 		pose.mulPose(Vector3f.YP.rotationDegrees(angle));
 		pose.translate(-0.5D, 0.2D, -0.5D);
 

@@ -39,7 +39,7 @@ public class RenderParallelInterfere<T extends TileParallelInterfere> extends Re
 		pose.pushPose();
 		pose.translate(0.5D, 0.85D, 0.5D);
 		float f = (float) tile.time + parTick;
-		pose.translate(0.0D, (double) (0.1F + Mth.sin(f * 0.1F) * 0.01F), 0.0D);
+		pose.translate(0D, (double) (0.1F + Mth.sin(f * 0.1F) * 0.01F), 0D);
 
 		float f1;
 		for (f1 = tile.rot - tile.oRot; f1 >= (float) Math.PI; f1 -= ((float) Math.PI * 2F)) { }

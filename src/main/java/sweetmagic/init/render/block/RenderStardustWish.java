@@ -41,7 +41,7 @@ public class RenderStardustWish<T extends TileStardustWish> extends RenderAbstra
 		pose.pushPose();
 		pose.translate(0.5D, 0.85D, 0.5D);
 		float f = (float) tile.time + parTick;
-		pose.translate(0.0D, (double) (0.1F + Mth.sin(f * 0.1F) * 0.01F), 0.0D);
+		pose.translate(0D, (double) (0.1F + Mth.sin(f * 0.1F) * 0.01F), 0D);
 
 		float f1;
 		for (f1 = tile.rot - tile.oRot; f1 >= (float) Math.PI; f1 -= ((float) Math.PI * 2F)) { }
@@ -50,14 +50,14 @@ public class RenderStardustWish<T extends TileStardustWish> extends RenderAbstra
 
 		float f2 = tile.oRot + f1 * parTick;
 		pose.mulPose(Vector3f.YP.rotation(-f2));
-		pose.mulPose(Vector3f.ZP.rotationDegrees(80.0F));
+		pose.mulPose(Vector3f.ZP.rotationDegrees(80F));
 		float f3 = Mth.lerp(parTick, tile.oFlip, tile.flip);
 		float f4 = Mth.frac(f3 + 0.25F) * 1.6F - 0.3F;
 		float f5 = Mth.frac(f3 + 0.75F) * 1.6F - 0.3F;
 		float f6 = Mth.lerp(parTick, tile.oOpen, tile.open);
-		this.bookModel.setupAnim(f, Mth.clamp(f4, 0.0F, 1.0F), Mth.clamp(f5, 0.0F, 1.0F), f6);
+		this.bookModel.setupAnim(f, Mth.clamp(f4, 0F, 1F), Mth.clamp(f5, 0F, 1F), f6);
 		VertexConsumer vert = info.buf().getBuffer(RENDER_TYPE).color(0F, 0F, 0F, 1F);
-		this.bookModel.render(pose, vert, info.light(), info.overlay(), 1.0F, 1.0F, 1.0F, 1.0F);
+		this.bookModel.render(pose, vert, info.light(), info.overlay(), 1F, 1F, 1F, 1F);
 		pose.popPose();
 	}
 
@@ -66,7 +66,7 @@ public class RenderStardustWish<T extends TileStardustWish> extends RenderAbstra
 		pose.pushPose();
 		int gameTime = tile.getClientTime();
 		pose.translate(0.5D, Math.sin((gameTime + parTick) / 10D) * 0.025D + 0.85D, 0.5D);
-		float angle = (gameTime + parTick) / -20F * (180F / (float) Math.PI);
+		float angle = (gameTime + parTick) / -20F * this.pi;
 		pose.mulPose(Vector3f.YP.rotationDegrees(angle));
 		pose.translate(-0.5D, 0D, -0.5D);
 		float r = (float) Math.sin((gameTime + parTick) / 20F) * 185F;

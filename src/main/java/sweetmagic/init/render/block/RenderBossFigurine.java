@@ -10,8 +10,6 @@ import sweetmagic.util.RenderUtil.RenderInfo;
 
 public class RenderBossFigurine<T extends TileBossFigurine> extends RenderAbstractTile<T> {
 
-	private int tickTime = 0;
-
 	public RenderBossFigurine(BlockEntityRendererProvider.Context con) {
 		super(con);
 	}
@@ -24,9 +22,9 @@ public class RenderBossFigurine<T extends TileBossFigurine> extends RenderAbstra
 		pose.translate(0D, 0D, tile.getAddZ());
 		LivingEntity entity = tile.getRenderEntity();
 
-		if (this.tickTime++ % 3 == 0) {
+		if (tile.renderTick++ % 3 == 0) {
 			entity.tickCount++;
-			this.tickTime = 1;
+			tile.renderTick = 1;
 		}
 
 		float f = 1F;

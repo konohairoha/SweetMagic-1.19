@@ -22,9 +22,10 @@ public class RenderMFFisher<T extends TileMFFisher> extends RenderAbstractTile<T
 	}
 
 	public void render(T tile, float parTick, RenderInfo info) {
-		if (tile.isMFEmpty()) { return; }
 		int data = tile.getData();
 		this.renderItem(tile, parTick, info, data);
+
+		if (tile.isMFEmpty()) { return; }
 		this.renderSquare(tile, parTick, info, data);
 	}
 

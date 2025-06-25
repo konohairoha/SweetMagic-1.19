@@ -8,17 +8,17 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import sweetmagic.init.BlockInit;
 import sweetmagic.init.ItemInit;
-import sweetmagic.init.tile.sm.TileMFGenerater;
+import sweetmagic.init.tile.sm.TileMFWoodCutter;
 import sweetmagic.util.RenderUtil;
 import sweetmagic.util.RenderUtil.RenderColor;
 import sweetmagic.util.RenderUtil.RenderInfo;
 
-public class RenderMFGenerater<T extends TileMFGenerater> extends RenderAbstractTile<T> {
+public class RenderMFWoodCutter<T extends TileMFWoodCutter> extends RenderAbstractTile<T> {
 
-	private static final ItemStack STACK = new ItemStack(ItemInit.alt_bucket_lava);
+	private static final ItemStack STACK = new ItemStack(ItemInit.alt_axe);
 	private static final Block SQUARE = BlockInit.magic_square_l;
 
-	public RenderMFGenerater(BlockEntityRendererProvider.Context con) {
+	public RenderMFWoodCutter(BlockEntityRendererProvider.Context con) {
 		super(con);
 	}
 

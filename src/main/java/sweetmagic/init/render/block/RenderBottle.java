@@ -34,7 +34,7 @@ public class RenderBottle<T extends TileBottle> extends RenderAbstractTile<T> {
 		float pos = 0;
 		int gameTime = tile.getClientTime();
 		double addZ = stackList.size() % 2 != 0 ? 0 : this.space / 2D;
-		pose.translate(1D, Math.sin((gameTime + parTick) / 10.0F) * 0.1D + 0.55D, 1D - addZ);
+		pose.translate(1D, Math.sin((gameTime + parTick) / 10F) * 0.1D + 0.55D, 1D - addZ);
 		float angle = (gameTime + parTick) / 40F * this.pi;
 		pose.mulPose(Vector3f.YP.rotationDegrees(angle));
 

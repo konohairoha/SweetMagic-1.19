@@ -28,7 +28,7 @@ public class RenderAetherReverse<T extends TileAetherReverse> extends RenderAbst
 			int gameTime = tile.getClientTime();
 			pose.translate(0D, Math.sin((gameTime + parTick) / 24F) * 0.05D, 0D);
 			pose.scale(0.35F, 0.35F, 0.35F);
-			float angle = (gameTime + parTick) / 20.0F * (180F / (float) Math.PI);
+			float angle = (gameTime + parTick) / 20F * this.pi;
 			pose.mulPose(Vector3f.YP.rotationDegrees(angle));
 			info.itemRender(stack);
 			pose.popPose();
@@ -48,7 +48,7 @@ public class RenderAetherReverse<T extends TileAetherReverse> extends RenderAbst
 			pose.scale(0.25F, 0.25F, 0.25F);
 			double x = i * -0.8775D + (i / 3) * 2.625D;
 			double y = (i / 3) * 0.88D;
-			pose.translate(1.1125D + y, 4.0D, 2.875D + x);
+			pose.translate(1.1125D + y, 4D, 2.875D + x);
 			pose.mulPose(Vector3f.YP.rotationDegrees(tile.getRot()));
 			pose.mulPose(Vector3f.XP.rotationDegrees(90F));
 			info.itemRender(stackList.get(i));

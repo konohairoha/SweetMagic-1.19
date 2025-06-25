@@ -145,7 +145,7 @@ public class RenderWandPedastal <T extends TileWandPedastal>extends RenderAbstra
 		PoseStack pose = info.pose();
 		pose.translate(0D, Math.sin((gameTime + parTick) / 15F) * 0.02D + 0.35D, 0D);
 		pose.scale(2F, 2F, 2F);
-		float angle = -(gameTime + parTick) / 20.0F * this.pi;
+		float angle = -(gameTime + parTick) / 20F * this.pi;
 		pose.mulPose(Vector3f.YP.rotationDegrees(angle));
 		pose.translate(-0.25D, -0.25D, -0.25D);
 		pose.scale(0.5F, 0.5F, 0.5F);

@@ -23,8 +23,8 @@ public class RenderMFBottler<T extends TileMFBottler> extends RenderAbstractTile
 	}
 
 	public void render(T tile, float parTick, RenderInfo info) {
-		if (tile.isMFEmpty()) { return; }
 		this.renderItem(tile, parTick, info);
+		if (tile.isMFEmpty()) { return; }
 		this.renderSquare(tile, parTick, info);
 	}
 

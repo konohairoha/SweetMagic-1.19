@@ -46,6 +46,9 @@ public class RenderPlate<T extends TilePlate> extends RenderAbstractTile<T> {
 		case 3:
 			this.renderShowCase(tile, info);
 			break;
+		case 4:
+			this.renderDigTrayBlock(tile, stack, info);
+			break;
 		}
 	}
 
@@ -154,6 +157,29 @@ public class RenderPlate<T extends TilePlate> extends RenderAbstractTile<T> {
 			pose.translate(0D, 0.075D, 0D);
 		}
 		ModelBlockRenderer.clearCache();
+	}
+
+	// 斜めウッドトレーのレンダー
+	public void renderDigTrayBlock(T tile, ItemStack stack, RenderInfo info) {
+
+		boolean isBlock = stack.getItem() instanceof BlockItem;
+		double addY = isBlock ? -0.05D : 0D;
+		double addZ = isBlock ? 0.125D : 0D;
+		for (int x = 0; x < 2; x++)
+			for (int z = 0; z < 2; z++)
+				RenderUtil.renderItem(info, tile, stack, 1.825D - x * 1D, 0.8675D + addY + z * 0.45D, 1.075D + z * 0.75D + addZ);
+
+		PoseStack pose = info.pose();
+		pose.pushPose();
+		pose.mulPose(Vector3f.YP.rotationDegrees(tile.getRot()));
+		this.rotPosFix(pose, tile.getFace());
+		pose.translate(0.5D, 0.145D, 0.0445D);
+		pose.scale(-0.01F, -0.01F, 0.01F);
+		int nameSize = this.font.width(stack.getHoverName().getString());
+		float f3 = (float) (-nameSize / 2F);
+		pose.scale(nameSize < 45F ? 1F : 45F / nameSize, 1F, 1F);
+		this.font.draw(pose, stack.getHoverName(), f3 + 0.75F, 0.5F, 0xFFFFFF);
+		pose.popPose();
 	}
 
 	public void renderItem(ItemStack stack, RenderInfo info) {

@@ -36,7 +36,7 @@ public class RenderAetherLamplight<T extends TileAetherLamplight> extends Render
 		int gameTime = tile.getClientTime();
 		float sin = (float) Math.sin((gameTime + parTick) / 10D);
 		float fSin = sin * 50F;
-		float angle = (gameTime + parTick) / 20.0F * (180F / (float) Math.PI);
+		float angle = (gameTime + parTick) / 20F * this.pi;
 
 		PoseStack pose = info.pose();
 		MultiBufferSource buf = info.buf();
@@ -76,7 +76,7 @@ public class RenderAetherLamplight<T extends TileAetherLamplight> extends Render
 		for (BlockPos pos : posList) {
 
 			// MFブロック以外なら終了
-			if ( !(tile.getTile(pos) instanceof TileSMMagic magic) || !magic.getReceive()) { continue; }
+			if (!(tile.getTile(pos) instanceof TileSMMagic magic) || !magic.getReceive()) { continue; }
 
 			if (magic instanceof TileAetherLamplight || magic instanceof TileAetherLanp) { continue; }
 

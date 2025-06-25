@@ -4,10 +4,14 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
 
 import net.minecraft.client.renderer.block.ModelBlockRenderer;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.ItemNameBlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.BushBlock;
+import net.minecraft.world.level.block.FlowerBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -49,6 +53,18 @@ public class RenderModenRack<T extends TileModenRack> extends RenderAbstractTile
 		case 5:
 			this.renderCeilingShelf(tile, info);
 			break;
+		case 6:
+			this.renderFruitCrate(tile, info);
+			break;
+		case 7:
+			this.renderFruitCrateBox(tile, info);
+			break;
+		case 8:
+			this.renderToolBox(tile, info);
+			break;
+		case 9:
+			this.renderBoxShelf(tile, info);
+			break;
 		}
 	}
 
@@ -56,7 +72,6 @@ public class RenderModenRack<T extends TileModenRack> extends RenderAbstractTile
 
 		// インベントリ分描画
 		for (int i = 0; i < tile.getInvSize(); i++) {
-
 			ItemStack stack = tile.getInputItem(i);
 			if (stack.isEmpty()) { continue; }
 
@@ -96,7 +111,6 @@ public class RenderModenRack<T extends TileModenRack> extends RenderAbstractTile
 
 		// インベントリ分描画
 		for (int i = 0; i < tile.getInvSize(); i++) {
-
 			ItemStack stack = tile.getInputItem(i);
 			if (stack.isEmpty()) { continue; }
 
@@ -112,7 +126,6 @@ public class RenderModenRack<T extends TileModenRack> extends RenderAbstractTile
 
 		// インベントリ分描画
 		for (int i = 0; i < tile.getInvSize(); i++) {
-
 			ItemStack stack = tile.getInputItem(i);
 			if (stack.isEmpty()) { continue; }
 
@@ -134,7 +147,6 @@ public class RenderModenRack<T extends TileModenRack> extends RenderAbstractTile
 
 		// インベントリ分描画
 		for (int i = 0; i < tile.getInvSize(); i++) {
-
 			ItemStack stack = tile.getInputItem(i);
 			if (stack.isEmpty()) { continue; }
 
@@ -213,6 +225,110 @@ public class RenderModenRack<T extends TileModenRack> extends RenderAbstractTile
 			}
 
 			pose.popPose();
+		}
+	}
+
+	public void renderFruitCrate(T tile, RenderInfo info) {
+
+		// インベントリ分描画
+		for (int i = 0; i < tile.getInvSize(); i++) {
+			ItemStack stack = tile.getInputItem(i);
+			if (stack.isEmpty()) { continue; }
+
+			double x = 1.35D - (i / 4) * 0.75D;
+			int id = i >= 4 ? i - 4 : i;
+			double y = 0.65D + id * 0.25D;
+			double z = 0.15D + id * 0.3D;
+			float scale = 1.35F;
+
+			if(stack.getItem() instanceof BlockItem bItem) {
+
+				Block block = bItem.getBlock();
+				if( (block instanceof FlowerBlock || block instanceof BushBlock) && !(bItem instanceof ItemNameBlockItem)) {
+					scale = 1.75F;
+					x = 1D - (i / 4) * 0.475D;
+					y = 0.65D + id * 0.105D;
+					z = 0.15D + id * 0.25D;
+				}
+			}
+
+			RenderUtil.renderItem(info, tile, stack, x, y, z, scale, true);
+		}
+	}
+
+	public void renderFruitCrateBox(T tile, RenderInfo info) {
+
+		// インベントリ分描画
+		for (int i = 0; i < tile.getInvSize(); i++) {
+			ItemStack stack = tile.getInputItem(i);
+			if (stack.isEmpty()) { continue; }
+
+			double x = 1.3D - (i / 4) * 0.625D;
+			int id = i >= 4 ? i - 4 : i;
+			double y = 0.6D;
+			double z = 0.45D + id * 0.35D;
+			float scale = 1.35F;
+
+			if(stack.getItem() instanceof BlockItem bItem) {
+
+				Block block = bItem.getBlock();
+				if ((block instanceof FlowerBlock || block instanceof BushBlock) && !(bItem instanceof ItemNameBlockItem)) {
+					scale = 1.75F;
+					x = 1D - (i / 4) * 0.475D;
+					z = 0.4D + id * 0.25D;
+				}
+			}
+
+			RenderUtil.renderItem(info, tile, stack, x, y, z, scale, true);
+		}
+	}
+
+	public void renderToolBox(T tile, RenderInfo info) {
+
+		PoseStack pose = info.pose();
+
+		// インベントリ分描画
+		for (int i = 0; i < tile.getInvSize(); i++) {
+			ItemStack stack = tile.getInputItem(i);
+			if (stack.isEmpty()) { continue; }
+
+			pose.pushPose();
+			pose.mulPose(Vector3f.YP.rotationDegrees(tile.getRot()));
+			pose.translate(0.5D, 0.9D, 0.25D + i * 0.175D);
+
+			switch (tile.getFace()) {
+			case SOUTH:
+				pose.translate(-1D, 0D, -1D);
+				break;
+			case WEST:
+				pose.translate(-1D, 0D, 0D);
+				break;
+			case EAST:
+				pose.translate(0D, 0D, -1D);
+				break;
+			}
+
+			pose.mulPose(Vector3f.ZP.rotationDegrees(-225F));
+			pose.scale(4F, 4F, 4F);
+			pose.scale(0.375F, 0.375F, 0.375F);
+			info.render().renderStatic(stack, ItemTransforms.TransformType.FIXED, info.light(), info.overlay(), pose, info.buf(), 0);
+			pose.popPose();
+		}
+	}
+
+	public void renderBoxShelf(T tile, RenderInfo info) {
+
+		// インベントリ分描画
+		for (int i = 0; i < tile.getInvSize(); i++) {
+			ItemStack stack = tile.getInputItem(i);
+			if (stack.isEmpty()) { continue; }
+
+			boolean isBlock = stack.getItem() instanceof BlockItem block;
+			double x = isBlock ? 1.875D - 0.55D * i : 2.05D - 0.7D * i;
+			double y = 0.5D;
+			double z = (isBlock ? 1.8D : 1.6D) + ((int) (i / 3) * 0.815D);
+
+			RenderUtil.renderItem(info, tile, stack, x, y, z);
 		}
 	}
 }

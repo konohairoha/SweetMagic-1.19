@@ -45,7 +45,7 @@ public class RenderMagicianLectern implements BlockEntityRenderer<TileAbstractMa
 
 		int overray = OverlayTexture.NO_OVERLAY;
 		pose.mulPose(Vector3f.YP.rotationDegrees(f1));
-		pose.translate(0.0D, (double) (1.5F + f / 2F), 0.0D);
+		pose.translate(0D, (double) (1.5F + f / 2F), 0D);
 		pose.mulPose(new Quaternion(new Vector3f(SIN_45, 0F, SIN_45), 60F, true));
 		this.glass.render(pose, vert, light, overray);
 

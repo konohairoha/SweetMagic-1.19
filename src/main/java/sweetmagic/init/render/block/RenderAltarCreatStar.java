@@ -124,7 +124,7 @@ public class RenderAltarCreatStar<T extends TileAltarCreatStar> extends RenderAb
 		pose.translate(0.5D, 1.35D, 0.5D);
 		int gameTime = tile.getClientTime();
 		pose.scale(size, size, size);
-		float angle = (gameTime + parTick) / -20.0F * this.pi;
+		float angle = (gameTime + parTick) / -20F * this.pi;
 		pose.mulPose(Vector3f.YP.rotationDegrees(angle));
 		pose.translate(-0.5D, 0D, -0.5D);
 		RenderUtil.renderBlock(info, new RenderColor(72F / 255F, 1F, 1F, info.light(), info.overlay()), SQUARE);
