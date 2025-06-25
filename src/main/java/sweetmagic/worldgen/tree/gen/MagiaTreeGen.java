@@ -113,9 +113,9 @@ public class MagiaTreeGen extends AbstractTreeGen {
 	// 主軸の横
 	public void subTrunk (Level world, BlockPos pos, BlockState state, Direction face) {
 
-		RandomSource rand = world.random;
+		RandomSource rand = world.getRandom();
 		int height = rand.nextInt(3) + 2;
-
+	
 		for (int y = 0; y < height; y++) {
 			this.setBlock(world, pos.above(y), state);
 		}
@@ -152,7 +152,7 @@ public class MagiaTreeGen extends AbstractTreeGen {
 	// 葉っぱ
 	public void setSubLeave (Level world, BlockPos pos, int scale) {
 
-		RandomSource rand = world.random;
+		RandomSource rand = world.getRandom();
 		float chance = 0.45F;
 
 		if (rand.nextFloat() <= chance) {

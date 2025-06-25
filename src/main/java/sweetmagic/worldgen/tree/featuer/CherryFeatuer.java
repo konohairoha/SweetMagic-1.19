@@ -19,6 +19,7 @@ import net.minecraft.world.level.LevelWriter;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.levelgen.feature.Feature;
@@ -35,11 +36,11 @@ import sweetmagic.init.BlockInit;
 
 public class CherryFeatuer extends Feature<TreeConfiguration> {
 
-	private boolean isCherry = false;
+	private final int data;
 
-	public CherryFeatuer(boolean isCherry) {
+	public CherryFeatuer(int data) {
 		super(TreeConfiguration.CODEC);
-		this.isCherry = isCherry;
+		this.data = data;
 	}
 
 	private static boolean isVine(LevelSimulatedReader world, BlockPos pos) {
@@ -62,6 +63,8 @@ public class CherryFeatuer extends Feature<TreeConfiguration> {
 	}
 
 	private static void setBlockKnownShape(LevelWriter world, BlockPos pos, BlockState state) {
+		state = state.hasProperty(LeavesBlock.PERSISTENT) ? state.setValue(LeavesBlock.PERSISTENT, false) : state;
+		state = state.hasProperty(LeavesBlock.DISTANCE) ? state.setValue(LeavesBlock.DISTANCE, 1) : state;
 		world.setBlock(pos, state, 19);
 	}
 
@@ -141,8 +144,8 @@ public class CherryFeatuer extends Feature<TreeConfiguration> {
 				con.decorators.forEach((s) -> { s.place(deco); });
 			}
 
-			if (this.isCherry) {
-				BlockState cherry_blossoms = BlockInit.cherry_blossoms_leaves_carpet.defaultBlockState();
+			if (this.data >= 1) {
+				BlockState cherry_blossoms = this.data == 1 ? BlockInit.cherry_blossoms_leaves_carpet.defaultBlockState() : BlockInit.maple_leaves_carpet.defaultBlockState();
 
 				for (int x = -4; x <= 4; x++) {
 					for (int z = -4; z <= 4; z++) {
@@ -241,14 +244,14 @@ public class CherryFeatuer extends Feature<TreeConfiguration> {
 	}
 
 	public void setSMBlock(WorldGenLevel world, BlockPos pos, BlockState state) {
-		if (world.getBlockState(pos).isAir() && this.checkBlock(world.getBlockState(pos.below()).getBlock())) {
+		if (world.isEmptyBlock(pos) && this.checkBlock(world.getBlockState(pos.below()).getBlock())) {
 			this.setBlock(world, pos, state);
 		}
 
 		else {
 			for (int y = 1; y < 4; y++) {
 				BlockPos targetPos = pos.below(y);
-				if (world.getBlockState(targetPos).isAir() && this.checkBlock(world.getBlockState(targetPos.below()).getBlock())) {
+				if (world.isEmptyBlock(targetPos) && this.checkBlock(world.getBlockState(targetPos.below()).getBlock())) {
 					this.setBlock(world, targetPos, state);
 					return;
 				}
@@ -256,7 +259,7 @@ public class CherryFeatuer extends Feature<TreeConfiguration> {
 
 			for (int y = 1; y < 3; y++) {
 				BlockPos targetPos = pos.above(y);
-				if (world.getBlockState(targetPos).isAir() && this.checkBlock(world.getBlockState(targetPos.below()).getBlock())) {
+				if (world.isEmptyBlock(targetPos) && this.checkBlock(world.getBlockState(targetPos.below()).getBlock())) {
 					this.setBlock(world, targetPos, state);
 					return;
 				}
@@ -265,7 +268,7 @@ public class CherryFeatuer extends Feature<TreeConfiguration> {
 	}
 
 	// 草か土かチェック
-	public boolean checkBlock (Block block) {
+	public boolean checkBlock(Block block) {
 		return block == Blocks.DIRT || block == Blocks.GRASS_BLOCK;
 	}
 }

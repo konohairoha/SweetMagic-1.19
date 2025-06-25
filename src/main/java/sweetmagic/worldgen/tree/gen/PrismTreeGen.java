@@ -91,9 +91,9 @@ public class PrismTreeGen extends AbstractTreeGen {
 	}
 
 	// 主軸の横
-	public void subTrunk (Level world, BlockPos pos, BlockState state) {
+	public void subTrunk(Level world, BlockPos pos, BlockState state) {
 
-		RandomSource rand = world.random;
+		RandomSource rand = world.getRandom();
 		int height = rand.nextInt(6) + 8;
 
 		for (int y = 0; y <= height; y++) {
@@ -102,7 +102,7 @@ public class PrismTreeGen extends AbstractTreeGen {
 	}
 
 	// 葉っぱ
-	public void setLeave (Level world, BlockPos pos, BlockState leave) {
+	public void setLeave(Level world, BlockPos pos, BlockState leave) {
 
 		for (int x = -1; x <= 1; x++) {
 			for (int z = -1; z <= 1; z++) {
@@ -119,7 +119,7 @@ public class PrismTreeGen extends AbstractTreeGen {
 	}
 
 	// 空気
-	public void setAir (Level world, BlockPos pos, BlockState state) {
+	public void setAir(Level world, BlockPos pos, BlockState state) {
 		if (world.getBlockState(pos).getBlock() == state.getBlock()) {
 			world.setBlock(pos, AIR, 3);
 		}

@@ -22,21 +22,22 @@ public abstract class AbstractTreeGen {
 		this.growValue = growValue;
 
 		if (this.leave.getBlock() instanceof LeavesBlock) {
-			this.leave = this.leave.setValue(LeavesBlock.PERSISTENT, true);
+			this.leave = this.leave.hasProperty(LeavesBlock.PERSISTENT) ? this.leave.setValue(LeavesBlock.PERSISTENT, false) : this.leave;
+			this.leave = this.leave.hasProperty(LeavesBlock.DISTANCE) ? this.leave.setValue(LeavesBlock.DISTANCE, 1) : this.leave;
 		}
 	}
 
 	public abstract void generate(Level world, RandomSource rand, BlockPos pos);
 
 	// ブロックの設置
-	public void setBlock (Level world, BlockPos pos, BlockState state) {
+	public void setBlock(Level world, BlockPos pos, BlockState state) {
 		if (this.isAir(world, pos)) {
 			world.setBlock(pos, state, 3);
 		}
 	}
 
 	public boolean isAir(Level world, BlockPos pos) {
-		return world.getBlockState(pos).isAir();
+		return world.isEmptyBlock(pos);
 	}
 
 	// 草か土かチェック

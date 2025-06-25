@@ -3,6 +3,8 @@ package sweetmagic.worldgen.tree.featuer;
 import java.util.Random;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.LevelWriter;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -11,9 +13,11 @@ import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConf
 import net.minecraft.world.level.material.Material;
 import sweetmagic.api.iblock.ISMCrop;
 import sweetmagic.init.BlockInit;
+import sweetmagic.init.block.base.BaseFaceBlock;
 
 public class SMTreeFeatuer extends AbstractTreeFeatuer {
 
+	private final static Direction[] ALLFACE = new Direction[] {Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
 	private final int data;
 
 	public SMTreeFeatuer(int data) {
@@ -94,6 +98,25 @@ public class SMTreeFeatuer extends AbstractTreeFeatuer {
 			}
 		}
 
+		else if(leave.getBlock() == BlockInit.maple_leaves) {
+
+			BlockState cherry_blossoms = BlockInit.maple_leaves_carpet.defaultBlockState().setValue(ISMCrop.AGE5, leave.getValue(ISMCrop.AGE5));
+
+			for (int x = -4; x <= 4; x++) {
+				for (int z = -4; z <= 4; z++) {
+
+					float chance = Math.abs(x) <= 2 && Math.abs(z) <= 2 ? 0.725F : 0.275F;
+					if ( (x == 0 && z == 0) || rand.nextFloat() >= chance) { continue; }
+
+					this.setSMBlock(world, pos.offset(x, 0, z), cherry_blossoms);
+				}
+			}
+
+			if(world.getRandom().nextFloat() >= 0.33F) {
+				world.setBlock(pos.above(1), BlockInit.maple_hole_log.defaultBlockState().setValue(BaseFaceBlock.FACING, ALLFACE[world.getRandom().nextInt(4)]), 3);
+			}
+		}
+
 		return true;
 	}
 
@@ -104,7 +127,7 @@ public class SMTreeFeatuer extends AbstractTreeFeatuer {
 		case 3: return BlockInit.estor_log.defaultBlockState();
 		case 4: return BlockInit.peach_log.defaultBlockState();
 		case 5: return BlockInit.cherry_blossoms_log.defaultBlockState();
-		case 6: return BlockInit.peach_log.defaultBlockState();
+		case 6: return BlockInit.maple_log.defaultBlockState();
 		default: return BlockInit.chestnut_log.defaultBlockState();
 		}
 	}
@@ -115,21 +138,21 @@ public class SMTreeFeatuer extends AbstractTreeFeatuer {
 		case 2: return BlockInit.orange_leaves.defaultBlockState().setValue(ISMCrop.AGE2, 2);
 		case 3: return BlockInit.estor_leaves.defaultBlockState().setValue(ISMCrop.AGE2, 2);
 		case 4: return BlockInit.peach_leaves.defaultBlockState().setValue(ISMCrop.AGE2, 2);
-		case 5: return BlockInit.cherry_blossoms_leaves.defaultBlockState().setValue(LeavesBlock.PERSISTENT, true);
-		case 6: return BlockInit.maple_leaves.defaultBlockState().setValue(LeavesBlock.PERSISTENT, true).setValue(ISMCrop.AGE5, new Random().nextInt(6));
-		default: return BlockInit.chestnut_leaves.defaultBlockState().setValue(LeavesBlock.PERSISTENT, true);
+		case 5: return BlockInit.cherry_blossoms_leaves.defaultBlockState().setValue(LeavesBlock.PERSISTENT, false).setValue(LeavesBlock.DISTANCE, 1);
+		case 6: return BlockInit.maple_leaves.defaultBlockState().setValue(LeavesBlock.PERSISTENT, false).setValue(LeavesBlock.DISTANCE, 1).setValue(ISMCrop.AGE5, new Random().nextInt(6));
+		default: return BlockInit.chestnut_leaves.defaultBlockState().setValue(LeavesBlock.PERSISTENT, false).setValue(LeavesBlock.DISTANCE, 1);
 		}
 	}
 
 	public void setSMBlock(WorldGenLevel world, BlockPos pos, BlockState state) {
-		if (world.getBlockState(pos).isAir() && this.checkBlock(world.getBlockState(pos.below()).getBlock())) {
+		if (world.isEmptyBlock(pos) && this.checkBlock(world.getBlockState(pos.below()).getBlock())) {
 			this.setBlock(world, pos, state);
 		}
 
 		else {
 			for (int y = 1; y < 4; y++) {
 				BlockPos targetPos = pos.below(y);
-				if (world.getBlockState(targetPos).isAir() && this.checkBlock(world.getBlockState(targetPos.below()).getBlock())) {
+				if (world.isEmptyBlock(targetPos) && this.checkBlock(world.getBlockState(targetPos.below()).getBlock())) {
 					this.setBlock(world, targetPos, state);
 					return;
 				}
@@ -137,11 +160,15 @@ public class SMTreeFeatuer extends AbstractTreeFeatuer {
 
 			for (int y = 1; y < 2; y++) {
 				BlockPos targetPos = pos.above(y);
-				if (world.getBlockState(targetPos).isAir() && this.checkBlock(world.getBlockState(targetPos.below()).getBlock())) {
+				if (world.isEmptyBlock(targetPos) && this.checkBlock(world.getBlockState(targetPos.below()).getBlock())) {
 					this.setBlock(world, targetPos, state);
 					return;
 				}
 			}
 		}
+	}
+
+	protected void setBlock(LevelWriter world, BlockPos pos, BlockState state) {
+		world.setBlock(pos, state, 3);
 	}
 }

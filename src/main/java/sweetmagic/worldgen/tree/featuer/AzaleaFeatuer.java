@@ -55,7 +55,7 @@ public class AzaleaFeatuer extends AbstractTreeFeatuer {
 	}
 
 	// 葉っぱ
-	public void setleave (WorldGenLevel world, BlockPos pos, Random rand) {
+	public void setleave(WorldGenLevel world, BlockPos pos, Random rand) {
 		this.setBlock(world, pos, rand.nextBoolean() ? this.getLeave() : this.getFlower());
 	}
 

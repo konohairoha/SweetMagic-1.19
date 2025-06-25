@@ -28,7 +28,7 @@ public class SMStructure extends Structure {
 			StructureTemplatePool.CODEC.fieldOf("start_pool").forGetter((par2) -> {
 				return par2.startPool;
 			}), ResourceLocation.CODEC.optionalFieldOf("start_jigsaw_name").forGetter((par3) -> {
-				return par3.startJigsawName;
+				return par3.jigsawName;
 			}), Codec.intRange(0, 512).fieldOf("size").forGetter((par4) -> {
 				return par4.maxDepth;
 			}), HeightProvider.CODEC.fieldOf("start_height").forGetter((par5) -> {
@@ -62,20 +62,18 @@ public class SMStructure extends Structure {
 	}
 
 	private final Holder<StructureTemplatePool> startPool;
-	private final Optional<ResourceLocation> startJigsawName;
+	private final Optional<ResourceLocation> jigsawName;
 	private final int maxDepth;
 	private final HeightProvider startHeight;
-	private final boolean useExpansionHack;
 	private final Optional<Heightmap.Types> projectStartToHeightmap;
 	private final int maxDistanceFromCenter;
 
 	public SMStructure(Structure.StructureSettings set, Holder<StructureTemplatePool> startPool, Optional<ResourceLocation> jigsawName, int maxDepth, HeightProvider startHeight, Optional<Heightmap.Types> heightmap, int maxDistance) {
 		super(set);
 		this.startPool = startPool;
-		this.startJigsawName = jigsawName;
+		this.jigsawName = Optional.empty();
 		this.maxDepth = maxDepth;
 		this.startHeight = startHeight;
-		this.useExpansionHack = true;
 		this.projectStartToHeightmap = heightmap;
 		this.maxDistanceFromCenter = maxDistance;
 	}
@@ -93,7 +91,7 @@ public class SMStructure extends Structure {
 		int i = this.startHeight.sample(gen.random(), new WorldGenerationContext(gen.chunkGenerator(), gen.heightAccessor()));
 		BlockPos pos = new BlockPos(chunkPos.getMinBlockX(), i, chunkPos.getMinBlockZ());
 		Pools.forceBootstrap();
-		return JigsawPlacement.addPieces(gen, this.startPool, this.startJigsawName, this.maxDepth, pos, this.useExpansionHack, this.projectStartToHeightmap, this.maxDistanceFromCenter);
+		return JigsawPlacement.addPieces(gen, this.startPool, this.jigsawName, this.maxDepth, pos, true, this.projectStartToHeightmap, this.maxDistanceFromCenter);
 	}
 
 	public StructureType<?> type() {

@@ -26,14 +26,14 @@ public abstract class AbstractTreeFeatuer extends Feature<NoneFeatureConfigurati
 	public abstract BlockState getLeave();
 
 	// 空気
-	public void setAir (WorldGenLevel world, BlockPos pos, BlockState state) {
+	public void setAir(WorldGenLevel world, BlockPos pos, BlockState state) {
 		if (world.getBlockState(pos).getBlock() == state.getBlock()) {
 			this.setBlock(world, pos, AIR);
 		}
 	}
 
 	// 草か土かチェック
-	public boolean checkBlock (Block block) {
+	public boolean checkBlock(Block block) {
 		return block == Blocks.DIRT || block == Blocks.GRASS_BLOCK;
 	}
 }

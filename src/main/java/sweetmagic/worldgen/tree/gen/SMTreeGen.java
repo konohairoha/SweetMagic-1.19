@@ -1,14 +1,18 @@
 package sweetmagic.worldgen.tree.gen;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
 import sweetmagic.api.iblock.ISMCrop;
 import sweetmagic.init.BlockInit;
+import sweetmagic.init.block.base.BaseFaceBlock;
 
 public class SMTreeGen extends AbstractTreeGen {
+
+	private final static Direction[] ALLFACE = new Direction[] {Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
 
 	public SMTreeGen(BlockState log, BlockState leave, int growValue) {
 		super(log, leave, growValue);
@@ -56,6 +60,10 @@ public class SMTreeGen extends AbstractTreeGen {
 		//原木
 		for (int y = 0; y <= 5; y++) {
 			world.setBlock(pos.offset(0, y, 0), this.log, 3);
+		}
+
+		if(this.leave.getBlock() == BlockInit.maple_leaves && world.getRandom().nextFloat() >= 0.33F) {
+			world.setBlock(pos.above(1), BlockInit.maple_hole_log.defaultBlockState().setValue(BaseFaceBlock.FACING, ALLFACE[world.getRandom().nextInt(4)]), 3);
 		}
 
 		if (this.leave.getBlock() != BlockInit.chestnut_leaves) { return; }

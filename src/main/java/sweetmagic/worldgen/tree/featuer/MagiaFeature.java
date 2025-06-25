@@ -29,7 +29,7 @@ public class MagiaFeature extends AbstractTreeFeatuer {
 		BlockPos pos = con.origin();
 		WorldGenLevel world = con.level();
 		if (!this.checkBlock(world.getBlockState(pos.below()).getBlock())) { return false; }
-
+		
 		for (int y = 1; y <= 8; y++) {
 			Material mate = world.getBlockState(pos.above(y)).getMaterial();
 			if (mate != Material.AIR && mate == Material.PLANT){ return false; }
@@ -121,7 +121,7 @@ public class MagiaFeature extends AbstractTreeFeatuer {
 	}
 
 	// 主軸の横
-	public void subTrunk (WorldGenLevel world, BlockPos pos, BlockState state, Direction face) {
+	public void subTrunk(WorldGenLevel world, BlockPos pos, BlockState state, Direction face) {
 
 		RandomSource rand = world.getRandom();
 		int height = rand.nextInt(3) + 2;
@@ -159,20 +159,20 @@ public class MagiaFeature extends AbstractTreeFeatuer {
 
 			this.setBlock(world, pos2, state2);
 
-			if (world.getBlockState(pos2.below()).isAir()) {
+			if (world.isEmptyBlock(pos2.below())) {
 				for (int k = 0; k < 4; k++) {
 					pos2 = pos2.below(1);
 					pos = pos.below(1);
 					this.setBlock(world, pos2, state2.setValue(AXIS, Direction.Axis.Y));
 
-					if (!world.getBlockState(pos2.below(1)).isAir()) { break; }
+					if (!world.isEmptyBlock(pos2.below(1))) { break; }
 				}
 			}
 		}
 	}
 
 	// 葉っぱ
-	public void setSubLeave (WorldGenLevel world, BlockPos pos, int scale, BlockState leave) {
+	public void setSubLeave(WorldGenLevel world, BlockPos pos, int scale, BlockState leave) {
 
 		RandomSource rand = world.getRandom();
 		float chance = 0.45F;
@@ -199,11 +199,11 @@ public class MagiaFeature extends AbstractTreeFeatuer {
 	}
 
 	public BlockState getLeave() {
-		return BlockInit.magiawood_leaves.defaultBlockState().setValue(LeavesBlock.PERSISTENT, true);
+		return BlockInit.magiawood_leaves.defaultBlockState().setValue(LeavesBlock.PERSISTENT, false).setValue(LeavesBlock.DISTANCE, 1);
 	}
 
 	protected void setBlock(WorldGenLevel world, BlockPos pos, BlockState state) {
-		if (world.getBlockState(pos).isAir() || state.equals(this.getLog())) {
+		if (world.isEmptyBlock(pos) || state.equals(this.getLog())) {
 			world.setBlock(pos, state, 3);
 		}
 	}
