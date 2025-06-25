@@ -24,6 +24,10 @@
 		"sweetmagic:whiteline_brick_b_slab",
 		"sweetmagic:whiteline_brick_y_stairs",
 		"sweetmagic:flagstone_stairs",
-		"sweetmagic:flagstone_color_stairs"
+		"sweetmagic:flagstone_color_stairs",
+		"sweetmagic:flagstone_brown_stairs",
+		"sweetmagic:white_stone_stairs",
+		"sweetmagic:white_stone_polished_stairs",
+		"sweetmagic:black_polished_stairs"
 	]
 }

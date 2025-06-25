@@ -1,16 +1,6 @@
 {
 	"replace": false,
 	"values": [
-		"sweetmagic:chestnut_sapling",
-		"sweetmagic:lemon_sapling",
-		"sweetmagic:orange_sapling",
-		"sweetmagic:coconut_sapling",
-		"sweetmagic:prism_sapling",
-		"sweetmagic:banana_sapling",
-		"sweetmagic:estor_sapling",
-		"sweetmagic:peach_sapling",
-		"sweetmagic:magiawood_sapling",
-		"sweetmagic:cherry_blossoms_sapling",
-		"sweetmagic:maple_sapling"
+		"#sweetmagic:smsapling"
 	]
 }

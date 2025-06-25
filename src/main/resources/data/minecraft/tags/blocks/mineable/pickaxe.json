@@ -4,6 +4,7 @@
 		"sweetmagic:moden_lamp",
 		"sweetmagic:wall_lamp",
 		"sweetmagic:wall_lamp_long",
+		"sweetmagic:ceiling_cue_lamp",
 		"sweetmagic:pole",
 		"sweetmagic:warp_block",
 		"sweetmagic:alternative_block",
@@ -75,7 +76,7 @@
 		"sweetmagic:magia_accelerator",
 		"sweetmagic:mffurnace",
 		"sweetmagic:mffurnace_advance",
-		
+
 		"sweetmagic:table_lamp",
 		"sweetmagic:table_lantern",
 		"sweetmagic:bedside_lamp",
@@ -107,9 +108,10 @@
 		"sweetmagic:aether_crafttable",
 		"sweetmagic:chest_reader",
 		"sweetmagic:magia_table",
-		
+
 		"sweetmagic:smspawner",
-		
+		"sweetmagic:poison_block",
+
 		"sweetmagic:antique_brick_pot_r",
 		"sweetmagic:antique_brick_pot_w",
 		"sweetmagic:antique_brick_pot_l",
@@ -138,7 +140,7 @@
 		"sweetmagic:magiaflux_block",
 		"sweetmagic:fluorite_block",
 		"sweetmagic:redberyl_block",
-		
+
 		"#sweetmagic:aethercrystal_block",
 		"#sweetmagic:divinecrystal_block",
 		"#sweetmagic:purecrystal_block",
@@ -161,7 +163,9 @@
 		"#sweetmagic:half_timber",
 		"#sweetmagic:half_timber_white",
 		"#sweetmagic:figurine",
-		
+		"#sweetmagic:note_pc",
+		"#sweetmagic:register",
+
 		"#sweetmagic:freezer",
 		"#sweetmagic:frypan",
 		"#sweetmagic:juice_maker",
