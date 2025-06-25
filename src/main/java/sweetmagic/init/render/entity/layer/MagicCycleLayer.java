@@ -15,7 +15,7 @@ import sweetmagic.init.PotionInit;
 import sweetmagic.util.RenderUtil;
 import sweetmagic.util.RenderUtil.RenderColor;
 
-public class MagicCycleLayer <T extends LivingEntity, M extends EntityModel<T>> extends AbstractEntityLayer<T, M> {
+public class MagicCycleLayer<T extends LivingEntity, M extends EntityModel<T>> extends AbstractEntityLayer<T, M> {
 
 	private static final Block SQUARE = BlockInit.magic_square_l_blank;
 
@@ -37,7 +37,7 @@ public class MagicCycleLayer <T extends LivingEntity, M extends EntityModel<T>> 
 		}
 
 		pose.pushPose();
-		pose.translate(0.0D, 1.5D, 0.0D);
+		pose.translate(0D, 1.5D, 0D);
 		pose.scale(size, size, size);
 		float angle = (tickCount + parTick) / 10F * this.pi;
 		pose.mulPose(Vector3f.YP.rotationDegrees(angle));

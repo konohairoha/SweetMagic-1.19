@@ -29,7 +29,7 @@ public class WhiteButlerLayer<T extends WhiteButler, M extends WhiteButlerModel<
 
 	protected void renderItem(T entity, PoseStack pose, MultiBufferSource buf, int light) {
 
-		WhiteButlerModel<T> model = this.getParentModel();
+		M model = this.getParentModel();
 
 		if (entity.getKnife()) {
 			pose.pushPose();

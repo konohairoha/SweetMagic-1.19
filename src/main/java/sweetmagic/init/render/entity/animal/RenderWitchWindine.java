@@ -1,7 +1,5 @@
 package sweetmagic.init.render.entity.animal;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
@@ -19,10 +17,6 @@ public class RenderWitchWindine<T extends WitchWindine> extends MobRenderer<T, S
 		super(con, new SMWitchModel<T>(con.bakeLayer(SMWitchModel.LAYER)), 0.5F);
 		this.addLayer(new WitchWandLayer<T, SMWitchModel<T>>(this, con));
 		this.addLayer(new MagicCycleLayer<T, SMWitchModel<T>>(this, con));
-	}
-
-	protected void scale(T entity, PoseStack pose, float par1) {
-		pose.scale(1F, 1F, 1F);
 	}
 
 	public ResourceLocation getTextureLocation(T entity) {

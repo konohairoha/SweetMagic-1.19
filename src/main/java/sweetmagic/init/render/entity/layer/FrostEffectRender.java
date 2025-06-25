@@ -31,7 +31,7 @@ public class FrostEffectRender <T extends LivingEntity, M extends EntityModel<T>
 		AttributeInstance speed = entity.getAttribute(Attributes.MOVEMENT_SPEED);
 		if (speed == null || speed.getModifier(SMEffect.MODIFIER_UUID) == null) { return; }
 
-		RandomSource rand = entity.level.random;
+		RandomSource rand = entity.getLevel().getRandom();
 		rand.setSeed(entity.getId() * 3121L);
 		BlockRenderDispatcher render = Minecraft.getInstance().getBlockRenderer();
 		BlockState state = Blocks.FROSTED_ICE.defaultBlockState();

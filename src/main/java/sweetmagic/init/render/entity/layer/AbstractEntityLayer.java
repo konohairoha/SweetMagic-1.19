@@ -49,11 +49,11 @@ public abstract class AbstractEntityLayer<T extends LivingEntity, M extends Enti
 	}
 
 	public void renderShadow(AbstractSMBoss entity, PoseStack pose, MultiBufferSource buf, float swing, float swingAmount, float parTick, int light, float ageTick, float headYaw, float headPitch, float rgb, float addY, float scale) {
-		if (!entity.isMagic()) { return; }
+		if (!entity.getMagic()) { return; }
 
 		pose.pushPose();
 		pose.scale(scale, scale, scale);
-		EntityModel<T> model = this.getModel();
+		M model = this.getParentModel();
 		model.prepareMobModel((T) entity, swing, swingAmount, parTick);
 		this.getParentModel().copyPropertiesTo(model);
 		VertexConsumer ver = buf.getBuffer(RenderType.entityCutoutNoCull(this.getTex()));

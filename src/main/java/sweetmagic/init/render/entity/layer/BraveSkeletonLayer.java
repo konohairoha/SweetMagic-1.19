@@ -13,7 +13,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import sweetmagic.init.entity.monster.boss.BraveSkeleton;
 
-public class BraveSkeletonLayer <T extends BraveSkeleton, M extends HumanoidModel<T>> extends AbstractEntityLayer<T, M> {
+public class BraveSkeletonLayer<T extends BraveSkeleton, M extends HumanoidModel<T>> extends AbstractEntityLayer<T, M> {
 
 	private static final ItemStack SWORD = new ItemStack(Items.DIAMOND_SWORD);
 	private static final ItemStack BOW = new ItemStack(Items.BOW);

@@ -35,16 +35,17 @@ public class ArlauneLayer <T extends Arlaune, M extends ArlauneModel<T>> extends
 	protected void renderArmWithItem(T entity, PoseStack pose, MultiBufferSource buf, int light, float swing, float swingAmount, float parTick, float ageTick, float netHeadYaw, float headPitch) {
 
 		pose.pushPose();
-		this.getParentModel().translateAndRotate(this.getParentModel().head, pose);
+		M model = this.getParentModel();
+		model.translateAndRotate(model.head, pose);
 		pose.mulPose(Vector3f.YP.rotationDegrees(180F));
 		pose.mulPose(Vector3f.XP.rotationDegrees(180F));
-		pose.translate(0.0D, -0.2D, -0.5D);
+		pose.translate(0D, -0.2D, -0.5D);
 		pose.translate(0.3D, 0.4D, 0.45D);
 		this.render.renderItem(entity, HAIRPIN, ItemTransforms.TransformType.THIRD_PERSON_RIGHT_HAND, false, pose, buf, light);
 		pose.popPose();
 
 		pose.pushPose();
-		this.getParentModel().translateAndRotate(this.getParentModel().getArm(true), pose);
+		model.translateAndRotate(model.getArm(true), pose);
 
 		CompoundTag tags = UMBRELLA.getOrCreateTag();
 		tags.putBoolean(JapaneseUmbrella.ACTIVE, true);
@@ -52,9 +53,9 @@ public class ArlauneLayer <T extends Arlaune, M extends ArlauneModel<T>> extends
 		if (tags.getBoolean(JapaneseUmbrella.ACTIVE)) {
 			pose.mulPose(Vector3f.YP.rotationDegrees(0F));
 			pose.mulPose(Vector3f.XP.rotationDegrees(120F));
-			pose.translate(0.0D, -0.1D, -0.2D);
+			pose.translate(0D, -0.1D, -0.2D);
 
-			if (entity.isMagic()) {
+			if (entity.getMagic()) {
 				pose.translate(0D, 0.2D, 0D);
 			}
 		}
@@ -64,7 +65,7 @@ public class ArlauneLayer <T extends Arlaune, M extends ArlauneModel<T>> extends
 			pose.mulPose(Vector3f.XP.rotationDegrees(165F));
 		}
 
-		pose.translate(0.0D, -0.4D, -0.2875D);
+		pose.translate(0D, -0.4D, -0.2875D);
 		this.render.renderItem(entity, UMBRELLA, ItemTransforms.TransformType.THIRD_PERSON_RIGHT_HAND, false, pose, buf, light);
 		pose.popPose();
 	}

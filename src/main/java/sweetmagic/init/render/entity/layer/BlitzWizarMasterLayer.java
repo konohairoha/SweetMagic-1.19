@@ -46,7 +46,7 @@ public class BlitzWizarMasterLayer<T extends BlitzWizardMaster, M extends BlitzW
 		}
 
 		else {
-			BlitzWizardModel<T> model = this.getParentModel();
+			M model = this.getParentModel();
 			model.translateAndRotate(model.getArm(false), pose);
 			pose.mulPose(Vector3f.XP.rotationDegrees(225F));
 			pose.mulPose(Vector3f.YP.rotationDegrees(90F));

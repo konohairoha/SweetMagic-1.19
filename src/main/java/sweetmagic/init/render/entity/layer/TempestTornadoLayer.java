@@ -55,10 +55,10 @@ public class TempestTornadoLayer <T extends BlazeTempestTornado, M extends Entit
 
 		for (int i = 0; i < size; i++) {
 			pose.pushPose();
-			pose.translate(0F, -0.35F + Mth.cos(((float)(i * 2) + ageTick) * 0.1F) * 0.1F, 0F);
+			pose.translate(0F, -0.35F + Mth.cos(((float) (i * 2) + ageTick) * 0.1F) * 0.1F, 0F);
 			pose.mulPose(Vector3f.YP.rotationDegrees(-rotY * pi + (i * (360 / size))));
 			pose.scale(scale, -scale, scale);
-			pose.translate(0.7F - (0.0055F * 1) , 0F, 0F);
+			pose.translate(0.7F - (0.0055F * 1), 0F, 0F);
 
 			ItemStack stack = count > i ? CANDLE : CANDLE_EX;
 			this.render.renderItem(entity, stack, ItemTransforms.TransformType.FIXED, false, pose, buf, light);

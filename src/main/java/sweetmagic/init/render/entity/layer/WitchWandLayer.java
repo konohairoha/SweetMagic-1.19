@@ -10,10 +10,11 @@ import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.ItemStack;
 import sweetmagic.api.ientity.ISMMob;
+import sweetmagic.api.ientity.IWitch;
 import sweetmagic.init.entity.animal.AbstractWitch;
 import sweetmagic.init.render.entity.model.SMWitchModel;
 
-public class WitchWandLayer<T extends Mob, M extends SMWitchModel<T>> extends AbstractEntityLayer<T, M> {
+public class WitchWandLayer<T extends Mob & IWitch, M extends SMWitchModel<T>> extends AbstractEntityLayer<T, M> {
 
 	public WitchWandLayer(RenderLayerParent<T, M> layer, EntityRendererProvider.Context con) {
 		super(layer, con);
@@ -57,11 +58,11 @@ public class WitchWandLayer<T extends Mob, M extends SMWitchModel<T>> extends Ab
 		}
 
 		if(flag) {
-			SMWitchModel<T> model = this.getParentModel();
+			M model = this.getParentModel();
 			model.translateAndRotate(model.getArm(false), pose);
 			pose.mulPose(Vector3f.XP.rotationDegrees(225F));
 			pose.mulPose(Vector3f.YP.rotationDegrees(180F));
-			pose.translate(0.0D, -0.2D, -0.5D);
+			pose.translate(0D, -0.2D, -0.5D);
 		}
 
 		this.render.renderItem(entity, wand, ItemTransforms.TransformType.THIRD_PERSON_RIGHT_HAND, false, pose, buf, light);

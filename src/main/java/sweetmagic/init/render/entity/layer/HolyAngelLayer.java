@@ -44,8 +44,8 @@ public class HolyAngelLayer <T extends HolyAngel, M extends EntityModel<T>> exte
 	}
 
 	public void renderAngelWingBig(T entity, PoseStack pose, MultiBufferSource buf, int light, boolean isReverse) {
-		float scale = 1.35F;
-		float reverseRate = (isReverse ? -1F : 1F);
+		float scale = entity.getCharge() ? 2.5F : 1.35F;
+		float reverseRate = isReverse ? -1F : 1F;
 		pose.pushPose();
 		pose.translate(-0.15F * reverseRate, -0.15F, 0.15F);
 		pose.mulPose(Vector3f.YN.rotationDegrees( (60F + 20F * Mth.sin(entity.tickCount * 0.1F)) * reverseRate ));
@@ -55,8 +55,8 @@ public class HolyAngelLayer <T extends HolyAngel, M extends EntityModel<T>> exte
 	}
 
 	public void renderAngelWingSmall(T entity, PoseStack pose, MultiBufferSource buf, int light, boolean isReverse) {
-		float scale = 1.15F;
-		float reverseRate = (isReverse ? -1F : 1F);
+		float scale = entity.getCharge() ? 1.5F : 1.15F;
+		float reverseRate = isReverse ? -1F : 1F;
 		pose.pushPose();
 		pose.translate(-0.25F * reverseRate, 0.35F, 0.175F);
 		pose.mulPose(Vector3f.YN.rotationDegrees( (60F - 20F * Mth.sin(entity.tickCount * 0.1F)) * reverseRate ));
@@ -67,10 +67,10 @@ public class HolyAngelLayer <T extends HolyAngel, M extends EntityModel<T>> exte
 	}
 
 	public void renderAngelRing(T entity, PoseStack pose, MultiBufferSource buf, int light) {
-		float scale = 1.15F;
+		float scale = entity.getCharge() ? 1.675F : 1.15F;
 		pose.pushPose();
-		pose.translate(-0.575F, -0.65F, -0.55F);
 		pose.scale(scale, scale, scale);
+		pose.translate(-0.5F, -0.5F, -0.5F);
 		RenderUtil.renderBlock(pose, buf, new RenderColor(1, 1, 1, light, OverlayTexture.NO_OVERLAY), RING);
 		pose.popPose();
 	}
@@ -95,7 +95,7 @@ public class HolyAngelLayer <T extends HolyAngel, M extends EntityModel<T>> exte
 
 			pose.pushPose();
 			pose.translate(0F, 1.35F + addY, 0F);
-			pose.mulPose(Vector3f.YP.rotationDegrees(rot + (isReverse ? 180F : 0F) + (i / 2) * 30F ));
+			pose.mulPose(Vector3f.YP.rotationDegrees(rot + (isReverse ? 180F : 0F) + (i / 2) * 30F));
 			pose.scale(scale, scale, scale);
 			pose.translate(4F, 0F, 0F);
 			RenderUtil.renderBlock(pose, buf, new RenderColor(1, 1, 1, light, OverlayTexture.NO_OVERLAY), GLASS);

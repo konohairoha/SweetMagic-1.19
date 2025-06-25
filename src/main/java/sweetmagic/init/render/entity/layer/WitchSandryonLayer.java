@@ -78,7 +78,7 @@ public class WitchSandryonLayer<T extends WitchSandryon, M extends WindWitchMode
 			this.getParentModel().translateAndRotate(this.getParentModel().getArm(false), pose);
 			pose.mulPose(Vector3f.XP.rotationDegrees(225F));
 			pose.mulPose(Vector3f.YP.rotationDegrees(180F));
-			pose.translate(0.0D, -0.2D, -0.55D);
+			pose.translate(0D, -0.2D, -0.55D);
 		}
 
 		this.render.renderItem(entity, WAND, ItemTransforms.TransformType.THIRD_PERSON_RIGHT_HAND, false, pose, buf, light);
@@ -108,7 +108,7 @@ public class WitchSandryonLayer<T extends WitchSandryon, M extends WindWitchMode
 		size = isTier5 ? 4 : 3;
 
 		pose.pushPose();
-		pose.translate(0.0D, 1.5D, 0.0D);
+		pose.translate(0D, 1.5D, 0D);
 		pose.scale(size, size, size);
 		float angle = tickCount / 10F * this.pi;
 		pose.mulPose(Vector3f.YP.rotationDegrees(angle));
@@ -120,7 +120,7 @@ public class WitchSandryonLayer<T extends WitchSandryon, M extends WindWitchMode
 
 		if (isTier5) {
 			pose.pushPose();
-			pose.translate(0.0D, 1D, 0.0D);
+			pose.translate(0D, 1D, 0D);
 			size = 3;
 			pose.scale(size, size, size);
 			pose.mulPose(Vector3f.YP.rotationDegrees(-angle * 1.5F));

@@ -13,6 +13,7 @@ import sweetmagic.init.render.entity.model.WitchAllayModel;
 public class RenderWitchAllay<T extends WitchAllay> extends MobRenderer<T, WitchAllayModel<T>> {
 
 	private static final ResourceLocation TEX = SweetMagicCore.getSRC("textures/entity/witchallay.png");
+	private static final ResourceLocation WINK = SweetMagicCore.getSRC("textures/entity/witchallay_wink.png");
 
 	public RenderWitchAllay(EntityRendererProvider.Context con) {
 		super(con, new WitchAllayModel<>(con.bakeLayer(WitchAllayModel.LAYER)), 0.4F);
@@ -21,7 +22,7 @@ public class RenderWitchAllay<T extends WitchAllay> extends MobRenderer<T, Witch
 	}
 
 	public ResourceLocation getTextureLocation(T entity) {
-		return TEX;
+		return entity.winkAnim.isStarted() && entity.winkAnim.getAccumulatedTime() <= 1200 ? WINK : TEX;
 	}
 
 	protected int getBlockLightLevel(T entity, BlockPos pos) {

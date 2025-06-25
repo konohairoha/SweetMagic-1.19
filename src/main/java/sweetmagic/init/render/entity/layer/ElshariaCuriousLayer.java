@@ -19,7 +19,7 @@ import sweetmagic.init.render.entity.model.HolyModel;
 import sweetmagic.util.RenderUtil;
 import sweetmagic.util.RenderUtil.RenderColor;
 
-public class ElshariaCuriousLayer <T extends ElshariaCurious, M extends EntityModel<T>> extends AbstractEntityLayer<T, M> {
+public class ElshariaCuriousLayer<T extends ElshariaCurious, M extends EntityModel<T>> extends AbstractEntityLayer<T, M> {
 
 	private static final Block RING = BlockInit.kogen;
 	private static final ItemStack STACK = new ItemStack(ItemInit.angel_wing_old);
@@ -37,21 +37,21 @@ public class ElshariaCuriousLayer <T extends ElshariaCurious, M extends EntityMo
 	}
 
 	public void renderAngelWingBig(T entity, PoseStack pose, MultiBufferSource buf, int light, boolean isReverse) {
-		float scale = 1.35F;
-		float reverseRate = (isReverse ? -1F : 1F);
+		float scale = entity.getCharge() ? 2.5F : 1.35F;
+		float reverseRate = isReverse ? -1F : 1F;
 		pose.pushPose();
 		pose.translate(-0.15F * reverseRate, -0.15F, 0.15F);
-		pose.mulPose(Vector3f.YN.rotationDegrees( (60F + 20F * Mth.sin(entity.tickCount * 0.1F)) * reverseRate ));
+		pose.mulPose(Vector3f.YN.rotationDegrees((60F + 20F * Mth.sin(entity.tickCount * 0.1F)) * reverseRate));
 		pose.scale(scale, -scale, scale);
 		this.render.renderItem(entity, STACK, ItemTransforms.TransformType.FIXED, false, pose, buf, light);
 		pose.popPose();
 	}
 
 	public void renderAngelRing(T entity, PoseStack pose, MultiBufferSource buf, int light) {
-		float scale = 1.15F;
+		float scale = entity.getCharge() ? 2F : 1.15F;
 		pose.pushPose();
-		pose.translate(-0.575F, -0.65F, -0.55F);
 		pose.scale(scale, scale, scale);
+		pose.translate(-0.5F, -0.5F, -0.5F);
 		RenderUtil.renderBlock(pose, buf, new RenderColor(1, 1, 1, light, OverlayTexture.NO_OVERLAY), RING);
 		pose.popPose();
 	}
