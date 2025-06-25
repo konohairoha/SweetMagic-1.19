@@ -1,9 +1,9 @@
 {
 	"type": "sweetmagic:tank_craft",
 	"ingredients": [
-		{ "item": "sweetmagic:b_mf_bottle", "count": 1 }
+		{"item": "sweetmagic:b_mf_bottle", "count": 1}
 	],
 	"result": [
-		{ "item": "sweetmagic:mf_bottle", "count": 1, "mf": 10000 }
+		{"item": "sweetmagic:mf_bottle", "count": 1, "mf": 10000}
 	]
 }

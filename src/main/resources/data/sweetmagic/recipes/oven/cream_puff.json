@@ -1,14 +1,14 @@
 {
 	"type": "sweetmagic:oven_craft",
 	"ingredients": [
-		{ "tag": "forge:custard", "count": 3 },
-		{ "tag": "forge:eggs", "count": 2 },
-		{ "tag": "forge:flour", "count": 5 },
-		{ "tag": "forge:butter", "count": 2 },
-		{ "tag": "forge:salt", "count": 1 },
-		{ "tag": "forge:sugar", "count": 3 }
+		{"tag": "forge:custard", "count": 3},
+		{"tag": "forge:eggs", "count": 2},
+		{"tag": "forge:flour", "count": 5},
+		{"tag": "forge:butter", "count": 2},
+		{"tag": "forge:salt", "count": 1},
+		{"tag": "forge:sugar", "count": 3}
 	],
 	"result": [
-		{ "item": "sweetmagic:cream_puff", "count": 9 }
+		{"item": "sweetmagic:cream_puff", "count": 9}
 	]
 }

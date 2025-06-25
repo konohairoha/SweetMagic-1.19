@@ -1,17 +1,17 @@
 {
 	"type": "sweetmagic:oven_craft",
 	"ingredients": [
-		{ "tag": "forge:crops/tomato", "count": 4 },
-		{ "tag": "forge:crops/onion", "count": 3 },
-		{ "tag": "forge:foods/meat/raw", "count": 2 },
-		{ "tag": "forge:cheese", "count": 5 },
-		{ "tag": "forge:flour", "count": 5 },
-		{ "tag": "forge:salt", "count": 1 },
-		{ "tag": "forge:sugar", "count": 1 },
-		{ "tag": "forge:oil", "count": 2 },
-		{ "tag": "forge:water", "count": 2 }
+		{"tag": "forge:crops/tomato", "count": 4},
+		{"tag": "forge:crops/onion", "count": 3},
+		{"tag": "forge:foods/meat/raw", "count": 2},
+		{"tag": "forge:cheese", "count": 5},
+		{"tag": "forge:flour", "count": 5},
+		{"tag": "forge:salt", "count": 1},
+		{"tag": "forge:sugar", "count": 1},
+		{"tag": "forge:oil", "count": 2},
+		{"tag": "forge:water", "count": 2}
 	],
 	"result": [
-		{ "item": "sweetmagic:pizza", "count": 10 }
+		{"item": "sweetmagic:pizza", "count": 10}
 	]
 }

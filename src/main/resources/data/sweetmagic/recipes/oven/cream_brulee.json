@@ -1,11 +1,11 @@
 {
 	"type": "sweetmagic:oven_craft",
 	"ingredients": [
-		{ "tag": "forge:custard", "count": 4 },
-		{ "tag": "forge:vannila_essence", "count": 4 },
-		{ "tag": "forge:sugar", "count": 2 }
+		{"tag": "forge:custard", "count": 4},
+		{"tag": "forge:vannila_essence", "count": 4},
+		{"tag": "forge:sugar", "count": 2}
 	],
 	"result": [
-		{ "item": "sweetmagic:cream_brulee", "count": 8 }
+		{"item": "sweetmagic:cream_brulee", "count": 8}
 	]
 }

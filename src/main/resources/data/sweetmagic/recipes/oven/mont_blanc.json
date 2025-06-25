@@ -1,12 +1,12 @@
 {
 	"type": "sweetmagic:oven_craft",
 	"ingredients": [
-		{ "tag": "forge:crops/chestnut", "count": 8 },
-		{ "tag": "forge:dough", "count": 2 },
-		{ "tag": "forge:cream", "count": 4 },
-		{ "tag": "forge:sugar", "count": 3 }
+		{"tag": "forge:crops/chestnut", "count": 8},
+		{"tag": "forge:dough", "count": 2},
+		{"tag": "forge:cream", "count": 4},
+		{"tag": "forge:sugar", "count": 3}
 	],
 	"result": [
-		{ "item": "sweetmagic:mont_blanc", "count": 8 }
+		{"item": "sweetmagic:mont_blanc", "count": 8}
 	]
 }

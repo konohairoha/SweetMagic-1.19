@@ -1,16 +1,16 @@
 {
 	"type": "sweetmagic:oven_craft",
 	"ingredients": [
-		{ "tag": "forge:custard", "count": 3 },
-		{ "tag": "forge:chocolate", "count": 1 },
-		{ "tag": "forge:eggs", "count": 2 },
-		{ "tag": "forge:flour", "count": 4 },
-		{ "tag": "forge:water", "count": 1 },
-		{ "tag": "forge:oil", "count": 2 },
-		{ "tag": "forge:salt", "count": 1 },
-		{ "tag": "forge:sugar", "count": 2 }
+		{"tag": "forge:custard", "count": 3},
+		{"tag": "forge:chocolate", "count": 1},
+		{"tag": "forge:eggs", "count": 2},
+		{"tag": "forge:flour", "count": 4},
+		{"tag": "forge:water", "count": 1},
+		{"tag": "forge:oil", "count": 2},
+		{"tag": "forge:salt", "count": 1},
+		{"tag": "forge:sugar", "count": 2}
 	],
 	"result": [
-		{ "item": "sweetmagic:eclair", "count": 9 }
+		{"item": "sweetmagic:eclair", "count": 9}
 	]
 }

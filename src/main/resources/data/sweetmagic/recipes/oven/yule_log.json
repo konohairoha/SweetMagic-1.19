@@ -1,0 +1,17 @@
+{
+	"type": "sweetmagic:pot_craft",
+	"ingredients": [
+		{"tag": "forge:cream", "count": 6},
+		{"tag": "forge:crops/strawberry", "count": 4},
+		{"tag": "forge:flour", "count": 4},
+		{"tag": "forge:cocoa_powder", "count": 8},
+		{"tag": "forge:eggs", "count": 4},
+		{"tag": "forge:butter", "count": 3},
+		{"tag": "forge:oil", "count": 4},
+		{"tag": "forge:milk", "count": 2},
+		{"tag": "forge:sugar", "count": 4}
+	],
+	"result": [
+		{"item": "sweetmagic:yule_log", "count": 8}
+	]
+}

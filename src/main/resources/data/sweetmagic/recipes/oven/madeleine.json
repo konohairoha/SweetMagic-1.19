@@ -1,14 +1,14 @@
 {
 	"type": "sweetmagic:oven_craft",
 	"ingredients": [
-		{ "tag": "forge:wine", "count": 3 },
-		{ "tag": "forge:butter", "count": 3 },
-		{ "tag": "forge:flour", "count": 6 },
-		{ "tag": "forge:eggs", "count": 2 },
-		{ "tag": "forge:sugar", "count": 3 },
-		{ "tag": "forge:salt", "count": 2 }
+		{"tag": "forge:wine", "count": 3},
+		{"tag": "forge:butter", "count": 3},
+		{"tag": "forge:flour", "count": 6},
+		{"tag": "forge:eggs", "count": 2},
+		{"tag": "forge:sugar", "count": 3},
+		{"tag": "forge:salt", "count": 2}
 	],
 	"result": [
-		{ "item": "sweetmagic:madeleine", "count": 12 }
+		{"item": "sweetmagic:madeleine", "count": 12}
 	]
 }

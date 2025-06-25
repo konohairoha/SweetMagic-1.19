@@ -1,14 +1,14 @@
 {
 	"type": "sweetmagic:oven_craft",
 	"ingredients": [
-		{ "tag": "forge:crops/strawberry", "count": 8 },
-		{ "tag": "forge:custard", "count": 1 },
-		{ "tag": "forge:flour", "count": 3 },
-		{ "tag": "forge:eggs", "count": 2 },
-		{ "tag": "forge:butter", "count": 2 },
-		{ "item": "minecraft:sugar", "count": 3 }
+		{"tag": "forge:crops/strawberry", "count": 8},
+		{"tag": "forge:custard", "count": 1},
+		{"tag": "forge:flour", "count": 3},
+		{"tag": "forge:eggs", "count": 2},
+		{"tag": "forge:butter", "count": 2},
+		{"item": "minecraft:sugar", "count": 3}
 	],
 	"result": [
-		{ "item": "sweetmagic:strawberry_tart", "count": 6 }
+		{"item": "sweetmagic:strawberry_tart", "count": 6}
 	]
 }

@@ -1,13 +1,13 @@
 {
 	"type": "sweetmagic:oven_craft",
 	"ingredients": [
-		{ "tag": "forge:rice_cake", "count": 4 },
-		{ "tag": "forge:crops/adzukibeans", "count": 8 },
-		{ "tag": "forge:water", "count": 2 },
-		{ "tag": "forge:salt", "count": 2 },
-		{ "tag": "forge:sugar", "count": 8 }
+		{"tag": "forge:rice_cake", "count": 4},
+		{"tag": "forge:crops/adzukibeans", "count": 8},
+		{"tag": "forge:water", "count": 2},
+		{"tag": "forge:salt", "count": 2},
+		{"tag": "forge:sugar", "count": 8}
 	],
 	"result": [
-		{ "item": "sweetmagic:ohagi", "count": 8 }
+		{"item": "sweetmagic:ohagi", "count": 8}
 	]
 }

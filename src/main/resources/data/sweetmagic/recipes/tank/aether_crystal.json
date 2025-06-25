@@ -1,9 +1,9 @@
 {
 	"type": "sweetmagic:tank_craft",
 	"ingredients": [
-		{ "item": "sweetmagic:aether_crystal_shard", "count": 8 }
+		{"item": "sweetmagic:aether_crystal_shard", "count": 8}
 	],
 	"result": [
-		{ "item": "sweetmagic:aether_crystal", "count": 1, "mf": 0 }
+		{"item": "sweetmagic:aether_crystal", "count": 1, "mf": 0}
 	]
 }

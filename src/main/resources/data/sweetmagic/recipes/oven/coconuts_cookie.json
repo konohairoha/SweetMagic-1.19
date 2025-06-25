@@ -1,14 +1,14 @@
 {
 	"type": "sweetmagic:oven_craft",
 	"ingredients": [
-		{ "tag": "forge:crops/coconut", "count": 3 },
-		{ "tag": "forge:butter", "count": 1 },
-		{ "tag": "forge:flour", "count": 6 },
-		{ "tag": "forge:eggs", "count": 2 },
-		{ "tag": "forge:vannila_essence", "count": 6 },
-		{ "tag": "forge:sugar", "count": 3 }
+		{"tag": "forge:crops/coconut", "count": 3},
+		{"tag": "forge:butter", "count": 1},
+		{"tag": "forge:flour", "count": 6},
+		{"tag": "forge:eggs", "count": 2},
+		{"tag": "forge:vannila_essence", "count": 6},
+		{"tag": "forge:sugar", "count": 3}
 	],
 	"result": [
-		{ "item": "sweetmagic:coconuts_cookie", "count": 12 }
+		{"item": "sweetmagic:coconuts_cookie", "count": 12}
 	]
 }

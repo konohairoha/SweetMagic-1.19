@@ -1,15 +1,15 @@
 {
 	"type": "sweetmagic:oven_craft",
 	"ingredients": [
-		{ "tag": "forge:cheese", "count": 4 },
-		{ "tag": "forge:crops/lemon", "count": 2 },
-		{ "tag": "forge:eggs", "count": 2 },
-		{ "tag": "forge:flour", "count": 4 },
-		{ "tag": "forge:cream", "count": 2 },
-		{ "tag": "forge:butter", "count": 3 },
-		{ "tag": "forge:sugar", "count": 2 }
+		{"tag": "forge:cheese", "count": 4},
+		{"tag": "forge:crops/lemon", "count": 2},
+		{"tag": "forge:eggs", "count": 2},
+		{"tag": "forge:flour", "count": 4},
+		{"tag": "forge:cream", "count": 2},
+		{"tag": "forge:butter", "count": 3},
+		{"tag": "forge:sugar", "count": 2}
 	],
 	"result": [
-		{ "item": "sweetmagic:cheese_cake", "count": 8 }
+		{"item": "sweetmagic:cheese_cake", "count": 8}
 	]
 }

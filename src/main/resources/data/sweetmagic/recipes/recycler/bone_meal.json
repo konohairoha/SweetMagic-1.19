@@ -1,12 +1,12 @@
 {
 	"type": "sweetmagic:recycler_craft",
 	"ingredients": [
-		{ "item": "minecraft:bone", "count": 1 }
+		{"item": "minecraft:bone", "count": 1}
 	],
 	"result": [
-		{ "item": "minecraft:bone_meal", "count": 3 },
-		{ "item": "minecraft:bone_meal", "count": 1, "chance": 0.33 },
-		{ "item": "minecraft:bone_meal", "count": 1, "chance": 0.1 },
-		{ "item": "minecraft:wither_skeleton_skull", "count": 1, "chance": 0.0001 }
+		{"item": "minecraft:bone_meal", "count": 3},
+		{"item": "minecraft:bone_meal", "count": 1, "chance": 0.33},
+		{"item": "minecraft:bone_meal", "count": 1, "chance": 0.1},
+		{"item": "minecraft:wither_skeleton_skull", "count": 1, "chance": 0.0001}
 	]
 }

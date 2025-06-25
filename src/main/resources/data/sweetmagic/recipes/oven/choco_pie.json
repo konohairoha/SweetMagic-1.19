@@ -1,13 +1,13 @@
 {
 	"type": "sweetmagic:oven_craft",
 	"ingredients": [
-		{ "tag": "forge:chocolate", "count": 2 },
-		{ "tag": "forge:butter", "count": 1 },
-		{ "tag": "forge:flour", "count": 4 },
-		{ "tag": "forge:eggs", "count": 2 },
-		{ "tag": "forge:water", "count": 1 }
+		{"tag": "forge:chocolate", "count": 2},
+		{"tag": "forge:butter", "count": 1},
+		{"tag": "forge:flour", "count": 4},
+		{"tag": "forge:eggs", "count": 2},
+		{"tag": "forge:water", "count": 1}
 	],
 	"result": [
-		{ "item": "sweetmagic:choco_pie", "count": 8 }
+		{"item": "sweetmagic:choco_pie", "count": 8}
 	]
 }

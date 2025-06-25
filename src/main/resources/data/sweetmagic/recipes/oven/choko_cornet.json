@@ -1,14 +1,14 @@
 {
 	"type": "sweetmagic:oven_craft",
 	"ingredients": [
-		{ "tag": "forge:chocolate", "count": 5 },
-		{ "tag": "forge:toast", "count": 4 },
-		{ "tag": "forge:milk", "count": 2 },
-		{ "tag": "forge:butter", "count": 2 },
-		{ "tag": "forge:eggs", "count": 3 },
-		{ "tag": "forge:sugar", "count": 4 }
+		{"tag": "forge:chocolate", "count": 5},
+		{"tag": "forge:toast", "count": 4},
+		{"tag": "forge:milk", "count": 2},
+		{"tag": "forge:butter", "count": 2},
+		{"tag": "forge:eggs", "count": 3},
+		{"tag": "forge:sugar", "count": 4}
 	],
 	"result": [
-		{ "item": "sweetmagic:choko_cornet", "count": 10 }
+		{"item": "sweetmagic:choko_cornet", "count": 10}
 	]
 }

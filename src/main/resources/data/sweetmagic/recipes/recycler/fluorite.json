@@ -1,15 +1,15 @@
 {
 	"type": "sweetmagic:recycler_craft",
 	"ingredients": [
-		{ "item": "sweetmagic:fluorite", "count": 1 }
+		{"item": "sweetmagic:fluorite", "count": 1}
 	],
 	"result": [
-		{ "item": "sweetmagic:aether_crystal", "count": 2 },
-		{ "item": "sweetmagic:aether_crystal_shard", "count": 1, "chance": 0.75 },
-		{ "item": "sweetmagic:aether_crystal_shard", "count": 2, "chance": 0.5 },
-		{ "item": "sweetmagic:aether_crystal_shard", "count": 3, "chance": 0.25 },
-		{ "item": "sweetmagic:copper_scrap", "count": 1, "chance": 0.1 },
-		{ "item": "sweetmagic:iron_scrap", "count": 1, "chance": 0.075 },
-		{ "item": "sweetmagic:gold_scrap", "count": 1, "chance": 0.05 }
+		{"item": "sweetmagic:aether_crystal", "count": 2},
+		{"item": "sweetmagic:aether_crystal_shard", "count": 1, "chance": 0.75},
+		{"item": "sweetmagic:aether_crystal_shard", "count": 2, "chance": 0.5},
+		{"item": "sweetmagic:aether_crystal_shard", "count": 3, "chance": 0.25},
+		{"item": "sweetmagic:copper_scrap", "count": 1, "chance": 0.1},
+		{"item": "sweetmagic:iron_scrap", "count": 1, "chance": 0.075},
+		{"item": "sweetmagic:gold_scrap", "count": 1, "chance": 0.05}
 	]
 }

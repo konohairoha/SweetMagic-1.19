@@ -1,10 +1,10 @@
 {
 	"type": "sweetmagic:recycler_craft",
 	"ingredients": [
-		{ "tag": "minecraft:leaves", "count": 8 }
+		{"tag": "minecraft:leaves", "count": 8}
 	],
 	"result": [
-		{ "tag": "minecraft:saplings", "count": 1 },
-		{ "tag": "minecraft:saplings", "count": 1, "chance": 0.25 }
+		{"tag": "minecraft:saplings", "count": 1},
+		{"tag": "minecraft:saplings", "count": 1, "chance": 0.25}
 	]
 }

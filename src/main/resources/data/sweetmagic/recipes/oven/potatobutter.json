@@ -1,11 +1,11 @@
 {
 	"type": "sweetmagic:oven_craft",
 	"ingredients": [
-		{ "tag": "forge:crops/potato", "count": 3 },
-		{ "tag": "forge:salt", "count": 1 },
-		{ "tag": "forge:butter", "count": 2 }
+		{"tag": "forge:crops/potato", "count": 3},
+		{"tag": "forge:salt", "count": 1},
+		{"tag": "forge:butter", "count": 2}
 	],
 	"result": [
-		{ "item": "sweetmagic:potatobutter", "count": 5 }
+		{"item": "sweetmagic:potatobutter", "count": 5}
 	]
 }

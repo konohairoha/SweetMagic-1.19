@@ -1,9 +1,9 @@
 {
 	"type": "sweetmagic:recycler_craft",
 	"ingredients": [
-		{ "tag": "forge:stained_glass", "count": 1 }
+		{"tag": "forge:stained_glass", "count": 1}
 	],
 	"result": [
-		{ "item": "minecraft:glass", "count": 1 }
+		{"item": "minecraft:glass", "count": 1}
 	]
 }

@@ -1,16 +1,16 @@
 {
 	"type": "sweetmagic:oven_craft",
 	"ingredients": [
-		{ "tag": "forge:raw_chicken", "count": 4 },
-		{ "tag": "forge:crops/onion", "count": 3 },
-		{ "tag": "forge:cheese", "count": 6 },
-		{ "tag": "forge:flour", "count": 4 },
-		{ "tag": "forge:butter", "count": 3 },
-		{ "tag": "forge:salt", "count": 1 },
-		{ "tag": "forge:milk", "count": 3 },
-		{ "tag": "forge:oil", "count": 2 }
+		{"tag": "forge:raw_chicken", "count": 4},
+		{"tag": "forge:crops/onion", "count": 3},
+		{"tag": "forge:cheese", "count": 6},
+		{"tag": "forge:flour", "count": 4},
+		{"tag": "forge:butter", "count": 3},
+		{"tag": "forge:salt", "count": 1},
+		{"tag": "forge:milk", "count": 3},
+		{"tag": "forge:oil", "count": 2}
 	],
 	"result": [
-		{ "item": "sweetmagic:gratin", "count": 14 }
+		{"item": "sweetmagic:gratin", "count": 14}
 	]
 }

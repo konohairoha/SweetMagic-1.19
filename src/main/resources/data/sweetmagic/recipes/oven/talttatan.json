@@ -1,16 +1,16 @@
 {
 	"type": "sweetmagic:oven_craft",
 	"ingredients": [
-		{ "tag": "forge:crops/apple", "count": 12 },
-		{ "tag": "forge:crops/mint", "count": 2 },
-		{ "tag": "forge:flour", "count": 4 },
-		{ "tag": "forge:eggs", "count": 2 },
-		{ "tag": "forge:butter", "count": 2 },
-		{ "tag": "forge:milk", "count": 4 },
-		{ "tag": "forge:salt", "count": 1 },
-		{ "tag": "forge:sugar", "count": 3 }
+		{"tag": "forge:crops/apple", "count": 12},
+		{"tag": "forge:crops/mint", "count": 2},
+		{"tag": "forge:flour", "count": 4},
+		{"tag": "forge:eggs", "count": 2},
+		{"tag": "forge:butter", "count": 2},
+		{"tag": "forge:milk", "count": 4},
+		{"tag": "forge:salt", "count": 1},
+		{"tag": "forge:sugar", "count": 3}
 	],
 	"result": [
-		{ "item": "sweetmagic:talttatan", "count": 8 }
+		{"item": "sweetmagic:talttatan", "count": 8}
 	]
 }

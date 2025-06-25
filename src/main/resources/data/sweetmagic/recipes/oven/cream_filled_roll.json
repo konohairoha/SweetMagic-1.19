@@ -1,11 +1,11 @@
 {
 	"type": "sweetmagic:oven_craft",
 	"ingredients": [
-		{ "tag": "forge:custard", "count": 4 },
-		{ "tag": "forge:toast", "count": 2 },
-		{ "tag": "forge:eggs", "count": 1 }
+		{"tag": "forge:custard", "count": 4},
+		{"tag": "forge:toast", "count": 2},
+		{"tag": "forge:eggs", "count": 1}
 	],
 	"result": [
-		{ "item": "sweetmagic:cream_filled_roll", "count": 5 }
+		{"item": "sweetmagic:cream_filled_roll", "count": 5}
 	]
 }

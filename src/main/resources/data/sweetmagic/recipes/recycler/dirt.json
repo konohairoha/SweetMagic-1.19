@@ -1,12 +1,12 @@
 {
 	"type": "sweetmagic:recycler_craft",
 	"ingredients": [
-		{ "tag": "forge:cobblestone", "count": 1 }
+		{"tag": "forge:cobblestone", "count": 1}
 	],
 	"result": [
-		{ "item": "minecraft:dirt", "count": 1 },
-		{ "item": "minecraft:dirt", "count": 1, "chance": 0.5 },
-		{ "item": "minecraft:gravel", "count": 1, "chance": 0.35 },
-		{ "item": "minecraft:gravel", "count": 1, "chance": 0.1 }
+		{"item": "minecraft:dirt", "count": 1},
+		{"item": "minecraft:dirt", "count": 1, "chance": 0.5},
+		{"item": "minecraft:gravel", "count": 1, "chance": 0.35},
+		{"item": "minecraft:gravel", "count": 1, "chance": 0.1}
 	]
 }

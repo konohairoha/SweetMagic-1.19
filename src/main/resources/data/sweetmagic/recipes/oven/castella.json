@@ -1,15 +1,15 @@
 {
 	"type": "sweetmagic:oven_craft",
 	"ingredients": [
-		{"tag": "forge:crops/lemon", "count": 4},
+		{"tag": "forge:honey", "count": 3},
+		{"tag": "forge:flour", "count": 4},
 		{"tag": "forge:eggs", "count": 4},
 		{"tag": "forge:butter", "count": 2},
-		{"tag": "forge:flour", "count": 8},
+		{"tag": "forge:milk", "count": 2},
 		{"tag": "forge:oil", "count": 2},
-		{"tag": "forge:salt", "count": 1},
 		{"tag": "forge:sugar", "count": 3}
 	],
 	"result": [
-		{"item": "sweetmagic:lemon_cookie", "count": 16}
+		{"item": "sweetmagic:castella", "count": 10}
 	]
 }

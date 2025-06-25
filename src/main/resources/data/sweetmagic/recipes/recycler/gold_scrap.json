@@ -1,13 +1,13 @@
 {
 	"type": "sweetmagic:recycler_craft",
 	"ingredients": [
-		{ "item": "sweetmagic:gold_scrap", "count": 1 }
+		{"item": "sweetmagic:gold_scrap", "count": 1}
 	],
 	"result": [
-		{ "item": "minecraft:gold_nugget", "count": 2 },
-		{ "item": "minecraft:gold_nugget", "count": 1, "chance": 0.75 },
-		{ "item": "minecraft:gold_nugget", "count": 1, "chance": 0.5 },
-		{ "item": "minecraft:raw_gold", "count": 1, "chance": 0.25 },
-		{ "item": "minecraft:raw_gold", "count": 1, "chance": 0.1 }
+		{"item": "minecraft:gold_nugget", "count": 2},
+		{"item": "minecraft:gold_nugget", "count": 1, "chance": 0.75},
+		{"item": "minecraft:gold_nugget", "count": 1, "chance": 0.5},
+		{"item": "minecraft:raw_gold", "count": 1, "chance": 0.25},
+		{"item": "minecraft:raw_gold", "count": 1, "chance": 0.1}
 	]
 }

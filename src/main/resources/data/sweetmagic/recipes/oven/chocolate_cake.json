@@ -1,12 +1,12 @@
 {
 	"type": "sweetmagic:oven_craft",
 	"ingredients": [
-		{ "tag": "forge:dough", "count": 2 },
-		{ "tag": "forge:chocolate", "count": 2 },
-		{ "tag": "forge:cream", "count": 2 },
-		{ "tag": "forge:cocoa_powder", "count": 8 }
+		{"tag": "forge:dough", "count": 2},
+		{"tag": "forge:chocolate", "count": 2},
+		{"tag": "forge:cream", "count": 2},
+		{"tag": "forge:cocoa_powder", "count": 8}
 	],
 	"result": [
-		{ "item": "sweetmagic:chocolate_cake", "count": 8 }
+		{"item": "sweetmagic:chocolate_cake", "count": 8}
 	]
 }

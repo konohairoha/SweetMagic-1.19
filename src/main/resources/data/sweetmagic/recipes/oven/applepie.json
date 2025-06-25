@@ -1,15 +1,15 @@
 {
 	"type": "sweetmagic:oven_craft",
 	"ingredients": [
-		{ "tag": "forge:crops/apple", "count": 4 },
-		{ "tag": "forge:custard", "count": 3 },
-		{ "tag": "forge:flour", "count": 4 },
-		{ "tag": "forge:eggs", "count": 2 },
-		{ "tag": "forge:butter", "count": 2 },
-		{ "tag": "forge:water", "count": 1 },
-		{ "tag": "forge:sugar", "count": 4 }
+		{"tag": "forge:crops/apple", "count": 4},
+		{"tag": "forge:custard", "count": 3},
+		{"tag": "forge:flour", "count": 4},
+		{"tag": "forge:eggs", "count": 2},
+		{"tag": "forge:butter", "count": 2},
+		{"tag": "forge:water", "count": 1},
+		{"tag": "forge:sugar", "count": 4}
 	],
 	"result": [
-		{ "item": "sweetmagic:applepie", "count": 7 }
+		{"item": "sweetmagic:applepie", "count": 7}
 	]
 }

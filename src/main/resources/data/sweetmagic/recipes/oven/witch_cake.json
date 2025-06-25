@@ -1,14 +1,17 @@
 {
 	"type": "sweetmagic:oven_craft",
 	"ingredients": [
-		{"tag": "forge:oil", "count": 1},
+		{"tag": "forge:dyes", "count": 1},
+		{"tag": "forge:dyes", "count": 1},
+		{"tag": "forge:chocolate", "count": 1},
 		{"tag": "forge:flour", "count": 4},
 		{"tag": "forge:eggs", "count": 2},
 		{"tag": "forge:butter", "count": 1},
+		{"tag": "forge:oil", "count": 1},
 		{"tag": "forge:milk", "count": 2},
 		{"tag": "forge:sugar", "count": 1}
 	],
 	"result": [
-		{"item": "sweetmagic:cup_cake", "count": 6}
+		{"item": "sweetmagic:witch_cake", "count": 8}
 	]
 }

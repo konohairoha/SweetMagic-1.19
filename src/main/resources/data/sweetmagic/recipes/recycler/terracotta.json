@@ -1,9 +1,9 @@
 {
 	"type": "sweetmagic:recycler_craft",
 	"ingredients": [
-		{ "tag": "minecraft:terracotta", "count": 1 }
+		{"tag": "minecraft:terracotta", "count": 1}
 	],
 	"result": [
-		{ "item": "minecraft:terracotta", "count": 1 }
+		{"item": "minecraft:terracotta", "count": 1}
 	]
 }

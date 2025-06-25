@@ -1,12 +1,12 @@
 {
 	"type": "sweetmagic:oven_craft",
 	"ingredients": [
-		{ "tag": "forge:crops/adzukibeans", "count": 8 },
-		{ "tag": "forge:toast", "count": 2 },
-		{ "tag": "forge:butter", "count": 4 },
-		{ "tag": "forge:sugar", "count": 4 }
+		{"tag": "forge:crops/adzukibeans", "count": 8},
+		{"tag": "forge:toast", "count": 2},
+		{"tag": "forge:butter", "count": 4},
+		{"tag": "forge:sugar", "count": 4}
 	],
 	"result": [
-		{ "item": "sweetmagic:ogura_toast", "count": 4 }
+		{"item": "sweetmagic:ogura_toast", "count": 4}
 	]
 }

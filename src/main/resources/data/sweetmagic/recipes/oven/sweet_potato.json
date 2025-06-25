@@ -1,14 +1,14 @@
 {
 	"type": "sweetmagic:oven_craft",
 	"ingredients": [
-		{ "tag": "forge:crops/sweetpotato", "count": 4 },
-		{ "tag": "forge:butter", "count": 1 },
-		{ "tag": "forge:milk", "count": 1 },
-		{ "tag": "forge:eggs", "count": 1 },
-		{ "tag": "forge:salt", "count": 1 },
-		{ "tag": "forge:sugar", "count": 1 }
+		{"tag": "forge:crops/sweetpotato", "count": 4},
+		{"tag": "forge:butter", "count": 1},
+		{"tag": "forge:milk", "count": 1},
+		{"tag": "forge:eggs", "count": 1},
+		{"tag": "forge:salt", "count": 1},
+		{"tag": "forge:sugar", "count": 1}
 	],
 	"result": [
-		{ "item": "sweetmagic:sweet_potato", "count": 6 }
+		{"item": "sweetmagic:sweet_potato", "count": 6}
 	]
 }

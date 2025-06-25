@@ -1,9 +1,9 @@
 {
 	"type": "sweetmagic:recycler_craft",
 	"ingredients": [
-		{ "tag": "minecraft:candles", "count": 1 }
+		{"tag": "minecraft:candles", "count": 1}
 	],
 	"result": [
-		{ "item": "minecraft:candle", "count": 1 }
+		{"item": "minecraft:candle", "count": 1}
 	]
 }

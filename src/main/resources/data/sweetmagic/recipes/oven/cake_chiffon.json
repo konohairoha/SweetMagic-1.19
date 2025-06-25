@@ -1,12 +1,12 @@
 {
 	"type": "sweetmagic:oven_craft",
 	"ingredients": [
-		{ "tag": "forge:eggs", "count": 6 },
-		{ "tag": "forge:flour", "count": 4 },
-		{ "tag": "forge:oil", "count": 2 },
-		{ "tag": "forge:sugar", "count": 8 }
+		{"tag": "forge:eggs", "count": 6},
+		{"tag": "forge:flour", "count": 4},
+		{"tag": "forge:oil", "count": 2},
+		{"tag": "forge:sugar", "count": 8}
 	],
 	"result": [
-		{ "item": "sweetmagic:cake_chiffon", "count": 8 }
+		{"item": "sweetmagic:cake_chiffon", "count": 8}
 	]
 }

@@ -1,11 +1,11 @@
 {
 	"type": "sweetmagic:recycler_craft",
 	"ingredients": [
-		{ "item": "minecraft:flint", "count": 1 }
+		{"item": "minecraft:flint", "count": 1}
 	],
 	"result": [
-		{ "item": "sweetmagic:copper_scrap", "count": 1, "chance": 0.2 },
-		{ "item": "sweetmagic:iron_scrap", "count": 1, "chance": 0.15 },
-		{ "item": "sweetmagic:gold_scrap", "count": 1, "chance": 0.1 }
+		{"item": "sweetmagic:copper_scrap", "count": 1, "chance": 0.2},
+		{"item": "sweetmagic:iron_scrap", "count": 1, "chance": 0.15},
+		{"item": "sweetmagic:gold_scrap", "count": 1, "chance": 0.1}
 	]
 }

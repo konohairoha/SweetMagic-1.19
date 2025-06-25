@@ -1,12 +1,12 @@
 {
 	"type": "sweetmagic:recycler_craft",
 	"ingredients": [
-		{ "tag": "forge:gravel", "count": 1 }
+		{"tag": "forge:gravel", "count": 1}
 	],
 	"result": [
-		{ "item": "minecraft:sand", "count": 1 },
-		{ "item": "minecraft:sand", "count": 1, "chance": 0.5 },
-		{ "item": "minecraft:flint", "count": 1, "chance": 0.35 },
-		{ "item": "minecraft:flint", "count": 1, "chance": 0.1 }
+		{"item": "minecraft:sand", "count": 1},
+		{"item": "minecraft:sand", "count": 1, "chance": 0.5},
+		{"item": "minecraft:flint", "count": 1, "chance": 0.35},
+		{"item": "minecraft:flint", "count": 1, "chance": 0.1}
 	]
 }

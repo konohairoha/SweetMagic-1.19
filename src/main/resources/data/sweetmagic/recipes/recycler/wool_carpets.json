@@ -1,9 +1,9 @@
 {
 	"type": "sweetmagic:recycler_craft",
 	"ingredients": [
-		{ "tag": "minecraft:wool_carpets", "count": 1 }
+		{"tag": "minecraft:wool_carpets", "count": 1}
 	],
 	"result": [
-		{ "item": "minecraft:white_carpet", "count": 1 }
+		{"item": "minecraft:white_carpet", "count": 1}
 	]
 }
