@@ -47,7 +47,7 @@ public class SMLivingDamageEvent {
 		LivingEntity target = event.getEntity();
 		DamageSource src = event.getSource();
 		Entity attackEntity = src.getEntity();
-		float oldDamage = damage;
+		final float oldDamage = damage;
 		hasQuillpen = false;
 
 		ItemStack chest = target.getItemBySlot(EquipmentSlot.CHEST);
@@ -106,11 +106,15 @@ public class SMLivingDamageEvent {
 			}
 		}
 
+		if(damage > 0) {
+			damage = SMLivingDamageEvent.barrierCut(target, leg, damage);
+		}
+
 		event.setAmount(damage);
 	}
 
 	// ローブでの魔法ダメージカット
-	public static float robeMagicDmageCut (LivingEntity target, float damage, DamageSource src, RobeInfo info) {
+	public static float robeMagicDmageCut(LivingEntity target, float damage, DamageSource src, RobeInfo info) {
 
 		IRobe robe = info.getRobe();
 		ItemStack stack = info.getStack();
@@ -124,7 +128,7 @@ public class SMLivingDamageEvent {
 	}
 
 	// ローブでのスイマジモブからのダメージカット
-	public static float robeSMMobDmageCut (LivingEntity target, float damage, LivingEntity attackEntity, RobeInfo info) {
+	public static float robeSMMobDmageCut(LivingEntity target, float damage, LivingEntity attackEntity, RobeInfo info) {
 
 		IRobe robe = info.getRobe();
 		ItemStack stack = info.getStack();
@@ -139,14 +143,13 @@ public class SMLivingDamageEvent {
 	}
 
 	// ポーチによるダメージカット
-	public static float porchMagicDmageCut (LivingEntity entity, float damage, DamageSource src, PorchInfo info) {
-
-		Level world = entity.level;
+	public static float porchMagicDmageCut(LivingEntity entity, float damage, DamageSource src, PorchInfo info) {
+		Level world = entity.getLevel();
 		IPorch porch = info.getPorch();
 		ItemStack stack = info.getStack();
 		if (porch.getStackList(stack).isEmpty()) { return damage; }
 
-		if ( ( world.getDayTime() % 24000 >= 12000 || entity.hasEffect(MobEffects.NIGHT_VISION)) && porch.hasAcce(stack, ItemInit.veil_darkness)) {
+		if ((world.getDayTime() % 24000 >= 12000 || entity.hasEffect(MobEffects.NIGHT_VISION)) && porch.hasAcce(stack, ItemInit.veil_darkness)) {
 			float dameRate = porch.acceCount(stack, ItemInit.veil_darkness, 5) * 0.1F;
 			damage *= (1F - dameRate);
 		}
@@ -157,15 +160,14 @@ public class SMLivingDamageEvent {
 	}
 
 	// ポーチによるダメージカット
-	public static float porchMobDmageCut (LivingEntity entity, LivingEntity attacker, float oldDamage, float damage, DamageSource src, PorchInfo info) {
-
-		Level world = entity.level;
+	public static float porchMobDmageCut(LivingEntity entity, LivingEntity attacker, float oldDamage, float damage, DamageSource src, PorchInfo info) {
+		Level world = entity.getLevel();
 		IPorch porch = info.getPorch();
 		ItemStack stack = info.getStack();
 		if (porch.getStackList(stack).isEmpty()) { return damage; }
 
 		// 夜か暗視ならダメージ軽減
-		if ( ( world.getDayTime() % 24000 >= 12000 || entity.hasEffect(MobEffects.NIGHT_VISION)) && porch.hasAcce(stack, ItemInit.veil_darkness)) {
+		if ((world.getDayTime() % 24000 >= 12000 || entity.hasEffect(MobEffects.NIGHT_VISION)) && porch.hasAcce(stack, ItemInit.veil_darkness)) {
 			float dameRate = porch.acceCount(stack, ItemInit.veil_darkness, 5) * 0.1F;
 			damage *= (1F - dameRate);
 		}
@@ -189,15 +191,14 @@ public class SMLivingDamageEvent {
 	}
 
 	// ポーチによるダメージ上昇
-	public static float porchMobDmageUp (LivingEntity entity, float damage, DamageSource src, PorchInfo info) {
-
-		Level world = entity.level;
+	public static float porchMobDmageUp(LivingEntity entity, float damage, DamageSource src, PorchInfo info) {
+		Level world = entity.getLevel();
 		IPorch porch = info.getPorch();
 		ItemStack stack = info.getStack();
 		if (porch.getStackList(stack).isEmpty()) { return damage; }
 
 		// 夜か暗視ならダメージ軽減
-		if ( ( world.getDayTime() % 24000 >= 12000 || entity.hasEffect(MobEffects.NIGHT_VISION)) && porch.hasAcce(stack, ItemInit.veil_darkness)) {
+		if ((world.getDayTime() % 24000 >= 12000 || entity.hasEffect(MobEffects.NIGHT_VISION)) && porch.hasAcce(stack, ItemInit.veil_darkness)) {
 			float dameRate = porch.acceCount(stack, ItemInit.veil_darkness, 5) * 0.1F;
 			damage *= (1F + dameRate);
 		}
@@ -206,12 +207,10 @@ public class SMLivingDamageEvent {
 	}
 
 	// ポーションによるダメージ増減
-	public static float potionDamageCut (LivingEntity target, LivingEntity attacker, DamageSource src, float damage) {
+	public static float potionDamageCut(LivingEntity target, LivingEntity attacker, DamageSource src, float damage) {
 
 		// 召喚保護なら攻撃を無効化
-		if (target.hasEffect(PotionInit.magic_array)) {
-			return 0;
-		}
+		if (target.hasEffect(PotionInit.magic_array)) { return 0; }
 
 		// エーテルシールドなら攻撃を無効化
 		if (target.hasEffect(PotionInit.aether_shield)) {
@@ -328,8 +327,7 @@ public class SMLivingDamageEvent {
 	}
 
 	// プレイヤーなら魔術書のダメージ無効化を発動
-	public static float bookCutDamage (Player player, LivingEntity attacker, float damage) {
-
+	public static float bookCutDamage(Player player, LivingEntity attacker, float damage) {
 		List<ItemStack> stackBookList = IMagicBook.getBookList(player);
 		if (stackBookList.isEmpty()) { return damage; }
 
@@ -342,11 +340,28 @@ public class SMLivingDamageEvent {
 
 		BookInfo info = new BookInfo(stackBookList.get(0));
 		IMagicBook book = info.getBook();
-		return book.checkChance(book.getRecastPage(info) + addChance, player.level) ? 0F : damage;
+		return book.checkChance(book.getRecastPage(info) + addChance, player.getLevel()) ? 0F : damage;
+	}
+
+	public static float barrierCut(LivingEntity target, ItemStack leg, float damage) {
+		if(!target.hasEffect(PotionInit.aether_barrier_origin)) { return damage; }
+
+		MobEffectInstance effect = target.getEffect(PotionInit.aether_barrier_origin);
+		int time = effect.getDuration();
+		int level = effect.getAmplifier();
+		float cutTime = damage * 20;
+
+		if (!leg.isEmpty() && leg.getItem() instanceof IPorch porch && porch.hasAcce(leg, ItemInit.magician_quillpen)) {
+			cutTime *= 0.25F;
+		}
+
+		target.removeEffect(PotionInit.aether_barrier_origin);
+		target.addEffect(new MobEffectInstance(PotionInit.aether_barrier_origin, time - (int) cutTime, level, true, false));
+		return damage / (level + 1);
 	}
 
 	// 攻撃対象を倒した場合
-	public static void targetKill (LivingEntity target, LivingEntity attacker, AbstractMagicShot shot, PorchInfo info) {
+	public static void targetKill(LivingEntity target, LivingEntity attacker, AbstractMagicShot shot, PorchInfo info) {
 
 		ItemStack stack = info.getStack();
 		IPorch porch = info.getPorch();
@@ -373,7 +388,6 @@ public class SMLivingDamageEvent {
 			List<ItemStack> magicList = IWand.getMagicList(IWand.getWandList((Player) attacker), e -> true);
 
 			for (ItemStack s : magicList) {
-
 				IMagicItem magic = new MagicInfo(s).getMagicItem();
 				int recast = magic.getRecastTime(s);
 				if (recast <= 0) { continue; }
@@ -384,13 +398,13 @@ public class SMLivingDamageEvent {
 	}
 
 	// ポーチによるダメージ上昇
-	public static void porchAftereffect (LivingEntity entity, float damage, DamageSource src, PorchInfo info) {
+	public static void porchAftereffect(LivingEntity entity, float damage, DamageSource src, PorchInfo info) {
 		if (info.getPorch().hasAcce(info.getStack(), ItemInit.angel_flugel)) {
 			entity.heal(damage * 0.025F);
 		}
 	}
 
-	public static void attackDisabled (LivingEntity target, PorchInfo info) {
+	public static void attackDisabled(LivingEntity target, PorchInfo info) {
 		if (!info.getPorch().hasAcce(info.getStack(), ItemInit.angel_flugel)) { return; }
 
 		PlayerHelper.setPotion(target, PotionInit.regeneration, 0, 200);

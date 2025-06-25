@@ -82,9 +82,7 @@ public class MillRecipeCategory extends AbstractRecipeCategory implements IRecip
 			String chance = String.format("%.2f", ( chancList.isEmpty() ? 1F : chancList.get(i) ) * 100F);
 
 			build.addSlot(RecipeIngredientRole.OUTPUT, 147, 9 + addY).addItemStack(resultList.get(i))
-				.addTooltipCallback((slotView, tooltip) -> {
-					tooltip.add(1, this.getTipArray(this.getText("chancedrop"), "：" + chance + "%").withStyle(GOLD));
-				});
+				.addTooltipCallback((slotView, tooltip) -> tooltip.add(1, this.getTipArray(this.getText("chancedrop"), "：" + chance + "%").withStyle(GOLD)));
 		}
 	}
 

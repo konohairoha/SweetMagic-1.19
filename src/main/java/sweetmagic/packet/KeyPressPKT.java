@@ -26,14 +26,16 @@ public record KeyPressPKT(SMKeybind key) implements IPacket {
 		Level level = player.level;
 		ItemStack stack = player.getMainHandItem();
 		Item item = stack.getItem();
+		ItemStack wandStack = IWand.getWand(player);
+		Item wandItem = wandStack.getItem();
 		ItemStack chest = player.getItemBySlot(EquipmentSlot.CHEST);
 		ItemStack leg = player.getItemBySlot(EquipmentSlot.LEGS);
 
 		switch (this.key) {
 		case OPEN:
 
-			if (item instanceof IWand wand) {
-				wand.openGui(level, player, stack);
+			if (!wandStack.isEmpty() && wandItem instanceof IWand wand) {
+				wand.openGui(level, player, wandStack);
 			}
 
 			else if (!chest.isEmpty() && chest.getItem() instanceof IRobe robe) {
@@ -55,12 +57,12 @@ public record KeyPressPKT(SMKeybind key) implements IPacket {
 				}
 			}
 
-			else if (item instanceof IWand wand) {
-				wand.nextSlot(level, player, stack);
+			else if (!wandStack.isEmpty() && wandItem instanceof IWand wand) {
+				wand.nextSlot(level, player, wandStack);
 			}
 
 			else if (item instanceof StartLightWand wand) {
-				wand.resetPos(player, stack);
+				wand.resetPos(player, wandStack);
 			}
 
 			break;
@@ -70,8 +72,8 @@ public record KeyPressPKT(SMKeybind key) implements IPacket {
 				book.openGui(level, player, stack);
 			}
 
-			else if (item instanceof IWand wand) {
-				wand.backSlot(level, player, stack);
+			else if (!wandStack.isEmpty() && wandItem instanceof IWand wand) {
+				wand.backSlot(level, player, wandStack);
 			}
 
 			else if (item instanceof StartLightWand wand) {

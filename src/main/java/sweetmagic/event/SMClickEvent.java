@@ -36,7 +36,7 @@ public class SMClickEvent {
 			ChangeSlot(new WandInfo(stack));
 		}
 
-		else if (!player.isShiftKeyDown() && item instanceof SummonerWand wand) {
+		else if (!player.isShiftKeyDown() && item instanceof SummonerWand) {
 			PacketHandler.sendToServer(new SummonerWandPKT());
 		}
 	}
@@ -54,7 +54,7 @@ public class SMClickEvent {
 			ChangeSlot(new WandInfo(stack));
 		}
 
-		else if (!player.isShiftKeyDown() && item instanceof SummonerWand wand) {
+		else if (!player.isShiftKeyDown() && item instanceof SummonerWand) {
 			event.setCanceled(true);
 		}
 	}
@@ -69,7 +69,7 @@ public class SMClickEvent {
 	public static void clientTickEvent(final PlayerTickEvent event) {
 		Player player = event.player;
 		if (player.getDisplayName().getString().equals("Konohairoha")) {
-			player.maxUpStep = !player.isShiftKeyDown() ? 1F : 1.25F;
+			player.maxUpStep = !player.isShiftKeyDown() ? 1F : 1.3F;
 		}
 	}
 

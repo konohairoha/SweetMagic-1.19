@@ -9,6 +9,7 @@ import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
 import sweetmagic.SweetMagicCore;
+import sweetmagic.packet.AddSPtoServerPKT;
 import sweetmagic.packet.AetherLampLightPKT;
 import sweetmagic.packet.BottlerPKT;
 import sweetmagic.packet.CleroPKT;
@@ -18,6 +19,7 @@ import sweetmagic.packet.FurnitureCraftPKT;
 import sweetmagic.packet.IPacket;
 import sweetmagic.packet.KeyPressPKT;
 import sweetmagic.packet.MouseSclorPKT;
+import sweetmagic.packet.PhonePKT;
 import sweetmagic.packet.StartLightWandPKT;
 import sweetmagic.packet.SummonerWandPKT;
 import sweetmagic.packet.WandLeftClickPKT;
@@ -36,11 +38,13 @@ public class PacketHandler {
 		registerClientToServer(StartLightWandPKT.class, StartLightWandPKT::decode);
 		registerClientToServer(CleroPKT.class, CleroPKT::decode);
 		registerClientToServer(CompasPKT.class, CompasPKT::decode);
+		registerClientToServer(PhonePKT.class, PhonePKT::decode);
 		registerClientToServer(WoodChestLootPKT.class, WoodChestLootPKT::decode);
 		registerClientToServer(FurnitureCraftPKT.class, FurnitureCraftPKT::decode);
 		registerClientToServer(BottlerPKT.class, BottlerPKT::decode);
 		registerClientToServer(AetherLampLightPKT.class, AetherLampLightPKT::decode);
 		registerClientToServer(SummonerWandPKT.class, SummonerWandPKT::decode);
+		registerClientToServer(AddSPtoServerPKT.class, AddSPtoServerPKT::decode);
 
 		registerServerToClient(CookStatusPKT.class, CookStatusPKT::decode);
 	}

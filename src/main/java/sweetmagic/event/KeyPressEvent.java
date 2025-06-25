@@ -70,7 +70,7 @@ public class KeyPressEvent {
 		if (player.isSpectator()) { return; }
 
 		// 杖を持っていないなら終了
-		ItemStack stack = player.getMainHandItem();
+		ItemStack stack = IWand.getWand(player);
 		if (stack.isEmpty() || !(stack.getItem() instanceof IWand)) { return; }
 
 		double scroll = event.getScrollDelta();

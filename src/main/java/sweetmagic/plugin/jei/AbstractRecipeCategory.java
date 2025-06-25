@@ -22,9 +22,10 @@ import sweetmagic.recipe.base.AbstractRecipe;
 public abstract class AbstractRecipeCategory implements ISMTip {
 
 	protected static final ResourceLocation TEX = SweetMagicCore.getSRC("textures/gui/gui_smcraft.png");
+	protected static final ResourceLocation MISC = SweetMagicCore.getSRC("textures/gui/gui_misc.png");
 	protected IDrawable recipeType;
 
-	public Component getTitle (String name) {
+	public Component getTitle(String name) {
 		return this.getTip("jei.sweetmagic." + name);
 	}
 

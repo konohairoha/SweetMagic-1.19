@@ -36,11 +36,12 @@ import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedOutEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.PlayerRespawnEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import sweetmagic.api.ientity.ISMMob;
 import sweetmagic.init.CapabilityInit;
 import sweetmagic.init.EnchantInit;
 import sweetmagic.init.ItemInit;
 import sweetmagic.init.PotionInit;
-import sweetmagic.init.capability.ICookingStatus;
+import sweetmagic.init.capability.icap.ICookingStatus;
 import sweetmagic.init.entity.monster.DwarfZombie;
 
 public class LivingDethEvent {
@@ -55,14 +56,14 @@ public class LivingDethEvent {
 
 		if (entity.hasEffect(PotionInit.resurrection)) {
 
-			Level world = entity.level;
+			Level world = entity.getLevel();
 			entity.setHealth(entity.getMaxHealth() / 2F);
 			entity.removeEffect(PotionInit.resurrection);
 			world.playSound(null, entity.blockPosition(), SoundEvents.TOTEM_USE, SoundSource.VOICE, 0.5F, 1F);
 
 			if (world instanceof ServerLevel sever) {
 
-				RandomSource rand = world.random;
+				RandomSource rand = world.getRandom();
 
 				for (int i = 0; i < 16; i++) {
 					double d0 = rand.nextGaussian() * 0.015D;
@@ -84,8 +85,6 @@ public class LivingDethEvent {
 
 			int count = -1;
 			for (ItemStack stack : pInv.items) {
-
-				// エーテルチャームが付いていなかったら次へ
 				count++;
 				if (stack.isEmpty() || EnchantmentHelper.getItemEnchantmentLevel(EnchantInit.aethercharm, stack) < 1) { continue; }
 
@@ -96,8 +95,6 @@ public class LivingDethEvent {
 			count = -1;
 
 			for (ItemStack stack : pInv.armor) {
-
-				// エーテルチャームが付いていなかったら次へ
 				count++;
 				if (stack.isEmpty() || EnchantmentHelper.getItemEnchantmentLevel(EnchantInit.aethercharm, stack) < 1) { continue; }
 
@@ -108,8 +105,6 @@ public class LivingDethEvent {
 			count = -1;
 
 			for (ItemStack stack : pInv.offhand) {
-
-				// エーテルチャームが付いていなかったら次へ
 				count++;
 				if (stack.isEmpty() || EnchantmentHelper.getItemEnchantmentLevel(EnchantInit.aethercharm, stack) < 1) { continue; }
 
@@ -135,7 +130,6 @@ public class LivingDethEvent {
 		NonNullList<ItemStack> offhand = keepInv.offhand;
 
 		for (int i = 0; i < items.size(); i++) {
-
 			ItemStack stack = items.get(i);
 			if (stack.isEmpty()) { continue; }
 
@@ -144,8 +138,8 @@ public class LivingDethEvent {
 
 			if (!pStack.isEmpty()) {
 
-				Level world = player.level;
-				if (world.isClientSide) { return; }
+				Level world = player.getLevel();
+				if (world.isClientSide()) { return; }
 
 				BlockPos pos = player.blockPosition();
 				world.addFreshEntity(new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(), stack.copy()));
@@ -156,7 +150,6 @@ public class LivingDethEvent {
 		}
 
 		for (int i = 0; i < armor.size(); i++) {
-
 			ItemStack stack = armor.get(i);
 			if (stack.isEmpty()) { continue; }
 
@@ -168,7 +161,6 @@ public class LivingDethEvent {
 		}
 
 		for (int i = 0; i < offhand.size(); i++) {
-
 			ItemStack stack = offhand.get(i);
 			if (stack.isEmpty()) { continue; }
 
@@ -223,10 +215,10 @@ public class LivingDethEvent {
 	@SubscribeEvent
 	public static void onEvent(LivingDropsEvent event) {
 
-		LivingEntity entity = event.getEntity();
 		Collection<ItemEntity> itemList = event.getDrops();
-		Level world = entity.level;
-		RandomSource rand = world.random;
+		LivingEntity entity = event.getEntity();
+		Level world = entity.getLevel();
+		RandomSource rand = world.getRandom();
 		double x = entity.xo;
 		double y = entity.yo;
 		double z = entity.zo;
@@ -251,6 +243,11 @@ public class LivingDethEvent {
 			itemList.add(getItem(world, x, y, z, Items.FEATHER, rand.nextInt(3) + 1));
 		}
 
+		// スイマジモブなら
+		else if (entity instanceof ISMMob) {
+			itemList.removeIf(s -> s.getItem().isDamageableItem());
+		}
+
 		if (entity.hasEffect(PotionInit.darkness_fog)) {
 			itemList.clear();
 
@@ -270,7 +267,7 @@ public class LivingDethEvent {
 		Entity entity = event.getSource().getDirectEntity();
 		if ( !(entity instanceof LivingEntity living) || !living.hasEffect(PotionInit.drop_increase)) { return; }
 
-		RandomSource rand = entity.level.random;
+		RandomSource rand = entity.getLevel().getRandom();
 		Collection<ItemEntity> entityList = event.getDrops();
 		int level = living.getEffect(PotionInit.drop_increase).getAmplifier() + 1;
 

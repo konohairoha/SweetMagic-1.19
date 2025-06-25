@@ -21,10 +21,10 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import sweetmagic.SweetMagicCore;
 import sweetmagic.api.event.SMUtilEvent;
-import sweetmagic.init.block.sm.SummonPedal;
+import sweetmagic.init.block.sm.CrystalPedal;
 
 @Mod.EventBusSubscriber(modid = SweetMagicCore.MODID, value = Dist.CLIENT)
-public class SummonPedalViiewEvent extends SMUtilEvent {
+public class CrystalPedalViewEvent extends SMUtilEvent {
 
 	// GUIの取得
 	private static final ResourceLocation TEX = SweetMagicCore.getSRC("textures/gui/gui_usergage.png");
@@ -35,7 +35,7 @@ public class SummonPedalViiewEvent extends SMUtilEvent {
 	// レンダーイベントの呼び出し
 	@SubscribeEvent
 	public static void onWandRenderEvent(RenderGuiOverlayEvent.Post event) {
-		if (!event.getOverlay().id().equals(VanillaGuiOverlay.HOTBAR.id()) || !SummonPedalViiewEvent.isView) { return; }
+		if (!event.getOverlay().id().equals(VanillaGuiOverlay.HOTBAR.id()) || !CrystalPedalViewEvent.isView) { return; }
 
 		int height = event.getWindow().getGuiScaledHeight();	// 画面サイズの高さを取得
 		int addX = (int) (-10 * getProgress(20));
@@ -53,7 +53,7 @@ public class SummonPedalViiewEvent extends SMUtilEvent {
 		float maxSize = 113F;
 
 		for(int i = 1; i < 3; i++) {
-			MutableComponent tip = getText("summon_pedal_view" + i);
+			MutableComponent tip = getText("crystal_pedal_view" + i);
 			pose.pushPose();
 			int spSize = font.width(tip.getString());
 			pose.scale(spSize < maxSize ? 1F : maxSize / spSize, 1F, 1F);
@@ -65,22 +65,22 @@ public class SummonPedalViiewEvent extends SMUtilEvent {
 		renderTick++;
 		if (tickTime++ % 5 == 0) {
 			tickTime = 0;
-			SummonPedalViiewEvent.isView = false;
+			CrystalPedalViewEvent.isView = false;
 		}
 	}
 
 	@SubscribeEvent
 	public static void highlightBlockEvent(RenderHighlightEvent.Block event) {
 		Camera camera = event.getCamera();
-		if (!(camera.getEntity() instanceof Player player) || SummonPedalViiewEvent.isView) { return; }
+		if (!(camera.getEntity() instanceof Player player) || CrystalPedalViewEvent.isView) { return; }
 
 		Level world = player.getLevel();
 		BlockPos pos = event.getTarget().getBlockPos();
 		Block block = world.getBlockState(pos).getBlock();
-		SummonPedalViiewEvent.isView = false;
+		CrystalPedalViewEvent.isView = false;
 
-		if (block instanceof SummonPedal pedal) {
-			SummonPedalViiewEvent.isView = true;
+		if (block instanceof CrystalPedal pedal) {
+			CrystalPedalViewEvent.isView = true;
 		}
 
 		else {

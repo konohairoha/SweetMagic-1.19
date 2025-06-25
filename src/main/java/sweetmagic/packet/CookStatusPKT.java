@@ -7,7 +7,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
 import sweetmagic.init.CapabilityInit;
 
-public record CookStatusPKT (CompoundTag tags) implements IPacket {
+public record CookStatusPKT(CompoundTag tags) implements IPacket {
 
 	@Override
 	public void handle(NetworkEvent.Context con) {

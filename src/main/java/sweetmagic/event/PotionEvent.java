@@ -34,7 +34,6 @@ public class PotionEvent {
 
 	@SubscribeEvent
 	public static void potionRemoveEvent(MobEffectEvent.Remove event) {
-
 		LivingEntity entity = event.getEntity();
 		MobEffectInstance instance = event.getEffectInstance();
 		if(instance == null) { return; }
@@ -51,8 +50,6 @@ public class PotionEvent {
 	// 回復のイベント
 	@SubscribeEvent
 	public static void healEvent(LivingHealEvent event) {
-
-		// 回復増加が付いていないなら終了
 		LivingEntity entity = event.getEntity();
 		if (entity == null || !entity.hasEffect(PotionInit.increased_recovery)) { return; }
 
@@ -84,7 +81,7 @@ public class PotionEvent {
 
 	public static boolean hasHarness(LivingEntity entity) {
 		ItemStack feet = entity.getItemBySlot(EquipmentSlot.FEET);
-		if ( !(feet.getItem() instanceof IHarness harness)) { return false; }
+		if (!(feet.getItem() instanceof IHarness harness)) { return false; }
 
 		int mf = harness.getMF(feet);
 		int useMF = 300;
@@ -104,7 +101,7 @@ public class PotionEvent {
 	// ノックバックのイベント
 	@SubscribeEvent
 	public static void teleportEvent(EntityTeleportEvent event) {
-		if ( !(event.getEntity() instanceof LivingEntity living) || !living.hasEffect(PotionInit.gravity)) { return; }
+		if (!(event.getEntity() instanceof LivingEntity living) || !living.hasEffect(PotionInit.gravity)) { return; }
 		event.setCanceled(true);
 	}
 }

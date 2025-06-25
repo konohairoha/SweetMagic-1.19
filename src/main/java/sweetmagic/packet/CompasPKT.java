@@ -31,28 +31,28 @@ public record CompasPKT(int selectId) implements IPacket {
 		tags.putBoolean("foundStructure", false);
 		tags.putBoolean("isSearch ", true);
 		tags.putBoolean("notFound", false);
-		player.level.playSound(null, player.blockPosition(), SoundEvents.UI_BUTTON_CLICK, SoundSource.PLAYERS, 0.25F, 1F);
-		if (player.level instanceof ServerLevel server) {
 
-			if(this.selectId <= -1) {
-				tags.putBoolean("isSearch", false);
-				return;
-			}
+		ServerLevel server = player.getLevel();
+		server.playSound(null, player.blockPosition(), SoundEvents.UI_BUTTON_CLICK, SoundSource.PLAYERS, 0.25F, 1F);
 
-			Structure structure = WorldHelper.getStructureForKey(server, SweetMagicCore.getSRC(StructureInit.strucMap.get(this.selectId).getName()));
-			HolderSet<Structure> hol = HolderSet.direct(WorldHelper.getHolderForStructure(server, structure));
-			Pair<BlockPos, Holder<Structure>> pair = server.getChunkSource().getGenerator().findNearestMapStructure(server, hol, player.blockPosition(), 100, false);
+		if(this.selectId <= -1) {
 			tags.putBoolean("isSearch", false);
-
-			if (pair == null) {
-				tags.putBoolean("notFound", true);
-				return;
-			}
-
-			tags.putBoolean("foundStructure", true);
-			tags.putInt("X", pair.getFirst().getX());
-			tags.putInt("Z", pair.getFirst().getZ());
+			return;
 		}
+
+		Structure structure = WorldHelper.getStructureKey(server, SweetMagicCore.getSRC(StructureInit.strucMap.get(this.selectId).name()));
+		HolderSet<Structure> hol = HolderSet.direct(WorldHelper.getStructure(server, structure));
+		Pair<BlockPos, Holder<Structure>> pair = server.getChunkSource().getGenerator().findNearestMapStructure(server, hol, player.blockPosition(), 100, false);
+		tags.putBoolean("isSearch", false);
+
+		if (pair == null) {
+			tags.putBoolean("notFound", true);
+			return;
+		}
+
+		tags.putBoolean("foundStructure", true);
+		tags.putInt("X", pair.getFirst().getX());
+		tags.putInt("Z", pair.getFirst().getZ());
 	}
 
 	@Override

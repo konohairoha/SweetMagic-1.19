@@ -1,6 +1,5 @@
 package sweetmagic.plugin.jade;
 
-import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -32,7 +31,7 @@ public class JadeDataProvider implements IBlockComponentProvider, ISMTip {
 
 		if (bEntity != null && bEntity instanceof TileSMMagic tile) {
 			tooltip.add(tooltip.getElementHelper().item(new ItemStack(ItemInit.aether_crystal), 0.67F));
-			tooltip.append(this.getTip("MF: " + String.format("%,d", tile.getMF())).withStyle(GREEN));
+			tooltip.append(this.getLabel("MF: " + this.format(tile.getMF()), GREEN));
 		}
 
 		else if (block instanceof ISMCrop crop && !(block instanceof FruitLeaves)) {
@@ -48,7 +47,7 @@ public class JadeDataProvider implements IBlockComponentProvider, ISMTip {
 		}
 
 		else {
-			tooltip.add(Component.translatable("tooltip.jade.crop_growth", Component.translatable("tooltip.jade.crop_mature").withStyle(ChatFormatting.GREEN)));
+			tooltip.add(Component.translatable("tooltip.jade.crop_growth", this.getTip("tooltip.jade.crop_mature").withStyle(GREEN)));
 		}
 	}
 

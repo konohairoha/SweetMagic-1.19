@@ -48,7 +48,7 @@ public class ToolTipEvent extends SMUtilEvent {
 		// 杖に入れる魔法アイテムなら
 		if (item instanceof IMagicItem smItem) {
 
-			toolTip.add(getTipArray(getText("tier").withStyle(GREEN), "： ", getLabel( "" + smItem.getTier()).withStyle(WHITE)));
+			toolTip.add(getTipArray(getText("tier").withStyle(GREEN), "： ", getLabel(smItem.getTier(), WHITE)));
 
 			// シフトを押したとき
 			if (Screen.hasShiftDown()) {
@@ -62,17 +62,17 @@ public class ToolTipEvent extends SMUtilEvent {
 
 				toolTip.add(getTipArray(getText("smtype").withStyle(GREEN), "： ", tipType.withStyle(WHITE)));
 				toolTip.add(getTipArray(getText("smelement").withStyle(GREEN), "： ", tipEle.withStyle(WHITE)));
-				toolTip.add(getTipArray(getText("requiremf").withStyle(GREEN), "： ", getLabel(String.format("%,d", smItem.getUseMF())).withStyle(WHITE) ));
+				toolTip.add(getTipArray(getText("requiremf").withStyle(GREEN), "： ", getLabel(String.format("%,d", smItem.getUseMF()), WHITE)));
 
 				float maxRecast = (float) smItem.getMaxRecastTime() / 20F;
-				toolTip.add(getTipArray(getText("recasttime").withStyle(GREEN), "： ", getLabel("" + maxRecast).withStyle(WHITE) ));
+				toolTip.add(getTipArray(getText("recasttime").withStyle(GREEN), "： ", getLabel(maxRecast, WHITE)));
 
 				if (smItem.isShirink()) {
-					toolTip.add(getTipArray(getText("shrink_item").withStyle(GREEN), "： ", getLabel("true").withStyle(WHITE) ));
+					toolTip.add(getTipArray(getText("shrink_item").withStyle(GREEN), "： ", getLabel("true", WHITE)));
 				}
 
 				if (smItem.getMagicType() == SMMagicType.SUMMON) {
-					toolTip.add(getTipArray(getText("summon_time").withStyle(GREEN), "： ", getLabel( String.format("%,d", smItem.getSummonTime())).withStyle(WHITE) ) );
+					toolTip.add(getTipArray(getText("summon_time").withStyle(GREEN), "： ", getLabel(String.format("%,d", smItem.getSummonTime()), WHITE)));
 				}
 
 				toolTip.add(empty());
@@ -115,7 +115,8 @@ public class ToolTipEvent extends SMUtilEvent {
 			int level = wand.getLevel(stack);
 
 			// tier
-			toolTip.add(getTipArray(getText("tier").withStyle(GREEN), ": ", getLabel("" + wand.getWandTier()).withStyle(WHITE)));
+			toolTip.add(getTipArray(getText("tier").withStyle(GREEN), ": ", getLabel(wand.getWandTier(), WHITE)));
+			toolTip.add(getTipArray(getText("slot_size").withStyle(GREEN), ": ", getLabel(wand.getSlot(), WHITE)));
 
 			// シフトを押したとき
 			if (Screen.hasShiftDown()) {
@@ -153,10 +154,10 @@ public class ToolTipEvent extends SMUtilEvent {
 				// レベルアップに必要な経験値
 				int needExp = wand.needExp(wand.getMaxLevel(), nextLevel, stack);
 
-				toolTip.add(getTipArray(getText("level"), ": ", getLabel("" + level).withStyle(WHITE)).withStyle(GREEN));
-				toolTip.add(getTipArray(getText("mf"), ": ", getLabel(String.format("%,d", wand.getMF(stack))).withStyle(WHITE)).withStyle(GREEN));
-				toolTip.add(getTipArray(getText("experience"), ": ", getLabel(String.format("%,d", needExp)).withStyle(WHITE)).withStyle(GREEN));
-				toolTip.add(getTipArray(getText("magic_damage"), ": ", getLabel(String.format("%.1f", wand.getPower(level))).withStyle(WHITE)).withStyle(GREEN));
+				toolTip.add(getTipArray(getText("level"), ": ", getLabel(level, WHITE)).withStyle(GREEN));
+				toolTip.add(getTipArray(getText("mf"), ": ", getLabel(String.format("%,d", wand.getMF(stack)), WHITE)).withStyle(GREEN));
+				toolTip.add(getTipArray(getText("experience"), ": ", getLabel(String.format("%,d", needExp), WHITE)).withStyle(GREEN));
+				toolTip.add(getTipArray(getText("magic_damage"), ": ", getLabel(String.format("%.1f", wand.getPower(level)), WHITE)).withStyle(GREEN));
 
 				// 属性杖なら属性表示
 				if (wand.isNotElement()) {
@@ -189,23 +190,23 @@ public class ToolTipEvent extends SMUtilEvent {
 				float recast = book.getRecastPage(info);
 
 				if (attack > 0F) {
-					toolTip.add(getTipArray(getText("magic_book_page_attack"), ": ", getLabel(String.format("%.1f%%", attack)).withStyle(WHITE)).withStyle(GOLD));
+					toolTip.add(getTipArray(getText("magic_book_page_attack"), ": ", getLabel(String.format("%.1f%%", attack), WHITE)).withStyle(GOLD));
 				}
 
 				if (defence > 0F) {
-					toolTip.add(getTipArray(getText("magic_book_page_defence"), ": ", getLabel(String.format("%.1f%%", defence)).withStyle(WHITE)).withStyle(GOLD));
+					toolTip.add(getTipArray(getText("magic_book_page_defence"), ": ", getLabel(String.format("%.1f%%", defence), WHITE)).withStyle(GOLD));
 				}
 
 				if (heal > 0F) {
-					toolTip.add(getTipArray(getText("magic_book_page_heal"), ": ", getLabel(String.format("%.1f", heal)).withStyle(WHITE)).withStyle(GOLD));
+					toolTip.add(getTipArray(getText("magic_book_page_heal"), ": ", getLabel(String.format("%.1f", heal), WHITE)).withStyle(GOLD));
 				}
 
 				if (mf > 0F) {
-					toolTip.add(getTipArray(getText("magic_book_page_mf"), ": ", getLabel(String.format("%.1f", mf)).withStyle(WHITE)).withStyle(GOLD));
+					toolTip.add(getTipArray(getText("magic_book_page_mf"), ": ", getLabel(String.format("%.1f", mf), WHITE)).withStyle(GOLD));
 				}
 
 				if (recast > 0F) {
-					toolTip.add(getTipArray(getText("magic_book_page_recast"), ": ", getLabel(String.format("%.1f", recast)).withStyle(WHITE)).withStyle(GOLD));
+					toolTip.add(getTipArray(getText("magic_book_page_recast"), ": ", getLabel(String.format("%.1f", recast), WHITE)).withStyle(GOLD));
 				}
 			}
 
@@ -216,7 +217,7 @@ public class ToolTipEvent extends SMUtilEvent {
 
 		else if (item instanceof IRobe robe) {
 
-			toolTip.add(getTipArray(getText("tier"), ": ", getLabel("" + robe.getTier()).withStyle(WHITE)).withStyle(GREEN));
+			toolTip.add(getTipArray(getText("tier"), ": ", getLabel(robe.getTier(), WHITE)).withStyle(GREEN));
 
 			// シフトを押したとき
 			if (Screen.hasShiftDown()) {
@@ -226,9 +227,9 @@ public class ToolTipEvent extends SMUtilEvent {
 				toolTip.add(getText("smrobe_chest").withStyle(GOLD));
 				toolTip.add(getText("smrobe_damecut").withStyle(GOLD));
 				toolTip.add(empty());
-				toolTip.add(getTipArray(getText("mf"), ": ", getLabel(String.format("%,d", robe.getMF(stack))).withStyle(WHITE) ).withStyle(GREEN));
-				toolTip.add(getTipArray(getText("magic_cut"), ": ", getLabel((1F - robe.getMagicDamageCut()) * 100F + "%").withStyle(WHITE) ).withStyle(GREEN));
-				toolTip.add(getTipArray(getText("smmob_cut"), ": ", getLabel((1F - robe.getSMMobDamageCut()) * 100F + "%").withStyle(WHITE) ).withStyle(GREEN));
+				toolTip.add(getTipArray(getText("mf"), ": ", getLabel(String.format("%,d", robe.getMF(stack)), WHITE)).withStyle(GREEN));
+				toolTip.add(getTipArray(getText("magic_cut"), ": ", getLabel((1F - robe.getMagicDamageCut()) * 100F + "%", WHITE)).withStyle(GREEN));
+				toolTip.add(getTipArray(getText("smmob_cut"), ": ", getLabel((1F - robe.getSMMobDamageCut()) * 100F + "%", WHITE)).withStyle(GREEN));
 			}
 
 			else {
@@ -238,11 +239,11 @@ public class ToolTipEvent extends SMUtilEvent {
 
 		else if (item instanceof IHarness harness) {
 
-			toolTip.add(getTipArray(getText("tier"), ": ", getLabel("" + harness.getTier()).withStyle(WHITE)).withStyle(GREEN));
+			toolTip.add(getTipArray(getText("tier"), ": ", getLabel(harness.getTier(), WHITE)).withStyle(GREEN));
 
 			// シフトを押したとき
 			if (Screen.hasShiftDown()) {
-				toolTip.add(getTipArray(getText("mf"), ": ", getLabel(String.format("%,d", harness.getMF(stack))).withStyle(WHITE)).withStyle(GREEN));
+				toolTip.add(getTipArray(getText("mf"), ": ", getLabel(String.format("%,d", harness.getMF(stack)), WHITE)).withStyle(GREEN));
 			}
 
 			else {
@@ -252,11 +253,11 @@ public class ToolTipEvent extends SMUtilEvent {
 
 		else if (item instanceof IChoker choker) {
 
-			toolTip.add(getTipArray(getText("tier"), ": ", getLabel("" + choker.getTier()).withStyle(WHITE)).withStyle(GREEN));
+			toolTip.add(getTipArray(getText("tier"), ": ", getLabel(choker.getTier(), WHITE)).withStyle(GREEN));
 
 			// シフトを押したとき
 			if (Screen.hasShiftDown()) {
-				toolTip.add(getTipArray(getText("mf"), ": ", getLabel(String.format("%,d", choker.getMF(stack))).withStyle(WHITE)).withStyle(GREEN));
+				toolTip.add(getTipArray(getText("mf"), ": ", getLabel(String.format("%,d", choker.getMF(stack)), WHITE)).withStyle(GREEN));
 			}
 
 			else {
@@ -265,7 +266,7 @@ public class ToolTipEvent extends SMUtilEvent {
 		}
 
 		else if (item instanceof IPorch porch) {
-			toolTip.add(getTipArray(getText("tier"), ": ", getLabel("" + porch.getTier()).withStyle(WHITE)).withStyle(GREEN));
+			toolTip.add(getTipArray(getText("tier"), ": ", getLabel(porch.getTier(), WHITE)).withStyle(GREEN));
 		}
 
 		else if (item instanceof IAcce acce) {
@@ -274,18 +275,18 @@ public class ToolTipEvent extends SMUtilEvent {
 			toolTip.add(getTip("====================================").withStyle(BLUE));
 
 			if (acce.isSwitch()) {
-				toolTip.add(getTipArray(getText("isactive"), ": ", getLabel( "" + stack.getOrCreateTag().getBoolean(SMAcce.NOT_ACTIVE)).withStyle(WHITE)).withStyle(GREEN));
+				toolTip.add(getTipArray(getText("isactive"), ": ", getLabel(stack.getOrCreateTag().getBoolean(SMAcce.NOT_ACTIVE), WHITE)).withStyle(GREEN));
 			}
 
 			boolean isDup = acce.isDuplication();
 
 			toolTip.add(getTipArray(getText("smacce"), ": ", enumString(acce.getAcceType().name()).withStyle(WHITE)).withStyle(GREEN));
-			toolTip.add(getTipArray(getText("isduplication"), ": ", getLabel("" + isDup).withStyle(WHITE)).withStyle(GREEN));
+			toolTip.add(getTipArray(getText("isduplication"), ": ", getLabel(isDup, WHITE)).withStyle(GREEN));
 			toolTip.add(getTipArray(getText("acce_howget"), ": ", acce.getHowGetTip().withStyle(WHITE)).withStyle(GREEN));
-			toolTip.add(getTipArray(getText("tier"), ": ", getLabel("" + acce.getTier()).withStyle(WHITE)).withStyle(GREEN));
+			toolTip.add(getTipArray(getText("tier"), ": ", getLabel(acce.getTier(), WHITE)).withStyle(GREEN));
 
 			if (isDup) {
-				toolTip.add(getTipArray(getText("stack_count"), ": ", getLabel(acce.getStackCount(new AcceInfo(stack)) + "/" + acce.getMaxStackCount()).withStyle(WHITE)).withStyle(GREEN));
+				toolTip.add(getTipArray(getText("stack_count"), ": ", getLabel(acce.getStackCount(new AcceInfo(stack)) + "/" + acce.getMaxStackCount(), WHITE)).withStyle(GREEN));
 			}
 
 			toolTip.add(getTip("====================================").withStyle(BLUE));
@@ -337,13 +338,13 @@ public class ToolTipEvent extends SMUtilEvent {
 			boolean isTier3 = value >= 3;
 
 			MutableComponent food_level = getText("cook_difficulty");
-			toolTip.add(getTipArray(food_level.copy(), ": ", getLabel("" + food.getFoodLevel()).withStyle(WHITE)).withStyle(GREEN));
+			toolTip.add(getTipArray(food_level.copy(), ": ", getLabel(food.getFoodLevel(), WHITE)).withStyle(GREEN));
 			toolTip.add(empty());
 
 			MutableComponent quality_level = getText("quality_level");
-			String potionEffect = info.potion().getDisplayName().getString() + getEnchaText(info.level() + 1).getString() + "(" + info.time() / 20 + "sec)";
+			String potionEffect = info.potion().getDisplayName().getString() + getEnchaTip(info.level() + 1).getString() + "(" + info.time() / 20 + "sec)";
 
-			toolTip.add(getTipArray(quality_level.copy(), ": ", getLabel("" + value).withStyle(WHITE)).withStyle(GREEN));
+			toolTip.add(getTipArray(quality_level.copy(), ": ", getLabel(value, WHITE)).withStyle(GREEN));
 			toolTip.add(getText("quality_effect").withStyle(GREEN));
 			toolTip.add(getTipArray("-", quality_level, "1: ", getText("quality1").withStyle(isTier1 ? WHITE : GRAY)).withStyle(isTier1 ? GREEN : GRAY));
 			toolTip.add(getTipArray("-", quality_level, "2: ", getText("quality2", potionEffect).withStyle(isTier2 ? WHITE : GRAY)).withStyle(isTier2 ? GREEN : GRAY));
@@ -370,7 +371,7 @@ public class ToolTipEvent extends SMUtilEvent {
 				}
 
 				String stackMF = String.format("%,d", mf * stack.getCount());
-				toolTip.add(getTipArray(String.format("%,d", mf), getLabel("MF").withStyle(GREEN)).withStyle(WHITE));
+				toolTip.add(getTipArray(String.format("%,d", mf), getLabel("MF", GREEN)).withStyle(WHITE));
 				toolTip.add(getTipArray("Stack：", getTip(stackMF).withStyle(WHITE), "MF").withStyle(GREEN));
 			}
 		}

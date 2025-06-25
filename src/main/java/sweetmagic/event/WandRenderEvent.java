@@ -22,6 +22,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ComputeFovModifierEvent;
 import net.minecraftforge.client.event.RenderGuiOverlayEvent;
 import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import sweetmagic.SweetMagicCore;
 import sweetmagic.api.emagic.SMMagicType;
@@ -32,7 +33,6 @@ import sweetmagic.api.iitem.IWand;
 import sweetmagic.api.iitem.info.MagicInfo;
 import sweetmagic.api.iitem.info.WandInfo;
 import sweetmagic.init.ItemInit;
-import sweetmagic.init.item.magic.MFTeleport;
 
 @OnlyIn(Dist.CLIENT)
 public class WandRenderEvent extends SMUtilEvent {
@@ -44,7 +44,7 @@ public class WandRenderEvent extends SMUtilEvent {
 	private static final int SCOPE_TIME = 6;
 
 	// レンダーイベントの呼び出し
-	@SubscribeEvent
+	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void onWandRenderEvent(RenderGuiOverlayEvent.Post event) {
 		if (!event.getOverlay().id().equals(VanillaGuiOverlay.HOTBAR.id())) { return; }
 
@@ -53,7 +53,7 @@ public class WandRenderEvent extends SMUtilEvent {
 		if (player.isSpectator()) { return; }
 
 		// ItemStackを取得
-		ItemStack stack = player.getMainHandItem();
+		ItemStack stack = IWand.getWand(player);
 		if (stack.isEmpty() || !(stack.getItem() instanceof IWand wand)) { return; }
 
 		Level world = mc.level;
@@ -92,7 +92,7 @@ public class WandRenderEvent extends SMUtilEvent {
 		// 選択してるスロットが空なら終了
 		if (!slotStack.isEmpty()) {
 
-			int addY = (int) (( isSneak ? -40 : Math.min(-40, tickTime) ) * getProgress(10));
+			int addY = (int) ((isSneak ? -40 : Math.min(-40, tickTime)) * getProgress(10));
 
 			// 選択中のスロットのアイテムを描画
 			renderSlotItem(mat, player, height, weight, new MagicInfo(slotStack), isLeftSide, addY);
@@ -103,7 +103,7 @@ public class WandRenderEvent extends SMUtilEvent {
 			}
 		}
 
-		if ( ( isSneak || !isSneak ) && tickTime >= 10 ) {
+		if ((isSneak || !isSneak) && tickTime >= 10) {
 
 			RenderSystem.setShaderColor(1F, 1F, 1F, getProgress(20));
 			if (!nextStack.isEmpty()) {
@@ -133,7 +133,7 @@ public class WandRenderEvent extends SMUtilEvent {
 		renderMFText(mc, pose, height, weight, wandInfo, isLeftSide);
 
 		// 選択してるスロットが空なら終了
-		if (!slotStack.isEmpty() && slotStack.getItem() instanceof MFTeleport) {
+		if (!slotStack.isEmpty()) {
 			renderMagicText(mc, pose, height, weight, slotStack, isLeftSide);
 		}
 
@@ -209,7 +209,7 @@ public class WandRenderEvent extends SMUtilEvent {
 				rate /= 4F;
 			}
 
-			int progress = Math.min(15, (int) (15 * (rate - ( remainingTick - (72000F - rate)) ) / rate ) );
+			int progress = Math.min(15, (int) (15 * (rate - (remainingTick - (72000F - rate))) / rate));
 			drawTextured(mat, posX, height - 22 + 15 - progress, 76 + (progress == 15 ? 8 : 0), 53 + (progress == 15 ? 0 : 15 - progress), 5, progress);
 		}
 	}
@@ -266,7 +266,7 @@ public class WandRenderEvent extends SMUtilEvent {
 			int x = smItem.isImmedFlag(magicStack) ? 88 : 5;
 
 			// ゲージの計算
-			int progress = (int) (32 * ( (float) smItem.getRecastTime(magicStack) / (float) smItem.getMaxRecastTime()));
+			int progress = (int) (32 * ((float) smItem.getRecastTime(magicStack) / (float) smItem.getMaxRecastTime())) + 1;
 			drawTextured(mat, posX, height - 11 - progress + addY, x, 73, 32, progress);
 		}
 	}

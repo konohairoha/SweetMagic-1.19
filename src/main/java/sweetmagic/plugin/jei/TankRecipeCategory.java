@@ -29,10 +29,12 @@ public class TankRecipeCategory extends AbstractRecipeCategory implements IRecip
 	protected static final ResourceLocation TEX = SweetMagicCore.getSRC("textures/gui/gui_mftank.png");
 	private final IDrawable background;
 	private final IDrawable icon;
+	private final IDrawable misc;
 
 	public TankRecipeCategory(IGuiHelper helper) {
 		this.background = helper.createDrawable(TEX, 4, 20, 169, 77);
 		this.recipeType = helper.createDrawable(TEX, 0, 185, 106, 8);
+		this.misc = helper.createDrawable(MISC, 22, 159, 77, 11);
 		this.icon = helper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(BlockInit.mftank));
 	}
 
@@ -67,6 +69,7 @@ public class TankRecipeCategory extends AbstractRecipeCategory implements IRecip
 	@Override
 	public void draw(TankRecipe recipe, IRecipeSlotsView slotsView, PoseStack pose, double mouseX, double mouseY) {
 		this.recipeType.draw(pose, 31, 29);
+		this.misc.draw(pose, 45, 27);
 		int mf = recipe.getMFList().get(0);
 		Font font = Minecraft.getInstance().font;
 		font.drawShadow(pose, this.getTipArray(this.getText("needmf"), String.format("%,d", mf)), 8, 42, 0xFFA000);

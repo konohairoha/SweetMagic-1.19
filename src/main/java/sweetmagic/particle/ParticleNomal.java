@@ -232,7 +232,7 @@ public class ParticleNomal extends ParticleSMBase {
 
 			ParticleNomal par = new ParticleNomal(world, x, y, z, xSpeed, ySpeed, zSpeed, 0.2F, this.sprite);
 			par.addColor((float) r, (float) g, (float) b);
-			par.scale(0.5F + world.random.nextFloat() * 0.25F);
+			par.scale(0.5F + world.getRandom().nextFloat() * 0.25F);
 			return par;
 		}
 	}

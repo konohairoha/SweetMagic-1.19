@@ -2,12 +2,15 @@ package sweetmagic.event;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Matrix4f;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -83,13 +86,14 @@ public class StarLightWandEvent extends SMUtilEvent {
 		if (player == null) { return; }
 
 		ItemStack stack = player.getMainHandItem();
-		if (stack.isEmpty() || !stack.is(ItemInit.startlight_wand)) { return; }
+		if (stack.isEmpty() || !(stack.getItem() instanceof StartLightWand)) { return; }
 
 		CompoundTag tags = stack.getTag();
 		if (tags == null || (!tags.contains("startX") && !tags.contains("endX")) || !tags.contains("blockId")) { return; }
 
-		Level world = player.level;
+		Level world = player.getLevel();
 		BlockState state = NbtUtils.readBlockState(tags.getCompound("state"));
+		Block block = state.getBlock();
 		BlockPos startPos = tags.contains("startX") ? new BlockPos(tags.getInt("startX"), tags.getInt("startY"), tags.getInt("startZ")) : new BlockPos(tags.getInt("endX"), tags.getInt("endY"), tags.getInt("endZ"));
 		BlockPos endPos = tags.contains("endX") ? new BlockPos(tags.getInt("endX"), tags.getInt("endY"), tags.getInt("endZ")) : new BlockPos(tags.getInt("startX"), tags.getInt("startY"), tags.getInt("startZ"));
 		Iterable<BlockPos> posList = BlockPos.betweenClosed(startPos, endPos);
@@ -101,25 +105,74 @@ public class StarLightWandEvent extends SMUtilEvent {
 		boolean isExchange = tags.getBoolean("isExchange");
 		boolean isFull = tags.getBoolean("isFull");
 
+		pose.pushPose();
+        VertexConsumer ver = buf.getBuffer(RenderType.lines());
+		Vec3 rPos = base.subtract(startPos.getX(), startPos.getY(), startPos.getZ()).add(.005F, .005F, .005F);
+		pose.translate(-rPos.x() + 1, -rPos.y() + 1, -rPos.z());
+
+		int x = -startPos.getX() + endPos.getX();
+		int y = -startPos.getY() + endPos.getY();
+		int z = -startPos.getZ() + endPos.getZ();
+		int addX = -1;
+		int addY = -1;
+		int addZ = 1;
+
+		if(x != 0) {
+			if(x > 0) {
+				addX = -1;
+			}
+
+			else {
+				x += addX;
+				addX = 0;
+			}
+		}
+
+		if(z != 0) {
+			if(z > 0) {
+				z -= addZ - 2;
+				addZ = 0;
+			}
+
+			else {
+				z -= addZ - 1;
+				addZ = 1;
+			}
+		}
+
+		if(y != 0) {
+			if(y < 0) {
+				y -= addY + 2;
+				addY = 0;
+			}
+		}
+
+        LevelRenderer.renderLineBox(pose, ver, addX, addY, addZ, x, y, z, 0.9F, 0.9F, 0.9F, 1F, 0.5F, 0.5F, 0.5F);
+		pose.popPose();
+
+		if(stack.is(ItemInit.wood_wand_b)) { return; }
+
 		for (BlockPos pos : posList) {
+			if (!isExchange && !world.isEmptyBlock(pos)) { continue; }
+			if(isExchange && block == world.getBlockState(pos).getBlock()) { continue; }
 
-			if (!isExchange && !world.getBlockState(pos).isAir()) { continue; }
-
-			Vec3 renderPos = base.subtract(pos.getX(), pos.getY(), pos.getZ()).add(.005F, .005F, .005F);
+			Vec3 renderPos = base.subtract(pos.getX(), pos.getY(), pos.getZ()).add(0.005F, 0.005F, 0.005F);
 			pose.pushPose();
 			pose.translate(-renderPos.x(), -renderPos.y(), -renderPos.z());
 			pose.scale(1.01F, 1.01F, 1.01F);
 
 			if (isFull) {
+				count++;
 				RenderUtil.renderTransBlock(pose, buf, RenderColor.create(1000), state, 0.65F);
 			}
 
 			else {
+				count += 10;
 				RenderUtil.renderTransBlock(pose, buf, RenderColor.create(1000), state);
 			}
 
 			pose.popPose();
-			if (count++ > 10000) { break; }
+			if (count > 10000) { break; }
 		}
 
 		RenderSystem.disableDepthTest();

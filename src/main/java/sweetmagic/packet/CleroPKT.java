@@ -17,7 +17,7 @@ public record CleroPKT(String name) implements IPacket {
 
 		ItemStack stack = player.getMainHandItem();
 		stack.setHoverName(Component.literal(this.name));
-		player.level.playSound(null, player.blockPosition(), SoundEvents.UI_BUTTON_CLICK, SoundSource.PLAYERS, 0.25F, 1F);
+		player.getLevel().playSound(null, player.blockPosition(), SoundEvents.UI_BUTTON_CLICK, SoundSource.PLAYERS, 0.25F, 1F);
 	}
 
 	@Override

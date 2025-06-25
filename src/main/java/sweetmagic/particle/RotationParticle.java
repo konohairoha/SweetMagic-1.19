@@ -318,6 +318,34 @@ public class RotationParticle extends SimpleAnimatedParticle {
 		}
 	}
 
+	public record BloodCyclone(SpriteSet sprite) implements BaseCreateParticle {
+
+		@Override
+		public Particle createParticle(SimpleParticleType type, ClientLevel world, double centerX, double centerY, double centerZ, double face, double radius, double angle) {
+
+			Vec3 center = new Vec3(centerX, centerY, centerZ);
+
+			int ccw = 1;
+			if (face < 0) {
+				ccw = -1;
+				face = -face;
+			}
+
+			Direction dir = Direction.from3DDataValue((int) face);
+			float radAngle = (float) (angle * Math.PI / 180F);
+			Vec3 axis = MathHelper.V3itoV3(dir.getNormal());
+			Vec3 rot = new Vec3(radius, 0, 0).yRot(radAngle);
+			Vec3 newPos = MathHelper.changeBasisN(axis, rot).add(center);
+			RotationParticle par = new RotationParticle(world, newPos.x, newPos.y, newPos.z, center, axis, ccw, radius, radAngle, this.sprite);
+			par.addColor(195F + this.getRand(32F), 17F + this.getRand(32F), 71F + this.getRand(32F));
+			par.lifetime = 25 + rand.nextInt(15);
+			par.setQuadSize(0.1F + this.getRand(0.1F));
+			par.yd = 2D;
+			par.isUp = true;
+			return par;
+		}
+	}
+
 	public record Yellow(SpriteSet sprite) implements BaseCreateParticle {
 
 		@Override

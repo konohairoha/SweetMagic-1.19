@@ -14,7 +14,7 @@ public record WoodChestLootPKT(int count, float chance, int selectID, BlockPos p
 		ServerPlayer player = con.getSender();
 		if (player == null) { return; }
 
-		TileWoodChest tile = (TileWoodChest) player.level.getBlockEntity(this.pos);
+		TileWoodChest tile = (TileWoodChest) player.getLevel().getBlockEntity(this.pos);
 		tile.count = this.count;
 		tile.chance = this.chance;
 		tile.lootTable = LootInit.lootList.get(this.selectID);

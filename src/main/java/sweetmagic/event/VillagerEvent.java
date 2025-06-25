@@ -83,7 +83,7 @@ public class VillagerEvent {
 			tier1.add(sellTrade(Items.ENDER_PEARL, 6, 16, 4, ItemInit.aether_crystal, 2));
 			tier1.add(sellTrade(Items.BLAZE_ROD, 6, 16, 4, ItemInit.aether_crystal, 2));
 			tier1.add(buyTrade(Items.GLASS_BOTTLE, 24, 16, 3, ItemInit.aether_crystal, 1));
-			tier2.add(sellTrade(ItemInit.alt_ingot, 5, 16, 7, ItemInit.aether_crystal, 2));
+			tier2.add(sellTrade(ItemInit.alternative_ingot, 5, 16, 7, ItemInit.aether_crystal, 2));
 			tier2.add(sellTrade(ItemInit.cotton, 16, 16, 7, ItemInit.aether_crystal, 2));
 			tier2.add(sellTrade(ItemInit.sannyflower_petal, 8, 16, 8, ItemInit.aether_crystal, 2));
 			tier2.add(sellTrade(ItemInit.moonblossom_petal, 8, 16, 8, ItemInit.aether_crystal, 2));

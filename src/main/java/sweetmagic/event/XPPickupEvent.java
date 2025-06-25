@@ -25,12 +25,10 @@ public class XPPickupEvent {
 		if (player == null || xpValue < 1) { return; }
 
 		for (EquipmentSlot slot : ARMORSLOT) {
-
 			ItemStack stack = player.getItemBySlot(slot);
 			if (stack.isEmpty()) { continue; }
 
 			if (stack.getItem() instanceof IMFTool mfTool) {
-
 				// MFが満タンなら次へ
 				if (mfTool.isMaxMF(stack)) { continue; }
 

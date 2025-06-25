@@ -57,15 +57,27 @@ public class AlstroemeriaTimeWeatherEvent extends SMUtilEvent {
 			Matrix4f mat = pose.last().pose();
 
 			drawTextured(mat, weight - 200 + addX, height - 186 + addY, 145, 144, 93, 29);
-
 			Minecraft mc = Minecraft.getInstance();
 			Font font = mc.font;
 			ItemRenderer render = mc.getItemRenderer();
+
 			MutableComponent tip = getText("als_" + AlstroemeriaTimeWeatherEvent.timeWeather.name().toLowerCase());
-			font.drawShadow(pose, tip, weight - 135 + addX, height - 186, 0xffffff);
+			pose.pushPose();
+			int spSize = font.width(tip.getString());
+			float maxSize = 28F;
+			pose.scale(spSize < maxSize ? 1F : maxSize / spSize, 1F, 1F);
+			float addX2 = spSize < maxSize ? 1F : spSize / maxSize;
+			font.drawShadow(pose, tip, (weight - 137 + addX) * addX2, height - 186, 0xffffff);
+			pose.popPose();
 
 			MutableComponent text = getText("sneak_timeweather");
-			font.drawShadow(pose, text, weight - 195 + addX, height - 175, 0xffffff);
+			pose.pushPose();
+			spSize = font.width(text.getString());
+			maxSize = 85F;
+			pose.scale(spSize < maxSize ? 1F : maxSize / spSize, 1F, 1F);
+			float addX3 = spSize < maxSize ? 1F : spSize / maxSize;
+			font.drawShadow(pose, text, (weight - 195 + addX) * addX3, height - 175, 0xffffff);
+			pose.popPose();
 
 			// レシピから完成品を取得
 			List<ItemStack> stackList = new ArrayList<>();
@@ -90,7 +102,6 @@ public class AlstroemeriaTimeWeatherEvent extends SMUtilEvent {
 			}
 
 			for (int i = 0; i < stackList.size(); i++) {
-
 				ItemStack stack = stackList.get(i);
 				if (stack.isEmpty()) { continue; }
 
@@ -112,7 +123,6 @@ public class AlstroemeriaTimeWeatherEvent extends SMUtilEvent {
 
 	@SubscribeEvent
 	public static void highlightBlockEvent(RenderHighlightEvent.Block event) {
-
 		Camera camera = event.getCamera();
 		if (!(camera.getEntity() instanceof Player player) || !player.getMainHandItem().isEmpty()) { return; }
 

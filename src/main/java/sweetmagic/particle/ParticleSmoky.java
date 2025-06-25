@@ -12,8 +12,8 @@ public class ParticleSmoky extends ParticleSMBase {
 
 	public ParticleSmoky(ClientLevel level, double x, double y, double z, double vx, double vy, double vz, float scale, SpriteSet sprite) {
 		super(level, x, y, z, vx, vy, vz, scale, sprite);
-		this.xd = this.zd = 0.1D - this.random.nextDouble() * 0.1D;
-		this.yd = 0.05D + this.random.nextDouble() * 0.025D;
+		this.xd = this.zd = 0.1D - this.rand.nextDouble() * 0.1D;
+		this.yd = 0.05D + this.rand.nextDouble() * 0.025D;
 		this.lifetime = (int) (Math.random() * 8D) + 20;
 		this.hasPhysics = true;
 	}

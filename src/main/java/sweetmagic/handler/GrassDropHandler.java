@@ -40,11 +40,11 @@ public class GrassDropHandler extends LootModifier {
 	@Override
 	protected ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> dropList, LootContext con) {
 		List<Item> seedList = this.getSeedList();
-		dropList.add(new ItemStack(seedList.get(con.getLevel().random.nextInt(seedList.size()))));
+		dropList.add(new ItemStack(seedList.get(con.getLevel().getRandom().nextInt(seedList.size()))));
 		return dropList;
 	}
 
-	public List<Item> getSeedList () {
+	public List<Item> getSeedList() {
 		if (this.seedList.isEmpty()) {
 			this.seedList = ItemInit.seedList;
 		}

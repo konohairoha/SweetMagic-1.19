@@ -14,6 +14,7 @@ import net.minecraft.world.item.ItemStack;
 import sweetmagic.SweetMagicCore;
 import sweetmagic.init.BlockInit;
 import sweetmagic.init.MenuInit;
+import sweetmagic.init.RecipeTypeInit;
 import sweetmagic.init.tile.menu.SMBookMenu;
 import sweetmagic.recipe.alstrameria.AlstroemeriaRecipe;
 import sweetmagic.recipe.bottle.BottleRecipe;
@@ -74,21 +75,21 @@ public class SMJeiPlugin implements IModPlugin {
 	// レシピ定義、JEIアイテム関連をいじる
 	@Override
 	public void registerRecipes(IRecipeRegistration registry) {
-		SMRecipes modRecipes = new SMRecipes();
-		registry.addRecipes(ALSTROEMERIA, modRecipes.getAlstroemeriaRecipe());
-		registry.addRecipes(OBMAGIA, modRecipes.getObMagiaRecipe());
-		registry.addRecipes(MILL, modRecipes.getMillRecipe());
-		registry.addRecipes(OVEN, modRecipes.getOvenRecipe());
-		registry.addRecipes(BOTTLE, modRecipes.getBottleRecipe());
-		registry.addRecipes(FRYPAN, modRecipes.getFrypanRecipe());
-		registry.addRecipes(POT, modRecipes.getPotRecipe());
-		registry.addRecipes(IRIS, modRecipes.getIrisRecipe());
-		registry.addRecipes(PEDAL, modRecipes.getPedalRecipe());
-		registry.addRecipes(TANK, modRecipes.getTankRecipe());
-		registry.addRecipes(FREEZER, modRecipes.getFreezerRecipe());
-		registry.addRecipes(JUICEMAKER, modRecipes.getJuiceMakerRecipe());
-		registry.addRecipes(FURNITURE, modRecipes.getFurnitureRecipe());
-		registry.addRecipes(RECYCLER, modRecipes.getRecyclerRecipe());
+		SMRecipes recipe = new SMRecipes();
+		registry.addRecipes(ALSTROEMERIA, recipe.getRecipe(RecipeTypeInit.ALSTROMERIA));
+		registry.addRecipes(OBMAGIA, recipe.getRecipe(RecipeTypeInit.OBMAGIA));
+		registry.addRecipes(MILL, recipe.getRecipe(RecipeTypeInit.MILL));
+		registry.addRecipes(OVEN, recipe.getRecipe(RecipeTypeInit.OVEN));
+		registry.addRecipes(BOTTLE, recipe.getRecipe(RecipeTypeInit.BOTTLE));
+		registry.addRecipes(FRYPAN, recipe.getRecipe(RecipeTypeInit.FRYPAN));
+		registry.addRecipes(POT, recipe.getRecipe(RecipeTypeInit.POT));
+		registry.addRecipes(IRIS, recipe.getRecipe(RecipeTypeInit.IRIS));
+		registry.addRecipes(PEDAL, recipe.getRecipe(RecipeTypeInit.PEDAL));
+		registry.addRecipes(TANK, recipe.getRecipe(RecipeTypeInit.TANK));
+		registry.addRecipes(FREEZER, recipe.getRecipe(RecipeTypeInit.FREEZER));
+		registry.addRecipes(JUICEMAKER, recipe.getRecipe(RecipeTypeInit.JUICEMAKER));
+		registry.addRecipes(FURNITURE, recipe.getRecipe(RecipeTypeInit.FURNITURE));
+		registry.addRecipes(RECYCLER, recipe.getRecipe(RecipeTypeInit.RECYCLER));
 //		registry.addIngredientInfo(new ItemStack(ItemInit.aether_wand), VanillaTypes.ITEM_STACK, Component.translatable("tip.sweetmagic.magic_fire"));
 	}
 
@@ -102,12 +103,21 @@ public class SMJeiPlugin implements IModPlugin {
 		registry.addRecipeCatalyst(new ItemStack(BlockInit.bottle), BOTTLE);
 		registry.addRecipeCatalyst(new ItemStack(BlockInit.frypan_r), FRYPAN);
 		registry.addRecipeCatalyst(new ItemStack(BlockInit.pot_w), POT);
+		registry.addRecipeCatalyst(new ItemStack(BlockInit.single_pot_r), POT);
 		registry.addRecipeCatalyst(new ItemStack(BlockInit.pedestal_creat), PEDAL);
+		registry.addRecipeCatalyst(new ItemStack(BlockInit.altar_creat), PEDAL);
+		registry.addRecipeCatalyst(new ItemStack(BlockInit.altar_creation_star), PEDAL);
 		registry.addRecipeCatalyst(new ItemStack(BlockInit.mftank), TANK);
+		registry.addRecipeCatalyst(new ItemStack(BlockInit.mftank_adavance), TANK);
+		registry.addRecipeCatalyst(new ItemStack(BlockInit.mftank_master), TANK);
+		registry.addRecipeCatalyst(new ItemStack(BlockInit.mftank_creative), TANK);
 		registry.addRecipeCatalyst(new ItemStack(BlockInit.freezer), FREEZER);
 		registry.addRecipeCatalyst(new ItemStack(BlockInit.juice_maker), JUICEMAKER);
 		registry.addRecipeCatalyst(new ItemStack(BlockInit.furniture_processing_table), FURNITURE);
 		registry.addRecipeCatalyst(new ItemStack(BlockInit.aether_recycler), RECYCLER);
+		registry.addRecipeCatalyst(new ItemStack(BlockInit.chopping_board), RecipeTypes.CRAFTING);
+		registry.addRecipeCatalyst(new ItemStack(BlockInit.mffurnace), RecipeTypes.SMELTING);
+		registry.addRecipeCatalyst(new ItemStack(BlockInit.furniture_processing_table), RecipeTypes.STONECUTTING);
 	}
 
 	@Override
@@ -115,7 +125,7 @@ public class SMJeiPlugin implements IModPlugin {
 		return ID;
 	}
 
-	public static <T> RecipeType<T> create (String name, Class<? extends T> recipeClass) {
+	public static <T> RecipeType<T> create(String name, Class<? extends T> recipeClass) {
 		return RecipeType.create(SweetMagicCore.MODID, name, recipeClass);
 	}
 

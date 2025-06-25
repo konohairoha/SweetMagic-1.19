@@ -8,6 +8,7 @@ import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.particle.TextureSheetParticle;
 import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.util.RandomSource;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -15,6 +16,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public abstract class ParticleSMBase extends TextureSheetParticle {
 
 	protected final SpriteSet sprite;
+	protected RandomSource rand = RandomSource.create();
 
 	public ParticleSMBase(ClientLevel level, double x, double y, double z, double vx, double vy, double vz, float scale, SpriteSet sprite) {
 		super(level, x, y, z, vx, vy, vz);

@@ -20,9 +20,7 @@ public class ClientEvents {
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void onClientSetup(FMLClientSetupEvent event) {
-		event.enqueueWork(() ->
-			addPropertyOverrides(ACTIVE_OVERRIDE, (stack, world, entity, seed) -> stack.getOrCreateTag().getBoolean(JapaneseUmbrella.ACTIVE) ? 1F : 0F, ItemInit.japanese_umbrella)
-		);
+		event.enqueueWork(() -> addPropertyOverrides(ACTIVE_OVERRIDE, (stack, world, entity, seed) -> stack.getOrCreateTag().getBoolean(JapaneseUmbrella.ACTIVE) ? 1F : 0F, ItemInit.japanese_umbrella));
 	}
 
 	public static void addPropertyOverrides(ResourceLocation override, ItemPropertyFunction pro, ItemLike... items) {

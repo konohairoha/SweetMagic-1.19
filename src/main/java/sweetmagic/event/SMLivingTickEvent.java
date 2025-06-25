@@ -24,7 +24,7 @@ public class SMLivingTickEvent {
 		ItemStack stack = player.getItemBySlot(EquipmentSlot.FEET);
 		CompoundTag tags = player.getPersistentData();
 
-		if ( (!player.getAbilities().instabuild && (stack.isEmpty() || !isHarness(stack) ) ) && tags.getBoolean("isHarness") ) {
+		if ((!player.getAbilities().instabuild && (stack.isEmpty() || !isHarness(stack))) && tags.getBoolean("isHarness")) {
 			player.getAbilities().mayfly = false;
 			player.getAbilities().flying = false;
 			player.onUpdateAbilities();

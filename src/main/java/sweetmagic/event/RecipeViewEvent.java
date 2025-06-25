@@ -26,7 +26,7 @@ import sweetmagic.SweetMagicCore;
 import sweetmagic.api.event.SMUtilEvent;
 import sweetmagic.api.iblock.ISMCookBlock;
 import sweetmagic.api.iblock.ISMCraftBlock;
-import sweetmagic.init.capability.ICookingStatus;
+import sweetmagic.init.capability.icap.ICookingStatus;
 import sweetmagic.recipe.RecipeHelper;
 import sweetmagic.recipe.RecipeHelper.RecipeUtil;
 
@@ -71,8 +71,17 @@ public class RecipeViewEvent extends SMUtilEvent {
 
 			if(RecipeViewEvent.canShiftCraft) {
 				drawTextured(mat, weight - 200 + addX, height - 210 + addY, 145, 179, 104, 23);
-				font.drawShadow(pose, getText("shift_craft_0"), weight - 198 + addX, height - 218, 0xF9B848);
-				font.drawShadow(pose, getText("shift_craft_1"), weight - 198 + addX, height - 209, 0xF9B848);
+
+				for(int i = 0; i < 2; i++) {
+					MutableComponent tip3 = getText("shift_craft_" + i);
+					pose.pushPose();
+					int spSize = font.width(tip3.getString());
+					float maxSize = 100F;
+					pose.scale(spSize < maxSize ? 1F : maxSize / spSize, 1F, 1F);
+					float addX2 = spSize < maxSize ? 1F : spSize / maxSize;
+					font.drawShadow(pose, tip3, (weight - 200 + addX) * addX2, height - 218 + i * 9, 0xF9B848);
+					pose.popPose();
+				}
 			}
 
 			// レシピから完成品を取得
@@ -81,7 +90,6 @@ public class RecipeViewEvent extends SMUtilEvent {
 			ItemStack inputStack = inputList.get(0);
 
 			for (int i = 0; i < resultList.size(); i++) {
-
 				ItemStack stack = resultList.get(i);
 				if (stack.isEmpty()) { continue; }
 
@@ -125,7 +133,7 @@ public class RecipeViewEvent extends SMUtilEvent {
 			int level = ICookingStatus.getState(player).getLevel();
 			float addX2 = (int) (20 - 10 * getProgress(renderCookTick, 20));
 			renderStart(TEX2);
-			drawTextured(mat, (int) (addX2 - 3), 57, 0, 0, 122, 74);
+			drawTextured(mat, (int) (addX2 - 3), 57, 0, 0, 137, 74);
 
 			MutableComponent tip = getTipArray(getText("player_cook_level"), ": ", getLabel("" + level).withStyle(WHITE));
 			font.drawShadow(pose, tip, addX2, 60, 0xF9B848);
@@ -133,39 +141,28 @@ public class RecipeViewEvent extends SMUtilEvent {
 			ICookingStatus status = ICookingStatus.getState(player);
 			MutableComponent tip2 = getTipArray(getText("experience"), ": ", getLabel("" + status.needExp(level + 1)).withStyle(WHITE));
 			font.drawShadow(pose, tip2, addX2, 71, 0xF9B848);
+			float maxSize = 133F;
 
 			if (player.isShiftKeyDown()) {
 
-				float limit = 117F;
-
 				for (int i = 1; i <= 4; i++) {
 					MutableComponent tip3 = getText("cook_level_tip" + i);
-					int nameSize = font.width(tip3);
 					pose.pushPose();
-					float addX = addX2 - 2F;
-
-					if (nameSize >= limit) {
-						pose.translate((nameSize - limit) / 10D + 1D, 0D, 0D);
-						pose.scale(limit / nameSize, 1F, 1F);
-					}
-
-					font.drawShadow(pose, tip3.withStyle(WHITE), addX, 74 + i * 11, 0xF9B848);
+					int spSize = font.width(tip3.getString());
+					pose.scale(spSize < maxSize ? 1F : maxSize / spSize, 1F, 1F);
+					float addX = spSize < maxSize ? 1F : spSize / maxSize;
+					font.drawShadow(pose, tip3, (addX2 - 1.5F) * addX, 74 + i * 11, 0xEEEEEE);
 					pose.popPose();
 				}
 			}
 
 			else {
+				MutableComponent tip3 = getText("shift").withStyle(RED);
 				pose.pushPose();
-				MutableComponent tip3 = getText("shift");
-				int nameSize = font.width(tip3);
-				float limit = 115F;
-
-				if (nameSize >= limit) {
-					pose.scale(limit / nameSize, 1F, 1F);
-					addX2 += 2F - 1F * (limit / nameSize);
-				}
-
-				font.drawShadow(pose, tip3.withStyle(RED), addX2, 85, 0xF9B848);
+				int spSize = font.width(tip3.getString());
+				pose.scale(spSize < maxSize ? 1F : maxSize / spSize, 1F, 1F);
+				float addX = spSize < maxSize ? 1F : spSize / maxSize;
+				font.drawShadow(pose, tip3, (addX2 - 1.5F) * addX, 85, 0xEEEEEE);
 				pose.popPose();
 			}
 
@@ -207,7 +204,7 @@ public class RecipeViewEvent extends SMUtilEvent {
 		}
 	}
 
-	public static float getProgress (int renderTick, int maxTime) {
+	public static float getProgress(int renderTick, int maxTime) {
 		return Math.min(1F, (float) renderTick / maxTime);
 	}
 }

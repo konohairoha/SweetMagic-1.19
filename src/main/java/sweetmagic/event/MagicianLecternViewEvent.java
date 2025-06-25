@@ -61,27 +61,30 @@ public class MagicianLecternViewEvent extends SMUtilEvent {
 
 			drawTextured(mat, weight - 200 + addX, height - 186 + addY, 90, 144, 46, 97);
 			drawTextured(mat, weight - 200 + addX, height - 202 + addY, 145, 179, 104, 24);
-
 			Minecraft mc = Minecraft.getInstance();
 			Font font = mc.font;
 			ItemRenderer render = mc.getItemRenderer();
+			float maxSize = 100F;
 
-			MutableComponent text = getText("needitem_0");
-			font.drawShadow(pose, text, weight - 198 + addX, height - 210, 0xF9B848);
+			for(int i = 0; i < 2; i++) {
+				MutableComponent tip = getText("needitem_" + i);
 
-			MutableComponent text2 = getText("needitem_1");
+				if (MagicianLecternViewEvent.isHard) {
+					tip.append(getText("ishard").withStyle(ChatFormatting.RED));
+				}
 
-			if (MagicianLecternViewEvent.isHard) {
-				text2.append(getText("ishard").withStyle(ChatFormatting.RED));
+				pose.pushPose();
+				int spSize = font.width(tip.getString());
+				pose.scale(spSize < maxSize ? 1F : maxSize / spSize, 1F, 1F);
+				float addX2 = spSize < maxSize ? 1F : spSize / maxSize;
+				font.drawShadow(pose, tip, (weight - 198 + addX) * addX2, height - 210 + i * 10, 0xF9B848);
+				pose.popPose();
 			}
-
-			font.drawShadow(pose, text2, weight - 198 + addX, height - 200, 0xF9B848);
 
 			// レシピから完成品を取得
 			List<ItemStack> stackList = MagicianLecternViewEvent.stackList;
 
 			for (int i = 0; i < stackList.size(); i++) {
-
 				ItemStack stack = stackList.get(i);
 				if (stack.isEmpty()) { continue; }
 
@@ -124,7 +127,7 @@ public class MagicianLecternViewEvent extends SMUtilEvent {
 		}
 	}
 
-	public static float getProgress (int maxTime) {
+	public static float getProgress(int maxTime) {
 		return Math.min(1F, (float) renderTick / maxTime);
 	}
 }

@@ -67,6 +67,6 @@ public class ColorRegisterEvent {
 			blue = (int) (spring * 23 + fall * 27);
 
 			return 0xFF000000 | red << 16 | green << 8 | blue;
-		}, BlockInit.maple_leaves);
+		}, BlockInit.maple_leaves, BlockInit.maple_leaves_carpet);
 	}
 }

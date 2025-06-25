@@ -7,6 +7,7 @@ import com.mojang.serialization.Codec;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -22,6 +23,7 @@ import net.minecraftforge.registries.RegisterEvent;
 import net.minecraftforge.registries.RegistryObject;
 import sweetmagic.SweetMagicCore;
 import sweetmagic.config.SMConfig;
+import sweetmagic.event.AdvancedEvent;
 import sweetmagic.event.AlstroemeriaClickEvent;
 import sweetmagic.event.BlockBreakEvent;
 import sweetmagic.event.CompasRenderEvent;
@@ -75,7 +77,7 @@ public class RegisterHandler {
 	public static final DeferredRegister<Codec<? extends IGlobalLootModifier>> LOOT_MODIFIER = DeferredRegister.create(ForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS, SweetMagicCore.MODID);
 
 	// 初期化
-	public void registerInit (IEventBus event) {
+	public void registerInit(IEventBus event) {
 
 		event.addListener(BlockInit::registerBlock);
 		event.addListener(ItemInit::registerItem);
@@ -95,24 +97,26 @@ public class RegisterHandler {
 		BIOME_REGISTER.register(event);
 		LOOT_MODIFIER.register(event);
 		LOOT_MODIFIER.register("add_loot_table", LootTableModifier.CODEC);
+		IEventBus bus = MinecraftForge.EVENT_BUS;
 
 		DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
 			event.addListener(RenderEntityInit::registerRenderEntity);
 			event.addListener(RenderEntityInit::registerRenderLayer);
 			event.addListener(ParticleInit::registerParticle);
-			MinecraftForge.EVENT_BUS.addListener(WandRenderEvent::onWandRenderEvent);
-			MinecraftForge.EVENT_BUS.addListener(WandRenderEvent::onFOVEvent);
-			MinecraftForge.EVENT_BUS.addListener(CompasRenderEvent::onWandRenderEvent);
+			bus.addListener(WandRenderEvent::onWandRenderEvent);
+			bus.addListener(WandRenderEvent::onFOVEvent);
+			bus.addListener(CompasRenderEvent::onWandRenderEvent);
 			MenuInit.registerGUI();
 		});
 
 		event.addListener(SoundInit::registerSound);
-		MinecraftForge.EVENT_BUS.addGenericListener(Entity.class, CapabilityInit::attachEntityCapability);
-		event.addListener(CapabilityInit::registerCapabilities);
+		bus.addGenericListener(Entity.class, CapabilityInit::attachEntityCapability);
+		bus.addGenericListener(Level.class, CapabilityInit::attachEntityCapabilitys);
+		event.addListener(CapabilityInit::registerCapability);
 	}
 
 	// イベント登録
-	public void registerEvent (IEventBus event) {
+	public void registerEvent(IEventBus event) {
 
 		IEventBus bus = MinecraftForge.EVENT_BUS;
 		bus.register(this);
@@ -144,11 +148,11 @@ public class RegisterHandler {
 		bus.addListener(SMPlayerEvent::onPlayerSetSpawn);
 		bus.addListener(SMPlayerEvent::onSleepTimeCheck);
 		bus.addListener(SMPlayerEvent::onPlayerSleep);
-		bus.addListener(SMPlayerEvent::onPickup);
+		bus.addListener(AdvancedEvent::addAdvanced);
 	}
 
 	// コンフィグ登録
-	public void registerConfig () {
+	public void registerConfig() {
 		SMConfig.loadConfig(SMConfig.SPEC, FMLPaths.CONFIGDIR.get().resolve(SweetMagicCore.MODID + "-server.toml"));
 	}
 

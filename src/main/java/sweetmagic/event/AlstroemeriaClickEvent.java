@@ -30,7 +30,7 @@ public class AlstroemeriaClickEvent {
 			// 最大成長時にアルストロメリアクラフトの実行
 			if (als.isMaxAge(state)) {
 
-				if(!world.isClientSide) {
+				if(!world.isClientSide()) {
 					als.getRecipeAlstroemeria(world, pos, player, stack, true);
 				}
 
@@ -40,7 +40,7 @@ public class AlstroemeriaClickEvent {
 
 		else if (block instanceof PedalCreate pedal) {
 
-			if(!world.isClientSide) {
+			if(!world.isClientSide()) {
 				pedal.pedalCraft(world, pos, player, stack, true);
 			}
 

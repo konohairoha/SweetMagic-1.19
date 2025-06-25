@@ -17,6 +17,7 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.MultiBufferSource.BufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -38,6 +39,7 @@ import sweetmagic.api.iitem.info.WandInfo;
 import sweetmagic.init.BlockInit;
 import sweetmagic.init.ItemInit;
 import sweetmagic.init.ParticleInit;
+import sweetmagic.init.item.sm.SMHoe;
 import sweetmagic.util.WorldHelper;
 
 @Mod.EventBusSubscriber(modid = SweetMagicCore.MODID, value = Dist.CLIENT)
@@ -45,7 +47,7 @@ public class HasItemEvent {
 
 	private static int tickTime = 0;
 	private static int renderTime = 0;
-	public static boolean hasThisItem;
+	public static boolean hasThisItem = false;
 	private static List<Item> itemList = new ArrayList<>();
 
 	@SubscribeEvent
@@ -70,21 +72,23 @@ public class HasItemEvent {
 		}
 
 		Item item = stack.getItem();
+		ItemStack wandStack = IWand.getWand(player);
 
 		// 杖の呼び出して選択中のアイテムを取得
-		if (item instanceof IWand wand) {
-			item = wand.getSlotItem(player, new WandInfo(stack)).getItem();
+		if (!wandStack.isEmpty()) {
+			WandInfo info = new WandInfo(wandStack);
+			item = info.getWand().getSlotItem(player, info).getItem();
 		}
 
 		if (itemList.isEmpty()) {
 			itemList = Arrays.<Item> asList(ItemInit.magic_light, Item.byBlock(BlockInit.magiclight));
 		}
 
-		Level world = player.level;
+		Level world = player.getLevel();
 		hasThisItem = itemList.contains(item);
 
 		// パーティクル描画
-		if (hasThisItem && world.isClientSide) {
+		if (hasThisItem && world.isClientSide()) {
 			renderEffect(world, player);
 		}
 	}
@@ -93,10 +97,10 @@ public class HasItemEvent {
 	public static void onMFMFlow(ComputeFovModifierEvent event) {
 		Player player = event.getPlayer();
 		ItemStack stack = player.getMainHandItem();
-		if (stack.isEmpty() || stack.getItem() != ItemInit.mf_stuff || !player.level.isClientSide) { return; }
+		if (stack.isEmpty() || stack.getItem() != ItemInit.mf_stuff || !player.getLevel().isClientSide()) { return; }
 
 		int area = 16;
-		Level world = player.level;
+		Level world = player.getLevel();
 		BlockPos pPos = player.getOnPos();
 		ParticleOptions par = ParticleInit.MF;
 
@@ -164,7 +168,13 @@ public class HasItemEvent {
 		Minecraft mc = Minecraft.getInstance();
 		LocalPlayer player = mc.player;
 		ItemStack stack = player.getMainHandItem();
-		if (player.isShiftKeyDown() || stack.isEmpty() || !(stack.getItem() instanceof IRangeTool tool) || tool.getRange() == 0) { return; }
+		if (player.isShiftKeyDown() || stack.isEmpty()) { return; }
+
+		if(stack.getItem() instanceof SMHoe hoe) {
+			HasItemEvent.renderRangeHoe(event, hoe);
+		}
+
+		if(!(stack.getItem() instanceof IRangeTool tool) || tool.getRange() == 0) { return; }
 
 		ClientLevel world = mc.level;
 		Camera camera = mc.gameRenderer.getMainCamera();
@@ -173,7 +183,6 @@ public class HasItemEvent {
 		double posZ = camera.getPosition().z;
 		Vec3 vec = event.getTarget().getLocation();
 		BlockPos pos = new BlockPos(vec.x, vec.y, vec.z);
-
 		BufferSource buffer = mc.renderBuffers().bufferSource();
 		VertexConsumer con = buffer.getBuffer(RenderType.lineStrip());
 
@@ -214,10 +223,35 @@ public class HasItemEvent {
 		}
 
 		// 範囲の座標取得
-		Iterable<BlockPos> pList = WorldHelper.getRangePos(pos, -rangeX + xa, -rangeY + ya, -rangeZ + za,rangeX + xb, rangeY + yb, rangeZ + zb);
+		Iterable<BlockPos> pList = WorldHelper.getRangePos(pos, -rangeX + xa, -rangeY + ya, -rangeZ + za, rangeX + xb, rangeY + yb, rangeZ + zb);
 		for (BlockPos p : pList) {
-
 			if (!tool.isAllBlock() && !stack.isCorrectToolForDrops(world.getBlockState(p)) || world.getBlockEntity(p) != null) { continue; }
+			VoxelShape voxel = world.getBlockState(p).getCollisionShape(world, p);
+			drawShape(event.getPoseStack(), con, voxel, -posX + p.getX(), -posY + p.getY(), -posZ + p.getZ());
+		}
+	}
+
+	public static void renderRangeHoe(RenderHighlightEvent.Block event, SMHoe hoe) {
+
+		Minecraft mc = Minecraft.getInstance();
+		ClientLevel world = mc.level;
+		Camera camera = mc.gameRenderer.getMainCamera();
+		double posX = camera.getPosition().x;
+		double posY = camera.getPosition().y;
+		double posZ = camera.getPosition().z;
+		Vec3 vec = event.getTarget().getLocation();
+		BlockPos pos = new BlockPos(vec.x, vec.y, vec.z);
+		BufferSource buffer = mc.renderBuffers().bufferSource();
+		VertexConsumer con = buffer.getBuffer(RenderType.lineStrip());
+
+		if(event.getTarget().getDirection() == Direction.UP) {
+			pos = pos.below();
+		}
+
+		// 範囲の座標取得
+		Iterable<BlockPos> pList = WorldHelper.getRangePos(pos, -1, 0, -1, 1, 0, 1);
+		for (BlockPos p : pList) {
+			if (hoe.getHoeState(world, p) == null) { continue; }
 			VoxelShape voxel = world.getBlockState(p).getCollisionShape(world, p);
 			drawShape(event.getPoseStack(), con, voxel, -posX + p.getX(), -posY + p.getY(), -posZ + p.getZ());
 		}

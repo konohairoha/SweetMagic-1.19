@@ -15,10 +15,10 @@ public class ParticleCherryBlossoms extends ParticleSMBase {
 
 	public ParticleCherryBlossoms(ClientLevel level, double x, double y, double z, double vx, double vy, double vz, float scale, SpriteSet spriteSet) {
 		super(level, x, y, z, vx, vy, vz, scale, spriteSet);
-		this.maxTick += this.random.nextInt(20);
-		this.gravity = 0.0475F + this.random.nextFloat() * 0.005F;
-		this.quadSize = scale + this.random.nextFloat() * 0.02F;
-		this.lifetime = 70 + this.random.nextInt(30);
+		this.maxTick += this.rand.nextInt(20);
+		this.gravity = 0.0475F + this.rand.nextFloat() * 0.005F;
+		this.quadSize = scale + this.rand.nextFloat() * 0.02F;
+		this.lifetime = 70 + this.rand.nextInt(30);
 	}
 
 	@Override
@@ -36,9 +36,9 @@ public class ParticleCherryBlossoms extends ParticleSMBase {
 		}
 
 		else if (this.quadSize >= 0.25F) {
-			this.xd *= (1D + (this.random.nextDouble() - this.random.nextDouble()) * 0.04D);
-			this.yd *= (1D + (this.random.nextDouble() - this.random.nextDouble()) * 0.01D);
-			this.zd *= (1D + (this.random.nextDouble() - this.random.nextDouble()) * 0.04D);
+			this.xd *= (1D + (this.rand.nextDouble() - this.rand.nextDouble()) * 0.04D);
+			this.yd *= (1D + (this.rand.nextDouble() - this.rand.nextDouble()) * 0.01D);
+			this.zd *= (1D + (this.rand.nextDouble() - this.rand.nextDouble()) * 0.04D);
 		}
 
 		this.setSpriteFromAge(sprite);

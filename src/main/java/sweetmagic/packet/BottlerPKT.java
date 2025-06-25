@@ -27,8 +27,8 @@ public record BottlerPKT(int id, BlockPos pos) implements IPacket, ISMTip {
 
 			if (mf < stackMF) {
 				player.closeContainer();
-				String needMF = String.format("%,d", stackMF);
-				player.sendSystemMessage(this.getTipArray(this.getText("pedastal_nomf").withStyle(RED), ": ", this.getLabel(needMF).withStyle(WHITE)));
+				String needMF = this.format(stackMF);
+				player.sendSystemMessage(this.getTipArray(this.getText("pedastal_nomf").withStyle(RED), ": ", this.getLabel(needMF, WHITE)));
 				tile.clickButton();
 				return;
 			}

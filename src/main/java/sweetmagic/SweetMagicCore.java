@@ -23,6 +23,7 @@ import sweetmagic.api.magiaflux.MagiaFluxInfo;
 import sweetmagic.handler.ComposterHandler;
 import sweetmagic.handler.PacketHandler;
 import sweetmagic.handler.RegisterHandler;
+import sweetmagic.init.AdvancedInit;
 import sweetmagic.init.BlockInit;
 import sweetmagic.init.DimentionInit;
 import sweetmagic.init.EntityInit;
@@ -77,6 +78,7 @@ public class SweetMagicCore {
 		}
 
 		DimentionInit.init();
+		AdvancedInit.init();
 
 		//登録インスタンス
 		MagiaFluxInfo info = new MagiaFluxInfo();

@@ -14,8 +14,10 @@ public record MouseSclorPKT(boolean isNext) implements IPacket {
 		ServerPlayer player = con.getSender();
 		if (player == null) { return; }
 
-		Level world = player.level;
-		ItemStack stack = player.getMainHandItem();
+		Level world = player.getLevel();
+		ItemStack stack = IWand.getWand(player);
+		if(stack.isEmpty()) { return; }
+
 		IWand wand = IWand.getWand(stack);
 
 		// 次のスロットへ

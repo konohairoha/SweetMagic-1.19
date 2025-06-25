@@ -10,7 +10,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import sweetmagic.api.iitem.ISMArmor;
-import sweetmagic.init.capability.ICookingStatus;
+import sweetmagic.init.capability.icap.ICookingStatus;
 
 public class EquipmentChangeEvent {
 

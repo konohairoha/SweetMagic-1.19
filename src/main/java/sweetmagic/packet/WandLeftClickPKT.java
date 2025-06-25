@@ -15,7 +15,7 @@ public class WandLeftClickPKT implements IPacket {
 
 		WandInfo info = new WandInfo(player.getMainHandItem());
 		info.getWand().setSelectSlot(info.getStack(), 0);
-		info.getWand().playSound(player.level, player, SoundInit.NEXT, 0.15F, 1F);
+		info.getWand().playSound(player.getLevel(), player, SoundInit.NEXT, 0.15F, 1F);
 	}
 
 	@Override
