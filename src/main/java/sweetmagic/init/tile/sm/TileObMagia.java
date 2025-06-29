@@ -13,12 +13,12 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemHandlerHelper;
 import sweetmagic.init.SoundInit;
 import sweetmagic.init.TagInit;
 import sweetmagic.init.TileInit;
 import sweetmagic.init.tile.menu.ObMagiaMenu;
 import sweetmagic.recipe.obmagia.ObMagiaRecipe;
+import sweetmagic.util.ItemHelper;
 
 public class TileObMagia extends TileAbstractSM {
 
@@ -107,9 +107,9 @@ public class TileObMagia extends TileAbstractSM {
 		ItemStack base = this.getBaseItem();
 
 		// レシピを取得して見つからなければ終了
-		boolean isCraft = !ObMagiaRecipe.getRecipe(this.level, stackList, page, base).isEmpty();
+		boolean isCraft = !ObMagiaRecipe.getRecipe(this.getLevel(), stackList, page, base).isEmpty();
 		if (isCraft) {
-			ObMagiaRecipe recipe = ObMagiaRecipe.getRecipe(this.level, stackList, page, base).get();
+			ObMagiaRecipe recipe = ObMagiaRecipe.getRecipe(this.getLevel(), stackList, page, base).get();
 			this.viewStack = recipe.getResultItem().copy();
 		}
 
@@ -125,11 +125,11 @@ public class TileObMagia extends TileAbstractSM {
 		ItemStack base = this.getBaseItem();
 
 		// レシピを取得して見つからなければ終了
-		ObMagiaRecipe recipe = ObMagiaRecipe.getRecipe(this.level, stackList, page, base).get();
+		ObMagiaRecipe recipe = ObMagiaRecipe.getRecipe(this.getLevel(), stackList, page, base).get();
 
 		// レシピから完成品を取得
 		ItemStack resultStack = recipe.getResultItem().copy();
-		if (!ItemHandlerHelper.insertItemStacked(this.getOutput(), resultStack, true).isEmpty()) { return; }
+		if (!ItemHelper.insertStack(this.getOutput(), resultStack, true).isEmpty()) { return; }
 
 		// クラフトで使うアイテムを入れておく
 		this.craftList = new ArrayList<ItemStack>(recipe.getRequestList());
@@ -160,7 +160,7 @@ public class TileObMagia extends TileAbstractSM {
 
 	// クラフトの完成
 	public void craftFinish() {
-		ItemHandlerHelper.insertItemStacked(this.getOutput(), this.outStack, false);
+		ItemHelper.insertStack(this.getOutput(), this.outStack, false);
 		this.playSound(this.getBlockPos(), SoundInit.WRITE, 0.1F, 1F);
 		this.clearInfo();
 	}

@@ -15,7 +15,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import sweetmagic.api.iitem.IFood;
 import sweetmagic.api.iitem.info.FoodInfo;
 import sweetmagic.init.block.base.BaseCookBlock;
-import sweetmagic.init.capability.ICookingStatus;
+import sweetmagic.init.capability.icap.ICookingStatus;
 
 public abstract class TileAbstractSMCook extends TileAbstractSM {
 
@@ -66,7 +66,7 @@ public abstract class TileAbstractSMCook extends TileAbstractSM {
 
 	public void setState(int data) {
 		if (this.getBlock(this.getBlockPos()) instanceof BaseCookBlock block) {
-			block.setState(this.level, this.getBlockPos(), data);
+			block.setState(this.getLevel(), this.getBlockPos(), data);
 		}
 	}
 

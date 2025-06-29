@@ -14,9 +14,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemHandlerHelper;
 import sweetmagic.init.TileInit;
 import sweetmagic.init.tile.menu.FurnitureTableMenu;
+import sweetmagic.util.ItemHelper;
 
 public class TileFurnitureTable extends TileAbstractSM {
 
@@ -68,7 +68,7 @@ public class TileFurnitureTable extends TileAbstractSM {
 			ItemStack stack = this.getInputSideItem(i);
 			if (stack.isEmpty()) { continue; }
 
-			ItemStack out = ItemHandlerHelper.insertItemStacked(this.getInput(), stack.copy(), false);
+			ItemStack out = ItemHelper.insertStack(this.getInput(), stack.copy(), false);
 			stack.shrink(stack.getCount() - out.getCount());
 		}
 	}
@@ -107,18 +107,18 @@ public class TileFurnitureTable extends TileAbstractSM {
 		out.setCount(count);
 		int shrinkCount = out.getCount();
 
-		if (!ItemHandlerHelper.insertItemStacked(this.getOut(), out, true).isEmpty()) {
+		if (!ItemHelper.insertStack(this.getOut(), out, true).isEmpty()) {
 			this.isCraft = false;
 			return;
 		}
 
-		ItemHandlerHelper.insertItemStacked(this.getOut(), out, false);
+		ItemHelper.insertStack(this.getOut(), out, false);
 		input.shrink(count / outCount);
 		this.setCount -= shrinkCount;
 		this.insertInput();
 		this.sendPKT();
 
-		if (this.getInputItem().isEmpty() || this.setCount <= 0) {
+		if (this.getInputItem().isEmpty() || !this.getInputItem().is(this.inputStack.getItem()) || this.setCount <= 0) {
 			this.tickTime = 0;
 			this.isCraft = false;
 			this.selectId = 0;

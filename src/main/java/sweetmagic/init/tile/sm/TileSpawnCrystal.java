@@ -76,7 +76,7 @@ public class TileSpawnCrystal extends TileAbstractSM {
 		Random rand = this.rand;
 		BlockPos summonPos = new BlockPos(pos.getX() + this.getRand(rand, this.range), pos.getY(), pos.getZ() + this.getRand(rand, this.range));
 
-		while (!world.getBlockState(summonPos).isAir() || world.getBlockState(summonPos.below()).isAir()) {
+		while (!world.isEmptyBlock(summonPos) || world.isEmptyBlock(summonPos.below())) {
 			summonPos = new BlockPos(pos.getX() + this.getRand(rand, this.range), pos.getY(), pos.getZ() + this.getRand(rand, this.range));
 			if (count++ >= 16) { break; }
 		}
@@ -100,7 +100,7 @@ public class TileSpawnCrystal extends TileAbstractSM {
 			count = 0;
 
 			// 座標がブロックだった場合は再設定
-			while (!world.getBlockState(secondPos).isAir() || world.getBlockState(secondPos.below()).isAir()) {
+			while (!world.isEmptyBlock(secondPos) || world.isEmptyBlock(summonPos.below())) {
 				secondPos = new BlockPos(summonPos.getX() + this.getRand(rand, 3), summonPos.getY(), summonPos.getZ() + this.getRand(rand, 3));
 				if (count++ >= 16) { break; }
 			}
@@ -140,7 +140,8 @@ public class TileSpawnCrystal extends TileAbstractSM {
 			break;
 		case 4:
 			entity = new ElectricCube(world);
-			( (ElectricCube) entity).setSize(4);
+			((ElectricCube) entity).setSize(4);
+			((ElectricCube) entity).setFixed();
 			break;
 		case 5:
 			entity = new SkullFlame(world);
@@ -182,7 +183,8 @@ public class TileSpawnCrystal extends TileAbstractSM {
 			break;
 		case 4:
 			entity = new ElectricCube(world);
-			( (ElectricCube) entity).setSize(8);
+			((ElectricCube) entity).setSize(8);
+			((ElectricCube) entity).setFixed();
 			this.addPotion(entity, PotionInit.leader_flag, 99999, 0);
 			break;
 		case 5:

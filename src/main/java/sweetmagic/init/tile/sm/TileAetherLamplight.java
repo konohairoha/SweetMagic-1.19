@@ -66,8 +66,6 @@ public class TileAetherLamplight extends TileSMMagic {
 
 		// リスト分まわす
 		for (BlockPos pos : posList) {
-
-			// MFブロック以外または送信側なら終了
 			if (!(this.getTile(pos) instanceof TileSMMagic tile) || !tile.getReceive() || tile.isMaxMF()) { continue; }
 			if (tile instanceof TileAetherLamplight || tile instanceof TileAetherLanp || tile instanceof TileMFTank) { continue; }
 
@@ -199,8 +197,6 @@ public class TileAetherLamplight extends TileSMMagic {
 
 		// リスト分まわす
 		for (BlockPos pos : posList) {
-
-			// MFブロック以外または送信側なら終了
 			if (!(this.getTile(pos) instanceof TileSMMagic tile) || !tile.getReceive()) { continue; }
 			if (tile instanceof TileAetherLamplight || tile instanceof TileAetherLanp || tile instanceof TileMFTank) { continue; }
 
@@ -219,8 +215,6 @@ public class TileAetherLamplight extends TileSMMagic {
 
 		// リスト分まわす
 		for (BlockPos pos : posList) {
-
-			// MFブロック以外または送信側なら終了
 			if (!(this.getTile(pos) instanceof TileSMMagic tile) || !tile.getReceive()) { continue; }
 			if (tile instanceof TileAetherLamplight || tile instanceof TileAetherLanp || tile instanceof TileMFTank) { continue; }
 

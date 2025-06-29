@@ -17,7 +17,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemHandlerHelper;
 import sweetmagic.api.iitem.IMagicItem;
 import sweetmagic.api.iitem.info.MagicInfo;
 import sweetmagic.init.BlockInit;
@@ -26,6 +25,7 @@ import sweetmagic.init.ParticleInit;
 import sweetmagic.init.SoundInit;
 import sweetmagic.init.TileInit;
 import sweetmagic.init.tile.menu.MagiaTableMenu;
+import sweetmagic.util.ItemHelper;
 
 public class TileMagiaTable extends TileSMMagic {
 
@@ -40,7 +40,7 @@ public class TileMagiaTable extends TileSMMagic {
 	public boolean canCraft = false;
 	public int craftTime = 0;
 	public int maxCraftTime = 10;
-	public int maxMagiaFlux = 100000;
+	public int maxMagiaFlux = 200000;
 	public ItemStack copyMagic = ItemStack.EMPTY;
 	protected final StackHandler inputInv = new StackHandler(1, true);
 	protected final StackHandler outputInv = new StackHandler(1, true);
@@ -85,7 +85,7 @@ public class TileMagiaTable extends TileSMMagic {
 
 		Item item = stack.getItem();
 		if(!(item instanceof IMagicItem magic) || magic.isUniqueMagic()) { return false; }
-		if(!ItemHandlerHelper.insertItemStacked(this.getOutput(), stack.copy(), true).isEmpty()) { return false; }
+		if(!ItemHelper.insertStack(this.getOutput(), stack.copy(), true).isEmpty()) { return false; }
 
 		MagicInfo info = new MagicInfo(stack);
 		if (this.getMF() < this.getRequestMF(info)) { return false; }
@@ -109,7 +109,6 @@ public class TileMagiaTable extends TileSMMagic {
 
 			// 小分類(インベントリアイテム)
 			for (int i = 0; i < stackList.size(); i++) {
-
 				if (slotIdList.contains(i)) { continue; }
 
 				ItemStack s = stackList.get(i);
@@ -141,9 +140,8 @@ public class TileMagiaTable extends TileSMMagic {
 			// 小分類(インベントリアイテム)
 			for (int i = 0; i < stackList.size(); i++) {
 
-				ItemStack s = stackList.get(i);
-
 				// アイテムが一致して要求個数以上なら検索完了
+				ItemStack s = stackList.get(i);
 				if (ingStack.is(s.getItem()) && s.getCount() >= ingStack.getCount()) {
 					s.shrink(ingStack.getCount());
 				}
@@ -153,8 +151,8 @@ public class TileMagiaTable extends TileSMMagic {
 	}
 
 	public void craftFinish(ItemStack stack) {
-		if(!ItemHandlerHelper.insertItemStacked(this.getOutput(), this.copyMagic, true).isEmpty()) { return; }
-		ItemHandlerHelper.insertItemStacked(this.getOutput(), this.copyMagic, false);
+		if(!ItemHelper.insertStack(this.getOutput(), this.copyMagic, true).isEmpty()) { return; }
+		ItemHelper.insertStack(this.getOutput(), this.copyMagic, false);
 		this.isCraft = false;
 		this.craftTime = 0;
 		this.copyMagic = ItemStack.EMPTY;
@@ -205,8 +203,7 @@ public class TileMagiaTable extends TileSMMagic {
 
 	// パーティクルスポーンサイクル
 	protected void spawnParticleCycle(Level world, ParticleOptions par, double x, double y, double z, double range, double angle) {
-		Direction face = Direction.UP;
-		world.addParticle(par, x, y, z, face.get3DDataValue(), range, angle + 6F - this.tickTime * 5);
+		world.addParticle(par, x, y, z, Direction.UP.get3DDataValue(), range, angle + 6F - this.tickTime * 5);
 	}
 
 	public Item getMainRequestItem(MagicInfo info) {
@@ -262,15 +259,15 @@ public class TileMagiaTable extends TileSMMagic {
 			break;
 		case 2:
 			stackList.add(new ItemStack(ItemInit.blank_magic, 2));
-			stackList.add(new ItemStack(ItemInit.blank_page, 3));
+			stackList.add(new ItemStack(ItemInit.blank_page, 4));
 			break;
 		case 3:
 			stackList.add(new ItemStack(ItemInit.blank_magic, 3));
-			stackList.add(new ItemStack(ItemInit.blank_page, 4));
+			stackList.add(new ItemStack(ItemInit.blank_page, 6));
 			break;
 		case 4:
 			stackList.add(new ItemStack(ItemInit.blank_magic, 4));
-			stackList.add(new ItemStack(ItemInit.blank_page, 5));
+			stackList.add(new ItemStack(ItemInit.blank_page, 8));
 			stackList.add(new ItemStack(BlockInit.magiaflux_block));
 			break;
 		}
@@ -283,7 +280,8 @@ public class TileMagiaTable extends TileSMMagic {
 		case 0: return 2000;
 		case 1: return 5000;
 		case 2: return 25000;
-		default: return 100000;
+		case 3: return 100000;
+		default: return 200000;
 		}
 	}
 
@@ -329,7 +327,7 @@ public class TileMagiaTable extends TileSMMagic {
 	// 受信するMF量の取得
 	@Override
 	public int getReceiveMF() {
-		return 20000;
+		return 25000;
 	}
 
 	// インベントリサイズの取得

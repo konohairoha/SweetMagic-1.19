@@ -17,7 +17,8 @@ public class TileMirageGlass extends TileAbstractSM {
 
 	private int recaslTime = 0;
 	private static final int MAX_RECAST_TIME = 30;
-	public BlockState state = BlockInit.mirage_glass.defaultBlockState();
+	public static final BlockState MIRAGE = BlockInit.mirage_glass.defaultBlockState();
+	public BlockState state = MIRAGE;
 	public static final DirectionProperty FACING = MirageGlass.FACING;
 	public static final BooleanProperty ISVIEW = MirageGlass.ISVIEW;
 

@@ -15,10 +15,10 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemHandlerHelper;
 import sweetmagic.init.TileInit;
 import sweetmagic.init.block.magic.AetherHopper;
 import sweetmagic.init.tile.menu.AetherHopperMenu;
+import sweetmagic.util.ItemHelper;
 
 public class TileAetherHopper extends TileSMMagic {
 
@@ -91,7 +91,7 @@ public class TileAetherHopper extends TileSMMagic {
 			ItemStack output = handler.getStackInSlot(i);
 			if (output.isEmpty()) { continue; }
 
-			ItemStack stack = ItemHandlerHelper.insertItemStacked(this.getInput(), output.copy(), false);
+			ItemStack stack = ItemHelper.insertStack(this.getInput(), output.copy(), false);
 			output.setCount(stack.getCount());
 		}
 	}

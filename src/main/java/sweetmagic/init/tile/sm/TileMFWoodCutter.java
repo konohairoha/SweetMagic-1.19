@@ -1,45 +1,41 @@
 package sweetmagic.init.tile.sm;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.Tags;
 import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.registries.ForgeRegistries;
-import sweetmagic.init.TagInit;
 import sweetmagic.init.TileInit;
-import sweetmagic.init.tile.menu.MFMinerAdvancedMenu;
+import sweetmagic.init.tile.menu.MFWoodCutterMenu;
+import sweetmagic.recipe.woodcutter.WoodCutterRecipe;
 import sweetmagic.util.ItemHelper;
 
-public class TileMFMinerAdvanced extends TileSMMagic {
+public class TileMFWoodCutter extends TileSMMagic {
 
 	public int craftTime = 0;
-	public int maxMagiaFlux = 100000;
-	public static final int MAXCRAFT_TIME = 10;
+	public int maxMagiaFlux = 10000;
+	public static final int MAXCRAFT_TIME = 20;
 	public boolean isCraft = false;
 	public ItemStack outStack = ItemStack.EMPTY;
-	protected final StackHandler inputInv = new StackHandler(10);
+	protected final StackHandler inputInv = new StackHandler(1);
 	protected final StackHandler outInv = new StackHandler(this.getInvSize());
 
-	public TileMFMinerAdvanced(BlockPos pos, BlockState state) {
-		this(TileInit.mfMinerAdvanced, pos, state);
+	public TileMFWoodCutter(BlockPos pos, BlockState state) {
+		this(TileInit.woodCutter, pos, state);
 	}
 
-	public TileMFMinerAdvanced(BlockEntityType<?> type, BlockPos pos, BlockState state) {
+	public TileMFWoodCutter(BlockEntityType<?> type, BlockPos pos, BlockState state) {
 		super(type, pos, state);
 		this.resolver = new InOutHandlerProvider(this.inputInv, this.outInv);
 	}
@@ -63,28 +59,16 @@ public class TileMFMinerAdvanced extends TileSMMagic {
 
 	public void craftStart() {
 		ItemHelper.compactSimpleInventory(this.inputInv);
-		ItemStack stack = this.getInputItem(0);
-		if (stack.isEmpty() || !stack.is(Tags.Items.COBBLESTONE) || stack.getCount() < 64) { return; }
+		ItemStack stack = this.getInputItem();
+		if (stack.isEmpty() || !this.canSmelt(stack)) { return; }
 
-		int mf = this.getMF();
-		if (mf < this.getNeedMF()) { return; }
-
-		List<ItemStack> oresList = this.getList(ForgeRegistries.ITEMS.tags().getTag(Tags.Items.ORES).stream());
-		ItemStack oreStack = oresList.get(this.rand.nextInt(oresList.size()));
-		if (oreStack.isEmpty()) { return; }
-
-		oreStack = oreStack.is(TagInit.COSMIC_ORE) ? new ItemStack(Blocks.IRON_ORE) : oreStack;
-
-		if (oreStack.is(Tags.Items.ORES_NETHERITE_SCRAP) && this.rand.nextFloat() > 0.001F) {
-			oreStack = new ItemStack(Blocks.GOLD_ORE);
-		}
-
-		if (!ItemHelper.insertStack(this.getOut(), oreStack.copy(), true).isEmpty()) { return; }
+		WoodCutterRecipe recipe = WoodCutterRecipe.getRecipe(this.getLevel(), Arrays.<ItemStack> asList(stack)).get();
+		ItemStack logStack = this.getLog(recipe, stack);
+		if (logStack.isEmpty() || !ItemHelper.insertStack(this.getOut(), logStack.copy(), true).isEmpty()) { return; }
 
 		this.isCraft = true;
-		this.outStack = oreStack;
-		stack.shrink(64);
-		this.setMF(mf - this.getNeedMF());
+		this.outStack = logStack;
+		this.setMF(this.getMF() - recipe.getNeedMF());
 		this.sendInfo();
 	}
 
@@ -92,18 +76,24 @@ public class TileMFMinerAdvanced extends TileSMMagic {
 		ItemHelper.insertStack(this.getOut(), this.outStack.copy(), false);
 		this.outStack = ItemStack.EMPTY;
 
-		ItemHelper.compactSimpleInventory(this.inputInv);
-		ItemStack stack = this.getInputItem(0);
-		this.isCraft = !stack.isEmpty() && stack.is(Tags.Items.COBBLESTONE) && stack.getCount() >= 64;
-		this.craftTime = this.isCraft ? MAXCRAFT_TIME - 4 : 0;
+		ItemStack stack = this.getInputItem();
+		this.isCraft = !stack.isEmpty() && stack.is(ItemTags.SAPLINGS);
+		this.craftTime = this.isCraft ? MAXCRAFT_TIME - 12 : 0;
 		this.isCraft = false;
-
-		this.playSound(this.getBlockPos(), SoundEvents.AMETHYST_BLOCK_BREAK, 0.5F, 1F);
 		this.sendInfo();
+
+		for(int i = 0; i < 4; i++)
+			this.playSound(this.getBlockPos(), SoundEvents.WOOD_BREAK, 0.5F, 0.9F + this.getRandFloat(0.15F));
 	}
 
-	public List<ItemStack> getList(Stream<Item> stream) {
-		return stream.map(Item::getDefaultInstance).collect(Collectors.toList());
+	// 精錬可能か銅か
+	public boolean canSmelt(ItemStack stack) {
+		return !WoodCutterRecipe.getRecipe(this.getLevel(), Arrays.<ItemStack> asList(stack)).isEmpty();
+	}
+
+	public ItemStack getLog(WoodCutterRecipe recipe, ItemStack stack) {
+		if(this.getMF() < recipe.getNeedMF()) { return ItemStack.EMPTY; }
+		return new ItemStack(recipe.getResultItem().getItem(), recipe.getCount(this.rand));
 	}
 
 	// インベントリサイズの取得
@@ -126,7 +116,7 @@ public class TileMFMinerAdvanced extends TileSMMagic {
 
 	// 必要MF
 	public int getNeedMF() {
-		return 500;
+		return 50;
 	}
 
 	// 入力スロットの取得
@@ -135,8 +125,8 @@ public class TileMFMinerAdvanced extends TileSMMagic {
 	}
 
 	// 入力スロットのアイテムを取得
-	public ItemStack getInputItem(int i) {
-		return this.getInput().getStackInSlot(i);
+	public ItemStack getInputItem() {
+		return this.getInput().getStackInSlot(0);
 	}
 
 	// 出力スロットの取得
@@ -173,7 +163,7 @@ public class TileMFMinerAdvanced extends TileSMMagic {
 
 	@Override
 	public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player) {
-		return new MFMinerAdvancedMenu(windowId, inv, this);
+		return new MFWoodCutterMenu(windowId, inv, this);
 	}
 
 	// RS信号で動作を停止するかどうか
@@ -194,10 +184,7 @@ public class TileMFMinerAdvanced extends TileSMMagic {
 			this.addStackList(stackList, this.getOutItem(i));
 		}
 
-		for (int i = 0; i < 9; i++) {
-			this.addStackList(stackList, this.getInputItem(i));
-		}
-
+		this.addStackList(stackList, this.getInputItem());
 		return stackList;
 	}
 

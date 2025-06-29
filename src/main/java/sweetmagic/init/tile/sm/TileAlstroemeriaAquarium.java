@@ -18,15 +18,15 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemHandlerHelper;
 import sweetmagic.init.TileInit;
 import sweetmagic.init.block.magic.PedalCreate;
-import sweetmagic.init.capability.ICapabilityResolver;
 import sweetmagic.init.capability.SidItemHandler;
+import sweetmagic.init.capability.icap.ICapabilityResolver;
 import sweetmagic.init.tile.menu.AlstroemeriaAquariumMenu;
 import sweetmagic.recipe.RecipeHelper;
 import sweetmagic.recipe.RecipeHelper.RecipeUtil;
 import sweetmagic.recipe.alstrameria.AlstroemeriaRecipe;
+import sweetmagic.util.ItemHelper;
 
 public class TileAlstroemeriaAquarium extends TileSMMagic {
 
@@ -87,7 +87,7 @@ public class TileAlstroemeriaAquarium extends TileSMMagic {
 	// レシピチェック
 	public boolean checkRecipe() {
 		List<ItemStack> stackList = this.getStackList();
-		return !AlstroemeriaRecipe.getRecipe(this.level, stackList).isEmpty();
+		return !AlstroemeriaRecipe.getRecipe(this.getLevel(), stackList).isEmpty();
 	}
 
 	// 作成開始
@@ -95,7 +95,7 @@ public class TileAlstroemeriaAquarium extends TileSMMagic {
 
 		// レシピを取得して見つからなければ終了
 		List<ItemStack> stackList = this.getStackList();
-		AlstroemeriaRecipe recipe = AlstroemeriaRecipe.getRecipe(this.level, stackList).get();
+		AlstroemeriaRecipe recipe = AlstroemeriaRecipe.getRecipe(this.getLevel(), stackList).get();
 		RecipeUtil recipeUtil = RecipeHelper.recipeSingleCraft(stackList, recipe);
 
 		// レシピから完成品を取得
@@ -108,12 +108,12 @@ public class TileAlstroemeriaAquarium extends TileSMMagic {
 		}
 
 		for (ItemStack result : resultList) {
-			if (!ItemHandlerHelper.insertItemStacked(this.getOutput(), result, true).isEmpty()) { return; }
+			if (!ItemHelper.insertStack(this.getOutput(), result, true).isEmpty()) { return; }
 		}
 
 		// リザルトアイテムを保存
 		this.outStackList = resultList;
-		this.playSound(this.getBlockPos(), SoundEvents.FIREWORK_ROCKET_BLAST_FAR, 0.5F, 1F / (this.level.random.nextFloat() * 0.4F + 1.2F) + 1F * 0.5F);
+		this.playSound(this.getBlockPos(), SoundEvents.FIREWORK_ROCKET_BLAST_FAR, 0.5F, 1F / (this.rand.nextFloat() * 0.4F + 1.2F) + 1F * 0.5F);
 		this.isCraft = true;
 		this.setMF(this.getMF() - this.getUseMF());
 	}
@@ -122,9 +122,7 @@ public class TileAlstroemeriaAquarium extends TileSMMagic {
 	public void craftFinish() {
 
 		// 完成品を入れる
-		for (ItemStack result : this.outStackList) {
-			ItemHandlerHelper.insertItemStacked(this.getOutput(), result.copy(), false);
-		}
+		this.outStackList.forEach(s -> ItemHelper.insertStack(this.getOutput(), s.copy(), false));
 
 		// 初期化
 		this.clearInfo();

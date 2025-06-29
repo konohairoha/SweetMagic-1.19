@@ -117,7 +117,7 @@ public abstract class TileSMMagic extends TileAbstractSM implements ITileMF {
 	}
 
 	public String getMFPercent() {
-		return String.format("%.1f", ((float) this.getMF() / (float) this.getMaxMF()) * 100F) + "%";
+		return this.format(((float) this.getMF() / (float) this.getMaxMF()) * 100F) + "%";
 	}
 
 	// NBTの書き込み

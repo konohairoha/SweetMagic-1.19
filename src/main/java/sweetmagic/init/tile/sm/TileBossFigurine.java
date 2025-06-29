@@ -2,22 +2,24 @@ package sweetmagic.init.tile.sm;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import sweetmagic.init.TileInit;
 import sweetmagic.init.block.sm.BossFigurine;
+import sweetmagic.init.entity.monster.boss.AbstractSMBoss;
 import sweetmagic.init.entity.monster.boss.AncientFairy;
 import sweetmagic.init.entity.monster.boss.Arlaune;
 import sweetmagic.init.entity.monster.boss.BlitzWizardMaster;
 import sweetmagic.init.entity.monster.boss.BraveSkeleton;
 import sweetmagic.init.entity.monster.boss.BullFight;
+import sweetmagic.init.entity.monster.boss.DemonsBelial;
 import sweetmagic.init.entity.monster.boss.ElshariaCurious;
 import sweetmagic.init.entity.monster.boss.HolyAngel;
 import sweetmagic.init.entity.monster.boss.IgnisKnight;
 import sweetmagic.init.entity.monster.boss.QueenFrost;
 import sweetmagic.init.entity.monster.boss.SilverLandRoad;
+import sweetmagic.init.entity.monster.boss.StellaWizardMaster;
 import sweetmagic.init.entity.monster.boss.TwilightHora;
 import sweetmagic.init.entity.monster.boss.WhiteButler;
 import sweetmagic.init.entity.monster.boss.WindWitchMaster;
@@ -25,8 +27,9 @@ import sweetmagic.init.entity.monster.boss.WitchSandryon;
 
 public class TileBossFigurine extends TileAbstractSM {
 
-	private LivingEntity entity = null;
+	public int renderTick = 0;
 	private double addZ = 0F;
+	private LivingEntity entity = null;
 
 	public TileBossFigurine(BlockPos pos, BlockState state) {
 		super(TileInit.bossFigurine, pos, state);
@@ -47,9 +50,9 @@ public class TileBossFigurine extends TileAbstractSM {
 	}
 
 	// えんちちー取得
-	public Mob getEntity() {
+	public AbstractSMBoss getEntity() {
 
-		Level world = this.level;
+		Level world = this.getLevel();
 
 		// モブ種類によって設定
 		switch (this.getData()) {
@@ -70,6 +73,8 @@ public class TileBossFigurine extends TileAbstractSM {
 		case 11: return new ElshariaCurious(world);
 		case 12: return new WitchSandryon(world);
 		case 13: return new BlitzWizardMaster(world);
+		case 14: return new StellaWizardMaster(world);
+		case 15: return new DemonsBelial(world);
 		default:
 			QueenFrost entity = new QueenFrost(world);
 			entity.setArmor(3);

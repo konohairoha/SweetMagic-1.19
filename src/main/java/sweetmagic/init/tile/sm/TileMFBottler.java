@@ -14,11 +14,11 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemHandlerHelper;
 import sweetmagic.api.SweetMagicAPI;
 import sweetmagic.init.ItemInit;
 import sweetmagic.init.TileInit;
 import sweetmagic.init.tile.menu.MFBottlerMenu;
+import sweetmagic.util.ItemHelper;
 
 public class TileMFBottler extends TileSMMagic {
 
@@ -48,41 +48,39 @@ public class TileMFBottler extends TileSMMagic {
 	public void serverTick(Level world, BlockPos pos, BlockState state) {
 		super.serverTick(world, pos, state);
 		if (!this.isSelect || this.outStack.isEmpty() || this.isRSPower()) { return; }
-
 		this.craftFinish();
 	}
 
 	public void craftFinish() {
-		ItemStack outStack = ItemHandlerHelper.insertItemStacked(this.getInput(), this.outStack.copy(), true);
+		ItemStack outStack = ItemHelper.insertStack(this.getInput(), this.outStack.copy(), true);
 		if (!outStack.isEmpty()) { return; }
 
 		this.setMF(this.getMF() - SweetMagicAPI.getMF(this.outStack.copy()) * this.setCount);
-		ItemHandlerHelper.insertItemStacked(this.getInput(), this.outStack.copy(), false);
+		ItemHelper.insertStack(this.getInput(), this.outStack.copy(), false);
 		this.outStack = ItemStack.EMPTY;
 		this.isSelect = false;
-		this.setCount = 1;
 		this.sendInfo();
 	}
 
-	public List<ItemStack> getStackList () {
+	public List<ItemStack> getStackList() {
 		return this.stackList;
 	}
 
 	// インベントリサイズの取得
 	@Override
-	public int getInvSize () {
+	public int getInvSize() {
 		return 18;
 	}
 
 	// 最大MFの取得
 	@Override
-	public int getMaxMF () {
+	public int getMaxMF() {
 		return this.maxMagiaFlux;
 	}
 
 	// 受信するMF量の取得
 	@Override
-	public int getReceiveMF () {
+	public int getReceiveMF() {
 		return 50000;
 	}
 
@@ -124,12 +122,12 @@ public class TileMFBottler extends TileSMMagic {
 	}
 
 	// RS信号で動作を停止するかどうか
-	public boolean isRSStop () {
+	public boolean isRSStop() {
 		return true;
 	}
 
 	// インベントリのアイテムを取得
-	public List<ItemStack> getInvList () {
+	public List<ItemStack> getInvList() {
 		List<ItemStack> stackList = new ArrayList<>();
 
 		for (int i = 0; i < this.getInvSize(); i++) {

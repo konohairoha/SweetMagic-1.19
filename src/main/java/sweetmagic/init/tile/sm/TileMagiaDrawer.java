@@ -14,9 +14,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemHandlerHelper;
 import sweetmagic.init.TileInit;
 import sweetmagic.init.tile.menu.MagiaDrawerMenu;
+import sweetmagic.util.ItemHelper;
 
 public class TileMagiaDrawer extends TileSMMagic {
 
@@ -59,7 +59,7 @@ public class TileMagiaDrawer extends TileSMMagic {
 		for (ItemEntity entity : entityList) {
 
 			ItemStack stack = entity.getItem();
-			ItemStack insert = ItemHandlerHelper.insertItemStacked(this.getInput(), stack.copy(), false);
+			ItemStack insert = ItemHelper.insertStack(this.getInput(), stack.copy(), false);
 
 			if (insert.isEmpty() || insert.getCount() <= 0) {
 				entity.discard();

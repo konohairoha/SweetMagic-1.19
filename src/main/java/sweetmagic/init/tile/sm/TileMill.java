@@ -11,10 +11,10 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemHandlerHelper;
 import sweetmagic.init.SoundInit;
 import sweetmagic.init.TileInit;
 import sweetmagic.recipe.mill.MillRecipe;
+import sweetmagic.util.ItemHelper;
 
 public class TileMill extends TileAbstractSMCook {
 
@@ -26,7 +26,7 @@ public class TileMill extends TileAbstractSMCook {
 	public List<ItemStack> craftList = new ArrayList<>();
 	public List<ItemStack> resultList = new ArrayList<>();
 	protected final StackHandler handInv = new StackHandler(1);
-	protected final StackHandler outputInv = new StackHandler(this.getInvSize());
+	protected final MagiaHandler outputInv = new MagiaHandler(this.getInvSize());
 
 	public TileMill(BlockPos pos, BlockState state) {
 		this(TileInit.mill, pos, state);
@@ -82,7 +82,7 @@ public class TileMill extends TileAbstractSMCook {
 		// レシピが見つからないがメインスロットにアイテムがあるなら吐き出す
 		else {
 			ItemStack hand = this.getHandItem();
-			ItemHandlerHelper.insertItemStacked(this.getOutput(), hand.copy(), false);
+			ItemHelper.insertStack(this.getOutput(), hand.copy(), false);
 			hand.shrink(hand.getCount());
 			this.setState(2);
 		}
@@ -114,7 +114,7 @@ public class TileMill extends TileAbstractSMCook {
 
 	// レシピチェック
 	public boolean checkRecipe() {
-		return !MillRecipe.getRecipe(this.level, this.getStackList()).isEmpty();
+		return !MillRecipe.getRecipe(this.getLevel(), this.getStackList()).isEmpty();
 	}
 
 	// 作成開始
@@ -122,7 +122,7 @@ public class TileMill extends TileAbstractSMCook {
 
 		// レシピを取得
 		List<ItemStack> stackList = this.getStackList();
-		MillRecipe recipe = MillRecipe.getRecipe(this.level, stackList).get();
+		MillRecipe recipe = MillRecipe.getRecipe(this.getLevel(), stackList).get();
 
 		// 要求アイテムリスト
 		List<ItemStack> requestList = recipe.getRequestList();
@@ -169,8 +169,8 @@ public class TileMill extends TileAbstractSMCook {
 			for (int k = 0; k < this.amount; k++) {
 
 				// 最初の1つかチャンスより大きいなら完成品を入れる
-				if (i == 0 || chance >= rand.nextFloat()) {
-					ItemHandlerHelper.insertItemStacked(this.getOutput(), this.resultList.get(i).copy(), false);
+				if (i == 0 || chance >= this.rand.nextFloat()) {
+					ItemHelper.insertStack(this.getOutput(), this.resultList.get(i).copy(), false);
 				}
 			}
 		}
@@ -277,6 +277,10 @@ public class TileMill extends TileAbstractSMCook {
 	@Override
 	public int getInvSize() {
 		return 4;
+	}
+
+	public int getMaxStackSize() {
+		return Integer.MAX_VALUE;
 	}
 
 	// メインスロットの取得

@@ -27,8 +27,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemHandlerHelper;
-import sweetmagic.api.util.ISMTip;
 import sweetmagic.init.BlockInit;
 import sweetmagic.init.ItemInit;
 import sweetmagic.init.ParticleInit;
@@ -46,9 +44,10 @@ import sweetmagic.init.entity.monster.SkullFlameArcher;
 import sweetmagic.init.entity.monster.SkullFrost;
 import sweetmagic.init.entity.monster.SkullFrostRoyalGuard;
 import sweetmagic.init.entity.monster.boss.QueenFrost;
+import sweetmagic.util.ItemHelper;
 import sweetmagic.util.SMDamage;
 
-public abstract class TileAbstractMagicianLectern extends TileSMMagic implements ISMTip {
+public abstract class TileAbstractMagicianLectern extends TileSMMagic {
 
 	public int tileTime = 0;
 	public int oldCharge = 8;
@@ -87,7 +86,7 @@ public abstract class TileAbstractMagicianLectern extends TileSMMagic implements
 		if (this.tickTime % 3 != 0 || this.summonType.is(SummonType.START) || this.summonType.is(SummonType.END)) { return; }
 
 		if (this.boss == null && this.bossId != null) {
-			this.boss = (Monster) ((ServerLevel) this.level).getEntity(this.bossId);
+			this.boss = (Monster) ((ServerLevel) this.getLevel()).getEntity(this.bossId);
 		}
 
 		if ( this.summonType.is(SummonType.SUMMON) || !(this.wave == 4 && !this.summonType.is(SummonType.CHARGE)) ) {
@@ -259,7 +258,7 @@ public abstract class TileAbstractMagicianLectern extends TileSMMagic implements
 		MutableComponent tip = null;
 
 		if (this.wave != 4) {
-			tip = this.getTipArray(this.getTip("Wave " + this.wave + ": "), this.getTip(this.dethMobCount + "/" + this.summonMaxCount));
+			tip = this.getTipArray(this.getLabel("Wave " + this.wave + ": "), this.getLabel(this.dethMobCount + "/" + this.summonMaxCount));
 		}
 
 		return tip;
@@ -290,7 +289,7 @@ public abstract class TileAbstractMagicianLectern extends TileSMMagic implements
 			wave = "Extra Wave ";
 		}
 
-		this.bossEvent.setName(this.getTipArray(this.getTip(wave + " : "), this.getText("preparing"), this.getTip(" " + name)));
+		this.bossEvent.setName(this.getTipArray(this.getLabel(wave + " : "), this.getText("preparing"), this.getLabel(" " + name)));
 		this.spawnParticle(world, pos);
 		if (chargeGage < this.summonMaxCount) { return; }
 
@@ -322,7 +321,7 @@ public abstract class TileAbstractMagicianLectern extends TileSMMagic implements
 		int count = 4 * playerList.size();
 		BlockPos summonPos = new BlockPos(pos.getX() + this.getRand(rand, 16), pos.getY(), pos.getZ() + this.getRand(rand, 16));
 
-		while (!world.getBlockState(summonPos).isAir() && !world.getBlockState(summonPos).is(BlockInit.rune_character)) {
+		while (!world.isEmptyBlock(summonPos) && !world.getBlockState(summonPos).is(BlockInit.rune_character)) {
 			summonPos = new BlockPos(pos.getX() + this.getRand(rand, 12), pos.getY(), pos.getZ() + this.getRand(rand, 12));
 		}
 
@@ -332,7 +331,7 @@ public abstract class TileAbstractMagicianLectern extends TileSMMagic implements
 		for (int i = 0; i < count; i++) {
 
 			// wave3以下なら最大湧き数に満たしたら終了
-			if ( this.dethMobCount >= this.summonMaxCount && this.wave <= 3) { return; }
+			if (this.dethMobCount >= this.summonMaxCount && this.wave <= 3) { return; }
 
 			// モブ召喚を記載
 			boolean isZero = i % 4 == 0;
@@ -343,7 +342,7 @@ public abstract class TileAbstractMagicianLectern extends TileSMMagic implements
 
 				summonPos = new BlockPos(pos.getX() + this.getRand(rand, 24), pos.getY(), pos.getZ() + this.getRand(rand, 24));
 
-				while (!world.getBlockState(summonPos).isAir() && !world.getBlockState(summonPos).is(BlockInit.rune_character)) {
+				while (!world.isEmptyBlock(summonPos) && !world.getBlockState(summonPos).is(BlockInit.rune_character)) {
 					summonPos = new BlockPos(pos.getX() + this.getRand(rand, 24), pos.getY(), pos.getZ() + this.getRand(rand, 24));
 
 					if (setPosCount++ >= 16) { break; }
@@ -355,7 +354,7 @@ public abstract class TileAbstractMagicianLectern extends TileSMMagic implements
 			setPosCount = 0;
 
 			// 座標がブロックだった場合は再設定
-			while (!world.getBlockState(secondPos).isAir() && !world.getBlockState(secondPos).is(BlockInit.rune_character)) {
+			while (!world.isEmptyBlock(secondPos) && !world.getBlockState(secondPos).is(BlockInit.rune_character)) {
 				secondPos = new BlockPos(summonPos.getX() + this.getRand(rand, 3), summonPos.getY(), summonPos.getZ() + this.getRand(rand, 3));
 
 				if (setPosCount++ >= 16) { break; }
@@ -520,7 +519,7 @@ public abstract class TileAbstractMagicianLectern extends TileSMMagic implements
 			}
 
 			stackList.add(new ItemStack(BlockInit.sturdust_crystal, 1));
-			stackList.forEach(s -> ItemHandlerHelper.insertItemStacked(tile.getInput(), s.copy(), false));
+			stackList.forEach(s -> ItemHelper.insertStack(tile.getInput(), s.copy(), false));
 			this.playSound(this.getTilePos(), SoundEvents.PLAYER_LEVELUP, 1F, 1F);
 
 			return;
@@ -562,7 +561,7 @@ public abstract class TileAbstractMagicianLectern extends TileSMMagic implements
 	}
 
 	public void spawnParticle(Level world, BlockPos pos) {
-		if ( !(world instanceof ServerLevel server) ) { return; }
+		if (!(world instanceof ServerLevel server)) { return; }
 
 		float addY = Math.min(2F, this.tileTime * 0.0125F);
 

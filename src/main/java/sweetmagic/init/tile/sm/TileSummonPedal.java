@@ -16,14 +16,13 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.shapes.Shapes;
-import sweetmagic.api.util.ISMTip;
 import sweetmagic.init.ParticleInit;
 import sweetmagic.init.TileInit;
 import sweetmagic.init.block.sm.BossFigurine;
 import sweetmagic.init.entity.monster.boss.AbstractSMBoss;
 import sweetmagic.init.item.sm.SMItem;
 
-public class TileSummonPedal extends TileAbstractSM implements ISMTip {
+public class TileSummonPedal extends TileAbstractSM {
 
 	private int summonTick = 0;
 	private boolean isWarning = false;
@@ -49,39 +48,51 @@ public class TileSummonPedal extends TileAbstractSM implements ISMTip {
 		if (block instanceof BossFigurine) {
 
 			boolean isBad = false;
-			Iterable<BlockPos> posList = this.getRangePosUnder(pos, 5);
 
-			// リスト分まわす
-			for (BlockPos p : posList) {
-				if(world.getBlockState(p).isAir()) { continue; }
+			try {
+				Iterable<BlockPos> posList = this.getRangePosUnder(pos, 5);
 
-				AABB aabb = this.getState(p).getCollisionShape(world, p).bounds();
-				if(!FULL.equals(aabb)) { continue; }
+				// リスト分まわす
+				for (BlockPos p : posList) {
+					if(world.isEmptyBlock(p)) { continue; }
 
-				isBad = true;
-				ParticleOptions par = ParticleInit.CYCLE_ORB;
-				if(this.tickTime % 30 != 0 || !(world instanceof ServerLevel server)) { continue; }
+					AABB aabb = this.getState(p).getCollisionShape(world, p).bounds();
+					if(!FULL.equals(aabb)) { continue; }
 
-				double range = aabb.min(Axis.X);
-				range = range > 1D - aabb.max(Axis.X) ? 1D - aabb.max(Axis.X) : range;
-				range = range > aabb.min(Axis.Z) ? aabb.min(Axis.Z) : range;
-				range = range > 1D - aabb.max(Axis.Z) ? 1D - aabb.max(Axis.Z) : range;
-				range = 0.85D - range;
+					isBad = true;
+					ParticleOptions par = ParticleInit.CYCLE_ORB;
+					if(this.tickTime % 30 != 0 || !(world instanceof ServerLevel server)) { continue; }
 
-				for (int i = 0; i < 16; i++) {
-					for (Direction face : ALL_FACE) {
-						this.spawnParticleCycle(server, p,  par, face, range, (i * 22.5D));
+					double range = aabb.min(Axis.X);
+					range = range > 1D - aabb.max(Axis.X) ? 1D - aabb.max(Axis.X) : range;
+					range = range > aabb.min(Axis.Z) ? aabb.min(Axis.Z) : range;
+					range = range > 1D - aabb.max(Axis.Z) ? 1D - aabb.max(Axis.Z) : range;
+					range = 0.85D - range;
+
+					for (int i = 0; i < 16; i++) {
+						for (Direction face : ALL_FACE) {
+							this.spawnParticleCycle(server, p,  par, face, range, (i * 22.5D));
+						}
 					}
 				}
 			}
 
+			catch (Exception e) {
+				isBad = false;
+			}
+
 			if (isBad) {
-				this.sendPlayerMSG(world);
+
+				try {
+					this.sendPlayerMSG(world);
+				}
+
+				catch (Exception e) { }
 				return;
 			}
 
 			if (this.summonTick++ >= MAX_SUMMONTICK) {
-				this.summonBoss((TileBossFigurine) this.getTile(pos), world, pos);
+				this.summonBoss(this.getTile(TileBossFigurine::new, pos), world, pos);
 				this.isWarning = false;
 			}
 
@@ -99,12 +110,13 @@ public class TileSummonPedal extends TileAbstractSM implements ISMTip {
 	public void sendPlayerMSG(Level world) {
 		if(this.isWarning) { return; }
 		List<Player> playerList = this.getEntityList(Player.class, e -> e.isAlive() && !e.isSpectator(), 24D);
-		playerList.forEach(p -> p.sendSystemMessage(this.getText("noempty_block", "" + 5).withStyle(RED)));
+		playerList.forEach(p -> p.sendSystemMessage(this.getText("noempty_block", 5).withStyle(RED)));
 		this.isWarning = true;
 	}
 
 	public void summonBoss(TileBossFigurine tile, Level world, BlockPos pos) {
-		AbstractSMBoss entity = (AbstractSMBoss) tile.getEntity();
+		if(tile == null) { return; }
+		AbstractSMBoss entity = tile.getEntity();
 		entity.setPos(pos.getX() + 2.5D, pos.getY() + 2D, pos.getZ() + 0.5D);
 		entity.startInfo();
 		world.addFreshEntity(entity);

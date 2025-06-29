@@ -28,19 +28,19 @@ public class TileMFBottlerAdcanced extends TileMFBottler {
 		super(type, pos, state);
 	}
 
-	public List<ItemStack> getStackList () {
+	public List<ItemStack> getStackList() {
 		return this.stackList;
 	}
 
 	// 最大MFの取得
 	@Override
-	public int getMaxMF () {
+	public int getMaxMF() {
 		return this.maxMagiaFlux;
 	}
 
 	// 受信するMF量の取得
 	@Override
-	public int getReceiveMF () {
+	public int getReceiveMF() {
 		return 250000;
 	}
 }

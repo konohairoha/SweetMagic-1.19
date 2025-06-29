@@ -425,9 +425,9 @@ public class TileAquariumPot extends TileSMMagic implements ITileFluid {
 		if (block instanceof SnowLayerBlock) {
 
 			if (!isClient) {
-				this.level.destroyBlock(p, false);
-				this.level.removeBlock(p, false);
-				this.setMF((this.getMF() + 25 * this.getStackCount()));
+				this.getLevel().destroyBlock(p, false);
+				this.getLevel().removeBlock(p, false);
+				this.setMF((this.getMF() + 40 * this.getStackCount()));
 				this.sentClient();
 			}
 
@@ -453,7 +453,7 @@ public class TileAquariumPot extends TileSMMagic implements ITileFluid {
 			if (!state.is(Blocks.LAVA) && !(block instanceof BaseFireBlock)) { continue; }
 			if (block instanceof LiquidBlock liq && state.getValue(LiquidBlock.LEVEL) != 0) { continue; }
 
-			sumMF += state.is(Blocks.LAVA) ? 2000 : 200;
+			sumMF += state.is(Blocks.LAVA) ? 8000 : 400;
 			world.setBlock(p, Blocks.AIR.defaultBlockState(), 3);
 			this.playSound(p, SoundEvents.FIRE_EXTINGUISH, 1F, 1F);
 		}
@@ -468,7 +468,7 @@ public class TileAquariumPot extends TileSMMagic implements ITileFluid {
 
 			if (!isClient) {
 				int stackCount = this.getStackCount();
-				this.setMF(this.getMF() + (int) (sumMF * (0.9F + stackCount * 0.1F)) );
+				this.setMF(this.getMF() + sumMF * stackCount);
 				this.sendPKT();
 			}
 

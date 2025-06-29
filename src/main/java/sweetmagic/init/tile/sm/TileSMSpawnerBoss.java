@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -21,17 +22,21 @@ import sweetmagic.init.entity.monster.boss.Arlaune;
 import sweetmagic.init.entity.monster.boss.BlitzWizardMaster;
 import sweetmagic.init.entity.monster.boss.BraveSkeleton;
 import sweetmagic.init.entity.monster.boss.BullFight;
+import sweetmagic.init.entity.monster.boss.DemonsBelial;
 import sweetmagic.init.entity.monster.boss.ElshariaCurious;
 import sweetmagic.init.entity.monster.boss.HolyAngel;
 import sweetmagic.init.entity.monster.boss.IgnisKnight;
 import sweetmagic.init.entity.monster.boss.QueenFrost;
 import sweetmagic.init.entity.monster.boss.SilverLandRoad;
+import sweetmagic.init.entity.monster.boss.StellaWizardMaster;
 import sweetmagic.init.entity.monster.boss.TwilightHora;
 import sweetmagic.init.entity.monster.boss.WhiteButler;
 import sweetmagic.init.entity.monster.boss.WindWitchMaster;
 import sweetmagic.init.entity.monster.boss.WitchSandryon;
 
 public class TileSMSpawnerBoss extends TileSMSpawner {
+
+	public int breakCrystal = 0;
 
 	public TileSMSpawnerBoss(BlockPos pos, BlockState state) {
 		super(TileInit.smSpawnerBoss, pos, state);
@@ -41,20 +46,21 @@ public class TileSMSpawnerBoss extends TileSMSpawner {
 		super(type, pos, state);
 	}
 
-	public boolean checkTick () {
+	public boolean checkTick() {
 		return this.tickTime % 20 != 0;
 	}
 
 	// プレイヤーが周囲にいるかのチェック
-	public boolean checkPlayer (Level world, double range) {
+	public boolean checkPlayer(Level world, double range) {
 		return !this.getEntityListUp(Player.class, e -> e.isAlive() && !e.isCreative() && !e.isSpectator(), range).isEmpty();
 	}
 
-	public void doSpawnEntity (Level world, BlockPos pos, Random rand) {
+	public void doSpawnEntity(Level world, BlockPos pos, Random rand) {
 		if (!(world instanceof ServerLevel server) || !this.checkPlayer(world, this.getRange())) { return; }
 
 		AbstractSMBoss entity = (AbstractSMBoss) this.getEntity(false);
 		entity.setPos(pos.getX() + 0.5D, pos.getY() + 1.5D, pos.getZ() + 0.5D);
+		entity.spawnAction();
 
 		this.setEntityBuff(entity);
 		this.startInfo(entity);
@@ -66,18 +72,24 @@ public class TileSMSpawnerBoss extends TileSMSpawner {
 	}
 
 	// モブのバフを設定
-	public void setEntityBuff (Mob entity) {
+	public void setEntityBuff(AbstractSMBoss entity) {
 		int level = this.getMobLevel() - 1;
 		this.addPotion(entity, PotionInit.resistance_blow, 99999, 4);
-		if (level <= 1) { return; }
+		if (level <= 0) { return; }
 
 		this.addPotion(entity, PotionInit.reflash_effect, 99999, 0);
+		entity.setHealthArmorCount(level);
+	}
+
+	public void setMobType() {
+		this.setMobType(this.rand.nextInt(this.maxMobType() - 1));
+		this.randFlag = true;
 	}
 
 	// えんちちー取得
-	public Mob getEntity (boolean isRender) {
+	public Mob getEntity(boolean isRender) {
 
-		Level world = this.level;
+		Level world = this.getLevel();
 		AbstractSMBoss entity = null;
 		LivingEntity sub = null;
 		List<Player> playerList = this.getEntityList(Player.class, e -> e.isAlive() && !e.isCreative() && !e.isSpectator(), 32D);
@@ -118,7 +130,7 @@ public class TileSMSpawnerBoss extends TileSMSpawner {
 			entity.setHealth(entity.getMaxHealth());
 
 			if (!isRender) {
-				sub = ((BraveSkeleton) entity).spawnHorse(this.level, this.getBlockPos().above());
+				sub = ((BraveSkeleton) entity).spawnHorse(world, this.getBlockPos().above());
 			}
 			break;
 		case 6:
@@ -156,6 +168,17 @@ public class TileSMSpawnerBoss extends TileSMSpawner {
 			entity.getAttribute(Attributes.MAX_HEALTH).setBaseValue(768D * (1F + playerList.size() * 0.15F) * addHealth);
 			entity.setHealth(entity.getMaxHealth());
 			break;
+		case 13:
+			entity = new StellaWizardMaster(world);
+			entity.getAttribute(Attributes.MAX_HEALTH).setBaseValue(768D * (1F + playerList.size() * 0.15F) * addHealth);
+			entity.setHealth(entity.getMaxHealth());
+			((StellaWizardMaster) entity).setDemons(!this.randFlag);
+			((StellaWizardMaster) entity).setGimmick(this.breakCrystal);
+			((StellaWizardMaster) entity).setHealthArmorCount(4);
+			break;
+		case 14:
+			entity = new DemonsBelial(world);
+			break;
 		}
 
 		if (sub != null) {
@@ -172,11 +195,11 @@ public class TileSMSpawnerBoss extends TileSMSpawner {
 		mob.startInfo();
 	}
 
-	public AbstractSMBoss addSpawn (boolean isRender) {
+	public AbstractSMBoss addSpawn(boolean isRender) {
 		if (isRender) { return null; }
 
 		AbstractSMBoss entity = null;
-		Level world = this.level;
+		Level world = this.getLevel();
 		List<Player> playerList = this.getEntityList(Player.class, e -> e.isAlive() && !e.isCreative() && !e.isSpectator(), 32D);
 		int summonMobSize = this.getEntityList(AbstractSummonMob.class, e -> e.isAlive(), 80D).size();
 		float addHealth = 1F + summonMobSize * 0.1F;
@@ -200,12 +223,12 @@ public class TileSMSpawnerBoss extends TileSMSpawner {
 		return entity;
 	}
 
-	public void buttonEntity () {
+	public void buttonEntity() {
 		this.entity = this.getEntity(true);
 	}
 
 	// レンダー用のえんちちー取得
-	public LivingEntity getRenderEntity () {
+	public LivingEntity getRenderEntity() {
 
 		if (this.entity == null) {
 			this.entity = this.getEntity(true);
@@ -214,7 +237,21 @@ public class TileSMSpawnerBoss extends TileSMSpawner {
 		return this.entity;
 	}
 
-	public int maxMobType () {
-		return 13;
+	public int maxMobType() {
+		return 15;
+	}
+
+	// NBTの書き込み
+	@Override
+	protected void saveAdditional(CompoundTag tag) {
+		super.saveAdditional(tag);
+		tag.putInt("breakCrystal", this.breakCrystal);
+	}
+
+	// NBTの読み込み
+	@Override
+	public void load(CompoundTag tag) {
+		super.load(tag);
+		this.breakCrystal = tag.getInt("breakCrystal");
 	}
 }

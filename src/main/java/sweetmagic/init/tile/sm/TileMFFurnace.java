@@ -19,7 +19,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.RecipeWrapper;
 import sweetmagic.init.TileInit;
@@ -101,7 +100,7 @@ public class TileMFFurnace extends TileSMMagic {
 		if (this.isMFEmpty() || this.getCostMF() > this.getMF()) { return false; }
 
 		// 精錬後アイテムをスロットに入れられないなら終了
-		ItemStack out = ItemHandlerHelper.insertItemStacked(this.getOut(), result.copy(), true);
+		ItemStack out = ItemHelper.insertStack(this.getOut(), result.copy(), true);
 		if (!out.isEmpty()) { return false; }
 
 		return true;
@@ -141,7 +140,7 @@ public class TileMFFurnace extends TileSMMagic {
 
 		// 精錬後のアイテムを出力スロットに入れる
 		ItemStack result = this.checkSmeltResult(world, this.stack).copy();
-		ItemHandlerHelper.insertItemStacked(this.getOut(), result, false);
+		ItemHelper.insertStack(this.getOut(), result, false);
 		ItemHelper.compactSimpleInventory(this.outInv);
 
 		// 下のチェストへアイテムを送る
@@ -174,7 +173,7 @@ public class TileMFFurnace extends TileSMMagic {
 			ItemStack output = handler.getStackInSlot(i);
 			if (output.isEmpty() || !this.canSmelt(world, output)) { continue; }
 
-			ItemStack stack = ItemHandlerHelper.insertItemStacked(this.getInput(), output.copy(), false);
+			ItemStack stack = ItemHelper.insertStack(this.getInput(), output.copy(), false);
 			output.setCount(stack.getCount());
 		}
 	}

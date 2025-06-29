@@ -78,7 +78,7 @@ public class TileSpawnStone extends TileAbstractSM {
 		Random rand = this.rand;
 		BlockPos summonPos = new BlockPos(pos.getX() + this.getRand(rand, this.range), pos.getY(), pos.getZ() + this.getRand(rand, this.range));
 
-		while (!world.getBlockState(summonPos).isAir() || world.getBlockState(summonPos.below()).isAir()) {
+		while (!world.isEmptyBlock(summonPos) || world.isEmptyBlock(summonPos.below())) {
 			summonPos = new BlockPos(pos.getX() + this.getRand(rand, this.range), pos.getY(), pos.getZ() + this.getRand(rand, this.range));
 			if (count++ >= 16) { break; }
 		}
@@ -108,7 +108,7 @@ public class TileSpawnStone extends TileAbstractSM {
 			count = 0;
 
 			// 座標がブロックだった場合は再設定
-			while (!world.getBlockState(secondPos).isAir() || world.getBlockState(secondPos.below()).isAir()) {
+			while (!world.isEmptyBlock(secondPos)|| world.isEmptyBlock(secondPos.below())) {
 				secondPos = new BlockPos(summonPos.getX() + this.getRand(rand, 3), summonPos.getY(), summonPos.getZ() + this.getRand(rand, 3));
 				if (count++ >= 16) { break; }
 			}

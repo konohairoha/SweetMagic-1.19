@@ -25,7 +25,6 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemHandlerHelper;
 import sweetmagic.api.iblock.ITileFluid;
 import sweetmagic.api.iitem.IFood;
 import sweetmagic.init.ItemInit;
@@ -36,6 +35,7 @@ import sweetmagic.init.fluid.FluidTankHandler.TankProperty;
 import sweetmagic.init.item.sm.SMBucket;
 import sweetmagic.init.tile.menu.FreezerMenu;
 import sweetmagic.recipe.feezer.FreezerRecipe;
+import sweetmagic.util.ItemHelper;
 
 public class TileFreezer extends TileAbstractSM implements ITileFluid {
 
@@ -123,15 +123,15 @@ public class TileFreezer extends TileAbstractSM implements ITileFluid {
 
 	// レシピチェック
 	public boolean checkRecipe() {
-		return !FreezerRecipe.getRecipe(this.level, this.getStackList()).isEmpty();
+		return !FreezerRecipe.getRecipe(this.getLevel(), this.getStackList()).isEmpty();
 	}
 
 	// 作成開始
 	public void craftStart() {
 		List<ItemStack> stackList = this.getStackList();
-		FreezerRecipe recipe = FreezerRecipe.getRecipe(this.level, stackList).get();
+		FreezerRecipe recipe = FreezerRecipe.getRecipe(this.getLevel(), stackList).get();
 		ItemStack resultStack = recipe.getResultItem().copy();
-		if (!ItemHandlerHelper.insertItemStacked(this.getOutput(), resultStack, true).isEmpty()) { return; }
+		if (!ItemHelper.insertStack(this.getOutput(), resultStack, true).isEmpty()) { return; }
 
 		// クラフトで使うアイテムを入れておく
 		this.craftList = new ArrayList<ItemStack>(recipe.getRequestList());
@@ -168,7 +168,7 @@ public class TileFreezer extends TileAbstractSM implements ITileFluid {
 
 	// クラフトの完成
 	public void craftFinish() {
-		ItemHandlerHelper.insertItemStacked(this.getOutput(), this.outStack, false);
+		ItemHelper.insertStack(this.getOutput(), this.outStack, false);
 		this.playSound(this.getBlockPos(), SoundInit.FREEZER_CRAFT, 0.1F, 1F);
 		this.clearInfo();
 	}
@@ -213,7 +213,7 @@ public class TileFreezer extends TileAbstractSM implements ITileFluid {
 
 			if (fluid.isEmpty() || fluid.getAmount() <= 0) {
 				bucket.shrink(1);
-				ItemHandlerHelper.insertItemStacked(this.getBucket(), new ItemStack(ItemInit.alt_bucket), false);
+				ItemHelper.insertStack(this.getBucket(), new ItemStack(ItemInit.alt_bucket), false);
 			}
 		}
 
@@ -222,15 +222,15 @@ public class TileFreezer extends TileAbstractSM implements ITileFluid {
 		}
 
 		if (copy.is(Items.WATER_BUCKET)) {
-			ItemHandlerHelper.insertItemStacked(this.getBucket(), new ItemStack(Items.BUCKET), false);
+			ItemHelper.insertStack(this.getBucket(), new ItemStack(Items.BUCKET), false);
 		}
 	}
 
 	// 氷の作成
 	public void craftIce() {
-		if(!ItemHandlerHelper.insertItemStacked(this.getIce(), ICE.copy(), true).isEmpty()) { return; }
+		if(!ItemHelper.insertStack(this.getIce(), ICE.copy(), true).isEmpty()) { return; }
 
-		ItemHandlerHelper.insertItemStacked(this.getIce(), ICE.copy(), false);
+		ItemHelper.insertStack(this.getIce(), ICE.copy(), false);
 		this.setAmount(this.getFluidValue() - this.useWaterValue);
 		this.sendPKT();
 	}

@@ -25,7 +25,6 @@ import sweetmagic.api.iitem.IWand;
 import sweetmagic.api.iitem.info.BookInfo;
 import sweetmagic.api.iitem.info.PorchInfo;
 import sweetmagic.api.iitem.info.WandInfo;
-import sweetmagic.api.util.ISMTip;
 import sweetmagic.init.BlockInit;
 import sweetmagic.init.ParticleInit;
 import sweetmagic.init.SoundInit;
@@ -41,7 +40,7 @@ import sweetmagic.recipe.RecipeHelper.RecipeUtil;
 import sweetmagic.recipe.pedal.PedalRecipe;
 import sweetmagic.util.RenderUtil.RGBColor;
 
-public class TilePedalCreate extends TileSMMagic implements ISMTip {
+public class TilePedalCreate extends TileSMMagic {
 
 	public int maxMagiaFlux = 20000;				// 最大MF量を設定
 	private static final int MAX_CRAFT_TIME = 10;
@@ -113,7 +112,7 @@ public class TilePedalCreate extends TileSMMagic implements ISMTip {
 	}
 
 	// ブロック一致確認
-	public boolean checkBlock () {
+	public boolean checkBlock() {
 		return this.getState(this.getBlockPos().below()).is(TagInit.AC_BLOCK);
 	}
 
@@ -126,7 +125,7 @@ public class TilePedalCreate extends TileSMMagic implements ISMTip {
 		}
 
 		// レシピを取得して見つからなければ終了
-		Optional<PedalRecipe> recipeOp = PedalRecipe.getRecipe(this.level, stackList);
+		Optional<PedalRecipe> recipeOp = PedalRecipe.getRecipe(this.getLevel(), stackList);
 		if (recipeOp.isEmpty()) {
 			return this.getText("pedastal_norecipe");
 		}
@@ -135,7 +134,7 @@ public class TilePedalCreate extends TileSMMagic implements ISMTip {
 		PedalRecipe recipe = recipeOp.get();
 		int needMF = recipe.getMFList().get(0);
 		if (this.getMF() < needMF) {
-			return this.getTipArray(this.getText("pedastal_nomf"), ":" + String.format("%,d", needMF));
+			return this.getTipArray(this.getText("pedastal_nomf"), ":" + this.format(needMF));
 		}
 
 		// クラフト要求アイテムの消費とクラフト後のアイテム取得
@@ -147,7 +146,7 @@ public class TilePedalCreate extends TileSMMagic implements ISMTip {
 	}
 
 	// クラフト可能か
-	public MutableComponent checkCanAllCraft (List<ItemStack> stackList) {
+	public MutableComponent checkCanAllCraft(List<ItemStack> stackList) {
 
 		// 必要なブロックがない場合
 		if (!this.checkBlock()) {
@@ -157,7 +156,7 @@ public class TilePedalCreate extends TileSMMagic implements ISMTip {
 		for (int i = 0; i < 8; i++) {
 
 			// レシピを取得して見つからなければ終了
-			Optional<PedalRecipe> recipeOp = PedalRecipe.getRecipe(this.level, stackList);
+			Optional<PedalRecipe> recipeOp = PedalRecipe.getRecipe(this.getLevel(), stackList);
 			if (recipeOp.isEmpty()) {
 				return i > 0 ? null : this.getText("pedastal_norecipe");
 			}
@@ -166,7 +165,7 @@ public class TilePedalCreate extends TileSMMagic implements ISMTip {
 			PedalRecipe recipe = recipeOp.get();
 			int needMF = recipe.getMFList().get(0);
 			if (this.getMF() < needMF) {
-				return i > 0 ? null : this.getTipArray(this.getText("pedastal_nomf"), ":" + String.format("%,d", needMF));
+				return i > 0 ? null : this.getTipArray(this.getText("pedastal_nomf"), ":" + this.format(needMF));
 			}
 
 			// クラフト要求アイテムの消費とクラフト後のアイテム取得
@@ -178,7 +177,7 @@ public class TilePedalCreate extends TileSMMagic implements ISMTip {
 		return null;
 	}
 
-	public void setCraftList (RecipeUtil recipeUtil, int needMF) {
+	public void setCraftList(RecipeUtil recipeUtil, int needMF) {
 
 		this.setMF(this.getMF() - needMF);
 		List<ItemStack> resultList = new ArrayList<>();
@@ -235,11 +234,11 @@ public class TilePedalCreate extends TileSMMagic implements ISMTip {
 			// 出力アイテムにNBTを設定
 			outStack.setTag(tags);
 
-			if (outItem instanceof IMagicBook wand) {
+			if (outItem instanceof IMagicBook book2) {
 
 				// インベントリを取得してスロット数を設定
 				SMBookInventory inv = new SMBookInventory(new BookInfo(outStack));
-				inv.inv = new ItemStackHandler(wand.getSlotSize());
+				inv.inv = new ItemStackHandler(book2.getSlotSize());
 
 				// インベントリに元の杖の魔法リストのアイテムを突っ込む
 				for (int i = 0; i < invStackList.size(); i++) {
@@ -260,7 +259,7 @@ public class TilePedalCreate extends TileSMMagic implements ISMTip {
 			}
 		}
 
-		else if (tags != null && inputStack.getItem() instanceof IPorch book) {
+		else if (tags != null && inputStack.getItem() instanceof IPorch porch) {
 
 			// 元の杖の魔法リスト
 			List<ItemStack> invStackList = new ArrayList<>();
@@ -268,9 +267,9 @@ public class TilePedalCreate extends TileSMMagic implements ISMTip {
 			Item outItem = outStack.getItem();
 
 			// スロットの数を増やす
-			if (outItem instanceof IPorch wand) {
-				tags.putInt(IMagicBook.SLOTCOUNT, wand.getSlotSize());
-				invStackList = wand.getStackList(inputStack);
+			if (outItem instanceof IPorch porch2) {
+				tags.putInt(IMagicBook.SLOTCOUNT, porch2.getSlotSize());
+				invStackList = porch2.getStackList(inputStack);
 			}
 
 			// 出力アイテムにNBTを設定
@@ -320,7 +319,7 @@ public class TilePedalCreate extends TileSMMagic implements ISMTip {
 	}
 
 	// 作成開始
-	public void craftStart () {
+	public void craftStart() {
 		this.isCraft = true;
 		this.nowTick = 0;
 		this.tickTime = 0;
@@ -330,15 +329,15 @@ public class TilePedalCreate extends TileSMMagic implements ISMTip {
 	}
 
 	// クラフトの完成
-	public void craftFinish () {
+	public void craftFinish() {
 		this.isCraft = false;
 		this.playSound(this.getBlockPos(), SoundEvents.PLAYER_LEVELUP, 0.5F, 1F);
-		this.level.levelEvent(2003, this.getBlockPos().above(2), 0);
+		this.getLevel().levelEvent(2003, this.getBlockPos().above(2), 0);
 		this.sendPKT();
 	}
 
 	// 初期化
-	public void clearInfo () {
+	public void clearInfo() {
 		this.amount = 0;
 		this.craftTime = 0;
 		this.nowTick = 0;
@@ -362,7 +361,6 @@ public class TilePedalCreate extends TileSMMagic implements ISMTip {
 			float f1 = (float) posX - 0.5F + this.rand.nextFloat();
 			float f2 = (float) (posY + 0.85F + this.rand.nextFloat() * 0.75F) + this.nowTick * 0.00375F * rate;
 			float f3 = (float) posZ - 0.5F + this.rand.nextFloat();
-
 			world.addParticle(ParticleInit.TWILIGHTLIGHT, true, f1, f2, f3, 0, 0, 0);
 
 			float f4 = (float) posX - 0.5F + this.rand.nextFloat();
@@ -398,13 +396,13 @@ public class TilePedalCreate extends TileSMMagic implements ISMTip {
 		return this.craftTime;
 	}
 
-	public Block getNeedBlock () {
+	public Block getNeedBlock() {
 		return BlockInit.aethercrystal_block;
 	}
 
 	// 最大MFの取得
 	@Override
-	public int getMaxMF () {
+	public int getMaxMF() {
 		return this.maxMagiaFlux;
 	}
 

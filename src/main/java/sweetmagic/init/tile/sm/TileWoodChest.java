@@ -32,7 +32,7 @@ public class TileWoodChest extends TileAbstractSM {
 	public int count = 4;
 	public float chance = 0.825F;
 	public ResourceLocation lootTable = null;
-	public final StackHandler inputInv = new StackHandler(this.getInvSize());
+	public final StackHandler inputInv = new StackHandler(this.getInvSize(), true);
 
 	public TileWoodChest(BlockPos pos, BlockState state) {
 		this(TileInit.woodChest, pos, state);
@@ -72,12 +72,12 @@ public class TileWoodChest extends TileAbstractSM {
 	public void setLootInv(@Nullable Player player) {
 		if (this.lootTable == null) { return; }
 
-		RandomSource rand = this.level.random;
-		LootContext.Builder builder = (new LootContext.Builder((ServerLevel)this.level)).withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(this.worldPosition)).withOptionalRandomSeed(rand.nextLong());
+		RandomSource rand = this.getLevel().getRandom();
+		LootContext.Builder builder = (new LootContext.Builder((ServerLevel)this.getLevel())).withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(this.worldPosition)).withOptionalRandomSeed(rand.nextLong());
  		List<ItemStack> stackList = new ArrayList<>();
 
  		for (int i = 0; i < this.count; i++ ) {
-	 		stackList.addAll(this.level.getServer().getLootTables().get(this.lootTable).getRandomItems(builder.create(LootContextParamSets.CHEST)));
+	 		stackList.addAll(this.getLevel().getServer().getLootTables().get(this.lootTable).getRandomItems(builder.create(LootContextParamSets.CHEST)));
  		}
 
 		IItemHandler handler = this.getItemHandler(this, Direction.UP);

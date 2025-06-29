@@ -16,7 +16,6 @@ import net.minecraft.world.level.block.CampfireBlock;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 import sweetmagic.api.iitem.IWand;
 import sweetmagic.api.iitem.info.WandInfo;
@@ -26,6 +25,7 @@ import sweetmagic.init.block.sm.IrisCreation;
 import sweetmagic.init.tile.inventory.SMInventory.SMWandInventory;
 import sweetmagic.init.tile.menu.IrisCreationMenu;
 import sweetmagic.recipe.iris.IrisRecipe;
+import sweetmagic.util.ItemHelper;
 
 public class TileIrisCreation extends TileAbstractSM {
 
@@ -93,7 +93,7 @@ public class TileIrisCreation extends TileAbstractSM {
 			double x = (double) pos.getX() + 0.5D + (this.rand.nextDouble() * 0.4D - 0.2D);
 			double y = (double) pos.getY() + addY;
 			double z = (double) pos.getZ() + 0.5D + (this.rand.nextDouble() * 0.4D - 0.2D);
-			world.addParticle(ParticleTypes.BUBBLE_POP, x, y, z, 0.0D, 0.0D, 0.0D);
+			world.addParticle(ParticleTypes.BUBBLE_POP, x, y, z, 0D, 0D, 0D);
 		}
 
 		if (under && this.rand.nextFloat() >= 0.75F) {
@@ -126,7 +126,7 @@ public class TileIrisCreation extends TileAbstractSM {
 
 	// レシピチェック
 	public boolean checkRecipe() {
-		return !IrisRecipe.getRecipe(this.level, this.getStackList()).isEmpty();
+		return !IrisRecipe.getRecipe(this.getLevel(), this.getStackList()).isEmpty();
 	}
 
 	// 作成開始
@@ -134,7 +134,7 @@ public class TileIrisCreation extends TileAbstractSM {
 
 		// レシピを取得して見つからなければ終了
 		List<ItemStack> stackList = this.getStackList();
-		IrisRecipe recipe = IrisRecipe.getRecipe(this.level, stackList).get();
+		IrisRecipe recipe = IrisRecipe.getRecipe(this.getLevel(), stackList).get();
 
 		// レシピから完成品を取得
 		ItemStack resultStack = recipe.getResultItem().copy();
@@ -172,7 +172,7 @@ public class TileIrisCreation extends TileAbstractSM {
 			}
 		}
 
-		if (!ItemHandlerHelper.insertItemStacked(this.getOutput(), resultStack, true).isEmpty()) { return; }
+		if (!ItemHelper.insertStack(this.getOutput(), resultStack, true).isEmpty()) { return; }
 
 		// クラフトで使うアイテムを入れておく
 		this.craftList = new ArrayList<ItemStack>(recipe.getRequestList());
@@ -195,7 +195,7 @@ public class TileIrisCreation extends TileAbstractSM {
 
 	// クラフトの完成
 	public void craftFinish() {
-		ItemHandlerHelper.insertItemStacked(this.getOutput(), this.outStack, false);
+		ItemHelper.insertStack(this.getOutput(), this.outStack, false);
 		this.clearInfo();
 	}
 

@@ -90,15 +90,13 @@ public class TileAetherRepair extends TileSMMagic {
 			float randX = this.getRandFloat(0.1F);
 			float randY = this.getRandFloat(0.1F);
 			float randZ = this.getRandFloat(0.1F);
-
 			float x = pos.getX() + 0.5F + randX;
 			float y = pos.getY() + 0.525F + randY;
 			float z = pos.getZ() + 0.5F + randZ;
 			float xSpeed = pX * 0.25F;
 			float ySpeed = 0.1F * 0.4F;
 			float zSpeed = pZ * 0.25F;
-
-			this.level.addParticle(ParticleInit.NORMAL, x, y, z, xSpeed, ySpeed, zSpeed);
+			this.addParticle(ParticleInit.NORMAL, x, y, z, xSpeed, ySpeed, zSpeed);
 		}
 	}
 

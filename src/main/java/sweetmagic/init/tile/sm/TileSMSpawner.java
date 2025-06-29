@@ -40,6 +40,7 @@ public class TileSMSpawner extends TileAbstractSM {
 	private int spawnTick = 0;
 	private int maxSpawnTick = 0;
 
+	public boolean randFlag = false;
 	public boolean isPlayer = false;
 	public boolean isPeace = false;
 
@@ -85,24 +86,29 @@ public class TileSMSpawner extends TileAbstractSM {
 		this.isPlayer = this.checkPlayer(world, 16D);
 	}
 
-	public boolean checkTick () {
+	public boolean checkTick() {
 		return this.spawnTick++ >= this.maxSpawnTick;
 	}
 
 	// モブスポーン
-	public void spawnEntity (Level world, BlockPos pos) {
+	public void spawnEntity(Level world, BlockPos pos) {
 
 		// 情報の初期化
 		this.clearInfo();
 
 		if (this.getMobType() == -1 && this.checkPlayer(world, 48D)) {
-			this.setMobType(this.rand.nextInt(this.maxMobType()));
+			this.setMobType();
 		}
 
 		this.doSpawnEntity(world, pos, this.rand);
 	}
 
-	public void doSpawnEntity (Level world, BlockPos pos, Random rand) {
+	public void setMobType() {
+		this.setMobType(this.rand.nextInt(this.maxMobType()));
+		this.randFlag = true;
+	}
+
+	public void doSpawnEntity(Level world, BlockPos pos, Random rand) {
 		if (!(world instanceof ServerLevel server) || !this.checkPlayer(world, 16D)) { return; }
 
 		// ブロックごとのスポーンしたモブを取得
@@ -152,23 +158,23 @@ public class TileSMSpawner extends TileAbstractSM {
 		}
 	}
 
-	public void startInfo (AbstractSMBoss mob) { }
+	public void startInfo(AbstractSMBoss mob) { }
 
 	// プレイヤーが周囲にいるかのチェック
-	public boolean checkPlayer (Level world, double range) {
+	public boolean checkPlayer(Level world, double range) {
 		return !this.getEntityListHalf(Player.class, e -> e.isAlive() && !e.isCreative() && !e.isSpectator(), range).isEmpty();
 	}
 
-	public int getRand (Random rand, int range) {
+	public int getRand(Random rand, int range) {
 		return rand.nextInt(range) - rand.nextInt(range);
 	}
 
-	public float getRand (Random rand) {
+	public float getRand(Random rand) {
 		return rand.nextFloat() - rand.nextFloat();
 	}
 
 	// 情報の初期化
-	public void clearInfo () {
+	public void clearInfo() {
 		this.maxSpawnTick = this.rand.nextInt(RAND_SPAWNTICK) + MAX_SPAWNTICK;
 		this.tickTime = 0;
 		this.spawnTick = 0;
@@ -176,7 +182,7 @@ public class TileSMSpawner extends TileAbstractSM {
 	}
 
 	// ボタンクリック
-	public void clickButton (int id) {
+	public void clickButton(int id) {
 		switch (id) {
 		case 0:
 			this.setRange(Math.min(16, this.getRange() + 1));
@@ -206,7 +212,7 @@ public class TileSMSpawner extends TileAbstractSM {
 		}
 	}
 
-	public void buttonEntity () {
+	public void buttonEntity() {
 		this.entity = this.getEntity();
 	}
 
@@ -233,37 +239,37 @@ public class TileSMSpawner extends TileAbstractSM {
 	}
 
 	// スポーン範囲の取得
-	public int getRange () {
+	public int getRange() {
 		return this.range;
 	}
 
 	// スポーン範囲の設定
-	public void setRange (int range) {
+	public void setRange(int range) {
 		this.range = range;
 	}
 
 	// モブレベルの取得
-	public int getMobLevel () {
+	public int getMobLevel() {
 		return this.mobLevel;
 	}
 
 	// モブレベルの設定
-	public void setMobLevel (int level) {
+	public void setMobLevel(int level) {
 		this.mobLevel = level;
 	}
 
 	// モブ種類の取得
-	public int getMobType () {
+	public int getMobType() {
 		return this.mobType;
 	}
 
 	// モブ種類の設定
-	public void setMobType (int mobType) {
+	public void setMobType(int mobType) {
 		this.mobType = mobType;
 	}
 
 	// レンダー用のえんちちー取得
-	public LivingEntity getRenderEntity () {
+	public LivingEntity getRenderEntity() {
 
 		if (this.entity == null) {
 			this.entity = this.getEntity();
@@ -273,9 +279,9 @@ public class TileSMSpawner extends TileAbstractSM {
 	}
 
 	// えんちちー取得
-	public Mob getEntity () {
+	public Mob getEntity() {
 
-		Level world = this.level;
+		Level world = this.getLevel();
 		Mob entity = null;
 
 		// モブ種類によって設定
@@ -307,12 +313,12 @@ public class TileSMSpawner extends TileAbstractSM {
 		return entity;
 	}
 
-	public int maxMobType () {
+	public int maxMobType() {
 		return 7;
 	}
 
 	// モブの名前を取得
-	public String getEntityName () {
+	public String getEntityName() {
 
 		if (this.getMobType() == -1) {
 			return "random";
@@ -322,7 +328,7 @@ public class TileSMSpawner extends TileAbstractSM {
 	}
 
 	// モブのバフを設定
-	public void setEntityBuff (Mob entity) {
+	public void setEntityBuff(Mob entity) {
 
 		int level = this.getMobLevel() - 1;
 		this.addPotion(entity, PotionInit.resistance_blow, 99999, 5);
@@ -336,7 +342,7 @@ public class TileSMSpawner extends TileAbstractSM {
 	}
 
 	// ユニーク名を取得
-	public String getUniqueTagName () {
+	public String getUniqueTagName() {
 		BlockPos pos = this.getBlockPos();
 		return pos.getX() + "_" + pos.getY() + "_" + pos.getZ();
 	}

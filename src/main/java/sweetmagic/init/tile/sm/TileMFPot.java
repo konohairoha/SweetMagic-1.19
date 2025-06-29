@@ -327,7 +327,7 @@ public class TileMFPot extends TileSMMagic {
 
 				this.setMF(this.getMF() + sumMF);
 				this.sendPKT();
-				this.playSound(pos, SoundEvents.GRASS_PLACE, 0.25F, 0.8F + world.random.nextFloat() * 0.4F);
+				this.playSound(pos, SoundEvents.GRASS_PLACE, 0.25F, 0.8F + world.getRandom().nextFloat() * 0.4F);
 			}
 
 			else {
@@ -347,9 +347,9 @@ public class TileMFPot extends TileSMMagic {
 		if (block instanceof SnowLayerBlock) {
 
 			if (!isClient) {
-				this.level.destroyBlock(p, false);
-				this.level.removeBlock(p, false);
-				this.setMF((this.getMF() + 12));
+				this.getLevel().destroyBlock(p, false);
+				this.getLevel().removeBlock(p, false);
+				this.setMF((this.getMF() + 20));
 				this.sentClient();
 			}
 
@@ -376,7 +376,7 @@ public class TileMFPot extends TileSMMagic {
 
 			if (block instanceof LiquidBlock liq && state.getValue(LiquidBlock.LEVEL) != 0) { continue; }
 
-			sumMF += state.is(Blocks.LAVA) ? 1500 : 100;
+			sumMF += state.is(Blocks.LAVA) ? 4000 : 200;
 			world.setBlock(p, Blocks.AIR.defaultBlockState(), 3);
 			this.playSound(p, SoundEvents.FIRE_EXTINGUISH, 1F, 1F);
 		}

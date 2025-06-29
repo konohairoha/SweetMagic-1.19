@@ -66,12 +66,12 @@ public class TileTransferGateVertical extends TileAbstractSM {
 	}
 
 	// 向きの取得
-	public Direction getFace () {
+	public Direction getFace() {
 		BlockState state = this.getState(this.getBlockPos());
 		return !state.hasProperty(BlockStateProperties.FACING) ? Direction.NORTH : state.getValue(BlockStateProperties.FACING);
 	}
 
-	public boolean doTereport (LivingEntity entity) {
+	public boolean doTereport(LivingEntity entity) {
 		ItemStack stack = this.getInputItem();
 		if (stack.isEmpty() || !(stack.getItem() instanceof MFTeleport) ) { return false; }
 
@@ -83,10 +83,10 @@ public class TileTransferGateVertical extends TileAbstractSM {
 		BlockPos pos = new BlockPos(tags.getInt("pX") + 0.5F, tags.getInt("pY") + 1F, tags.getInt("pZ") + 0.5F);
 		ResourceLocation dim = new ResourceLocation(tags.getString("dim"));
 
-		if (this.level instanceof ServerLevel server) {
+		if (this.getLevel() instanceof ServerLevel server) {
 
 			double range = 0.875D;
-			double ySpeed = -2.0D;
+			double ySpeed = -2D;
 
 			for (int i= -1; i < 5; i++) {
 				this.spawnParticleRing(server, ParticleTypes.PORTAL, range, entity.blockPosition().above(1), i / 3D, ySpeed, 1D);
@@ -98,7 +98,7 @@ public class TileTransferGateVertical extends TileAbstractSM {
 			sp.teleportTo(server, pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, 0, 0F);
 
 			double range = 0.875D;
-			double ySpeed = 1.0D;
+			double ySpeed = 1D;
 
 			for (int i= -1; i < 5; i++) {
 				this.spawnParticleRing(server, ParticleTypes.PORTAL, range, pos.below(2), i / 3D, ySpeed, 1D);
@@ -124,6 +124,11 @@ public class TileTransferGateVertical extends TileAbstractSM {
 	// メインスロットのアイテムを取得
 	public ItemStack getInputItem() {
 		return this.getInput().getStackInSlot(0);
+	}
+
+	// ブロック内の情報が空かどうか
+	public boolean isInfoEmpty() {
+		return this.getInputItem().isEmpty();
 	}
 
 	// NBTの書き込み

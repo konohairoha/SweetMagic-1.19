@@ -15,7 +15,7 @@ public class TileFreezerChest extends TileWoodChest {
 		super(type, pos, state);
 	}
 
-	public int getData () {
+	public int getData() {
 		return 3;
 	}
 }

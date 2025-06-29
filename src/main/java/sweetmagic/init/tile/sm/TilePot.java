@@ -76,7 +76,7 @@ public class TilePot extends TileAbstractSMCook {
 
 	// レシピチェック
 	public boolean checkRecipe() {
-		return !OvenRecipe.getRecipe(this.level, this.craftList).isEmpty();
+		return !OvenRecipe.getRecipe(this.getLevel(), this.craftList).isEmpty();
 	}
 
 	// 作成開始

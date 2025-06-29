@@ -103,7 +103,7 @@ public class TileMFTable extends TileSMMagic {
 			// MFが最大になったときに通知
 			if (this.wandMaxMF(stack)) {
 				this.playSound(this.getTilePos(), SoundEvents.PLAYER_LEVELUP, 1F, 1F);
-				this.level.levelEvent(2003, this.getBlockPos().above(2), 0);
+				this.getLevel().levelEvent(2003, this.getBlockPos().above(2), 0);
 			}
 		}
 	}

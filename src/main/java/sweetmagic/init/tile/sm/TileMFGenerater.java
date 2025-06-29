@@ -28,7 +28,6 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
 import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemHandlerHelper;
 import sweetmagic.api.iblock.ITileFluid;
 import sweetmagic.init.ItemInit;
 import sweetmagic.init.TileInit;
@@ -146,7 +145,7 @@ public class TileMFGenerater extends TileSMMagic implements ITileFluid {
 		bucket.saveFluid(stack, fluid);
 		this.getContent().setAmount(Math.max(0, this.getFluidValue() - 1000));
 		this.getBucketItem().shrink(1);
-		ItemHandlerHelper.insertItemStacked(this.getBucket(), stack, false);
+		ItemHelper.insertStack(this.getBucket(), stack, false);
 
 		this.sendInfo();
 	}

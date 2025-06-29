@@ -5,7 +5,6 @@ import java.util.List;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -29,11 +28,11 @@ public class TileMagicianLecternFire extends TileAbstractMagicianLectern {
 	}
 
 	// ボス召喚
-	public void summonBoss (Level world, BlockPos pos, float addHealth) {
+	public void summonBoss(Level world, BlockPos pos, float addHealth) {
 
 		int rate = this.isHard ? 8 : 4;
 
-		Monster entity = new IgnisKnight(world);
+		IgnisKnight entity = new IgnisKnight(world);
 		entity.setPos(pos.getX() + 2.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D);
 		this.addPotion(entity, PotionInit.resistance_blow, 99999, 4);
 		entity.getAttribute(Attributes.MAX_HEALTH).setBaseValue(entity.getMaxHealth() * addHealth);
@@ -45,27 +44,26 @@ public class TileMagicianLecternFire extends TileAbstractMagicianLectern {
 		}
 
 		List<Player> playerList = this.getPlayer(Player.class);
-		IgnisKnight ignis = (IgnisKnight) entity;
-		ignis.clearInfo();
-		ignis.setArmor(playerList.size() * rate);
-		ignis.setLectern(true);
-		ignis.setSpawnPos(pos.above());
+		entity.clearInfo();
+		entity.setArmor(playerList.size() * rate);
+		entity.setLectern(true);
+		entity.setSpawnPos(pos.above());
 		entity.setHealth(entity.getMaxHealth());
-		world.addFreshEntity(ignis);
+		world.addFreshEntity(entity);
 
-		this.boss = ignis;
+		this.boss = entity;
 		this.sendPKT();
 	}
 
-	public ItemStack getStack () {
+	public ItemStack getStack() {
 		return ACCE;
 	}
 
-	public String deadTip () {
+	public String deadTip() {
 		return "smDeadFire";
 	}
 
-	public int getBattleLevel () {
+	public int getBattleLevel() {
 		return 3;
 	}
 

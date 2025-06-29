@@ -20,13 +20,13 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemHandlerHelper;
 import sweetmagic.api.iblock.ITileFluid;
 import sweetmagic.init.TileInit;
 import sweetmagic.init.fluid.FluidTankHandler;
 import sweetmagic.init.fluid.FluidTankHandler.TankProperty;
 import sweetmagic.init.item.sm.SMBucket;
 import sweetmagic.init.tile.menu.AlternativeTankMenu;
+import sweetmagic.util.ItemHelper;
 
 public class TileAlternativeTank extends TileAbstractSM implements ITileFluid {
 
@@ -81,7 +81,7 @@ public class TileAlternativeTank extends TileAbstractSM implements ITileFluid {
 
 		stack = bucket.shrinkWater(stack, value);
 		this.getInputItem().shrink(1);
-		ItemHandlerHelper.insertItemStacked(this.getInput(), stack, false);
+		ItemHelper.insertStack(this.getInput(), stack, false);
 		this.sendPKT();
 	}
 

@@ -34,7 +34,7 @@ public class TileAetherLanp extends TileSMMagic {
 	public void serverTick(Level world, BlockPos pos, BlockState state) {
 		super.serverTick(world, pos, state);
 
-		if (this.tickTime % 40 == 0 && !this.isRSPower()) {
+		if (this.tickTime % 20 == 0 && !this.isRSPower()) {
 			this.tickTime = 0;
 			this.roundMFRecive();
 		}
@@ -59,8 +59,6 @@ public class TileAetherLanp extends TileSMMagic {
 
 		// リスト分まわす
 		for (BlockPos pos : posList) {
-
-			// MFブロック以外なら終了
 			if (!(this.getTile(pos) instanceof TileSMMagic tile) || tile.getReceive()) { continue; }
 
 			// MFブロックからMFを入れるときの処理
@@ -85,8 +83,6 @@ public class TileAetherLanp extends TileSMMagic {
 
 		// リスト分まわす
 		for (BlockPos p : posArray) {
-
-			// MFブロック以外なら終了
 			if (!(this.getTile(p) instanceof TileSMMagic tile) || tile.getReceive() || tile.isMFEmpty()) { continue; }
 
 			float pX = pos.getX() - p.getX();
@@ -98,7 +94,6 @@ public class TileAetherLanp extends TileSMMagic {
 				float randX = this.getRandFloat(0.5F);
 				float randY = this.getRandFloat(0.5F);
 				float randZ = this.getRandFloat(0.5F);
-
 				float x = p.getX() + 0.5F + randX;
 				float y = p.getY() + 0.525F + randY;
 				float z = p.getZ() + 0.5F + randZ;
@@ -106,7 +101,7 @@ public class TileAetherLanp extends TileSMMagic {
 				float ySpeed = pY * 0.1175F;
 				float zSpeed = pZ * 0.1175F;
 
-				this.level.addParticle(ParticleInit.NORMAL, x, y, z, xSpeed, ySpeed, zSpeed);
+				this.addParticle(ParticleInit.NORMAL, x, y, z, xSpeed, ySpeed, zSpeed);
 			}
 		}
 	}

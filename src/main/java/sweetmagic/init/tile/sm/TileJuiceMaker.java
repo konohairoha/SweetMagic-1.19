@@ -24,19 +24,19 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemHandlerHelper;
 import sweetmagic.api.iblock.ITileFluid;
 import sweetmagic.api.iitem.IFood;
 import sweetmagic.init.ItemInit;
 import sweetmagic.init.SoundInit;
 import sweetmagic.init.TileInit;
-import sweetmagic.init.capability.ICapabilityResolver;
 import sweetmagic.init.capability.SidItemHandler;
+import sweetmagic.init.capability.icap.ICapabilityResolver;
 import sweetmagic.init.fluid.FluidTankHandler;
 import sweetmagic.init.fluid.FluidTankHandler.TankProperty;
 import sweetmagic.init.item.sm.SMBucket;
 import sweetmagic.init.tile.menu.JuiceMakerMenu;
 import sweetmagic.recipe.juice_maker.JuiceMakerRecipe;
+import sweetmagic.util.ItemHelper;
 
 public class TileJuiceMaker extends TileAbstractSM implements ITileFluid {
 
@@ -120,7 +120,7 @@ public class TileJuiceMaker extends TileAbstractSM implements ITileFluid {
 
 	// レシピチェック
 	public boolean checkRecipe() {
-		return !JuiceMakerRecipe.getRecipe(this.level, this.getStackList()).isEmpty();
+		return !JuiceMakerRecipe.getRecipe(this.getLevel(), this.getStackList()).isEmpty();
 	}
 
 	// 作成開始
@@ -128,11 +128,11 @@ public class TileJuiceMaker extends TileAbstractSM implements ITileFluid {
 
 		// レシピを取得して見つからなければ終了
 		List<ItemStack> stackList = this.getStackList();
-		JuiceMakerRecipe recipe = JuiceMakerRecipe.getRecipe(this.level, stackList).get();
+		JuiceMakerRecipe recipe = JuiceMakerRecipe.getRecipe(this.getLevel(), stackList).get();
 
 		// レシピから完成品を取得
 		ItemStack resultStack = recipe.getResultItem().copy();
-		if (!ItemHandlerHelper.insertItemStacked(this.getOutput(), resultStack, true).isEmpty()) { return; }
+		if (!ItemHelper.insertStack(this.getOutput(), resultStack, true).isEmpty()) { return; }
 
 		int waterValue = this.getFluidValue();
 		if (waterValue < 100) { return; }
@@ -174,7 +174,7 @@ public class TileJuiceMaker extends TileAbstractSM implements ITileFluid {
 
 	// クラフトの完成
 	public void craftFinish() {
-		ItemHandlerHelper.insertItemStacked(this.getOutput(), this.outStack, false);
+		ItemHelper.insertStack(this.getOutput(), this.outStack, false);
 		this.playSound(this.getBlockPos(), SoundInit.JM_FIN, 0.0625F, 1F);
 		this.clearInfo();
 	}
@@ -219,7 +219,7 @@ public class TileJuiceMaker extends TileAbstractSM implements ITileFluid {
 
 			if (fluid.isEmpty() || fluid.getAmount() <= 0) {
 				bucket.shrink(1);
-				ItemHandlerHelper.insertItemStacked(this.getBucket(), new ItemStack(ItemInit.alt_bucket), false);
+				ItemHelper.insertStack(this.getBucket(), new ItemStack(ItemInit.alt_bucket), false);
 			}
 		}
 
@@ -228,7 +228,7 @@ public class TileJuiceMaker extends TileAbstractSM implements ITileFluid {
 		}
 
 		if (copy.is(Items.WATER_BUCKET)) {
-			ItemHandlerHelper.insertItemStacked(this.getBucket(), new ItemStack(Items.BUCKET), false);
+			ItemHelper.insertStack(this.getBucket(), new ItemStack(Items.BUCKET), false);
 		}
 	}
 

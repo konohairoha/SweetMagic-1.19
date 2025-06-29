@@ -80,6 +80,6 @@ public class TileModenRack extends TileAbstractSM {
 	}
 
 	public int getData() {
-		return ( (ModenRack) this.getBlock(this.getBlockPos()) ).data;
+		return ((ModenRack) this.getBlock(this.getBlockPos())).data;
 	}
 }

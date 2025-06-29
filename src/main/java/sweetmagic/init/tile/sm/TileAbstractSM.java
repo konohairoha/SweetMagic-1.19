@@ -59,15 +59,16 @@ import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 import net.minecraftforge.items.wrapper.SidedInvWrapper;
+import sweetmagic.api.util.ISMTip;
 import sweetmagic.init.block.base.BaseFaceBlock;
-import sweetmagic.init.capability.ICapabilityResolver;
 import sweetmagic.init.capability.SidItemHandler;
+import sweetmagic.init.capability.icap.ICapabilityResolver;
 import sweetmagic.init.item.sm.SMItem;
 import sweetmagic.init.tile.slot.WrappedItemHandler;
 import sweetmagic.init.tile.slot.WrappedItemHandler.WriteMode;
 import sweetmagic.util.WorldHelper;
 
-public abstract class TileAbstractSM extends BlockEntity implements MenuProvider {
+public abstract class TileAbstractSM extends BlockEntity implements MenuProvider, ISMTip {
 
 	public int tickTime = 0;
 	public int clientTime = 0;
@@ -131,6 +132,12 @@ public abstract class TileAbstractSM extends BlockEntity implements MenuProvider
 		return this.getLevel().getBlockEntity(pos);
 	}
 
+	// ブロックえんちちーの取得
+	public<T extends BlockEntity> T getTile(BlockEntityType.BlockEntitySupplier<T> tiType, BlockPos pos) {
+		BlockEntity tile = this.getTile(pos);
+		return tile != null ? (T) tile : null;
+	}
+
 	// 向きの取得
 	public Direction getFace() {
 		BlockState state = this.getState(this.getBlockPos());
@@ -168,7 +175,7 @@ public abstract class TileAbstractSM extends BlockEntity implements MenuProvider
 
 	// サーバーかどうか
 	public boolean isSever() {
-		return !this.getLevel().isClientSide;
+		return !this.getLevel().isClientSide();
 	}
 
 	// ブロックえんちちーの取得
@@ -196,6 +203,10 @@ public abstract class TileAbstractSM extends BlockEntity implements MenuProvider
 
 		if (this.clientTime++ >= 72000) {
 			this.clientTime = 0;
+		}
+
+		if(this.tickTime >= 6000) {
+			this.tickTime = 0;
 		}
 
 		if (this.tickTime % 20 == 0 && this.isRSStop() && this.isRSPower()) {
@@ -242,13 +253,17 @@ public abstract class TileAbstractSM extends BlockEntity implements MenuProvider
 		world.addParticle(par, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, face.get3DDataValue() * way, range, angle + way * 1 * SMItem.SPEED);
 	}
 
-	protected void addParticlesAroundSelf(Level level, Random rand, BlockPos pos, ParticleOptions par) {
+	protected void addParticlesAroundSelf(Level world, Random rand, BlockPos pos, ParticleOptions par) {
 		for (int i = 0; i < 4; ++i) {
 			double d0 = rand.nextDouble() * 0.02D;
 			double d1 = rand.nextDouble() * 0.02D;
 			double d2 = rand.nextDouble() * 0.02D;
-			level.addParticle(par, this.getRandX(pos, rand, 0.5D), this.getRandY(pos, rand), this.getRandZ(pos, rand, 0.5D), d0, d1, d2);
+			world.addParticle(par, this.getRandX(pos, rand, 0.5D), this.getRandY(pos, rand), this.getRandZ(pos, rand, 0.5D), d0, d1, d2);
 		}
+	}
+
+	public void addParticle(ParticleOptions par, double x, double y, double z, double xS, double yS, double zS) {
+		this.getLevel().addParticle(par, x, y, z, xS, yS, zS);
 	}
 
 	public double getRandX(BlockPos pos, Random rand, double scale) {
@@ -376,8 +391,38 @@ public abstract class TileAbstractSM extends BlockEntity implements MenuProvider
 		return floatList;
 	}
 
+	// List<Float>をnbt保存
+	public CompoundTag saveIntList(CompoundTag nbt, List<Integer> intList, String name) {
+
+		// NULLチェックとListの個数を確認
+		if (intList != null && !intList.isEmpty()) {
+
+			// リストの分だけ回してNBTに保存
+			ListTag tagsList = new ListTag();
+			for (int i : intList) {
+
+				// nbtリストにnbtを入れる
+				CompoundTag tags = new CompoundTag();
+				tags.putInt("intList", i);
+				tagsList.add(tags);
+			}
+
+			// NBTに保存
+			nbt.put(name, tagsList);
+		}
+
+		return nbt;
+	}
+
+	// nbtを呼び出してList<Float>に突っ込む
+	public List<Integer> loadAllInt(CompoundTag nbt, String name) {
+		List<Integer> intList = new ArrayList<>();
+		nbt.getList(name, 10).forEach(t -> intList.add(this.getTag(t).getInt("intList")));
+		return intList;
+	}
+
 	public void sendPKT() {
-		Level world = this.level;
+		Level world = this.getLevel();
 		if (world == null) { return; }
 
 		BlockPos pos = this.getBlockPos();
@@ -441,19 +486,19 @@ public abstract class TileAbstractSM extends BlockEntity implements MenuProvider
 	}
 
 	public <T extends Entity> List<T> getEntityList(Class<T> enClass, double range) {
-		return this.level.getEntitiesOfClass(enClass, this.getAABB(range));
+		return WorldHelper.getEntityList(this.getLevel(), enClass, this.getAABB(range));
 	}
 
-	public <T extends Entity> List<T> getEntityList(Class<T> enClass, Predicate<T> flag, double range) {
-		return this.level.getEntitiesOfClass(enClass, this.getAABB(range)).stream().filter(flag).toList();
+	public <T extends Entity> List<T> getEntityList(Class<T> enClass, Predicate<T> filter, double range) {
+		return WorldHelper.getEntityList(this.getLevel(), enClass, filter, this.getAABB(range));
 	}
 
-	public <T extends Entity> List<T> getEntityListHalf(Class<T> enClass, Predicate<T> flag, double range) {
-		return this.level.getEntitiesOfClass(enClass, this.getAABBHalf(range)).stream().filter(flag).toList();
+	public <T extends Entity> List<T> getEntityListHalf(Class<T> enClass, Predicate<T> filter, double range) {
+		return WorldHelper.getEntityList(this.getLevel(), enClass, filter, this.getAABBHalf(range));
 	}
 
-	public <T extends Entity> List<T> getEntityListUp(Class<T> enClass, Predicate<T> flag, double range) {
-		return this.level.getEntitiesOfClass(enClass, this.getAABBUp(range)).stream().filter(flag).toList();
+	public <T extends Entity> List<T> getEntityListUp(Class<T> enClass, Predicate<T> filter, double range) {
+		return WorldHelper.getEntityList(this.getLevel(), enClass, filter, this.getAABBUp(range));
 	}
 
 	// 範囲の取得

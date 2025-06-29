@@ -19,15 +19,17 @@ import net.minecraft.world.level.block.BambooBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BonemealableBlock;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.MushroomBlock;
 import net.minecraft.world.level.block.StemBlock;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemHandlerHelper;
+import sweetmagic.api.iblock.ISMCrop;
 import sweetmagic.init.TileInit;
 import sweetmagic.init.block.crop.MagiaFlower;
 import sweetmagic.init.tile.menu.AetherPlanterMenu;
+import sweetmagic.util.ItemHelper;
 
 public class TileAetherPlanter extends TileSMMagic {
 
@@ -115,12 +117,12 @@ public class TileAetherPlanter extends TileSMMagic {
 
 		else if (upBlock instanceof BonemealableBlock crop) {
 
-			if (crop.isValidBonemealTarget(world, upPos, upState, true)) {
-				crop.performBonemeal(world, world.random, upPos, upState);
+			if (crop.isValidBonemealTarget(world, upPos, upState, true) || (upBlock instanceof ISMCrop smCrop && !smCrop.isMaxAge(upState))) {
+				crop.performBonemeal(world, world.getRandom(), upPos, upState);
 				isGlow = true;
 			}
 
-			if (!crop.isValidBonemealTarget(world, upPos, upState, true)) {
+			else {
 				this.isMaxGlow = true;
 			}
 		}
@@ -160,8 +162,7 @@ public class TileAetherPlanter extends TileSMMagic {
 
 		if (upBlock instanceof MushroomBlock) {
 			stackList.add(new ItemStack(upBlock, this.rand.nextInt(2) + 1));
-			BlockState newState = upBlock2.defaultBlockState();
-			world.setBlock(upPos2, newState, 3);
+			world.setBlock(upPos2, this.getNewState(upState2), 3);
 		}
 
 		else if (upBlock instanceof BambooBlock) {
@@ -171,26 +172,33 @@ public class TileAetherPlanter extends TileSMMagic {
 		else if (upBlock instanceof StemBlock crop && !crop.isValidBonemealTarget(world, upPos, upState, true)) {
 			stackList.addAll(Block.getDrops(upState, world, upPos, world.getBlockEntity(upPos)));
 			stackList.add(new ItemStack(crop.getFruit()));
-			BlockState newState = upBlock.defaultBlockState();
-			world.setBlock(upPos, newState, 3);
+			world.setBlock(upPos, this.getNewState(upState), 3);
+		}
+
+		else if (upBlock2 instanceof ISMCrop crop && crop.isMaxAge(upState2)) {
+			stackList.addAll(Block.getDrops(upState2, world, upPos2, world.getBlockEntity(upPos2)));
+			world.setBlock(upPos2, this.getNewState(upState2), 3);
 		}
 
 		else if (upBlock2 instanceof BonemealableBlock crop && !crop.isValidBonemealTarget(world, upPos2, upState2, true)) {
 			stackList.addAll(Block.getDrops(upState2, world, upPos2, world.getBlockEntity(upPos2)));
-			BlockState newState = upBlock2.defaultBlockState();
-			world.setBlock(upPos2, newState, 3);
+			world.setBlock(upPos2, this.getNewState(upState2), 3);
 		}
 
-		if (upBlock instanceof BonemealableBlock crop && !crop.isValidBonemealTarget(world, upPos, upState, true)) {
+		if (upBlock instanceof ISMCrop crop && crop.isMaxAge(upState)) {
 			stackList.addAll(Block.getDrops(upState, world, upPos, world.getBlockEntity(upPos)));
-			BlockState newState = upBlock.defaultBlockState();
-			world.setBlock(upPos, newState, 3);
+			world.setBlock(upPos, this.getNewState(upState), 3);
+
+		}
+
+		else if (upBlock instanceof BonemealableBlock crop && !crop.isValidBonemealTarget(world, upPos, upState, true)) {
+			stackList.addAll(Block.getDrops(upState, world, upPos, world.getBlockEntity(upPos)));
+			world.setBlock(upPos, this.getNewState(upState), 3);
 		}
 
 		else if (upBlock instanceof MagiaFlower crop) {
 			stackList.addAll(Block.getDrops(upState, world, upPos, world.getBlockEntity(upPos)));
-			BlockState newState = upBlock.defaultBlockState();
-			world.setBlock(upPos, newState, 3);
+			world.setBlock(upPos, this.getNewState(upState), 3);
 		}
 
 		if (!stackList.isEmpty()) {
@@ -198,7 +206,7 @@ public class TileAetherPlanter extends TileSMMagic {
 			List<ItemStack> dropList = new ArrayList<>();
 			for (ItemStack stack : stackList) {
 
-				ItemStack outStack = ItemHandlerHelper.insertItemStacked(this.getInput(), stack.copy(), false);
+				ItemStack outStack = ItemHelper.insertStack(this.getInput(), stack.copy(), false);
 
 				if (!outStack.isEmpty()) {
 					dropList.add(outStack);
@@ -220,6 +228,16 @@ public class TileAetherPlanter extends TileSMMagic {
 		}
 
 		this.sendPKT();
+	}
+
+	public BlockState getNewState(BlockState oldState) {
+		BlockState state = oldState.getBlock().defaultBlockState();
+
+		if(oldState.hasProperty(HorizontalDirectionalBlock.FACING)) {
+			state = state.setValue(HorizontalDirectionalBlock.FACING, oldState.getValue(HorizontalDirectionalBlock.FACING));
+		}
+
+		return state;
 	}
 
 	// インベントリサイズの取得

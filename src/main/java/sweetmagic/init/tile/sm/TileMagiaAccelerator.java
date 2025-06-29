@@ -39,7 +39,7 @@ public class TileMagiaAccelerator extends TileSMMagic {
 	}
 
 	// 周囲のMF回収
-	public void roundMFAccelerator (Level world) {
+	public void roundMFAccelerator(Level world) {
 
 		int sumMF = 0;
 		int mf = this.getMF();
@@ -47,9 +47,7 @@ public class TileMagiaAccelerator extends TileSMMagic {
 
 		// リスト分まわす
 		for (BlockPos pos : posList) {
-
-			// MFブロック以外、送信側なら終了
-			if ( !(this.getTile(pos) instanceof TileSMMagic tile) || !tile.getReceive() || tile instanceof TileMagiaAccelerator) { continue; }
+			if (!(this.getTile(pos) instanceof TileSMMagic tile) || !tile.getReceive() || tile instanceof TileMagiaAccelerator) { continue; }
 
 			sumMF += 4;
 			tile.serverTick(level, pos, this.getState(pos));
@@ -60,7 +58,7 @@ public class TileMagiaAccelerator extends TileSMMagic {
 		this.sendPKT();
 	}
 
-	public void addRange (int id) {
+	public void addRange(int id) {
 
 		int addValue = 0;
 
@@ -89,12 +87,12 @@ public class TileMagiaAccelerator extends TileSMMagic {
 
 	// 最大MFの取得
 	@Override
-	public int getMaxMF () {
+	public int getMaxMF() {
 		return this.maxMagiaFlux;
 	}
 
 	// 受信するMF量の取得
-	public int getReceiveMF () {
+	public int getReceiveMF() {
 		return 10000;
 	}
 

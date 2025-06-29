@@ -24,10 +24,10 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemHandlerHelper;
 import sweetmagic.init.TileInit;
 import sweetmagic.init.item.sm.SMBook;
 import sweetmagic.init.tile.menu.EnchantEduceMenu;
+import sweetmagic.util.ItemHelper;
 
 public class TileEnchantEduce extends TileSMMagic {
 
@@ -138,7 +138,7 @@ public class TileEnchantEduce extends TileSMMagic {
 
 	// クラフトの完成
 	public void craftFinish() {
-		ItemHandlerHelper.insertItemStacked(this.getOutput(), this.outStack, false);
+		ItemHelper.insertStack(this.getOutput(), this.outStack, false);
 		this.playSound(this.getBlockPos(), SoundEvents.ENCHANTMENT_TABLE_USE, 0.25F, 1F);
 		this.clearInfo();
 	}
@@ -187,13 +187,13 @@ public class TileEnchantEduce extends TileSMMagic {
 
 		// 既にエンチャントされているリストを取得
 		ListTag listTag = stack.getEnchantmentTags();
-		List<Enchantment> stackEncha = new ArrayList<>();
+		List<Enchantment> enchaList = new ArrayList<>();
 
 		if (!listTag.isEmpty()) {
-			listTag.forEach(t -> stackEncha.add(Registry.ENCHANTMENT.getOptional(this.getEnchantId(this.getTag(t))).get()));
+			listTag.forEach(t -> enchaList.add(Registry.ENCHANTMENT.getOptional(this.getEnchantId(this.getTag(t))).get()));
 		}
 
-		return stackEncha;
+		return enchaList;
 	}
 
 	// エンチャントコストの取得
@@ -202,15 +202,12 @@ public class TileEnchantEduce extends TileSMMagic {
 		if (enchaList.isEmpty() || id >= enchaList.size()) { return 0; }
 
 		Enchantment encha = enchaList.get(id);
-
-		if (encha.equals(Enchantments.MENDING)) {
-			return this.getMaxMF();
-		}
+		if (encha.equals(Enchantments.MENDING)) { return this.getMaxMF(); }
 
 		int maxLevel = encha.getMaxLevel();
-		int rate = (6 - Math.min(maxLevel, 5));
+		int rate = 6 - Math.min(maxLevel, 5);
 		int addRate = maxLevel > 1 ? this.getNowLevel() : 1;
-		return (11 - encha.getRarity().getWeight() ) * 150 * rate * rate * addRate;
+		return (11 - encha.getRarity().getWeight()) * 150 * rate * rate * addRate;
 	}
 
 	@Nullable

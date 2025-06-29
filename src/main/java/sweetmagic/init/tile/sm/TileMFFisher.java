@@ -25,7 +25,6 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 import sweetmagic.api.SweetMagicAPI;
 import sweetmagic.init.ItemInit;
@@ -34,6 +33,7 @@ import sweetmagic.init.TagInit;
 import sweetmagic.init.TileInit;
 import sweetmagic.init.block.magic.MFFisher;
 import sweetmagic.init.tile.menu.MFFisherMenu;
+import sweetmagic.util.ItemHelper;
 
 public class TileMFFisher extends TileSMMagic {
 
@@ -95,18 +95,14 @@ public class TileMFFisher extends TileSMMagic {
 				float randX = this.getRandFloat();
 				float randY = this.getRandFloat(0.25F);
 				float randZ = this.getRandFloat();
-				float pX = -randX;
-				float pY = randY;
-				float pZ = -randZ;
-
 				float x = pos.getX() + 0.5F + randX;
 				float y = pos.getY() + 0.5F + randY;
 				float z = pos.getZ() + 0.5F + randZ;
-				float xSpeed = pX * 0.1175F;
-				float ySpeed = -(pY * 0.025F - 0.065F);
-				float zSpeed = pZ * 0.1175F;
+				float xSpeed = -randX * 0.1175F;
+				float ySpeed = -(randY * 0.025F - 0.065F);
+				float zSpeed = -randZ * 0.1175F;
 
-				this.level.addParticle(ParticleInit.NORMAL, x, y, z, xSpeed, ySpeed, zSpeed);
+				this.addParticle(ParticleInit.NORMAL, x, y, z, xSpeed, ySpeed, zSpeed);
 			}
 		}
 	}
@@ -131,11 +127,11 @@ public class TileMFFisher extends TileSMMagic {
 		List<ItemStack> stackList = this.getDropList(world, pos);
 
 		for (ItemStack stack : stackList) {
-			ItemStack out = ItemHandlerHelper.insertItemStacked(this.getInput(), stack.copy(), true);
+			ItemStack out = ItemHelper.insertStack(this.getInput(), stack.copy(), true);
 			if (!out.isEmpty()) { return; }
 		}
 
-		stackList.forEach(s -> ItemHandlerHelper.insertItemStacked(this.getInput(), s.copy(), false));
+		stackList.forEach(s -> ItemHelper.insertStack(this.getInput(), s.copy(), false));
 		this.setMF(this.getMF() - useMF);
 		this.playSound(this.getBlockPos(), this.getSound(), 0.1F, 1F);
 		this.craftTime = 0;
@@ -149,7 +145,7 @@ public class TileMFFisher extends TileSMMagic {
 
 	public List<ItemStack> getDropList(Level world, BlockPos pos) {
 
-		RandomSource rand = this.level.random;
+		RandomSource rand = this.getLevel().getRandom();
 		List<ItemStack> stackList = new ArrayList<>();
 
 		switch (this.getData()) {
@@ -157,7 +153,7 @@ public class TileMFFisher extends TileSMMagic {
 
 			int addY = world.getBlockState(pos.below()).is(Blocks.WATER) ? -1 : 0;
 			Vec3 vec = new Vec3(pos.getX(), pos.getY() + addY, pos.getZ());
-			LootContext.Builder loot = (new LootContext.Builder((ServerLevel)this.level)).withParameter(LootContextParams.ORIGIN, vec).withParameter(LootContextParams.TOOL, FISHING_ROD).withRandom(rand).withLuck(1F);
+			LootContext.Builder loot = (new LootContext.Builder((ServerLevel)this.getLevel())).withParameter(LootContextParams.ORIGIN, vec).withParameter(LootContextParams.TOOL, FISHING_ROD).withRandom(rand).withLuck(1F);
 			stackList = world.getServer().getLootTables().get(BuiltInLootTables.FISHING).getRandomItems(loot.create(LootContextParamSets.FISHING));
 
 			if (rand.nextFloat() <= 0.125F) {
@@ -223,9 +219,9 @@ public class TileMFFisher extends TileSMMagic {
 		ParticleOptions par = data == 3 ? ParticleInit.AETHER : ParticleInit.DIVINE;
 
 		for (int i = 0; i < 5; i++) {
-			float x = (float) (pos.getX() + 0.25F + this.rand.nextFloat() * 0.5F);
-			float y = (float) (pos.getY() + 1F + this.rand.nextFloat() * 0.25F);
-			float z = (float) (pos.getZ() + 0.25F + this.rand.nextFloat() * 0.5F);
+			float x = (float) pos.getX() + 0.25F + this.rand.nextFloat() * 0.5F;
+			float y = (float) pos.getY() + 1F + this.rand.nextFloat() * 0.25F;
+			float z = (float) pos.getZ() + 0.25F + this.rand.nextFloat() * 0.5F;
 			sever.sendParticles(par, x, y, z, 0, 0F, -0.125F, 0F, 1F);
 		}
 	}

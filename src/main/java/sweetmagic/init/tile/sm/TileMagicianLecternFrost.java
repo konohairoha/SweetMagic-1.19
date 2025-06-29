@@ -5,7 +5,6 @@ import java.util.List;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -29,11 +28,11 @@ public class TileMagicianLecternFrost extends TileAbstractMagicianLectern {
 	}
 
 	// ボス召喚
-	public void summonBoss (Level world, BlockPos pos, float addHealth) {
+	public void summonBoss(Level world, BlockPos pos, float addHealth) {
 
 		int rate = this.isHard ? 8 : 4;
 
-		Monster entity = new QueenFrost(world);
+		QueenFrost entity = new QueenFrost(world);
 		entity.setPos(pos.getX() + 2.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D);
 		entity.getAttribute(Attributes.MAX_HEALTH).setBaseValue(entity.getMaxHealth() * addHealth);
 		this.addPotion(entity, PotionInit.resistance_blow, 99999, 4);
@@ -45,27 +44,26 @@ public class TileMagicianLecternFrost extends TileAbstractMagicianLectern {
 		}
 
 		List<Player> playerList = this.getPlayer(Player.class);
-		QueenFrost queen = (QueenFrost) entity;
-		queen.clearInfo();
-		queen.setArmor(playerList.size() * rate);
-		queen.setLectern(true);
-		queen.setSpawnPos(pos.above());
+		entity.clearInfo();
+		entity.setArmor(playerList.size() * rate);
+		entity.setLectern(true);
+		entity.setSpawnPos(pos.above());
 		entity.setHealth(entity.getMaxHealth());
-		world.addFreshEntity(queen);
+		world.addFreshEntity(entity);
 
-		this.boss = queen;
+		this.boss = entity;
 		this.sendPKT();
 	}
 
-	public ItemStack getStack () {
+	public ItemStack getStack() {
 		return ACCE;
 	}
 
-	public String deadTip () {
+	public String deadTip() {
 		return "smDeadIce";
 	}
 
-	public int getBattleLevel () {
+	public int getBattleLevel() {
 		return 1;
 	}
 

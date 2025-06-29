@@ -25,13 +25,13 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemHandlerHelper;
 import sweetmagic.init.ItemInit;
 import sweetmagic.init.ParticleInit;
 import sweetmagic.init.SoundInit;
 import sweetmagic.init.TileInit;
 import sweetmagic.init.item.sm.SMBook;
 import sweetmagic.init.tile.menu.MagiaRewriteMenu;
+import sweetmagic.util.ItemHelper;
 
 public class TileMagiaRewrite extends TileSMMagic {
 
@@ -155,7 +155,7 @@ public class TileMagiaRewrite extends TileSMMagic {
 
 	// クラフトの完成
 	public void craftFinish() {
-		ItemHandlerHelper.insertItemStacked(this.getOut(), this.outStack, false);
+		ItemHelper.insertStack(this.getOut(), this.outStack, false);
 		this.playSound(this.getBlockPos(), SoundEvents.ENCHANTMENT_TABLE_USE, 1F, 1F);
 		this.clearInfo();
 	}
@@ -509,8 +509,7 @@ public class TileMagiaRewrite extends TileSMMagic {
 			float xSpeed = -randX * 0.075F;
 			float ySpeed = -randY * 0.075F;
 			float zSpeed = -randZ * 0.075F;
-
-			this.level.addParticle(ParticleInit.NORMAL, x, y, z, xSpeed, ySpeed, zSpeed);
+			this.addParticle(ParticleInit.NORMAL, x, y, z, xSpeed, ySpeed, zSpeed);
 		}
 	}
 

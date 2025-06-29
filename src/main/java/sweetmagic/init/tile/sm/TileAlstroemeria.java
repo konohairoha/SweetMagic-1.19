@@ -34,7 +34,7 @@ public class TileAlstroemeria extends TileAbstractSM {
 		ISMCrop crop = (ISMCrop) state.getBlock();
 		boolean isMaxAge = crop.isMaxAge(state);
 
-		if ( ( flagTwilight && !isMaxAge ) || ( !flagTwilight && isMaxAge )) {
+		if ((flagTwilight && !isMaxAge) || (!flagTwilight && isMaxAge)) {
 			world.setBlock(pos, state.setValue(crop.getSMMaxAge(), flagTwilight ? 1 : 0), 2);
 
 			if (flagTwilight) {

@@ -23,10 +23,7 @@ public class TileMFTankMaster extends TileMFTank {
 	protected final StackHandler inputInv = new StackHandler(this.getInvSize());
 	protected final StackHandler outputInv = new StackHandler(this.getSubInvSize());
 
-	public void smeltAction () {
-
-		// 精錬可能かつ必要MF以上なら
-		if (!this.hasNeedMF()) { return; }
+	public void smeltAction() {
 
 		for (int i = 0; i < 5; i++) {
 			if (this.canSmelt(i)) {

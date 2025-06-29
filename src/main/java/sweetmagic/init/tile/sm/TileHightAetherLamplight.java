@@ -21,7 +21,7 @@ public class TileHightAetherLamplight extends TileAetherLanp {
 		super(TileInit.hightAetheLamplight, pos, state);
 	}
 
-	public void addRange (int id) {
+	public void addRange(int id) {
 
 		int addValue = 0;
 
@@ -59,23 +59,23 @@ public class TileHightAetherLamplight extends TileAetherLanp {
 		this.range = tag.getInt("range");
 	}
 
-	public int getRange () {
+	public int getRange() {
 		return this.range;
 	}
 
 	// 受信するMF量の取得
-	public int getReceiveMF () {
+	public int getReceiveMF() {
 		return 100000;
 	}
 
 	// 最大MFの取得
 	@Override
-	public int getMaxMF () {
+	public int getMaxMF() {
 		return this.maxMagiaFlux;
 	}
 
 	// 受信するMF量の取得
-	public int getUserMF () {
+	public int getUserMF() {
 		return 10000;
 	}
 }

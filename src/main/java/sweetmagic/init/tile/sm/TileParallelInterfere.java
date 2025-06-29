@@ -50,7 +50,7 @@ public class TileParallelInterfere extends TileWoodChest {
 
 		this.oOpen = this.open;
 		this.oRot = this.rot;
-		Player player = world.getNearestPlayer((double) pos.getX() + 0.5D, (double) pos.getY() + 0.5D, (double) pos.getZ() + 0.5D, 3.0D, false);
+		Player player = world.getNearestPlayer((double) pos.getX() + 0.5D, (double) pos.getY() + 0.5D, (double) pos.getZ() + 0.5D, 3D, false);
 
 		if (player != null) {
 			double d0 = player.getX() - ((double) pos.getX() + 0.5D);
@@ -86,7 +86,7 @@ public class TileParallelInterfere extends TileWoodChest {
 		while (f2 < -(float) Math.PI) { f2 += ((float) Math.PI * 2F); }
 
 		this.rot += f2 * 0.4F;
-		this.open = Mth.clamp(this.open, 0.0F, 1.0F);
+		this.open = Mth.clamp(this.open, 0F, 1F);
 		++this.time;
 		this.oFlip = this.flip;
 		float f = (this.flipT - this.flip) * 0.4F;
@@ -104,7 +104,7 @@ public class TileParallelInterfere extends TileWoodChest {
 		float xSpeed = this.getRandFloat(0.05F);
 		float ySpeed = 0.025F + rand.nextFloat() * 0.05F;
 		float zSpeed = this.getRandFloat(0.05F);
-		this.level.addParticle(ParticleInit.NORMAL, x, y, z, xSpeed, ySpeed, zSpeed);
+		this.addParticle(ParticleInit.NORMAL, x, y, z, xSpeed, ySpeed, zSpeed);
 	}
 
 	// NBTの書き込み

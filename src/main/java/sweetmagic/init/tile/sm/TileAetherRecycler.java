@@ -18,11 +18,11 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemHandlerHelper;
 import sweetmagic.init.SoundInit;
 import sweetmagic.init.TileInit;
 import sweetmagic.init.tile.menu.AetherRecyclerMenu;
 import sweetmagic.recipe.recycler.RecyclerRecipe;
+import sweetmagic.util.ItemHelper;
 
 public class TileAetherRecycler extends TileSMMagic {
 
@@ -103,7 +103,7 @@ public class TileAetherRecycler extends TileSMMagic {
 
 		// レシピを取得
 		List<ItemStack> stackList = this.getStackList();
-		RecyclerRecipe recipe = RecyclerRecipe.getRecipe(this.level, stackList).get();
+		RecyclerRecipe recipe = RecyclerRecipe.getRecipe(this.getLevel(), stackList).get();
 
 		// 要求アイテムリスト
 		List<ItemStack> requestList = recipe.getRequestList();
@@ -168,7 +168,7 @@ public class TileAetherRecycler extends TileSMMagic {
 				// 最初の1つかチャンスより大きいなら完成品を入れる
 				if (chance < this.rand.nextFloat()) { continue; }
 
-				ItemStack stack = ItemHandlerHelper.insertItemStacked(this.getOutput(), ouStackList.get(k).copy(), false);
+				ItemStack stack = ItemHelper.insertStack(this.getOutput(), ouStackList.get(k).copy(), false);
 				if (!stack.isEmpty()) {
 					this.outStackOverList.add(stack);
 				}
@@ -187,7 +187,7 @@ public class TileAetherRecycler extends TileSMMagic {
 
 		for (ItemStack stack : this.outStackOverList) {
 
-			ItemStack result = ItemHandlerHelper.insertItemStacked(this.getOutput(), stack.copy(), false);
+			ItemStack result = ItemHelper.insertStack(this.getOutput(), stack.copy(), false);
 			if (!result.isEmpty()) {
 				stackList.add(result);
 			}
@@ -205,7 +205,7 @@ public class TileAetherRecycler extends TileSMMagic {
 			ItemStack stack = this.getHandItem(i);
 			if (stack.isEmpty()) { continue; }
 
-			ItemStack out = ItemHandlerHelper.insertItemStacked(this.getInput(), stack.copy(), false);
+			ItemStack out = ItemHelper.insertStack(this.getInput(), stack.copy(), false);
 			stack.shrink(stack.getCount() - out.getCount());
 		}
 	}
@@ -223,7 +223,7 @@ public class TileAetherRecycler extends TileSMMagic {
 
 	// レシピチェック
 	public boolean checkRecipe() {
-		return !RecyclerRecipe.getRecipe(this.level, this.getStackList()).isEmpty();
+		return !RecyclerRecipe.getRecipe(this.getLevel(), this.getStackList()).isEmpty();
 	}
 
 	// NBTの書き込み

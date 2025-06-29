@@ -20,11 +20,11 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.crafting.IShapedRecipe;
 import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemHandlerHelper;
 import sweetmagic.init.ParticleInit;
 import sweetmagic.init.TagInit;
 import sweetmagic.init.TileInit;
 import sweetmagic.init.tile.menu.AetherReverseMenu;
+import sweetmagic.util.ItemHelper;
 
 public class TileAetherReverse extends TileSMMagic {
 
@@ -106,7 +106,7 @@ public class TileAetherReverse extends TileSMMagic {
 		if (needMF > this.getMF()) { return; }
 
 		for (ItemStack stack : this.craftList) {
-			ItemStack input = ItemHandlerHelper.insertItemStacked(this.getChest(), stack, true);
+			ItemStack input = ItemHelper.insertStack(this.getChest(), stack, true);
 			if (!input.isEmpty()) { return; }
 		}
 
@@ -123,7 +123,7 @@ public class TileAetherReverse extends TileSMMagic {
 
 	// クラフトの完成
 	public void craftFinish() {
-		this.craftList.forEach(s -> ItemHandlerHelper.insertItemStacked(this.getChest(), s.copy(), false));
+		this.craftList.forEach(s -> ItemHelper.insertStack(this.getChest(), s.copy(), false));
 		this.playSound(this.getBlockPos(), SoundEvents.ANVIL_USE, 0.1F, 1.125F);
 		this.clearInfo();
 	}

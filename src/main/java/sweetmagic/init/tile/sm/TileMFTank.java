@@ -11,16 +11,15 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemHandlerHelper;
 import sweetmagic.api.SweetMagicAPI;
 import sweetmagic.api.iblock.ITileMF;
 import sweetmagic.init.TileInit;
 import sweetmagic.init.tile.menu.MFTankMenu;
 import sweetmagic.recipe.tank.TankRecipe;
+import sweetmagic.util.ItemHelper;
 
 public class TileMFTank extends TileSMMagic {
 
@@ -46,7 +45,6 @@ public class TileMFTank extends TileSMMagic {
 	// サーバー側処理
 	@Override
 	public void serverTick(Level level, BlockPos pos, BlockState state) {
-
 		super.serverTick(level, pos, state);
 		if (this.getTickTime() % 10 != 0) { return; }
 
@@ -65,7 +63,7 @@ public class TileMFTank extends TileSMMagic {
 	public void smeltAction() {
 
 		// 精錬可能かつ必要MF以上なら
-		if (this.hasNeedMF() && this.canSmelt(0)) {
+		if (this.canSmelt(0)) {
 			this.smeltItem(0);
 		}
 	}
@@ -74,7 +72,7 @@ public class TileMFTank extends TileSMMagic {
 	public boolean canSmelt(int index) {
 		ItemStack toSmelt = this.getInputItem(index);
 		if (toSmelt.isEmpty()) { return false; }
-		return !TankRecipe.getRecipe(this.level, Arrays.<ItemStack> asList(toSmelt)).isEmpty();
+		return !TankRecipe.getRecipe(this.getLevel(), Arrays.<ItemStack> asList(toSmelt)).isEmpty();
 	}
 
 	// 精錬後のアイテム
@@ -82,17 +80,17 @@ public class TileMFTank extends TileSMMagic {
 
 		// レシピを取得して見つからなければ終了
 		ItemStack inputStack = this.getInputItem(index);
-		TankRecipe recipe = TankRecipe.getRecipe(this.level, Arrays.<ItemStack> asList(inputStack)).get();
+		TankRecipe recipe = TankRecipe.getRecipe(this.getLevel(), Arrays.<ItemStack> asList(inputStack)).get();
 
 		int needMF = recipe.getMFList().get(0);
 		ItemStack smeltResult = recipe.getResultItem();
 
 		// smeltResultがnullまたは必要MF未満なら終了
 		if (smeltResult.isEmpty() || this.getMF() < needMF) { return; }
-		if (!ItemHandlerHelper.insertItemStacked(this.getOut(), smeltResult, true).isEmpty()) { return; }
+		if (!ItemHelper.insertStack(this.getOut(), smeltResult, true).isEmpty()) { return; }
 
 		this.setMF(this.getMF() - needMF);
-		ItemHandlerHelper.insertItemStacked(this.getOut(), smeltResult, false);
+		ItemHelper.insertStack(this.getOut(), smeltResult, false);
 		inputStack.shrink(recipe.getRequestList().get(0).getCount());
 		this.sentClient();
 	}
@@ -111,30 +109,23 @@ public class TileMFTank extends TileSMMagic {
 
 	// MF最大時のインサート処理
 	public void maxMFInsert(ITileMF tran) {
-		BlockEntity tile = this.getTile(this.getBlockPos().above());
-		if ( !(tile instanceof TileMFTank mfTile)) { return; }
-
-		mfTile.insertMF(mfTile, tran, mfTile.getTickTime());
+		TileMFTank tile = this.getTile(TileMFTank::new, this.getBlockPos().above());
+		if (tile == null) { return; }
+		tile.insertMF(tile, tran, tile.getTickTime());
 	}
 
 	// タンク下のタンクにMFを入れる
 	public void underInsertMF(BlockPos pos) {
-		BlockEntity tile = this.getTile(pos.below());
-		if ( !(tile instanceof TileMFTank mfTile)) { return; }
-
-		// MFが最大のときは終了
-		if (mfTile.isMaxMF()) { return; }
-		this.insertMF(mfTile, this, this.getTickTime());
+		TileMFTank tile = this.getTile(TileMFTank::new, pos.below());
+		if (tile == null || tile.isMaxMF()) { return; }
+		this.insertMF(tile, this, this.getTickTime());
 	}
 
 	// MF受信時のインサート処理
 	public void recipedMFInsert() {
-		BlockEntity tile = this.getTile(this.getBlockPos().below());
-		if ( !(tile instanceof TileMFTank mfTile)) { return; }
-
-		// MFが最大のときは終了
-		if (mfTile.isMaxMF()) { return; }
-		this.insertMF(mfTile, this, this.getTickTime());
+		TileMFTank tile = this.getTile(TileMFTank::new, this.getBlockPos().below());
+		if (tile == null || tile.isMaxMF()) { return; }
+		this.insertMF(tile, this, this.getTickTime());
 	}
 
 	public void loadNBT(CompoundTag tags) {
