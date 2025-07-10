@@ -17,13 +17,13 @@ public interface IMFTool {
 	public final String MF = "mf";
 
 	// 最大MFを取得
-	int getMaxMF (ItemStack stack);
+	int getMaxMF(ItemStack stack);
 
 	// 最大MFを設定
-	void setMaxMF (int maxMF);
+	void setMaxMF(int maxMF);
 
 	// NBT初期化用
-	default CompoundTag getNBT (ItemStack stack) {
+	default CompoundTag getNBT(ItemStack stack) {
 
 		CompoundTag tags = stack.getTag();
 
@@ -38,27 +38,29 @@ public interface IMFTool {
 	}
 
 	// MFを取得
-	default int getMF (ItemStack stack) {
+	default int getMF(ItemStack stack) {
 		return this.getNBT(stack).getInt(MF);
 	}
 
 	// MFを設定
-	default void setMF (ItemStack stack, int expValue) {
+	default void setMF(ItemStack stack, int expValue) {
 		this.getNBT(stack).putInt(MF, Math.max(0, expValue));
 	}
 
 	// MFが最大かどうか
-	default boolean isMaxMF (ItemStack stack) {
+	default boolean isMaxMF(ItemStack stack) {
 		return this.getMF(stack) >= this.getMaxMF(stack);
 	}
 
 	// ゲージ計算取得用
 	default int getMFProgressScaled(ItemStack stack, int value) {
+		int maxMF = this.getMaxMF(stack);
+		if(maxMF <= 0) { return value; }
 		return Math.min(value, (int) (value * this.getMF(stack) / this.getMaxMF(stack)));
 	}
 
 	// MFブロックからMFを入れるときの処理
-	default void insertMF (ItemStack stack, ITileMF tile) {
+	default void insertMF(ItemStack stack, ITileMF tile) {
 
 		int mf = this.getMF(stack);
 		int useMF = tile.getShrinkMF() > tile.getMF() ? tile.getMF() : tile.getShrinkMF();
@@ -72,7 +74,6 @@ public interface IMFTool {
 
 		// 合計MFが最大値を超える場合
 		else {
-
 			int insertMF = this.getMaxMF(stack) - mf;
 			this.setMF(stack, mf + insertMF);
 			tile.setMF(tile.getMF() - insertMF);
@@ -81,7 +82,7 @@ public interface IMFTool {
 		tile.sentClient();
 	}
 
-	default int insetMF (ItemStack stack, int insertMF) {
+	default int insetMF(ItemStack stack, int insertMF) {
 
 		int mf = this.getMF(stack);
 		int sumMF = insertMF + mf;
@@ -101,21 +102,21 @@ public interface IMFTool {
 	}
 
 	// MFが空かどうか
-	default boolean isMFEmpty (ItemStack stack) {
+	default boolean isMFEmpty(ItemStack stack) {
 		return this.getMF(stack) <= 0;
 	}
 
-	default void playSound (Level world, Player player, SoundEvent sound, float vol, float pitch) {
-		player.getCommandSenderWorld().playSound(null, player.blockPosition(), sound, SoundSource.PLAYERS, vol, pitch);
+	default void playSound(Level world, Player player, SoundEvent sound, float vol, float pitch) {
+		player.getLevel().playSound(null, player.blockPosition(), sound, SoundSource.PLAYERS, vol, pitch);
 	}
 
 	// 吸い込むアイテムのMF量
-	default int getItemMF (ItemStack stack) {
+	default int getItemMF(ItemStack stack) {
 		return SweetMagicAPI.getMF(stack) * stack.getCount();
 	}
 
 	// エンチャントレベル取得
-	default int getEnchaLevel (ItemStack stacck, Enchantment encha) {
+	default int getEnchaLevel(ItemStack stacck, Enchantment encha) {
 		return EnchantmentHelper.getItemEnchantmentLevel(encha, stacck);
 	}
 

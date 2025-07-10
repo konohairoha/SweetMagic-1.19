@@ -4,10 +4,10 @@ public interface IMFItem {
 
 	// NBT用の変数
 	public final String MF = "mf";
-	
+
 	// MFの取得
-	int getMF ();
-	
+	int getMF();
+
 	// MFの設定
-	void setMF (int mf);
+	void setMF(int mf);
 }

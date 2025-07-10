@@ -159,7 +159,7 @@ public interface IMagicItem extends ISMUtil {
 	}
 
 	// パーティクルスポーン
-	default void spawnParticleRing(ServerLevel server, ParticleOptions particle, double range, BlockPos pos, double addY, double ySpeed, double moveValue) {
+	default void spawnParticleRing(ServerLevel server, ParticleOptions par, double range, BlockPos pos, double addY, double ySpeed, double moveValue) {
 
 		double x = pos.getX() + 0.5D;
 		double y = pos.getY() + 1D + addY;
@@ -167,7 +167,7 @@ public interface IMagicItem extends ISMUtil {
 
 		for (double degree = -range * Math.PI; degree < range * Math.PI; degree += 0.05D) {
 			double rate = range;
-			server.sendParticles(particle, x + Math.cos(degree) * rate, y, z + Math.sin(degree) * rate, 0, -Math.cos(degree) * 0.25D, ySpeed, -Math.sin(degree) * 0.25D, moveValue);
+			server.sendParticles(par, x + Math.cos(degree) * rate, y, z + Math.sin(degree) * rate, 0, -Math.cos(degree) * 0.25D, ySpeed, -Math.sin(degree) * 0.25D, moveValue);
 		}
 	}
 

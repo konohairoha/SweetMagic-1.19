@@ -49,6 +49,7 @@ import sweetmagic.init.PotionInit;
 import sweetmagic.init.TagInit;
 import sweetmagic.init.entity.animal.AbstractSummonMob;
 import sweetmagic.init.entity.projectile.AbstractMagicShot;
+import sweetmagic.init.entity.projectile.BelialSword;
 import sweetmagic.init.entity.projectile.EvilArrow;
 import sweetmagic.util.PlayerHelper;
 import sweetmagic.util.SMDamage;
@@ -111,7 +112,7 @@ public interface ISMMob {
 			amount = Math.min(cap * 0.5F, amount) * 0.5F;
 		}
 
-		else if(attacker instanceof EvilArrow) {
+		else if(attacker instanceof EvilArrow || attacker instanceof BelialSword) {
 			return amount;
 		}
 
@@ -352,7 +353,7 @@ public interface ISMMob {
 
 	// 経過日数を満たしていないなら
 	public static boolean isSkyView(ServerLevelAccessor world, BlockPos pos) {
-		return world.canSeeSky(pos) || ( SMConfig.spawnCave.get() && pos.getY() <= 30 && Math.min(1F, ( (float) ( 30F - pos.getY() ) * 0.0333F)) > world.getRandom().nextFloat() );
+		return world.canSeeSky(pos) || (SMConfig.spawnCave.get() && pos.getY() <= 30 && Math.min(1F, ((float) (30F - pos.getY()) * 0.0333F)) > world.getRandom().nextFloat());
 	}
 
 	// スポーン条件のチェック

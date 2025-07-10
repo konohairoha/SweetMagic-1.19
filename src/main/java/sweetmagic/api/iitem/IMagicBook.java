@@ -130,7 +130,7 @@ public interface IMagicBook {
 	}
 
 	// スロット数
-	default int getSlotSize () {
+	default int getSlotSize() {
 		return 3;
 	}
 

@@ -1069,7 +1069,7 @@ public interface IWand extends IMFTool {
 		return Math.min(value, (int) (value * ((float) exp / (float) maxEXP)));
 	}
 
-	// 火力取得( レベル × 0.2 ) + 最小( (レベル - 1) × 0.175, 5) + 最小( 最大(5 × (1 - (レベル - 1) × 0.02), 0), 4)
+	// 火力取得( レベル × 0.2 ) + 最小((レベル - 1) × 0.175, 5) + 最小( 最大(5 × (1 - (レベル - 1) × 0.02), 0), 4)
 	default float getPower(float level) {
 		return (level * 0.2F) + Math.min((level - 1) * 0.255F, 5) + Math.min(Math.max(6 * (1 - (level - 1) * 0.0185F), 0), 5.8F);
 	}

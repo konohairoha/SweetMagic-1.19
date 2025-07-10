@@ -136,7 +136,6 @@ public interface IAcce extends ISMTip {
 	// スタック数の増加
 	default void addStackCount(AcceInfo info) {
 		if (!this.canAddStackCount(info)) { return; }
-
 		CompoundTag tags = this.getNBT(info.getStack());
 		tags.putInt(STACKCOUNT, tags.getInt(STACKCOUNT) + 1);
 	}

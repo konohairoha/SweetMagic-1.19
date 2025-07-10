@@ -131,7 +131,7 @@ public abstract class AbstractChopTaskEvent {
 		MinecraftForge.EVENT_BUS.unregister(this);
 	}
 
-	public LootContext.Builder getLoot (Level world, BlockPos pos, ItemStack stack) {
+	public LootContext.Builder getLoot(Level world, BlockPos pos, ItemStack stack) {
 		return (new LootContext.Builder((ServerLevel) world)).withRandom(world.random)
 				.withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(pos)).withParameter(LootContextParams.TOOL, stack).withOptionalParameter(LootContextParams.BLOCK_ENTITY, world.getBlockEntity(pos));
 	}
