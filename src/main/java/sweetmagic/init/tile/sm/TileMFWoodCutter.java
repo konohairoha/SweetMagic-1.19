@@ -25,9 +25,10 @@ public class TileMFWoodCutter extends TileSMMagic {
 
 	public int craftTime = 0;
 	public int maxMagiaFlux = 10000;
-	public static final int MAXCRAFT_TIME = 20;
+	public static final int MAX_CRAFT_TIME = 20;
 	public boolean isCraft = false;
-	public ItemStack outStack = ItemStack.EMPTY;
+	public List<ItemStack> outStackList = new ArrayList<>();
+	public List<ItemStack> outStackOverList = new ArrayList<>();
 	protected final StackHandler inputInv = new StackHandler(1);
 	protected final StackHandler outInv = new StackHandler(this.getInvSize());
 
@@ -50,7 +51,7 @@ public class TileMFWoodCutter extends TileSMMagic {
 			this.craftStart();
 		}
 
-		else if (this.craftTime++ >= MAXCRAFT_TIME) {
+		else if (this.craftTime++ >= MAX_CRAFT_TIME) {
 			this.craftEnd();
 		}
 
@@ -58,27 +59,39 @@ public class TileMFWoodCutter extends TileSMMagic {
 	}
 
 	public void craftStart() {
+
+		if(!this.outStackOverList.isEmpty()) {
+			this.craftOverInsert();
+			return;
+		}
+
 		ItemHelper.compactSimpleInventory(this.inputInv);
 		ItemStack stack = this.getInputItem();
 		if (stack.isEmpty() || !this.canSmelt(stack)) { return; }
 
 		WoodCutterRecipe recipe = WoodCutterRecipe.getRecipe(this.getLevel(), Arrays.<ItemStack> asList(stack)).get();
-		ItemStack logStack = this.getLog(recipe, stack);
-		if (logStack.isEmpty() || !ItemHelper.insertStack(this.getOut(), logStack.copy(), true).isEmpty()) { return; }
+		this.outStackList = this.getLog(recipe, stack);
+		if (this.outStackList.isEmpty()) { return; }
 
 		this.isCraft = true;
-		this.outStack = logStack;
-		this.setMF(this.getMF() - recipe.getNeedMF());
+		this.setMF(this.getMF() - recipe.getMF());
 		this.sendInfo();
 	}
 
 	public void craftEnd() {
-		ItemHelper.insertStack(this.getOut(), this.outStack.copy(), false);
-		this.outStack = ItemStack.EMPTY;
 
+		for(ItemStack outStack : this.outStackList) {
+			ItemStack stack = ItemHelper.insertStack(this.getOut(), outStack.copy(), false);
+
+			if (!stack.isEmpty()) {
+				this.outStackOverList.add(stack);
+			}
+		}
+
+		this.outStackList.clear();
 		ItemStack stack = this.getInputItem();
 		this.isCraft = !stack.isEmpty() && stack.is(ItemTags.SAPLINGS);
-		this.craftTime = this.isCraft ? MAXCRAFT_TIME - 12 : 0;
+		this.craftTime = this.isCraft ? MAX_CRAFT_TIME - 10 : 0;
 		this.isCraft = false;
 		this.sendInfo();
 
@@ -91,9 +104,27 @@ public class TileMFWoodCutter extends TileSMMagic {
 		return !WoodCutterRecipe.getRecipe(this.getLevel(), Arrays.<ItemStack> asList(stack)).isEmpty();
 	}
 
-	public ItemStack getLog(WoodCutterRecipe recipe, ItemStack stack) {
-		if(this.getMF() < recipe.getNeedMF()) { return ItemStack.EMPTY; }
-		return new ItemStack(recipe.getResultItem().getItem(), recipe.getCount(this.rand));
+	public List<ItemStack> getLog(WoodCutterRecipe recipe, ItemStack stack) {
+		if(this.getMF() < recipe.getMF()) { return new ArrayList<>(); }
+		List<ItemStack> stackList = new ArrayList<>();
+		List<ItemStack> outList = recipe.getResultList();
+
+		for(int i = 0; i < outList.size(); i++) {
+			stackList.add(new ItemStack(outList.get(i).getItem(), recipe.getCount(this.rand, i)));
+		}
+
+		return stackList;
+	}
+
+	public void craftOverInsert() {
+
+		List<ItemStack> stackList = new ArrayList<>();
+		this.outStackOverList.forEach(s -> this.addStackList(stackList, ItemHelper.insertStack(this.getOut(), s.copy(), false)));
+		this.outStackOverList.clear();
+
+		if (!stackList.isEmpty()) {
+			this.outStackOverList = stackList;
+		}
 	}
 
 	// インベントリサイズの取得
@@ -147,7 +178,8 @@ public class TileMFWoodCutter extends TileSMMagic {
 		tag.put("outInv", this.outInv.serializeNBT());
 		tag.putInt("craftTime", this.craftTime);
 		tag.putBoolean("isCraft", this.isCraft);
-		tag.put("outStack", this.outStack.save(new CompoundTag()));
+		this.saveStackList(tag, this.outStackOverList, "outStackOverList");
+		this.saveStackList(tag, this.outStackList, "outStackList");
 	}
 
 	// NBTの読み込み
@@ -158,7 +190,8 @@ public class TileMFWoodCutter extends TileSMMagic {
 		this.outInv.deserializeNBT(tag.getCompound("outInv"));
 		this.craftTime = tag.getInt("craftTime");
 		this.isCraft = tag.getBoolean("isCraft");
-		this.outStack = ItemStack.of(tag.getCompound("outStack"));
+		this.outStackOverList = this.loadAllStack(tag, "outStackOverList");
+		this.outStackList = this.loadAllStack(tag, "outStackList");
 	}
 
 	@Override
@@ -173,7 +206,7 @@ public class TileMFWoodCutter extends TileSMMagic {
 
 	// クラフト描画量を計算するためのメソッド
 	public int getCraftProgress(int value) {
-		return Math.min(value, (int) (value * (float) (this.craftTime) / (float) (MAXCRAFT_TIME)));
+		return this.getProgress(value, this.craftTime, MAX_CRAFT_TIME);
 	}
 
 	// インベントリのアイテムを取得

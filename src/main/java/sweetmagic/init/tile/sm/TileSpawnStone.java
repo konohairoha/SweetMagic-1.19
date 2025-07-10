@@ -5,7 +5,6 @@ import java.util.Random;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -48,7 +47,6 @@ public class TileSpawnStone extends TileAbstractSM {
 	private int range = 4;
 	private int mobLevel = 1;
 	private int mobType = 0;
-
 	public boolean isPlayer = false;
 	public boolean isPeace = false;
 
@@ -101,9 +99,8 @@ public class TileSpawnStone extends TileAbstractSM {
 
 		for (int i = 0; i < summonSize; i++) {
 
-			boolean isZero = i % 4 == 0;
-
 			// 召喚するモブの座標を設定
+			boolean isZero = i % 4 == 0;
 			BlockPos secondPos = new BlockPos(summonPos.getX() + this.getRand(rand, 3), summonPos.getY(), summonPos.getZ() + this.getRand(rand, 3));
 			count = 0;
 
@@ -117,8 +114,7 @@ public class TileSpawnStone extends TileAbstractSM {
 			LivingEntity entity = isZero ? this.setBigMob(world, spawnMobType, data, addHealth) : this.setMob(world, spawnMobType, data, addHealth);
 			entity.setPos(secondPos.getX() + 0.5D, secondPos.getY() + 0.5D, secondPos.getZ() + 0.5D);
 			world.addFreshEntity(entity);
-
-			( (ISMMob) entity).refreshInfo();
+			((ISMMob) entity).refreshInfo();
 		}
 
 		world.destroyBlock(pos, false);
@@ -154,7 +150,7 @@ public class TileSpawnStone extends TileAbstractSM {
 			break;
 		case 6:
 			entity = new ElectricCube(world);
-			( (ElectricCube) entity).setSize(2);
+			((ElectricCube) entity).setSize(2);
 			this.addPotion(entity, PotionInit.leader_flag, 99999, 0);
 			break;
 		case 7:
@@ -260,7 +256,7 @@ public class TileSpawnStone extends TileAbstractSM {
 			break;
 		}
 
-		return Component.translatable("entity.sweetmagic." + text).getString();
+		return this.getTip("entity.sweetmagic." + text).getString();
 	}
 
 	public void setMobBuff(LivingEntity entity, int mobLevel) {

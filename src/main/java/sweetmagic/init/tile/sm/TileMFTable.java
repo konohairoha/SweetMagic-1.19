@@ -91,8 +91,6 @@ public class TileMFTable extends TileSMMagic {
 	public void wandChargeMF() {
 
 		for (int i = 0; i < this.getInvSize(); i++) {
-
-			// 杖スロットが空以外なら次へ
 			ItemStack stack = this.getInputItem(i);
 			if(stack.isEmpty() || this.wandMaxMF(stack) || this.isMFEmpty()){ continue; }
 

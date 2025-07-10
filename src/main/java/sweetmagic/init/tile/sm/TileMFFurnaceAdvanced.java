@@ -7,7 +7,7 @@ import sweetmagic.init.TileInit;
 
 public class TileMFFurnaceAdvanced extends TileMFFurnace {
 
-	protected final int costMF = 10;
+	protected final int costMF = 15;
 	protected final int maxMagiaFlux = 200000;
 
 	public TileMFFurnaceAdvanced(BlockPos pos, BlockState state) {

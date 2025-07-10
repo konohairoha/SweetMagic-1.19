@@ -48,6 +48,7 @@ public class TileMagiaTable extends TileSMMagic {
 
 	public TileMagiaTable(BlockPos pos, BlockState state) {
 		super(TileInit.magiaTable, pos, state);
+		this.resolver = new SingleHandlerProvider(this.inputInv, IN_OUT);
 	}
 
 	public TileMagiaTable(BlockEntityType<?> type, BlockPos pos, BlockState state) {
@@ -287,7 +288,7 @@ public class TileMagiaTable extends TileSMMagic {
 
 	// クラフト描画量を計算するためのメソッド
 	public int getCraftProgress(int value) {
-		return Math.min(value, (int) (value * (float) (this.craftTime) / (float) (this.maxCraftTime)));
+		return this.getProgress(value, this.craftTime, this.maxCraftTime);
 	}
 
 	// NBTの書き込み

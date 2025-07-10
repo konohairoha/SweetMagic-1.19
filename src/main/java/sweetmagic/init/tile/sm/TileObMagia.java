@@ -88,11 +88,7 @@ public class TileObMagia extends TileAbstractSM {
 		stackList.add(this.getHandItem());
 
 		for (int i = 0; i < this.getInvSize(); i++) {
-
-			ItemStack stack = this.getInputItem(i);
-			if (stack.isEmpty()) { continue; }
-
-			stackList.add(stack);
+			this.addStackList(stackList, this.getInputItem(i));
 		}
 
 		return stackList;
@@ -315,7 +311,7 @@ public class TileObMagia extends TileAbstractSM {
 
 	// 描画量を計算するためのメソッド
 	public int getProgress(int value) {
-		return Math.min(value, (int) (value * (float) (this.craftTime) / (float) (this.maxCraftTime)));
+		return this.getProgress(value, this.craftTime, this.maxCraftTime);
 	}
 
 	@Override

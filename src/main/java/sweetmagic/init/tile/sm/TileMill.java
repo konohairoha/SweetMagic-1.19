@@ -206,11 +206,7 @@ public class TileMill extends TileAbstractSMCook {
 		List<ItemStack> stackList = new ArrayList<>();
 
 		for (int i = 0; i < this.getInvSize(); i++) {
-
-			ItemStack stack = this.getOutputItem(i);
-			if (stack.isEmpty()) { continue; }
-
-			stackList.add(stack);
+			this.addStackList(stackList, this.getOutputItem(i));
 		}
 
 		return stackList;

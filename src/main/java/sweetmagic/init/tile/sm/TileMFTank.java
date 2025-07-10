@@ -82,10 +82,9 @@ public class TileMFTank extends TileSMMagic {
 		ItemStack inputStack = this.getInputItem(index);
 		TankRecipe recipe = TankRecipe.getRecipe(this.getLevel(), Arrays.<ItemStack> asList(inputStack)).get();
 
+		// smeltResultがnullまたは必要MF未満なら終了
 		int needMF = recipe.getMFList().get(0);
 		ItemStack smeltResult = recipe.getResultItem();
-
-		// smeltResultがnullまたは必要MF未満なら終了
 		if (smeltResult.isEmpty() || this.getMF() < needMF) { return; }
 		if (!ItemHelper.insertStack(this.getOut(), smeltResult, true).isEmpty()) { return; }
 

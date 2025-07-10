@@ -78,6 +78,7 @@ public class TileBossFigurine extends TileAbstractSM {
 		default:
 			QueenFrost entity = new QueenFrost(world);
 			entity.setArmor(3);
+			entity.setLectern(true);
 			return entity;
 		}
 	}

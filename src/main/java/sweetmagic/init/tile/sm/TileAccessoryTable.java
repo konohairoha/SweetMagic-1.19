@@ -67,7 +67,7 @@ public class TileAccessoryTable extends TileSMMagic {
 	// クライアント側処理
 	public void clientTick(Level world, BlockPos pos, BlockState state) {
 		super.clientTick(world, pos, state);
-		if (!this.isCraft || this.tickTime % 30 != 12 || (this.craftTime >= this.maxCraftTime - 3) ) { return; }
+		if (!this.isCraft || this.tickTime % 30 != 12 || (this.craftTime >= this.maxCraftTime - 3)) { return; }
 
 		this.craftParticle(world, pos, 0.45F, 0F);
 		this.craftParticle(world, pos, 0F, 0.45F);
@@ -97,8 +97,6 @@ public class TileAccessoryTable extends TileSMMagic {
 	}
 
 	public boolean canCraft(int starCount) {
-
-		// メインスロットが空なら終了
 		ItemStack input = this.getInputItem();
 		if (input.isEmpty()) { return false; }
 
@@ -106,20 +104,13 @@ public class TileAccessoryTable extends TileSMMagic {
 		ItemStack sub = this.getAcceItem();
 		if (sub.isEmpty()) { return false; }
 
-		// 星なる光スロットが空なら終了
-//		ItemStack star = this.getStarItem();
-//		if (star.isEmpty()) { return false; }
-
 		// 出力スロットが空でないなら終了
 		ItemStack out = this.getOutputItem();
 		if (!out.isEmpty() || input.getItem() != sub.getItem()) { return false; }
 
-		// アクセサリーが重複不可または強化不可なら終了
-		AcceInfo info = new AcceInfo(input);
-//		int starCount = star.getCount();					// 星なる光の数を取得
-		int stackCount = info.getAcce().getStackCount(info);// アクセサリーのスタック数を取得
-
 		// 星なる光の数が足りないまたはMFが足りないなら終了
+		AcceInfo info = new AcceInfo(input);
+		int stackCount = info.getAcce().getStackCount(info);
 		if (stackCount > starCount || stackCount * 10000 > this.getMF()) { return false; }
 		return true;
 	}
@@ -174,17 +165,13 @@ public class TileAccessoryTable extends TileSMMagic {
 		AcceInfo inputInfo = new AcceInfo(input);
 		int starCount = star.getCount();									// 星なる光の数を取得
 		int stackCount = inputInfo.getAcce().getStackCount(inputInfo) + 1;	// アクセサリーのスタック数を取得
-
-		// 星なる光がないなら
 		if (star.isEmpty() || stackCount > starCount) { return "acce_nostar"; }
 
 		// 出力スロットが空でないなら終了
 		ItemStack out = this.getOutputItem();
 		if (!out.isEmpty()) { return "acce_noempty"; }
 
-		if ((stackCount * 10000) > this.getMF()) { return "acce_nomf"; }
-
-		return tip;
+		return stackCount * 10000 > this.getMF() ? "acce_nomf" : tip;
 	}
 
 	// インベントリサイズの取得
@@ -279,13 +266,12 @@ public class TileAccessoryTable extends TileSMMagic {
 	public void setInv(StackHandler inv, CompoundTag tags, String name) {
 		CompoundTag tag = tags.getCompound(name);
 		if (tag == null) { return; }
-
 		inv.deserializeNBT(tag);
 	}
 
 	// 描画量を計算するためのメソッド
 	public int getProgress(int value) {
-		return Math.min(value, (int) (value * (float) (this.craftTime) / (float) (this.maxCraftTime)));
+		return this.getProgress(value, this.craftTime, this.maxCraftTime);
 	}
 
 	@Override

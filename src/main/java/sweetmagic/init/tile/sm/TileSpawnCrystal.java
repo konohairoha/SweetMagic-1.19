@@ -37,7 +37,6 @@ import sweetmagic.init.tile.menu.SpawnCrystalMenu;
 public class TileSpawnCrystal extends TileAbstractSM {
 
 	public int range = 7;
-	public boolean isBoss = false;
 
 	public TileSpawnCrystal(BlockPos pos, BlockState state) {
 		super(TileInit.spawn_crystal, pos, state);
@@ -58,16 +57,7 @@ public class TileSpawnCrystal extends TileAbstractSM {
 
 		SpawnCrystal crystal = (SpawnCrystal) this.getBlock(pos);
 		int data = crystal.getData();
-
-		// ボス召喚の場合
-		if (this.isBoss) {
-
-		}
-
-		// 通常モブの召喚の場合
-		else {
-			this.spawnMob(world, pos, data);
-		}
+		this.spawnMob(world, pos, data);
 	}
 
 	public void spawnMob(Level world, BlockPos pos, int data) {
@@ -110,7 +100,7 @@ public class TileSpawnCrystal extends TileAbstractSM {
 			entity.setPos(secondPos.getX() + 0.5D, secondPos.getY() + 0.5D, secondPos.getZ() + 0.5D);
 			world.addFreshEntity(entity);
 
-			( (ISMMob) entity).refreshInfo();
+			((ISMMob) entity).refreshInfo();
 		}
 
 		world.destroyBlock(pos, false);
@@ -156,7 +146,6 @@ public class TileSpawnCrystal extends TileAbstractSM {
 		entity.getAttribute(Attributes.MAX_HEALTH).setBaseValue(this.getMobHealth(data) * addHealth);
 		entity.setHealth(entity.getMaxHealth());
 		this.setMobBuff(entity, data);
-
 		return entity;
 	}
 
@@ -200,7 +189,6 @@ public class TileSpawnCrystal extends TileAbstractSM {
 		entity.getAttribute(Attributes.MAX_HEALTH).setBaseValue(this.getBigMobHealth(data) * addHealth);
 		entity.setHealth(entity.getMaxHealth());
 		this.setBigMobBuff(entity, data);
-
 		return entity;
 	}
 

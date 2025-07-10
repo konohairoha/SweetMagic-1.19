@@ -394,12 +394,12 @@ public class TileJuiceMaker extends TileAbstractSM implements ITileFluid {
 
 	// クラフト描画量を計算するためのメソッド
 	public int getCraftProgress(int value) {
-		return Math.min(value, (int) (value * (float) (this.craftTime) / (float) (MAX_CRAFT_TIME)));
+		return this.getProgress(value, this.craftTime, MAX_CRAFT_TIME);
 	}
 
 	// 水描画量を計算するためのメソッド
 	public int getWaterProgress(int value) {
-		return Math.min(value, (int) (value * (float) (this.getFluidValue()) / (float) (this.getMaxFuildValue())));
+		return this.getProgress(value, this.getFluidValue(), this.getMaxFuildValue());
 	}
 
 	@Override

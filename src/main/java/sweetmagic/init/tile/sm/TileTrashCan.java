@@ -20,7 +20,6 @@ public class TileTrashCan extends TileWoodChest {
 	public void serverTick(Level world, BlockPos pos, BlockState state) {
 		super.serverTick(world, pos, state);
 		if (this.tickTime % 60 != 0 || !this.isRSPower()) { return; }
-
 		this.invTrash(true);
 	}
 }

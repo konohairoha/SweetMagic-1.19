@@ -388,7 +388,7 @@ public class TileEnchantEduce extends TileSMMagic {
 
 	// クラフト描画量を計算するためのメソッド
 	public int getCraftProgress(int value) {
-		return Math.min(value, (int) (value * (float) (this.craftTime) / (float) (MAX_CRAFT_TIME)));
+		return this.getProgress(value, this.craftTime, MAX_CRAFT_TIME);
 	}
 
 	@Override

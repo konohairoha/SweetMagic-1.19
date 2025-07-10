@@ -54,7 +54,7 @@ public class TileAetherCraftTable extends TileAbstractSM {
 
 	// インベントリサイズの取得
 	@Override
-	public int getInvSize () {
+	public int getInvSize() {
 		return 9;
 	}
 

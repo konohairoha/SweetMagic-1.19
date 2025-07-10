@@ -146,7 +146,6 @@ public class TileMFGenerater extends TileSMMagic implements ITileFluid {
 		this.getContent().setAmount(Math.max(0, this.getFluidValue() - 1000));
 		this.getBucketItem().shrink(1);
 		ItemHelper.insertStack(this.getBucket(), stack, false);
-
 		this.sendInfo();
 	}
 
@@ -173,7 +172,6 @@ public class TileMFGenerater extends TileSMMagic implements ITileFluid {
 
 		for (Direction face : ALLFACE) {
 			if (this.getBlock(pos.relative(face)) != AIR || count >= maxCount) { continue; }
-
 			world.setBlock(pos.relative(face), LAVA, 3);
 			count++;
 		}

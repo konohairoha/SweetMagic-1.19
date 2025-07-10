@@ -20,7 +20,6 @@ public class TileCosmosLightTank extends TileAlternativeTank {
 
 	public TileCosmosLightTank(BlockEntityType<?> type, BlockPos pos, BlockState state) {
 		super(type, pos, state);
-//		this.resolver = new SingleHandlerProvider(this.inputInv, IN_OUT);
 		this.fluidPro = new TankProperty(MAX_FLUID_VALUE, true, true);
 	}
 
@@ -29,11 +28,11 @@ public class TileCosmosLightTank extends TileAlternativeTank {
 	}
 
 	// 最大水量を設定
-	public int getMaxFuildValue () {
+	public int getMaxFuildValue() {
 		return MAX_FLUID_VALUE;
 	}
 
-	public LazyOptional<IFluidHandler> getFluidHandler () {
+	public LazyOptional<IFluidHandler> getFluidHandler() {
 		return this.fluidHandler;
 	}
 }

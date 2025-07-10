@@ -319,17 +319,12 @@ public class TileSMSpawner extends TileAbstractSM {
 
 	// モブの名前を取得
 	public String getEntityName() {
-
-		if (this.getMobType() == -1) {
-			return "random";
-		}
-
+		if (this.getMobType() == -1) { return "random"; }
 		return this.getRenderEntity().getName().getString();
 	}
 
 	// モブのバフを設定
 	public void setEntityBuff(Mob entity) {
-
 		int level = this.getMobLevel() - 1;
 		this.addPotion(entity, PotionInit.resistance_blow, 99999, 5);
 		if (level <= 1) { return; }

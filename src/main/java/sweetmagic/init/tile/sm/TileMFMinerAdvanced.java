@@ -29,7 +29,7 @@ public class TileMFMinerAdvanced extends TileSMMagic {
 
 	public int craftTime = 0;
 	public int maxMagiaFlux = 100000;
-	public static final int MAXCRAFT_TIME = 10;
+	public static final int MAX_CRAFT_TIME = 10;
 	public boolean isCraft = false;
 	public ItemStack outStack = ItemStack.EMPTY;
 	protected final StackHandler inputInv = new StackHandler(10);
@@ -54,7 +54,7 @@ public class TileMFMinerAdvanced extends TileSMMagic {
 			this.craftStart();
 		}
 
-		else if (this.craftTime++ >= MAXCRAFT_TIME) {
+		else if (this.craftTime++ >= MAX_CRAFT_TIME) {
 			this.craftEnd();
 		}
 
@@ -95,7 +95,7 @@ public class TileMFMinerAdvanced extends TileSMMagic {
 		ItemHelper.compactSimpleInventory(this.inputInv);
 		ItemStack stack = this.getInputItem(0);
 		this.isCraft = !stack.isEmpty() && stack.is(Tags.Items.COBBLESTONE) && stack.getCount() >= 64;
-		this.craftTime = this.isCraft ? MAXCRAFT_TIME - 4 : 0;
+		this.craftTime = this.isCraft ? MAX_CRAFT_TIME - 4 : 0;
 		this.isCraft = false;
 
 		this.playSound(this.getBlockPos(), SoundEvents.AMETHYST_BLOCK_BREAK, 0.5F, 1F);
@@ -126,7 +126,7 @@ public class TileMFMinerAdvanced extends TileSMMagic {
 
 	// 必要MF
 	public int getNeedMF() {
-		return 500;
+		return 1000;
 	}
 
 	// 入力スロットの取得
@@ -183,7 +183,7 @@ public class TileMFMinerAdvanced extends TileSMMagic {
 
 	// クラフト描画量を計算するためのメソッド
 	public int getCraftProgress(int value) {
-		return Math.min(value, (int) (value * (float) (this.craftTime) / (float) (MAXCRAFT_TIME)));
+		return this.getProgress(value, this.craftTime, MAX_CRAFT_TIME);
 	}
 
 	// インベントリのアイテムを取得

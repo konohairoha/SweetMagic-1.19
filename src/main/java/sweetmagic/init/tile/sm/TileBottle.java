@@ -38,9 +38,7 @@ public class TileBottle extends TileAbstractSMCook {
 		if (this.tickTime % 10 != 0) { return; }
 
 		this.tickTime = 0;
-		setChanged();
-
-		// クラフト中以外なら終了
+		this.setChanged();
 		if (!this.isCraft) { return; }
 
 		// クラフト時間の経過
@@ -72,7 +70,7 @@ public class TileBottle extends TileAbstractSMCook {
 	}
 
 	// パーティクルすぽーん
-	public void spawnParticle (Level world, BlockPos pos) {
+	public void spawnParticle(Level world, BlockPos pos) {
 		double x = (double) pos.getX() + 0.8D - this.rand.nextDouble() * 0.6D;
 		double y = pos.getY() + 0.9D + this.rand.nextDouble() * 0.15D;
 		double z = (double) pos.getZ() + 0.8D - this.rand.nextDouble() * 0.6D;
@@ -80,12 +78,12 @@ public class TileBottle extends TileAbstractSMCook {
 	}
 
 	// レシピチェック
-	public boolean checkRecipe () {
+	public boolean checkRecipe() {
 		return !OvenRecipe.getRecipe(this.getLevel(), this.craftList).isEmpty();
 	}
 
 	// 作成開始
-	public void craftStart () {
+	public void craftStart() {
 		this.isCraft = true;
 		this.setState(1);
 		this.sendPKT();
@@ -97,7 +95,7 @@ public class TileBottle extends TileAbstractSMCook {
 	}
 
 	// クラフトの完成
-	public void craftFinish () {
+	public void craftFinish() {
 		this.tickTime = 9;
 		this.isCraft = false;
 		this.isFinish = true;
@@ -107,7 +105,7 @@ public class TileBottle extends TileAbstractSMCook {
 	}
 
 	// 初期化
-	public void clearInfo () {
+	public void clearInfo() {
 		this.amount = 0;
 		this.craftTime = 0;
 		this.isCraft = false;

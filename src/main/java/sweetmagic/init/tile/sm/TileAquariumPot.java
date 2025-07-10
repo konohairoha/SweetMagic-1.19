@@ -552,7 +552,7 @@ public class TileAquariumPot extends TileSMMagic implements ITileFluid {
 
 	// ゲージの描画量を計算するためのメソッド
 	public int getProgress(int value) {
-		return Math.min(value, (int) (value * (float) this.getStackCount() / (float) MAX_STACKCOUNT));
+		return this.getProgress(value, this.getStackCount(), MAX_STACKCOUNT);
 	}
 
 	public int fluidTanks() {

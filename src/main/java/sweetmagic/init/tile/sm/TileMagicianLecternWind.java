@@ -67,8 +67,8 @@ public class TileMagicianLecternWind extends TileAbstractMagicianLectern {
 			}
 
 			if (this.isHard) {
-				entity.getAttribute(Attributes.MAX_HEALTH).setBaseValue(60D);
-				entity.setHealth(entity.getMaxHealth());
+				crystal.getAttribute(Attributes.MAX_HEALTH).setBaseValue(60D);
+				crystal.setHealth(crystal.getMaxHealth());
 			}
 
 			crystal.setPos(targetPos.getX() + 0.5D, targetPos.getY() + 0.5D, targetPos.getZ() + 0.5D);

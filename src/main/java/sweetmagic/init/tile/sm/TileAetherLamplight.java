@@ -59,17 +59,31 @@ public class TileAetherLamplight extends TileSMMagic {
 
 	// 周囲にMF送信
 	public void roundMFTransmit() {
+		if(this.isMFEmpty()) { return; }
 
 		// 範囲の座標取得
 		Iterable<BlockPos> posList = this.getRangePos(this.getBlockPos(), this.range);
-		Map<BlockPos, BlockTile> posBlockMap = new HashMap<>();
+		Map<Block, List<BlockTile>> posBlockMap = new HashMap<>();
 
 		// リスト分まわす
 		for (BlockPos pos : posList) {
+//			BlockPos p = new BlockPos(pos.getX(), pos.getY(), pos.getZ());
 			if (!(this.getTile(pos) instanceof TileSMMagic tile) || !tile.getReceive() || tile.isMaxMF()) { continue; }
 			if (tile instanceof TileAetherLamplight || tile instanceof TileAetherLanp || tile instanceof TileMFTank) { continue; }
+			Block block = this.getBlock(pos);
+			BlockTile bTile = new BlockTile(block, tile);
 
-			posBlockMap.put(pos, new BlockTile(this.getBlock(pos), tile));
+			List<BlockTile> tileMap = posBlockMap.get(block);
+
+			if(tileMap == null || tileMap.isEmpty()) {
+				tileMap = new ArrayList<>();
+				tileMap.add(bTile);
+				posBlockMap.put(block, tileMap);
+			}
+
+			else {
+				tileMap.add(bTile);
+			}
 		}
 
 		BlockOrder blockOrder = this.blockOrder;
@@ -81,6 +95,7 @@ public class TileAetherLamplight extends TileSMMagic {
 			Map<Integer, List<Block>> orderBlockMap = blockOrder.getOrderBlockMap();	// 優先度情報の取得
 			List<Integer> orderNumerList = this.getOrderNumber();						// 優先度順の取得
 
+			// 優先度順で回す
 			for (int order : orderNumerList) {
 
 				// 優先度のごとのブロックを取得
@@ -92,43 +107,47 @@ public class TileAetherLamplight extends TileSMMagic {
 					continue;
 				}
 
-				for (Entry<BlockPos, BlockTile> map : posBlockMap.entrySet()) {
-					BlockTile bTile = map.getValue();
-					if (orderBlockList.contains(bTile.block())) { continue; }
+				// 優先度に登録されたブロックリストを回す
+				for(Block block : orderBlockList) {
+					List<BlockTile> tileMap = posBlockMap.get(block);
+					if(tileMap == null) { continue; }
 
-					// MFブロックからMFを入れるときの処理、MFを貯めれなくなったら終了
-					this.insertMF(bTile.tile(), this, this.getTickTime());
-					orderBlock.add(bTile.block());
-					if (this.isMFEmpty()) { break; }
+					for (BlockTile bTile : tileMap) {
+						this.insertMF(bTile.tile(), this, this.getTickTime());
+						orderBlock.add(bTile.block());
+						if (this.isMFEmpty()) { return; }
+					}
 				}
 			}
 
 			// MFが空でないなら未登録のブロックへのMF配布
 			if (!this.isMFEmpty()) {
-				for (Entry<BlockPos, BlockTile> map : posBlockMap.entrySet()) {
-					BlockTile bTile = map.getValue();
-					if (orderBlock.contains(bTile.block())) { continue; }
 
-					// MFブロックからMFを入れるときの処理、MFを貯めれなくなったら終了
-					this.insertMF(bTile.tile(), this, this.getTickTime());
-					if (this.isMFEmpty()) { break; }
+				// 優先度未登録のMFブロックにMFを入れる
+				for (List<BlockTile> tileList : posBlockMap.values()) {
+					for(BlockTile bTile : tileList) {
+						if (orderBlock.contains(bTile.block())) { continue; }
+						this.insertMF(bTile.tile(), this, this.getTickTime());
+						if (this.isMFEmpty()) { return; }
+					}
 				}
 			}
 		}
 
 		// 優先度未登録時のMF配布
 		else {
-			for (Entry<BlockPos, BlockTile> map : posBlockMap.entrySet()) {
-
-				// MFブロックからMFを入れるときの処理、MFを貯めれなくなったら終了
-				this.insertMF(map.getValue().tile(), this, this.getTickTime());
-				if (this.isMFEmpty()) { break; }
+			for (List<BlockTile> tileList : posBlockMap.values()) {
+				for(BlockTile bTile : tileList) {
+					this.insertMF(bTile.tile(), this, this.getTickTime());
+					if (this.isMFEmpty()) { return; }
+				}
 			}
 		}
 
 		this.sendPKT();
 	}
 
+	// 範囲登録
 	public void addRange(int id) {
 
 		int addValue = 0;
@@ -156,6 +175,7 @@ public class TileAetherLamplight extends TileSMMagic {
 		this.sendPKT();
 	}
 
+	// 優先度登録
 	public void addOrder(int id) {
 
 		int addValue = 0;
@@ -199,7 +219,6 @@ public class TileAetherLamplight extends TileSMMagic {
 		for (BlockPos pos : posList) {
 			if (!(this.getTile(pos) instanceof TileSMMagic tile) || !tile.getReceive()) { continue; }
 			if (tile instanceof TileAetherLamplight || tile instanceof TileAetherLanp || tile instanceof TileMFTank) { continue; }
-
 			blockList.add(this.getBlock(pos));
 		}
 
@@ -217,7 +236,6 @@ public class TileAetherLamplight extends TileSMMagic {
 		for (BlockPos pos : posList) {
 			if (!(this.getTile(pos) instanceof TileSMMagic tile) || !tile.getReceive()) { continue; }
 			if (tile instanceof TileAetherLamplight || tile instanceof TileAetherLanp || tile instanceof TileMFTank) { continue; }
-
 			blockList.add(this.getBlock(pos));
 		}
 
@@ -228,7 +246,6 @@ public class TileAetherLamplight extends TileSMMagic {
 
 				for (Block block : blockList) {
 					if(!orderBlockList.contains(block)) { continue; }
-
 					orderBlockSet.add(block);
 				}
 			}
@@ -285,34 +302,31 @@ public class TileAetherLamplight extends TileSMMagic {
 	public CompoundTag saveBLockOrder(CompoundTag nbt, BlockOrder blockOrder, String name) {
 
 		// NULLチェックとListの個数を確認
-		if (!blockOrder.getBlockList().isEmpty()) {
+		if (blockOrder.getBlockList().isEmpty()) { return nbt; }
 
-			Map<Integer, List<Block>> orderMap = blockOrder.getOrderBlockMap();
+		// リストの分だけ回してNBTに保存
+		ListTag tagsList = new ListTag();
+		Map<Integer, List<Block>> orderMap = blockOrder.getOrderBlockMap();
 
-			// リストの分だけ回してNBTに保存
-			ListTag tagsList = new ListTag();
-			for (Entry<Integer, List<Block>> map : orderMap.entrySet()) {
+		for (Entry<Integer, List<Block>> map : orderMap.entrySet()) {
 
-				// nbtリストにnbtを入れる
-				CompoundTag tags = new CompoundTag();
-				tags.putInt("order", map.getKey());
+			// nbtリストにnbtを入れる
+			CompoundTag tags = new CompoundTag();
+			tags.putInt("order", map.getKey());
+			ListTag tagsList2 = new ListTag();
 
-				ListTag tagsList2 = new ListTag();
-
-				for (Block block : map.getValue()) {
-					CompoundTag tags2 = new CompoundTag();
-					tags2.putString("blockId", ForgeRegistries.BLOCKS.getKey(block).toString());
-					tagsList2.add(tags2);
-				}
-
-				tags.put("blockList", tagsList2);
-				tagsList.add(tags);
+			for (Block block : map.getValue()) {
+				CompoundTag tags2 = new CompoundTag();
+				tags2.putString("blockId", ForgeRegistries.BLOCKS.getKey(block).toString());
+				tagsList2.add(tags2);
 			}
 
-			// NBTに保存
-			nbt.put(name, tagsList);
+			tags.put("blockList", tagsList2);
+			tagsList.add(tags);
 		}
 
+		// NBTに保存
+		nbt.put(name, tagsList);
 		return nbt;
 	}
 
@@ -338,7 +352,6 @@ public class TileAetherLamplight extends TileSMMagic {
 		List<Integer> orderList = new ArrayList<>();
 		Map<Integer, List<Block>> orderBlockMap = this.blockOrder.getOrderBlockMap();
 
-
 		if (!orderBlockMap.isEmpty()) {
 			orderList.addAll(orderBlockMap.keySet());
 			orderList = orderList.stream().sorted((s1, s2) -> this.sortOrder(s1, s2)).toList();
@@ -353,7 +366,7 @@ public class TileAetherLamplight extends TileSMMagic {
 
 
 	// 優先度ソート
-	public int sortOrder (int int1, int int2) {
+	public int sortOrder(int int1, int int2) {
 		if (int1 > int2) { return -1; }
 		if (int1 < int2) { return 1; }
 		return 0;

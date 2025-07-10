@@ -214,7 +214,6 @@ public class TileMagiaRewrite extends TileSMMagic {
 		if (enchaList.isEmpty()) { return 0; }
 
 		Enchantment encha = enchaList.get(id);
-
 		int level = EnchantmentHelper.getEnchantmentLevel(tags);
 		if (level >= this.getMaxEnchantLevel()) { return 0; }
 
@@ -240,7 +239,7 @@ public class TileMagiaRewrite extends TileSMMagic {
 			}
 		}
 
-		return (11 - encha.getRarity().getWeight() ) * 1500 * rate * rate * addRate;
+		return (11 - encha.getRarity().getWeight()) * 1500 * rate * rate * addRate;
 	}
 
 	public int getChanedLevel(int id) {
@@ -491,7 +490,7 @@ public class TileMagiaRewrite extends TileSMMagic {
 
 	// クラフト描画量を計算するためのメソッド
 	public int getCraftProgress(int value) {
-		return Math.min(value, (int) (value * (float) (this.craftTime) / (float) (MAX_CRAFT_TIME)));
+		return this.getProgress(value, this.craftTime, MAX_CRAFT_TIME);
 	}
 
 	public void spawnParticl() {

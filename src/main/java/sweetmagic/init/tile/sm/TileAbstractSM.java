@@ -286,6 +286,10 @@ public abstract class TileAbstractSM extends BlockEntity implements MenuProvider
 		return this.getRandFloat() * rate;
 	}
 
+	public int getProgress(int value, int nowValue, int maxValue) {
+		return Math.min(value, (int) (value * (float) nowValue / (float) maxValue));
+	}
+
 	// List<ItemStack>をnbt保存
 	public CompoundTag saveStackList(CompoundTag nbt, List<ItemStack> stackList, String name) {
 

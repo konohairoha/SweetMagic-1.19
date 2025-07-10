@@ -62,8 +62,6 @@ public class TileMFChanger extends TileSMMagic {
 		boolean isUpdate = false;
 
 		for (int i = 0; i < this.getInvSize(); i++) {
-
-			// スロットが空なら終了
 			ItemStack stack = this.getInputItem(i);
 			if (stack.isEmpty() || !SweetMagicAPI.hasMF(stack)) { continue; }
 
@@ -83,8 +81,6 @@ public class TileMFChanger extends TileSMMagic {
 
 			// スロットのアイテムを減らす
 			stack.shrink(value);
-
-			// 最大になったら終了
 			if (this.isMaxMF()) { break; }
 		}
 

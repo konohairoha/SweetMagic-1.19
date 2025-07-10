@@ -333,7 +333,7 @@ public class TileMFFisher extends TileSMMagic {
 
 	// クラフト描画量を計算するためのメソッド
 	public int getCraftProgress(int value) {
-		return Math.min(value, (int) (value * (float) this.craftTime / (float) this.maxCraftTime));
+		return this.getProgress(value, this.craftTime, this.maxCraftTime);
 	}
 
 	@Override

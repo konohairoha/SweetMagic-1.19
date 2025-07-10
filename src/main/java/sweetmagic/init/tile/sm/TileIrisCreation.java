@@ -114,11 +114,7 @@ public class TileIrisCreation extends TileAbstractSM {
 		stackList.add(this.getHandItem());
 
 		for (int i = 0; i < this.getInvSize(); i++) {
-
-			ItemStack stack = this.getInputItem(i);
-			if (stack.isEmpty()) { continue; }
-
-			stackList.add(stack);
+			this.addStackList(stackList, this.getInputItem(i));
 		}
 
 		return stackList;
@@ -142,10 +138,9 @@ public class TileIrisCreation extends TileAbstractSM {
 
 		if (tags != null) {
 
-			Item outItem = resultStack.getItem();
-
 			// 元の杖の魔法リスト
 			List<ItemStack> invStackList = new ArrayList<>();
+			Item outItem = resultStack.getItem();
 
 			// スロットの数を増やす
 			if (outItem instanceof IWand wand) {
@@ -179,7 +174,7 @@ public class TileIrisCreation extends TileAbstractSM {
 		this.outStack = resultStack;
 
 		// 要求アイテムの消費
-		for (ItemStack request: recipe.getRequestList()) {
+		for (ItemStack request : recipe.getRequestList()) {
 			for (ItemStack stack : stackList) {
 				if (request.is(stack.getItem())) {
 					stack.shrink(request.getCount());
@@ -224,7 +219,6 @@ public class TileIrisCreation extends TileAbstractSM {
 
 		this.addStackList(stackList, this.getOutputItem());
 		stackList.addAll(this.craftList);
-
 		return stackList;
 	}
 
@@ -294,7 +288,7 @@ public class TileIrisCreation extends TileAbstractSM {
 
 	// 描画量を計算するためのメソッド
 	public int getProgress(int value) {
-		return Math.min(value, (int) (value * (float) (this.craftTime) / (float) (this.maxCraftTime)));
+		return this.getProgress(value, this.craftTime, this.maxCraftTime);
 	}
 
 	@Override

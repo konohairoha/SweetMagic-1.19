@@ -164,8 +164,6 @@ public class TileAetherRecycler extends TileSMMagic {
 
 			// クラフト個数分回す
 			for (int k = 0; k < this.amount; k++) {
-
-				// 最初の1つかチャンスより大きいなら完成品を入れる
 				if (chance < this.rand.nextFloat()) { continue; }
 
 				ItemStack stack = ItemHelper.insertStack(this.getOutput(), ouStackList.get(k).copy(), false);
@@ -262,7 +260,7 @@ public class TileAetherRecycler extends TileSMMagic {
 
 	// クラフトゲージの描画量を計算するためのメソッド
 	public int getCraftProgress(int value) {
-		return Math.min(value, (int) (value * (float) (this.craftTime) / (float) (MAX_CRAFT_TIME)));
+		return this.getProgress(value, this.craftTime, MAX_CRAFT_TIME);
 	}
 
 	// 受信するMF量の取得

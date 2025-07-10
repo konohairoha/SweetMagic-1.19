@@ -86,7 +86,6 @@ public class TileWoodChest extends TileAbstractSM {
 			if (rand.nextFloat() < this.chance) { continue; }
 
 			for (int s = 0; s < stackList.size(); s++) {
-
 				ItemStack stack = stackList.get(s);
 				if (stack.isEmpty()) { continue; }
 
@@ -154,7 +153,6 @@ public class TileWoodChest extends TileAbstractSM {
 		boolean isTrash = isRS;
 
 		for (int i = 0; i < this.getInvSize(); i++) {
-
 			ItemStack stack = this.getInputItem(i);
 			if (stack.isEmpty()) { continue; }
 

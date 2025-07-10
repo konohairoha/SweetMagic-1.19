@@ -17,6 +17,8 @@ import sweetmagic.init.tile.menu.CardboardStorageMenu;
 
 public class TileCardboardStorage extends TileAbstractSM {
 
+	public final MagiaHandler inputInv = new MagiaHandler(this.getInvSize());
+
 	public TileCardboardStorage(BlockPos pos, BlockState state) {
 		this(TileInit.cardboardStorage, pos, state);
 	}
@@ -25,8 +27,6 @@ public class TileCardboardStorage extends TileAbstractSM {
 		super(type, pos, state);
 		this.resolver = new SingleHandlerProvider(this.inputInv, IN_OUT);
 	}
-
-	public final MagiaHandler inputInv = new MagiaHandler(this.getInvSize());
 
 	// NBTの書き込み
 	@Override
@@ -93,6 +93,6 @@ public class TileCardboardStorage extends TileAbstractSM {
 	}
 
 	public int getData() {
-		return ((MagiaStorage) this.getBlock(this.getBlockPos()) ).getData();
+		return ((MagiaStorage) this.getBlock(this.getBlockPos())).getData();
 	}
 }

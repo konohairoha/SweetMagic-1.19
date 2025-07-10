@@ -52,10 +52,6 @@ public class TileRegister extends TileAbstractSM {
 		if(playerExp <= 0 && id >= 3) { return; }
 
 		int addValue = 0;
-//		int needExp = 0;
-//		int shrinkLevel = 0;
-//		int regiExp = this.exp;
-//		int regiLevel = this.getExpLevel();
 		int playerLevel = player.experienceLevel;
 
 		switch (id) {

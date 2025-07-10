@@ -33,7 +33,7 @@ public class TileAltarCreat extends TilePedalCreate {
 
 		this.isHaveBlock = this.getState(pos.below()).is(TagInit.DC_BLOCK);
 		this.isRangeBlock = this.checkRangeBlock(false);
-		if (!this.isCraft || this.nowTick > ( (this.maxCrafttime - 1) * 20) ) { return; }
+		if (!this.isCraft || this.nowTick > ((this.maxCrafttime - 1) * 20)) { return; }
 
 		float addY = this.nowTick * 0.00575F * (this.quickCraft ? 2F : 1F);
 		this.spawnParticleRing(world, pos.getX() + 0.5F, pos.getY() + 1.4F + addY, pos.getZ() + 0.5F, 0D, 0D, 0D, 0.75D);

@@ -116,7 +116,6 @@ public class TileAetherReverse extends TileSMMagic {
 		this.canCraft = false;
 		this.getInputItem().shrink(this.shrinkValue);
 		this.setMF(this.getMF() - needMF);
-
 		this.sendPKT();
 		this.clickButton();
 	}
@@ -140,7 +139,6 @@ public class TileAetherReverse extends TileSMMagic {
 	}
 
 	public List<ItemStack> getReverseStack(Level world) {
-
 		List<ItemStack> stackList = new ArrayList<>();
 		ItemStack stack = this.getInputItem();
 		if (stack.isEmpty()) { return stackList; }
@@ -153,7 +151,7 @@ public class TileAetherReverse extends TileSMMagic {
 
 			// リザルトが一致しないなら次へ
 			ItemStack result = allRecipe.getResultItem();
-			if ( !result.is(stack.getItem()) || stack.getCount() < result.getCount()) { continue; }
+			if (!result.is(stack.getItem()) || stack.getCount() < result.getCount()) { continue; }
 
 			recipe = allRecipe;
 			this.shrinkValue = result.getCount();
@@ -172,7 +170,6 @@ public class TileAetherReverse extends TileSMMagic {
 
 			for (int invY = 0; invY < recipeHeight; invY++) {
 				for (int invX = 0; invX < recipeWidth; invX++) {
-
 					int index = invX + invY * recipeWidth;
 					if (index >= ingredList.size()) continue;
 
@@ -187,7 +184,6 @@ public class TileAetherReverse extends TileSMMagic {
 		else {
 			for (int i = 0; i < 9; i++) {
 				if (i < ingredList.size()) {
-
 					ItemStack ingred = ingredList.get(i).copy();
 					if (ingred.isEmpty() || ingred.is(TagInit.RECIPE_BOOK) || ingred.getDisplayName().toString().contains("bucket")) { continue; }
 
@@ -236,8 +232,7 @@ public class TileAetherReverse extends TileSMMagic {
 			rate += stack.getMaxDamage() * 0.01F;
 		}
 
-		int needMF = (int) (this.craftList.size() * rate * mf);
-		return needMF;
+		return (int) (this.craftList.size() * rate * mf);
 	}
 
 	// NBTの書き込み
@@ -316,7 +311,7 @@ public class TileAetherReverse extends TileSMMagic {
 
 	// クラフト描画量を計算するためのメソッド
 	public int getCraftProgress(int value) {
-		return Math.min(value, (int) (value * (float) (this.craftTime) / (float) (this.maxCraftTime)));
+		return this.getProgress(value, this.craftTime, this.maxCraftTime);
 	}
 
 	@Override

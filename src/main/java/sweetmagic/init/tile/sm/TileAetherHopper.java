@@ -42,12 +42,8 @@ public class TileAetherHopper extends TileSMMagic {
 		if (this.tickTime % 40 != 0 || this.isRSPower()) { return; }
 
 		this.tickTime = 0;
-
-		// アイテム吸い込み
-		this.suctionItem(pos);
-
-		// ホッパーからアイテムをチェストに入れる
-		this.extractItem(pos);
+		this.suctionItem(pos);	// アイテム吸い込み
+		this.extractItem(pos);	// ホッパーからアイテムをチェストに入れる
 
 		// MFが空でなければ実行
 		if (!this.isMFEmpty()) {
@@ -64,12 +60,10 @@ public class TileAetherHopper extends TileSMMagic {
 		if (handler == null) { return; }
 
 		for (int h = 0; h < this.getInvSize(); h++) {
-
 			ItemStack input = this.getInputItem(h);
 			if (input.isEmpty()) { continue; }
 
 			for (int i = 0; i < handler.getSlots(); i++) {
-
 				ItemStack inStack = handler.insertItem(i, input.copy(), false);
 				input.setCount(inStack.getCount());
 				if (inStack.isEmpty()) { break; }
@@ -87,7 +81,6 @@ public class TileAetherHopper extends TileSMMagic {
 		if (handler == null) { return; }
 
 		for (int i = 0; i < handler.getSlots(); i++) {
-
 			ItemStack output = handler.getStackInSlot(i);
 			if (output.isEmpty()) { continue; }
 
@@ -105,28 +98,25 @@ public class TileAetherHopper extends TileSMMagic {
 		CompoundTag tag = stack.getTag();
 		if (tag == null || !tag.contains("X")) { return; }
 
-		// 座標の取得
+		// 座標の取得してホッパー以外なら終了
 		int x = tag.getInt("X");
 		int y = tag.getInt("Y");
 		int z = tag.getInt("Z");
 		BlockPos targetPos = new BlockPos(x, y, z);
-
-		// ホッパー以外なら終了
-		if ( !(this.getBlock(targetPos) instanceof AetherHopper) ) { return; }
+		if (!(this.getBlock(targetPos) instanceof AetherHopper)) { return; }
 
 		IItemHandler handler = this.getItemHandler(this.getTile(targetPos), Direction.UP);
 		if (handler == null) { return; }
 
-		int mf = this.getMF();
 		int sumMF = 0;
+		int mf = this.getMF();
 
 		for (int h = 0; h < this.getInvSize(); h++) {
-
 			ItemStack input = this.getInputItem(h);
 			if (input.isEmpty()) { continue; }
 
 			// MFが足りなくなったら終了
-			if ( (mf - sumMF) < input.getCount()) { return; }
+			if ((mf - sumMF) < input.getCount()) { return; }
 
 			for (int i = 0; i < handler.getSlots(); i++) {
 
@@ -199,12 +189,12 @@ public class TileAetherHopper extends TileSMMagic {
 	}
 
 	// 向きの取得
-	public Direction getFace () {
+	public Direction getFace() {
 		return this.getState(this.getBlockPos()).getValue(AetherHopper.FACING);
 	}
 
 	// 向きの取得
-	public Direction getFaceReverse () {
+	public Direction getFaceReverse() {
 		switch (this.getState(this.getBlockPos()).getValue(AetherHopper.FACING)) {
 		case NORTH: return Direction.SOUTH;
 		case SOUTH: return Direction.NORTH;
@@ -217,12 +207,12 @@ public class TileAetherHopper extends TileSMMagic {
 	}
 
 	// RS信号で動作を停止するかどうか
-	public boolean isRSStop () {
+	public boolean isRSStop() {
 		return true;
 	}
 
 	// インベントリのアイテムを取得
-	public List<ItemStack> getInvList () {
+	public List<ItemStack> getInvList() {
 		List<ItemStack> stackList = new ArrayList<>();
 
 		for (int i = 0; i < this.getInvSize(); i++) {

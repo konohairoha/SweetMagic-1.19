@@ -37,7 +37,6 @@ public class TileMFTankCreative extends TileMFTank {
 	}
 
 	public void smeltAction() {
-
 		for (int i = 0; i < 3; i++) {
 			if (this.canSmelt(i)) {
 				this.smeltItem(i);

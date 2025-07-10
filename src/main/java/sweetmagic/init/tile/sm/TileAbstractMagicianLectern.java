@@ -99,12 +99,12 @@ public abstract class TileAbstractMagicianLectern extends TileSMMagic {
 			this.setBossBar(world, pos);
 
 			// 最大召喚数を満たしてないなら召喚
-			if (this.tickTime % this.getSummonInterval() == 0 && ( this.dethMobCount < this.summonMaxCount || this.wave >= 4 ) ) {
+			if (this.tickTime % this.getSummonInterval() == 0 && (this.dethMobCount < this.summonMaxCount || this.wave >= 4)) {
 				this.onSummonMob(world, pos);
 			}
 
 			// 敵モブをすべて倒したら次のウェーブへ以降
-			if ( ( this.dethMobCount >= this.summonMaxCount && this.wave <= 3 ) || ( this.wave >= 4 && this.deathBoss ) ) {
+			if ((this.dethMobCount >= this.summonMaxCount && this.wave <= 3) || (this.wave >= 4 && this.deathBoss)) {
 				this.setNextWave(world, pos);
 			}
 		}
@@ -196,7 +196,6 @@ public abstract class TileAbstractMagicianLectern extends TileSMMagic {
 			this.bossEvent.setProgress(gage);
 			this.bossEvent.setName(this.boss.getDisplayName());
 			this.deathBoss = !this.boss.isAlive();
-
 			if (!this.deathBoss) { return; }
 
 			// 召喚したモブを消す
@@ -356,7 +355,6 @@ public abstract class TileAbstractMagicianLectern extends TileSMMagic {
 			// 座標がブロックだった場合は再設定
 			while (!world.isEmptyBlock(secondPos) && !world.getBlockState(secondPos).is(BlockInit.rune_character)) {
 				secondPos = new BlockPos(summonPos.getX() + this.getRand(rand, 3), summonPos.getY(), summonPos.getZ() + this.getRand(rand, 3));
-
 				if (setPosCount++ >= 16) { break; }
 			}
 
@@ -415,7 +413,7 @@ public abstract class TileAbstractMagicianLectern extends TileSMMagic {
 			break;
 		}
 
-		entity.getAttribute(Attributes.MAX_HEALTH).setBaseValue( (this.isHard ? 30D : 20D) * addHealth);
+		entity.getAttribute(Attributes.MAX_HEALTH).setBaseValue((this.isHard ? 30D : 20D) * addHealth);
 		entity.setHealth(entity.getMaxHealth());
 		this.addPotion(entity, PotionInit.darkness_fog, 99999, 0);
 
@@ -459,7 +457,7 @@ public abstract class TileAbstractMagicianLectern extends TileSMMagic {
 			break;
 		}
 
-		entity.getAttribute(Attributes.MAX_HEALTH).setBaseValue( (this.isHard ? 40D : 20D) * addHealth);
+		entity.getAttribute(Attributes.MAX_HEALTH).setBaseValue((this.isHard ? 40D : 20D) * addHealth);
 		entity.setHealth(entity.getMaxHealth());
 		this.addPotion(entity, PotionInit.resistance_blow, 99999, 2);
 		this.addPotion(entity, PotionInit.darkness_fog, 99999, 0);

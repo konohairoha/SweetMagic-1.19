@@ -58,12 +58,13 @@ public class TileNotePC extends TileAbstractSM {
 	public List<Integer> intList= new ArrayList<>();
 	public int buyCount = 1;
 	private int viewCount = 10;
-	private static final String NOMAL_TRADE = "normal_trade";
-	private static final String COUNT_TRADE = "count_trade";
-	private static final String MF_TRADE = "mf_trade";
+//	private static final String NOMAL_TRADE = "normal_trade";
+//	private static final String COUNT_TRADE = "count_trade";
+//	private static final String MF_TRADE = "mf_trade";
 
 	public TileNotePC(BlockPos pos, BlockState state) {
 		super(TileInit.notePC, pos, state);
+		this.resolver = new InOutHandlerProvider(this.inputInv, this.outInv);
 	}
 
 	// サーバー側処理
@@ -335,9 +336,13 @@ public class TileNotePC extends TileAbstractSM {
 		}
 
 		// スイマジの食べ物
-		 if (item instanceof SMFood food) {
-			 FoodProperties pro = food.getFoodProperties(stack, null);
-			int amount = (int) (pro.getNutrition() * pro.getSaturationModifier() * 100F);
+		if (item instanceof SMFood food) {
+
+			if (stack.is(ItemInit.watercup)) { return (int) (value * rate); }
+			if (stack.is(ItemInit.milk_pack)) { return (int) (5 * value * rate); }
+
+			FoodProperties pro = food.getFoodProperties(stack, null);
+			int amount = (int) (Math.max(1, pro.getNutrition()) * pro.getSaturationModifier() * 100F);
 			float saturation = Math.max(pro.getSaturationModifier() * pro.getSaturationModifier(), 0.75F);
 			int mfValue = (int) (amount * (saturation + 0.1));
 			float quality = 1F + food.getQualityValue(stack) * 0.25F;
@@ -381,11 +386,11 @@ public class TileNotePC extends TileAbstractSM {
 
 		else if (item instanceof IAcce acce) {
 			int tier = acce.getTier() - 1;
-			return (int) ((1000 + 10000 * tier * tier) * value * rate * acce.getStackCount(new AcceInfo(stack)));
+			return (int) ((1000 + 10000 * tier * tier) * rate * acce.getStackCount(new AcceInfo(stack))) * value;
 		}
 
 		else if (item instanceof ITier tier) {
-			return (int) (10 + 20 * tier.getTier() * tier.getTier() * value * rate);
+			return (int) (10 + 20 * tier.getTier() * tier.getTier() * rate) * value;
 		}
 
 		return Math.max(1, (int) (value * rate));
@@ -425,6 +430,8 @@ public class TileNotePC extends TileAbstractSM {
 		this.dateRand = new Random(this.seed + this.randDate);
 		this.rate = this.getRate();
 		ICookingStatus cook = this.getCook(player);
+		if(cook == null) { return; }
+
 		cook.setRate(this.rate);
 		int value = this.getValue(cook, stack);
 		cook.addTradeSP(value);
@@ -438,6 +445,8 @@ public class TileNotePC extends TileAbstractSM {
 		if(!this.stackList.isEmpty()) { return; }
 
 		ICookingStatus cook = this.getCook(player);
+		if(cook == null) { return; }
+
 		int viewCount = 10 + cook.getTradeLevel() * 2;
 		int tabId = id / viewCount;
 		int selectId = id % viewCount;
@@ -485,7 +494,7 @@ public class TileNotePC extends TileAbstractSM {
 	}
 
 	public ICookingStatus getCook(Player player) {
-		return ICookingStatus.getState(player);
+		return ICookingStatus.hasValue(player) ? ICookingStatus.getState(player) : null;
 	}
 
 	public ITag<Item> getTagList(TagKey<Item> tag) {

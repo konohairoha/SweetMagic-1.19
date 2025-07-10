@@ -43,7 +43,6 @@ public class TileTransferGateVertical extends TileAbstractSM {
 		if(this.rand.nextFloat() >= 0.67F || this.isAir()) { return; }
 
 		Direction face = this.getFace();
-
 		float x = 0.5F + pos.getX() + this.getRandFloat(1.65F);
 		float y = pos.getY();
 		float z = 0.5F + pos.getZ() + this.getRandFloat(1.65F);
@@ -73,7 +72,7 @@ public class TileTransferGateVertical extends TileAbstractSM {
 
 	public boolean doTereport(LivingEntity entity) {
 		ItemStack stack = this.getInputItem();
-		if (stack.isEmpty() || !(stack.getItem() instanceof MFTeleport) ) { return false; }
+		if (stack.isEmpty() || !(stack.getItem() instanceof MFTeleport)) { return false; }
 
 		CompoundTag tags = stack.getTag();
 		if (tags == null || !tags.contains("pX")) { return false; }

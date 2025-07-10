@@ -52,7 +52,7 @@ public class TileMFFurnace extends TileSMMagic {
 	@Override
 	public void serverTick(Level world, BlockPos pos, BlockState state) {
 		super.serverTick(world, pos, state);
-		if ( ( !this.isCraft && this.tickTime % 10 != 0 ) || this.isRSPower()) { return; }
+		if ((!this.isCraft && this.tickTime % 10 != 0) || this.isRSPower()) { return; }
 
 		if (this.isCraft) {
 			this.craftTime++;
@@ -74,36 +74,21 @@ public class TileMFFurnace extends TileSMMagic {
 
 	// 精錬できるか
 	public boolean canSmelt(Level world, BlockPos pos) {
-
-		// インベントリの整理
-		ItemHelper.compactSimpleInventory(this.inputInv);
-
-		// 上のチェストからアイテム吸い込み
-		this.suctionItem(world, pos);
-
-		// 精錬するアイテムが無かったら終了
-		ItemStack stack = this.inputInv.getStackInSlot(0);
-		return this.canSmelt(world, stack);
+		ItemHelper.compactSimpleInventory(this.inputInv);	// インベントリの整理
+		this.suctionItem(world, pos);	// 上のチェストからアイテム吸い込み
+		return this.canSmelt(world, this.inputInv.getStackInSlot(0));	// 精錬するアイテムが無かったら終了
 	}
 
 	// 精錬できるか
 	public boolean canSmelt(Level world, ItemStack stack) {
-
-		// 精錬するアイテムがないなら終了
 		if (stack.isEmpty()) { return false; }
 
 		// 精錬結果がないなら終了
 		ItemStack result = this.checkSmeltResult(world, stack);
-		if (result.isEmpty()) { return false; }
-
-		// MFが必要以上似なければ終了
-		if (this.isMFEmpty() || this.getCostMF() > this.getMF()) { return false; }
+		if (result.isEmpty() || this.isMFEmpty() || this.getCostMF() > this.getMF()) { return false; }
 
 		// 精錬後アイテムをスロットに入れられないなら終了
-		ItemStack out = ItemHelper.insertStack(this.getOut(), result.copy(), true);
-		if (!out.isEmpty()) { return false; }
-
-		return true;
+		return ItemHelper.insertStack(this.getOut(), result.copy(), true).isEmpty();
 	}
 
 	// 精錬後のアイテムを取得
@@ -169,7 +154,6 @@ public class TileMFFurnace extends TileSMMagic {
 		if (handler == null) { return; }
 
 		for (int i = 0; i < handler.getSlots(); i++) {
-
 			ItemStack output = handler.getStackInSlot(i);
 			if (output.isEmpty() || !this.canSmelt(world, output)) { continue; }
 
@@ -187,7 +171,6 @@ public class TileMFFurnace extends TileSMMagic {
 		if (handler == null) { return; }
 
 		for (int h = 0; h < this.getInvSize(); h++) {
-
 			ItemStack input = this.getOutItem(h);
 			if (input.isEmpty()) { continue; }
 
@@ -276,7 +259,7 @@ public class TileMFFurnace extends TileSMMagic {
 
 	// クラフト描画量を計算するためのメソッド
 	public int getCraftProgress(int value) {
-		return Math.min(value, (int) (value * (float) (this.craftTime) / (float) (this.maxCraftTime)));
+		return this.getProgress(value, this.craftTime, this.maxCraftTime);
 	}
 
 	@Override
