@@ -78,10 +78,6 @@ public class NotePC extends BaseFaceBlock implements EntityBlock {
 			Player owner = tile.getOwner();
 			this.openGUI(world, pos, player, tile);
 
-			if(owner == null) {
-				tile.setOwner(player);
-			}
-
 			if(close) {
 				world.setBlock(pos, state.cycle(CLOSE), 3);
 				this.playerSound(world, pos, SoundEvents.SHULKER_CLOSE, 0.25F, 1.15F);
@@ -130,6 +126,7 @@ public class NotePC extends BaseFaceBlock implements EntityBlock {
 			this.getShiftTip(toolTip);
 			if (this.block == null) { return; }
 			toolTip.add(this.getText("originatorblock", this.block.getName().getString()).withStyle(GOLD));
+			toolTip.add(this.getText("note_pc_sell").withStyle(RED));
 		}
 	}
 

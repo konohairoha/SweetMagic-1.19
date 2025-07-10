@@ -61,12 +61,12 @@ public class ModenLamp extends BaseModelBlock {
 
 		ItemStack stack = player.getItemInHand(hand);
 
-		if (!stack.isEmpty() && stack.getItem() instanceof BlockItem blockItem && blockItem.getBlock() instanceof ModenLamp) {
+		if (!stack.isEmpty() && stack.getItem() instanceof BlockItem item && item.getBlock() instanceof ModenLamp) {
 			this.actionBlock(world, pos, player, stack);
 			return InteractionResult.sidedSuccess(world.isClientSide());
 		}
 
-		if ( player.isShiftKeyDown() && ( this.data == 1 || this.data == 2 ) ) {
+		if (player.isShiftKeyDown() && (this.data == 1 || this.data == 2)) {
 			Block block = this.data == 1 ? BlockInit.wall_lamp_long : BlockInit.wall_lamp;
 			world.setBlock(pos, block.defaultBlockState().setValue(VERTICAL, world.getBlockState(pos).getValue(VERTICAL)), 3);
 			this.playerSound(world, pos, SoundEvents.UI_BUTTON_CLICK, 0.25F, world.random.nextFloat() * 0.1F + 1.2F);
@@ -81,14 +81,14 @@ public class ModenLamp extends BaseModelBlock {
 		if (world.isClientSide()) { return true; }
 
 		Block block = this.getBlock(stack);
-		if ( block != this ) { return false; }
+		if (block != this) { return false; }
 
 		for (int i = 1; i < 11; i++) {
 
 			BlockPos targetPos = pos.below(i);
 			BlockState state = world.getBlockState(targetPos);
 			Block targetBlock = state.getBlock();
-			if ( !state.isAir() && !(targetBlock instanceof ModenLamp) ) { return false; }
+			if (!state.isAir() && !(targetBlock instanceof ModenLamp)) { return false; }
 			if (!state.isAir()) { continue; }
 
 			world.setBlock(targetPos, block.defaultBlockState(), 3);
@@ -108,7 +108,7 @@ public class ModenLamp extends BaseModelBlock {
 		return this.setVertical(con.getLevel(), con.getClickedPos());
 	}
 
-	public BlockState setVertical (LevelAccessor world, BlockPos pos) {
+	public BlockState setVertical(LevelAccessor world, BlockPos pos) {
 		boolean bot = this.getBlock(world, pos.below()) instanceof ModenLamp;
 		boolean top = this.getBlock(world, pos.above()) instanceof ModenLamp;
 		return this.defaultBlockState().setValue(VERTICAL, EnumVertical.getVertical(bot, top));
