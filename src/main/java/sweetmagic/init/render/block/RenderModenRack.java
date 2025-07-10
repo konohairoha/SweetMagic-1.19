@@ -117,7 +117,7 @@ public class RenderModenRack<T extends TileModenRack> extends RenderAbstractTile
 			boolean isBlock = stack.getItem() instanceof BlockItem;
 			double x = 1.9875D - 0.65D * i + ((int) (i / 3) * 1.95D);
 			double y = 1.95D + ((int) (i / 3) * -1.25D) + (i > 5 ? 2.5D : 0D) + (isBlock ? 0.175D : 0D);
-			double z = 2.415D + ((int) (i / 6) * 0.275D) + ( (isBlock ? -0.325D : 0D) * (i > 5 ? -0.1D : 1D) );
+			double z = 2.415D + ((int) (i / 6) * 0.275D) + ((isBlock ? -0.325D : 0D) * (i > 5 ? -0.1D : 1D));
 			RenderUtil.renderItem(info, tile, stack, x, y, z);
 		}
 	}
@@ -244,7 +244,7 @@ public class RenderModenRack<T extends TileModenRack> extends RenderAbstractTile
 			if(stack.getItem() instanceof BlockItem bItem) {
 
 				Block block = bItem.getBlock();
-				if( (block instanceof FlowerBlock || block instanceof BushBlock) && !(bItem instanceof ItemNameBlockItem)) {
+				if ((block instanceof FlowerBlock || block instanceof BushBlock) && !(bItem instanceof ItemNameBlockItem)) {
 					scale = 1.75F;
 					x = 1D - (i / 4) * 0.475D;
 					y = 0.65D + id * 0.105D;
