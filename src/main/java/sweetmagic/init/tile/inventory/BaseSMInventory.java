@@ -47,7 +47,6 @@ public abstract class BaseSMInventory implements IItemHandlerModifiable {
 		for (int i = 0; i < this.getInv().getSlots(); ++i) {
 			ItemStack stack = this.getInv().getStackInSlot(i);
 			if (stack.isEmpty()) { continue; }
-
 			stackList.add(stack);
 		}
 
