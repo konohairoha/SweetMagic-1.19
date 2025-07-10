@@ -29,7 +29,7 @@ public class GuiMagiaTable extends GuiSMBase<MagiaTableMenu> {
 
 	public GuiMagiaTable(MagiaTableMenu menu, Inventory pInv, Component title) {
 		super(menu, pInv, title);
-		this.setGuiSize(176, 190);
+		this.setGuiSize(176, 191);
 		this.tile = menu.tile;
 		this.addRenderTexList(new SMRenderTex(TEX, 7, 6, 0, 0, 11, 77, new MFRenderGage(menu.tile, true)));
 

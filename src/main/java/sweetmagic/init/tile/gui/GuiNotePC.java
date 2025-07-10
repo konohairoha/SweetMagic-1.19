@@ -91,14 +91,17 @@ public class GuiNotePC extends GuiSMBase<NotePCMenu> {
 			this.blit(pose, x + 5, y + 72 + i * 17, 188, (this.lootView[i] ? 122 : 225), 67, 17);
 		}
 
-		ItemStack input = this.tile.getInputItem();
-		if(!input.isEmpty()) {
-			this.blit(pose, x + 34, y + 39, 1, 249, this.cook.getExpProgress(144, (int) (this.tile.getValue(this.cook, input) * 0.05F)), 7);
-		}
+		if(this.cook.getTradeLevel() <= 4) {
 
-		else if(this.trade != null) {
-			int needSP = this.trade.price() * this.tile.buyCount;
-			this.blit(pose, x + 34, y + 39, 1, 249, this.cook.getExpProgress(144, (int) (needSP * 0.25F)), 7);
+			ItemStack input = this.tile.getInputItem();
+			if(!input.isEmpty()) {
+				this.blit(pose, x + 34, y + 39, 1, 249, this.cook.getExpProgress(144, (int) (this.tile.getValue(this.cook, input) * 0.05F)), 7);
+			}
+
+			else if(this.trade != null) {
+				int needSP = this.trade.price() * this.tile.buyCount;
+				this.blit(pose, x + 34, y + 39, 1, 249, this.cook.getExpProgress(144, (int) (needSP * 0.25F)), 7);
+			}
 		}
 
 		this.blit(pose, x + 34, y + 39, 1, 243, this.cook.getExpProgress(144), 7);
