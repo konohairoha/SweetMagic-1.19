@@ -1,0 +1,13 @@
+{
+	"type": "sweetmagic:woodcutter_craft",
+	"ingredients": [
+		{"item": "minecraft:spruce_sapling"}
+	],
+	"result": [
+		{"item": "minecraft:spruce_log", "min": 1, "max": 4},
+		{"item": "minecraft:spruce_leaves", "min": 1, "max": 2}
+	],
+	"request": [
+		{"mf": 300}
+	]
+}

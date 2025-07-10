@@ -1,0 +1,13 @@
+{
+	"type": "sweetmagic:woodcutter_craft",
+	"ingredients": [
+		{"item": "minecraft:acacia_sapling"}
+	],
+	"result": [
+		{"item": "minecraft:acacia_log", "min": 1, "max": 4},
+		{"item": "minecraft:acacia_leaves", "min": 1, "max": 2}
+	],
+	"request": [
+		{"mf": 300}
+	]
+}
