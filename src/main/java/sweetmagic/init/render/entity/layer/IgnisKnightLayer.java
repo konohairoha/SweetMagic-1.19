@@ -4,7 +4,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
 
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -70,7 +69,7 @@ public class IgnisKnightLayer <T extends IgnisKnight, M extends IgnisModel<T>> e
 				pose.mulPose(Vector3f.YP.rotationDegrees(rotY * pi + (i * (360 / size)) + gameTime * 10.5F));
 				pose.scale(scale, scale, scale);
 				pose.translate(1.5F - (0.0055F * 1) , 0F, 0F);
-				this.render.renderItem(entity, ARMOR, ItemTransforms.TransformType.FIXED, false, pose, buf, light);
+				this.renderItemFix(entity, ARMOR, pose, buf, light);
 				pose.popPose();
 			}
 		}
@@ -93,7 +92,7 @@ public class IgnisKnightLayer <T extends IgnisKnight, M extends IgnisModel<T>> e
 		pose.translate(0D, -0.2D, -0.5D);
 		pose.mulPose(Vector3f.ZP.rotationDegrees(230F));
 		pose.translate(0.1D, 0.2D, 0.05D);
-		this.render.renderItem(entity, HAMMER, ItemTransforms.TransformType.THIRD_PERSON_RIGHT_HAND, false, pose, buf, light);
+		this.renderItem(entity, HAMMER, pose, buf, light);
 		pose.popPose();
 	}
 

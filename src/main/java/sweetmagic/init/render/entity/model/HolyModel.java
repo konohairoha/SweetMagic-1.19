@@ -57,12 +57,21 @@ public class HolyModel<T extends AbstractSMBoss & IAngel> extends SMBaseModel<T>
 	}
 
 	public void setupAnim(T entity, float swing, float swingAmount, float ageTick, float headYaw, float headPitch) {
-		if(!entity.getCharge()) { return; }
-		float rate = (float) Math.sin(entity.tickCount * 0.15F) * 0.3F;
-		float scale = 2.5F + rate;
-		this.armLeft.zRot = scale;
-		this.armRight.zRot = -scale;
-		this.armJacketLeft.zRot = scale;
-		this.armJacketRight.zRot = -scale;
+		if (!entity.getCharge()) {
+			float scale = 0F;
+			this.armLeft.zRot = scale;
+			this.armRight.zRot = -scale;
+			this.armJacketLeft.zRot = scale;
+			this.armJacketRight.zRot = -scale;
+		}
+
+		else {
+			float rate = (float) Math.sin(entity.tickCount * 0.15F) * 0.3F;
+			float scale = 2.5F + rate;
+			this.armLeft.zRot = scale;
+			this.armRight.zRot = -scale;
+			this.armJacketLeft.zRot = scale;
+			this.armJacketRight.zRot = -scale;
+		}
 	}
 }

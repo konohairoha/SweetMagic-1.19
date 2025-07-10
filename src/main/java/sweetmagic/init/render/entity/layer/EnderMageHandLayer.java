@@ -6,7 +6,6 @@ import com.mojang.math.Vector3f;
 import net.minecraft.client.model.EndermanModel;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.world.entity.EntityType;
@@ -28,18 +27,18 @@ public class EnderMageHandLayer <T extends Monster, M extends EndermanModel<T>> 
 		this.setModel(new EndermanModel<>(con.getModelSet().bakeLayer(ModelLayers.ENDERMAN)));
 	}
 
-	public void render(PoseStack pose, MultiBufferSource buf, int light, T entity, float swing, float swingAmount, float parTick, float ageTick, float netHeadYaw, float headPitch) {
-		this.renderArmWithItem(entity, pose, buf, light, swing, swingAmount, parTick, ageTick, netHeadYaw, headPitch);
+	public void render(PoseStack pose, MultiBufferSource buf, int light, T entity) {
+		this.renderArmWithItem(entity, pose, buf, light);
 		this.renderHead(entity, this.getParentModel().getHead(), pose, buf, light, 0.67F, -0.33F, 0F, -0.33F);
 	}
 
-	protected void renderArmWithItem(T entity, PoseStack pose, MultiBufferSource buf, int light, float swing, float swingAmount, float parTick, float ageTick, float netHeadYaw, float headPitch) {
+	protected void renderArmWithItem(T entity, PoseStack pose, MultiBufferSource buf, int light) {
 		pose.pushPose();
 		this.getParentModel().translateToHand(HumanoidArm.RIGHT, pose);
 		pose.mulPose(Vector3f.XP.rotationDegrees(-90F));
 		pose.mulPose(Vector3f.YP.rotationDegrees(180F));
 		pose.translate(0D, 0.15D, -1.65D);
-		this.render.renderItem(entity, this.getStack(entity.getType()), ItemTransforms.TransformType.THIRD_PERSON_RIGHT_HAND, false, pose, buf, light);
+		this.renderItem(entity, this.getStack(entity.getType()), pose, buf, light);
 		pose.popPose();
 	}
 

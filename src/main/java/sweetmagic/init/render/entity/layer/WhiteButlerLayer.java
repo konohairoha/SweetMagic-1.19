@@ -4,7 +4,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
 
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.world.item.ItemStack;
@@ -23,7 +22,7 @@ public class WhiteButlerLayer<T extends WhiteButler, M extends WhiteButlerModel<
 		this.model = new WhiteButlerModel<>(this.getModel(con, WhiteButlerModel.LAYER));
 	}
 
-	public void render(PoseStack pose, MultiBufferSource buf, int light, T entity, float swing, float swingAmount, float parTick, float ageTick, float netHeadYaw, float headPitch) {
+	public void render(PoseStack pose, MultiBufferSource buf, int light, T entity) {
 		this.renderItem(entity, pose, buf, light);
 	}
 
@@ -37,7 +36,7 @@ public class WhiteButlerLayer<T extends WhiteButler, M extends WhiteButlerModel<
 			pose.mulPose(Vector3f.XP.rotationDegrees(-90F));
 			pose.mulPose(Vector3f.YP.rotationDegrees(180F));
 			pose.translate(0D, 0.15D, -0.7D);
-			this.render.renderItem(entity, KNIFE, ItemTransforms.TransformType.THIRD_PERSON_RIGHT_HAND, false, pose, buf, light);
+			this.renderItem(entity, KNIFE, pose, buf, light);
 			pose.popPose();
 		}
 
@@ -48,7 +47,7 @@ public class WhiteButlerLayer<T extends WhiteButler, M extends WhiteButlerModel<
 			pose.mulPose(Vector3f.XN.rotationDegrees(-10F));
 			pose.translate(-0.15D, -0.3D, -0.825D);
 			pose.scale(1F, 1.25F, 1.25F);
-			this.render.renderItem(entity, SICKLE, ItemTransforms.TransformType.THIRD_PERSON_RIGHT_HAND, false, pose, buf, light);
+			this.renderItem(entity, SICKLE, pose, buf, light);
 			pose.popPose();
 		}
 
@@ -59,7 +58,7 @@ public class WhiteButlerLayer<T extends WhiteButler, M extends WhiteButlerModel<
 			pose.mulPose(Vector3f.YP.rotationDegrees(190F));
 			pose.translate(0.225D, 0.08D, -0.65D);
 			pose.scale(1.25F, 1.25F, 1.5F);
-			this.render.renderItem(entity, RIFLE, ItemTransforms.TransformType.THIRD_PERSON_RIGHT_HAND, false, pose, buf, light);
+			this.renderItem(entity, RIFLE, pose, buf, light);
 			pose.popPose();
 		}
 	}

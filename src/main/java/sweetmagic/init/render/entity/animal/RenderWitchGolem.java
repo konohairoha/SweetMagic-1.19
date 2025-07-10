@@ -24,6 +24,10 @@ public class RenderWitchGolem<T extends WitchGolem> extends MobRenderer<T, Witch
 		return TEX;
 	}
 
+	protected void scale(T entity, PoseStack pose, float par1) {
+		pose.scale(0.5F, 0.5F, 0.5F);
+	}
+
 	protected void setupRotations(T entity, PoseStack pose, float par1, float par2, float par3) {
 		super.setupRotations(entity, pose, par1, par2, par3);
 		if (((double) entity.animationSpeed < 0.01D)) { return; }

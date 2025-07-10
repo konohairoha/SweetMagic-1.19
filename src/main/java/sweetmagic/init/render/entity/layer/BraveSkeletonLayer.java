@@ -5,7 +5,6 @@ import com.mojang.math.Vector3f;
 
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.world.entity.HumanoidArm;
@@ -22,7 +21,7 @@ public class BraveSkeletonLayer<T extends BraveSkeleton, M extends HumanoidModel
 		super(layer, con);
 	}
 
-	public void render(PoseStack pose, MultiBufferSource buf, int light, T entity, float swing, float swingAmount, float parTick, float ageTick, float netHeadYaw, float headPitch) {
+	public void render(PoseStack pose, MultiBufferSource buf, int light, T entity) {
 		ItemStack tool1 = entity.getArrow() ? BOW : SWORD;
 		ItemStack tool2 = entity.getArrow() ? SWORD : BOW;
 		this.renderItem(entity, pose, buf, light, tool1, true);
@@ -65,7 +64,7 @@ public class BraveSkeletonLayer<T extends BraveSkeleton, M extends HumanoidModel
 			pose.translate(0.1D, 0.5D + addY, 0D + addZ);
 		}
 
-		this.render.renderItem(entity, stack, ItemTransforms.TransformType.THIRD_PERSON_RIGHT_HAND, false, pose, buf, light);
+		this.renderItem(entity, stack, pose, buf, light);
 		pose.popPose();
 	}
 }

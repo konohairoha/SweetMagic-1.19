@@ -4,7 +4,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
 
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.world.entity.HumanoidArm;
@@ -22,11 +21,11 @@ public class WitchAllayLayer<T extends WitchAllay, M extends WitchAllayModel<T>>
 		this.setModel(new WitchAllayModel<>(this.getModel(con, WitchAllayModel.LAYER)));
 	}
 
-	public void render(PoseStack pose, MultiBufferSource buf, int light, T entity, float swing, float swingAmount, float parTick, float ageTick, float netHeadYaw, float headPitch) {
-		this.renderArmWithItem(entity, pose, buf, light, swing, swingAmount, parTick, ageTick, netHeadYaw, headPitch);
+	public void render(PoseStack pose, MultiBufferSource buf, int light, T entity) {
+		this.renderArmWithItem(entity, pose, buf, light);
 	}
 
-	protected void renderArmWithItem(T entity, PoseStack pose, MultiBufferSource buf, int light, float swing, float swingAmount, float parTick, float ageTick, float netHeadYaw, float headPitch) {
+	protected void renderArmWithItem(T entity, PoseStack pose, MultiBufferSource buf, int light) {
 		pose.pushPose();
 
 		if (entity.getShit()) {
@@ -45,7 +44,7 @@ public class WitchAllayLayer<T extends WitchAllay, M extends WitchAllayModel<T>>
 		}
 
 		pose.scale(0.85F, 0.85F, 0.85F);
-		this.render.renderItem(entity, WAND, ItemTransforms.TransformType.THIRD_PERSON_RIGHT_HAND, false, pose, buf, light);
+		this.renderItem(entity, WAND, pose, buf, light);
 		pose.popPose();
 	}
 }

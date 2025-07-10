@@ -5,7 +5,6 @@ import com.mojang.math.Vector3f;
 
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -61,7 +60,7 @@ public class TempestTornadoLayer <T extends BlazeTempestTornado, M extends Entit
 			pose.translate(0.7F - (0.0055F * 1), 0F, 0F);
 
 			ItemStack stack = count > i ? CANDLE : CANDLE_EX;
-			this.render.renderItem(entity, stack, ItemTransforms.TransformType.FIXED, false, pose, buf, light);
+			this.renderItemFix(entity, stack, pose, buf, light);
 			pose.popPose();
 		}
 	}

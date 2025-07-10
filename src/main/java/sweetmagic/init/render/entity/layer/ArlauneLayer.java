@@ -4,16 +4,13 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
 
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import sweetmagic.SweetMagicCore;
 import sweetmagic.init.ItemInit;
 import sweetmagic.init.entity.monster.boss.Arlaune;
-import sweetmagic.init.item.sm.JapaneseUmbrella;
 import sweetmagic.init.render.entity.model.ArlauneModel;
 
 public class ArlauneLayer <T extends Arlaune, M extends ArlauneModel<T>> extends AbstractEntityLayer<T, M> {
@@ -29,10 +26,10 @@ public class ArlauneLayer <T extends Arlaune, M extends ArlauneModel<T>> extends
 
 	public void render(PoseStack pose, MultiBufferSource buf, int light, T entity, float swing, float swingAmount, float parTick, float ageTick, float netHeadYaw, float headPitch) {
 		this.renderShadow(entity, pose, buf, swing, swingAmount, parTick, light, ageTick, netHeadYaw, headPitch, 0.5F, -1F, 1F);
-		this.renderArmWithItem(entity, pose, buf, light, swing, swingAmount, parTick, ageTick, netHeadYaw, headPitch);
+		this.renderArmWithItem(entity, pose, buf, light);
 	}
 
-	protected void renderArmWithItem(T entity, PoseStack pose, MultiBufferSource buf, int light, float swing, float swingAmount, float parTick, float ageTick, float netHeadYaw, float headPitch) {
+	protected void renderArmWithItem(T entity, PoseStack pose, MultiBufferSource buf, int light) {
 
 		pose.pushPose();
 		M model = this.getParentModel();
@@ -41,32 +38,21 @@ public class ArlauneLayer <T extends Arlaune, M extends ArlauneModel<T>> extends
 		pose.mulPose(Vector3f.XP.rotationDegrees(180F));
 		pose.translate(0D, -0.2D, -0.5D);
 		pose.translate(0.3D, 0.4D, 0.45D);
-		this.render.renderItem(entity, HAIRPIN, ItemTransforms.TransformType.THIRD_PERSON_RIGHT_HAND, false, pose, buf, light);
+		this.renderItem(entity, HAIRPIN, pose, buf, light);
 		pose.popPose();
 
 		pose.pushPose();
 		model.translateAndRotate(model.getArm(true), pose);
+		pose.mulPose(Vector3f.YP.rotationDegrees(0F));
+		pose.mulPose(Vector3f.XP.rotationDegrees(120F));
+		pose.translate(0D, -0.1D, -0.2D);
 
-		CompoundTag tags = UMBRELLA.getOrCreateTag();
-		tags.putBoolean(JapaneseUmbrella.ACTIVE, true);
-
-		if (tags.getBoolean(JapaneseUmbrella.ACTIVE)) {
-			pose.mulPose(Vector3f.YP.rotationDegrees(0F));
-			pose.mulPose(Vector3f.XP.rotationDegrees(120F));
-			pose.translate(0D, -0.1D, -0.2D);
-
-			if (entity.getMagic()) {
-				pose.translate(0D, 0.2D, 0D);
-			}
-		}
-
-		else {
-			pose.mulPose(Vector3f.YP.rotationDegrees(180F));
-			pose.mulPose(Vector3f.XP.rotationDegrees(165F));
+		if (entity.getMagic()) {
+			pose.translate(0D, 0.2D, 0D);
 		}
 
 		pose.translate(0D, -0.4D, -0.2875D);
-		this.render.renderItem(entity, UMBRELLA, ItemTransforms.TransformType.THIRD_PERSON_RIGHT_HAND, false, pose, buf, light);
+		this.renderItem(entity, UMBRELLA, pose, buf, light);
 		pose.popPose();
 	}
 

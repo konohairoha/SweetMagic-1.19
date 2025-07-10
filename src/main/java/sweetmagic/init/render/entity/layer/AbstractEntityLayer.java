@@ -10,6 +10,7 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.ItemInHandRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
@@ -33,6 +34,12 @@ public abstract class AbstractEntityLayer<T extends LivingEntity, M extends Enti
 		super(layer);
 		this.render = con.getItemInHandRenderer();
 	}
+
+	public void render(PoseStack pose, MultiBufferSource buf, int light, T entity, float swing, float swingAmount, float parTick, float ageTick, float netHeadYaw, float headPitch) {
+		this.render(pose, buf, light, entity);
+	}
+
+	public void render(PoseStack pose, MultiBufferSource buf, int light, T entity) { }
 
 	protected void renderHead(T entity, ModelPart head, PoseStack pose, MultiBufferSource buf, int light, float scale, float x, float y, float z) {
 		ItemStack stack = entity.getItemBySlot(EquipmentSlot.HEAD);
@@ -60,6 +67,14 @@ public abstract class AbstractEntityLayer<T extends LivingEntity, M extends Enti
 		model.setupAnim((T) entity, swing, swingAmount, ageTick, headYaw, headPitch);
 		model.renderToBuffer(pose, ver, light, OverlayTexture.NO_OVERLAY, rgb, rgb, rgb, 1F);
 		pose.popPose();
+	}
+
+	public void renderItem(T entity, ItemStack stack, PoseStack pose, MultiBufferSource buf, int light) {
+		this.render.renderItem(entity, stack, ItemTransforms.TransformType.THIRD_PERSON_RIGHT_HAND, false, pose, buf, light);
+	}
+
+	public void renderItemFix(T entity, ItemStack stack, PoseStack pose, MultiBufferSource buf, int light) {
+		this.render.renderItem(entity, stack, ItemTransforms.TransformType.FIXED, false, pose, buf, light);
 	}
 
 	protected float xOffset(float size) {

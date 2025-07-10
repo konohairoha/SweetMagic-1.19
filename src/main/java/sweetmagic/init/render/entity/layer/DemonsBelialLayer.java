@@ -4,7 +4,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
 
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -28,7 +27,7 @@ public class DemonsBelialLayer<T extends DemonsBelial, M extends DemonsBelialMod
 		this.setModel(new DemonsBelialModel<>(this.getModel(con, DemonsBelialModel.LAYER)));
 	}
 
-	public void render(PoseStack pose, MultiBufferSource buf, int light, T entity, float swing, float swingAmount, float parTick, float ageTick, float headYaw, float headPitch) {
+	public void render(PoseStack pose, MultiBufferSource buf, int light, T entity) {
 		if(!entity.isAlive()) { return; }
 		for(int i = 0; i < 2; i++) {
 			this.renderAngelWingBig(entity, pose, buf, light, i == 0);
@@ -46,7 +45,7 @@ public class DemonsBelialLayer<T extends DemonsBelial, M extends DemonsBelialMod
 		pose.translate(-0.15F * reverseRate, -0.75F, 0.4F);
 		pose.mulPose(Vector3f.YN.rotationDegrees((60F + 20F * Mth.sin(entity.tickCount * 0.1F)) * reverseRate));
 		pose.scale(scale, -scale, scale);
-		this.render.renderItem(entity, STACK, ItemTransforms.TransformType.FIXED, false, pose, buf, light);
+		this.renderItemFix(entity, STACK, pose, buf, light);
 		pose.popPose();
 	}
 
@@ -60,7 +59,7 @@ public class DemonsBelialLayer<T extends DemonsBelial, M extends DemonsBelialMod
 		pose.mulPose(Vector3f.YN.rotationDegrees((60F - 20F * Mth.sin(entity.tickCount * 0.1F)) * reverseRate));
 		pose.mulPose(Vector3f.XP.rotationDegrees(-50F));
 		pose.scale(scale, -scale, scale);
-		this.render.renderItem(entity, STACK, ItemTransforms.TransformType.FIXED, false, pose, buf, light);
+		this.renderItemFix(entity, STACK, pose, buf, light);
 		pose.popPose();
 	}
 

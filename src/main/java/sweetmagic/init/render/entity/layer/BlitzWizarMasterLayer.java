@@ -28,11 +28,11 @@ public class BlitzWizarMasterLayer<T extends BlitzWizardMaster, M extends BlitzW
 		this.bookModel = new BookModel(con.bakeLayer(ModelLayers.BOOK));
 	}
 
-	public void render(PoseStack pose, MultiBufferSource buf, int light, T entity, float swing, float swingAmount, float parTick, float ageTick, float netHeadYaw, float headPitch) {
-		this.renderArmWithItem(entity, pose, buf, light, parTick);
+	public void render(PoseStack pose, MultiBufferSource buf, int light, T entity) {
+		this.renderArmWithItem(entity, pose, buf, light);
 	}
 
-	protected void renderArmWithItem(T entity, PoseStack pose, MultiBufferSource buf, int light, float parTick) {
+	protected void renderArmWithItem(T entity, PoseStack pose, MultiBufferSource buf, int light) {
 
 		pose.pushPose();
 		float bookValue = 0F;

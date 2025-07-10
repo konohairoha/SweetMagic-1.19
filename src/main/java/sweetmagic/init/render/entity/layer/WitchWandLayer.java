@@ -4,7 +4,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
 
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.world.entity.Mob;
@@ -20,7 +19,7 @@ public class WitchWandLayer<T extends Mob & IWitch, M extends SMWitchModel<T>> e
 		super(layer, con);
 	}
 
-	public void render(PoseStack pose, MultiBufferSource buf, int light, T entity, float swing, float swingAmount, float parTick, float ageTick, float netHeadYaw, float headPitch) {
+	public void render(PoseStack pose, MultiBufferSource buf, int light, T entity) {
 		this.renderArmWithItem(entity, pose, buf, light);
 		this.renderHead(entity, this.getParentModel().getHead(), pose, buf, light, 0.67F, -0.33F, -0.1F, -0.33F);
 	}
@@ -65,7 +64,7 @@ public class WitchWandLayer<T extends Mob & IWitch, M extends SMWitchModel<T>> e
 			pose.translate(0D, -0.2D, -0.5D);
 		}
 
-		this.render.renderItem(entity, wand, ItemTransforms.TransformType.THIRD_PERSON_RIGHT_HAND, false, pose, buf, light);
+		this.renderItem(entity, wand, pose, buf, light);
 		pose.popPose();
 	}
 }

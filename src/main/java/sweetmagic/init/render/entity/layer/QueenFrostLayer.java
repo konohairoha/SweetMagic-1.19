@@ -5,7 +5,6 @@ import com.mojang.math.Vector3f;
 
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -50,7 +49,7 @@ public class QueenFrostLayer <T extends QueenFrost, M extends EntityModel<T>> ex
 			pose.mulPose(Vector3f.YP.rotationDegrees(rotY * pi + (i * (360 / size)) + gameTime * 10.5F));
 			pose.scale(scale, scale, scale);
 			pose.translate(1.5F - (0.0055F * 1) , 0F, 0F);
-			this.render.renderItem(entity, this.stack, ItemTransforms.TransformType.FIXED, false, pose, buf, light);
+			this.renderItemFix(entity, this.stack, pose, buf, light);
 			pose.popPose();
 		}
 

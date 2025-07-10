@@ -4,7 +4,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
 
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -26,7 +25,7 @@ public class StellaLayer<T extends StellaWizard, M extends StellaWizardModel<T>>
 		super(layer, con);
 	}
 
-	public void render(PoseStack pose, MultiBufferSource buf, int light, T entity, float swing, float swingAmount, float parTick, float ageTick, float netHeadYaw, float headPitch) {
+	public void render(PoseStack pose, MultiBufferSource buf, int light, T entity) {
 
 		if(entity.getCrystal()) {
 			this.renderCrystal(entity, pose, buf, light);
@@ -49,7 +48,7 @@ public class StellaLayer<T extends StellaWizard, M extends StellaWizardModel<T>>
 		float scale = 0.45F;
 		pose.translate(0D, 0.45D, -0.2D);
 		pose.scale(scale, scale, scale);
-		this.render.renderItem(entity, RIBBON, ItemTransforms.TransformType.FIXED, false, pose, buf, light);
+		this.renderItemFix(entity, RIBBON, pose, buf, light);
 		pose.popPose();
 
 		pose.pushPose();
@@ -69,7 +68,7 @@ public class StellaLayer<T extends StellaWizard, M extends StellaWizardModel<T>>
 			pose.translate(0D, -0.2D, -0.5D);
 		}
 
-		this.render.renderItem(entity, wand, ItemTransforms.TransformType.THIRD_PERSON_RIGHT_HAND, false, pose, buf, light);
+		this.renderItem(entity, wand, pose, buf, light);
 		pose.popPose();
 	}
 

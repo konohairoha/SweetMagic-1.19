@@ -7,7 +7,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
 
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -81,7 +80,7 @@ public class WitchSandryonLayer<T extends WitchSandryon, M extends WindWitchMode
 			pose.translate(0D, -0.2D, -0.55D);
 		}
 
-		this.render.renderItem(entity, WAND, ItemTransforms.TransformType.THIRD_PERSON_RIGHT_HAND, false, pose, buf, light);
+		this.renderItem(entity, WAND, pose, buf, light);
 		pose.popPose();
 	}
 
@@ -101,7 +100,7 @@ public class WitchSandryonLayer<T extends WitchSandryon, M extends WindWitchMode
 			pose.scale(scale, scale + 0.25F, scale);
 			pose.translate(-1.325F - (0.0055F * 1) , 0F, 0F);
 			pose.mulPose(Vector3f.ZP.rotationDegrees(-45F));
-			this.render.renderItem(entity, stackList.get(i), ItemTransforms.TransformType.FIXED, false, pose, buf, light);
+			this.renderItemFix(entity, stackList.get(i), pose, buf, light);
 			pose.popPose();
 		}
 
