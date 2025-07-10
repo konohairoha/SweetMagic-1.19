@@ -46,45 +46,45 @@ public class ToolTipEvent extends SMUtilEvent {
 		Item item = stack.getItem();
 
 		// 杖に入れる魔法アイテムなら
-		if (item instanceof IMagicItem smItem) {
+		if (item instanceof IMagicItem magic) {
 
-			toolTip.add(getTipArray(getText("tier").withStyle(GREEN), "： ", getLabel(smItem.getTier(), WHITE)));
+			toolTip.add(getTipArray(getText("tier").withStyle(GREEN), "： ", getLabel(magic.getTier(), WHITE)));
 
 			// シフトを押したとき
 			if (Screen.hasShiftDown()) {
 
-				MutableComponent tipEle = enumString(smItem.getElement().name());
-				MutableComponent tipType = enumString(smItem.getMagicType().name());
+				MutableComponent tipEle = enumString(magic.getElement().name());
+				MutableComponent tipType = enumString(magic.getMagicType().name());
 
-				if (smItem.getSubElement() != null) {
-					tipEle = getTipArray(tipEle, "/", enumString(smItem.getSubElement().name()));
+				if (magic.getSubElement() != null) {
+					tipEle = getTipArray(tipEle, "/", enumString(magic.getSubElement().name()));
 				}
 
 				toolTip.add(getTipArray(getText("smtype").withStyle(GREEN), "： ", tipType.withStyle(WHITE)));
 				toolTip.add(getTipArray(getText("smelement").withStyle(GREEN), "： ", tipEle.withStyle(WHITE)));
-				toolTip.add(getTipArray(getText("requiremf").withStyle(GREEN), "： ", getLabel(String.format("%,d", smItem.getUseMF()), WHITE)));
+				toolTip.add(getTipArray(getText("requiremf").withStyle(GREEN), "： ", getLabel(String.format("%,d", magic.getUseMF()), WHITE)));
 
-				float maxRecast = (float) smItem.getMaxRecastTime() / 20F;
+				float maxRecast = (float) magic.getMaxRecastTime() / 20F;
 				toolTip.add(getTipArray(getText("recasttime").withStyle(GREEN), "： ", getLabel(maxRecast, WHITE)));
 
-				if (smItem.isShirink()) {
+				if (magic.isShirink()) {
 					toolTip.add(getTipArray(getText("shrink_item").withStyle(GREEN), "： ", getLabel("true", WHITE)));
 				}
 
-				if (smItem.getMagicType() == SMMagicType.SUMMON) {
-					toolTip.add(getTipArray(getText("summon_time").withStyle(GREEN), "： ", getLabel(String.format("%,d", smItem.getSummonTime()), WHITE)));
+				if (magic.getMagicType() == SMMagicType.SUMMON) {
+					toolTip.add(getTipArray(getText("summon_time").withStyle(GREEN), "： ", getLabel(String.format("%,d", magic.getSummonTime()), WHITE)));
 				}
 
 				toolTip.add(empty());
 
 				// ユニーク魔法の場合
-				if (smItem.isUniqueMagic()) {
+				if (magic.isUniqueMagic()) {
 					toolTip.add(getText("unique_magic").withStyle(RED));
 				}
 
 				// Stringのリストを作成
 				List<MutableComponent> list = new ArrayList<>();
-				List<MutableComponent> magicTipList = smItem.magicToolTip(list);
+				List<MutableComponent> magicTipList = magic.magicToolTip(list);
 				if (magicTipList.isEmpty()) { return; }
 
 				if (magicTipList.size() == 1) {

@@ -12,7 +12,7 @@ public interface IPacket {
 
 	void encode(FriendlyByteBuf buf);
 
-	static <PACKET extends IPacket> void handle(final PACKET msg, Supplier<NetworkEvent.Context> ctx) {
+	static <P extends IPacket> void handle(final P msg, Supplier<NetworkEvent.Context> ctx) {
 		Context con = ctx.get();
 		con.enqueueWork(() -> msg.handle(con));
 		con.setPacketHandled(true);

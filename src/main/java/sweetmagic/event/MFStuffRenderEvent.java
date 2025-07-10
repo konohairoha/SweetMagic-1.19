@@ -61,7 +61,7 @@ public class MFStuffRenderEvent {
 	}
 
 	// パーティクルスポーンサイクル
-	protected static void spawnParticleCycle (ClientLevel world, ParticleOptions par, double x, double y, double z, Direction face, double range, double angle) {
+	protected static void spawnParticleCycle(ClientLevel world, ParticleOptions par, double x, double y, double z, Direction face, double range, double angle) {
 		world.addParticle(par, x, y, z, face.get3DDataValue(), range, angle + SMItem.SPEED);
 	}
 }

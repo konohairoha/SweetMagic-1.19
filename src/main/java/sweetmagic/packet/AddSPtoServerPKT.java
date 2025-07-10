@@ -35,7 +35,6 @@ public record AddSPtoServerPKT(UUID uuID, int sp) implements IPacket {
 		buf.writeInt(this.sp);
 	}
 
-
 	public static AddSPtoServerPKT decode(FriendlyByteBuf buf) {
 		return new AddSPtoServerPKT(buf.readUUID(), buf.readInt());
 	}

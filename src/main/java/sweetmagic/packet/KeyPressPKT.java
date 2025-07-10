@@ -62,7 +62,7 @@ public record KeyPressPKT(SMKeybind key) implements IPacket {
 			}
 
 			else if (item instanceof StartLightWand wand) {
-				wand.resetPos(player, wandStack);
+				wand.resetPos(player, stack);
 			}
 
 			break;

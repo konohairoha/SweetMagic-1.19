@@ -255,7 +255,8 @@ public class StarLightWandEvent extends SMUtilEvent {
 		pose.pushPose();
 		pose.translate(-renderPos.x(), -renderPos.y(), -renderPos.z());
 		pose.scale(1.01F, 1.01F, 1.01F);
-		RenderUtil.renderTransBlock(pose, buf, RenderColor.create(1000), BlockInit.select_block.defaultBlockState(), 0.8F);
+//		RenderUtil.renderTransBlock(pose, buf, RenderColor.create(1000), BlockInit.select_block.defaultBlockState(), 0.8F);
+		RenderUtil.renderBlock(pose, buf, RenderColor.create(1000), BlockInit.select_block);
 		pose.popPose();
 	}
 }

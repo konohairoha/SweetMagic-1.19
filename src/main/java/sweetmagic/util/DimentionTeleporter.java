@@ -27,7 +27,7 @@ import sweetmagic.init.block.sm.MagiaPortal;
 
 public record DimentionTeleporter (Block portal, Block flame, Direction.Axis face, boolean isZ) implements ITeleporter {
 
-	private static final Direction[] FACE_ARRAY = { Direction.NORTH, Direction.SOUTH, Direction.WEST, Direction.SOUTH };
+	private static final Direction[] FACE_ARRAY = { Direction.NORTH, Direction.SOUTH, Direction.WEST, Direction.EAST };
 
 	@Override public boolean isVanilla() { return false; }
 
@@ -43,20 +43,18 @@ public record DimentionTeleporter (Block portal, Block flame, Direction.Axis fac
 		if(!(entity instanceof LivingEntity living)) { return null; }
 
 		living.setPortalCooldown();
-//		SMDebug.info(info.apply(world).pos, entity.blockPosition());
 		ChunkPos chunk = new ChunkPos(entity.blockPosition());
 		int chunkX = chunk.x, chunkZ = chunk.z;
 
-		for(int currentX = chunkX - 4; currentX < chunkX + 4; currentX++) for(int currentZ = chunkZ - 4; currentZ < chunkZ + 4; currentZ++) {
+		for(int currentX = chunkX - 2; currentX < chunkX + 2; currentX++) for(int currentZ = chunkZ - 2; currentZ < chunkZ + 2; currentZ++) {
 
 			MutableBlockPos mut = new MutableBlockPos();
-			int baseX = chunkX * 16, baseZ = chunkZ * 16;
+			int baseX = currentX * 16, baseZ = currentZ * 16;
 
 			for(int y = 0; y < 256; y++) {
-				for(int x = -16; x < 16; x++) for(int z = -16; z < 16; z++) {
-
+				for(int x = 0; x < 16; x++) for(int z = 0; z < 16; z++) {
 					MutableBlockPos mut2 = mut.set(baseX + x, y, baseZ + z);
-					if(!this.isCenter(world, mut2)) { continue; }
+					if(world.isEmptyBlock(mut2) || !world.getBlockState(mut2).is(this.portal) || !this.isCenter(world, mut2)) { continue; }
 
 					BlockState state = world.getBlockState(mut2);
 					float addY = state.hasProperty(MagiaPortal.AXIS) && state.getValue(MagiaPortal.AXIS) == Direction.Axis.Y ? 1.5F : 0F;
@@ -74,7 +72,7 @@ public record DimentionTeleporter (Block portal, Block flame, Direction.Axis fac
 
 		BlockPos entityPos = entity.blockPosition();
 		MutableBlockPos pos = new BlockPos(entityPos.getX(), world.getHeight() - 8, entityPos.getZ()).mutable();
-		while(world.getBlockState(pos).isAir()) { pos.move(Direction.DOWN); }
+		while(world.isEmptyBlock(pos)) { pos.move(Direction.DOWN); }
 
 		pos.move(Direction.UP);
 
@@ -107,7 +105,7 @@ public record DimentionTeleporter (Block portal, Block flame, Direction.Axis fac
 	}
 
 	public boolean isCenter(Level world, MutableBlockPos pos) {
-		return (world.getBlockState(pos.relative(FACE_ARRAY[0])).is(this.portal) && world.getBlockState(pos.relative(FACE_ARRAY[1])).is(this.portal) ) ||
-				(world.getBlockState(pos.relative(FACE_ARRAY[2])).is(this.portal) && world.getBlockState(pos.relative(FACE_ARRAY[3])).is(this.portal) );
+		return (world.getBlockState(pos.relative(FACE_ARRAY[0])).is(this.portal) && world.getBlockState(pos.relative(FACE_ARRAY[1])).is(this.portal)) ||
+				(world.getBlockState(pos.relative(FACE_ARRAY[2])).is(this.portal) && world.getBlockState(pos.relative(FACE_ARRAY[3])).is(this.portal));
 	}
 }

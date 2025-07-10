@@ -10,7 +10,6 @@ public class ComposterHandler {
 
 	// コンポスターに登録
 	public static void registerCompostables() {
-
 		Object2FloatMap<ItemLike> comList = ComposterBlock.COMPOSTABLES;
 		comList.put(ItemInit.sugarbell_seed, 0.3F);
 		comList.put(ItemInit.glowflower_seed, 0.3F);

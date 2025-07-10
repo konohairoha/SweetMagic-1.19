@@ -16,7 +16,7 @@ public record BottlerPKT(int id, BlockPos pos) implements IPacket, ISMTip {
 		ServerPlayer player = con.getSender();
 		if (player == null) { return; }
 
-		TileMFBottler tile = (TileMFBottler) player.level.getBlockEntity(this.pos);
+		TileMFBottler tile = (TileMFBottler) player.getLevel().getBlockEntity(this.pos);
 
 		if (this.id > -1) {
 

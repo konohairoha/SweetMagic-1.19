@@ -142,6 +142,7 @@ public class RegisterHandler {
 		bus.addListener(PotionEvent::potionAddEvent);
 		bus.addListener(PotionEvent::potionRemoveEvent);
 		bus.addListener(PotionEvent::knockBackEvent);
+		bus.addListener(PotionEvent::fallEvent);
 		bus.addListener(PotionEvent::teleportEvent);
 		bus.addListener(VillagerEvent::villagerTrade);
 		bus.addListener(SMPlayerEvent::sleepEvent);

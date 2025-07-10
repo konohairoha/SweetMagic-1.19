@@ -37,7 +37,6 @@ public class ItemHelper {
 		for (int i = 0; i < inv.getSlots(); i++) {
 			ItemStack stack = inv.getStackInSlot(i);
 			if (stack.isEmpty()) { continue; }
-
 			stackList.add(stack);
 			inv.setStackInSlot(i, ItemStack.EMPTY);
 		}
@@ -48,16 +47,18 @@ public class ItemHelper {
 		return stackList.isEmpty();
 	}
 
+	public static ItemStack insertStack(IItemHandler inv, ItemStack stack, boolean simulate) {
+		return ItemHandlerHelper.insertItemStacked(inv, stack, simulate);
+	}
+
 	public static void inventoryInput(Player player, IItemHandlerModifiable inv) {
 
 		List<ItemStack> stackList = new ArrayList<>();
 		List<Item> itemList = new ArrayList<>();
 
 		for (int i = 0; i < inv.getSlots(); i++) {
-
 			ItemStack stack = inv.getStackInSlot(i);
 			if (stack.isEmpty()) { continue; }
-
 			stackList.add(stack);
 			itemList.add(stack.getItem());
 		}
@@ -78,7 +79,6 @@ public class ItemHelper {
 
 		for (ItemStack stack : player.getInventory().items) {
 			if (stack.isEmpty()) { continue; }
-
 			pInveList.add(stack);
 			itemList.add(stack.getItem());
 		}
@@ -86,7 +86,6 @@ public class ItemHelper {
 		for (int i = 0; i < inv.getSlots(); i++) {
 			ItemStack stack = inv.getStackInSlot(i);
 			if (stack.isEmpty() || !itemList.contains(stack.getItem())) { continue; }
-
 			stackList.add(stack);
 		}
 
@@ -103,10 +102,8 @@ public class ItemHelper {
 		List<ItemStack> stackList = new ArrayList<>();
 
 		for (int i = 0; i < inv.getSlots(); i++) {
-
 			ItemStack stack = inv.getStackInSlot(i);
 			if (stack.isEmpty()) { continue; }
-
 			stackList.add(stack);
 			inv.setStackInSlot(i, ItemStack.EMPTY);
 		}
@@ -116,7 +113,7 @@ public class ItemHelper {
 	}
 
 	// アイテムソート
-	public static int sortItemStack (ItemStack stack1, ItemStack stack2) {
+	public static int sortItemStack(ItemStack stack1, ItemStack stack2) {
 		if (stack1.isEmpty() || stack2.isEmpty()) { return 0; }
 
 		int stackId1 = Item.getId(stack1.getItem());
@@ -129,7 +126,7 @@ public class ItemHelper {
 	}
 
 	// アイテムソート
-	public static int sortSlot (Slot slot1, Slot slot2, boolean notRreverse) {
+	public static int sortSlot(Slot slot1, Slot slot2, boolean notRreverse) {
 		ItemStack stack1 = slot1.getItem();
 		ItemStack stack2 = slot2.getItem();
 		if (stack1.isEmpty() || stack2.isEmpty()) { return 0; }
@@ -144,7 +141,7 @@ public class ItemHelper {
 	}
 
 	// アイテムソート
-	public static int sortName (Slot slot1, Slot slot2, boolean notRreverse) {
+	public static int sortName(Slot slot1, Slot slot2, boolean notRreverse) {
 		ItemStack stack1 = slot1.getItem();
 		ItemStack stack2 = slot2.getItem();
 		if (stack1.isEmpty() || stack2.isEmpty()) { return 0; }
@@ -175,7 +172,6 @@ public class ItemHelper {
 			for (int z = x + 1; z < stackList.size(); z++) {
 				ItemStack s1 = stackList.get(z);
 				if (!(ItemHandlerHelper.canItemStacksStack(stack, s1))) { continue; }
-
 				stack.grow(s1.getCount());
 				stackList.set(z, ItemStack.EMPTY);
 			}

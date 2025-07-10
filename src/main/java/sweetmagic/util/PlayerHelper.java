@@ -2,6 +2,9 @@ package sweetmagic.util;
 
 import java.util.List;
 
+import net.minecraft.advancements.Advancement;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -49,11 +52,10 @@ public class PlayerHelper {
 	}
 
 	public static void addExp(Player player, int amount) {
-		final int exp = getExpValue(player) + amount;
-		player.totalExperience = exp;
-		player.experienceLevel = getLevelForExp(exp);
-		final int expForLevel = getExpForLevel(player.experienceLevel);
-		player.totalExperience = (int) ((float) (exp - expForLevel) / (float) player.getXpNeededForNextLevel());
+		player.totalExperience += amount;
+		player.experienceLevel = getLevelForExp(player.totalExperience);
+		player.totalExperience = Math.max(0, player.totalExperience);
+		player.experienceProgress = -(float) (getExpForLevel(player.experienceLevel) - player.totalExperience) / (float) player.getXpNeededForNextLevel();
 	}
 
 	public static int getExpValue(Player player) {
@@ -61,14 +63,9 @@ public class PlayerHelper {
 	}
 
 	public static int getLevelForExp(int exp) {
-
 		int level = 0;
-
-		while (getExpForLevel(level) <= exp) {
-			level++;
-		}
-
-		return level - 1;
+		while (getExpForLevel(level) <= exp) { level++; }
+		return Math.max(0, level - 1);
 	}
 
 	public static int getExpForLevel(int level) {
@@ -79,13 +76,32 @@ public class PlayerHelper {
 		}
 
 		else if (level > 16 && level < 32) {
-			return (int) (2.5 * level * level - 40.5 * level + 360);
+			return (int) (2.5F * level * level - 40.5F * level + 360);
 		}
 
-		return (int) (4.5 * level * level - 162.5 * level + 2220);
+		return (int) (4.5F * level * level - 162.5F * level + 2220);
+	}
+
+	public static int getLevelForExperience(int exp) {
+		int level = 0;
+		while (getExpForLevel(level) <= exp) { level++; }
+		return level - 1;
 	}
 
 	public static List<MobEffectInstance> getEffectList(LivingEntity entity, MobEffectCategory cate) {
 		return entity.getActiveEffects().stream().filter(p -> p.getEffect().getCategory() == cate).toList();
+	}
+
+	public static boolean checkClearAdvanced(Player player, ResourceLocation... advancedArray) {
+		return PlayerHelper.checkClearAdvanced(player, List.of(advancedArray));
+	}
+
+	public static boolean checkClearAdvanced(Player player, Iterable<ResourceLocation> advancedList) {
+		if(player.getLevel().isClientSide() || !(player instanceof ServerPlayer sPlayer)) { return false; }
+		for (ResourceLocation advanced : advancedList) {
+			Advancement adv = sPlayer.getLevel().getServer().getAdvancements().getAdvancement(advanced);
+			if(adv == null || !sPlayer.getAdvancements().getOrStartProgress(adv).isDone()) { return false; }
+		}
+		return true;
 	}
 }

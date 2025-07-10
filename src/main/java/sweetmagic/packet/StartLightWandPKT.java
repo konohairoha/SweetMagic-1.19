@@ -16,20 +16,17 @@ public record StartLightWandPKT(int data, BlockPos pos) implements IPacket {
 		if (player == null) { return; }
 
 		ItemStack stack = player.getMainHandItem();
+		if (!(stack.getItem() instanceof StartLightWand wand)) { return; }
 
-		if (stack.getItem() instanceof StartLightWand wand) {
+		ServerLevel world = player.getLevel();
 
-			ServerLevel world = player.getLevel();
-
-			switch (this.data) {
-			case 1:
-				wand.registerBlock(world, world.getBlockState(this.pos), this.pos, stack);
-				break;
-			default:
-				wand.setBlock(world, player, stack);
-				break;
-			}
-
+		switch (this.data) {
+		case 1:
+			wand.registerBlock(world, world.getBlockState(this.pos), this.pos, stack);
+			break;
+		default:
+			wand.setBlock(world, player, stack);
+			break;
 		}
 	}
 

@@ -30,6 +30,7 @@ import sweetmagic.recipe.pedal.PedalRecipe;
 import sweetmagic.recipe.pot.PotRecipe;
 import sweetmagic.recipe.recycler.RecyclerRecipe;
 import sweetmagic.recipe.tank.TankRecipe;
+import sweetmagic.recipe.woodcutter.WoodCutterRecipe;
 
 @JeiPlugin
 public class SMJeiPlugin implements IModPlugin {
@@ -50,6 +51,7 @@ public class SMJeiPlugin implements IModPlugin {
 	public static final RecipeType<JuiceMakerRecipe> JUICEMAKER = create("juicemaker", JuiceMakerRecipe.class);
 	public static final RecipeType<FurnitureRecipe> FURNITURE = create("furniture", FurnitureRecipe.class);
 	public static final RecipeType<RecyclerRecipe> RECYCLER = create("recycler", RecyclerRecipe.class);
+	public static final RecipeType<WoodCutterRecipe> WOODCUTTER = create("woodcutter", WoodCutterRecipe.class);
 
 	@Override
 	public void registerCategories(IRecipeCategoryRegistration registry) {
@@ -70,6 +72,7 @@ public class SMJeiPlugin implements IModPlugin {
 		registry.addRecipeCategories(new JuiceMakerRecipeCategory(helper));
 		registry.addRecipeCategories(new FurnitureRecipeCategory(helper));
 		registry.addRecipeCategories(new RecyclerRecipeCategory(helper));
+		registry.addRecipeCategories(new WoddCutterRecipeCategory(helper));
 	}
 
 	// レシピ定義、JEIアイテム関連をいじる
@@ -90,6 +93,7 @@ public class SMJeiPlugin implements IModPlugin {
 		registry.addRecipes(JUICEMAKER, recipe.getRecipe(RecipeTypeInit.JUICEMAKER));
 		registry.addRecipes(FURNITURE, recipe.getRecipe(RecipeTypeInit.FURNITURE));
 		registry.addRecipes(RECYCLER, recipe.getRecipe(RecipeTypeInit.RECYCLER));
+		registry.addRecipes(WOODCUTTER, recipe.getRecipe(RecipeTypeInit.WOODCUTTER));
 //		registry.addIngredientInfo(new ItemStack(ItemInit.aether_wand), VanillaTypes.ITEM_STACK, Component.translatable("tip.sweetmagic.magic_fire"));
 	}
 
@@ -115,6 +119,7 @@ public class SMJeiPlugin implements IModPlugin {
 		registry.addRecipeCatalyst(new ItemStack(BlockInit.juice_maker), JUICEMAKER);
 		registry.addRecipeCatalyst(new ItemStack(BlockInit.furniture_processing_table), FURNITURE);
 		registry.addRecipeCatalyst(new ItemStack(BlockInit.aether_recycler), RECYCLER);
+		registry.addRecipeCatalyst(new ItemStack(BlockInit.mf_woodcutter), WOODCUTTER);
 		registry.addRecipeCatalyst(new ItemStack(BlockInit.chopping_board), RecipeTypes.CRAFTING);
 		registry.addRecipeCatalyst(new ItemStack(BlockInit.mffurnace), RecipeTypes.SMELTING);
 		registry.addRecipeCatalyst(new ItemStack(BlockInit.furniture_processing_table), RecipeTypes.STONECUTTING);

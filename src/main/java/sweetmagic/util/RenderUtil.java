@@ -31,6 +31,11 @@ import sweetmagic.init.tile.sm.TileAbstractSM;
 public class RenderUtil {
 
 	public static void renderItem(RenderInfo info, TileAbstractSM tile, ItemStack stack, double x, double y, double z) {
+		RenderUtil.renderItem(info, tile, stack, x, y, z, 1F, false);
+	}
+
+
+	public static void renderItem(RenderInfo info, TileAbstractSM tile, ItemStack stack, double x, double y, double z, float rate, boolean isBlock) {
 
 		PoseStack pose = info.pose();
 		pose.pushPose();
@@ -48,14 +53,15 @@ public class RenderUtil {
 			break;
 		}
 
-		if (stack.getItem() instanceof BlockItem) {
+		if (!isBlock && stack.getItem() instanceof BlockItem) {
 			pose.scale(0.5F, 0.5F, 0.5F);
 			pose.translate(x, y, z);
 			pose.translate(-0.325D, -y / 3.3D, -0.5D);
 		}
 
 		else {
-			pose.scale(0.375F, 0.375F, 0.375F);
+			float scale = 0.375F * rate;
+			pose.scale(scale, scale, scale);
 			pose.translate(x, y, z);
 		}
 
@@ -116,7 +122,7 @@ public class RenderUtil {
 		ForgeHooksClient.renderPistonMovedBlocks(pos, state, pose, buf, world, false, overlay, render);
 	}
 
-	public static record RenderInfo (ItemRenderer render, int light, int overlay, PoseStack pose, MultiBufferSource buf) {
+	public static record RenderInfo(ItemRenderer render, int light, int overlay, PoseStack pose, MultiBufferSource buf) {
 
 		public void itemRender(ItemStack stack) {
 			this.render().renderStatic(stack, ItemTransforms.TransformType.FIXED, this.light(), this.overlay(), this.pose(), this.buf(), 0);
@@ -127,16 +133,16 @@ public class RenderUtil {
 		}
 	}
 
-	public static record RenderColor (float red, float green, float blue, int light, int overlayLight) {
+	public static record RenderColor(float red, float green, float blue, int light, int overlayLight) {
 
 		public static RenderColor create(int light) {
-			return new RenderColor (1F, 1F, 1F, light, OverlayTexture.NO_OVERLAY);
+			return new RenderColor(1F, 1F, 1F, light, OverlayTexture.NO_OVERLAY);
 		}
 
 		public static RenderColor create(RenderInfo info) {
-			return new RenderColor (1F, 1F, 1F, info.light(), OverlayTexture.NO_OVERLAY);
+			return new RenderColor(1F, 1F, 1F, info.light(), OverlayTexture.NO_OVERLAY);
 		}
 	}
 
-	public static record RGBColor (int red, int green, int blue) { }
+	public static record RGBColor(int red, int green, int blue) { }
 }

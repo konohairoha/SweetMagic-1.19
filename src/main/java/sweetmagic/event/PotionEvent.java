@@ -7,6 +7,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.entity.EntityTeleportEvent;
+import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.event.entity.living.LivingHealEvent;
 import net.minecraftforge.event.entity.living.LivingKnockBackEvent;
 import net.minecraftforge.event.entity.living.MobEffectEvent;
@@ -76,6 +77,15 @@ public class PotionEvent {
 			event.setRatioX(0D);
 			event.setRatioZ(0D);
 			event.setCanceled(true);
+		}
+	}
+
+	// 落下イベント
+	@SubscribeEvent
+	public static void fallEvent(LivingFallEvent event) {
+		LivingEntity entity = event.getEntity();
+		if(entity.fallDistance > 0F && entity.hasEffect(PotionInit.resistance_blow)) {
+			event.setDamageMultiplier(0F);
 		}
 	}
 

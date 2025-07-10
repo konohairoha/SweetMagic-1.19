@@ -30,9 +30,9 @@ public class RecyclerRecipeCategory extends AbstractRecipeCategory implements IR
 	private final IDrawable icon;
 
 	public RecyclerRecipeCategory(IGuiHelper helper) {
-		this.background = helper.createDrawable(TEX, 0, 0, 176, 106);
+		this.background = helper.createDrawable(TEX, 0, 0, 176, 124);
 		this.icon = helper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(BlockInit.aether_recycler));
-		this.recipeType = helper.createDrawable(TEX, 0, 110, 21, 21);
+		this.recipeType = helper.createDrawable(TEX, 0, 134, 21, 21);
 	}
 
 	@Override

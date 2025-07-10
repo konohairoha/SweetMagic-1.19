@@ -12,9 +12,8 @@ public record CookStatusPKT(CompoundTag tags) implements IPacket {
 	@Override
 	public void handle(NetworkEvent.Context con) {
 		LocalPlayer player = Minecraft.getInstance().player;
-		if (player != null) {
-			player.getCapability(CapabilityInit.COOK).ifPresent(cap -> cap.deserializeNBT(this.tags));
-		}
+		if (player == null) { return; }
+		player.getCapability(CapabilityInit.COOK).ifPresent(c -> c.deserializeNBT(this.tags));
 	}
 
 	@Override

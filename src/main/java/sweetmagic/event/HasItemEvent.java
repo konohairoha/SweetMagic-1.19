@@ -131,8 +131,6 @@ public class HasItemEvent {
 		Iterable<BlockPos> posList = WorldHelper.getRangePos(pPos, area);
 
 		for (BlockPos pos : posList) {
-
-			// 魔法の光以外ならツ次へ
 			if (world.getBlockState(pos).getBlock() != BlockInit.magiclight) { continue; }
 
 			double d0 = pos.getX() + 0.5D;
@@ -143,13 +141,12 @@ public class HasItemEvent {
 	}
 
 	// 魔法の流れを描画
-	public static void renderMFFlow(Level world, BlockPos basePos, Set<BlockPos> posList, ParticleOptions particle) {
+	public static void renderMFFlow(Level world, BlockPos basePos, Set<BlockPos> posList, ParticleOptions par) {
 
 		// スピードの宣言
 		float speed = 0.0265F;
 
 		for (BlockPos pos : posList) {
-
 			if (!(world.getBlockEntity(pos) instanceof ITileMF)) { continue; }
 
 			float x = pos.getX() + 0.5F;
@@ -158,7 +155,7 @@ public class HasItemEvent {
 			float xSpeed = (basePos.getX() - pos.getX()) * speed;
 			float ySpeed = (basePos.getY() - pos.getY()) * speed;
 			float zSpeed = (basePos.getZ() - pos.getZ()) * speed;
-			world.addParticle(particle, x, y, z, xSpeed, ySpeed, zSpeed);
+			world.addParticle(par, x, y, z, xSpeed, ySpeed, zSpeed);
 		}
 	}
 

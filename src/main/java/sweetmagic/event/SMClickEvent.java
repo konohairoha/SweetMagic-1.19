@@ -36,7 +36,7 @@ public class SMClickEvent {
 			ChangeSlot(new WandInfo(stack));
 		}
 
-		else if (!player.isShiftKeyDown() && item instanceof SummonerWand) {
+		else if (item instanceof SummonerWand) {
 			PacketHandler.sendToServer(new SummonerWandPKT());
 		}
 	}
@@ -54,7 +54,8 @@ public class SMClickEvent {
 			ChangeSlot(new WandInfo(stack));
 		}
 
-		else if (!player.isShiftKeyDown() && item instanceof SummonerWand) {
+		else if (item instanceof SummonerWand) {
+			PacketHandler.sendToServer(new SummonerWandPKT());
 			event.setCanceled(true);
 		}
 	}

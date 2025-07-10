@@ -229,7 +229,7 @@ public class LivingDethEvent {
 		}
 
 		// ゾンビなら
-		else if ( (entity instanceof Zombie || entity instanceof DwarfZombie) && rand.nextFloat() <= 0.15F) {
+		else if ((entity instanceof Zombie || entity instanceof DwarfZombie) && rand.nextFloat() <= 0.15F) {
 			itemList.add(getItem(world, x, y, z, ItemInit.egg_bag, rand.nextInt(2) + 1));
 		}
 
