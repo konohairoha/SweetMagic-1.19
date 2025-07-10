@@ -45,13 +45,13 @@ public abstract class AbstractRecipe implements Recipe<Container> {
 
 	// containerでチェックする場合必要だが不要
 	@Override
-	public boolean matches(Container container, Level world) {
+	public boolean matches(Container con, Level world) {
 		throw new UnsupportedOperationException("Use a method that takes a List<ItemStack> as an argument.");
 	}
 
 	// containerでチェックする場合必要だが不要
 	@Override
-	public ItemStack assemble(Container container) {
+	public ItemStack assemble(Container con) {
 		throw new UnsupportedOperationException("Use a method that takes a List<ItemStack> as an argument.");
 	}
 
@@ -95,7 +95,7 @@ public abstract class AbstractRecipe implements Recipe<Container> {
 	}
 
 	// 要求アイテムリストを取得
-	public List<ItemStack> getRequestList () {
+	public List<ItemStack> getRequestList() {
 		return this.requestStackList;
 	}
 
@@ -116,7 +116,7 @@ public abstract class AbstractRecipe implements Recipe<Container> {
 		return this.id;
 	}
 
-	public boolean isTagResult () {
+	public boolean isTagResult() {
 		return this.tagResult;
 	}
 

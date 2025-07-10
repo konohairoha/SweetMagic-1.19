@@ -27,31 +27,31 @@ public class FrypanRecipeSeria extends AbstractRecipeSerializer implements Recip
 
 	// サーバー側から受け取ったパケットから、レシピを復元する
 	@Override
-	public @Nullable FrypanRecipe fromNetwork(ResourceLocation id, FriendlyByteBuf buffer) {
+	public @Nullable FrypanRecipe fromNetwork(ResourceLocation id, FriendlyByteBuf buf) {
 
-		int resultSize = buffer.readVarInt();
+		int resultSize = buf.readVarInt();
 		List<ItemStack> resultList = new ArrayList<>();
 
 		for (int k = 0; k < resultSize; k++) {
-			resultList.add(buffer.readItem());
+			resultList.add(buf.readItem());
 		}
 
 		// Ingredientの個数を読み込む
-		int ingredSize = buffer.readVarInt();
+		int ingredSize = buf.readVarInt();
 		List<Ingredient> ingredList = new ArrayList<>();
 
 		// 読み取った個数の分だけ、繰り返し処理でIngredientを読み込む
 		for (int i = 0; i < ingredSize; i++) {
-			ingredList.add(Ingredient.fromNetwork(buffer));
+			ingredList.add(Ingredient.fromNetwork(buf));
 		}
 
 		// Ingredientの個数を読み込む
-		int countSize = buffer.readVarInt();
+		int countSize = buf.readVarInt();
 		List<Integer> countList = new ArrayList<>();
 
 		// 読み取った個数の分だけ、繰り返し処理でIntegerを読み込む
 		for (int i = 0; i < countSize; i++) {
-			countList.add(buffer.readVarInt());
+			countList.add(buf.readVarInt());
 		}
 
 		// 読み取った要素からレシピを作成
@@ -60,18 +60,9 @@ public class FrypanRecipeSeria extends AbstractRecipeSerializer implements Recip
 
 	// サーバー側からクライアント側に同期するために、レシピをパケットに乗せる
 	@Override
-	public void toNetwork(FriendlyByteBuf buffer, FrypanRecipe recipe) {
-
-		List<ItemStack> resultList = recipe.getResultList();
-		buffer.writeVarInt(resultList.size());
-		resultList.forEach(s -> buffer.writeItem(s));
-
-		List<Ingredient> ingredList = recipe.getIngredList();
-		buffer.writeVarInt(ingredList.size());
-		ingredList.forEach(t -> t.toNetwork(buffer));
-
-		List<Integer> countList = recipe.getCountList();
-		buffer.writeVarInt(countList.size());
-		countList.forEach(i -> buffer.writeVarInt(i));
+	public void toNetwork(FriendlyByteBuf buf, FrypanRecipe recipe) {
+		this.saveStackList(buf, recipe.getResultList());
+		this.saveIngList(buf, recipe.getIngredList());
+		this.saveIntList(buf, recipe.getCountList());
 	}
 }

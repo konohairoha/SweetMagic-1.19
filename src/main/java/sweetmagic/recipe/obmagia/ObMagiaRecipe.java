@@ -82,7 +82,7 @@ public class ObMagiaRecipe extends AbstractRecipe {
 		this.countList = countList;
 	}
 
-	public Ingredient getPageList () {
+	public Ingredient getPageList() {
 		return this.pageList;
 	}
 
@@ -92,11 +92,11 @@ public class ObMagiaRecipe extends AbstractRecipe {
 	}
 
 	// 要求する紙の設定
-	public void setPage (ItemStack page) {
+	public void setPage(ItemStack page) {
 		this.requestPage = page;
 	}
 
-	public Ingredient getBaseList () {
+	public Ingredient getBaseList() {
 		return this.baseList;
 	}
 
@@ -106,7 +106,7 @@ public class ObMagiaRecipe extends AbstractRecipe {
 	}
 
 	// 要求する紙の設定
-	public void setBase (ItemStack base) {
+	public void setBase(ItemStack base) {
 		this.requestBase = base;
 	}
 
@@ -116,7 +116,7 @@ public class ObMagiaRecipe extends AbstractRecipe {
 	}
 
 	// クラフト時間の設定
-	public void setCraftTime (int craftTime) {
+	public void setCraftTime(int craftTime) {
 		this.craftTime = craftTime;
 	}
 }

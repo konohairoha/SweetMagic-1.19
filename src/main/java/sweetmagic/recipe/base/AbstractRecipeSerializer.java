@@ -10,6 +10,7 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonSyntaxException;
 
 import net.minecraft.core.Registry;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.GsonHelper;
@@ -19,7 +20,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraftforge.registries.ForgeRegistries;
 
-public abstract class AbstractRecipeSerializer{
+public abstract class AbstractRecipeSerializer {
 
 	public JsonArray getArray (JsonObject json, String name) {
 		return GsonHelper.getAsJsonArray(json, name);
@@ -43,13 +44,13 @@ public abstract class AbstractRecipeSerializer{
 	}
 
 	// クラフト時間の取得
-	protected int readCraftTime(JsonObject jo, String name) {
+	protected int readIntValue(JsonObject jo, int minValue, String name, String type) {
 
 		JsonArray resultArray = this.getArray(jo, name);
-		int craftTime = 10;
+		int craftTime = minValue;
 
 		for (JsonElement json : resultArray) {
-			craftTime = this.readCraftTimeJson(json);
+			craftTime = this.readIntValueJson(json, type);
 			break;
 		}
 
@@ -139,12 +140,72 @@ public abstract class AbstractRecipeSerializer{
 	}
 
 	// jsonからクラフト後アイテム取得
-	protected int readCraftTimeJson(JsonElement je) {
+	protected int readIntValueJson(JsonElement je, String type) {
 
 		if (!je.isJsonObject()) {
 			throw new JsonSyntaxException("Must be a json object");
 		}
 
-		return GsonHelper.getAsInt(je.getAsJsonObject(), "time", 1);
+		return GsonHelper.getAsInt(je.getAsJsonObject(), type, 1);
+	}
+
+	public List<ItemStack> loadStackList(FriendlyByteBuf buf) {
+		int size = buf.readVarInt();
+		List<ItemStack> list = new ArrayList<>();
+		for (int k = 0; k < size; k++) { list.add(buf.readItem()); 	}
+		return list;
+	}
+
+	public List<Ingredient> loadIngList(FriendlyByteBuf buf) {
+		int size = buf.readVarInt();
+		List<Ingredient> list = new ArrayList<>();
+		for (int i = 0; i < size; i++) { list.add(Ingredient.fromNetwork(buf)); }
+		return list;
+	}
+
+	public List<Integer> loadIntList(FriendlyByteBuf buf) {
+		int size = buf.readVarInt();
+		List<Integer> list = new ArrayList<>();
+		for (int i = 0; i < size; i++) { list.add(buf.readVarInt()); }
+		return list;
+	}
+
+	public List<Float> loadFltList(FriendlyByteBuf buf) {
+		int size = buf.readVarInt();
+		List<Float> list = new ArrayList<>();
+		for (int i = 0; i < size; i++) { list.add(buf.readFloat()); }
+		return list;
+	}
+
+	public List<Boolean> loadBlnList(FriendlyByteBuf buf) {
+		int size = buf.readVarInt();
+		List<Boolean> list = new ArrayList<>();
+		for (int i = 0; i < size; i++) { list.add(buf.readBoolean()); }
+		return list;
+	}
+
+	public void saveStackList(FriendlyByteBuf buf, List<ItemStack> list) {
+		buf.writeVarInt(list.size());
+		list.forEach(s -> buf.writeItem(s));
+	}
+
+	public void saveIngList(FriendlyByteBuf buf, List<Ingredient> list) {
+		buf.writeVarInt(list.size());
+		list.forEach(t -> t.toNetwork(buf));
+	}
+
+	public void saveIntList(FriendlyByteBuf buf, List<Integer> list) {
+		buf.writeVarInt(list.size());
+		list.forEach(i -> buf.writeVarInt(i));
+	}
+
+	public void saveFltList(FriendlyByteBuf buf, List<Float> list) {
+		buf.writeVarInt(list.size());
+		list.forEach(f -> buf.writeFloat(f));
+	}
+
+	public void saveBlnList(FriendlyByteBuf buf, List<Boolean> list) {
+		buf.writeVarInt(list.size());
+		list.forEach(b -> buf.writeBoolean(b));
 	}
 }
