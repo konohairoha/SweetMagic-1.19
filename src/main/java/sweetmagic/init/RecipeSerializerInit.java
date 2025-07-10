@@ -32,6 +32,8 @@ import sweetmagic.recipe.recycler.RecyclerRecipe;
 import sweetmagic.recipe.recycler.RecyclerRecipeSeria;
 import sweetmagic.recipe.tank.TankRecipe;
 import sweetmagic.recipe.tank.TankRecipeSeria;
+import sweetmagic.recipe.woodcutter.WoodCutterRecipe;
+import sweetmagic.recipe.woodcutter.WoodCutterRecipeSeria;
 
 public class RecipeSerializerInit {
 
@@ -51,6 +53,7 @@ public class RecipeSerializerInit {
 	public static final RecipeSerializer<JuiceMakerRecipe> JUICEMAKER = register("juicemaker_craft", new JuiceMakerRecipeSeria());
 	public static final RecipeSerializer<FurnitureRecipe> FURNITURE = register("furniture_craft", new FurnitureRecipeSeria());
 	public static final RecipeSerializer<RecyclerRecipe> RECYCLER = register("recycler_craft", new RecyclerRecipeSeria());
+	public static final RecipeSerializer<WoodCutterRecipe> WOODCUTTER = register("woodcutter_craft", new WoodCutterRecipeSeria());
 
 	public static <T extends RecipeSerializer<?>> T register(String name, T seria) {
 		REGISTRY.register(name, () -> seria);

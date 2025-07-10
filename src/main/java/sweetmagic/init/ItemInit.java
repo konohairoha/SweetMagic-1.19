@@ -18,6 +18,7 @@ import sweetmagic.api.iitem.IFood.FoodType;
 import sweetmagic.init.item.blockitem.SMSeed;
 import sweetmagic.init.item.magic.AetherRecoveryBook;
 import sweetmagic.init.item.magic.ChargeMagic;
+import sweetmagic.init.item.magic.EnderWand;
 import sweetmagic.init.item.magic.EvilArrowItem;
 import sweetmagic.init.item.magic.FieldMagic;
 import sweetmagic.init.item.magic.MFStuff;
@@ -40,7 +41,6 @@ import sweetmagic.init.item.magic.SummonBossMagic;
 import sweetmagic.init.item.magic.SummonMagic;
 import sweetmagic.init.item.sm.CosmicWand;
 import sweetmagic.init.item.sm.DungeonCompas;
-import sweetmagic.init.item.sm.JapaneseUmbrella;
 import sweetmagic.init.item.sm.MagicKey;
 import sweetmagic.init.item.sm.MagicMeal;
 import sweetmagic.init.item.sm.Phone;
@@ -225,6 +225,7 @@ public class ItemInit {
 	public static Item iron_scrap = new SMItem("iron_scrap");
 	public static Item gold_scrap = new SMItem("gold_scrap");
 
+	public static Item wood_wand_g = new EnderWand("wood_wand_g");
 	public static Item magician_wand = new MagicianWand("magician_wand");
 	public static Item wood_wand_b = new StartLightWand("wood_wand_b", 1);
 	public static Item startlight_wand = new StartLightWand("startlight_wand", 0);
@@ -365,7 +366,6 @@ public class ItemInit {
 
 	public static Item creative_wand = new SMWand("creative_wand", 7, 1, 35);
 
-	public static Item wood_wand_g = new SMItem("wood_wand_g", false);
 	public static Item aether_hammer = new SMItem("aether_hammer", false);
 	public static Item ignis_armor = new SMItem("ignis_armor", false);
 
@@ -373,17 +373,17 @@ public class ItemInit {
 	public static Item magic_quickheal = new NormalMagic("magic_quickheal", WATER, 1, 500, 100, 0, "magic_heal");
 	public static Item magic_hiheal = new NormalMagic("magic_hiheal", WATER, 2, 1200, 300, 1, "magic_heal");
 	public static Item magic_roudheal = new NormalMagic("magic_roudheal", WATER, 3, 1800, 800, 10, "magic_heal");
-	public static Item magic_healingwish = new NormalMagic("magic_healingwish", WATER, 4, 2500, 1200, 16, "magic_heal");
+	public static Item magic_healingwish = new NormalMagic("magic_healingwish", WATER, 4, 2500, 1600, 16, "magic_heal");
 
 	public static Item magic_effectremover = new NormalMagic("magic_effectremover", WATER, 1, 1800, 200, 4, "magic_reflasheffect");
 	public static Item magic_reflasheffect = new NormalMagic("magic_reflasheffect", WATER, 2, 3000, 500, 5);
 	public static Item magic_reflashresurrection = new NormalMagic("magic_reflashresurrection", WATER, 3, 6000, 1200, 11, "magic_reflasheffect");
-	public static Item magic_reflashfield = new FieldMagic("magic_reflashfield", WATER, 4, 8000, 1500, 12, "magic_reflasheffect");
+	public static Item magic_reflashfield = new FieldMagic("magic_reflashfield", WATER, 4, 8000, 2000, 12, "magic_reflasheffect");
 
 	public static Item magic_light = new ShotMagic("magic_light", SHINE, 1, 20, 20, 0);
 	public static Item magic_holy_light = new ShotMagic("magic_holy_light", SHINE, 2, 160, 120, 23, "magic_light");
 	public static Item magic_illuminate = new ShotMagic("magic_illuminate", SHINE, 3, 240, 500, 24, "magic_light");
-	public static Item magic_shining_flare = new ShotMagic("magic_shining_flare", SHINE, 4, 360, 1200, 39, "magic_light");
+	public static Item magic_shining_flare = new ShotMagic("magic_shining_flare", SHINE, 4, 360, 1600, 39, "magic_light");
 
 	public static Item magic_aether_armor = new NormalMagic("magic_aether_armor", SHINE, 1, 1800, 300, 2, "magic_aether_barrier");
 	public static Item magic_aether_barrier = new NormalMagic("magic_aether_barrier", SHINE, 2, 3000, 500, 3);
@@ -393,37 +393,37 @@ public class ItemInit {
 	public static Item magic_fire = new ShotMagic("magic_fire", FLAME, 1, 50, 30, 1);
 	public static Item magic_flamenova = new ShotMagic("magic_flamenova", FLAME, 2, 200, 100, 2, "magic_fire");
 	public static Item magic_meteor = new ShotMagic("magic_meteor", FLAME, 3, 400, 600, 34, "magic_fire");
-	public static Item magic_meteorite_impact = new ShotMagic("magic_meteorite_impact", FLAME, 4, 600, 1400, 40, "magic_fire");
+	public static Item magic_meteorite_impact = new ShotMagic("magic_meteorite_impact", FLAME, 4, 600, 1600, 40, "magic_fire");
 
 	public static Item magic_frost = new ShotMagic("magic_frost", FROST, 1, 50, 30, 3);
 	public static Item magic_frostspear = new ShotMagic("magic_frostspear", FROST, 2, 160, 100, 4, "magic_frost");
 	public static Item magic_frostrain = new ShotMagic("magic_frostrain", FROST, 3, 400, 600, 35, "magic_frost");
-	public static Item magic_absolute_zero = new ShotMagic("magic_absolute_zero", FROST, 4, 600, 1400, 41, "magic_frost");
+	public static Item magic_absolute_zero = new ShotMagic("magic_absolute_zero", FROST, 4, 600, 1600, 41, "magic_frost");
 
 	public static Item magic_tornado = new ShotMagic("magic_tornado", CYCLON, 1, 100, 80, 5);
 	public static Item magic_storm = new ShotMagic("magic_storm", CYCLON, 2, 240, 200, 6, "magic_tornado");
 	public static Item magic_gale = new ShotMagic("magic_gale", CYCLON, 3, 290, 800, 25, "magic_tornado");
-	public static Item magic_tempest_storm = new ShotMagic("magic_tempest_storm", CYCLON, 4, 520, 1400, 42, "magic_tornado");
+	public static Item magic_tempest_storm = new ShotMagic("magic_tempest_storm", CYCLON, 4, 520, 1600, 42, "magic_tornado");
 
 	public static Item magic_burst = new ShotMagic("magic_burst", BLAST, 1, 120, 100, 7);
 	public static Item magic_blast = new ShotMagic("magic_blast", BLAST, 2, 250, 200, 8, "magic_burst");
 	public static Item magic_magia_destroy = new ShotMagic("magic_magia_destroy", BLAST, 3, 280, 800, 22, "magic_burst");
-	public static Item magic_supernova = new ShotMagic("magic_supernova", BLAST, 4, 520, 1400, 43, "magic_burst");
+	public static Item magic_supernova = new ShotMagic("magic_supernova", BLAST, 4, 520, 1600, 43, "magic_burst");
 
 	public static Item magic_ballast = new ShotMagic("magic_ballast", GRAVITY, 1, 100, 80, 9, "magic_gravitywave");
 	public static Item magic_gravitywave = new ShotMagic("magic_gravitywave", GRAVITY, 2, 160, 240, 10);
 	public static Item magic_gravity_break = new ShotMagic("magic_gravity_break", GRAVITY, 3, 400, 800, 26, "magic_gravitywave");
-	public static Item magic_blackhole = new ShotMagic("magic_blackhole", GRAVITY, 4, 600, 1400, 44, "magic_gravitywave");
+	public static Item magic_blackhole = new ShotMagic("magic_blackhole", GRAVITY, 4, 600, 1600, 44, "magic_gravitywave");
 
 	public static Item magic_poison_shoot = new ShotMagic("magic_poison_shoot", TOXIC, 1, 100, 120, 11, "magic_toxic");
 	public static Item magic_toxic = new ShotMagic("magic_toxic", TOXIC, 2, 240, 250, 12);
 	public static Item magic_deadly_poison = new ShotMagic("magic_deadly_poison", TOXIC, 3, 360, 800, 27, "magic_toxic");
-	public static Item magic_end_poison = new ShotMagic("magic_end_poison", TOXIC, 4, 560, 1400, 45, "magic_toxic");
+	public static Item magic_end_poison = new ShotMagic("magic_end_poison", TOXIC, 4, 560, 1600, 45, "magic_toxic");
 
 	public static Item magic_lightningbolt = new ChargeMagic("magic_lightningbolt", LIGHTNING, 1, 140, 160, 0, "magic_thunder");
 	public static Item magic_thunder = new ChargeMagic("magic_thunder", LIGHTNING, 2, 340, 300, 1);
 	public static Item magic_thunderrain = new ChargeMagic("magic_thunderrain", LIGHTNING, 3, 500, 800, 6, "magic_thunder");
-	public static Item magic_thunderforce = new ChargeMagic("magic_thunderforce", LIGHTNING, 4, 720, 1500, 8, "magic_thunder");
+	public static Item magic_thunderforce = new ChargeMagic("magic_thunderforce", LIGHTNING, 4, 720, 1800, 8, "magic_thunder");
 
 	public static Item magic_dig = new ShotMagic("magic_dig", EARTH, 1, 15, 10, 13);
 	public static Item magic_silk_dig = new ShotMagic("magic_silk_dig", EARTH, 2, 25, 15, 14, "magic_dig");
@@ -433,12 +433,12 @@ public class ItemInit {
 	public static Item magic_rockblast = new ShotMagic("magic_rockblast", EARTH, 1, 100, 100, 29);
 	public static Item magic_ironblast = new ShotMagic("magic_ironblast", EARTH, 2, 200, 250, 30, "magic_rockblast");
 	public static Item magic_diamondblast = new ShotMagic("magic_diamondblast", EARTH, 3, 300, 800, 31, "magic_rockblast");
-	public static Item magic_netheriteblast = new ShotMagic("magic_netheriteblast", EARTH, 4, 500, 1400, 47, "magic_rockblast");
+	public static Item magic_netheriteblast = new ShotMagic("magic_netheriteblast", EARTH, 4, 500, 1600, 47, "magic_rockblast");
 
 	public static Item magic_cherry = new ShotMagic("magic_cherry", EARTH, 1, 80, 60, 36);
 	public static Item magic_cherry_wind = new ShotMagic("magic_cherry_wind", EARTH, 2, 200, 180, 37, "magic_cherry");
 	public static Item magic_cherry_storm = new ShotMagic("magic_cherry_storm", EARTH, 3, 350, 700, 38, "magic_cherry");
-	public static Item magic_cherry_blizzard = new ShotMagic("magic_cherry_blizzard", EARTH, 4, 600, 1400, 48, "magic_cherry");
+	public static Item magic_cherry_blizzard = new ShotMagic("magic_cherry_blizzard", EARTH, 4, 600, 1600, 48, "magic_cherry");
 
 	public static Item magic_normal = new ShotMagic("magic_normal", NON, 1, 15, 20, 15);
 	public static Item magic_completion = new ShotMagic("magic_completion", NON, 2, 30, 40, 16, "magic_normal");
@@ -448,12 +448,12 @@ public class ItemInit {
 	public static Item magic_bubleprison = new ShotMagic("magic_bubleprison", WATER, 1, 180, 80, 17);
 	public static Item magic_scumefang = new ShotMagic("magic_scumefang", WATER, 2, 250, 200, 18, "magic_bubleprison");
 	public static Item magic_bublehell = new ShotMagic("magic_bublehell", WATER, 3, 280, 800, 28, "magic_bubleprison");
-	public static Item magic_bubleburst = new ShotMagic("magic_bubleburst", WATER, 4, 420, 1400, 50, "magic_bubleprison");
+	public static Item magic_bubleburst = new ShotMagic("magic_bubleburst", WATER, 4, 420, 1600, 50, "magic_bubleprison");
 
 	public static Item magic_bloodshot = new ShotMagic("magic_bloodshot", DARK, 1, 130, 100, 19, "magic_shadow");
 	public static Item magic_bloodwave = new ShotMagic("magic_bloodwave", DARK, 2, 280, 250, 20, "magic_shadow");
 	public static Item magic_bloodvortex = new ShotMagic("magic_bloodvortex", DARK, 3, 400, 600, 32, "magic_shadow");
-	public static Item magic_bloodspear = new ShotMagic("magic_bloodspear", DARK, 4, 600, 1400, 51, "magic_shadow");
+	public static Item magic_bloodspear = new ShotMagic("magic_bloodspear", DARK, 4, 600, 1600, 51, "magic_shadow");
 
 	public static Item magic_summon_cat = new SummonMagic("magic_summon_cat", TIME, 0, 6000, 1000, 7, "magic_summon_wolf");
 	public static Item magic_summon_wolf = new SummonMagic("magic_summon_wolf", TIME, 1, 4800, 600, 0);
@@ -470,25 +470,25 @@ public class ItemInit {
 	public static Item magic_growth_wide = new ChargeMagic("magic_growth_wide", EARTH, 3, 600, 900, 7, "magic_growth_aura");
 	public static Item magic_growth_harvest = new ChargeMagic("magic_growth_harvest", EARTH, 4, 1000, 2000, 9, "magic_growth_aura");
 
-	public static Item magic_invisible = new NormalMagic("magic_invisible", SHINE, 1, 1800, 300, 13, "magic_aether_shield");
-	public static Item magic_aether_shield = new NormalMagic("magic_aether_shield", SHINE, 2, 2400, 600, 14);
-	public static Item magic_aether_shield2 = new NormalMagic("magic_aether_shield2", SHINE, 3, 3600, 1000, 15, "magic_aether_shield");
-	public static Item magic_aether_shield3 = new NormalMagic("magic_aether_shield3", SHINE, 4, 4800, 2000, 18, "magic_aether_shield");
+	public static Item magic_invisible = new NormalMagic("magic_invisible", SHINE, 1, 1800, 500, 13, "magic_aether_shield");
+	public static Item magic_aether_shield = new NormalMagic("magic_aether_shield", SHINE, 2, 2400, 1000, 14);
+	public static Item magic_aether_shield2 = new NormalMagic("magic_aether_shield2", SHINE, 3, 3600, 2000, 15, "magic_aether_shield");
+	public static Item magic_aether_shield3 = new NormalMagic("magic_aether_shield3", SHINE, 4, 4800, 3000, 18, "magic_aether_shield");
 
-	public static Item magic_gravityfield = new FieldMagic("magic_gravityfield", GRAVITY, 1, 2400, 300, 0);
-	public static Item magic_gravityfield2 = new FieldMagic("magic_gravityfield2", GRAVITY, 2, 3600, 600, 1, "magic_gravityfield");
-	public static Item magic_gravityfield3 = new FieldMagic("magic_gravityfield3", GRAVITY, 3, 4800, 1000, 2, "magic_gravityfield");
-	public static Item magic_gravityfield4 = new FieldMagic("magic_gravityfield4", GRAVITY, 4, 6000, 2000, 13, "magic_gravityfield");
+	public static Item magic_gravityfield = new FieldMagic("magic_gravityfield", GRAVITY, 1, 2400, 500, 0);
+	public static Item magic_gravityfield2 = new FieldMagic("magic_gravityfield2", GRAVITY, 2, 3600, 1000, 1, "magic_gravityfield");
+	public static Item magic_gravityfield3 = new FieldMagic("magic_gravityfield3", GRAVITY, 3, 4800, 2000, 2, "magic_gravityfield");
+	public static Item magic_gravityfield4 = new FieldMagic("magic_gravityfield4", GRAVITY, 4, 6000, 3000, 13, "magic_gravityfield");
 
-	public static Item magic_windfield = new FieldMagic("magic_windfield", CYCLON, 1, 2400, 300, 3);
-	public static Item magic_windfield2 = new FieldMagic("magic_windfield2", CYCLON, 2, 3600, 600, 4, "magic_windfield");
-	public static Item magic_windfield3 = new FieldMagic("magic_windfield3", CYCLON, 3, 4800, 1000, 5, "magic_windfield");
-	public static Item magic_windfield4 = new FieldMagic("magic_windfield4", CYCLON, 4, 6000, 2000, 14, "magic_windfield");
+	public static Item magic_windfield = new FieldMagic("magic_windfield", CYCLON, 1, 2400, 500, 3);
+	public static Item magic_windfield2 = new FieldMagic("magic_windfield2", CYCLON, 2, 3600, 1000, 4, "magic_windfield");
+	public static Item magic_windfield3 = new FieldMagic("magic_windfield3", CYCLON, 3, 4800, 2000, 5, "magic_windfield");
+	public static Item magic_windfield4 = new FieldMagic("magic_windfield4", CYCLON, 4, 6000, 3000, 14, "magic_windfield");
 
-	public static Item magic_rainfield = new FieldMagic("magic_rainfield", WATER, 1, 2400, 300, 6);
-	public static Item magic_rainfield2 = new FieldMagic("magic_rainfield2", WATER, 2, 3600, 600, 7, "magic_rainfield");
-	public static Item magic_rainfield3 = new FieldMagic("magic_rainfield3", WATER, 3, 4800, 1000, 8, "magic_rainfield");
-	public static Item magic_rainfield4 = new FieldMagic("magic_rainfield4", WATER, 4, 6000, 2000, 15, "magic_rainfield");
+	public static Item magic_rainfield = new FieldMagic("magic_rainfield", WATER, 1, 3600, 500, 6);
+	public static Item magic_rainfield2 = new FieldMagic("magic_rainfield2", WATER, 2, 5400, 1000, 7, "magic_rainfield");
+	public static Item magic_rainfield3 = new FieldMagic("magic_rainfield3", WATER, 3, 7200, 2000, 8, "magic_rainfield");
+	public static Item magic_rainfield4 = new FieldMagic("magic_rainfield4", WATER, 4, 8400, 3000, 15, "magic_rainfield");
 
 	public static Item magic_future_visionfiled = new FieldMagic("magic_future_visionfiled", WATER, 1, 3000, 400, 9);
 	public static Item magic_future_visionfiled2 = new FieldMagic("magic_future_visionfiled2", WATER, 2, 4200, 800, 10, "magic_future_visionfiled");
@@ -822,7 +822,7 @@ public class ItemInit {
 	public static Item angel_wing = new SMItem("angel_wing", (CreativeModeTab) null);
 	public static Item angel_wing_b = new SMItem("angel_wing_b", (CreativeModeTab) null);
 	public static Item cat_wing = new SMItem("cat_wing", (CreativeModeTab) null);
-	public static Item japanese_umbrella = new JapaneseUmbrella("japanese_umbrella");
+	public static Item japanese_umbrella = new SMItem("japanese_umbrella", (CreativeModeTab) null);
 
 	@SubscribeEvent
 	public static void registerItem(RegisterEvent event) {

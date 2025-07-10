@@ -18,6 +18,7 @@ import sweetmagic.recipe.pedal.PedalRecipe;
 import sweetmagic.recipe.pot.PotRecipe;
 import sweetmagic.recipe.recycler.RecyclerRecipe;
 import sweetmagic.recipe.tank.TankRecipe;
+import sweetmagic.recipe.woodcutter.WoodCutterRecipe;
 
 public class RecipeTypeInit {
 
@@ -37,6 +38,7 @@ public class RecipeTypeInit {
 	public static final RecipeType<JuiceMakerRecipe> JUICEMAKER = register("juicemaker_craft", new RecipeType<JuiceMakerRecipe>() {});
 	public static final RecipeType<FurnitureRecipe> FURNITURE = register("furniture_craft", new RecipeType<FurnitureRecipe>() {});
 	public static final RecipeType<RecyclerRecipe> RECYCLER = register("recycler_craft", new RecipeType<RecyclerRecipe>() {});
+	public static final RecipeType<WoodCutterRecipe> WOODCUTTER = register("woodcutter_craft", new RecipeType<WoodCutterRecipe>() {});
 
 	public static <T extends RecipeType<?>> T register(String name, T recipeType) {
 		REGISTRY.register(name, () -> recipeType);

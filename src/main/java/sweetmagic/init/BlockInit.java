@@ -669,6 +669,7 @@ public class BlockInit {
 	public static final Block wall_lamp = new ModenLamp("wall_lamp", 1);
 	public static final Block wall_lamp_long = new ModenLamp("wall_lamp_long", 2);
 	public static final Block ceiling_cue_lamp = new ModenLamp("ceiling_cue_lamp", 0);
+	public static final Block glow_lamp = new ModenLamp("glow_lamp", 0);
 
 	public static final Block ceiling_light = new CeilingLight("ceiling_light");
 
