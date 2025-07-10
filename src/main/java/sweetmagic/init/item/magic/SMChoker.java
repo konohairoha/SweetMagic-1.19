@@ -121,7 +121,7 @@ public class SMChoker extends ArmorItem implements IChoker {
 	}
 
 	public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment encha) {
-		return ENCHACATELIST.contains(encha.category) || ( encha != Enchantments.UNBREAKING && encha.category.canEnchant(stack.getItem()));
+		return ENCHACATELIST.contains(encha.category) || (encha != Enchantments.UNBREAKING && encha.category.canEnchant(stack.getItem()));
 	}
 
 	// ツールチップの表示

@@ -40,7 +40,6 @@ public class AetherRecoveryBook extends TreasureItem {
 		for (List<ItemStack> stacks : playerStackList) {
 			List<ItemStack> filterList = stacks.stream().filter(s -> !s.isEmpty() && s.getItem() instanceof IMFTool tool && !tool.isMaxMF(s)).toList();
 			if (filterList.isEmpty()) { continue; }
-
 			stackList.addAll(filterList);
 		}
 

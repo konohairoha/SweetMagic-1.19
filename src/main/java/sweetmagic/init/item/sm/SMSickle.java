@@ -10,7 +10,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
@@ -93,7 +92,7 @@ public class SMSickle extends SMItem {
 
 		if (!stackList.isEmpty()) {
 			world.playSound(null, pos, SoundEvents.GRASS_PLACE, SoundSource.BLOCKS, 0.5F, 0.8F + rand.nextFloat() * 0.4F);
-			stackList.forEach(c -> world.addFreshEntity(new ItemEntity(world, player.xo, player.yo, player.zo, c)));
+			stackList.forEach(s -> this.spawnItem(world, player.blockPosition(), s));
 		}
 
 		return InteractionResult.SUCCESS;
@@ -142,7 +141,7 @@ public class SMSickle extends SMItem {
 		// Listが空なら終了
 		if (stackList.isEmpty()) { return; }
 
-		stackList.forEach(s -> world.addFreshEntity(new ItemEntity(world, player.xo, player.yo, player.zo, s)));
+		stackList.forEach(s -> this.spawnItem(world, player.blockPosition(), s));
 	}
 
 	// ツールチップの表示

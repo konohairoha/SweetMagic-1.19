@@ -114,7 +114,7 @@ public class MFTeleport extends BaseMagicItem {
 		if (tags != null && player.isShiftKeyDown()) {
 
 			if (!world.isClientSide()) {
-				NetworkHooks.openScreen((ServerPlayer) player, new ContainerClero(stack), b -> b.writeByte(player.getInventory().selected));
+				NetworkHooks.openScreen((ServerPlayer) player, new ContainerClero(stack));
 				return InteractionResultHolder.consume(stack);
 			}
 		}

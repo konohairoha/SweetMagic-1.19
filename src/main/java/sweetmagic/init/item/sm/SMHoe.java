@@ -50,10 +50,9 @@ public class SMHoe extends HoeItem implements ISMTip {
 	// 右クリック
 	@Override
 	public InteractionResult useOn(UseOnContext con) {
+		boolean isFarm = false;
 		Level world = con.getLevel();
 		BlockPos pos = con.getClickedPos();
-
-		boolean isFarm = false;
 		Iterable<BlockPos> posList = WorldHelper.getRangePos(pos, -1, 0, -1, 1, 0, 1);
 
 		for(BlockPos p : posList) {

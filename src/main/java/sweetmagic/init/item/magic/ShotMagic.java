@@ -188,7 +188,7 @@ public class ShotMagic extends BaseMagicItem {
 		RandomSource rand = world.getRandom();
 		float level = wandInfo.getLevel();
 
-		// ( レベル × 0.2 ) + 最小( (レベル - 1) × 0.175, 5) + 最小( 最大(5 × (1 - (レベル - 1) × 0.02), 0), 4)
+		// ( レベル × 0.2 ) + 最小((レベル - 1) × 0.175, 5) + 最小( 最大(5 × (1 - (レベル - 1) × 0.02), 0), 4)
 		float power = this.getPower(wandInfo);
 		float shotSpeed = 2F + level * 0.05F;
 		FoodData foodData = player.getFoodData();

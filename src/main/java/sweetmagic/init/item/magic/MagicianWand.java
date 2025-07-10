@@ -34,7 +34,6 @@ public class MagicianWand extends SMItem {
 		BlockState state = world.getBlockState(pos);
 		Block block = state.getBlock();
 		Direction face = con.getClickedFace();
-
 		world.setBlock(pos, block.rotate(state, Rotation.CLOCKWISE_90), 3);
 
 		if (world.isClientSide()) {

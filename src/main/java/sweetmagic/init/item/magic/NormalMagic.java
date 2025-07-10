@@ -2,8 +2,11 @@ package sweetmagic.init.item.magic;
 
 import java.util.List;
 
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -14,6 +17,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import sweetmagic.api.emagic.SMElement;
 import sweetmagic.api.emagic.SMMagicType;
@@ -162,6 +166,7 @@ public class NormalMagic extends BaseMagicItem {
 			for (LivingEntity entity : entityList) {
 				this.addPotion(entity, PotionInit.regeneration, 0, time);
 				this.addPotion(entity, PotionInit.aether_barrier, level, time);
+				entity.removeEffect(PotionInit.aether_barrier_origin);
 				this.playSound(world, entity, SoundEvents.ENCHANTMENT_TABLE_USE, 0.5F, 1.175F);
 			}
 		}
@@ -174,6 +179,7 @@ public class NormalMagic extends BaseMagicItem {
 			}
 
 			this.addPotion(player, PotionInit.aether_barrier, level, time);
+			player.removeEffect(PotionInit.aether_barrier_origin);
 			this.playSound(world, player, SoundEvents.ENCHANTMENT_TABLE_USE, 0.5F, 1.175F);
 		}
 
@@ -366,6 +372,7 @@ public class NormalMagic extends BaseMagicItem {
 		int level = wandInfo.getLevel();
 		int time = (int) this.getHealValue(player, this.effectTime(wandInfo));
 		this.addPotion(player, PotionInit.aether_barrier_origin, level, time);
+		player.removeEffect(PotionInit.aether_barrier);
 		this.playSound(world, player, SoundEvents.ENCHANTMENT_TABLE_USE, 0.5F, 1.175F);
 		return true;
 	}
@@ -373,5 +380,12 @@ public class NormalMagic extends BaseMagicItem {
 	// ユニーク魔法かどうか
 	public boolean isUniqueMagic() {
 		return this.data == 20;
+	}
+
+	// ツールチップの表示
+	@Override
+	public void appendHoverText(ItemStack stack, @Nullable Level world, List<Component> toolTip, TooltipFlag flag) {
+		if(this.data != 20) { return; }
+		toolTip.add(this.getText("magic_aether_barrier_origin_get").withStyle(RED));
 	}
 }

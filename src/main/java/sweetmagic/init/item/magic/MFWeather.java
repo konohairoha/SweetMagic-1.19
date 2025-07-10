@@ -41,11 +41,12 @@ public class MFWeather extends BaseMagicItem {
 	}
 
 	public void changeWeather(Level world) {
-		if (!world.isClientSide() && world.getServer().getLevel(Level.OVERWORLD).getLevelData() instanceof ServerLevelData worldInfo) {
-			worldInfo.setRainTime(this.getRainTime());
-			worldInfo.setThunderTime(100000);
-			worldInfo.setThundering(true);
-			worldInfo.setRaining(this.getRainTime() > 0);
+		if (!world.isClientSide() && world.getServer().getLevel(Level.OVERWORLD).getLevelData() instanceof ServerLevelData info) {
+			int time = this.getRainTime();
+			info.setRainTime(time);
+			info.setThunderTime(time);
+			info.setThundering(time > 0);
+			info.setRaining(time > 0);
 		}
 	}
 

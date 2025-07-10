@@ -74,6 +74,7 @@ public class MagicMeal extends SMTierItem {
 				server.levelEvent((Player) null, 1027, witch.blockPosition(), 0);
 			}
 
+			if(!player.isCreative()) { stack.shrink(1); }
 			ForgeEventFactory.onLivingConvert(witch, villager);
 			this.playSound(player, SoundEvents.FIREWORK_ROCKET_BLAST_FAR, 0.5F, 1F / (server.getRandom().nextFloat() * 0.4F + 1.2F) + 1 * 0.5F);
 		}

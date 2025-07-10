@@ -40,9 +40,13 @@ public class SummonerWand extends SMMagicItem {
 
 	public void leftClick(Level world, Player player, ItemStack stack) {
 		CompoundTag tags = stack.getOrCreateTag();
+		int tickCount = tags.getInt("tickCount");
+		if(tickCount == player.tickCount) { return; }
+
 		List<AbstractSummonMob> entityList = this.getEntityList(AbstractSummonMob.class, player, e -> e.isAlive() && e.getOwnerUUID().equals(player.getUUID()), 64D);
 		entityList.forEach(e -> e.setShitMob(tags.getBoolean(MODE)));
 		tags.putBoolean(MODE, !tags.getBoolean(MODE));
+		tags.putInt("tickCount", player.tickCount);
 		player.sendSystemMessage(this.getText(this.name + "_" + tags.getBoolean(MODE)).withStyle(GREEN));
 		this.playSound(player, SoundEvents.AMETHYST_BLOCK_BREAK, 0.5F, 1.15F);
 	}

@@ -80,7 +80,7 @@ public class StartLightWand extends SMItem implements IMFTool {
 			tag.putInt("startY", pos.getY());
 			tag.putInt("startZ", pos.getZ());
 
-			if (world.isClientSide) {
+			if (world.isClientSide()) {
 				player.sendSystemMessage(this.getText("posregi_start").withStyle(GREEN));
 			}
 		}
@@ -90,16 +90,16 @@ public class StartLightWand extends SMItem implements IMFTool {
 			tag.putInt("endY", pos.getY());
 			tag.putInt("endZ", pos.getZ());
 
-			if (world.isClientSide) {
+			if (world.isClientSide()) {
 				player.sendSystemMessage(this.getText("posregi_end").withStyle(GREEN));
 			}
 		}
 
-		if (world.isClientSide) {
+		if (world.isClientSide()) {
 			player.playSound(SoundEvents.ENDERMAN_TELEPORT, 1F, 1F);
 		}
 
-		return InteractionResult.sidedSuccess(world.isClientSide);
+		return InteractionResult.sidedSuccess(world.isClientSide());
 	}
 
 	public void registerBlock(Level world, BlockState state, BlockPos pos, ItemStack stack) {
@@ -112,6 +112,8 @@ public class StartLightWand extends SMItem implements IMFTool {
 	}
 
 	public void setBlock(Level world, Player player, ItemStack stack) {
+		if(!player.isCreative() && this.isMFEmpty(stack)) { return; }
+
 		CompoundTag tags = stack.getTag();
 		if (tags == null || (!tags.contains("startX") && !tags.contains("endX")) || !tags.contains("blockId") || !tags.contains("state") || player.hasEffect(PotionInit.non_destructive)) { return; }
 
@@ -143,6 +145,8 @@ public class StartLightWand extends SMItem implements IMFTool {
 			maxBlockCount += item.getCount();
 		}
 
+		if(maxBlockCount <= 0) { return; }
+
 		if(this.data == 1) {
 			if(SchematicExport.saveSchematic(SchematicExport.SCHEMATICS, staet.getBlock().getName().getString(), false, world, startPos, endPos)) {
 				player.sendSystemMessage(this.getText("register_struc").withStyle(GREEN));
@@ -166,7 +170,7 @@ public class StartLightWand extends SMItem implements IMFTool {
 			useMF += 1 * useMFRate;
 			isSetBlock = true;
 
-			if (!isCreative && (useMF >= mf || count++ >= maxBlockCount)) { break; }
+			if (!isCreative && (useMF >= mf || ++count >= maxBlockCount)) { break; }
 		}
 
 		if (isSetBlock) {
@@ -185,7 +189,7 @@ public class StartLightWand extends SMItem implements IMFTool {
 				if (maxBlockCount <= 0 || count <= 0) { break; }
 			}
 
-			if (!dropList.isEmpty() && !world.isClientSide) {
+			if (!dropList.isEmpty() && !world.isClientSide()) {
 				BlockPos p = player.blockPosition();
 				dropList.forEach(s -> world.addFreshEntity(new ItemEntity(world, p.getX(), p.getY(), p.getZ(), s)));
 			}
@@ -201,14 +205,14 @@ public class StartLightWand extends SMItem implements IMFTool {
 		tags.remove("endY");
 		tags.remove("endZ");
 		player.sendSystemMessage(this.getText("posremo").withStyle(RED));
-		this.playSound(player.getLevel(), player, SoundEvents.UI_BUTTON_CLICK, 0.25F, player.getRandom().nextFloat() * 0.1F + 1.2F);
+		this.playSound(player, SoundEvents.UI_BUTTON_CLICK, 0.25F, player.getRandom().nextFloat() * 0.1F + 1.2F);
 	}
 
 	public void changeExchange(Player player, ItemStack stack) {
 		CompoundTag tags = stack.getOrCreateTag();
 		tags.putBoolean("isExchange", !tags.getBoolean("isExchange"));
 		player.sendSystemMessage(this.getText(tags.getBoolean("isExchange") ? "exchange_mode" : "set_mode").withStyle(GREEN));
-		this.playSound(player.getLevel(), player, SoundEvents.UI_BUTTON_CLICK, 0.25F, player.getRandom().nextFloat() * 0.1F + 1.2F);
+		this.playSound(player, SoundEvents.UI_BUTTON_CLICK, 0.25F, player.getRandom().nextFloat() * 0.1F + 1.2F);
 	}
 
 	public BlockPos getPos(BlockPos pos, Vec3 vec, Direction face) {
@@ -247,6 +251,10 @@ public class StartLightWand extends SMItem implements IMFTool {
 
 		toolTip.add(this.getText(this.name).withStyle(GOLD));
 
+		for(int i = 0; i < 4; i++)
+			toolTip.add(this.getText("startlight_wand_operation." + i).withStyle(GREEN));
+
+		toolTip.add(this.empty());
 		MutableComponent keyNext = KeyPressEvent.getKeyName(SMKeybind.NEXT);
 		MutableComponent keyBack = KeyPressEvent.getKeyName(SMKeybind.BACK);
 		toolTip.add(this.getTipArray(keyNext.copy(), this.getText("key"), this.getText("startlight_wand_key1").withStyle(WHITE)).withStyle(RED));
