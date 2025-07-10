@@ -71,7 +71,7 @@ public abstract class BaseMFBlock extends BaseFaceBlock implements EntityBlock {
 		// NBTを取得
 		CompoundTag tags = stack.getTag();
 
-		if (tags == null || !tags.contains("X")) {
+		if (tags == null || !tags.contains("X") || !stack.is(ItemInit.mf_stuff)) {
 
 			if (stack.is(ItemInit.mf_stuff)) {
 				return this.setBlockPos(world, tags, stack, player, pos);

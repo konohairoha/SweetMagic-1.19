@@ -8,6 +8,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemNameBlockItem;
@@ -136,6 +137,7 @@ public class ToolRepair extends BaseMFBlock {
 	public boolean actionBlock(Level world, BlockPos pos, Player player, ItemStack stack) {
 		if (world.isClientSide()) { return true; }
 		this.openGUI(world, pos, player, this.getTile(world, pos));
+		if(this.data == 4) { this.playerSound(world, pos, SoundEvents.PISTON_CONTRACT, 0.5F, world.getRandom().nextFloat() * 0.1F + 0.9F); }
 		return true;
 	}
 
