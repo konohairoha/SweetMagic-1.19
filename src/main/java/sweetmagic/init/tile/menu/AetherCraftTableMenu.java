@@ -113,9 +113,7 @@ public class AetherCraftTableMenu extends BaseSMMenu {
 
 	// スロット登録時に描画用スロットにも登録
 	protected Slot addSlots(Slot slot, boolean flag) {
-//		if (slot.getMaxStackSize() > 64) {
-			this.slotList.add(slot);
-//		}
+		this.slotList.add(slot);
 		return flag ? slot : this.addSlot(slot);
 	}
 
@@ -429,7 +427,7 @@ public class AetherCraftTableMenu extends BaseSMMenu {
 	public ItemStack quickMoveStack(Player player, int index) {
 		ItemStack stack = ItemStack.EMPTY;
 		Slot slot = this.slots.get(index);
-		if (slot == null || !slot.hasItem() || (index <= this.maxSlots && this.oldIndex == index && this.tickCount == player.tickCount)) { return stack; }
+		if (slot == null || !slot.hasItem() || (index <= this.maxSlots - 1 && this.oldIndex == index && this.tickCount == player.tickCount)) { return stack; }
 
 		this.tickCount = player.tickCount;
 		this.oldIndex = index;

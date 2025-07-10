@@ -97,12 +97,9 @@ public class PhoneMenu extends BaseItemMenu {
 
 	@Override
 	public boolean clickMenuButton(Player player, int id) {
+
 		Level world = player.getLevel();
-
-		if(!world.isClientSide()) {
-			player.playSound(SoundEvents.UI_BUTTON_CLICK, 0.15F, world.getRandom().nextFloat() * 0.1F + 0.9F);
-		}
-
+		player.playSound(SoundEvents.UI_BUTTON_CLICK, 0.15F, world.getRandom().nextFloat() * 0.1F + 0.9F);
 		if(id == -1) { return true; }
 
 		if(this.isSingle) {
@@ -165,7 +162,11 @@ public class PhoneMenu extends BaseItemMenu {
 			this.sp = Math.max(1, this.sp - 64);
 			break;
 		case 6:
+		case 7:
 			this.itemButBuy(player);
+			break;
+		case 8:
+			this.addButSale(player);
 			break;
 		}
 	}
